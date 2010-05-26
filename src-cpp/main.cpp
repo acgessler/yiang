@@ -17,12 +17,13 @@
 
 // Main entry point, initializes Python and calls main.py
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 // CommandLineToArgvW, GetCommandLineW
 #include <Shellapi.h>
-#include <Python.h>
 
 // SFML libs
 #pragma comment (lib, "sfml-graphics.lib")
@@ -30,24 +31,57 @@
 #pragma comment (lib, "sfml-audio.lib")
 #pragma comment (lib, "sfml-system.lib")
 
-// Python 3.1
+// fixup code for some missing SFML symbols
+#include "fixers.h"
+
+
+// Python C API, PySFML module initialization stub
+#include <Python.h>
 #pragma comment (lib, "Python31.lib")
 
-
 PyMODINIT_FUNC PyInit_sf(void);
-#include "fixers.h"
+
+#if 0
+// --------------------------------------------------------------------------------------------
+FILE* FindScript(const char* name)
+{
+	FILE* fp;
+
+	static const std::string base_src = "./../src-py/", base_bin = "./../bin-py/";
+	return !(fp = fopen((base_src+name).c_str(),"rt")) && !(fp = fopen((base_bin+name).c_str(),"rb")), fp;
+}
+#endif
 
 // --------------------------------------------------------------------------------------------
 int PyMain(int argc, wchar_t* argv[])
 {
+	// bootstrapping script, hands control over to main.py
+	static char start_script_name[] =  "__launch_stub__.py";
+	const char* start_stub = 
+		"import sys\n" 
+		"sys.path.append(\'../src-py\')\n"
+		"try:\n"
+		"\timport main\n"
+		"except Exception as e:\n"
+		"\tprint(e)\n"
+	;
+
 	PyImport_AppendInittab("sf", & PyInit_sf);
-	Py_Initialize();    
+	Py_Initialize();   
 
 	PySys_SetArgv(argc, argv);
 
-	//PyObj PyRun_File;
-	return 0;
+	const int ret = PyRun_SimpleString(start_stub);
+
+	if (PyErr_Occurred()) {
+		PyErr_Print();
+	}
+
+	Py_Finalize();
+	return ret;
 }
+
+#ifdef USE_WINMAIN
 
 // --------------------------------------------------------------------------------------------
 int WINAPI WinMain(
@@ -65,6 +99,18 @@ int WINAPI WinMain(
 
 	return PyMain(argc,argv);
 }
+
+#else
+
+int main(int argc, char* argv)
+{
+	// on Windows only for debugging purposes to get a console easily
+
+	static wchar_t* name[] = {L"game.exe"};
+	return PyMain(1,name);
+}
+
+#endif
 
 
 /* vi: set shiftwidth=4 tabstop=4: */ 
