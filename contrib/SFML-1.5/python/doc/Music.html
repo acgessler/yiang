@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>PySFML - Python binding for SFML (Simple and Fast Multimedia Library) - Music</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="logo">
+            <img src="http://www.sfml-dev.org/images/logo.jpg" width="770" height="200" title="SFML home" alt="SFML logo" />
+        </div>
+<h1>sf.Music Class Reference</h1>
+<div class="class_desc">sf.Music defines a big sound played using streaming, so usually what we call a music :).<br />
+Constructor: sf.Music(BufferSize=44100)<br />
+BufferSize : Size of the internal buffer, expressed in number of samples (ie. size taken by the music in memory) (44100 by default)</div>
+<div class="base_class">Base class: <a href="SoundStream.html">sf.SoundStream</a>.</div>
+<h2>Attributes</h2>
+<div class="attr_name">Paused</div>
+<div class="attr_name">Playing</div>
+<div class="attr_name">Stopped</div>
+<br />
+<h2>Methods</h2>
+<div class="attr_name">GetAttenuation()</div>
+<div class="desc">Get the attenuation factor.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetChannelsCount()</div>
+<div class="desc">Return the number of channels (1 = mono, 2 = stereo).<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetDuration()</div>
+<div class="desc">Get the sound duration.<br /></div>
+<div class="attr_name">GetLoop()</div>
+<div class="desc">Tell whether or not the music is looping.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetMinDistance()</div>
+<div class="desc">Get the minimum distance.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetPitch()</div>
+<div class="desc">Get the sound pitch.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetPlayingOffset()</div>
+<div class="desc">Get the current playing position of the stream.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetPosition()</div>
+<div class="desc">Get the sound position in the world. Returns a tuple.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetSampleRate()</div>
+<div class="desc">Get the sound frequency (sample rate).<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetStatus()</div>
+<div class="desc">Get the status of the sound (stopped, paused, playing).<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">GetVolume()</div>
+<div class="desc">Get the sound volume.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">Initialize(ChannelsCount, SampleRate)</div>
+<div class="desc">Set the audio stream parameters, you must call it before Play()<br />&nbsp;&nbsp;&nbsp;&nbsp;ChannelsCount : Number of channels<br />&nbsp;&nbsp;&nbsp;&nbsp;SampleRate :    Sample rate.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">IsRelativeToListener()</div>
+<div class="desc">Tell if the sound's position is relative to the listener's position, or if it's absolute.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">OpenFromFile(Filename)</div>
+<div class="desc">Open a music file (doesn't play it -- call Play() for that). Returns True if loading has been successful.<br />&nbsp;&nbsp;&nbsp;&nbsp;Filename : Path of the music file to open<br /></div>
+<div class="attr_name">OpenFromMemory(Data)</div>
+<div class="desc">Open a music file (doesn't play it -- call Play() for that). Returns True if loading has been successful.<br />&nbsp;&nbsp;&nbsp;&nbsp;Data : string representing the file data in memory<br /></div>
+<div class="attr_name">Pause()</div>
+<div class="desc">Pause the sound.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">Play()</div>
+<div class="desc">Play the sound.<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetAttenuation(Attenuation)</div>
+<div class="desc">Set the attenuation factor - the higher the attenuation, the more the sound will be attenuated with distance from listener. The default attenuation factor 1.0.<br />&nbsp;&nbsp;&nbsp;&nbsp;Attenuation : New attenuation factor for the sound<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetLoop(Loop)</div>
+<div class="desc">Set the music loop state. This parameter is disabled by default<br />&nbsp;&nbsp;&nbsp;&nbsp;Loop : True to play in loop, false to play once <br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetMinDistance(MinDistance)</div>
+<div class="desc">Set the minimum distance - closer than this distance, the listener will hear the sound at its maximum volume. The default minimum distance is 1.0.<br />&nbsp;&nbsp;&nbsp;&nbsp;MinDistance : New minimum distance for the sound<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetPitch(Pitch)</div>
+<div class="desc">Set the sound pitch. The default pitch is 1.<br />&nbsp;&nbsp;&nbsp;&nbsp;Pitch : New pitch<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetPosition(X, Y, Z)</div>
+<div class="desc">Set the sound position in the world.<br />&nbsp;&nbsp;&nbsp;&nbsp;X,Y,Z : Position of the sound in the world<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetRelativeToListener(Relative)</div>
+<div class="desc">Make the sound's position relative to the listener's position, or absolute. The default value is false (absolute)<br />&nbsp;&nbsp;&nbsp;&nbsp;Relative : True to set the position relative, false to set it absolute<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">SetVolume(Volume)</div>
+<div class="desc">Set the sound volume.<br />&nbsp;&nbsp;&nbsp;&nbsp;Volume : Volume (in range [0, 100])<br /></div>
+<div class="inherited">Inherited</div>
+<div class="attr_name">Stop()</div>
+<div class="desc">Stop the sound.<br /></div>
+<div class="inherited">Inherited</div>
+<br />
+<br />
+<br />
+
+        <p id="footer">
+            &nbsp;::&nbsp; Copyright &copy; 2007-2008 Rémi Koenig &nbsp;::&nbsp;
+        </p>
+
+    </body>
+</html>

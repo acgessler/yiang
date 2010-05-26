@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>PySFML - Python binding for SFML (Simple and Fast Multimedia Library) - Font</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="logo">
+            <img src="http://www.sfml-dev.org/images/logo.jpg" width="770" height="200" title="SFML home" alt="SFML logo" />
+        </div>
+<h1>sf.Font Class Reference</h1>
+<div class="class_desc">sf.Font is the low-level class for loading and manipulating character fonts. This class is meant to be used by sf.String.<br />
+Default constructor : sf.Font().</div>
+<h2>Static methods</h2>
+<div class="attr_name">GetDefaultFont()</div>
+<div class="desc">Get the SFML default built-in font (Arial).<br /></div>
+<br />
+<h2>Methods</h2>
+<div class="attr_name">GetCharacterSize()</div>
+<div class="desc">Get the base size of characters in the font; All glyphs dimensions are based on this value<br /></div>
+<div class="attr_name">GetGlyph(CodePoint)</div>
+<div class="desc">Get the description of a glyph (character) given by its unicode value. Returns glyph's visual settings, or an invalid glyph if character not found.<br />&nbsp;&nbsp;&nbsp;&nbsp;CodePoint : Unicode value of the character to get.<br /></div>
+<div class="attr_name">GetImage()</div>
+<div class="desc">Get the image containing the rendered characters (glyphs).<br /></div>
+<div class="attr_name">LoadFromFile(Filename, CharSize, UnicodeCharset) or LoadFromFile(Filename, CharSize, Charset, Encoding='utf8')</div>
+<div class="desc">Load the font from a file. Returns True if loading was successful.<br />&nbsp;&nbsp;&nbsp;&nbsp;Filename : Font file to load<br />&nbsp;&nbsp;&nbsp;&nbsp;CharSize : Size of characters in bitmap - the bigger, the higher quality (30 by default)<br />&nbsp;&nbsp;&nbsp;&nbsp;Charset : Characters set to generate (by default, contains the ISO-8859-1 printable characters)<br /></div>
+<div class="attr_name">LoadFromMemory(Data, CharSize, UnicodeCharset) or LoadFromMemory(Data, CharSize, Charset, Encoding='utf8')</div>
+<div class="desc">Load the font from a file in memory. Returns True if loading was successful.<br />&nbsp;&nbsp;&nbsp;&nbsp;Data : data to load<br />&nbsp;&nbsp;&nbsp;&nbsp;CharSize : Size of characters in bitmap - the bigger, the higher quality (30 by default)<br />&nbsp;&nbsp;&nbsp;&nbsp;Charset : Characters set to generate (by default, contains the ISO-8859-1 printable characters)<br /></div>
+<br />
+<br />
+<br />
+
+        <p id="footer">
+            &nbsp;::&nbsp; Copyright &copy; 2007-2008 Rémi Koenig &nbsp;::&nbsp;
+        </p>
+
+    </body>
+</html>
