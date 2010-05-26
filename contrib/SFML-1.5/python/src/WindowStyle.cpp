@@ -57,7 +57,7 @@ PyTypeObject PySfStyleType = {
 	0,						/*tp_as_buffer*/
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
 	"Enumeration of window creation styles.\n\
-None       No border / title bar (this flag and all others are mutually exclusive).\n\
+_None       No border / title bar (this flag and all others are mutually exclusive).\n\
 Titlebar   Title bar + fixed border.\n\
 Resize     Titlebar + resizable border + maximize button.\n\
 Close      Titlebar + close button.\n\
@@ -85,7 +85,7 @@ void PySfStyle_InitConst()
 {
 	PyObject *obj;
 	obj = PyLong_FromLong(sf::Style::None);
-	PyDict_SetItemString(PySfStyleType.tp_dict, "None", obj);
+	PyDict_SetItemString(PySfStyleType.tp_dict, "_None", obj);
 	Py_DECREF(obj);
 	obj = PyLong_FromLong(sf::Style::Titlebar);
 	PyDict_SetItemString(PySfStyleType.tp_dict, "Titlebar", obj);
