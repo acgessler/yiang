@@ -1,0 +1,7 @@
+
+
+# Lines starting with # are comment lines. Oh, really!
+
+fullscreen=False
+resolution[0]=1280
+resolution[1]=650

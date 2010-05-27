@@ -1,0 +1,15 @@
+texture framebuffer
+float strength
+
+effect
+{
+	// XXX compilation fails if these statements are put on one line, SFML what do you do?
+	vec4 pixel = framebuffer(_in);
+	vec4 other = framebuffer(_in+vec2(strength,0.2));
+	vec4 another = framebuffer(_in+vec2(-0.4,strength));
+
+    // Finally write the output pixel using 50% of the source pixel and 50% of its colored version
+    _out = pixel*0.35f+(other*0.3f+another*0.2);
+
+}
+
