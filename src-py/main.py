@@ -13,6 +13,7 @@ import math
 # My own stuff
 import defaults
 from fonts import FontCache
+from game import Game
 
 
 def options_quit():
@@ -22,10 +23,16 @@ def options_credits():
     print("Credits!")
 
 def options_newgame():
-    pass
+    global game
+    global app
+
+    game = Game(app)
+    game.Run()
 
 def options_resumegame():
-    pass
+    assert not game is None
+    
+    game.Run()
 
 options = [
     ("New Game -------------------------------------------", options_newgame, "You will die"),
@@ -35,6 +42,8 @@ options = [
 ]
 cur_option = 0
 menu_text = [(None,None)]*len(options)
+game = None
+app = None
 
 clock = sf.Clock()
 
@@ -48,7 +57,8 @@ def set_menu_option(i):
         tex = sf.String(options[i][0],Font=FontCache.get(height),Size=height)
         tex.SetPosition(-20,100+i*height*1.5)
         
-        tex.SetColor(sf.Color.Red if cur_option==i else sf.Color.Black)
+        tex.SetColor((sf.Color(100,100,100) if cur_option == 1 and game is None else sf.Color.Red)
+            if cur_option==i else sf.Color.Black)
 
         tex2 = sf.String(options[i][0],Font=FontCache.get(height+2),Size=height+2)
         tex2.SetPosition(-24,98+i*height*1.5)
@@ -77,8 +87,12 @@ def check_requirements():
     if sf.PostFX.CanUsePostFX() is False:
         print("Need to support postprocessing effects, buy better hardware.")
         sys.exit(-100)
+        
 
 def main():
+    """Main entry point to the application"""
+
+    global app
     check_requirements()
 
     # Read game.txt, which is the master config file
@@ -89,14 +103,14 @@ def main():
         dm = sf.VideoMode.GetDesktopMode()
         
         defaults.resolution = dm.Width,dm.Height
-        App = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen)
+        app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen)
     else:
-        App = sf.RenderWindow(sf.VideoMode(*defaults.resolution), defaults.caption, sf.Style._None)
+        app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), defaults.caption, sf.Style._None)
 
     defaults.update_derived()
 
     # Setup a dummy icon, I might add a proper one later
-    App.SetIcon(16,16,b'\xcd\x22\x22\xff'*256)
+    app.SetIcon(16,16,b'\xcd\x22\x22\xff'*256)
 
     # Load the font for the intro
     font = FontCache.get(defaults.letter_height_intro)
@@ -106,42 +120,43 @@ def main():
     effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","intro.sfx"))
     effect.SetTexture("framebuffer", None);
 
-    App.SetFramerateLimit(30)
+    app.SetFramerateLimit(30)
     ttl = 0
 
     set_menu_option(0)
     clock = sf.Clock()
     
-    while App.IsOpened():
+    while app.IsOpened():
         # Process events
-        Event = sf.Event()
+        event = sf.Event()
         while True:
 
-                if App.GetEvent(Event):
+                if app.GetEvent(event):
                     # Close window : exit
-                    if Event.Type == sf.Event.Closed:
-                        App.Close()
-                        break
+                    # if Event.Type == sf.Event.Closed:
+                    #    app.Close()
+                    #    break
 
                     # Escape key : exit
-                    if Event.Type == sf.Event.KeyPressed:
-                        if Event.Key.Code == sf.Key.Escape:
-                            App.Close()
+                    if event.Type == sf.Event.KeyPressed:
+                        if event.Key.Code == sf.Key.Escape:
+                            app.Close()
                             break
-                        elif Event.Key.Code == sf.Key.Down:
+                        
+                        elif event.Key.Code == sf.Key.Down:
                              set_menu_option(cur_option+1)
                              
-                        elif Event.Key.Code == sf.Key.Up:
+                        elif event.Key.Code == sf.Key.Up:
                              set_menu_option(cur_option-1)
 
-                        elif Event.Key.Code == sf.Key.Return:
+                        elif event.Key.Code == sf.Key.Return:
                             options[cur_option][1]()
 
                     # Adjust the viewport when the window is resized
-                    if Event.Type == sf.Event.Resized:
+                    if event.Type == sf.Event.Resized:
                         assert False
 
-                App.Clear(sf.Color.White)
+                app.Clear(sf.Color.White)
                
                 s = ""
                 abc = "abcdefghijklmnopqrstuvABCDEFGHJIKLMNOPQRSTUVWXYZ#@/^%$"
@@ -154,7 +169,7 @@ def main():
                 Text = sf.String(s,Font=font,Size=defaults.letter_height_intro)
                 Text.SetPosition(0,0)
                 Text.SetColor(sf.Color.Black)
-                App.Draw(Text)
+                app.Draw(Text)
 
                 if ttl == 0:
                     cached_danger_signs = recache_danger_signs(font)
@@ -162,15 +177,15 @@ def main():
                 ttl = ttl-1
                     
                 for te in cached_danger_signs:
-                    App.Draw(te)
+                    app.Draw(te)
 
                 effect.SetParameter("strength", (math.sin( clock.GetElapsedTime() ) +1)*0.5);
-                App.Draw(effect)
+                app.Draw(effect)
                 for entry in itertools.chain(menu_text):
-                    App.Draw(entry)
+                    app.Draw(entry)
 
                 # Finally, display the rendered frame on screen
-                App.Display()
+                app.Display()
 
 
 main()
