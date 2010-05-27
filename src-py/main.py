@@ -169,8 +169,6 @@ def main():
                 for entry in itertools.chain(menu_text):
                     App.Draw(entry)
 
-                
-
                 # Finally, display the rendered frame on screen
                 App.Display()
 
