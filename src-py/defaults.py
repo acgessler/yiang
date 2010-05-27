@@ -11,6 +11,7 @@ resolution = [1280,720]
 fullscreen = False
 letter_height = 12
 letter_height_intro = 10
+letter_height_status = 14
 caption = "Yet another Jump'n'Run (an unfair one)"
 danger_signs_ttl = 30
 
@@ -20,6 +21,7 @@ root_dir = ".."
 data_dir = os.path.join(root_dir,"data")
 config_dir = os.path.join(root_dir,"config")
 font_monospace = os.path.join(data_dir,"fonts","courier_new_bold.ttf")
+font_status = os.path.join(data_dir,"fonts","courier_new_bold.ttf")
 credits_string = "(c) 2010 Alexander Christoph Gessler"
 
 # derived values, do not change

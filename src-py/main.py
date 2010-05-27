@@ -27,12 +27,14 @@ def options_newgame():
     global app
 
     game = Game(app)
-    game.Run()
+    options_resumegame()
 
 def options_resumegame():
+    global swallow_escape
     assert not game is None
     
-    game.Run()
+    if game.Run() is True:
+        swallow_escape = True
 
 options = [
     ("New Game -------------------------------------------", options_newgame, "You will die"),
@@ -40,10 +42,16 @@ options = [
     ("Credits", options_credits, defaults.credits_string),
     ("Quit!", options_quit,"")
 ]
+
+# numeric constants for the menu entries
+OPTION_NEWGAME,OPTION_RESUME,OPTION_CREDITS,OPTION_QUIT = range(4)
+
+# mixed global variables to control the main menu
 cur_option = 0
 menu_text = [(None,None)]*len(options)
 game = None
 app = None
+swallow_escape = False
 
 clock = sf.Clock()
 
@@ -57,7 +65,7 @@ def set_menu_option(i):
         tex = sf.String(options[i][0],Font=FontCache.get(height),Size=height)
         tex.SetPosition(-20,100+i*height*1.5)
         
-        tex.SetColor((sf.Color(100,100,100) if cur_option == 1 and game is None else sf.Color.Red)
+        tex.SetColor((sf.Color(100,100,100) if cur_option == OPTION_RESUME and game is None else sf.Color.Red)
             if cur_option==i else sf.Color.Black)
 
         tex2 = sf.String(options[i][0],Font=FontCache.get(height+2),Size=height+2)
@@ -69,13 +77,17 @@ def set_menu_option(i):
 
 def recache_danger_signs(font):
     """Regenerate the dangerous, red flashing matrix-like ghost texts"""
+
+    scale = 8
+    color = sf.Color.Red if cur_option == OPTION_CREDITS else sf.Color(100,100,100)
+    count = 2 if cur_option == OPTION_CREDITS else 10
     
     out = []
-    for i in range(random.randint(0,10)):
-        tex = sf.String(options[cur_option][2],Font=font,Size=defaults.letter_height_intro*8)
-        tex.SetPosition(random.randint(-defaults.resolution[0]*2,defaults.resolution[0]),
+    for i in range(random.randint(0,count)):
+        tex = sf.String(options[cur_option][2],Font=font,Size=defaults.letter_height_intro*scale)
+        tex.SetPosition(random.randint(-defaults.resolution[0],defaults.resolution[0]),
             random.randint(-10,defaults.resolution[1]))
-        tex.SetColor(sf.Color(100,100,100))
+        tex.SetColor(color)
 
         out.append(tex)
     return out
@@ -93,6 +105,7 @@ def main():
     """Main entry point to the application"""
 
     global app
+    global swallow_escape
     check_requirements()
 
     # Read game.txt, which is the master config file
@@ -107,6 +120,7 @@ def main():
     else:
         app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), defaults.caption, sf.Style._None)
 
+    #print(dir(sf.Window))
     defaults.update_derived()
 
     # Setup a dummy icon, I might add a proper one later
@@ -139,7 +153,7 @@ def main():
 
                     # Escape key : exit
                     if event.Type == sf.Event.KeyPressed:
-                        if event.Key.Code == sf.Key.Escape:
+                        if event.Key.Code == sf.Key.Escape and swallow_escape is False:
                             app.Close()
                             break
                         
@@ -151,6 +165,9 @@ def main():
 
                         elif event.Key.Code == sf.Key.Return:
                             options[cur_option][1]()
+
+                    elif event.Type == sf.Event.KeyReleased and event.Key.Code == sf.Key.Escape:
+                        swallow_escape = False
 
                     # Adjust the viewport when the window is resized
                     if event.Type == sf.Event.Resized:

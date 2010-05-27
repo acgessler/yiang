@@ -31,6 +31,9 @@ class Game:
         self.clock = sf.Clock()
         self.total = 0.0
         self.total_accum = 0.0
+        self.score = 0
+
+        self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
 
     def Run(self):
         """ """
@@ -42,7 +45,7 @@ class Game:
         event = sf.Event()
         while self.running is True:
             if not self.app.IsOpened():
-                return
+                return False
 
             if self.app.GetEvent(event):
                 # Close window : exit
@@ -68,10 +71,20 @@ class Game:
                 if not tiles is None:
                     tiles.Draw(self.app)
 
+
+            # Finally draw the status bar with the player's score and game duration
+            status = sf.String("Time:  {0:4.4}\nScore: {1}".format(self.GetTotalElapsedTime(),self.GetScore()),
+                Font=self.status_bar_font,Size=defaults.letter_height_status)
+            status.SetColor(sf.Color.Green)
+            status.SetPosition(10,10)
+
+            self.app.Draw(status)
+
             self.app.Display()
 
         self.total_accum += self.clock.GetElapsedTime()
         print("Leave mainloop")
+        return True
 
     def Suspend(self):
         """ Suspend the game """
@@ -91,10 +104,20 @@ class Game:
         game was started OR resumed."""
         return self.clock
 
-    def GetTotalElapsedTime():
+    def GetTotalElapsedTime(self):
         """ Get the total duration of this game, not counting in
         suspend times. The return valuue is in seconds. """
-        return self.total 
+        return self.total
+
+    def GetScore(self):
+        """ Get the total, accumulated score up to now.
+        The score is an integer. """
+        return self.score
+
+    def Award(self,points):
+        """ Award a certain amount of points to the player's
+        score as a reward for extreme skillz."""
+        self.score += points
 
     def SpawnRandomMap(self,start,outxidx):
         pass
