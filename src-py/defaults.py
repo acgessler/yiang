@@ -16,10 +16,11 @@ caption = "Yet another Jump'n'Run (an unfair one)"
 danger_signs_ttl = 30
 tiles_size = [5,3]
 move_speed = [5,4]
-gravity = -10 # tiles/m*s^2
-jump_vel = 10 # tiles/m*s
+gravity = -15 # tiles/m*s^2
+jump_vel = 8 # tiles/m*s
 cheat_allow_updown_move = False
 debug_prevent_fall_down = True
+move_map_speed = 1
 
 # these are not intended to be modified, although no one keeps
 # you from changing them.

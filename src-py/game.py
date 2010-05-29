@@ -34,6 +34,7 @@ class Game:
         self.total = 0.0
         self.total_accum = 0.0
         self.score = 0
+        self.last_time = 0
 
         self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
 
@@ -68,12 +69,17 @@ class Game:
                 
             time = self.clock.GetElapsedTime()
             self.total = time+self.total_accum
+
+            dtime = time - self.last_time
+            self.last_time = time
+
+            self.origin[0] += dtime*defaults.move_map_speed
             
             for entity in self.entities:
-                entity.Update(time)
+                entity.Update(time,dtime,self)
 
             for entity in self.entities:
-                entity.Draw()
+                entity.Draw(self)
 
             # Now draw the status bar with the player's score and game duration
             status = sf.String("Time:  {0:4.4}\nScore: {1}".format(self.GetTotalElapsedTime(),self.GetScore()),
@@ -140,13 +146,15 @@ class Game:
         self.level = level
         self.entities = []
 
-        color_dict = collections.defaultdict(lambda x: sf.Color.White, {
-            "R" : sf.Color.Red,
-            "G" : sf.Color.Green,
-            "B" : sf.Color.Blue,
-            "Y" : sf.Color.Yellow,
-            "W" : sf.Color.White,
+        color_dict = collections.defaultdict(lambda: sf.Color.White, {
+            "r" : sf.Color.Red,
+            "g" : sf.Color.Green,
+            "b" : sf.Color.Blue,
+            "y" : sf.Color.Yellow,
+            "_" : sf.Color.White,
         })
+
+        spaces = [" ","\t"]
         
         try:
             with open(os.path.join(defaults.data_dir,"levels",str(level)+".txt"), "rt") as f:
@@ -154,18 +162,25 @@ class Game:
                 assert len(lines)>0
                 
                 for y,line in enumerate(lines):
-                    assert len(line)%2 
-                    for x in range(len(line)-1):
+                    line = line.rstrip()
+                    if len(line) == 0:
+                        continue
+                    
+                    assert len(line)%2 == 0
+                    for x in range(0,len(line),2):
                         ccode = line[x]
                         tcode = line[x+1]
 
-                        tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"))
+                        if tcode in spaces:
+                            continue
+
+                        tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
                         tile.SetColor(color_dict[ccode])
-                        tile.SetPosition((x, defaults.cells[1] - y))
+                        tile.SetPosition((x//2, defaults.tiles[1] - y))
 
-                        self.entities.apppend(tile)
+                        self.entities.append(tile)
 
-            print("Got {0} entities for level {1}".format(len(entities),level))
+            print("Got {0} entities for level {1}".format(len(self.entities),level))
                 
         except IOError:
             print("Failure loading level "+str(level))
@@ -185,10 +200,10 @@ class Entity:
         self.pos = [0,0]
         self.color = sf.Color.White 
 
-    def Update(self):
+    def Update(self,time_elapsed,time_delta,game):
         pass
 
-    def Draw(self):
+    def Draw(self,game):
         pass
 
     def SetPosition(self,pos):
@@ -201,7 +216,7 @@ class Entity:
 class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing"""
          
-    def __init__(self,text):
+    def __init__(self,text=""):
         Entity.__init__(self)
          
         font = FontCache.get(defaults.letter_size[1])
@@ -210,17 +225,14 @@ class Tile(Entity):
     def SetColor(self,color):
         Entity.SetColor(self,color)
         self.cached.SetColor(color)
-
-    def SetPosition(self,position):
-        Entity.SetPosition(self,position)
-        self.cached.SetPosition(position)
+        
 
     @staticmethod
     def CreateSimple(char,color,pos):
         """Create a tile which consists solely of a particular color,
         in a single color at a specific location."""
         t = Tile((char*defaults.tiles_size[0]+'\n')*defaults.tiles_size[1])
-        t.SetColor(col)
+        t.SetColor(color)
         t.SetPosition(pos)
 
         return t
@@ -239,44 +251,57 @@ class Tile(Entity):
 class TileLoader:
     """Utility class to load static or animated sets of tiles from
     unformatted ASCII text files"""
+
+    cache = {}
     
     @staticmethod
-    def Load(file):
+    def Load(file,game):
         """Load from a file in the following file format:
           <exec-statement>
           <raw>
         Any occurence of <raw> in the <exec-statement> is replaced by
         <raw>. <out> in the Python line denotes the output object,
-        one may use 'entity' as well. 
+        one may use 'entity' as well. Other substitutions:
+        <game> the current Game instance.
         """
 
-        print("Loading tile from "+file)
-        try:
-            with open(file,"rt") as f:
-                lines = f.read().split("\n",1)
-                assert len(lines)==2
+        
+        lines = TileLoader.cache.get(file,None)
 
-                replace = {
-                    "<out>" : "entity",
-                    "<raw>" : '"""'+lines[1].rstrip()+'"""'
-                }
+        if lines is None:
+            try:
+                print("Loading tile from "+file)
+                with open(file,"rt") as f:
+                    lines = f.read().split("\n",1)
+                    assert len(lines)==2
 
-                l = lines[0]
-                for k,v in replace.items():
-                    l = l.replace(k,v)
+                    TileLoader.cache[file] = lines
+                      
+            except IOError:
+                print("Could not open "+file+" for reading")
 
-                tempdict = {}
-                exec(l,globals(),tempdict)
-                return tempdict.get("entity",Tile())
-                  
-        except IOError:
-            print("Could not open "+file+" for reading")
+            except AssertionError as err:
+                print("File "+file+" is not well-formatted:")
+                print(err)
 
-        except AssertionError as err:
-            print("File "+file+" is not well-formatted:")
-            print(err)
+        if lines is None:
+            return Tile()
 
-        return Tile()
+        replace = {
+            "<out>"  : "entity",
+            "<raw>"  : 'r"""'+lines[1].rstrip()+'"""',
+            "<game>" : "game"
+        }
+
+        l = lines[0]
+        for k,v in replace.items():
+            l = l.replace(k,v)
+
+        tempdict = dict(locals())
+        exec(l,globals(),tempdict)
+        return tempdict.get("entity",Tile())
+
+        
     
 
     

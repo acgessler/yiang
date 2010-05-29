@@ -11,24 +11,19 @@ class Player(Entity):
     player tiles accordingly. This entity is unique within a
     single game. """
 
-    def __init__(self,text):
+    def __init__(self,text,game):
         Entity.__init__(self)
-        #self.game = Game.Get()
+        self.game = game
         self.pos = [0,3] # in tile coordinates
         self.vel = [0,0]
         self.acc = [0,defaults.gravity]
         self.can_jump = True
-        self.last_time = 0
 
         self.tiles = [Tile.CreateSimple("#",sf.Color.White,(0,1)),
-            Tile.CreateSimple("#",sf.Color.White,(0,2)),
-            Tile.CreateSimple("*",sf.Color.White,(0,3))]
+            Tile.CreateSimple("#",sf.Color.White,(0,2))]
 
-    def Update(self,time_elapsed):
+    def Update(self,time_elapsed,time,game):
         inp = self.game.GetApp().GetInput()
-        
-        time = time_elapsed - self.last_time
-        self.last_time = time_elapsed
         vec = [0,0]
 
         if defaults.cheat_allow_updown_move is True:
@@ -72,6 +67,6 @@ class Player(Entity):
         self.vel[0] = 0
 
 
-    def Draw(self):
+    def Draw(self,game):
         for tile in self.tiles:
             tile.DrawRelative(self.game,self.pos)
