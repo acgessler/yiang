@@ -1,0 +1,9 @@
+from player import Player; <out> = Player(<raw>)
+XXXXX
+XXXX
+XX
+  X
+  X
+  X
+ 
+
