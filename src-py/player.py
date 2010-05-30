@@ -94,6 +94,14 @@ class Player(Entity):
 
         self.vel[0] = 0
 
+        self._UpdatePostFX(game)
+
+
+    def _UpdatePostFX(self,game):
+        game.effect.SetParameter("cur",
+            self.pos[0]/defaults.tiles[0],
+            self.pos[1]/defaults.tiles[1])   
+
 
     def Draw(self,game):
         self.tiles[self.cur_tile[-1]].DrawRelative(self.game,self.pos)

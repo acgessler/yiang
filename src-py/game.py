@@ -37,6 +37,11 @@ class Game:
         self.score = 0
         self.last_time = 0
 
+        self.effect = sf.PostFX()
+        self.effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","ingame1.sfx"))
+        self.effect.SetTexture("framebuffer", None);
+        self.effect.SetParameter("cur",0.0,0.0)
+
         self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
 
     def Run(self):
@@ -81,6 +86,8 @@ class Game:
 
             for entity in self.entities:
                 entity.Draw(self)
+
+            self.app.Draw(self.effect)
 
             # Now draw the status bar with the player's score and game duration
             status = sf.String("Time:  {0:4.4}\nScore: {1}".format(self.GetTotalElapsedTime(),self.GetScore()),

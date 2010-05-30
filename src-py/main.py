@@ -134,7 +134,7 @@ def main():
     effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","intro.sfx"))
     effect.SetTexture("framebuffer", None);
 
-    app.SetFramerateLimit(30)
+    #app.SetFramerateLimit(30)
     ttl = 0
 
     set_menu_option(0)
