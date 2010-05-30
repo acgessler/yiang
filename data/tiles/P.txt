@@ -1,9 +1,0 @@
-from player import Player; <out> = Player(<raw>,<game>)
-XXXXX
-XXXX
-XX
-  X
-  X
-  X
- 
-

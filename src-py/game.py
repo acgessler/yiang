@@ -6,6 +6,7 @@ import sf
 import itertools
 import collections
 import os
+import random
 
 # My own stuff
 import defaults
@@ -129,6 +130,10 @@ class Game:
         score as a reward for extreme skillz."""
         self.score += points
 
+    def Kill(self):
+        """Kill the player immediately, set game over state"""
+        pass
+
     def Draw(self,drawable,pos):
         """ Draw a sf.Drawable at a specific position, which is
         specified in tile coordinates."""
@@ -161,22 +166,24 @@ class Game:
                 lines = f.readlines()
                 assert len(lines)>0
                 
-                for y,line in enumerate(lines):
+                for y,line in enumerate(lines): 
                     line = line.rstrip()
                     if len(line) == 0:
                         continue
-                    
-                    assert len(line)%2 == 0
-                    for x in range(0,len(line),2):
-                        ccode = line[x]
-                        tcode = line[x+1]
 
-                        if tcode in spaces:
+                    diff = len(lines) - defaults.tiles[1]
+
+                    assert len(line)%3 == 0
+                    for x in range(0,len(line),3):
+                        ccode = line[x]
+                        tcode = line[x+1]+line[x+2]
+
+                        if tcode[0] in spaces:
                             continue
 
                         tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
                         tile.SetColor(color_dict[ccode])
-                        tile.SetPosition((x//2, defaults.tiles[1] - y))
+                        tile.SetPosition((x//3, defaults.tiles[1] - y + diff-1))
 
                         self.entities.append(tile)
 
@@ -212,20 +219,32 @@ class Entity:
     def SetColor(self,color):
         self.color = color
 
+    def CheckCollision(self,rect,game):
+        return None
+
+    def Interact(self,game):
+        pass
+
 
 class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing"""
          
-    def __init__(self,text=""):
+    def __init__(self,text="<no text specified>"):
         Entity.__init__(self)
-         
-        font = FontCache.get(defaults.letter_size[1])
-        self.cached = sf.String(text,Font=font,Size=defaults.letter_size[1])
+
+        self.text = text
+        self._Recache()
 
     def SetColor(self,color):
         Entity.SetColor(self,color)
-        self.cached.SetColor(color)
+        self.cached.SetColor(self.color)
+
+    def _Recache(self):
+        """Cache the tile string from self.text"""
+        font = FontCache.get(defaults.letter_size[1])
+        self.cached = sf.String(self.text,Font=font,Size=defaults.letter_size[1])
         
+        self.cached.SetColor(self.color)
 
     @staticmethod
     def CreateSimple(char,color,pos):
@@ -247,6 +266,85 @@ class Tile(Entity):
         position. The offset is specified in tile coordinates"""
         game.Draw(self.cached,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
 
+
+class AnimTile(Tile):
+    """ Adds simple animation to a Tile, which rotates the
+    actual image that is displayed. The animation is either
+    played automatically or manually."""
+
+    
+    def __init__(self,text,height,frames,speed):
+        """ Read an animated tile from a text block. Such a textual
+        description contains the ASCII images for all frames,
+        separated by an empty line for clarity.
+
+            Parameters:
+               text Text block
+               height Character height of the tile
+               frames Number of frames in the file
+               speed Playback speed, -1 for manual playback. This is
+                the total time to play the whole animation, not to
+                shift from one frame to the next
+
+            Throws:
+                AssertionError
+        """
+
+        Tile.__init__(self)
+        
+        lines = text.split("\n")
+        n = 0
+
+        self.texts = []
+        for frame in range(frames):
+            assert n+height<=len(lines)
+            self.texts.append("\n".join(lines[n:n+height]))
+            n += height+1
+
+        self.speed = -1 if speed == -1 else speed / len(self.texts)
+        self.animidx = -1
+        self.animofs = 0
+
+    def Next(self):
+        """Manually advance to the next frame"""
+        self.Set(self.Get()+1)
+
+    def Get(self):
+        """Get the current frame index"""
+        return self.animidx
+
+    def Set(self,idx):
+        """Set the current animation frame """
+        self.animofs = idx-self.animidx
+        self.animidx = idx
+
+        if self.speed==-1:
+            self._UpdateAnim()
+
+    def GetNumFrames(self):
+        """Get the number of valid animation frames"""
+        return len(self.texts)
+
+    def GotoRandom(self):
+        """Advance to a random frame"""
+        self.Set(random.randint(0,self.GetNumFrames()-1))
+
+    def Update(self,time_elapsed,time_delta,game):
+        """Overridden from Entity"""
+        if self.speed == -1:
+            return
+            
+        animidx = time_elapsed // self.speed + self.animofs
+        if self.animidx == animidx:
+            return
+
+        self.animidx = animidx
+        self._UpdateAnim()
+
+    def _UpdateAnim(self):
+        self.text = self.texts[int(self.animidx) % self.GetNumFrames()]
+        self._Recache()
+        
 
 class TileLoader:
     """Utility class to load static or animated sets of tiles from
@@ -289,13 +387,15 @@ class TileLoader:
 
         replace = {
             "<out>"  : "entity",
-            "<raw>"  : 'r"""'+lines[1].rstrip()+'"""',
+            "<raw>"  : 'r"""'+lines[1].rstrip()+' """',
             "<game>" : "game"
         }
 
         l = lines[0]
         for k,v in replace.items():
             l = l.replace(k,v)
+
+        #print(l)
 
         tempdict = dict(locals())
         exec(l,globals(),tempdict)
