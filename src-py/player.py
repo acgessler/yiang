@@ -14,7 +14,7 @@ class Player(Entity):
     ANIM_RIGHT,ANIM_JUMP_RIGHT,ANIM_LEFT,ANIM_JUMP_LEFT = range(4)
     MAX_ANIMS = 4
 
-    def __init__(self,text,game):
+    def __init__(self,text,game,width,height,ofsx):
         Entity.__init__(self)
         self.game = game
         self.vel = [0,0]
@@ -22,20 +22,22 @@ class Player(Entity):
         self.can_jump = True
         self.cur_tile = [Player.ANIM_RIGHT]
 
+        self.pwidth = width / defaults.tiles_size[0]
+        self.pheight = height / defaults.tiles_size[1]
+        self.pofsx = ofsx / defaults.tiles_size[0]
+
         lines = text.split("\n")
         height = len(lines)//Player.MAX_ANIMS
 
         self.tiles = []
         for i in range(0,(len(lines)//height)*height,height):
             self.tiles.append(Tile("\n".join(lines[i:i+height])))
-            self.tiles[-1].SetPosition((0,1))
+            self.tiles[-1].SetPosition((0,0))
 
         assert len(self.tiles) == Player.MAX_ANIMS
 
     def SetPosition(self,pos):
-        #for tile in self.tiles:
-        #    tile.SetPosition(pos)
-        pass
+        self.pos = pos
 
     def SetColor(self,pos):
         for tile in self.tiles:
@@ -73,35 +75,107 @@ class Player(Entity):
 
         #if inp.IsKeyDown(sf.Key.):
             
-            
-        self.vel[0] += self.acc[0]*time
-        self.vel[1] += self.acc[1]*time
-
-        vec[0] += self.vel[0]*time
-        vec[1] += self.vel[1]*time
+        newvel = [self.vel[0] + self.acc[0]*time,self.vel[1] + self.acc[1]*time]
+        vec[0] += newvel[0]*time
+        vec[1] += newvel[1]*time
 
         if pvely > 0 and self.vel[1]<0:
             del self.cur_tile[-1] 
             
-        self.pos[0] += vec[0]
-        self.pos[1] += vec[1]
+        newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
+
+        # Check for collisions
+        self.pos,self.vel = self._HandleCollisions(newpos,newvel,game)
 
         # (HACK) -- for debugging, prevent the player from falling below the map
-        if defaults.debug_prevent_fall_down and self.pos[1]<1:
+        if False and defaults.debug_prevent_fall_down and self.pos[1]<1:
             self.pos[1] = 1
             self.can_jump = True
             self.vel[1] = 0
 
         self.vel[0] = 0
-
         self._UpdatePostFX(game)
 
 
     def _UpdatePostFX(self,game):
         game.effect.SetParameter("cur",
             self.pos[0]/defaults.tiles[0],
-            self.pos[1]/defaults.tiles[1])   
+            self.pos[1]/defaults.tiles[1])
 
+    def _HandleCollisions(self,newpos,newvel,game):
+        """Handle any collision events, given the computed new position
+        of the player. The funtion returns the actual position after
+        collision handling has been performed."""
 
+        rect = (newpos[0]+self.pofsx, newpos[1],self.pwidth,self.pheight)
+        # brute force .. :-)
+        
+        for collider in game.GetEntities():
+            mycorner = collider.GetBoundingBox()
+            if mycorner is None:
+                continue
+
+            mycorner = (mycorner[0],mycorner[1],mycorner[2]+mycorner[0],mycorner[3]+mycorner[1])
+            has = 0
+             
+            # lower left corner
+            if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
+                has |= 1
+
+            # lower right corner
+            if mycorner[2]>rect[0]+rect[2]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
+                has |= 2
+
+            # upper left corner
+            if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]+rect[3]>=mycorner[1]:
+                has |= 4
+
+            # upper right corner
+            if mycorner[2]>rect[0]+rect[2]>=mycorner[0] and mycorner[3]>rect[1]+rect[3]>=mycorner[1]:
+                has |= 8
+
+            if has == 0:
+                continue
+
+            print("hi!")
+
+            res = collider.Interact(self,game)
+            if res == Entity.KILL:
+                print("hit deadly entity, need to commit suicide")
+                game.Kill()
+
+            elif res != Entity.BLOCK:
+                return newpos,newvel
+
+            # collision with ceiling
+            if has & (4|8):
+                newpos[1] = mycorner[3]-self.pheight
+                newvel[0] = min(0,newvel[1])
+
+            # collision with floor
+            if has & (1|2):
+                newpos[1] = mycorner[1]
+                newvel[1] = max(0,newvel[1])
+
+            # collision on the left
+            if has & (1|4):
+                newpos[0] = mycorner[0]+self.pofsx
+                newvel[0] = min(0,newvel[0])
+
+            # collision on the right
+            if has & (2|8):
+                newpos[0] = mycorner[2]-self.pwidth
+                newvel[0] = max(0,newvel[0])
+
+            break
+
+        return newpos,newvel
+            
     def Draw(self,game):
         self.tiles[self.cur_tile[-1]].DrawRelative(self.game,self.pos)
+
+    def GetBoundingBox(self):
+        return None   
+
+
+

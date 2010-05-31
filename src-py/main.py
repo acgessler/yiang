@@ -88,8 +88,8 @@ def choose_level():
     """Switch to the choose level menu option and return the selected
     level. 0 is returned if the user cancels the operaton"""
 
-    height = 40
-    width_spacing, height_spacing = 60,60
+    height = 80
+    width_spacing, height_spacing = 100,100
     
     num = get_level_count()
     xnum = defaults.resolution[0]//width_spacing

@@ -15,8 +15,8 @@ class DangerousBarrel(AnimTile):
         if randomize is True:
             self.GotoRandom()
 
-    def Interact(self,game):
-        game.Kill()
+    def Interact(self,other,game):
+        return Entity.KILL
 
 
     

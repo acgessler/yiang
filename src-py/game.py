@@ -203,13 +203,18 @@ class Game:
         except AssertionError as err:
             print("Level "+str(level)+" is not well-formatted:")
             print(err)
-    
+
+    def GetEntities(self):
+        """Get a list of all entities in the game"""
+        return self.entities
 
 class Entity:
     """Base class for all kinds of entities, including the player.
     The term `entity` refers to a state machine which is in control
     of a set of tiles. Entities receive Update() callbacks once per
     logical frame."""
+
+    ENTER,BLOCK,LEAVE,KILL = range(4)
 
     def __init__(self):
         self.pos = [0,0]
@@ -227,11 +232,13 @@ class Entity:
     def SetColor(self,color):
         self.color = color
 
-    def CheckCollision(self,rect,game):
+    def GetBoundingBox(self,rect,game):
+        """Get the bounding box (x,y,w,h) of the entity or
+        None of the entity does not support this concept"""
         return None
 
-    def Interact(self,game):
-        pass
+    def Interact(self,other,game):
+        return Entity.BLOCK
 
 
 class Tile(Entity):
@@ -243,9 +250,19 @@ class Tile(Entity):
         self.text = text
         self._Recache()
 
+        self.color = sf.Color.White
+        self.pos = [0,0]
+
+    def __str__(self):
+        return "Tile, pos: {0}|{1}, text:\n{2}".format(\
+            self.pos[0],self.pos[1],self.text)
+
     def SetColor(self,color):
         Entity.SetColor(self,color)
         self.cached.SetColor(self.color)
+
+    def GetBoundingBox(self):
+        return (self.pos[0],self.pos[1],1,1)
 
     def _Recache(self):
         """Cache the tile string from self.text"""
@@ -312,6 +329,12 @@ class AnimTile(Tile):
         self.speed = -1 if speed == -1 else speed / len(self.texts)
         self.animidx = -1
         self.animofs = 0
+
+    def __str__(self):
+        return "AnimTile, pos: {0}|{1}, frames: {2}, speed: {3}, text:\n{2}".format(\
+            self.pos[0],self.pos[1],
+            self.GetNumFrames(),
+            self.speed,self.text)
 
     def Next(self):
         """Manually advance to the next frame"""
