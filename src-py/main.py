@@ -24,9 +24,20 @@ def options_credits():
 
 def options_newgame():
     global game
-    global app
 
     game = Game(app)
+    game.LoadLevel(1)
+    options_resumegame()
+
+def options_newgame_choose():
+    global game
+
+    level = choose_level()
+    if level == 0:
+        return
+
+    game = Game(app)
+    game.LoadLevel(level)
     options_resumegame()
 
 def options_resumegame():
@@ -39,12 +50,13 @@ def options_resumegame():
 options = [
     ("New Game -------------------------------------------", options_newgame, "You will die"),
     ("Resume Game", options_resumegame, "You will die soon"),
+    ("Choose Level -------------------------------------------", options_newgame_choose, "Bad idea"),
     ("Credits", options_credits, defaults.credits_string),
     ("Quit!", options_quit,"")
 ]
 
 # numeric constants for the menu entries
-OPTION_NEWGAME,OPTION_RESUME,OPTION_CREDITS,OPTION_QUIT = range(4)
+OPTION_NEWGAME,OPTION_RESUME,OPTION_CHOOSELEVEL,OPTION_CREDITS,OPTION_QUIT = range(5)
 
 # mixed global variables to control the main menu
 cur_option = 0
@@ -52,21 +64,42 @@ menu_text = [(None,None)]*len(options)
 game = None
 app = None
 swallow_escape = False
+font = None
+effect = sf.PostFX()
+event = sf.Event()
+ttl = 0
 
 clock = sf.Clock()
+
+
+def choose_level():
+
+    level = 1
+    while True:
+
+        if app.GetEvent(event):
+            if event.Type == sf.Event.KeyPressed:
+                if event.Key.Code == sf.Key.Escape:
+                    return 0
+                
+        draw_background()
+        app.Display()
+
+    return level
+
 
 def set_menu_option(i):
     global cur_option
     cur_option = i % len(options)
 
-    height = 100
+    height = 80
 
     for i in range(len(options)):
         tex = sf.String(options[i][0],Font=FontCache.get(height),Size=height)
         tex.SetPosition(-20,100+i*height*1.5)
         
         tex.SetColor((sf.Color(100,100,100) if cur_option == OPTION_RESUME and game is None else sf.Color.Red)
-            if cur_option==i else sf.Color.Black)
+            if cur_option==i else sf.Color.White)
 
         tex2 = sf.String(options[i][0],Font=FontCache.get(height+2),Size=height+2)
         tex2.SetPosition(-24,98+i*height*1.5)
@@ -99,6 +132,38 @@ def check_requirements():
     if sf.PostFX.CanUsePostFX() is False:
         print("Need to support postprocessing effects, buy better hardware.")
         sys.exit(-100)
+
+def draw_background():
+    """Draw the fuzzy menu background """
+    global ttl
+    global cached_danger_signs
+    
+    app.Clear(sf.Color.White)
+               
+    s = ""
+    abc = "abcdefghijklmnopqrstuvABCDEFGHJIKLMNOPQRSTUVWXYZ#@/^%$"
+    for y in range(defaults.cells_intro[1]):
+        for x in range(defaults.cells_intro[0]):
+            s += random.choice(abc)
+            
+        s += "\n"
+           
+    text = sf.String(s,Font=font,Size=defaults.letter_height_intro)
+    text.SetPosition(0,0)
+    text.SetColor(sf.Color.Black)
+    app.Draw(text)
+
+    if ttl == 0:
+        cached_danger_signs = recache_danger_signs(font)
+        ttl = defaults.danger_signs_ttl
+    ttl = ttl-1
+        
+    for te in cached_danger_signs:
+        app.Draw(te)
+
+    effect.SetParameter("strength", (math.sin( clock.GetElapsedTime() ) +1)*0.5);
+    app.Draw(effect)
+
         
 
 def main():
@@ -106,6 +171,10 @@ def main():
 
     global app
     global swallow_escape
+    global ttl
+    global effect
+    global font
+    global event
     check_requirements()
 
     # Read game.txt, which is the master config file
@@ -130,7 +199,6 @@ def main():
     font = FontCache.get(defaults.letter_height_intro)
 
     # Load the PostFX (I had to try them ...)
-    effect = sf.PostFX()
     effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","intro.sfx"))
     effect.SetTexture("framebuffer", None);
 
@@ -138,11 +206,7 @@ def main():
     ttl = 0
 
     set_menu_option(0)
-    clock = sf.Clock()
-    
     while app.IsOpened():
-        # Process events
-        event = sf.Event()
         while True:
 
                 if app.GetEvent(event):
@@ -173,31 +237,8 @@ def main():
                     if event.Type == sf.Event.Resized:
                         assert False
 
-                app.Clear(sf.Color.White)
-               
-                s = ""
-                abc = "abcdefghijklmnopqrstuvABCDEFGHJIKLMNOPQRSTUVWXYZ#@/^%$"
-                for y in range(defaults.cells_intro[1]):
-                    for x in range(defaults.cells_intro[0]):
-                        s += random.choice(abc)
-                        
-                    s += "\n"
-                       
-                Text = sf.String(s,Font=font,Size=defaults.letter_height_intro)
-                Text.SetPosition(0,0)
-                Text.SetColor(sf.Color.Black)
-                app.Draw(Text)
+                draw_background()
 
-                if ttl == 0:
-                    cached_danger_signs = recache_danger_signs(font)
-                    ttl = defaults.danger_signs_ttl
-                ttl = ttl-1
-                    
-                for te in cached_danger_signs:
-                    app.Draw(te)
-
-                effect.SetParameter("strength", (math.sin( clock.GetElapsedTime() ) +1)*0.5);
-                app.Draw(effect)
                 for entry in itertools.chain(menu_text):
                     app.Draw(entry)
 

@@ -21,6 +21,7 @@ jump_vel = 8 # tiles/m*s
 cheat_allow_updown_move = False
 debug_prevent_fall_down = True
 move_map_speed = 0.1
+lives = 4
 
 # these are not intended to be modified, although no one keeps
 # you from changing them.

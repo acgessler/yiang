@@ -5,12 +5,12 @@ effect
 {
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
-	vec4 other = framebuffer(_in+vec2(0.125,0.0));
 	vec4 another = framebuffer(_in+vec2(-1.0,0.0));
 
-	float scale =  saturate((1.f - length(_in-cur))*1);
+	float scale =  saturate((length(_in-cur))*1);
+	float4 color = (pixel*1.0f+(another*0.2));
 
-	_out = (pixel*1.0f+(other*0.1f+another*0.1)) * scale;
+	_out.rgb = mix(color.rgb,float3(length(color.rgb)),scale) * saturate(1.f-scale+0.3);
 	_out.a = 1.f;
 }
 

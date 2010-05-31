@@ -8,8 +8,8 @@ effect
 	vec4 other = framebuffer(_in+vec2(strength,0.2));
 	vec4 another = framebuffer(_in+vec2(-0.4,strength));
 
-    // Finally write the output pixel using 50% of the source pixel and 50% of its colored version
-    _out = pixel*0.35f+(other*0.3f+another*0.2);
+    	_out = pixel*0.1f+(other*0.05f+another*0.05);
+	_out.a = 1.f;
 
 }
 

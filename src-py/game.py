@@ -28,13 +28,14 @@ class Game:
         self.entities = []
         self.level = -1
 
-        # Load the first level
-        self.LoadLevel(1)
+        # Load the first level for testing purposes
+        # self.LoadLevel(1)
          
         self.clock = sf.Clock()
         self.total = 0.0
         self.total_accum = 0.0
         self.score = 0
+        self.lives = defaults.lives
         self.last_time = 0
 
         self.effect = sf.PostFX()
