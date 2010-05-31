@@ -137,8 +137,6 @@ class Player(Entity):
             if has == 0:
                 continue
 
-            print("hi!")
-
             res = collider.Interact(self,game)
             if res == Entity.KILL:
                 print("hit deadly entity, need to commit suicide")
@@ -150,23 +148,28 @@ class Player(Entity):
             # collision with ceiling
             if has & (4|8):
                 newpos[1] = mycorner[3]-self.pheight
-                newvel[0] = min(0,newvel[1])
+                newvel[1] = min(0,newvel[1])
+                #print("ceiling")
 
             # collision with floor
             if has & (1|2):
                 newpos[1] = mycorner[1]
                 newvel[1] = max(0,newvel[1])
+                #print("floor")
 
             # collision on the left
             if has & (1|4):
                 newpos[0] = mycorner[0]+self.pofsx
-                newvel[0] = min(0,newvel[0])
+                newvel[0] = max(0,newvel[0])
+                #print("left")
 
             # collision on the right
             if has & (2|8):
                 newpos[0] = mycorner[2]-self.pwidth
-                newvel[0] = max(0,newvel[0])
+                newvel[0] = min(0,newvel[0])
+                #print("right")
 
+            #print("*")
             break
 
         return newpos,newvel

@@ -20,6 +20,7 @@ gravity = -15 # tiles/m*s^2
 jump_vel = 8 # tiles/m*s
 cheat_allow_updown_move = False
 debug_prevent_fall_down = True
+debug_draw_bounding_boxes = True
 move_map_speed = 0.1
 lives = 4
 

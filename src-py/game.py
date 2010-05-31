@@ -91,10 +91,26 @@ class Game:
             self.app.Draw(self.effect)
 
             # Now draw the status bar with the player's score and game duration
-            status = sf.String("Time:  {0:4.4}\nScore: {1}".format(self.GetTotalElapsedTime(),self.GetScore()),
+            status = sf.String("Time:  {0:4.4}\nScore: {1}".format(
+                self.GetTotalElapsedTime(),
+                self.GetScore()),
                 Font=self.status_bar_font,Size=defaults.letter_height_status)
             status.SetColor(sf.Color.White)
             status.SetPosition(10,10)
+
+            self.app.Draw(status)
+
+            # .. and the number of remaining lifes
+            status = sf.String("\n".join([
+                    r"[LIFE]     "  *self.lives,
+                    r"XXXX XXXX  "  *self.lives,
+                    r"X       X  "  *self.lives,
+                    r"XXXX XXXX  "  *self.lives,
+                    r"XXXXXXXXX  "  *self.lives
+                ]),
+                Font=self.status_bar_font,Size=defaults.letter_height_status)
+            status.SetColor(sf.Color.Red)
+            status.SetPosition(defaults.resolution[0]//2,10)
 
             self.app.Draw(status)
 
