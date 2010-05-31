@@ -72,7 +72,27 @@ ttl = 0
 clock = sf.Clock()
 
 
+def get_level_count():
+    """Get the number of levels in the data/levels folder"""
+    index = 0
+    for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
+        if file.endswith(".txt"):
+            try:
+                index = max(index,int(file[:-4]))
+            except:
+                pass # swallow and burn, only NN.txt files are counted
+            
+    return index
+
 def choose_level():
+    """Switch to the choose level menu option and return the selected
+    level. 0 is returned if the user cancels the operaton"""
+
+    height = 40
+    width_spacing, height_spacing = 60,60
+    
+    num = get_level_count()
+    xnum = defaults.resolution[0]//width_spacing
 
     level = 1
     while True:
@@ -81,8 +101,33 @@ def choose_level():
             if event.Type == sf.Event.KeyPressed:
                 if event.Key.Code == sf.Key.Escape:
                     return 0
+
+                elif event.Key.Code == sf.Key.Right:
+                    level = (level+1)%xnum
+
+                elif event.Key.Code == sf.Key.Left:
+                    level = (level-1)%xnum
+
+                elif event.Key.Code == sf.Key.Down:
+                    level = (level+xnum)%xnum
+
+                elif event.Key.Code == sf.Key.Up:
+                    level = (level-xnum)%xnum
+
+                elif event.Key.Code == sf.Key.Return:
+                    break
                 
         draw_background()
+
+        for y in range(math.ceil( num/xnum )):
+            for x in range((num - y*xnum) % xnum):
+                i = y*xnum +x +1
+                tex = sf.String(str(i),Font=FontCache.get(height),Size=height)
+                tex.SetColor(sf.Color.Red if level == i else sf.Color.Black)
+                tex.SetPosition(20+x*width_spacing,20+y*height_spacing)
+                
+                app.Draw(tex)
+        
         app.Display()
 
     return level
