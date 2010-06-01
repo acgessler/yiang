@@ -44,6 +44,8 @@ class Game:
         self.effect.SetParameter("cur",0.0,0.0)
 
         self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
+        self.life_bar_font = FontCache.get(defaults.letter_height_lives,face=defaults.font_lives)
+
 
     def Run(self):
         """ Run the main loop. If the game was previsouly suspended,
@@ -90,6 +92,9 @@ class Game:
 
             self.app.Draw(self.effect)
 
+            if defaults.debug_draw_bounding_boxes:
+                self._DrawBoundingBoxes()
+
             # Now draw the status bar with the player's score and game duration
             status = sf.String("Time:  {0:4.4}\nScore: {1}".format(
                 self.GetTotalElapsedTime(),
@@ -101,14 +106,16 @@ class Game:
             self.app.Draw(status)
 
             # .. and the number of remaining lifes
-            status = sf.String("\n".join([
-                    r"[LIFE]     "  *self.lives,
-                    r"XXXX XXXX  "  *self.lives,
-                    r"X       X  "  *self.lives,
-                    r"XXXX XXXX  "  *self.lives,
-                    r"XXXXXXXXX  "  *self.lives
-                ]),
-                Font=self.status_bar_font,Size=defaults.letter_height_status)
+            status = sf.String("\n".join(map(lambda x:x*self.lives,
+" OOO     OOO   \n\
+O****O  O***O  \n\
+ O****OO***O   \n\
+  O*******O    \n\
+   O*****O     \n\
+    O***O      \n\
+     O*O       \n\
+      O        ".split("\n"))),
+                Font=self.life_bar_font,Size=8)
             status.SetColor(sf.Color.Red)
             status.SetPosition(defaults.resolution[0]//2,10)
 
@@ -120,6 +127,31 @@ class Game:
         self.total_accum += self.clock.GetElapsedTime()
         print("Leave mainloop")
         return True
+
+    def _DrawBoundingBoxes(self):
+        """Draw visible bounding boxes around all entities in the scene"""
+        for entity in self.entities:
+            bb = entity.GetBoundingBox()
+            if bb is None:
+                continue
+
+            shape = sf.Shape()
+
+            bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
+            bb[0:2] = self._ToDeviceCoordinates(self._ToCameraCoordinates( bb[0:2] ))
+            bb[2:4] = self._ToDeviceCoordinates(self._ToCameraCoordinates( bb[2:4] ))
+            
+            shape.AddPoint(bb[0],bb[1],sf.Color.Green,sf.Color.Green)
+            shape.AddPoint(bb[2],bb[1],sf.Color.Green,sf.Color.Green)
+            shape.AddPoint(bb[2],bb[3],sf.Color.Green,sf.Color.Green)
+            shape.AddPoint(bb[0],bb[3],sf.Color.Green,sf.Color.Green)
+            #shape.AddPoint(bb[0],bb[1],sf.Color.Green,sf.Color.Green)
+
+            shape.SetOutlineWidth(1)
+            shape.EnableFill(False)
+            shape.EnableOutline(True)
+
+            self.app.Draw(shape)
 
     def Suspend(self):
         """ Suspend the game """
@@ -140,17 +172,17 @@ class Game:
         return self.clock
 
     def GetTotalElapsedTime(self):
-        """ Get the total duration of this game, not counting in
+        """Get the total duration of this game, not counting in
         suspend times. The return valuue is in seconds. """
         return self.total
 
     def GetScore(self):
-        """ Get the total, accumulated score up to now.
+        """Get the total, accumulated score up to now.
         The score is an integer. """
         return self.score
 
     def Award(self,points):
-        """ Award a certain amount of points to the player's
+        """Award a certain amount of points to the player's
         score as a reward for extreme skillz."""
         self.score += points
 
@@ -159,14 +191,22 @@ class Game:
         pass
 
     def Draw(self,drawable,pos):
-        """ Draw a sf.Drawable at a specific position, which is
+        """Draw a sf.Drawable at a specific position, which is
         specified in tile coordinates."""
 
-        # (invert y, so the lower left corner is the cooordinate system origin)
-        drawable.SetPosition((pos[0]-self.origin[0]) * defaults.tiles_size[0] * defaults.letter_size[0],
-            defaults.resolution[1] - (pos[1]-self.origin[1]+1) * defaults.tiles_size[1] * defaults.letter_size[1])
+        pos = self._ToDeviceCoordinates(self._ToCameraCoordinates( pos ))
         
+        drawable.SetPosition(*pos)
         self.app.Draw(drawable)
+
+    def _ToDeviceCoordinates(self,coords):
+        """Get from camera coordinates to SFML (device) coordinates"""
+        return (coords[0]*defaults.tiles_size_px[0],
+                defaults.resolution[1] - (coords[1])*defaults.tiles_size_px[1])
+
+    def _ToCameraCoordinates(self,coords):
+        """Get from world- to camera coordinates"""
+        return (coords[0]-self.origin[0],coords[1]-self.origin[1])
 
     def LoadLevel(self,level):
         """Load a particular level"""

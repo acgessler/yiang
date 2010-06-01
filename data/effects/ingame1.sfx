@@ -1,5 +1,5 @@
 texture framebuffer
-float2 cur
+vec2 cur
 
 effect
 {
@@ -7,10 +7,10 @@ effect
 	vec4 pixel = framebuffer(_in);
 	vec4 another = framebuffer(_in+vec2(-1.0,0.0));
 
-	float scale =  saturate((length(_in-cur))*1);
-	float4 color = (pixel*1.0f+(another*0.2));
+	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);
+	vec4 color = (pixel*1.0f+(another*0.2));
 
-	_out.rgb = mix(color.rgb,float3(length(color.rgb)),scale) * saturate(1.f-scale+0.3);
+	_out.rgb = mix(color.rgb,vec3(length(color.rgb)),scale)  * clamp(1.f-scale+0.3,0.0,1.0);
 	_out.a = 1.f;
 }
 
