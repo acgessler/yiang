@@ -59,10 +59,15 @@ def options_newgame_choose():
 
 def options_resumegame():
     global swallow_escape
+    global game
+    
     assert not game is None
     
     if game.Run() is True:
         swallow_escape = True
+
+        if game.IsGameOver():
+            game = None
 
 options = [
     ("New Game -------------------------------------------", options_newgame, "You will die"),

@@ -27,6 +27,7 @@ letter_size = [8,12]
 letter_height_intro = 10
 letter_height_status = 36
 letter_height_lives = 9
+letter_height_game_over = 15
 caption = "Yet another Jump'n'Run (an unfair one)"
 danger_signs_ttl = 30
 tiles_size = [5,3]
@@ -41,10 +42,11 @@ move_map_speed = 0.1
 lives = 4
 enable_log = True
 log_file = "log.txt"
+game_over_fade_time = 2.0
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
-# you from changing them.
+# you from changing them. you have been warned.
 root_dir = ".."
 data_dir = os.path.join(root_dir,"data")
 config_dir = os.path.join(root_dir,"config")
@@ -52,10 +54,11 @@ font_monospace = os.path.join(data_dir,"fonts","courier_new_bold.ttf")
 font_lives = font_monospace
 font_menu = os.path.join(data_dir,"fonts","VeraSE.ttf")
 font_status = font_menu
+font_game_over = font_menu
 credits_string = "(c) 2010 Alexander Christoph Gessler"
 
 # -----------------------------------------------------------------------------
-# derived values, do not change
+# derived values, do not change. you have been warned.
 cells = None
 cells_intro = None
 tiles = None

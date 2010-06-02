@@ -35,7 +35,6 @@ class Game:
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
 
-
     def __init__(self, app):
         """ Initialize a new Game instance given the primary
         RenderWindow """
@@ -43,7 +42,7 @@ class Game:
         self.origin = [0,0]
 
         # These are later changed by LoadLevel(...)
-        self.entities = []
+        self.entities = set()
         self.level = -1
 
         # Load the first level for testing purposes
@@ -52,18 +51,15 @@ class Game:
         self.clock = sf.Clock()
         self.total = 0.0
         self.total_accum = 0.0
-        self.score = 0
+        self.score = 0.0
         self.lives = defaults.lives
         self.last_time = 0
+        self.game_over = False
 
-        self.effect = sf.PostFX()
-        self.effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","ingame1.sfx"))
-        self.effect.SetTexture("framebuffer", None);
-        self.effect.SetParameter("cur",0.0,0.0)
+        self._LoadPostFX()
 
         self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
         self.life_bar_font = FontCache.get(defaults.letter_height_lives,face=defaults.font_lives)
-
 
     def Run(self):
         """ Run the main loop. If the game was previsouly suspended,
@@ -93,17 +89,16 @@ class Game:
 
             self.origin[0] += dtime*defaults.move_map_speed
             
-            for entity in self.entities:
+            for entity in self._EnumEntities():
                 entity.Update(time,dtime,self)
 
-            for entity in self.entities:
+            for entity in self._EnumEntities():
                 entity.Draw(self)
 
             self.app.Draw(self.effect)
 
             if defaults.debug_draw_bounding_boxes:
                 self._DrawBoundingBoxes()
-
 
             self._DrawStatusBar()
 
@@ -113,6 +108,21 @@ class Game:
         self.total_accum += self.clock.GetElapsedTime()
         print("Leave mainloop")
         return True
+
+    def _LoadPostFX(self):
+        """Load all postprocessing effects which we might need"""
+        self.effect = sf.PostFX()
+        self.effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","ingame1.sfx"))
+        self.effect.SetTexture("framebuffer", None);
+        self.effect.SetParameter("cur",0.0,0.0)
+        self.effect.SetParameter("fade",1.0)
+
+    def _EnumEntities(self):
+        """Special generator, maintains a copy of the entity list so
+        the real list can freely be modified during the iteration"""
+        copy = self.entities.copy()
+        for entity in copy:
+            yield entity
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
@@ -133,9 +143,9 @@ class Game:
 
         self.app.Draw(shape)
         
-        status = sf.String("{0:.2} s\n{1} $".format(
-            self.GetTotalElapsedTime(),
-            self.GetScore()),
+        status = sf.String("{0:.2} days\n{1} $".format(
+            Game.SecondsToDays( self.GetTotalElapsedTime() ),
+            self.GetScore()/100),
             Font=self.status_bar_font,Size=defaults.letter_height_status)
 
         status.SetPosition(8,5)
@@ -171,8 +181,6 @@ class Game:
         status.SetColor(sf.Color.Yellow)
         self.app.Draw(status)
 
-        
-
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
         # Close window : exit
@@ -195,11 +203,16 @@ class Game:
                 
             elif event.Key.Code == sf.Key.G:
                  defaults.debug_updown_move = not  defaults.debug_updown_move
-                
 
+            elif event.Key.Code == sf.Key.K:
+                 self.Kill()
+
+            elif event.Key.Code == sf.Key.Q:
+                 self.GameOver()
+                
     def _DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the scene"""
-        for entity in self.entities:
+        for entity in self._EnumEntities():
             bb = entity.GetBoundingBox()
             if bb is None:
                 continue
@@ -245,6 +258,11 @@ class Game:
         suspend times. The return valuue is in seconds. """
         return self.total
 
+    @staticmethod
+    def SecondsToDays(seconds):
+        """Quick helper to convert from seconds to fractions of days"""
+        return seconds / (3600*24)
+
     def GetScore(self):
         """Get the total, accumulated score up to now.
         The score is an integer. """
@@ -254,9 +272,87 @@ class Game:
         """Award a certain amount of points to the player's
         score as a reward for extreme skillz."""
         self.score += points
+        print("Awarding myself {0} points (total: {1})".format(points,self.score))
 
     def Kill(self):
-        """Kill the player immediately, set game over state"""
+        """Kill the player immediately, respawn if they have
+        another life, set game over alternatively"""
+        if self.lives == 0:
+            self.GameOver()
+            
+        self.lives = self.lives-1
+        self._Respawn()
+
+    def IsGameOver(self):
+        """Check if the game is over. Once the game is over,
+        it cannot be continued or reseted anymore."""
+        return self.game_over
+
+    def GameOver(self):
+        """Fade to black and show stats, then return to the main menu"""
+
+        self.game_over = True
+        print("Game over, score is {0} and time is {1}".format(self.score,
+            self.clock.GetElapsedTime()))
+        self.clock.Reset()
+
+        event = sf.Event()
+        while self.running is True:
+            if not self.app.IsOpened():
+                return False
+
+            if self.app.GetEvent(event):
+                if event.Type == sf.Event.KeyPressed:
+                    self.Suspend()
+                    return
+
+            self.app.Clear(sf.Color.Black)
+            time = self.clock.GetElapsedTime()
+
+            # draw all entities, but don't update them
+            for entity in self._EnumEntities():
+                entity.Draw(self)
+
+            self.effect.SetParameter("fade",1.0 - time/defaults.game_over_fade_time)
+            self.app.Draw(self.effect)
+            self._DrawStatusBar()
+
+            # now the message box showing the match result
+            fg,bg = sf.Color(160,160,160),sf.Color(50,50,50)
+            size = (550,120)
+            
+            shape = sf.Shape()
+            shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
+            shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
+            shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+            shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+            
+            shape.SetOutlineWidth(4)
+            shape.EnableFill(True)
+            shape.EnableOutline(True)
+            self.app.Draw(shape)
+
+            text = sf.String("You survived {0:.4} days and collected {1:.4} dollars.\nThat's {2}".format(
+                Game.SecondsToDays(self.GetTotalElapsedTime()),
+                self.score/100,
+                "pretty awesome, but you can do better.\n\nPress any key to continue .. (Should you not want to "+
+                    "continue,\nrest assured that this status notice will stay here forever)"),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+            ))
+            pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
+            
+            text.SetColor(sf.Color.Black)
+            text.SetPosition(pos[0]+1,pos[1]+1)
+            self.app.Draw(text)
+
+            text.SetColor(sf.Color.Red)
+            text.SetPosition(pos[0],pos[1])
+            self.app.Draw(text)
+
+            self.app.Display()
+
+    def _Respawn(self):
         pass
 
     def Draw(self,drawable,pos):
@@ -282,7 +378,7 @@ class Game:
 
         print("Loading level from disc: "+str(level))
         self.level = level
-        self.entities = []
+        self.entities = set()
 
         color_dict = collections.defaultdict(lambda: sf.Color.White, {
             "r" : sf.Color.Red,
@@ -318,7 +414,7 @@ class Game:
                         tile.SetColor(color_dict[ccode])
                         tile.SetPosition((x//3, y - diff))
 
-                        self.entities.append(tile)
+                        self.entities.add(tile)
 
             print("Got {0} entities for level {1}".format(len(self.entities),level))
                 
@@ -339,7 +435,7 @@ class Entity:
     of a set of tiles. Entities receive Update() callbacks once per
     logical frame."""
 
-    ENTER,BLOCK,LEAVE,KILL = range(4)
+    ENTER,BLOCK,KILL = range(3)
 
     def __init__(self):
         self.pos = [0,0]
@@ -369,10 +465,11 @@ class Entity:
 class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing"""
          
-    def __init__(self,text="<no text specified>"):
+    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=defaults.tiles_size[1]):
         Entity.__init__(self)
 
         self.text = text
+        self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
         self._Recache()
 
         self.color = sf.Color.White
@@ -387,7 +484,7 @@ class Tile(Entity):
         self.cached.SetColor(self.color)
 
     def GetBoundingBox(self):
-        return (self.pos[0],self.pos[1],1,1)
+        return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
 
     def _Recache(self):
         """Cache the tile string from self.text"""

@@ -1,5 +1,6 @@
 texture framebuffer
 vec2 cur
+float fade
 
 effect
 {
@@ -10,7 +11,7 @@ effect
 	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);
 	vec4 color = (pixel*1.0f+(another*0.2));
 
-	_out.rgb = mix(color.rgb,vec3(length(color.rgb)),scale)  * clamp(1.f-scale+0.3,0.0,1.0);
+	_out.rgb = mix(color.rgb,vec3(length(color.rgb)),scale)  * clamp(1.f-scale+0.3,0.0,1.0) * fade;
 	_out.a = 1.f;
 }
 
