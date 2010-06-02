@@ -58,11 +58,13 @@ int PyMain(int argc, wchar_t* argv[])
 	static char start_script_name[] =  "__launch_stub__.py";
 	const char* start_stub = 
 		"import sys\n" 
+		"import traceback\n"
 		"sys.path.append(\'../src-py\')\n"
 		"try:\n"
 		"\timport main\n"
 		"except Exception as e:\n"
 		"\tprint(e)\n"
+		"\ttraceback.print_exc()\n"
 	;
 
 	PyImport_AppendInittab("sf", & PyInit_sf);
@@ -74,6 +76,7 @@ int PyMain(int argc, wchar_t* argv[])
 
 	if (PyErr_Occurred()) {
 		PyErr_Print();
+		PyErr_Clear();
 	}
 
 	Py_Finalize();
