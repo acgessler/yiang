@@ -116,30 +116,62 @@ class Game:
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
-        status = sf.String("Time:  {0:4.4}\nScore: {1}".format(
+        # and finally the border
+        shape = sf.Shape()
+
+        fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
+        statush = 90
+        
+        shape.AddPoint(1,0,bcol,fcol)
+        shape.AddPoint(defaults.resolution[0]-1,0,bcol,bcol)
+        shape.AddPoint(defaults.resolution[0]-1,statush,fcol,bcol)
+        shape.AddPoint(1,statush,fcol,bcol)
+
+        shape.SetOutlineWidth(2)
+        shape.EnableFill(True)
+        shape.EnableOutline(True)
+
+        self.app.Draw(shape)
+        
+        status = sf.String("{0:.2} s\n{1} $".format(
             self.GetTotalElapsedTime(),
             self.GetScore()),
             Font=self.status_bar_font,Size=defaults.letter_height_status)
-        status.SetColor(sf.Color.White)
-        status.SetPosition(10,10)
 
+        status.SetPosition(8,5)
+        status.SetColor(sf.Color.Black)
         self.app.Draw(status)
 
+        status.SetColor(sf.Color.Yellow)
+        status.SetPosition(10,5)
+        self.app.Draw(status)
+
+
         # .. and the number of remaining lifes
-        status = sf.String("\n".join(map(lambda x:x*self.lives,
-        "  OOO     OOO   \n\
+        string = "\n".join(map(lambda x:x*self.lives,
+"  OOO     OOO   \n\
  O****O  O***O  \n\
   O****OO***O   \n\
    O*******O    \n\
     O*****O     \n\
      O***O      \n\
       O*O       \n\
-       O        ".split("\n"))),
-            Font=self.life_bar_font,Size=8)
-        status.SetColor(sf.Color.Red)
-        status.SetPosition(defaults.resolution[0]//2,10)
+       O        ".split("\n")))
+        status = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
+        xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*12
 
+        status.SetPosition(xstart-2,5)
+        status.SetColor(sf.Color.Black)
         self.app.Draw(status)
+
+        status.SetPosition(xstart+2,5)
+        self.app.Draw(status)
+
+        status.SetPosition(xstart,6)        
+        status.SetColor(sf.Color.Yellow)
+        self.app.Draw(status)
+
+        
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -156,8 +188,14 @@ class Game:
 
             if not defaults.debug_keys:
                 return
+
+            # Debug keys
             if event.Key.Code == sf.Key.B:
                 defaults.debug_draw_bounding_boxes = not defaults.debug_draw_bounding_boxes
+                
+            elif event.Key.Code == sf.Key.G:
+                 defaults.debug_updown_move = not  defaults.debug_updown_move
+                
 
     def _DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the scene"""

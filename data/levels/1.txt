@@ -1,15 +1,14 @@
 
 gPL
 
-                     rS0
-            rA0rA0rA0rA0                        _A3      _A3      _A3      yA3
-                                                _A0      _A0      _A0      yA0
-         rA0                                    _A0_A0_A0_A0      _A0      yA0
-                                                _A0      _A0      _A0       
-      rA0                                       _A6      _A6      _A6      yA4
-                 
-   rA0rA0rA0rA0      rS0      
-                  _A3            _A3   _A3                                                   _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
-               _A1            _A1                                                                                                                                                                                                                              rF0                      
-            _A1            _A1                  _A0         _A3rDA      _A3rDArDA_A3                                                                                                                                                                           rF0
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0                  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0            _A0_A0                           _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+
+
+
+
+
+
+
+                                 _A1_A0_A0_A0_A2               rFI
+                              _A1_B0_B0_B0_A5                  rFI                                                                                                                                                    
+            _A1            _A1_B0_B0_B0_B0_A5                  rFI                                                                                                                                           
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_B0_B0_B0_B0_B0_B0_A0_A0_A0_A0_A0_A0_A0                 

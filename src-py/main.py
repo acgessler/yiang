@@ -266,6 +266,8 @@ def main():
     #Log.Enable(defaults.enable_log)
     defaults.merge_config(os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
+
+    print("Startup ...")
         
     # Create main window
     if defaults.fullscreen is True:
@@ -275,6 +277,8 @@ def main():
         app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen)
     else:
         app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), defaults.caption, sf.Style._None)
+
+    print("Created window ...")
 
     #print(dir(sf.Window))
     defaults.update_derived()
@@ -291,6 +295,8 @@ def main():
 
     #app.SetFramerateLimit(30)
     ttl = 0
+
+    print("Entering main menu")
 
     set_menu_option(0)
     while app.IsOpened():
@@ -320,7 +326,6 @@ def main():
                     elif event.Type == sf.Event.KeyReleased and event.Key.Code == sf.Key.Escape:
                         swallow_escape = False
 
-                    # Adjust the viewport when the window is resized
                     if event.Type == sf.Event.Resized:
                         assert False
 
@@ -329,8 +334,8 @@ def main():
                 for entry in itertools.chain(menu_text):
                     app.Draw(entry)
 
-                # Finally, display the rendered frame on screen
                 app.Display()
+    print("Leaving main menu, shutdown")
 
 
 main()

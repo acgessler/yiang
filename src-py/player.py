@@ -75,11 +75,11 @@ class Player(Entity):
             self.vel[0] = defaults.move_speed[0]
             self.cur_tile[0] = Player.ANIM_RIGHT
 
-        if defaults.cheat_allow_updown_move is True:
+        if defaults.debug_updown_move is True:
             if inp.IsKeyDown(sf.Key.Up):
-                self.pos[1] += time*defaults.move_speed[1]
-            if inp.IsKeyDown(sf.Key.Down):
                 self.pos[1] -= time*defaults.move_speed[1]
+            if inp.IsKeyDown(sf.Key.Down):
+                self.pos[1] += time*defaults.move_speed[1]
         else:
             if inp.IsKeyDown(sf.Key.Up):
                 if self.can_jump is True:
@@ -93,7 +93,8 @@ class Player(Entity):
 
         #if inp.IsKeyDown(sf.Key.):
             
-        newvel = [self.vel[0] + self.acc[0]*time,self.vel[1] + self.acc[1]*time]
+        newvel = [self.vel[0] + self.acc[0]*time,self.vel[1] + (self.acc[1]
+            +(defaults.gravity if defaults.debug_updown_move is True else 0))*time]
         vec[0] += newvel[0]*time
         vec[1] += newvel[1]*time
 
@@ -129,6 +130,9 @@ class Player(Entity):
         # brute force .. :-)
         
         for collider in game.GetEntities():
+            if collider is self:
+                continue
+            
             mycorner = collider.GetBoundingBox()
             if mycorner is None:
                 continue
@@ -196,7 +200,7 @@ class Player(Entity):
         self.tiles[self.cur_tile[-1]].DrawRelative(self.game,self.pos)
 
     def GetBoundingBox(self):
-        return None   
+        return (self.pos[0]+self.pofsx, self.pos[1],self.pwidth,self.pheight)  
 
 
 
