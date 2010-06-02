@@ -108,7 +108,7 @@ def choose_level():
     height = 80
     width_spacing, height_spacing = 100,100
     
-    num = get_level_count()
+    num = get_level_count()+1
     xnum = defaults.resolution[0]//width_spacing
 
     level = 1
@@ -139,35 +139,58 @@ def choose_level():
         for y in range(math.ceil( num/xnum )):
             for x in range((num - y*xnum) % xnum):
                 i = y*xnum +x +1
-                tex = sf.String(str(i),Font=FontCache.get(height),Size=height)
-                tex.SetColor(sf.Color.Red if level == i else sf.Color.Black)
-                tex.SetPosition(20+x*width_spacing,20+y*height_spacing)
+
+                tex2,tex = sf_string_with_shadow(
+                    str(i) if i < num else "\n\n\n... back to main menu ",
+                    FontCache.get(
+                        height,
+                        defaults.font_menu),
+                    height,
+                    20+ (x*width_spacing if i < num else 0),
+                    20+y*height_spacing,
+                    sf.Color.Red if level == i else sf.Color.Black )
                 
+                app.Draw(tex2)
                 app.Draw(tex)
         
         app.Display()
 
-    return level
+    return level if level < num else 0
+
+
+def sf_string_with_shadow(text,font,size,x,y,color,bgcolor=sf.Color(100,100,100)):
+    """Spawn a string with a shadow behind, which is actually the same
+    string in a different color, moved and scaled slightly. Return a
+    2-tuple (a,b) where a is the shadow string"""
+    tex = sf.String(text,Font=font,Size=size)
+    tex.SetPosition(x,y)
+    tex.SetColor(color)
+
+    tex2 = sf.String(text,Font=font,Size=size+2)
+    tex2.SetPosition(x-4,y-2)
+    tex2.SetColor(bgcolor)
+
+    return (tex2,tex)
 
 
 def set_menu_option(i):
+    """Choose the currently selected main menu option, entries
+    are enumerated by the global 'options' array. """
     global cur_option
     cur_option = i % len(options)
 
     height = 80
-
     for i in range(len(options)):
-        tex = sf.String(options[i][0],Font=FontCache.get(height),Size=height)
-        tex.SetPosition(-20,100+i*height*1.5)
-        
-        tex.SetColor((sf.Color(100,100,100) if cur_option == OPTION_RESUME and game is None else sf.Color.Red)
-            if cur_option==i else sf.Color.White)
-
-        tex2 = sf.String(options[i][0],Font=FontCache.get(height+2),Size=height+2)
-        tex2.SetPosition(-24,98+i*height*1.5)
-        tex2.SetColor(sf.Color(100,100,100))
-                     
-        menu_text[i] = (tex2,tex)
+        menu_text[i] = sf_string_with_shadow(
+            options[i][0],
+            FontCache.get(
+                height,
+                defaults.font_menu),
+            height,
+            -20,
+            100+i*height*1.5,
+            (sf.Color(100,100,100) if cur_option == OPTION_RESUME and game is None else sf.Color.Red) 
+                if cur_option==i else sf.Color.White )
     
 
 def recache_danger_signs(font):

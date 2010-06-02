@@ -37,7 +37,7 @@ class FontCache:
 
         font = sf.Font()
         if not font.LoadFromFile(face,height) is True:
-            print("Failure creating font "+(face,height))
+            print("Failure creating font {0},{1}".format(face,height))
             # XXX substitute default font?
 
         FontCache.cached[(face,height)] = font

@@ -51,6 +51,7 @@ config_dir = os.path.join(root_dir,"config")
 font_monospace = os.path.join(data_dir,"fonts","courier_new_bold.ttf")
 font_status = font_monospace
 font_lives = font_status
+font_menu = os.path.join(data_dir,"fonts","VeraSE.ttf")
 credits_string = "(c) 2010 Alexander Christoph Gessler"
 
 # -----------------------------------------------------------------------------
