@@ -1,7 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////
-// MGL Framework Source Module (v0.1)
-// [game_main.cpp]
-// (c) Alexander Gessler, 2009
+// Yet Another Jump'n'Run Game, unfair this time.
+// (c) 2010 Alexander Christoph Gessler
 //
 // HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
