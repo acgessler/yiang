@@ -18,7 +18,7 @@ class Player(Entity):
         Entity.__init__(self)
         self.game = game
         self.vel = [0,0]
-        self.acc = [0,defaults.gravity]
+        self.acc = [0,-defaults.gravity]
         self.can_jump = True
         self.cur_tile = [Player.ANIM_RIGHT]
 
@@ -118,19 +118,19 @@ class Player(Entity):
             mycorner = (mycorner[0],mycorner[1],mycorner[2]+mycorner[0],mycorner[3]+mycorner[1])
             has = 0
              
-            # lower left corner
+            # upper left corner
             if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
                 has |= 1
 
-            # lower right corner
+            # upper right corner
             if mycorner[2]>rect[0]+rect[2]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
                 has |= 2
 
-            # upper left corner
+            # lower left corner
             if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]+rect[3]>=mycorner[1]:
                 has |= 4
 
-            # upper right corner
+            # lower right corner
             if mycorner[2]>rect[0]+rect[2]>=mycorner[0] and mycorner[3]>rect[1]+rect[3]>=mycorner[1]:
                 has |= 8
 
@@ -146,13 +146,13 @@ class Player(Entity):
                 return newpos,newvel
 
             # collision with ceiling
-            if has & (4|8):
+            if has & (1|2):
                 newpos[1] = mycorner[3]-self.pheight
                 newvel[1] = min(0,newvel[1])
                 #print("ceiling")
 
             # collision with floor
-            if has & (1|2):
+            if has & (4|8):
                 newpos[1] = mycorner[1]
                 newvel[1] = max(0,newvel[1])
                 #print("floor")

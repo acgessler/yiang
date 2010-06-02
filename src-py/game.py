@@ -63,16 +63,7 @@ class Game:
                 return False
 
             if self.app.GetEvent(event):
-                # Close window : exit
-                # if event.Type == sf.Event.Closed:
-                #    self.app.Close()
-                #    break
-
-                # Escape key : return to main menu, suspend the game
-                if event.Type == sf.Event.KeyPressed:
-                    if event.Key.Code == sf.Key.Escape:
-                        self.Suspend()
-                        continue
+                self._HandleIncomingEvent(event)
 
             self.app.Clear(sf.Color.Black)
                 
@@ -95,31 +86,8 @@ class Game:
             if defaults.debug_draw_bounding_boxes:
                 self._DrawBoundingBoxes()
 
-            # Now draw the status bar with the player's score and game duration
-            status = sf.String("Time:  {0:4.4}\nScore: {1}".format(
-                self.GetTotalElapsedTime(),
-                self.GetScore()),
-                Font=self.status_bar_font,Size=defaults.letter_height_status)
-            status.SetColor(sf.Color.White)
-            status.SetPosition(10,10)
 
-            self.app.Draw(status)
-
-            # .. and the number of remaining lifes
-            status = sf.String("\n".join(map(lambda x:x*self.lives,
-" OOO     OOO   \n\
-O****O  O***O  \n\
- O****OO***O   \n\
-  O*******O    \n\
-   O*****O     \n\
-    O***O      \n\
-     O*O       \n\
-      O        ".split("\n"))),
-                Font=self.life_bar_font,Size=8)
-            status.SetColor(sf.Color.Red)
-            status.SetPosition(defaults.resolution[0]//2,10)
-
-            self.app.Draw(status)
+            self._DrawStatusBar()
 
             # Toggle buffers 
             self.app.Display()
@@ -127,6 +95,51 @@ O****O  O***O  \n\
         self.total_accum += self.clock.GetElapsedTime()
         print("Leave mainloop")
         return True
+
+    def _DrawStatusBar(self):
+        """draw the status bar with the player's score, lives and total game duration"""
+        status = sf.String("Time:  {0:4.4}\nScore: {1}".format(
+            self.GetTotalElapsedTime(),
+            self.GetScore()),
+            Font=self.status_bar_font,Size=defaults.letter_height_status)
+        status.SetColor(sf.Color.White)
+        status.SetPosition(10,10)
+
+        self.app.Draw(status)
+
+        # .. and the number of remaining lifes
+        status = sf.String("\n".join(map(lambda x:x*self.lives,
+        "  OOO     OOO   \n\
+ O****O  O***O  \n\
+  O****OO***O   \n\
+   O*******O    \n\
+    O*****O     \n\
+     O***O      \n\
+      O*O       \n\
+       O        ".split("\n"))),
+            Font=self.life_bar_font,Size=8)
+        status.SetColor(sf.Color.Red)
+        status.SetPosition(defaults.resolution[0]//2,10)
+
+        self.app.Draw(status)
+
+    def _HandleIncomingEvent(self,event):
+        """Standard window behaviour and debug keys"""
+        # Close window : exit
+        # if event.Type == sf.Event.Closed:
+        #    self.app.Close()
+        #    break
+
+        # Escape key : return to main menu, suspend the game
+        if event.Type == sf.Event.KeyPressed:
+            if event.Key.Code == sf.Key.Escape:
+                self.Suspend()
+                return
+
+            if not defaults.debug_keys:
+                return
+            if event.Key.Code == sf.Key.B:
+                defaults.debug_draw_bounding_boxes = not defaults.debug_draw_bounding_boxes
 
     def _DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the scene"""
@@ -202,7 +215,7 @@ O****O  O***O  \n\
     def _ToDeviceCoordinates(self,coords):
         """Get from camera coordinates to SFML (device) coordinates"""
         return (coords[0]*defaults.tiles_size_px[0],
-                defaults.resolution[1] - (coords[1])*defaults.tiles_size_px[1])
+                coords[1]*defaults.tiles_size_px[1])
 
     def _ToCameraCoordinates(self,coords):
         """Get from world- to camera coordinates"""
@@ -247,7 +260,7 @@ O****O  O***O  \n\
 
                         tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
                         tile.SetColor(color_dict[ccode])
-                        tile.SetPosition((x//3, defaults.tiles[1] - y + diff-1))
+                        tile.SetPosition((x//3, y - diff))
 
                         self.entities.append(tile)
 

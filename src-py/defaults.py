@@ -14,12 +14,15 @@ danger_signs_ttl = 30
 tiles_size = [5,3]
 move_speed = [5,4]
 gravity = -15 # tiles/m*s^2
-jump_vel = 8 # tiles/m*s
+jump_vel = 9 # tiles/m*s
 cheat_allow_updown_move = False
+debug_keys = True
 debug_prevent_fall_down = True
-debug_draw_bounding_boxes = True
+debug_draw_bounding_boxes = False
 move_map_speed = 0.1
 lives = 4
+enable_log = True
+log_file = "log.txt"
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

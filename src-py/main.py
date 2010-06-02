@@ -14,7 +14,7 @@ import math
 import defaults
 from fonts import FontCache
 from game import Game
-
+from log import Log
 
 def options_quit():
     sys.exit(0)
@@ -223,8 +223,10 @@ def main():
     check_requirements()
 
     # Read game.txt, which is the master config file
+    #Log.Enable(defaults.enable_log)
     defaults.merge_config(os.path.join(defaults.config_dir,"game.txt"))
-    
+    Log.Enable(defaults.enable_log)
+        
     # Create main window
     if defaults.fullscreen is True:
         dm = sf.VideoMode.GetDesktopMode()
