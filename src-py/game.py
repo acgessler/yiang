@@ -25,6 +25,7 @@ import itertools
 import collections
 import os
 import random
+import math
 
 # My own stuff
 import defaults
@@ -294,63 +295,89 @@ class Game:
         self.game_over = True
         print("Game over, score is {0} and time is {1}".format(self.score,
             self.clock.GetElapsedTime()))
-        self.clock.Reset()
 
+        if not hasattr(self,"score_map"):
+            self.score_map = collections.defaultdict(lambda : "poor, I am laughing at you",{})
+
+            try:
+                with open(os.path.join(defaults.config_dir,"scores.txt"),"rt") as scores:
+                    for n,line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
+                        self.score_map[n+1] = line.strip()
+
+            except IOError:
+                print("Failure reading scores.txt file")
+
+        if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String(("You survived {0:.4} days and collected {1:.4} dollars.\nThat's {2}.\n\nPress any key to continue .. (Should you not want to "+
+                    "continue,\nrest assured that this status notice will stay here forever)").format(
+                Game.SecondsToDays(self.GetTotalElapsedTime()),
+                self.score/100,
+                self.score_map[math.log(self.score*10+1,2)]),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+        ))) is True:
+            self.Suspend()
+
+    def _FadeOutAndShowStatusNotice(self,fade_time,text,size=(550,120)):
+        """Tiny utility to wrap the fade out effect used on game over
+        and end of level. Alongside, a status message is displayed and
+        control is not returned unless the user presses any key
+        to continue."""
+
+        ret = True
+        clock = sf.Clock()
         event = sf.Event()
         while self.running is True:
             if not self.app.IsOpened():
-                return False
+                ret = False
+                break
 
             if self.app.GetEvent(event):
                 if event.Type == sf.Event.KeyPressed:
-                    self.Suspend()
-                    return
+                    break
 
             self.app.Clear(sf.Color.Black)
-            time = self.clock.GetElapsedTime()
+            time = clock.GetElapsedTime()
 
             # draw all entities, but don't update them
             for entity in self._EnumEntities():
                 entity.Draw(self)
 
-            self.effect.SetParameter("fade",1.0 - time/defaults.game_over_fade_time)
+            self.effect.SetParameter("fade",1.0 - time/fade_time)
             self.app.Draw(self.effect)
             self._DrawStatusBar()
 
             # now the message box showing the match result
-            fg,bg = sf.Color(160,160,160),sf.Color(50,50,50)
-            size = (550,120)
-            
-            shape = sf.Shape()
-            shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
-            shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
-            shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
-            shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
-            
-            shape.SetOutlineWidth(4)
-            shape.EnableFill(True)
-            shape.EnableOutline(True)
-            self.app.Draw(shape)
-
-            text = sf.String("You survived {0:.4} days and collected {1:.4} dollars.\nThat's {2}".format(
-                Game.SecondsToDays(self.GetTotalElapsedTime()),
-                self.score/100,
-                "pretty awesome, but you can do better.\n\nPress any key to continue .. (Should you not want to "+
-                    "continue,\nrest assured that this status notice will stay here forever)"),
-                Size=defaults.letter_height_game_over,
-                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-            ))
-            pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
-            
-            text.SetColor(sf.Color.Black)
-            text.SetPosition(pos[0]+1,pos[1]+1)
-            self.app.Draw(text)
-
-            text.SetColor(sf.Color.Red)
-            text.SetPosition(pos[0],pos[1])
-            self.app.Draw(text)
-
+            self._DrawStatusNotice(text,size)
             self.app.Display()
+
+        self.effect.SetParameter("fade",1.0)
+        return ret
+
+    def _DrawStatusNotice(self,text,size=(550,120)):
+        """Utility to draw a messagebox-like status notice in the
+        center of the screen."""
+        fg,bg = sf.Color(160,160,160),sf.Color(50,50,50)
+        
+        shape = sf.Shape()
+        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
+        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
+        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+        
+        shape.SetOutlineWidth(4)
+        shape.EnableFill(True)
+        shape.EnableOutline(True)
+        self.app.Draw(shape)
+        pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
+        
+        text.SetColor(sf.Color.Black)
+        text.SetPosition(pos[0]+1,pos[1]+1)
+        self.app.Draw(text)
+
+        text.SetColor(sf.Color.Red)
+        text.SetPosition(pos[0],pos[1])
+        self.app.Draw(text)
 
     def _Respawn(self):
         pass
@@ -424,6 +451,20 @@ class Game:
         except AssertionError as err:
             print("Level "+str(level)+" is not well-formatted:")
             print(err)
+
+    def NextLevel(self):
+        """Load the next level, cycle if the last level was reached"""
+        import main # XXX (hack)
+        print("Level {0} done, advancing to the next level".format(self.level))
+
+        if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String(("Hey, you solved Level {0}!.\n\nPress any key to continue .. (this is compulsory)").format(self.level),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+        ))) is False:
+            self.Suspend()
+
+        self.LoadLevel((self.level+1)%main.get_level_count())
 
     def GetEntities(self):
         """Get a list of all entities in the game"""

@@ -107,10 +107,13 @@ class Player(Entity):
         self.pos,self.vel = self._HandleCollisions(newpos,newvel,game)
 
         # (HACK) -- for debugging, prevent the player from falling below the map
-        if False and defaults.debug_prevent_fall_down and self.pos[1]<1:
+        if defaults.debug_prevent_fall_down is True and self.pos[1]<1:
             self.pos[1] = 1
             self.can_jump = True
             self.vel[1] = 0
+            
+        elif self.pos[1]<-0.5:
+            game.Kill()
 
         self.vel[0] = 0
         self._UpdatePostFX(game)
@@ -119,16 +122,14 @@ class Player(Entity):
     def _UpdatePostFX(self,game):
         game.effect.SetParameter("cur",
             self.pos[0]/defaults.tiles[0],
-            self.pos[1]/defaults.tiles[1])
+            1.0-self.pos[1]/defaults.tiles[1])
 
     def _HandleCollisions(self,newpos,newvel,game):
         """Handle any collision events, given the computed new position
         of the player. The funtion returns the actual position after
         collision handling has been performed."""
 
-        rect = (newpos[0]+self.pofsx, newpos[1],self.pwidth,self.pheight)
-        # brute force .. :-)
-        
+        # brute force collision detection for dummies .. :-)
         for collider in game.GetEntities():
             if collider is self:
                 continue
@@ -137,6 +138,7 @@ class Player(Entity):
             if mycorner is None:
                 continue
 
+            rect = (newpos[0]+self.pofsx, newpos[1],self.pwidth,self.pheight)
             mycorner = (mycorner[0],mycorner[1],mycorner[2]+mycorner[0],mycorner[3]+mycorner[1])
             has = 0
              
@@ -169,27 +171,27 @@ class Player(Entity):
 
             # collision with ceiling
             if has & (1|2):
-                newpos[1] = mycorner[3]-self.pheight
-                newvel[1] = min(0,newvel[1])
-                #print("ceiling")
-
-            # collision with floor
-            if has & (4|8):
                 newpos[1] = mycorner[1]
                 newvel[1] = max(0,newvel[1])
-                #print("floor")
+                print("ceiling")
+
+            # collision with floor
+            elif has & (4|8):
+                newpos[1] = mycorner[3]-self.pheight-1.0 # off by one error somewhere, can't spot it now
+                newvel[1] = min(0,newvel[1])
+                print("floor")
 
             # collision on the left
-            if has & (1|4):
+            if has & (1|4) and not (has % 8):
                 newpos[0] = mycorner[0]+self.pofsx
                 newvel[0] = max(0,newvel[0])
-                #print("left")
+                print("left")
 
             # collision on the right
-            if has & (2|8):
+            elif has & (2|8):
                 newpos[0] = mycorner[2]-self.pwidth
                 newvel[0] = min(0,newvel[0])
-                #print("right")
+                print("right")
 
             #print("*")
             break

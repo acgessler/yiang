@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,5,6)
+from levelup import LevelUp; <out> = LevelUp(<raw>,5,6)
 -----
 ;-) E
 :-) X
