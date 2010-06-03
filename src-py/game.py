@@ -40,11 +40,11 @@ class Game:
         """ Initialize a new Game instance given the primary
         RenderWindow """
         self.app = app
-        self.origin = [0,0]
 
         # These are later changed by LoadLevel(...)
         self.entities = set()
         self.level = -1
+        self.origin = [0,0]
 
         # Load the first level for testing purposes
         # self.LoadLevel(1)
@@ -56,6 +56,8 @@ class Game:
         self.lives = defaults.lives
         self.last_time = 0
         self.game_over = False
+
+        self.entities_add,self.entities_rem = set(),set()
 
         self._LoadPostFX()
 
@@ -97,11 +99,23 @@ class Game:
                 entity.Draw(self)
 
             self.app.Draw(self.effect)
-
+            
             if defaults.debug_draw_bounding_boxes:
                 self._DrawBoundingBoxes()
 
             self._DrawStatusBar()
+
+            # update the entity list
+            for entity in self.entities_add:
+                self.entities.add(entity)
+
+            for entity in self.entities_rem:
+                try:
+                    self.entities.remove(entity)
+                except KeyError:
+                    pass
+
+            self.entities_rem,self.entities_add = set(),set()
 
             # Toggle buffers 
             self.app.Display()
@@ -119,10 +133,10 @@ class Game:
         self.effect.SetParameter("fade",1.0)
 
     def _EnumEntities(self):
-        """Special generator, maintains a copy of the entity list so
-        the real list can freely be modified during the iteration"""
-        copy = self.entities.copy()
-        for entity in copy:
+        """Use this wrapper generator to iterate through all enties
+        in the global entity list"""
+        #copy = self.entities.copy()
+        for entity in self.entities:
             yield entity
 
     def _DrawStatusBar(self):
@@ -223,18 +237,25 @@ class Game:
             bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
             bb[0:2] = self._ToDeviceCoordinates(self._ToCameraCoordinates( bb[0:2] ))
             bb[2:4] = self._ToDeviceCoordinates(self._ToCameraCoordinates( bb[2:4] ))
-            
-            shape.AddPoint(bb[0],bb[1],sf.Color.Green,sf.Color.Green)
-            shape.AddPoint(bb[2],bb[1],sf.Color.Green,sf.Color.Green)
-            shape.AddPoint(bb[2],bb[3],sf.Color.Green,sf.Color.Green)
-            shape.AddPoint(bb[0],bb[3],sf.Color.Green,sf.Color.Green)
-            #shape.AddPoint(bb[0],bb[1],sf.Color.Green,sf.Color.Green)
+
+            color = sf.Color.Red if getattr(entity,"highlight_bb",False) is True else sf.Color.Green
+            shape.AddPoint(bb[0],bb[1],color,color)
+            shape.AddPoint(bb[2],bb[1],color,color)
+            shape.AddPoint(bb[2],bb[3],color,color)
+            shape.AddPoint(bb[0],bb[3],color,color)
 
             shape.SetOutlineWidth(1)
             shape.EnableFill(False)
             shape.EnableOutline(True)
 
             self.app.Draw(shape)
+            entity.highlight_bb = False
+
+    def AddToActiveBBs(self,entity):
+        """Debug feature, mark a specific entity for highlighting
+        in the next frame. Its bounding box will then be drawn
+        in red"""
+        entity.highlight_bb = True # (HACK, inject a hidden attribute)
 
     def Suspend(self):
         """ Suspend the game """
@@ -405,6 +426,7 @@ class Game:
 
         print("Loading level from disc: "+str(level))
         self.level = level
+        self.origin = [0,0]
         self.entities = set()
 
         color_dict = collections.defaultdict(lambda: sf.Color.White, {
@@ -470,6 +492,20 @@ class Game:
         """Get a list of all entities in the game"""
         return self.entities
 
+    def AddEntity(self,entity):
+        """Dynamically add an entity to the list of all active
+        entities. The operation is deferred until the next
+        frame so it is safe to be called from enumeration
+        context"""
+        self.entities_add.add(entity)
+
+    def RemoveEntity(self,entity):
+        """Dynamically add an entity to the list of all active
+        entities. The operation is deferred until the next
+        frame so it is safe to be called from enumeration
+        context"""
+        self.entities_rem.add(entity)
+
 class Entity:
     """Base class for all kinds of entities, including the player.
     The term `entity` refers to a state machine which is in control
@@ -480,7 +516,7 @@ class Entity:
 
     def __init__(self):
         self.pos = [0,0]
-        self.color = sf.Color.White 
+        self.color = sf.Color.White
 
     def Update(self,time_elapsed,time_delta,game):
         pass
@@ -512,9 +548,6 @@ class Tile(Entity):
         self.text = text
         self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
         self._Recache()
-
-        self.color = sf.Color.White
-        self.pos = [0,0]
 
     def __str__(self):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\

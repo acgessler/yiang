@@ -112,7 +112,7 @@ class Player(Entity):
             self.can_jump = True
             self.vel[1] = 0
             
-        elif self.pos[1]<-0.5:
+        elif self.pos[1]< 0.0:
             game.Kill()
 
         self.vel[0] = 0
@@ -128,9 +128,10 @@ class Player(Entity):
         """Handle any collision events, given the computed new position
         of the player. The funtion returns the actual position after
         collision handling has been performed."""
+        game.AddToActiveBBs(self)
 
-        # brute force collision detection for dummies .. :-)
-        for collider in game.GetEntities():
+        # brute force collision detection for dummies .. actually I am not proud of it :-)
+        for collider in game._EnumEntities():
             if collider is self:
                 continue
             
@@ -138,63 +139,68 @@ class Player(Entity):
             if mycorner is None:
                 continue
 
-            rect = (newpos[0]+self.pofsx, newpos[1],self.pwidth,self.pheight)
             mycorner = (mycorner[0],mycorner[1],mycorner[2]+mycorner[0],mycorner[3]+mycorner[1])
-            has = 0
-             
-            # upper left corner
-            if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
-                has |= 1
+            co = False
 
-            # upper right corner
-            if mycorner[2]>rect[0]+rect[2]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
-                has |= 2
+            while True:
+                has = 0
+                rect = (newpos[0]+self.pofsx, newpos[1],self.pwidth,self.pheight)
+                
+                # upper left corner
+                if mycorner[2]>rect[0]>mycorner[0] and mycorner[3]>rect[1]>mycorner[1]:
+                    has |= 1
 
-            # lower left corner
-            if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]+rect[3]>=mycorner[1]:
-                has |= 4
+                # upper right corner
+                if mycorner[2]>rect[0]+rect[2]>mycorner[0] and mycorner[3]>rect[1]>mycorner[1]:
+                    has |= 2
 
-            # lower right corner
-            if mycorner[2]>rect[0]+rect[2]>=mycorner[0] and mycorner[3]>rect[1]+rect[3]>=mycorner[1]:
-                has |= 8
+                # lower left corner
+                if mycorner[2]>rect[0]>mycorner[0] and mycorner[3]>rect[1]+rect[3]>mycorner[1]:
+                    has |= 4
 
-            if has == 0:
-                continue
+                # lower right corner
+                if mycorner[2]>rect[0]+rect[2]>mycorner[0] and mycorner[3]>rect[1]+rect[3]>mycorner[1]:
+                    has |= 8
 
-            res = collider.Interact(self,game)
-            if res == Entity.KILL:
-                print("hit deadly entity, need to commit suicide")
-                game.Kill()
+                if has == 0:
+                    break
 
-            elif res != Entity.BLOCK:
-                return newpos,newvel
+                co = True
 
-            # collision with ceiling
-            if has & (1|2):
-                newpos[1] = mycorner[1]
-                newvel[1] = max(0,newvel[1])
-                print("ceiling")
+                res = collider.Interact(self,game)
+                if res == Entity.KILL:
+                    print("hit deadly entity, need to commit suicide")
+                    game.Kill()
 
-            # collision with floor
-            elif has & (4|8):
-                newpos[1] = mycorner[3]-self.pheight-1.0 # off by one error somewhere, can't spot it now
-                newvel[1] = min(0,newvel[1])
-                print("floor")
+                elif res != Entity.BLOCK:
+                    break
 
-            # collision on the left
-            if has & (1|4) and not (has % 8):
-                newpos[0] = mycorner[0]+self.pofsx
-                newvel[0] = max(0,newvel[0])
-                print("left")
+                # collision with ceiling
+                if has & (1|2):
+                    newpos[1] = mycorner[1]
+                    newvel[1] = max(0,newvel[1])
+                    print("ceiling")
 
-            # collision on the right
-            elif has & (2|8):
-                newpos[0] = mycorner[2]-self.pwidth
-                newvel[0] = min(0,newvel[0])
-                print("right")
+                # collision with floor
+                if has & (4|8):
+                    newpos[1] = mycorner[3]-self.pheight-1.0001 # off by one error somewhere, can't spot it now
+                    newvel[1] = min(0,newvel[1])
+                    print("floor")
 
-            #print("*")
-            break
+                # collision on the left
+                if has & (1|4):
+                    newpos[0] = mycorner[0]+self.pofsx
+                    newvel[0] = max(0,newvel[0])
+                    print("left")
+
+                # collision on the right
+                if has & (2|8):
+                    newpos[0] = mycorner[2]-self.pwidth
+                    newvel[0] = min(0,newvel[0])
+                    print("right")
+
+            if co is True:
+                game.AddToActiveBBs(collider)
 
         return newpos,newvel
             

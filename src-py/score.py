@@ -23,7 +23,7 @@ import sf
 # My own stuff
 import defaults
 from game import AnimTile
-from player import Player,Entity
+from player import Player,Entity,Tile
 
 class ScoreTile(AnimTile):
     """The player receives a certain extra score upon
@@ -36,9 +36,28 @@ class ScoreTile(AnimTile):
     def Interact(self,other,game):
         if isinstance(other,Player):
             game.Award(self.points)
-            game.GetEntities().remove(self) # this will completely remove this tile from this level
+            
+            game.RemoveEntity(self) 
+            game.AddEntity(ScoreTileAnimStub(str(self.points)+" ct.",self.pos,1.0))
             
         return Entity.ENTER
+
+
+class ScoreTileAnimStub(Tile):
+    """Implements the text string that is spawned whenever
+    the aplyer triggers a score item."""
+
+    def __init__(self,text,pos,speed):
+        Tile.__init__(self,text)
+        
+        self.SetPosition( pos )
+        self.speed = speed
+
+    def GetBoundingBox(self):
+        return None
+
+    def Update(self,time_elapsed,time_delta,game):
+        self.SetPosition((self.pos[0],self.pos[1]-time_delta*self.speed))
 
 
     

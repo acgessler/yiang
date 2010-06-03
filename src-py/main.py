@@ -298,7 +298,9 @@ def main():
     effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","intro.sfx"))
     effect.SetTexture("framebuffer", None);
 
-    #app.SetFramerateLimit(30)
+    if defaults.framerate_limit > 0:
+        app.SetFramerateLimit(defaults.framerate_limit)
+        
     ttl = 0
 
     print("Entering main menu")
