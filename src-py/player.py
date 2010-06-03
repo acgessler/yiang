@@ -83,7 +83,7 @@ class Player(Entity):
         else:
             if inp.IsKeyDown(sf.Key.Up):
                 if self.can_jump is True:
-                    self.vel[1] += defaults.jump_vel
+                    self.vel[1] += defaults.jump_vel*2
                     self.can_jump = False
 
                     self.cur_tile.append(Player.ANIM_JUMP_LEFT if \
@@ -177,27 +177,29 @@ class Player(Entity):
 
                 # collision with ceiling
                 if has & (1|2):
-                    newpos[1] = mycorner[1]
+                    newpos[1] = mycorner[1]+1.0001
                     newvel[1] = max(0,newvel[1])
                     print("ceiling")
 
                 # collision with floor
-                if has & (4|8):
+                elif has & (4|8):
                     newpos[1] = mycorner[3]-self.pheight-1.0001 # off by one error somewhere, can't spot it now
                     newvel[1] = min(0,newvel[1])
                     print("floor")
 
                 # collision on the left
-                if has & (1|4):
+                elif has & (1|4) == (1|4):
                     newpos[0] = mycorner[0]+self.pofsx
                     newvel[0] = max(0,newvel[0])
                     print("left")
 
                 # collision on the right
-                if has & (2|8):
+                elif has & (2|8) == (2|8):
                     newpos[0] = mycorner[2]-self.pwidth
                     newvel[0] = min(0,newvel[0])
                     print("right")
+                else:
+                    break
 
             if co is True:
                 game.AddToActiveBBs(collider)

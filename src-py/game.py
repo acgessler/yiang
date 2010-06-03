@@ -26,6 +26,7 @@ import collections
 import os
 import random
 import math
+import traceback
 
 # My own stuff
 import defaults
@@ -438,14 +439,17 @@ class Game:
         })
 
         spaces = [" ","\t"]
+        line_idx = 0
         
         try:
             with open(os.path.join(defaults.data_dir,"levels",str(level)+".txt"), "rt") as f:
                 lines = f.readlines()
                 assert len(lines)>0
                 
-                for y,line in enumerate(lines): 
-                    line = line.rstrip()
+                for y,line in enumerate(lines):
+
+                    line_idx += 1
+                    line = line.rstrip(" \n\t")
                     if len(line) == 0:
                         continue
 
@@ -471,8 +475,8 @@ class Game:
             print("Failure loading level "+str(level))
 
         except AssertionError as err:
-            print("Level "+str(level)+" is not well-formatted:")
-            print(err)
+            print("Level "+str(level)+" is not well-formatted (line {0})".format(line_idx))
+            traceback.print_exc()
 
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
@@ -594,10 +598,13 @@ class AnimTile(Tile):
     played automatically or manually."""
 
     
-    def __init__(self,text,height,frames,speed):
+    def __init__(self,text,height,frames,speed,states=1):
         """ Read an animated tile from a text block. Such a textual
         description contains the ASCII images for all frames,
-        separated by an empty line for clarity.
+        separated by an empty line for clarity. There can be multiple
+        'states', each of which has its own set of frames. States
+        are intended for animated tiles which change their
+        appearance, i.e due to user input.
 
             Parameters:
                text Text block
@@ -616,13 +623,17 @@ class AnimTile(Tile):
         lines = text.split("\n")
         n = 0
 
-        self.texts = []
-        for frame in range(frames):
-            assert n+height<=len(lines)
-            self.texts.append("\n".join(lines[n:n+height]))
-            n += height+1
+        self.texts, self.state = [],0
+        for state in range(states):
+            self.texts.append([])
+            
+            for frame in range(frames):
+                #assert n+height<=len(lines)
+                self.texts[state].append("\n".join(lines[n:n+height]))
+                n += height+1
+            n += 1
 
-        self.speed = -1 if speed == -1 else speed / len(self.texts)
+        self.speed = -1 if speed == -1 else speed / len(self.texts[self.state])
         self.animidx = -1
         self.animofs = 0
 
@@ -631,6 +642,12 @@ class AnimTile(Tile):
             self.pos[0],self.pos[1],
             self.GetNumFrames(),
             self.speed,self.text)
+
+    def SetState(self,state):
+        self.state = state % len(self.texts)
+
+    def GetState(self):
+        return self.state
 
     def Next(self):
         """Manually advance to the next frame"""
@@ -669,7 +686,7 @@ class AnimTile(Tile):
         self._UpdateAnim()
 
     def _UpdateAnim(self):
-        self.text = self.texts[int(self.animidx) % self.GetNumFrames()]
+        self.text = self.texts[self.state][int(self.animidx) % self.GetNumFrames()]
         self._Recache()
         
 
@@ -707,7 +724,7 @@ class TileLoader:
 
             except AssertionError as err:
                 print("File "+file+" is not well-formatted:")
-                print(err)
+                traceback.print_exc()
 
         if lines is None:
             return Tile()
@@ -725,7 +742,13 @@ class TileLoader:
         #print(l)
 
         tempdict = dict(locals())
-        exec(l,globals(),tempdict)
+
+        try:
+            exec(l,globals(),tempdict)
+        except AssertionError as e:
+            print("exec() fails: ")
+            traceback.print_exc()
+            
         return tempdict.get("entity",Tile())
 
         
