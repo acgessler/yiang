@@ -28,17 +28,38 @@ class SmallTraverser(AnimTile):
     """The simplest class of entities, it moves in a certain
     range and kills the player immediately"""
 
-    def __init__(self,text,height,frames,speed=1.0,move_speed=0.4):
+    def __init__(self,text,height,frames,speed=1.0,move_speed=3):
         AnimTile.__init__(self,text,height,frames,speed,2)
 
-        self.move_speed = move_speed
-        self.vel = 1
+        self.vel = move_speed
 
     def Interact(self,other,game):
         return Entity.KILL
 
     def Update(self,time_elapsed,time,game):
-        self.pos = (self.pos[0]+self.vel*time*self.move_speed,self.pos[1])
+
+        rect = self.GetBoundingBox()
+        res = 0
+        for collider in game._EnumEntities():
+            if collider is self:
+                continue
+            
+            mycorner = collider.GetBoundingBox()
+            if mycorner is None:
+                continue
+            
+            tj = self._BBCollide(rect, mycorner)
+            if tj>0:
+                game.AddToActiveBBs(collider)
+                assert False
+                res |= tj
+
+        if self.vel < 0 and res & Entity.ALL == (Entity.UPPER_LEFT|Entity.LOWER_LEFT) or\
+           res & Entity.ALL == (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT):
+               
+            self.vel *= -1
+            
+        self.pos = (self.pos[0]+self.vel*time,self.pos[1])
         AnimTile.Update(self,time_elapsed,time,game)
 
         self.SetState(1 if self.vel >0 else 0 )

@@ -44,6 +44,7 @@ enable_log = True
 log_file = "log.txt"
 game_over_fade_time = 2.0
 framerate_limit = 60
+min_respawn_distance = 3.0
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

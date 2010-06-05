@@ -33,6 +33,10 @@ import defaults
 from fonts import FontCache
 
 
+class NewFrame(BaseException):
+    pass
+
+
 class Game:
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
@@ -92,12 +96,15 @@ class Game:
             self.last_time = time
 
             self.origin[0] += dtime*defaults.move_map_speed
-            
-            for entity in self._EnumEntities():
-                entity.Update(time,dtime,self)
 
-            for entity in self._EnumEntities():
-                entity.Draw(self)
+            try:
+                for entity in self._EnumEntities():
+                    entity.Update(time,dtime,self)
+
+                for entity in self._EnumEntities():
+                    entity.Draw(self)
+            except NewFrame:
+                pass
 
             self.app.Draw(self.effect)
             
@@ -137,8 +144,12 @@ class Game:
         """Use this wrapper generator to iterate through all enties
         in the global entity list"""
         #copy = self.entities.copy()
+
+        self.endit = False
         for entity in self.entities:
             yield entity
+            if self.endit is True:
+                raise NewFrame()
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
@@ -306,6 +317,8 @@ class Game:
         self.lives = self.lives-1
         self._Respawn()
 
+        self.endit = True
+
     def IsGameOver(self):
         """Check if the game is over. Once the game is over,
         it cannot be continued or reseted anymore."""
@@ -402,15 +415,19 @@ class Game:
         self.app.Draw(text)
 
     def _Respawn(self):
-        pass
+        """Respawn the player at the beginning of the level"""
+        for entity in self._EnumEntities():
+            if hasattr(entity,"Respawn"):
+                entity.Respawn()
 
-    def Draw(self,drawable,pos):
+    def Draw(self,drawable,pos=None):
         """Draw a sf.Drawable at a specific position, which is
         specified in tile coordinates."""
 
-        pos = self._ToDeviceCoordinates(self._ToCameraCoordinates( pos ))
-        
-        drawable.SetPosition(*pos)
+        if not pos is None:
+            pos = self._ToDeviceCoordinates(self._ToCameraCoordinates( pos ))
+            drawable.SetPosition(*pos)
+            
         self.app.Draw(drawable)
 
     def _ToDeviceCoordinates(self,coords):
@@ -517,6 +534,8 @@ class Entity:
     logical frame."""
 
     ENTER,BLOCK,KILL = range(3)
+    UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT, CONTAINS = 1,2,4,8,16
+    ALL = UPPER_LEFT|UPPER_RIGHT|LOWER_LEFT|LOWER_RIGHT
 
     def __init__(self):
         self.pos = [0,0]
@@ -541,6 +560,31 @@ class Entity:
 
     def Interact(self,other,game):
         return Entity.BLOCK
+
+    def _BBCollide(self,rect,mycorner):
+        has = 0
+        
+        # upper left corner
+        if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
+            has |= Entity.UPPER_LEFT
+
+        # upper right corner
+        if mycorner[2]>rect[2]>=mycorner[0] and mycorner[3]>rect[1]>=mycorner[1]:
+            has |= Entity.UPPER_RIGHT
+
+        # lower left corner
+        if mycorner[2]>rect[0]>=mycorner[0] and mycorner[3]>rect[3]>=mycorner[1]:
+            has |= Entity.LOWER_LEFT
+
+        # lower right corner
+        if mycorner[2]>rect[2]>=mycorner[0] and mycorner[3]>rect[3]>=mycorner[1]:
+            has |= Entity.LOWER_RIGHT
+
+
+        if rect[2]>mycorner[2]>=rect[0] and rect[3]>mycorner[3]>=rect[1]:
+            has |= Entity.CONTAINS
+
+        return has
 
 
 class Tile(Entity):
@@ -637,8 +681,12 @@ class AnimTile(Tile):
         self.animidx = -1
         self.animofs = 0
 
+        # constraints checking
+        for i in range(1,len(self.texts)):
+            assert len(self.texts[i]) == len(self.texts[0])
+
     def __str__(self):
-        return "AnimTile, pos: {0}|{1}, frames: {2}, speed: {3}, text:\n{2}".format(\
+        return "AnimTile, pos: {0}|{1}, frames: {2}, speed: {3}, text:\n{4}".format(\
             self.pos[0],self.pos[1],
             self.GetNumFrames(),
             self.speed,self.text)
@@ -667,7 +715,7 @@ class AnimTile(Tile):
 
     def GetNumFrames(self):
         """Get the number of valid animation frames"""
-        return len(self.texts)
+        return len(self.texts[0])
 
     def GotoRandom(self):
         """Advance to a random frame"""
@@ -675,6 +723,7 @@ class AnimTile(Tile):
 
     def Update(self,time_elapsed,time_delta,game):
         """Overridden from Entity"""
+       
         if self.speed == -1:
             return
             

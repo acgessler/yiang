@@ -2,6 +2,16 @@ PL
 
 (Animated player character, more than one per level allowed)
 
+E0
+
+(A simple entity which moves on the x axis until it touches
+ an obstacle, which causes it to change its direction.
+ It kills on touch)
+
+RE
+
+(Respawn point, if touched once, the player respawns here)
+
 A0
 
 =====
@@ -55,6 +65,8 @@ A6
 
 DA
 
+(dangerous barrel, kills on touch)
+
 |XXX|
 |XXX|
 |XXX|
@@ -65,5 +77,7 @@ B0
 AAAAA
 AAAAA
 AAAAA
+
+
 
 
