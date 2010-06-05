@@ -42,7 +42,7 @@ class Player(Entity):
         self.game = game
         self.vel = [0,0]
         self.acc = [0,-defaults.gravity]
-        self.in_jump, self.block_jump = False,False
+        self.in_jump, self.block_jump, self.moved_once = False,False,False
         self.cur_tile = [Player.ANIM_RIGHT]
 
         self.pwidth = width / defaults.tiles_size[0]
@@ -70,6 +70,7 @@ class Player(Entity):
             self._AddRespawnPoint(pos)
 
     def SetColor(self,pos):
+        self.color = pos
         for tile in self.tiles:
             tile.SetColor(pos)
 
@@ -91,18 +92,22 @@ class Player(Entity):
             self.cur_tile[0] = Player.ANIM_LEFT
 
             self._SetJumpAnimState()
+            self.moved_once = True
             
         if inp.IsKeyDown(sf.Key.Right):
             self.vel[0] = defaults.move_speed[0]
             self.cur_tile[0] = Player.ANIM_RIGHT
 
             self._SetJumpAnimState()
+            self.moved_once = True
 
         if defaults.debug_updown_move is True:
             if inp.IsKeyDown(sf.Key.Up):
                 self.pos[1] -= time*defaults.move_speed[1]
+                self.moved_once = True
             if inp.IsKeyDown(sf.Key.Down):
                 self.pos[1] += time*defaults.move_speed[1]
+                self.moved_once = True
         else:
             if inp.IsKeyDown(sf.Key.Up):
                 if self.in_jump is False and self.block_jump is False:
@@ -111,13 +116,11 @@ class Player(Entity):
 
                     self.cur_tile.append(0)
                     self._SetJumpAnimState()
+
+                self.moved_once = True
             else:
                 self.block_jump = False
         
-            #else:
-            #    self.can_jump = True
-
-        #if inp.IsKeyDown(sf.Key.):
             
         newvel = [self.vel[0] + self.acc[0]*time,self.vel[1] + (self.acc[1]
             +(defaults.gravity if defaults.debug_updown_move is True else 0))*time]
@@ -130,7 +133,6 @@ class Player(Entity):
         # Check for collisions
         self.pos,self.vel = self._HandleCollisions(newpos,newvel,game)
 
-
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1]<1:
             self.pos[1] = 1
@@ -140,20 +142,67 @@ class Player(Entity):
         elif self.pos[1] < 1.0 or self.pos[1] > defaults.tiles[1]:
             self._Kill(game)
 
+        self._CheckForLeftMapBorder(game)
+        self._MoveMap(game,time)
+        self._CheckForRightMapBorder(game)
+
         self.vel[0] = 0
         self._UpdatePostFX(game)
 
+    def _CheckForLeftMapBorder(self,game):
+        """Check if we passed the left border of the game, which is
+        generally a bad idea. """
+        origin = game.GetOrigin()
+        if self.pos[0] < origin[0]:
+            if self.pos[0]+self.pwidth > origin[0]:
+
+                self.restore_color = self.color
+                self.SetColor(sf.Color.Yellow)
+                print("Entering left danger area")
+            else:
+                self._Kill(game)
+
+        else:
+            if not getattr(self,"restore_color",None) is None:
+                if not self.color is self.restore_color:
+
+                    print("Leaving left danger area, restoring old state")
+                    self.SetColor(self.restore_color)
+                    self.restore_color = None
+                else:
+                    print("Can't restore old color, seemingly the player color "+\
+                          "changed while the entity resided in the left danger area")
+
+    def _CheckForRightMapBorder(self,game):
+        """Check if we approached the right border of the game, which
+        forces the map to scroll immediately"""
+        origin = game.GetOrigin()
+        rmax = float(defaults.right_scroll_distance)
+        if self.pos[0] > origin[0]+defaults.tiles[0]-rmax:
+            game.SetOrigin((self.pos[0]-defaults.tiles[0]+rmax,origin[1]))
+
+    def _MoveMap(self,game,dtime):
+        """Move the map view origin according to a time function"""
+        if self.moved_once is False:
+            return
+            
+        origin = game.GetOrigin()
+        game.SetOrigin((origin[0]+dtime*defaults.move_map_speed,origin[1]))
+
+
     def _UpdatePostFX(self,game):
+        origin = game.GetOrigin()
         game.effect.SetParameter("cur",
-            self.pos[0]/defaults.tiles[0],
-            1.0-self.pos[1]/defaults.tiles[1])
+            (self.pos[0]-origin[0])/defaults.tiles[0],
+            1.0-(self.pos[1]-origin[1])/defaults.tiles[1])
 
     def _Kill(self,game):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event"""
-        for i in range(30):
-            game.AddEntity(KillAnimStub(self.pos,random.uniform(-1.0,1.0),\
-                (random.random(),random.random())))
+        if game.GetLives() > 0:
+            for i in range(30):
+                game.AddEntity(KillAnimStub(self.pos,random.uniform(-1.0,1.0),\
+                    (random.random(),random.random())))
             
         game.Kill()
 
@@ -269,7 +318,7 @@ class Player(Entity):
         self.respawn_positions.append(pos)
         print("Set respawn point {0}|{1}".format(pos[0],pos[1]))
 
-    def Respawn(self):
+    def Respawn(self,game):
         """Used internally by Game.Respawn to respawn the player
         at a given position"""
         assert hasattr(self,"respawn_positions")
@@ -277,14 +326,16 @@ class Player(Entity):
 
         min_distance = float(defaults.min_respawn_distance)
         for rpos in reversed(self.respawn_positions):
-            if math.sqrt((rpos[0]-self.pos[0])*(rpos[0]-self.pos[0])+\
-                (rpos[1]-self.pos[1])*(rpos[1]-self.pos[1])) < min_distance:
+            if mathutil.Length((rpos[0]-self.pos[0],rpos[1]-self.pos[1])) < min_distance:
                 continue
             
             self.SetPosition(rpos)
+            
         else:
             self.SetPosition(self.respawn_positions[0])
         print("Respawn at {0}|{1}".format(self.pos[0],self.pos[1]))
+        # Adjust the game origin accordingly
+        game.SetOrigin((self.pos[0]-defaults.respawn_origin_distance,0))
 
 class RespawnPoint(Entity):
     """A respawning point represents a possible position where

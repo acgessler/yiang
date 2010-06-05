@@ -95,8 +95,6 @@ class Game:
             dtime = time - self.last_time
             self.last_time = time
 
-            self.origin[0] += dtime*defaults.move_map_speed
-
             try:
                 for entity in self._EnumEntities():
                     entity.Update(time,dtime,self)
@@ -319,6 +317,24 @@ class Game:
 
         self.endit = True
 
+    def GetLives(self):
+        """Get the number of lives the player has. They
+        die if they are killed and no more lives are available"""
+        return self.lives
+
+
+    def GetOrigin(self):
+        """Get the current origin of the game. That is the
+        tile coordinate to map to the upper left coordinate
+        of the window """
+        return self.origin
+
+    def SetOrigin(self,origin):
+        """Change the view origin"""
+        assert isinstance(origin,tuple)
+        self.origin = origin
+        
+
     def IsGameOver(self):
         """Check if the game is over. Once the game is over,
         it cannot be continued or reseted anymore."""
@@ -418,7 +434,7 @@ class Game:
         """Respawn the player at the beginning of the level"""
         for entity in self._EnumEntities():
             if hasattr(entity,"Respawn"):
-                entity.Respawn()
+                entity.Respawn(self)
 
     def Draw(self,drawable,pos=None):
         """Draw a sf.Drawable at a specific position, which is
