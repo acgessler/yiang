@@ -529,8 +529,8 @@ SpeedScaleLevel:   {speed_scale_per_level}
 
     def ToDeviceCoordinates(self,coords):
         """Get from camera coordinates to SFML (device) coordinates"""
-        return (coords[0]*defaults.tiles_size_px[0],
-                coords[1]*defaults.tiles_size_px[1])
+        return (math.floor(coords[0]*defaults.tiles_size_px[0]),
+                math.floor(coords[1]*defaults.tiles_size_px[1]))
 
     def ToCameraCoordinates(self,coords):
         """Get from world- to camera coordinates"""
