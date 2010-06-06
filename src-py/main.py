@@ -38,6 +38,7 @@ def options_quit():
 
 def options_credits():
     print("Credits!")
+    show_credits()
 
 def options_newgame():
     global game
@@ -74,7 +75,7 @@ options = [
     ("New Game -------------------------------------------", options_newgame, "You will die"),
     ("Resume Game", options_resumegame, "You will die soon"),
     ("Choose Level >>>>>>>>>", options_newgame_choose, "Bad idea"),
-    ("Credits", options_credits, defaults.credits_string),
+    ("Credits", options_credits, "CREDITS"),
     ("Quit!", options_quit,"")
 ]
 
@@ -119,7 +120,6 @@ def choose_level():
     
     num = get_level_count()+1
     xnum = defaults.resolution[0]//width_spacing
-    rows = math.ceil( num/xnum )
 
     level = 1
     while True:
@@ -130,27 +130,23 @@ def choose_level():
                     return 0
 
                 elif event.Key.Code == sf.Key.Right:
-                    level = (level+1)%(num+1)
+                    level = (level+1)%xnum
 
                 elif event.Key.Code == sf.Key.Left:
-                    level = (level-1)%(num+1)
+                    level = (level-1)%xnum
 
                 elif event.Key.Code == sf.Key.Down:
-                    level = (level+xnum)%(num+1)
-
-                    # improve the usability of the 'return to menu' field
-                    if (level // xnum) == rows-1:
-                        level = num
+                    level = (level+xnum)%xnum
 
                 elif event.Key.Code == sf.Key.Up:
-                    level = (level-xnum)%(num+1)
+                    level = (level-xnum)%xnum
 
                 elif event.Key.Code == sf.Key.Return:
                     break
                 
         draw_background()
 
-        for y in range(rows):
+        for y in range(math.ceil( num/xnum )):
             for x in range((num - y*xnum) % xnum):
                 i = y*xnum +x +1
 
@@ -172,6 +168,47 @@ def choose_level():
     return level if level < num else 0
 
 
+def show_credits():
+    """Show the game's credits"""
+    try:
+        with open(os.path.join("..","CREDITS"),"rt") as file:
+            cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
+            cred.insert(0,"(Press any key to continue)")
+    except IOError:
+        print("Failure loading credits file")
+        return
+
+    height,height_spacing = 30, 5
+    while True:
+
+        if app.GetEvent(event):
+            if event.Type == sf.Event.KeyPressed:
+                #if event.Key.Code == sf.Key.Escape:
+                return
+                
+        draw_background()
+
+        x,y = 100,50
+        for line in cred:
+            tex = sf_string(
+                line+("\n" if line[0] == "=" else ""),
+                FontCache.get(
+                    height,
+                    defaults.font_menu),
+                height,
+                x,
+                y,
+                sf.Color.Red if line[0] == "=" else sf.Color.White)
+
+            y += height+height_spacing
+            if y > defaults.resolution[1]-100:
+                x+= 500
+                y = 130
+            
+            app.Draw(tex)
+        app.Display()
+
+
 def sf_string_with_shadow(text,font,size,x,y,color,bgcolor=sf.Color(100,100,100)):
     """Spawn a string with a shadow behind, which is actually the same
     string in a different color, moved and scaled slightly. Return a
@@ -185,6 +222,17 @@ def sf_string_with_shadow(text,font,size,x,y,color,bgcolor=sf.Color(100,100,100)
     tex2.SetColor(bgcolor)
 
     return (tex2,tex)
+
+
+def sf_string(text,font,size,x,y,color):
+    """Create a sf.String from the given parameters and
+    return it. Unlike XXX_with_shadow, this method does not
+    supplement a drop shadow."""
+    tex = sf.String(text,Font=font,Size=size)
+    tex.SetPosition(x,y)
+    tex.SetColor(color)
+
+    return tex
 
 
 def set_menu_option(i):
