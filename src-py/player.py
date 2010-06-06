@@ -320,7 +320,14 @@ class Player(Entity):
         self.tiles[self.cur_tile[-1]].DrawRelative(self.game,self.pos)
 
     def GetBoundingBox(self):
-        return (self.pos[0]+self.pofsx, self.pos[1],self.pwidth,self.pheight)
+
+        # Adjust the size of the bb slightly to increase the likelihood
+        # to pass tight tunnels.
+        pcb = (defaults.player_caution_border[0]/defaults.tiles_size_px[0],\
+            defaults.player_caution_border[1]/defaults.tiles_size_px[1])
+
+        return (self.pos[0]+self.pofsx+pcb[0]/2, self.pos[1]+pcb[1],\
+            self.pwidth-pcb[0],self.pheight-pcb[1])
 
     def _AddRespawnPoint(self,pos):
         """Add a possible respawn position to the player entity."""
