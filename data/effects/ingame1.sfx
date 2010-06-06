@@ -6,7 +6,7 @@ effect
 {
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
-	vec4 another = framebuffer(_in+vec2(-0.008,0.0));
+	vec4 another = framebuffer(_in+vec2(-0.01,-0.004));
 
 	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);
 	vec4 color = (pixel*1.0f+(another*0.25));

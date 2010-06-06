@@ -199,9 +199,11 @@ class Player(Entity):
 
     def _UpdatePostFX(self,game):
         origin = game.GetOrigin()
+
+        # XXX Use Game's coordinate sustem conversion utilities
         game.effect.SetParameter("cur",
-            (self.pos[0]-origin[0])/defaults.tiles[0],
-            1.0-(self.pos[1]-origin[1])/defaults.tiles[1])
+            (self.pos[0]+self.pwidth//2-origin[0])/defaults.tiles[0],
+            1.0-(self.pos[1]+self.pheight//2-origin[1])/defaults.tiles[1])
 
     def _Kill(self,game):
         """Internal stub to kill the player and to fire some nice
@@ -366,7 +368,7 @@ class KillAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player is killed."""
 
-    def __init__(self,pos,speed,dirvec,ttl,text="(KILLED)"):
+    def __init__(self,pos,speed,dirvec,ttl,text="YOU DIED HERE"):
         Tile.__init__(self,text)
 
         self.opos = pos
