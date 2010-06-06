@@ -108,6 +108,8 @@ def get_level_count():
         if not os.path.exists(f):
             break
 
+    level_count -= 1
+
     print("cache level count: {0}".format(level_count))
     return level_count
 

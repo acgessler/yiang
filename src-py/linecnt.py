@@ -42,3 +42,4 @@ def line_count_all():
 
 if __name__ ==  '__main__':
     line_count_all()
+    input("Press any key to continue")

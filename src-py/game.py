@@ -325,7 +325,8 @@ PreventFallDown:   {debug_prevent_fall_down}
 ShowBoundingBoxes: {debug_draw_bounding_boxes}
 ScrollBoth:        {debug_scroll_both}
 ScrollSpeed:       {move_map_speed}
-SpeedScaleLevel:   {speed_scale_per_level}
+SpeedScale/Level   {speed_scale_per_level}
+SpeedScale         {speed_scale}
 
 """.format(**locdef)
         
@@ -597,6 +598,8 @@ SpeedScaleLevel:   {speed_scale_per_level}
 
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
+
+        self.speed_scale *= defaults.speed_scale_per_level
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level))
 
@@ -611,8 +614,6 @@ SpeedScaleLevel:   {speed_scale_per_level}
         if self.LoadLevel(lidx) is False:
             raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
             
-        self.speed_scale *= defaults.speed_scale_per_level
-
     def GetEntities(self):
         """Get a list of all entities in the game"""
         return self.entities
