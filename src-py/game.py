@@ -33,9 +33,24 @@ import defaults
 from fonts import FontCache
 
 
-class NewFrame(BaseException):
+class NewFrame(Exception):
+    """Sentinel exception to abort the current frame and to
+    resume with the next, immediately."""
     pass
 
+
+class ReturnToMenuDueToFailure(Exception):
+    """Sentinel exception to return control to the main
+    menu ins response to unexpected disasters (i.e.
+    level loading failed). The exception carries a
+    description string."""
+
+    def __init__(self,message):
+        self.message = message 
+
+    def __str__(self):
+        return "(ReturnToMenuDueToFailure): {0}".format(self.message)
+    
 
 class Game:
     """Encapsulates the whole game state, including map tiles,
@@ -67,9 +82,6 @@ class Game:
 
         self._LoadPostFX()
 
-        self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
-        self.life_bar_font = FontCache.get(defaults.letter_height_lives,face=defaults.font_lives)
-
     def Run(self):
         """ Run the main loop. If the game was previsouly suspended,
         the old status is recovered. The function returns True if
@@ -80,54 +92,62 @@ class Game:
 
         print("Enter mainloop")
 
-        event = sf.Event()
-        while self.running is True:
-            if not self.app.IsOpened():
-                return False
+        try: # Do or do not. There is no try
+            event = sf.Event()
+            while self.running is True:
+                if not self.app.IsOpened():
+                    return False
 
-            if self.app.GetEvent(event):
-                self._HandleIncomingEvent(event)
+                if self.app.GetEvent(event):
+                    self._HandleIncomingEvent(event)
 
-            self.app.Clear(sf.Color.Black)
-                
-            time = self.clock.GetElapsedTime()
-            self.total = time+self.total_accum
+                self.app.Clear(sf.Color.Black)
+                    
+                time = self.clock.GetElapsedTime()
+                self.total = time+self.total_accum
 
-            dtime = (time - self.last_time)*self.speed_scale
-            self.last_time = time
+                dtime = (time - self.last_time)*self.speed_scale
+                self.last_time = time
 
-            try:
-                for entity in self._EnumEntities():
-                    entity.Update(time,dtime,self)
-
-                for entity in self._EnumEntities():
-                    entity.Draw(self)
-            except NewFrame:
-                pass
-
-            self.app.Draw(self.effect)
-            
-            if defaults.debug_draw_bounding_boxes:
-                self._DrawBoundingBoxes()
-
-            self._DrawStatusBar()
-
-            # update the entity list
-            for entity in self.entities_add:
-                self.entities.add(entity)
-
-            for entity in self.entities_rem:
                 try:
-                    self.entities.remove(entity)
-                except KeyError:
+                    for entity in self._EnumEntities():
+                        entity.Update(time,dtime,self)
+
+                    for entity in self._EnumEntities():
+                        entity.Draw(self)
+                except NewFrame:
                     pass
 
-            self.entities_rem,self.entities_add = set(),set()
+                self.app.Draw(self.effect)
+                
+                if defaults.debug_draw_bounding_boxes:
+                    self._DrawBoundingBoxes()
 
-            # Toggle buffers 
-            self.app.Display()
+                self._DrawStatusBar()
 
-        self.total_accum += self.clock.GetElapsedTime()
+                if defaults.debug_draw_info:
+                    self._DrawDebugInfo()
+
+                # update the entity list
+                for entity in self.entities_add:
+                    self.entities.add(entity)
+
+                for entity in self.entities_rem:
+                    try:
+                        self.entities.remove(entity)
+                    except KeyError:
+                        pass
+
+                self.entities_rem,self.entities_add = set(),set()
+
+                # Toggle buffers 
+                self.app.Display()
+
+            self.total_accum += self.clock.GetElapsedTime()
+
+        except ReturnToMenuDueToFailure as e:
+            return str(e)
+        
         print("Leave mainloop")
         return True
 
@@ -152,6 +172,13 @@ class Game:
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
+
+        if not hasattr(self,"status_bar_font"):
+            self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
+
+        if not hasattr(self,"life_bar_font"):
+            self.life_bar_font = FontCache.get(defaults.letter_height_lives,face=defaults.font_lives)
+        
         # and finally the border
         shape = sf.Shape()
 
@@ -230,6 +257,9 @@ class Game:
             elif event.Key.Code == sf.Key.G:
                  defaults.debug_updown_move = not  defaults.debug_updown_move
 
+            elif event.Key.Code == sf.Key.D:
+                 defaults.debug_draw_info = not  defaults.debug_draw_info
+
             elif event.Key.Code == sf.Key.K:
                  self.Kill()
 
@@ -261,6 +291,31 @@ class Game:
 
             self.app.Draw(shape)
             entity.highlight_bb = False
+
+    def _DrawDebugInfo(self):
+        """Dump debug information (i.e. entity stats) to the upper right
+        corner of the window"""
+
+        if not hasattr(self,"debug_info_font"):
+            self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
+            
+        entities, entities_range = len(self.entities),0
+
+        import gc
+        gcc = gc.get_count()
+
+        text = """
+EntitiesTotal:     {entities}
+EntitiesInRange:   {entities_range}
+GCCollections:     {gcc}
+""".format(**locals())
+        
+        s = sf.String(text,Font=self.debug_info_font,\
+            Size=defaults.letter_height_debug_info)
+
+        s.SetPosition(defaults.resolution[0]-400,150)
+        s.SetColor(sf.Color.Green)
+        self.app.Draw(s)
 
     def AddToActiveBBs(self,entity):
         """Debug feature, mark a specific entity for highlighting
@@ -457,7 +512,7 @@ class Game:
         return (coords[0]-self.origin[0],coords[1]-self.origin[1])
 
     def LoadLevel(self,level):
-        """Load a particular level"""
+        """Load a particular level, return True on success"""
 
         print("Loading level from disc: "+str(level))
         self.level = level
@@ -507,10 +562,13 @@ class Game:
                 
         except IOError:
             print("Failure loading level "+str(level))
+            return False
 
         except AssertionError as err:
             print("Level "+str(level)+" is not well-formatted (line {0})".format(line_idx))
             traceback.print_exc()
+
+        return True
 
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
@@ -524,7 +582,10 @@ class Game:
         ))) is False:
             self.Suspend()
 
-        self.LoadLevel((self.level+1)%main.get_level_count())
+        lidx = (self.level+1)%main.get_level_count()
+        if self.LoadLevel(lidx) is False:
+            raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
+            
         self.speed_scale *= defaults.speed_scale_ler_level
 
     def GetEntities(self):

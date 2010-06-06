@@ -168,10 +168,10 @@ class Player(Entity):
 
                     print("Leaving left danger area, restoring old state")
                     self.SetColor(self.restore_color)
-                    delattr(self,"restore_color")
                 else:
                     print("Can't restore old color, seemingly the player color "+\
                           "changed while the entity resided in the left danger area")
+                delattr(self,"restore_color")
 
     def _CheckForRightMapBorder(self,game):
         """Check if we approached the right border of the game, which
