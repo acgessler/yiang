@@ -721,6 +721,11 @@ class Tile(Entity):
         self.cached.SetColor(self.color)
 
     def GetBoundingBox(self):
+        if hasattr(self,"shrink_percentage"):
+            ssp = 1.0-self.shrink_percentage
+            hs = (self.dim[0]*ssp,self.dim[1]*ssp)
+            return (self.pos[0]+hs[0]/2,self.pos[1]+hs[1]/2,self.dim[0]-hs[0],self.dim[1]-hs[1])    
+            
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
 
     def _Recache(self):
@@ -729,6 +734,13 @@ class Tile(Entity):
         self.cached = sf.String(self.text,Font=font,Size=defaults.letter_size[1])
         
         self.cached.SetColor(self.color)
+
+    def _ShrinkBB(self,shrink_percentage):
+        """Helper function, changes the behaviour of GetBoundingBox()
+        to shrink the returne dbounding box by a given percentage
+        in all directions. Specifying 0.9 will result in a bounding
+        box with a margin of 0.05 percent on each side."""
+        self.shrink_percentage = shrink_percentage
 
     @staticmethod
     def CreateSimple(char,color,pos):

@@ -37,6 +37,8 @@ class SmallTraverser(AnimTile):
         if randomdir is True:
             self.vel = move_speed*random.choice((-1,1))
 
+        self._ShrinkBB(0.8)
+
     def Interact(self,other,game):
         return Entity.KILL
 
