@@ -17,21 +17,28 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# Delete all *.pyc recursively.
 import os
 
-def main(root='.'):
-    for t in os.listdir(root):
-        fullp =os.path.join(root,t)
-        if os.path.isdir(t):
-            main(fullp)
+def line_count (file):
+    i = 0
+    with open(file) as f:
+        for i, l in enumerate(f):
+            pass
+        
+    return i + 1
+
+
+def line_count_all():
+    total = 0
+    for t in os.listdir("."):
+        if not os.path.isfile(t) or os.path.splitext(t)[-1].lower() != ".py":
             continue
 
-        if os.path.splitext(fullp)[-1].lower() == '.pyc':
-            os.unlink(fullp)
-
-
+        cnt = line_count(t)
+        print("{0} {1} lines".format(t,cnt))
+        total += cnt
+        
+    print("Total: {0} lines".format(total))
 
 if __name__ ==  '__main__':
-    os.chdir("..")
-    main()
+    line_count_all()

@@ -1,0 +1,26 @@
+Etwas verspaetet, hier mein Beitrag zur ZFX–Action.
+
+
+[size=150]Kurz[/size]
+<> ist ein kurzweiliger, actionbasiertes Jump'n'Run-Spiel in ASCII-Art. 
+
+[size=150]Screenshots[/size]
+
+[size=150]Beschreibung[/size]
+
+[size=150]Technik[/size]
+
+Das Projekt ist nahezu vollstaendig in Python 3 (v3.1) entstanden. Leider entstand somit eine Abhaengigkeit von der Python–Runtime, die in der erforderliche Version nur selten installiert ist. Als Framework kommt SFML, Release 1.5, zum Einsatz, das zwar veraltet ist, jedoch ueber funktionstuechtige Python–Wrapper verfuegt. Damit waere eigentlich die Notwendigkeit entstanden den End–User auch noch selbige Bindings einrichten zu lassen, fuer nicht Python–Kenner eine eher unlustige Sache.
+
+Daher habe ich mich dafuer entschieden, die Python Runtime komplett einzubetten, was gluecklicherweise nicht sonderlich muehsam ist. Der eher kurze C++–Teil des Programms dient als Bootstrapper, d.h. er initialisiert Python und startet das eigentliche Spiel.
+
+[size=150]Team[/size]
+[i]Programmierung:[/i]
+Alexander Gessler (Ich)
+
+[i]Leveldesign & Quality Assurance[/i]
+Tizian Wieland
+Tobias Rittig
+Jolanda Roessner
+Tobias Riedel
+Alexander Gessler
