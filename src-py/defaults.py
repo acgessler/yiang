@@ -47,6 +47,7 @@ framerate_limit = 60
 min_respawn_distance = 2.5
 right_scroll_distance = 9
 respawn_origin_distance = 2.0
+speed_scale_ler_level = 1.05
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

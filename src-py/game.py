@@ -61,6 +61,7 @@ class Game:
         self.lives = defaults.lives
         self.last_time = 0
         self.game_over = False
+        self.speed_scale = 1.0
 
         self.entities_add,self.entities_rem = set(),set()
 
@@ -92,7 +93,7 @@ class Game:
             time = self.clock.GetElapsedTime()
             self.total = time+self.total_accum
 
-            dtime = time - self.last_time
+            dtime = (time - self.last_time)*self.speed_scale
             self.last_time = time
 
             try:
@@ -524,6 +525,7 @@ class Game:
             self.Suspend()
 
         self.LoadLevel((self.level+1)%main.get_level_count())
+        self.speed_scale *= defaults.speed_scale_ler_level
 
     def GetEntities(self):
         """Get a list of all entities in the game"""
