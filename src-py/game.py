@@ -549,9 +549,10 @@ class Entity:
     of a set of tiles. Entities receive Update() callbacks once per
     logical frame."""
 
-    ENTER,BLOCK,KILL = range(3)
-    UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT, CONTAINS = 1,2,4,8,16
-    ALL = UPPER_LEFT|UPPER_RIGHT|LOWER_LEFT|LOWER_RIGHT
+    ENTER,KILL = range(2)
+
+    BLOCK_LEFT,BLOCK_RIGHT,BLOCK_UPPER,BLOCK_LOWER,BLOCK = 0x1,0x2,0x4,0x8,0xf
+    UPPER_LEFT,UPPER_RIGHT,LOWER_LEFT,LOWER_RIGHT,CONTAINS,ALL = 0x1,0x2,0x4,0x8,0x10,0xf|0x10
 
     def __init__(self):
         self.pos = [0,0]
@@ -571,13 +572,16 @@ class Entity:
 
     def GetBoundingBox(self):
         """Get the bounding box (x,y,w,h) of the entity or
-        None of the entity does not support this concept"""
+        None if the entity does not support this concept"""
         return None
 
     def Interact(self,other,game):
         return Entity.BLOCK
 
     def _BBCollide(self,rect,mycorner):
+        """Collide the first axis-aligned BB (x,y,x2,y2) with the
+        second bounding box, return a ORed combination of the
+        Entity.UPPER/Entity.LOWER flags."""
         has = 0
         
         # upper left corner
@@ -596,7 +600,9 @@ class Entity:
         if mycorner[2]>rect[2]>=mycorner[0] and mycorner[3]>rect[3]>=mycorner[1]:
             has |= Entity.LOWER_RIGHT
 
-
+        # check an arbitrary corner the other way round, this checks for
+        # containment (which shouldn't regularly happen for
+        # collision detection will prevent it)
         if rect[2]>mycorner[2]>=rect[0] and rect[3]>mycorner[3]>=rect[1]:
             has |= Entity.CONTAINS
 
@@ -604,11 +610,13 @@ class Entity:
 
 
 class Tile(Entity):
-    """Base class for tiles, handles common behaviour, i.e, drawing"""
+    """Base class for tiles, handles common behaviour, i.e, drawing.
+    Extends Entity with more specialized behaviour."""
          
-    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=defaults.tiles_size[1]):
+    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=defaults.tiles_size[1],collision=Entity.BLOCK):
         Entity.__init__(self)
 
+        self.collision = collision
         self.text = text
         self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
         self._Recache()
@@ -616,6 +624,9 @@ class Tile(Entity):
     def __str__(self):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\
             self.pos[0],self.pos[1],self.text)
+
+    def Interact(self,other,game):
+        return self.collision
 
     def SetColor(self,color):
         Entity.SetColor(self,color)
@@ -649,7 +660,8 @@ class Tile(Entity):
     def DrawRelative(self,game,offset):
         """Same as Draw(), except it adds an offset to the tile
         position. The offset is specified in tile coordinates"""
-        game.Draw(self.cached,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
+        game.Draw(self.cached,(self.pos[0]+offset[0],
+            self.pos[1]+offset[1]))
 
 
 class AnimTile(Tile):
