@@ -73,7 +73,7 @@ def options_resumegame():
 options = [
     ("New Game -------------------------------------------", options_newgame, "You will die"),
     ("Resume Game", options_resumegame, "You will die soon"),
-    ("Choose Level -------------------------------------------", options_newgame_choose, "Bad idea"),
+    ("Choose Level >>>>>>>>>", options_newgame_choose, "Bad idea"),
     ("Credits", options_credits, defaults.credits_string),
     ("Quit!", options_quit,"")
 ]
@@ -96,16 +96,19 @@ clock = sf.Clock()
 
 
 def get_level_count():
-    """Get the number of levels in the data/levels folder"""
-    index = 0
-    for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
-        if file.endswith(".txt"):
-            try:
-                index = max(index,int(file[:-4]))
-            except:
-                pass # swallow and burn, only NN.txt files are counted
-            
-    return index
+    """Get the number of levels in the data/levels folder."""
+
+    global level_count
+    if "level_count" in globals():
+        return level_count
+    
+    for level_count in itertools.count(1):
+        f = os.path.join(defaults.data_dir,"levels","{0}.txt".format(level_count))
+        if not os.path.exists(f):
+            break
+
+    print("cache level count: {0}".format(level_count))
+    return level_count
 
 def choose_level():
     """Switch to the choose level menu option and return the selected
@@ -172,8 +175,8 @@ def sf_string_with_shadow(text,font,size,x,y,color,bgcolor=sf.Color(100,100,100)
     tex.SetPosition(x,y)
     tex.SetColor(color)
 
-    tex2 = sf.String(text,Font=font,Size=size+2)
-    tex2.SetPosition(x-4,y-2)
+    tex2 = sf.String(text,Font=font,Size=size+1)
+    tex2.SetPosition(x-6,y-3)
     tex2.SetColor(bgcolor)
 
     return (tex2,tex)
@@ -255,7 +258,6 @@ def draw_background():
     effect.SetParameter("strength", (math.sin( clock.GetElapsedTime() ) +1)*0.5);
     app.Draw(effect)
 
-        
 
 def main():
     """Main entry point to the application"""
@@ -309,7 +311,6 @@ def main():
         app.SetFramerateLimit(defaults.framerate_limit)
         
     ttl = 0
-
     print("Entering main menu")
 
     set_menu_option(0)
