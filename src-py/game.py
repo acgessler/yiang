@@ -483,7 +483,7 @@ class Game:
                 for y,line in enumerate(lines):
 
                     line_idx += 1
-                    line = line.rstrip(" \n\t")
+                    line = line.rstrip(" \n\t.")
                     if len(line) == 0:
                         continue
 
