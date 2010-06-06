@@ -28,7 +28,7 @@ letter_height_intro = 10
 letter_height_status = 36
 letter_height_lives = 9
 letter_height_game_over = 15
-letter_height_debug_info = 20
+letter_height_debug_info = 15
 caption = "Yet another Jump'n'Run (an unfair one)"
 danger_signs_ttl = 30
 tiles_size = [5,3]
@@ -40,6 +40,8 @@ debug_keys = True
 debug_prevent_fall_down = False
 debug_draw_bounding_boxes = False
 debug_draw_info = False
+debug_godmode = False
+debug_scroll_both = False
 move_map_speed = 0.25
 lives = 4
 enable_log = True
@@ -49,7 +51,7 @@ framerate_limit = 60
 min_respawn_distance = 2.5
 right_scroll_distance = 9
 respawn_origin_distance = 2.0
-speed_scale_ler_level = 1.05
+speed_scale_per_level = 1.05
 antialiasing_level = 2
 
 # -----------------------------------------------------------------------------
@@ -104,7 +106,17 @@ def merge_config(file):
     try:
         with open(file,"rt") as f:
             lines = [t for t in [m.strip("\n ") for m in f.readlines()] if len(t) and t[0] != "#"]
+
+            # convinience substitutions 
+            replace = {
+                "[0]" : ".x",
+                "[1]" : ".y",
+            }
+    
             for line in lines:
+                for k,v in replace.items():
+                    line = line.replace(k,v)
+                    
                 try:
                     exec(line,globals(),globals())
                 except Exception as e:

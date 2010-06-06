@@ -97,11 +97,11 @@ class Game:
             while self.running is True:
                 if not self.app.IsOpened():
                     return False
-
+                
                 if self.app.GetEvent(event):
                     self._HandleIncomingEvent(event)
 
-                self.app.Clear(sf.Color.Black)
+                self.Clear(sf.Color.Black)
                     
                 time = self.clock.GetElapsedTime()
                 self.total = time+self.total_accum
@@ -139,7 +139,6 @@ class Game:
                         pass
 
                 self.entities_rem,self.entities_add = set(),set()
-
                 # Toggle buffers 
                 self.app.Display()
 
@@ -174,10 +173,12 @@ class Game:
         """draw the status bar with the player's score, lives and total game duration"""
 
         if not hasattr(self,"status_bar_font"):
-            self.status_bar_font = FontCache.get(defaults.letter_height_status,face=defaults.font_status)
+            self.status_bar_font = FontCache.get(defaults.letter_height_status,\
+                face=defaults.font_status)
 
         if not hasattr(self,"life_bar_font"):
-            self.life_bar_font = FontCache.get(defaults.letter_height_lives,face=defaults.font_lives)
+            self.life_bar_font = FontCache.get(defaults.letter_height_lives,\
+                face=defaults.font_lives)
         
         # and finally the border
         shape = sf.Shape()
@@ -203,11 +204,11 @@ class Game:
 
         status.SetPosition(8,5)
         status.SetColor(sf.Color.Black)
-        self.app.Draw(status)
+        self.Draw(status)
 
         status.SetColor(sf.Color.Yellow)
         status.SetPosition(10,5)
-        self.app.Draw(status)
+        self.Draw(status)
 
 
         # .. and the number of remaining lifes
@@ -225,14 +226,14 @@ class Game:
 
         status.SetPosition(xstart-2,5)
         status.SetColor(sf.Color.Black)
-        self.app.Draw(status)
+        self.Draw(status)
 
         status.SetPosition(xstart+2,5)
-        self.app.Draw(status)
+        self.Draw(status)
 
         status.SetPosition(xstart,6)        
         status.SetColor(sf.Color.Yellow)
-        self.app.Draw(status)
+        self.Draw(status)
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -255,16 +256,19 @@ class Game:
                 defaults.debug_draw_bounding_boxes = not defaults.debug_draw_bounding_boxes
                 
             elif event.Key.Code == sf.Key.G:
-                 defaults.debug_updown_move = not  defaults.debug_updown_move
+                defaults.debug_updown_move = not defaults.debug_updown_move
 
             elif event.Key.Code == sf.Key.D:
-                 defaults.debug_draw_info = not  defaults.debug_draw_info
+                defaults.debug_draw_info = not defaults.debug_draw_info
+
+            elif event.Key.Code == sf.Key.X:
+                defaults.debug_godmode = not defaults.debug_godmode
 
             elif event.Key.Code == sf.Key.K:
-                 self.Kill()
+                self.Kill()
 
             elif event.Key.Code == sf.Key.Q:
-                 self.GameOver()
+                self.GameOver()
                 
     def _DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the scene"""
@@ -276,8 +280,8 @@ class Game:
             shape = sf.Shape()
 
             bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
-            bb[0:2] = self._ToDeviceCoordinates(self._ToCameraCoordinates( bb[0:2] ))
-            bb[2:4] = self._ToDeviceCoordinates(self._ToCameraCoordinates( bb[2:4] ))
+            bb[0:2] = self.ToDeviceCoordinates(self.ToCameraCoordinates( bb[0:2] ))
+            bb[2:4] = self.ToDeviceCoordinates(self.ToCameraCoordinates( bb[2:4] ))
 
             color = sf.Color.Red if getattr(entity,"highlight_bb",False) is True else sf.Color.Green
             shape.AddPoint(bb[0],bb[1],color,color)
@@ -289,7 +293,7 @@ class Game:
             shape.EnableFill(False)
             shape.EnableOutline(True)
 
-            self.app.Draw(shape)
+            self.Draw(shape)
             entity.highlight_bb = False
 
     def _DrawDebugInfo(self):
@@ -299,23 +303,37 @@ class Game:
         if not hasattr(self,"debug_info_font"):
             self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
             
-        entities, entities_range = len(self.entities),0
+        entity_count, entities_range = len(self.entities),0
 
         import gc
         gcc = gc.get_count()
 
+        # this is expensive, but we will survive it.
+        locdef = locals().copy()
+        locdef.update(defaults.__dict__)
+        locdef.update(self.__dict__)
+        
         text = """
-EntitiesTotal:     {entities}
+EntitiesTotal:     {entity_count}
 EntitiesInRange:   {entities_range}
+DrawCalls:         {draw_counter}
 GCCollections:     {gcc}
-""".format(**locals())
+GodMode:           {debug_godmode}
+UpDownMove:        {debug_updown_move}
+PreventFallDown:   {debug_prevent_fall_down}
+ShowBoundingBoxes: {debug_draw_bounding_boxes}
+ScrollBoth:        {debug_scroll_both}
+ScrollSpeed:       {move_map_speed}
+SpeedScaleLevel:   {speed_scale_per_level}
+
+""".format(**locdef)
         
         s = sf.String(text,Font=self.debug_info_font,\
             Size=defaults.letter_height_debug_info)
 
-        s.SetPosition(defaults.resolution[0]-400,150)
+        s.SetPosition(defaults.resolution[0]-400,120)
         s.SetColor(sf.Color.Green)
-        self.app.Draw(s)
+        self.Draw(s)
 
     def AddToActiveBBs(self,entity):
         """Debug feature, mark a specific entity for highlighting
@@ -443,7 +461,7 @@ GCCollections:     {gcc}
                 if event.Type == sf.Event.KeyPressed:
                     break
 
-            self.app.Clear(sf.Color.Black)
+            self.Clear(sf.Color.Black)
             time = clock.GetElapsedTime()
 
             # draw all entities, but don't update them
@@ -451,7 +469,7 @@ GCCollections:     {gcc}
                 entity.Draw(self)
 
             self.effect.SetParameter("fade",1.0 - time/fade_time)
-            self.app.Draw(self.effect)
+            self.Draw(self.effect)
             self._DrawStatusBar()
 
             # now the message box showing the match result
@@ -475,16 +493,16 @@ GCCollections:     {gcc}
         shape.SetOutlineWidth(4)
         shape.EnableFill(True)
         shape.EnableOutline(True)
-        self.app.Draw(shape)
+        self.Draw(shape)
         pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
         
         text.SetColor(sf.Color.Black)
         text.SetPosition(pos[0]+1,pos[1]+1)
-        self.app.Draw(text)
+        self.Draw(text)
 
         text.SetColor(sf.Color.Red)
         text.SetPosition(pos[0],pos[1])
-        self.app.Draw(text)
+        self.Draw(text)
 
     def _Respawn(self):
         """Respawn the player at the beginning of the level"""
@@ -501,6 +519,12 @@ GCCollections:     {gcc}
             drawable.SetPosition(*pos)
             
         self.app.Draw(drawable)
+        self.draw_counter += 1
+
+    def Clear(self,color):
+        """Clear the screen in a specified color"""
+        self.draw_counter = 0
+        self.app.Clear(color)
 
     def ToDeviceCoordinates(self,coords):
         """Get from camera coordinates to SFML (device) coordinates"""
@@ -586,7 +610,7 @@ GCCollections:     {gcc}
         if self.LoadLevel(lidx) is False:
             raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
             
-        self.speed_scale *= defaults.speed_scale_ler_level
+        self.speed_scale *= defaults.speed_scale_per_level
 
     def GetEntities(self):
         """Get a list of all entities in the game"""
@@ -664,7 +688,7 @@ class Entity:
             has |= Entity.LOWER_RIGHT
 
         # check an arbitrary corner the other way round, this checks for
-        # containment (which shouldn't regularly happen for
+        # containment (which shouldn't happen regularly for
         # collision detection will prevent it)
         if rect[2]>mycorner[2]>=rect[0] and rect[3]>mycorner[3]>=rect[1]:
             has |= Entity.CONTAINS
@@ -880,13 +904,12 @@ class TileLoader:
             l = l.replace(k,v)
 
         #print(l)
-
         tempdict = dict(locals())
 
         try:
             exec(l,globals(),tempdict)
-        except AssertionError as e:
-            print("exec() fails: ")
+        except:
+            print("exec() fails loading tile {0}: ".format(file))
             traceback.print_exc()
             
         return tempdict.get("entity",Tile())

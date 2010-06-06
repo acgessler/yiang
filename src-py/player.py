@@ -152,7 +152,15 @@ class Player(Entity):
     def _CheckForLeftMapBorder(self,game):
         """Check if we passed the left border of the game, which is
         generally a bad idea. """
+
         origin = game.GetOrigin()
+        if defaults.debug_godmode is True or defaults.debug_scroll_both is True:
+            # GODMODE: scroll to the left as usual
+            rmax = float(defaults.right_scroll_distance)
+            if self.pos[0] < origin[0]+defaults.tiles[0]+rmax:
+                game.SetOrigin((self.pos[0]-rmax,origin[1]))
+                return
+        
         if self.pos[0] < origin[0]:
             if self.pos[0]+self.pwidth > origin[0]:
 
@@ -188,7 +196,6 @@ class Player(Entity):
             
         origin = game.GetOrigin()
         game.SetOrigin((origin[0]+dtime*defaults.move_map_speed,origin[1]))
-
 
     def _UpdatePostFX(self,game):
         origin = game.GetOrigin()
@@ -235,7 +242,8 @@ class Player(Entity):
             res = collider.Interact(self,game)
             if res == Entity.KILL:
                 print("hit deadly entity, need to commit suicide")
-                self._Kill(game)
+                if defaults.debug_godmode is False:
+                    self._Kill(game)
 
             elif res != Entity.BLOCK:
                 continue

@@ -1,7 +1,9 @@
 
 
 # Lines starting with # are comment lines. Oh, really!
+# To access 2-tuples (such as resolution), .x and .y can be
+# used to access the values (i.e. resolution.x)
 
 fullscreen=False
-resolution[0]=1280
-resolution[1]=650
+resolution.x=1280
+resolution.y=650
