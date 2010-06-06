@@ -109,8 +109,8 @@ def merge_config(file):
 
             # convinience substitutions 
             replace = {
-                "[0]" : ".x",
-                "[1]" : ".y",
+                ".x" : "[0]",
+                ".y" : "[1]",
             }
     
             for line in lines:
