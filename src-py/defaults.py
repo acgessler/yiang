@@ -44,7 +44,7 @@ enable_log = True
 log_file = "log.txt"
 game_over_fade_time = 2.0
 framerate_limit = 60
-min_respawn_distance = 3.0
+min_respawn_distance = 2.5
 right_scroll_distance = 5
 respawn_origin_distance = 2.0
 

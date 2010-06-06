@@ -441,17 +441,17 @@ class Game:
         specified in tile coordinates."""
 
         if not pos is None:
-            pos = self._ToDeviceCoordinates(self._ToCameraCoordinates( pos ))
+            pos = self.ToDeviceCoordinates(self.ToCameraCoordinates( pos ))
             drawable.SetPosition(*pos)
             
         self.app.Draw(drawable)
 
-    def _ToDeviceCoordinates(self,coords):
+    def ToDeviceCoordinates(self,coords):
         """Get from camera coordinates to SFML (device) coordinates"""
         return (coords[0]*defaults.tiles_size_px[0],
                 coords[1]*defaults.tiles_size_px[1])
 
-    def _ToCameraCoordinates(self,coords):
+    def ToCameraCoordinates(self,coords):
         """Get from world- to camera coordinates"""
         return (coords[0]-self.origin[0],coords[1]-self.origin[1])
 

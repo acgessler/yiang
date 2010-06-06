@@ -60,7 +60,7 @@ class Player(Entity):
         assert len(self.tiles) == Player.MAX_ANIMS
 
     def SetPosition(self,pos):
-        self.pos = pos
+        self.pos = list(pos)
         #for tile in self.tiles:
         #    tile._Recache()
 
@@ -163,12 +163,12 @@ class Player(Entity):
                 self._Kill(game)
 
         else:
-            if not getattr(self,"restore_color",None) is None:
+            if hasattr(self,"restore_color"):
                 if not self.color is self.restore_color:
 
                     print("Leaving left danger area, restoring old state")
                     self.SetColor(self.restore_color)
-                    self.restore_color = None
+                    delattr(self,"restore_color")
                 else:
                     print("Can't restore old color, seemingly the player color "+\
                           "changed while the entity resided in the left danger area")
@@ -202,7 +202,7 @@ class Player(Entity):
         if game.GetLives() > 0:
             for i in range(30):
                 game.AddEntity(KillAnimStub(self.pos,random.uniform(-1.0,1.0),\
-                    (random.random(),random.random())))
+                    (random.random(),random.random()),random.random()*12.0))
             
         game.Kill()
 
@@ -303,7 +303,7 @@ class Player(Entity):
                 game.AddToActiveBBs(collider)
 
 
-        print("Active colliders: {0}".format(cnt))
+        #print("Active colliders: {0}".format(cnt))
         return newpos,newvel
             
     def Draw(self,game):
@@ -326,10 +326,12 @@ class Player(Entity):
 
         min_distance = float(defaults.min_respawn_distance)
         for rpos in reversed(self.respawn_positions):
-            if mathutil.Length((rpos[0]-self.pos[0],rpos[1]-self.pos[1])) < min_distance:
-                continue
+            if rpos[0]>self.pos[0] or mathutil.Length((rpos[0]-self.pos[0],rpos[1]-self.pos[1])) < min_distance:
+                continue # this is to protect the player from being
+                # respawned in kill zones.
             
             self.SetPosition(rpos)
+            break
             
         else:
             self.SetPosition(self.respawn_positions[0])
@@ -356,12 +358,13 @@ class KillAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player is killed."""
 
-    def __init__(self,pos,speed,dirvec,text="(KILLED)"):
+    def __init__(self,pos,speed,dirvec,ttl,text="(KILLED)"):
         Tile.__init__(self,text)
 
         self.opos = pos
         self.SetPosition( pos )
         self.speed = speed
+        self.ttl = ttl
         
         self.dirvec = mathutil.Normalize( dirvec )
         self.SetColor(sf.Color.Red)
@@ -372,14 +375,24 @@ class KillAnimStub(Tile):
     def Update(self,time_elapsed,time_delta,game):
         self.SetPosition((self.pos[0]+self.dirvec[0]*time_delta*self.speed,self.pos[1]+self.dirvec[1]*time_delta*self.speed))
 
+        if not hasattr(self,"time_start"):
+            self.time_start = time_elapsed
+            return
+
+        if time_elapsed - self.time_start > self.ttl:
+            game.RemoveEntity(self) 
+        
     def Draw(self,game):
         Tile.Draw(self,game)
 
-        # XXX wrong coordinate system
-        # color = sf.Color.Red
-        # shape = sf.Shape.Line(self.pos[0] - self.dirvec[0]*3,\
-        #    self.pos[1] - self.dirvec[1]*3,self.opos[0],self.opos[1],1,color)
-        # game.Draw(shape)
+        # could use Rotate(), Scale() as well
+        start = game.ToDeviceCoordinates(game.ToCameraCoordinates((
+            self.pos[0]-(self.pos[0]-self.opos[0])*0.25+0.8,self.pos[1]-(self.pos[1]-self.opos[1])*0.25)))
+        end = game.ToDeviceCoordinates(game.ToCameraCoordinates(
+            (self.opos[0],self.opos[1])))
+        
+        shape = sf.Shape.Line(start[0],start[1],end[0],end[1],1,sf.Color.Red)
+        game.Draw(shape)
 
 
         
