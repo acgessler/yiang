@@ -30,8 +30,8 @@ import traceback
 
 # My own stuff
 import defaults
+import validator
 from fonts import FontCache
-
 
 class NewFrame(Exception):
     """Sentinel exception to abort the current frame and to
@@ -552,12 +552,12 @@ SpeedScaleLevel:   {speed_scale_per_level}
             "_" : sf.Color.White,
         })
 
-        spaces = [" ","\t"]
+        spaces = [" ","\t","."]
         line_idx = 0
         
         try:
             with open(os.path.join(defaults.data_dir,"levels",str(level)+".txt"), "rt") as f:
-                lines = f.readlines()
+                self.lines = lines = f.readlines()
                 assert len(lines)>0
                 
                 for y,line in enumerate(lines):
@@ -593,7 +593,7 @@ SpeedScaleLevel:   {speed_scale_per_level}
             print("Level "+str(level)+" is not well-formatted (line {0})".format(line_idx))
             traceback.print_exc()
 
-        return True
+        return validator.validate_level(self.lines,level)
 
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""

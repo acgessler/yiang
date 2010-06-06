@@ -37,8 +37,6 @@ class SmallTraverser(AnimTile):
         if randomdir is True:
             self.vel = move_speed*random.choice((-1,1))
 
-        self._ShrinkBB(0.8)
-
     def Interact(self,other,game):
         return Entity.KILL
 
@@ -57,7 +55,7 @@ class SmallTraverser(AnimTile):
             tj = self._BBCollide(rect, mycorner)
             if tj>0:
                 game.AddToActiveBBs(collider)
-                assert False
+                #assert False
                 res |= tj
 
         if self.vel < 0 and res & Entity.ALL == (Entity.UPPER_LEFT|Entity.LOWER_LEFT) or\
