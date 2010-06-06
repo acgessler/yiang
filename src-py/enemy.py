@@ -17,6 +17,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# Python Core
+import random
+
 # PySFML
 import sf
 
@@ -28,10 +31,11 @@ class SmallTraverser(AnimTile):
     """The simplest class of entities, it moves in a certain
     range and kills the player immediately"""
 
-    def __init__(self,text,height,frames,speed=1.0,move_speed=3):
+    def __init__(self,text,height,frames,speed=1.0,move_speed=3,randomdir=True):
         AnimTile.__init__(self,text,height,frames,speed,2)
 
-        self.vel = move_speed
+        if randomdir is True:
+            self.vel = move_speed*random.choice((-1,1))
 
     def Interact(self,other,game):
         return Entity.KILL

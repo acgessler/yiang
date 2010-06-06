@@ -1,0 +1,14 @@
+from score import ScoreTile; <out> = ScoreTile(<raw>,1,5,2.0,0.005,True)
+ (.) 
+
+ (') 
+
+ (") 
+
+(("))
+
+ (") 
+
+ (') 
+
+ (.) 

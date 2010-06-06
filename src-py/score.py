@@ -29,9 +29,12 @@ class ScoreTile(AnimTile):
     """The player receives a certain extra score upon
     entering this tile"""
 
-    def __init__(self,text,height,frames,speed,points):
+    def __init__(self,text,height,frames,speed,points,randomize=False):
         AnimTile.__init__(self,text,height,frames,speed)
         self.points = points
+
+        if randomize is True:
+            self.GotoRandom()
         
     def Interact(self,other,game):
         if isinstance(other,Player):

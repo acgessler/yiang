@@ -348,8 +348,9 @@ class RespawnPoint(Entity):
 
         for entity in game._EnumEntities():
             if hasattr(entity,"_AddRespawnPoint"):
-                entity.AddRespawnPoint(self.pos)
-
+                entity._AddRespawnPoint(self.pos)
+                
+        self.didit = True        
 
 class KillAnimStub(Tile):
     """Implements the text string that is spawned whenever

@@ -33,6 +33,7 @@ class LevelUp(Tile):
         
     def Interact(self,other,game):
         if isinstance(other,Player):
+            print("Got level up!")
             game.NextLevel()
             
         return Entity.ENTER

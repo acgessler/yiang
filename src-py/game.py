@@ -569,7 +569,7 @@ class Entity:
     def SetColor(self,color):
         self.color = color
 
-    def GetBoundingBox(self,rect,game):
+    def GetBoundingBox(self):
         """Get the bounding box (x,y,w,h) of the entity or
         None of the entity does not support this concept"""
         return None
