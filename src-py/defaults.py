@@ -38,7 +38,7 @@ debug_updown_move = False
 debug_keys = True
 debug_prevent_fall_down = False
 debug_draw_bounding_boxes = False
-move_map_speed = 0.1
+move_map_speed = 0.25
 lives = 4
 enable_log = True
 log_file = "log.txt"
@@ -48,6 +48,7 @@ min_respawn_distance = 2.5
 right_scroll_distance = 9
 respawn_origin_distance = 2.0
 speed_scale_ler_level = 1.05
+antialiasing_level = 2
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

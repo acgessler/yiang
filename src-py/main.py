@@ -60,8 +60,9 @@ def options_newgame_choose():
 def options_resumegame():
     global swallow_escape
     global game
-    
-    assert not game is None
+
+    if game is None:
+        return
     
     if game.Run() is True:
         swallow_escape = True
@@ -273,15 +274,21 @@ def main():
     Log.Enable(defaults.enable_log)
 
     print("Startup ...")
+    
+    settings = sf.WindowSettings()
+    settings.DepthBits = 0
+    settings.StencilBits = 0  
+    settings.AntialiasingLevel = defaults.antialiasing_level 
         
     # Create main window
     if defaults.fullscreen is True:
         dm = sf.VideoMode.GetDesktopMode()
         
         defaults.resolution = dm.Width,dm.Height
-        app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen)
+        app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen, settings)
     else:
-        app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), defaults.caption, sf.Style._None)
+        app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), \
+            defaults.caption, sf.Style._None, settings)
 
     print("Created window ...")
 
