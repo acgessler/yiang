@@ -1,0 +1,3 @@
+[web]
+allow_push = *
+push_ssl = false
