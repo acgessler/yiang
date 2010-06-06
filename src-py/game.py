@@ -197,7 +197,8 @@ class Game:
 
         self.app.Draw(shape)
         
-        status = sf.String("{0:.2} days\n{1} $".format(
+        status = sf.String("Level {0}, {1:.2} days\n{2} $".format(
+            self.level,
             Game.SecondsToDays( self.GetTotalElapsedTime() ),
             self.GetScore()/100),
             Font=self.status_bar_font,Size=defaults.letter_height_status)
