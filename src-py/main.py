@@ -119,6 +119,7 @@ def choose_level():
     
     num = get_level_count()+1
     xnum = defaults.resolution[0]//width_spacing
+    rows = math.ceil( num/xnum )
 
     level = 1
     while True:
@@ -129,23 +130,27 @@ def choose_level():
                     return 0
 
                 elif event.Key.Code == sf.Key.Right:
-                    level = (level+1)%xnum
+                    level = (level+1)%(num+1)
 
                 elif event.Key.Code == sf.Key.Left:
-                    level = (level-1)%xnum
+                    level = (level-1)%(num+1)
 
                 elif event.Key.Code == sf.Key.Down:
-                    level = (level+xnum)%xnum
+                    level = (level+xnum)%(num+1)
+
+                    # improve the usability of the 'return to menu' field
+                    if (level // xnum) == rows-1:
+                        level = num
 
                 elif event.Key.Code == sf.Key.Up:
-                    level = (level-xnum)%xnum
+                    level = (level-xnum)%(num+1)
 
                 elif event.Key.Code == sf.Key.Return:
                     break
                 
         draw_background()
 
-        for y in range(math.ceil( num/xnum )):
+        for y in range(rows):
             for x in range((num - y*xnum) % xnum):
                 i = y*xnum +x +1
 
