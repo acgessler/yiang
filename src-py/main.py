@@ -119,7 +119,7 @@ def choose_level():
     level. 0 is returned if the user cancels the operaton"""
 
     height = 80
-    width_spacing, height_spacing = 100,100
+    width_spacing, height_spacing = 120,100
 
     num = get_level_count()+1
     xnum = defaults.resolution[0]//width_spacing
@@ -154,9 +154,11 @@ def choose_level():
                 
         draw_background()
 
+        print(rows,xnum)
         for y in range(rows):
-            for x in range((num - y*xnum) % xnum):
+            for x in range(min(num - y*xnum,xnum)):
                 i = y*xnum +x +1
+                print(i)
 
                 tex2,tex = sf_string_with_shadow(
                     str(i) if i < num else "\n\n\n... back to main menu ",
@@ -345,13 +347,14 @@ def main():
     settings.AntialiasingLevel = defaults.antialiasing_level 
         
     # Create main window
+    dm = sf.VideoMode.GetDesktopMode()
     if defaults.fullscreen is True:
-        dm = sf.VideoMode.GetDesktopMode()
-        
+    
         defaults.resolution = dm.Width,dm.Height
         app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen, settings)
     else:
-        app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), \
+        app = sf.RenderWindow(sf.VideoMode(min(defaults.resolution[0],dm.Width),\
+            min(defaults.resolution[1],dm.Height)), \
             defaults.caption, sf.Style._None, settings)
 
     print("Created window ...")
