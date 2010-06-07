@@ -53,7 +53,7 @@ right_scroll_distance = 9
 respawn_origin_distance = 2.0
 speed_scale_per_level = 1.05
 antialiasing_level = 2
-player_caution_border = [2,3]
+player_caution_border = [2,7]
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
