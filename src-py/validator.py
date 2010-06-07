@@ -46,10 +46,11 @@ def validate_level(lines,idx):
     for n,line in enumerate(lines):
         line = line.rstrip(" \n\t.")
         if not len(line):
-            if len(line)%3 != 0:
-                print("Level {0}, ERROR: Line {1} is {2} characters (not divisible by 3)".format(
-                    idx,n,len(line)))
-                return False
+            continue
+        if len(line)%3 != 0:
+            print("Level {0}, ERROR: Line {1} is {2} characters (not divisible by 3)".format(
+                idx,n,len(line)))
+            return False
             
         for a,b,c in partition(line,3):
             d = b+c
