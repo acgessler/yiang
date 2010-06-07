@@ -58,7 +58,7 @@ class SuperSpeed(Perk):
     """The SuperSpeed perk enables the player to move
     much, much faster for a certain amount of time"""
 
-    def __init__(self,text,height,frames,time=10.0,speed_multiplier=3,anim_speed=1.0):
+    def __init__(self,text,height,frames,time=5.0,speed_multiplier=3.0,anim_speed=1.0):
         Perk.__init__(self,text,height,frames,anim_speed)
         self.speed_multiplier = speed_multiplier
         self.time = time
@@ -73,7 +73,7 @@ class MegaJump(Perk):
     """The MegaJump perk enables the player to jump
     much, much higher for a certain amount of time"""
 
-    def __init__(self,text,height,frames,time=10.0,jump_multiplier=3,anim_speed=1.0):
+    def __init__(self,text,height,frames,time=5.0,jump_multiplier=2.0,anim_speed=1.0):
         Perk.__init__(self,text,height,frames,anim_speed)
         self.jump_multiplier = jump_multiplier
         self.time = time
