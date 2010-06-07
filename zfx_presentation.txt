@@ -26,7 +26,7 @@ Da alle verwendeten Komponenten portabel sind, steht einer Portierung auf Linux/
 
 [size=150]Team[/size]
 [i]Programmierung:[/i]
-Alexander Gessler (Ich)
+Alexander Gessler 
 
 [i]Leveldesign & Quality Assurance[/i] – dafuer vielen, vielen Dank :-)
 Tizian Wieland
@@ -40,8 +40,8 @@ Dank auch an alle, die so freundlich waren das Programm bei sich zu testen :-)
 
 Lizenz: 3–clause BSD
 
-[Binaries, Windows 2k+, x86] (6.87 MiB, ZIP)
-[Quellcode, ohne SFML und Python] (6.87 MiB, ZIP)
+[Binaries, Windows 2k+, x86] 
+[Quellcode, ohne SFML und Python]
 [Abhaengigkeiten] (6.87 MiB, ZIP)
 
 [size=150]Bekannte Probleme[/size]
@@ -58,8 +58,6 @@ Lizenz: 3–clause BSD
 [i]Startet nicht, ‘Anwendungskonfiguration nicht korrekt’, ‘msXXXXX.dll konnte nicht gefunden werden’, …[/i]
 Die Visual C++ Runtime fuer VC9, x86 installieren. 
 
-[i]Tastaturbelegung? Ich nutze das <IRGENDWAS>–Layout, Pfeiltasten sind bei mir auf der Rueckseite der Tastatur[/i]
-
 [i]What about WINE?[/i]
 Nicht getestet bislang, koennte durchaus klappen ;-)
 
@@ -71,4 +69,4 @@ Leider nein und es ist auch keine in Planung.
 
 [size=150]Feedback[/size]
 
-Ich freue mich ueber jegliches Feedback, ob Bugreport, konstruktive Kritik oder einfach nur ein paar nette Worte :-) Das Projekt hat Spaß gemacht, und es wird sicherlich noch eine weitere, fehlerbereinigte und levelreichere, Version geben … wenn auch außerhalb der ZFX–Action :-)
+Ich freue mich ueber jegliches Feedback, ob Bugreport, konstruktive Kritik oder einfach nur ein paar nette Worte :-) Das Projekt hat Spaß gemacht, und es wird sicherlich noch eine weitere Version geben, wenn auch außerhalb der ZFX–Action :-)
