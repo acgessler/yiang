@@ -77,6 +77,7 @@ class Game:
         self.last_time = 0
         self.game_over = False
         self.speed_scale = 1.0
+        self.rounds = 1
 
         self.entities_add,self.entities_rem = set(),set()
 
@@ -197,7 +198,8 @@ class Game:
 
         self.app.Draw(shape)
         
-        status = sf.String("Level {0}, {1:.2} days\n{2} $".format(
+        status = sf.String("Level {0}.{1}, {2:.2} days\n{3} $".format(
+            self.rounds,
             self.level,
             Game.SecondsToDays( self.GetTotalElapsedTime() ),
             self.GetScore()/100),
@@ -609,7 +611,12 @@ SpeedScale         {speed_scale}
         ))) is False:
             self.Suspend()
 
-        lidx = (self.level+1)%main.get_level_count()
+        if self.level == main.get_level_count():
+            lidx = 1
+            self.rounds += 1
+        else:
+            lidx = self.level+1
+            
         if self.LoadLevel(lidx) is False:
             raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
             
