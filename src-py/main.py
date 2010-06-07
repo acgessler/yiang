@@ -30,6 +30,7 @@ import math
 # My own stuff
 import defaults
 from fonts import FontCache
+from keys import KeyMapping
 from game import Game
 from log import Log
 
@@ -129,26 +130,26 @@ def choose_level():
 
         if app.GetEvent(event):
             if event.Type == sf.Event.KeyPressed:
-                if event.Key.Code == sf.Key.Escape:
+                if event.Key.Code == KeyMapping.Get("escape"):
                     return 0
 
-                elif event.Key.Code == sf.Key.Right:
+                elif event.Key.Code == KeyMapping.Get("menu-right"):
                     level = (level+1)%(num+1)
 
-                elif event.Key.Code == sf.Key.Left:
+                elif event.Key.Code == KeyMapping.Get("menu-left"):
                     level = (level-1)%(num+1)
 
-                elif event.Key.Code == sf.Key.Down:
+                elif event.Key.Code == KeyMapping.Get("menu-down"):
                     level = (level+xnum)%(num+1)
 
                     # improve the usability of the 'return to menu' field
                     if (level // xnum) == rows-1:
                         level = num
 
-                elif event.Key.Code == sf.Key.Up:
+                elif event.Key.Code == KeyMapping.Get("menu-up"):
                     level = (level-xnum)%(num+1)
 
-                elif event.Key.Code == sf.Key.Return:
+                elif event.Key.Code == KeyMapping.Get("accept"):
                     break
                 
         draw_background()
@@ -336,6 +337,7 @@ def main():
     Log.Enable(defaults.enable_log)
 
     print("Startup ...")
+    KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
     
     settings = sf.WindowSettings()
     settings.DepthBits = 0
@@ -385,20 +387,20 @@ def main():
 
                     # Escape key : exit
                     if event.Type == sf.Event.KeyPressed:
-                        if event.Key.Code == sf.Key.Escape and swallow_escape is False:
+                        if event.Key.Code == KeyMapping.Get("escape") and swallow_escape is False:
                             app.Close()
                             break
                         
-                        elif event.Key.Code == sf.Key.Down:
+                        elif event.Key.Code == KeyMapping.Get("menu-down"):
                              set_menu_option(cur_option+1)
                              
-                        elif event.Key.Code == sf.Key.Up:
+                        elif event.Key.Code == KeyMapping.Get("menu-up"):
                              set_menu_option(cur_option-1)
 
-                        elif event.Key.Code == sf.Key.Return:
+                        elif event.Key.Code == KeyMapping.Get("accept"):
                             options[cur_option][1]()
 
-                    elif event.Type == sf.Event.KeyReleased and event.Key.Code == sf.Key.Escape:
+                    elif event.Type == sf.Event.KeyReleased and event.Key.Code == KeyMapping.Get("escape"):
                         swallow_escape = False
 
                     if event.Type == sf.Event.Resized:

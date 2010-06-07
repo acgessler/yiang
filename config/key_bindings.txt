@@ -1,0 +1,21 @@
+
+# These are the default key bindings. All possible actions are present,
+# so it should be quite easy to modify them to your needs.
+
+move-left=Left
+move-right=Right
+move-up=Up
+move-down=Down
+move-left=Left
+menu-up=Up
+menu-down=Down
+menu-left=Left
+menu-right=Right
+debug-godmode=X
+debug-showbb=B
+debug-showinfo=D
+debug-allowup=G
+level-new=N
+debug-kill=K
+escape=Escape
+accept=Return

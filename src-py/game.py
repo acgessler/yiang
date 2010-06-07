@@ -32,6 +32,7 @@ import traceback
 import defaults
 import validator
 from fonts import FontCache
+from keys import KeyMapping
 
 class NewFrame(Exception):
     """Sentinel exception to abort the current frame and to
@@ -99,7 +100,7 @@ class Game:
             while self.running is True:
                 if not self.app.IsOpened():
                     return False
-                
+
                 if self.app.GetEvent(event):
                     self._HandleIncomingEvent(event)
 
@@ -247,32 +248,40 @@ class Game:
         #    break
 
         # Escape key : return to main menu, suspend the game
-        if event.Type == sf.Event.KeyPressed:
-            if event.Key.Code == sf.Key.Escape:
-                self.Suspend()
-                return
+        try:
+            if event.Type == sf.Event.KeyPressed:
+                if event.Key.Code == KeyMapping.Get("escape"):
+                    self.Suspend()
+                    return
 
-            if not defaults.debug_keys:
-                return
+                if not defaults.debug_keys:
+                    return
 
-            # Debug keys
-            if event.Key.Code == sf.Key.B:
-                defaults.debug_draw_bounding_boxes = not defaults.debug_draw_bounding_boxes
+                # Debug keys
+                if event.Key.Code == KeyMapping.Get("debug-showbb"):
+                    defaults.debug_draw_bounding_boxes = not defaults.debug_draw_bounding_boxes
+                    
+                elif event.Key.Code == KeyMapping.Get("debug-allowup"):
+                    defaults.debug_updown_move = not defaults.debug_updown_move
+
+                elif event.Key.Code == KeyMapping.Get("debug-showinfo"):
+                    defaults.debug_draw_info = not defaults.debug_draw_info
+
+                elif event.Key.Code == KeyMapping.Get("debug-godmode"):
+                    defaults.debug_godmode = not defaults.debug_godmode
+
+                elif event.Key.Code == KeyMapping.Get("debug-kill"):
+                    self.Kill()
+                    
+                elif event.Key.Code == KeyMapping.Get("debug-gameover"):
+                    self.GameOver()
+                    
+                elif event.Key.Code == KeyMapping.Get("level-new"):
+                    self.LoadLevel(self.level)
                 
-            elif event.Key.Code == sf.Key.G:
-                defaults.debug_updown_move = not defaults.debug_updown_move
-
-            elif event.Key.Code == sf.Key.D:
-                defaults.debug_draw_info = not defaults.debug_draw_info
-
-            elif event.Key.Code == sf.Key.X:
-                defaults.debug_godmode = not defaults.debug_godmode
-
-            elif event.Key.Code == sf.Key.K:
-                self.Kill()
-
-            elif event.Key.Code == sf.Key.Q:
-                self.GameOver()
+        except NewFrame:
+            print("Received NewFrame notification during event polling")
+            pass
                 
     def _DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the scene"""

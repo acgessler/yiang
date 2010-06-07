@@ -28,6 +28,7 @@ import sf
 import defaults
 import mathutil
 from game import Entity,TileLoader,Game,Tile
+from keys import KeyMapping
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -93,14 +94,14 @@ class Player(Entity):
 
         pvely = self.vel[1]
 
-        if inp.IsKeyDown(sf.Key.Left):
+        if inp.IsKeyDown(KeyMapping.Get("move-left")):
             self.vel[0] = -defaults.move_speed[0]
             self.cur_tile[0] = Player.ANIM_LEFT
 
             self._SetJumpAnimState()
             self.moved_once = True
             
-        if inp.IsKeyDown(sf.Key.Right):
+        if inp.IsKeyDown(KeyMapping.Get("move-right")):
             self.vel[0] = defaults.move_speed[0]
             self.cur_tile[0] = Player.ANIM_RIGHT
 
@@ -108,10 +109,10 @@ class Player(Entity):
             self.moved_once = True
 
         if defaults.debug_updown_move is True:
-            if inp.IsKeyDown(sf.Key.Up):
+            if inp.IsKeyDown(KeyMapping.Get("move-up")):
                 self.pos[1] -= time*defaults.move_speed[1]
                 self.moved_once = True
-            if inp.IsKeyDown(sf.Key.Down):
+            if inp.IsKeyDown(KeyMapping.Get("move-down")):
                 self.pos[1] += time*defaults.move_speed[1]
                 self.moved_once = True
         else:
