@@ -37,6 +37,8 @@ Alexander Gessler
 
 [size=150]Downloads[/size]
 
+Lizenz: 3–clause BSD
+
 [Binaries, Windows 2k+, x86] (6.87 MiB, ZIP)
 [Quellcode, ohne SFML und Python] (6.87 MiB, ZIP)
 [Abhaengigkeiten] (6.87 MiB, ZIP)

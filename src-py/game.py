@@ -78,6 +78,7 @@ class Game:
         self.game_over = False
         self.speed_scale = 1.0
         self.rounds = 1
+        self.level_size = (0,0)
 
         self.entities_add,self.entities_rem = set(),set()
 
@@ -330,6 +331,7 @@ ScrollBoth:        {debug_scroll_both}
 ScrollSpeed:       {move_map_speed}
 SpeedScale/Level:  {speed_scale_per_level}
 SpeedScale:        {speed_scale}
+LevelSize:         {level_size}
 
 TimeDelta:         {dtime:.4}
 1/TimeDelta:       {fps:.4}
@@ -420,7 +422,7 @@ TimeDelta:         {dtime:.4}
         """Change the view origin"""
         assert isinstance(origin,tuple)
         self.origin = origin
-        
+    
 
     def IsGameOver(self):
         """Check if the game is over. Once the game is over,
@@ -542,6 +544,11 @@ TimeDelta:         {dtime:.4}
         """Get from world- to camera coordinates"""
         return (coords[0]-self.origin[0],coords[1]-self.origin[1])
 
+    def GetLevelSize(self):
+        """Get the size of the current level, in tiles. The return
+        value is a 2-tuple."""
+        return self.level_size
+
     def LoadLevel(self,level):
         """Load a particular level, return True on success"""
 
@@ -565,7 +572,7 @@ TimeDelta:         {dtime:.4}
             with open(os.path.join(defaults.data_dir,"levels",str(level)+".txt"), "rt") as f:
                 self.lines = lines = f.readlines()
                 assert len(lines)>0
-                
+
                 for y,line in enumerate(lines):
 
                     line_idx += 1
@@ -588,6 +595,8 @@ TimeDelta:         {dtime:.4}
                         tile.SetPosition((x//3, y - diff))
 
                         self.entities.add(tile)
+
+                self.level_size = (x//3,y)
 
             print("Got {0} entities for level {1}".format(len(self.entities),level))
                 

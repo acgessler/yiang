@@ -66,15 +66,17 @@ class SmallTraverser(AnimTile):
         if res>0:
             game.AddToActiveBBs(self)
             if self.direction == Entity.DIR_HOR:
-                if self.vel < 0 and res & (Entity.UPPER_LEFT|Entity.LOWER_LEFT) == (Entity.UPPER_LEFT|Entity.LOWER_LEFT) or\
-                   self.vel > 0 and res & (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT) == (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT):
+                x = game.GetLevelSize()[0]
+                if self.vel < 0 and (self.pos[0] < 0 or res & (Entity.UPPER_LEFT|Entity.LOWER_LEFT) == (Entity.UPPER_LEFT|Entity.LOWER_LEFT)) or\
+                   self.vel > 0 and (self.pos[0] > x or res & (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT) == (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT)):
                    
                     self.vel = -self.vel
                 
                 
             elif self.direction == Entity.DIR_VER:
-                if self.vel < 0 and res & (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) == (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) or\
-                   self.vel > 0 and res & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) == (Entity.LOWER_LEFT|Entity.LOWER_RIGHT):
+                y = game.GetLevelSize()[1]
+                if self.vel < 0 and (self.pos[1] < 0 or res & (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) == (Entity.UPPER_LEFT|Entity.UPPER_RIGHT)) or\
+                   self.vel > 0 and (self.pos[1] > y or res & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) == (Entity.LOWER_LEFT|Entity.LOWER_RIGHT)):
                    
                     self.vel = -self.vel
                 
