@@ -29,6 +29,7 @@
 #pragma comment (lib, "sfml-window.lib")
 #pragma comment (lib, "sfml-audio.lib")
 #pragma comment (lib, "sfml-system.lib")
+#pragma comment (lib, "sfml-main.lib")
 
 // fixup code for some missing SFML symbols
 #include "fixers.h"
