@@ -49,7 +49,7 @@ Lizenz: 3ñclause BSD
 [list]
 [*]Auf manchen Systemen kommt es beim Beenden des Spiels zu einem Absturz in den Tiefen von SFML. Bislang nur auf ATI/AMD-Hardware beobachtet, ein Zusammenhang ist nach bisherigem Kenntnisstand wahrscheinlich.
 [*]Auf leistungsschwachen Systemen kann es zu Performanceproblemen in groﬂen Levels kommen.
-[*]Die Kollisionserkennung ist alles andere als perfekt. Schlussendlich hat die Zeit gefehlt es sauber zu machen. Ich erbitte mir etwas FrustñToleranz, manchmal kommt sie euch auch entgegen :-)
+[*]Die Kollisionserkennung ist katastrophal. Schlussendlich hat die Zeit gefehlt es sauber zu machen. Ich erbitte mir etwas FrustñToleranz, manchmal kommt sie euch dafuer auch etwas entgegen :-)
 [*]Auf einem Test-System (XpHome, x86, SP3) startete das Spiel nicht, mit einer mysterioesen CRT Fehlermeldung. Bislang noch auf keinem zweiten System reproduziert.
 [/list]
 
@@ -69,4 +69,4 @@ Leider nein und es ist auch keine in Planung.
 
 [size=150]Feedback[/size]
 
-Ich freue mich ueber jegliches Feedback, ob Bugreport, konstruktive Kritik oder einfach nur ein paar nette Worte :-) Das Projekt hat Spaﬂ gemacht, und ich werde sicherlich auch daran weitermachen.
+Ich freue mich ueber jegliches Feedback, ob Bugreport, konstruktive Kritik oder einfach nur ein paar nette Worte :-) Das Projekt hat Spaﬂ gemacht, und es wird sicherlich noch eine weitere Version geben, wenn auch auﬂerhalb der ZFXñAction :-)
