@@ -1,31 +1,34 @@
 Etwas verspaetet, hier mein Beitrag zur ZFX–Action.
 
-[size=150]Kurz[/size]
+[size=150]Beschreibung[/size]
 YIANG ist ein kurzweiliges, actionbasiertes Jump'n'Run-Spiel in ASCII-Art. Level–basiert, aber trotzdem NonStop Aektschen :-). Sobald das Ziel eines Levels erreicht ist, geht es sofort mit dem naechsten bzw. ersten weiter. Mit jedem Level erhoeht sich auch die Spielgeschwindigkeit. Den mutigen Spieler erwarten verschiedene Typen von Gegnern, Fallen sowie spezielle Items fuer kurzfristige Boni, z.B. mehr Geschwindigkeit, Unverwundbarkeit oder erhoehte Sprungkraft. Manche Spielelemente haben eine Farbe und aendern ihr Verhalten in Abhaengigkeit von der Farbe des Spielers.
 
-Das Spiel soll einfach nur Spaß machen, etwas Konzentration ist aber erforderlich. Das Spielziel ist, moeglichst lange durchzuhalten und nebenher gaaaanz viel Geld zu sammeln.
+Das Spiel soll einfach nur Spaß machen, etwas Konzentration ist aber erforderlich. Das Spielziel ist, moeglichst lange durchzuhalten und nebenher gaaaanz viel Geld zu sammeln. Auch wenn es nun doch ein eher klassisches Jump'n'Run-Game geworden ist, habe ich versucht den Spielablauf moeglichst abwechslungsreich zu gestalten :-)
 
-‘YIANG’ ist ein rekursives Akronym, wer die Bedeutung erraet darf sie behalten.
+‘YIANG’ ist ein rekursives Akronym, wer die Bedeutung erraet, darf sie behalten.
 
 [size=150]Screenshots[/size]
 
-[size=150]Beschreibung[/size]
+[size=150]Spielablauf[/size]
 
+Starten, „New Game”. Steuerung mit den Pfeiltasten – links, rechts, oben. Einige Debug–Features (aka „Cheats”) sind ueber die Tastatur erreichbar, u.a. "X" aktiviert den GodMode, "B" zeigt Umgebungsboxen, "D" Debug–Statistiken und "G" erlaubt beliebige Bewegungen im Raum. Oben links findet ihr euren Punktestand, das aktuelle Level (wobei die erste Zahl fuer die Wiederholung steht), oben rechts die verbleibenden Leben. Wenn ihr sterbt, werdet ihr am letzten vordefinierten Respawn–Punkt wiedergespawnt.
+
+… Ach was erklaere ich euch eigentlich die Funktionsweise eines Jump'n'Runs :-) …
 
 [size=150]Technik[/size]
-Das Projekt ist nahezu vollstaendig in Python 3 (v3.1) entstanden. Leider entstand somit eine Abhaengigkeit von der Python–Runtime, die in der erforderliche Version nur selten installiert ist. Als Framework kommt SFML, Release 1.5, zum Einsatz, das zwar veraltet ist, jedoch ueber funktionstuechtige Python–Wrapper verfuegt. Damit waere eigentlich die Notwendigkeit entstanden den End–User auch noch selbige Bindings einrichten zu lassen, fuer nicht Python–Kenner eine eher unlustige Sache.
+Das Projekt ist nahezu vollstaendig in Python 3 (v3.1) entstanden. Leider entstand somit eine Abhaengigkeit von der Python–Runtime, die in der erforderliche Version nur selten installiert ist. Als Framework kommt SFML, Release 1.5, zum Einsatz, das zwar veraltet ist, jedoch ueber funktionstuechtige Python–Wrapper verfuegt. Damit waere eigentlich die Notwendigkeit entstanden den End–User auch noch selbige Bindings einrichten zu lassen, fuer nicht-Python–„Kenner” eine eher unlustige Sache.
 
 Daher habe ich mich dafuer entschieden, die Python Runtime komplett einzubetten, was gluecklicherweise nicht sonderlich muehsam ist. Der eher kurze C++–Teil des Programms dient als Bootstrapper, d.h. er initialisiert Python und startet das eigentliche Spiel, das, von der MSVC–Runtime abgesehen, somit keine wirklichen Abhaengigkeiten mehr besitzt. Es besteht aus ca. ~3.5kLOC, der Quellcode ist dokumentiert. Insgesamt habe ich stark auf Les– und Wartbarkeit geachtet. 
 
 Das Spiel war urspruenglich Tile-basiert, ist aber in der vorliegenden Version im Prinzip voellig frei konfigurierbar und nicht an bestimmte Groeßen oder Positionen gebunden – siehe die mitgelieferten Level. Das Leveldesign erfolgt, wie ueblich, in Form von ganz normalen Textdateien, die eine Art Minimap aller Elemente im jwlg. Level bilden. Ein Eintrag besteht aus einem Farbcode (z.B. faerbt ‘r’ ein Element rot) sowie einem aus zwei Zeichen bestehenden Typcode, der direkt einer gleichnamigen Datei entspricht. Diese definiert dann das Aussehen des entsprechenden Elementes und verweist auf eine dynamisch ladbare Klasse, die die Implementierung des gewuenschten Verhaltens - sofern das Standardverhalten nicht ausreichend ist - uebernimmt. Insgesamt eine nette Anwendung fuer eine dynamische Sprache wie Python, insofern bereue ich die Wahl trotz der geschilderten Probleme nicht.
 
-Da alle verwendeten Komponenten portabel sind, steht einer Portierung auf Linux/Mac nichts entgegen. Aus Zeitmangel habe ich mich bislang aber dagegen entschieden, d.h. es gibt nur eine Windows-Version :-) 
+Da alle verwendeten Komponenten portabel sind, steht einer Portierung auf Linux/Mac nichts entgegen. Aus Zeitmangel habe ich mich bislang aber dagegen entschieden, d.h. es gibt momentan nur eine Windows-Version :-) 
 
 [size=150]Team[/size]
 [i]Programmierung:[/i]
 Alexander Gessler (Ich)
 
-[i]Leveldesign & Quality Assurance[/i]
+[i]Leveldesign & Quality Assurance[/i] – dafuer vielen, vielen Dank :-)
 Tizian Wieland
 Tobias Rittig
 Jolanda Roessner
@@ -42,7 +45,8 @@ Alexander Gessler
 
 [list]
 [*]Auf manchen Systemen kommt es beim Beenden des Spiels zu einem Absturz in den Tiefen von SFML. Bislang nur auf NVidia-Hardware beobachtet, ein Zusammenhang ist nach bisherigem Kenntnisstand wahrscheinlich.
-[*]Auf leistungsschwachen Systemen kann es zu Performanceproblemen in großen Levels kommen (‘[i]optimiert[/i]’ sieht anders aus).
+[*]Auf leistungsschwachen Systemen kann es zu Performanceproblemen in großen Levels kommen.
+[*]Die Kollisionserkennung ist alles andere als perfekt. Schlussendlich hat die Zeit gefehlt es sauber zu machen. Ich erbitte mir etwas Frust–Toleranz, manchmal kommt sie euch auch entgegen :-)
 [/list]
 
 [size=150]Mini–FAQ[/size]
