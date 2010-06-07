@@ -40,7 +40,9 @@ class Log(io.IOBase):
 
     def write(self,*args,**kwargs):
         self.file.write(*args,**kwargs)
-        self.old.write(*args,**kwargs)
+
+        if not self.old is None:
+            self.old.write(*args,**kwargs)
 
         self.file.flush()
 
