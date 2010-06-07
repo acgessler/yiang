@@ -62,7 +62,7 @@ class Player(Entity):
         for proper respawning"""
         self.vel = [0,0]
         self.acc = [0,-defaults.gravity]
-        self.in_jump, self.block_jump, self.moved_once = False,False,False
+        self.in_jump, self.block_jump, self.moved_once = True,False,False
         self.cur_tile = [Player.ANIM_RIGHT]
 
     def SetPosition(self,pos):
@@ -228,6 +228,8 @@ class Player(Entity):
         game.AddToActiveBBs(self)
 
         # brute force collision detection for dummies .. actually I am not proud of it :-)
+        # XXX rewrite this, do proper intersection between the movement vector and the
+        # bb borders.
         cnt,hasall = 0,0
         for collider in game._EnumEntities():
             if collider is self:
@@ -326,7 +328,6 @@ class Player(Entity):
         self.tiles[self.cur_tile[-1]].DrawRelative(self.game,self.pos)
 
     def GetBoundingBox(self):
-
         # Adjust the size of the bb slightly to increase the likelihood
         # to pass tight tunnels.
         pcb = (defaults.player_caution_border[0]/defaults.tiles_size_px[0],\
