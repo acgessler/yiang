@@ -31,8 +31,7 @@ Alexander Gessler (Ich)
 [i]Leveldesign & Quality Assurance[/i] – dafuer vielen, vielen Dank :-)
 Tizian Wieland
 Tobias Rittig
-Jolanda Roessner
-Tobias Riedel
+Adrian Thebrath
 Alexander Gessler
 
 Dank auch an alle, die so freundlich waren das Programm bei sich zu testen :-)
