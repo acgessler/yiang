@@ -345,13 +345,14 @@ def main():
     settings.AntialiasingLevel = defaults.antialiasing_level 
         
     # Create main window
+    dm = sf.VideoMode.GetDesktopMode()
     if defaults.fullscreen is True:
-        dm = sf.VideoMode.GetDesktopMode()
-        
+    
         defaults.resolution = dm.Width,dm.Height
         app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen, settings)
     else:
-        app = sf.RenderWindow(sf.VideoMode(*defaults.resolution), \
+        app = sf.RenderWindow(sf.VideoMode(min(defaults.resolution[0],dm.Width),\
+            min(defaults.resolution[1],dm.Height)), \
             defaults.caption, sf.Style._None, settings)
 
     print("Created window ...")
