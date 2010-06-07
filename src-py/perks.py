@@ -51,6 +51,9 @@ class Perk(AnimTile):
         del self.players[player]
 
     def Interact(self,other,game):
+        if isinstance(other,Player):
+            self.EnablePerk(other)
+            
         return Entity.ENTER
     
 
@@ -69,6 +72,7 @@ class SuperSpeed(Perk):
     def DisablePerk(self,player):
         pass
 
+
 class MegaJump(Perk):
     """The MegaJump perk enables the player to jump
     much, much higher for a certain amount of time"""
@@ -76,6 +80,23 @@ class MegaJump(Perk):
     def __init__(self,text,height,frames,time=5.0,jump_multiplier=2.0,anim_speed=1.0):
         Perk.__init__(self,text,height,frames,anim_speed)
         self.jump_multiplier = jump_multiplier
+        self.time = time
+
+    def EnablePerk(self,player):
+        pass
+
+    def DisablePerk(self,player):
+        pass
+
+
+class Unkillable(Perk):
+    """The Unkillable perk enables the player to survive
+    collisions with dangerous tiles for a specific
+    duration. The player won't survive falling outside
+    the level boundaries, however."""
+
+    def __init__(self,text,height,frames,time=5.0,jump_multiplier=2.0,anim_speed=1.0):
+        Perk.__init__(self,text,height,frames,anim_speed)
         self.time = time
 
     def EnablePerk(self,player):
