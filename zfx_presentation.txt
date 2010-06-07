@@ -35,6 +35,8 @@ Jolanda Roessner
 Tobias Riedel
 Alexander Gessler
 
+Dank auch an alle, die so freundlich waren das Programm bei sich zu testen :-)
+
 [size=150]Downloads[/size]
 
 Lizenz: 3–clause BSD
@@ -46,9 +48,10 @@ Lizenz: 3–clause BSD
 [size=150]Bekannte Probleme[/size]
 
 [list]
-[*]Auf manchen Systemen kommt es beim Beenden des Spiels zu einem Absturz in den Tiefen von SFML. Bislang nur auf NVidia-Hardware beobachtet, ein Zusammenhang ist nach bisherigem Kenntnisstand wahrscheinlich.
+[*]Auf manchen Systemen kommt es beim Beenden des Spiels zu einem Absturz in den Tiefen von SFML. Bislang nur auf ATI/AMD-Hardware beobachtet, ein Zusammenhang ist nach bisherigem Kenntnisstand wahrscheinlich.
 [*]Auf leistungsschwachen Systemen kann es zu Performanceproblemen in großen Levels kommen.
 [*]Die Kollisionserkennung ist alles andere als perfekt. Schlussendlich hat die Zeit gefehlt es sauber zu machen. Ich erbitte mir etwas Frust–Toleranz, manchmal kommt sie euch auch entgegen :-)
+[*]Auf einem Test-System (XpHome, x86, SP3) startete das Spiel nicht, mit einer mysterioesen CRT Fehlermeldung. Bislang noch auf keinem zweiten System reproduziert.
 [/list]
 
 [size=150]Mini–FAQ[/size]
@@ -60,7 +63,7 @@ Die Visual C++ Runtime fuer VC9, x86 installieren.
 Nicht getestet bislang, koennte durchaus klappen ;-)
 
 [i]Desktop? IIIIICH WIIIIILL VOLLBILDMODUS SPIELEN!!!!!!!?[/i]
-Offiziell nirgendwo, aber gaaaaaaanz Clevere [i]koennten[/i] es [i]eventuell[/i] schaffen ihn zu aktivieren. Dafuer muesste man aber wirklich so enorm clever sein, dass man [i]eigentlich[/i] in der Lage sein sollte zu begreifen, dass es vermutlich einen Grund fuer den nicht im Menue aktivierbaren Vollbildmodus gibt.
+Offiziell nirgendwo, aber gaaaaaaanz Clevere koennten es [i]eventuell[/i] schaffen ihn zu aktivieren. Dafuer muesste man aber wirklich so enorm clever sein, dass man [i]eigentlich[/i] in der Lage sein sollte zu begreifen, dass es vermutlich einen Grund fuer den nicht im Menue aktivierbaren Vollbildmodus gibt.
 
 [i]Mir gefaellt die Grafik nicht, gibt es eine Option um auf die CryEngine™ zu wechseln?[/i]
 Leider nein und es ist auch keine in Planung.
