@@ -154,11 +154,11 @@ def choose_level():
                 
         draw_background()
 
-        print(rows,xnum)
+        #print(rows,xnum)
         for y in range(rows):
             for x in range(min(num - y*xnum,xnum)):
                 i = y*xnum +x +1
-                print(i)
+                #print(i)
 
                 tex2,tex = sf_string_with_shadow(
                     str(i) if i < num else "\n\n\n... back to main menu ",

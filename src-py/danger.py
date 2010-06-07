@@ -23,10 +23,30 @@ import sf
 # My own stuff
 import defaults
 from game import Entity,TileLoader,Game,Tile,AnimTile
+from player import Player
 
 class DangerousBarrel(AnimTile):
     """This entity is an animated barrel which kills
     the player immediately when he touches it"""
+
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.75,hideontouch=False):
+        AnimTile.__init__(self,text,height,frames,speed)
+
+        self.hideontouch = hideontouch
+        if randomize is True:
+            self.GotoRandom()
+
+        self._ShrinkBB(bbadjust)
+
+    def Interact(self,other,game):
+        return Entity.KILL
+
+
+class FakeDangerousBarrel(AnimTile):
+    """This entity looks like a DangerousBarrel, but
+    actually it doesn't kill the player - it just
+    erases itself and can thus be used for secret
+    doors ... stuff like that. """
 
     def __init__(self,text,height,frames,speed,randomize,bbadjust=0.75):
         AnimTile.__init__(self,text,height,frames,speed)
@@ -37,7 +57,11 @@ class DangerousBarrel(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other,game):
-        return Entity.KILL
+        if isinstance(other,Player):
+            print("Huh, you've found an special door which doesn't kill you!")
+            game.RemoveEntity(self)
+            
+        return Entity.ENTER
 
 
     
