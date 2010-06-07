@@ -38,10 +38,10 @@ class ScoreTile(AnimTile):
         
     def Interact(self,other,game):
         if isinstance(other,Player):
-            game.Award(self.points)
+            points = game.Award(self.points)
             
             game.RemoveEntity(self) 
-            game.AddEntity(ScoreTileAnimStub(str(self.points)+" ct.",self.pos,1.0))
+            game.AddEntity(ScoreTileAnimStub("{0:4.4} ct".format(points),self.pos,1.0))
             
         return Entity.ENTER
 

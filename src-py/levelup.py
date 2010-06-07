@@ -34,6 +34,7 @@ class LevelUp(Tile):
     def Interact(self,other,game):
         if isinstance(other,Player):
             print("Got level up!")
+            game.Award(0.1*game.GetLevelStats()[0])
             game.NextLevel()
 
             raise NewFrame()

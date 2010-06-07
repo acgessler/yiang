@@ -199,7 +199,7 @@ class Game:
 
         self.app.Draw(shape)
         
-        status = sf.String("Level {0}.{1}, {2:.2} days\n{3} $".format(
+        status = sf.String("Level {0}.{1}, {2:.2} days\n{3:4.5} $".format(
             self.rounds,
             self.level,
             Game.SecondsToDays( self.GetTotalElapsedTime() ),
@@ -387,8 +387,10 @@ TimeDelta:         {dtime:.4}
     def Award(self,points):
         """Award a certain amount of points to the player's
         score as a reward for extreme skillz."""
-        self.score += points
+        pp = points*self.speed_scale
+        self.score += pp
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
+        return pp
 
     def Kill(self):
         """Kill the player immediately, respawn if they have
@@ -612,7 +614,7 @@ TimeDelta:         {dtime:.4}
 
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
-
+        
         self.speed_scale *= defaults.speed_scale_per_level
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level))
@@ -632,6 +634,13 @@ TimeDelta:         {dtime:.4}
             
         if self.LoadLevel(lidx) is False:
             raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
+
+    def GetLevelStats(self):
+        """Return a 4-tuple: (level,round,num_levels,total_levels)"""
+        import main # XXX (hack)
+        rcnt = main.get_level_count()
+        
+        return (self.level,self.rounds,rcnt,rcnt*(self.rounds-1)+self.level)
             
     def GetEntities(self):
         """Get a list of all entities in the game"""
