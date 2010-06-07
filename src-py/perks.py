@@ -52,8 +52,10 @@ class Perk(AnimTile):
 
     def Interact(self,other,game):
         if isinstance(other,Player):
-            self.EnablePerk(other)
+            if other in self.players:
+                return Entity.ENTER    
             
+            self.EnablePerk(other)
         return Entity.ENTER
     
 
@@ -67,10 +69,12 @@ class SuperSpeed(Perk):
         self.time = time
 
     def EnablePerk(self,player):
-        pass
+        Perk.EnablePerk(self,player)
+        print("Enable perk: SuperSpeed")
 
     def DisablePerk(self,player):
-        pass
+        Perk.DisablePerk(self,player)
+        print("Disable perk: SuperSpeed")
 
 
 class MegaJump(Perk):
@@ -83,10 +87,12 @@ class MegaJump(Perk):
         self.time = time
 
     def EnablePerk(self,player):
-        pass
+        Perk.EnablePerk(self,player)
+        print("Enable perk: MegaJump")
 
     def DisablePerk(self,player):
-        pass
+        Perk.DisablePerk(self,player)
+        print("Disable perk: Unkillable")
 
 
 class Unkillable(Perk):
@@ -100,9 +106,11 @@ class Unkillable(Perk):
         self.time = time
 
     def EnablePerk(self,player):
-        pass
+        Perk.EnablePerk(self,player)
+        print("Enable perk: Unkillable")
 
     def DisablePerk(self,player):
-        pass
+        Perk.DisablePerk(self,player)
+        print("Disable perk: Unkillable")
 
     
