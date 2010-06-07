@@ -1,1 +1,1 @@
-This is just a test. Actually this file should not be read, neither appear in the level list, neither should it cause errors.
+This is just a test. Actually this file should not be read, neither appear in the level list, nor should it cause errors.

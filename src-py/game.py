@@ -459,7 +459,7 @@ TimeDelta:         {dtime:.4}
                 print("Failure reading scores.txt file")
 
         if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("You survived {0:.4} days and collected {1:.4} dollars.\nThat's {2}.\n\nPress any key to continue .. (Should you not want to "+
+            sf.String(("You survived {0:.4} days and collected {1:.4} dollars.\nThat's {2}.\n\nHit ENTER to continue .. (Should you not want to "+
                     "continue,\nrest assured that this status notice will stay here forever)").format(
                 Game.SecondsToDays(self.GetTotalElapsedTime()),
                 self.score/100,
@@ -475,6 +475,10 @@ TimeDelta:         {dtime:.4}
         control is not returned unless the user presses any key
         to continue."""
 
+        inp = self.app.GetInput()
+        #while inp.IsKeyDown(KeyMapping.Get("accept")):
+        #    pass
+
         ret = True
         clock = sf.Clock()
         event = sf.Event()
@@ -484,7 +488,7 @@ TimeDelta:         {dtime:.4}
                 break
 
             if self.app.GetEvent(event):
-                if event.Type == sf.Event.KeyPressed:
+                if event.Type == sf.Event.KeyPressed and event.Key.Code == KeyMapping.Get("accept"):
                     break
 
             self.Clear(sf.Color.Black)
@@ -629,7 +633,7 @@ TimeDelta:         {dtime:.4}
         print("Level {0} done, advancing to the next level".format(self.level))
 
         if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("Hey, you solved Level {0}!.\n\nPress any key to continue .. (this is compulsory)").format(self.level),
+            sf.String(("Hey, you solved Level {0}!.\n\nHit ENTER to continue .. (this is compulsory)").format(self.level),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
         ))) is False:
