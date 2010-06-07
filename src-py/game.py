@@ -127,7 +127,7 @@ class Game:
                 self._DrawStatusBar()
 
                 if defaults.debug_draw_info:
-                    self._DrawDebugInfo()
+                    self._DrawDebugInfo(dtime)
 
                 # update the entity list
                 for entity in self.entities_add:
@@ -299,7 +299,7 @@ class Game:
             self.Draw(shape)
             entity.highlight_bb = False
 
-    def _DrawDebugInfo(self):
+    def _DrawDebugInfo(self,dtime):
         """Dump debug information (i.e. entity stats) to the upper right
         corner of the window"""
 
@@ -307,6 +307,7 @@ class Game:
             self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
             
         entity_count, entities_range = len(self.entities),0
+        fps = 1.0/dtime
 
         import gc
         gcc = gc.get_count()
@@ -327,16 +328,19 @@ PreventFallDown:   {debug_prevent_fall_down}
 ShowBoundingBoxes: {debug_draw_bounding_boxes}
 ScrollBoth:        {debug_scroll_both}
 ScrollSpeed:       {move_map_speed}
-SpeedScale/Level   {speed_scale_per_level}
-SpeedScale         {speed_scale}
+SpeedScale/Level:  {speed_scale_per_level}
+SpeedScale:        {speed_scale}
+
+TimeDelta:         {dtime:.4}
+1/TimeDelta:       {fps:.4}
 
 """.format(**locdef)
         
         s = sf.String(text,Font=self.debug_info_font,\
             Size=defaults.letter_height_debug_info)
 
-        s.SetPosition(defaults.resolution[0]-400,120)
-        s.SetColor(sf.Color.Green)
+        s.SetPosition(defaults.resolution[0]-302,119)
+        s.SetColor(sf.Color.White)
         self.Draw(s)
 
     def AddToActiveBBs(self,entity):
