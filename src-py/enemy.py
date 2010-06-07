@@ -29,43 +29,73 @@ from game import Entity,TileLoader,Game,Tile,AnimTile
 
 class SmallTraverser(AnimTile):
     """The simplest class of entities, it moves in a certain
-    range and kills the player immediately"""
+    range and kills the player immediately. The class supports
+    both horizontal and vertical moves."""
 
-    def __init__(self,text,height,frames,speed=1.0,move_speed=3,randomdir=True):
+    def __init__(self,text,height,frames,speed=1.0,move_speed=3,randomdir=True,direction=Entity.DIR_HOR):
         AnimTile.__init__(self,text,height,frames,speed,2)
 
-        if randomdir is True:
-            self.vel = move_speed*random.choice((-1,1))
+        self.vel = (move_speed*random.choice((-1,1))) if randomdir is True else 1
+        self.direction=direction
+
+        self._ShrinkBB(0.8)
 
     def Interact(self,other,game):
         return Entity.KILL
 
     def Update(self,time_elapsed,time,game):
-
         rect = self.GetBoundingBox()
         res = 0
+
+        # check for collisions on both sides, turn around if we have one.
         for collider in game._EnumEntities():
-            if collider is self:
+
+            # traverers of the same color collide with each other, others don't.
+            if isinstance(collider,SmallTraverser) and not collider.color is self.color:
                 continue
             
             mycorner = collider.GetBoundingBox()
             if mycorner is None:
                 continue
             
-            tj = self._BBCollide(rect, mycorner)
-            if tj>0:
+            tj = self._BBCollide_XYWH(rect,mycorner)
+            if tj>0 and collider.Interact(self,game) != Entity.ENTER:
                 game.AddToActiveBBs(collider)
-                #assert False
                 res |= tj
 
-        if self.vel < 0 and res & Entity.ALL == (Entity.UPPER_LEFT|Entity.LOWER_LEFT) or\
-           res & Entity.ALL == (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT):
-               
-            self.vel *= -1
-            
-        self.pos = (self.pos[0]+self.vel*time,self.pos[1])
-        AnimTile.Update(self,time_elapsed,time,game)
+        if res>0:
+            game.AddToActiveBBs(self)
+            if self.direction == Entity.DIR_HOR:
+                if self.vel < 0 and res & (Entity.UPPER_LEFT|Entity.LOWER_LEFT) == (Entity.UPPER_LEFT|Entity.LOWER_LEFT) or\
+                   self.vel > 0 and res & (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT) == (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT):
+                   
+                    self.vel = -self.vel
+                
+                
+            elif self.direction == Entity.DIR_VER:
+                if self.vel < 0 and res & (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) == (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) or\
+                   self.vel > 0 and res & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) == (Entity.LOWER_LEFT|Entity.LOWER_RIGHT):
+                   
+                    self.vel = -self.vel
+                
+            else:
+                assert False
 
-        self.SetState(1 if self.vel >0 else 0 )
+        if self.direction == Entity.DIR_HOR:
+            self.pos = (self.pos[0]+self.vel*time,self.pos[1])
+        else:
+            self.pos = (self.pos[0],self.pos[1]+self.vel*time)
             
-        
+        AnimTile.Update(self,time_elapsed,time,game)
+        self.SetState(1 if self.vel >0 else 0)
+            
+class Robot(SmallTraverser):
+    pass
+
+
+
+
+
+
+
+

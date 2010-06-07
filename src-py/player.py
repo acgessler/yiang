@@ -40,10 +40,6 @@ class Player(Entity):
     def __init__(self,text,game,width,height,ofsx):
         Entity.__init__(self)
         self.game = game
-        self.vel = [0,0]
-        self.acc = [0,-defaults.gravity]
-        self.in_jump, self.block_jump, self.moved_once = False,False,False
-        self.cur_tile = [Player.ANIM_RIGHT]
 
         self.pwidth = width / defaults.tiles_size[0]
         self.pheight = height / defaults.tiles_size[1]
@@ -52,12 +48,22 @@ class Player(Entity):
         lines = text.split("\n")
         height = len(lines)//Player.MAX_ANIMS
 
+        self._Reset()
+
         self.tiles = []
         for i in range(0,(len(lines)//height)*height,height):
             self.tiles.append(Tile("\n".join(lines[i:i+height])))
             self.tiles[-1].SetPosition((0,0))
 
         assert len(self.tiles) == Player.MAX_ANIMS
+
+    def _Reset(self):
+        """Reset the state of the player instance, this is needed
+        for proper respawning"""
+        self.vel = [0,0]
+        self.acc = [0,-defaults.gravity]
+        self.in_jump, self.block_jump, self.moved_once = False,False,False
+        self.cur_tile = [Player.ANIM_RIGHT]
 
     def SetPosition(self,pos):
         self.pos = list(pos)
@@ -355,6 +361,9 @@ class Player(Entity):
         print("Respawn at {0}|{1}".format(self.pos[0],self.pos[1]))
         # Adjust the game origin accordingly
         game.SetOrigin((self.pos[0]-defaults.respawn_origin_distance,0))
+
+        # Reset our status
+        self._Reset()
 
 class RespawnPoint(Entity):
     """A respawning point represents a possible position where

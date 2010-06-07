@@ -22,7 +22,7 @@ import sf
 
 # My own stuff
 import defaults
-from game import Tile, Entity
+from game import Tile, Entity,NewFrame
 from player import Player
 
 class LevelUp(Tile):
@@ -35,6 +35,8 @@ class LevelUp(Tile):
         if isinstance(other,Player):
             print("Got level up!")
             game.NextLevel()
+
+            raise NewFrame()
             
         return Entity.ENTER
 

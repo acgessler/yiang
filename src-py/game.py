@@ -391,7 +391,12 @@ SpeedScale         {speed_scale}
         self.lives = self.lives-1
         self._Respawn()
 
-        self.endit = True
+    def _Respawn(self):
+        """Respawn the player at the beginning of the level"""
+        for entity in self._EnumEntities():
+            if hasattr(entity,"Respawn"):
+                entity.Respawn(self)
+                raise NewFrame()
 
     def GetLives(self):
         """Get the number of lives the player has. They
@@ -505,12 +510,6 @@ SpeedScale         {speed_scale}
         text.SetColor(sf.Color.Red)
         text.SetPosition(pos[0],pos[1])
         self.Draw(text)
-
-    def _Respawn(self):
-        """Respawn the player at the beginning of the level"""
-        for entity in self._EnumEntities():
-            if hasattr(entity,"Respawn"):
-                entity.Respawn(self)
 
     def Draw(self,drawable,pos=None):
         """Draw a sf.Drawable at a specific position, which is
@@ -639,6 +638,7 @@ class Entity:
     logical frame."""
 
     ENTER,KILL = range(2)
+    DIR_HOR,DIR_VER=range(2)
 
     BLOCK_LEFT,BLOCK_RIGHT,BLOCK_UPPER,BLOCK_LOWER,BLOCK = 0x1,0x2,0x4,0x8,0xf
     UPPER_LEFT,UPPER_RIGHT,LOWER_LEFT,LOWER_RIGHT,CONTAINS,ALL = 0x1,0x2,0x4,0x8,0x10,0xf|0x10
@@ -696,6 +696,13 @@ class Entity:
             has |= Entity.CONTAINS
 
         return has
+
+    def _BBCollide_XYWH(self,a,b):
+        """Collide the first axis-aligned BB (x,y,width,height) with the
+        second bounding box, return a ORed combination of the
+        Entity.UPPER/Entity.LOWER flags."""
+        return self._BBCollide((a[0],a[1],a[0]+a[2],a[1]+a[3]),
+            (b[0],b[1],b[0]+b[2],b[1]+b[3]))
 
 
 class Tile(Entity):
@@ -923,7 +930,7 @@ class TileLoader:
         try:
             exec(l,globals(),tempdict)
         except:
-            print("exec() fails loading tile {0}: ".format(file))
+            print("exec() fails loading tile {0}, executing line: {1} ".format(file,l))
             traceback.print_exc()
             
         return tempdict.get("entity",Tile())
