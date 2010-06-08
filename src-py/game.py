@@ -39,7 +39,8 @@ class NewFrame(Exception):
     resume with the next, immediately."""
     def __init__(self):
         print("Raising NewFrame sentinel signal")
-        Game._DebugTrace()
+        if defaults.debug_trace_keypoints is True:
+            Game._DebugTrace()
 
 
 class ReturnToMenuDueToFailure(Exception):
@@ -132,6 +133,8 @@ class Game:
                     for entity in self._EnumEntities():
                         entity.Draw(self)
                 except NewFrame:
+                    self.last_time = self.clock.GetElapsedTime() 
+                    self.total -= self.last_time-time
                     continue
 
                 self.app.Draw(self.effect)
@@ -177,13 +180,8 @@ class Game:
     def _EnumEntities(self):
         """Use this wrapper generator to iterate through all enties
         in the global entity list"""
-        #copy = self.entities.copy()
-
-        self.endit = False
         for entity in self.entities:
             yield entity
-            if self.endit is True:
-                raise NewFrame()
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""

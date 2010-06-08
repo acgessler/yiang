@@ -159,12 +159,12 @@ class Player(Entity):
         self.pos,self.vel = self._HandleCollisions(newpos,newvel,game)
 
         # (HACK) -- for debugging, prevent the player from falling below the map
-        if defaults.debug_prevent_fall_down is True and self.pos[1]<1:
+        if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
             self.pos[1] = 1
             self.in_jump, self.block_jump = False,False
             self.vel[1] = 0
             
-        elif self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
+        if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
             self._Kill(game)
 
         self._CheckForLeftMapBorder(game)
