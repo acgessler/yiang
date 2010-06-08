@@ -3,7 +3,7 @@
 
                      rS0
             rA0rA0rA0rA0                        _A3      _A3      _A3      yA3
-                                                _A0      _A0      _A0      yA0
+                                                _A0_RE   _A0      _A0      yA0
          rA0                                    _A0_A0_A0_A0      _A0      yA0
                                                 _A0      _A0      _A0       
       rA0                                       _A6      _A6      _A6      yA4
