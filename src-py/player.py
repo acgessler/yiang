@@ -49,7 +49,7 @@ class Player(Entity):
         lines = text.split("\n")
         height = len(lines)//Player.MAX_ANIMS
 
-        self._Reset()
+        self._Reset(game)
 
         self.tiles = []
         for i in range(0,(len(lines)//height)*height,height):
@@ -58,13 +58,24 @@ class Player(Entity):
 
         assert len(self.tiles) == Player.MAX_ANIMS
 
-    def _Reset(self):
+    def _Reset(self,game):
         """Reset the state of the player instance, this is needed
         for proper respawning"""
         self.vel = [0,0]
         self.acc = [0,-defaults.gravity]
         self.in_jump, self.block_jump, self.moved_once = True,False,False
         self.cur_tile = [Player.ANIM_RIGHT]
+
+        # disable all perks
+        if hasattr(self,"perks"):
+            for perk in self.perks.copy():
+                perk.DisablePerk(self,game)
+        self.perks = set()
+
+        # these are used and modified by the various 'upgrades' in perks.py
+        self.jump_scale = 1.0
+        self.speed_scale = 1.0
+        self.unkillable = 0
 
     def SetPosition(self,pos):
         self.pos = list(pos)
@@ -89,20 +100,26 @@ class Player(Entity):
             self.cur_tile[-2] == Player.ANIM_LEFT else Player.ANIM_JUMP_RIGHT)
 
     def Update(self,time_elapsed,time,game):
+
+        # Check if one of our perks has expired
+        for perk in list(self.perks):
+            if perk._CheckIfExpired(game,self) is True:
+                self.perks.remove(perk)
+        
         inp = self.game.GetApp().GetInput()
         vec = [0,0]
 
         pvely = self.vel[1]
 
         if inp.IsKeyDown(KeyMapping.Get("move-left")):
-            self.vel[0] = -defaults.move_speed[0]
+            self.vel[0] = -defaults.move_speed[0]*self.speed_scale
             self.cur_tile[0] = Player.ANIM_LEFT
 
             self._SetJumpAnimState()
             self.moved_once = True
             
         if inp.IsKeyDown(KeyMapping.Get("move-right")):
-            self.vel[0] = defaults.move_speed[0]
+            self.vel[0] = defaults.move_speed[0]*self.speed_scale
             self.cur_tile[0] = Player.ANIM_RIGHT
 
             self._SetJumpAnimState()
@@ -118,7 +135,7 @@ class Player(Entity):
         else:
             if inp.IsKeyDown(sf.Key.Up):
                 if self.in_jump is False and self.block_jump is False:
-                    self.vel[1] -= defaults.jump_vel
+                    self.vel[1] -= defaults.jump_vel*self.jump_scale
                     self.in_jump = self.block_jump = True
 
                     self.cur_tile.append(0)
@@ -204,12 +221,11 @@ class Player(Entity):
         origin = game.GetOrigin()
         game.SetOrigin((origin[0]+dtime*defaults.move_map_speed,origin[1]))
 
-    def _UpdatePostFX(self,game):
+    def _UpdatePostFX(self,game):
         origin = game.GetOrigin()
 
         # XXX Use Game's coordinate sustem conversion utilities
-        game.effect.SetParameter("cur",
-            (self.pos[0]+self.pwidth//2-origin[0])/defaults.tiles[0],
+        game.effect.SetParameter("cur",(self.pos[0]+self.pwidth//2-origin[0])/defaults.tiles[0],
             1.0-(self.pos[1]+self.pheight//2-origin[1])/defaults.tiles[1])
 
     def _Kill(self,game):
@@ -253,8 +269,9 @@ class Player(Entity):
             res = collider.Interact(self,game)
             if res == Entity.KILL:
                 print("hit deadly entity, need to commit suicide")
-                if defaults.debug_godmode is False:
+                if defaults.debug_godmode is False and self.unkillable == 0:
                     self._Kill(game)
+                continue
 
             elif res != Entity.BLOCK:
                 continue
@@ -365,7 +382,7 @@ class Player(Entity):
         game.SetOrigin((self.pos[0]-defaults.respawn_origin_distance,0))
 
         # Reset our status
-        self._Reset()
+        self._Reset(game)
 
 class RespawnPoint(Entity):
     """A respawning point represents a possible position where

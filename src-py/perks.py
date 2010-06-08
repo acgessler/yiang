@@ -36,28 +36,75 @@ class Perk(AnimTile):
     
     def __init__(self,*args,**kwargs):
         AnimTile.__init__(self,*args,**kwargs)
-        self.players = {} 
+        self.players = {}
 
-    def EnablePerk(self,player):
+    def EnablePerk(self,player,game):
         """Apply the perk to a Player object. The perk
         is expected to be able to restore the current
-        state later."""
+        state later. The function checks if another perk
+        of the same type is already active on the player
+        and returns a reference to it if this is the
+        case. """
         self.players[player] = {}
+        for perk in player.perks:
+            if type(perk) == type(self):
+                return perk
 
-    def DisablePerk(self,player):
+        player.perks.add(self)
+        return None
+
+    def DisablePerk(self,player,game):
         """Recover the state prior to the EnablePerk()
         call. Properties not affected by the perk need
         not to be recovered. """
+        try:
+            player.perks.remove(self)
+        except KeyError:
+            pass
         del self.players[player]
+
+    def _SetAutoExpire(self,game,player,time,extend=False):
+        """Automatically expire the perk for a specific player
+        after a given time range has passed. If extend is True,
+        the function will try to extend the perk if it is
+        already running"""
+        playerd = self.players[player]
+        if extend is True:
+            try:
+                if game.GetTotalElapsedTime()-playerd["time_start"]-playerd["time"] > time:
+                    return
+                print("Extending lifetime of existing perk")
+            except KeyError:
+                pass
+        
+        playerd["time"] = time
+        playerd["time_start"] = game.GetTotalElapsedTime()
+
+    def _CheckIfExpired(self,game,player,):
+        """Called by Player during its Update() calls. We can'd do it
+        from within our Update() callback because the perk position
+        is static, and the player might leave its active range so
+        Update() would not longer be called."""
+        player_dict = self.players[player]
+        if game.GetTotalElapsedTime()-player_dict["time_start"] > player_dict["time"]:
+            self.DisablePerk(player,game)
+
+    def FindExisting(self,perks,cls):
+        """Search a given list of perks for an instance of a particular
+        class, but don't return ourselfes."""
+        for perk in perks:
+            if not perk is self and isinstance(perk,cls):
+                return perk
+        return None
 
     def Interact(self,other,game):
         if isinstance(other,Player):
             if other in self.players:
                 return Entity.ENTER    
             
-            self.EnablePerk(other)
+            self.EnablePerk(other,game)
         return Entity.ENTER
-    
+
 
 class SuperSpeed(Perk):
     """The SuperSpeed perk enables the player to move
@@ -68,13 +115,24 @@ class SuperSpeed(Perk):
         self.speed_multiplier = speed_multiplier
         self.time = time
 
-    def EnablePerk(self,player):
-        Perk.EnablePerk(self,player)
+    def EnablePerk(self,player,game):
+        if player in self.players:
+            return
+        
         print("Enable perk: SuperSpeed")
+        other = Perk.EnablePerk(self,player,game)
+        if other is None:
+            player.speed_scale *= self.speed_multiplier
+            self._SetAutoExpire(game,player,self.time)
+            return
 
-    def DisablePerk(self,player):
-        Perk.DisablePerk(self,player)
+        other._SetAutoExpire(game,player,self.time,True)
+
+    def DisablePerk(self,player,game):
+        Perk.DisablePerk(self,player,game)
         print("Disable perk: SuperSpeed")
+
+        player.speed_scale /= self.speed_multiplier
 
 
 class MegaJump(Perk):
@@ -86,13 +144,24 @@ class MegaJump(Perk):
         self.jump_multiplier = jump_multiplier
         self.time = time
 
-    def EnablePerk(self,player):
-        Perk.EnablePerk(self,player)
+    def EnablePerk(self,player,game):
+        if player in self.players:
+            return
+        
         print("Enable perk: MegaJump")
+        other = Perk.EnablePerk(self,player,game)
+        if other is None:
+            player.jump_scale *= self.jump_multiplier
+            self._SetAutoExpire(game,player,self.time)
+            return
 
-    def DisablePerk(self,player):
-        Perk.DisablePerk(self,player)
-        print("Disable perk: Unkillable")
+        other._SetAutoExpire(game,player,self.time,True)
+
+    def DisablePerk(self,player,game):
+        Perk.DisablePerk(self,player,game)
+        print("Disable perk: MegaJump")
+
+        player.jump_scale /= self.jump_multiplier
 
 
 class Unkillable(Perk):
@@ -105,12 +174,23 @@ class Unkillable(Perk):
         Perk.__init__(self,text,height,frames,anim_speed)
         self.time = time
 
-    def EnablePerk(self,player):
-        Perk.EnablePerk(self,player)
+    def EnablePerk(self,player,game):
+        if player in self.players:
+            return
+        
         print("Enable perk: Unkillable")
+        other = Perk.EnablePerk(self,player,game)
+        if other is None:
+            player.unkillable += 1
+            self._SetAutoExpire(game,player,self.time)
+            return
 
-    def DisablePerk(self,player):
-        Perk.DisablePerk(self,player)
+        other._SetAutoExpire(game,player,self.time,True)
+
+    def DisablePerk(self,player,game):
+        Perk.DisablePerk(self,player,game)
         print("Disable perk: Unkillable")
 
+        player.unkillable -= 1
+        assert player.unkillable>0
     

@@ -1,4 +1,4 @@
-from perks import MegaJump; <out> = MegaJump(<raw>,6,5,5.0,2.0)
+from perks import MegaJump; <out> = MegaJump(<raw>,6,5,5.0,1.6)
 ------------------
 |  MEGA JUMP 5s  |
 ------------------

@@ -18,7 +18,6 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 # Python core
-import re
 
 # PySFML
 import sf
@@ -47,10 +46,12 @@ class KeyMapping:
         "accept"        : sf.Key.Return
     }
 
-    @staticmethod
-    def LoadFromFile(file):
+    @classmethod
+    def LoadFromFile(cls,file):
         """Load a set of key bindings from a particular file"""
         print("Loading key bindings from {0}".format(file))
+
+
         try:
             with open(file,"rt") as f:
                 for n,line in enumerate(f):
@@ -65,25 +66,29 @@ class KeyMapping:
 
                     k = k.strip()
                     v = v.strip()
-                    if not k in KeyMapping.mapping:
+                    if not k in cls.mapping:
                         print("{0}:{1}: Key name {2} is not known".format(file,n,k))
                         continue
 
                     try:
-                        KeyMapping.mapping[k] = getattr(sf.Key,v)
+                        #print("'{0}'".format(k),sf.Key.__dict__[v])
+                        attr = sf.Key.__dict__[v] #eval("sf.Key.{0}".format(v)) 
                     except AttributeError:
                         print("{0}:{1}: Key value {2} is not known".format(file,n,v))
                         continue
 
+                    cls.mapping[k] = attr
+                    #print(attr,cls.mapping[k],id(attr),id(cls.mapping[k]))
                     print("{0}:{1}: Remap {2} action to {3} key".format(file,n,k,v))
                     
         except IOError:
             print("Failure reading key bindings from {0}".format(file))
+        #print(cls.mapping)
 
-    @staticmethod
-    def Get(name):
+    @classmethod
+    def Get(cls,name):
         """Query the SFML key constant for a specific action"""
-        return KeyMapping.mapping[name]
+        return cls.mapping[name]
 
     
                 
