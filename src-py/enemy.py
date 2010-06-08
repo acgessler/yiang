@@ -52,7 +52,7 @@ class SmallTraverser(AnimTile):
         for collider in game._EnumEntities():
 
             # traverers of the same color collide with each other, others don't.
-            if isinstance(collider,SmallTraverser) and not collider.color is self.color:
+            if isinstance(collider,SmallTraverser) and not collider.color == self.color:
                 continue
             
             mycorner = collider.GetBoundingBox()

@@ -39,8 +39,7 @@ class NewFrame(Exception):
     resume with the next, immediately."""
     def __init__(self):
         print("Raising NewFrame sentinel signal")
-        if defaults.debug_trace_keypoints is True:
-            Game._DebugTrace()
+        Game._DebugTrace()
 
 
 class ReturnToMenuDueToFailure(Exception):
@@ -94,10 +93,11 @@ class Game:
     @staticmethod
     def _DebugTrace():
         """Invoke traceback.print_stack in debug builds"""
-        import traceback
+        if defaults.debug_trace_keypoints is True:
+            import traceback
 
-        print("")
-        traceback.print_stack()
+            print("")
+            traceback.print_stack()
 
     def Run(self):
         """ Run the main loop. If the game was previsouly suspended,
