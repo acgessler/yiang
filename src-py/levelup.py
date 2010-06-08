@@ -22,7 +22,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Tile, Entity,NewFrame
+from game import Entity,NewFrame
+from tile import Tile
 from player import Player
 
 class LevelUp(Tile):

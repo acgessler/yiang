@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,320,10)
+from tile import Tile; <out> = Tile(<raw>,320,10)
                                                                   88                                                                                                                                                                                                                                                 
          88           88                88                        88                         88                                              88                                       88      88                                                               ,adPPYb,d8  ,adPPYYba,  88,dPYba,,adPYba,    ,adPPYba,
   ,d     88           ""                ""                 ,d     88                         88                                    ,d        88                                       88      ""                            88           88                   a8"    `Y88  ""     `Y8  88P'   "88"    "8a  a8P_____88

@@ -22,8 +22,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import AnimTile
-from player import Player,Entity,Tile
+from tile import AnimTile,Tile
+from player import Player,Entity
 
 class ScoreTile(AnimTile):
     """The player receives a certain extra score upon

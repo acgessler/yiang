@@ -27,7 +27,8 @@ import sf
 # My own stuff
 import defaults
 import mathutil
-from game import Entity,TileLoader,Game,Tile
+from game import Entity,Game
+from tile import Tile
 from keys import KeyMapping
 
 class Player(Entity):

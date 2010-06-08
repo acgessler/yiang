@@ -25,7 +25,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,TileLoader,Game,Tile,AnimTile
+from game import Entity,Game
+from tile import Tile,AnimTile
 
 class SmallTraverser(AnimTile):
     """The simplest class of entities, it moves in a certain

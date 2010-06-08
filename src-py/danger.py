@@ -22,7 +22,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,TileLoader,Game,Tile,AnimTile
+from game import Entity,Game
+from tile import Tile,AnimTile
 from player import Player
 
 class DangerousBarrel(AnimTile):

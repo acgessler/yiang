@@ -25,7 +25,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,Game,Tile,AnimTile
+from game import Entity,Game
+from tile import AnimTile
 from player import Player
 
 class Perk(AnimTile):

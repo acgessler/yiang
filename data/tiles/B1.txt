@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,7,5)
+from tile import Tile; <out> = Tile(<raw>,7,5)
    _   
  _| |_ 
 (_   _)

@@ -1,4 +1,4 @@
-<out> = Tile(<raw>)
+from tile import Tile; <out> = Tile(<raw>)
 ====\
 \\\\\
 =====

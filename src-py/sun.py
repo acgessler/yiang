@@ -22,7 +22,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,Game,Tile
+from game import Entity,Game
+from tile import Tile
 from player import Player
 
 class Sun(Tile):
