@@ -62,6 +62,9 @@ class Game:
         RenderWindow """
         self.app = app
 
+        if defaults.draw_clamp_to_pixel is True:
+            self.ToDeviceCoordinates = self._ToDeviceCoordinates_Floored
+
         # These are later changed by LoadLevel(...)
         self.entities = set()
         self.level = -1
@@ -550,10 +553,15 @@ TimeDelta:         {dtime:.4}
         self.draw_counter = 0
         self.app.Clear(color)
 
-    def ToDeviceCoordinates(self,coords):
-        """Get from camera coordinates to SFML (device) coordinates"""
+    def _ToDeviceCoordinates_Floored(self,coords):
+        """Replacement for ToDeviceCoordinate() if defaults.draw_clamp_to_pixels is True """
         return (math.floor(coords[0]*defaults.tiles_size_px[0]),
                 math.floor(coords[1]*defaults.tiles_size_px[1]))
+
+    def ToDeviceCoordinates(self,coords):
+        """Get from camera coordinates to SFML (device) coordinates"""
+        return (coords[0]*defaults.tiles_size_px[0],
+                coords[1]*defaults.tiles_size_px[1])
 
     def ToCameraCoordinates(self,coords):
         """Get from world- to camera coordinates"""
