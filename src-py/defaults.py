@@ -56,6 +56,7 @@ antialiasing_level = 2
 player_caution_border = [2,7]
 draw_clamp_to_pixel = True
 debug_trace_keypoints = False
+show_window_caption = True
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

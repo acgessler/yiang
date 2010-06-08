@@ -335,7 +335,7 @@ def main():
 
     # Read game.txt, which is the master config file
     #Log.Enable(defaults.enable_log)
-    defaults.merge_config(os.path.join(defaults.config_dir,"game.txt"))
+    defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
 
     print("Startup ...")
@@ -353,9 +353,10 @@ def main():
         defaults.resolution = dm.Width,dm.Height
         app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen, settings)
     else:
-        app = sf.RenderWindow(sf.VideoMode(min(defaults.resolution[0],dm.Width),\
-            min(defaults.resolution[1],dm.Height)), \
-            defaults.caption, sf.Style._None, settings)
+        tb = sf.Style.Close if defaults.show_window_caption else sf.Style._None
+        app = sf.RenderWindow(sf.VideoMode(min(defaults.resolution[0],dm.Width),
+            min(defaults.resolution[1],dm.Height)),
+            defaults.caption,tb, settings)
 
     print("Created window ...")
 
