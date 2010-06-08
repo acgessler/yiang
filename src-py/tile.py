@@ -23,6 +23,7 @@ import sf
 # Python Core
 import traceback
 import random
+import itertools
 
 # My own stuff
 import defaults
@@ -102,7 +103,7 @@ class AnimTile(Tile):
     played automatically or manually."""
 
     
-    def __init__(self,text,height,frames,speed,states=1):
+    def __init__(self,text,height,frames,speed,states=1,width=0):
         """ Read an animated tile from a text block. Such a textual
         description contains the ASCII images for all frames,
         separated by an empty line for clarity. There can be multiple
@@ -112,6 +113,7 @@ class AnimTile(Tile):
 
             Parameters:
                text Text block
+               width Character width of the tile, may be left 0.
                height Character height of the tile
                frames Number of frames in the file
                speed Playback speed, -1 for manual playback. This is
@@ -133,7 +135,7 @@ class AnimTile(Tile):
             
             for frame in range(frames):
                 #assert n+height<=len(lines)
-                self.texts[state].append("\n".join(lines[n:n+height]))
+                self.texts[state].append("\n".join(l.rstrip() for l in lines[n:n+height]))
                 n += height+1
             n += 1
 
@@ -144,6 +146,15 @@ class AnimTile(Tile):
         # constraints checking
         for i in range(1,len(self.texts)):
             assert len(self.texts[i]) == len(self.texts[0])
+
+        # update width and height to get a proper bounding box.
+        if width==0:
+            for text in itertools.chain(*self.texts):
+                for line in text.split("\n"):
+                    width = max(width,len(line))
+
+        self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
+                
 
     def __str__(self):
         return "AnimTile, pos: {0}|{1}, frames: {2}, speed: {3}, text:\n{4}".format(\
