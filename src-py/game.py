@@ -37,7 +37,9 @@ from keys import KeyMapping
 class NewFrame(Exception):
     """Sentinel exception to abort the current frame and to
     resume with the next, immediately."""
-    pass
+    def __init__(self):
+        print("Raising NewFrame sentinel signal")
+        Game._DebugTrace()
 
 
 class ReturnToMenuDueToFailure(Exception):
@@ -88,6 +90,14 @@ class Game:
 
         self._LoadPostFX()
 
+    @staticmethod
+    def _DebugTrace():
+        """Invoke traceback.print_stack in debug builds"""
+        import traceback
+
+        print("")
+        traceback.print_stack()
+
     def Run(self):
         """ Run the main loop. If the game was previsouly suspended,
         the old status is recovered. The function returns True if
@@ -122,7 +132,7 @@ class Game:
                     for entity in self._EnumEntities():
                         entity.Draw(self)
                 except NewFrame:
-                    pass
+                    continue
 
                 self.app.Draw(self.effect)
                 
@@ -404,21 +414,42 @@ TimeDelta:         {dtime:.4}
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         return pp
 
-    def Kill(self):
+    def Kill(self,killer="an unknown enemy "):
         """Kill the player immediately, respawn if they have
         another life, set game over alternatively"""
+        Game._DebugTrace()
+        
         if self.lives == 0:
             self.GameOver()
             
         self.lives = self.lives-1
-        self._Respawn()
 
-    def _Respawn(self):
+        accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
+        key = self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String("""You got killed by {0}
+
+Press {1} to restart at the last respawning point
+Press {2} to restart the level
+Press {3} to leave the game""".format(
+                    killer,
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("level-new"),
+                    KeyMapping.GetString("escape")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+        )),(500,130),0.0,accepted)
+
+        if key == accepted[2]:
+            self.GameOver()
+    
+        self._Respawn(True if key == accepted[0] else False)
+
+    def _Respawn(self,enable_respawn_points=True):
         """Respawn the player at the beginning of the level"""
         for entity in self._EnumEntities():
-            if hasattr(entity,"Respawn"):
-                entity.Respawn(self)
-                raise NewFrame()
+            #if hasattr(entity,"Respawn"):
+            entity.Respawn(self,enable_respawn_points)
 
     def GetLives(self):
         """Get the number of lives the player has. They
@@ -445,14 +476,14 @@ TimeDelta:         {dtime:.4}
 
     def GameOver(self):
         """Fade to black and show stats, then return to the main menu"""
-
+        
+        Game._DebugTrace()
         self.game_over = True
         print("Game over, score is {0} and time is {1}".format(self.score,
             self.clock.GetElapsedTime()))
 
         if not hasattr(self,"score_map"):
             self.score_map = collections.defaultdict(lambda : "poor, I am laughing at you",{})
-
             try:
                 with open(os.path.join(defaults.config_dir,"scores.txt"),"rt") as scores:
                     for n,line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
@@ -461,37 +492,50 @@ TimeDelta:         {dtime:.4}
             except IOError:
                 print("Failure reading scores.txt file")
 
+        accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
         if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("You survived {0:.4} days and collected {1:.4} dollars.\nThat's {2}.\n\nHit ENTER to continue .. (Should you not want to "+
-                    "continue,\nrest assured that this status notice will stay here forever)").format(
-                Game.SecondsToDays(self.GetTotalElapsedTime()),
-                self.score/100,
-                self.score_map[math.log(self.score*10+1,2)]),
+            sf.String(("""You survived {0:.4} days and collected {1:.4} dollars.
+That's {2}.\n\n
+Hit {3} or {4} to return to the menu .. """).format(
+                    Game.SecondsToDays(self.GetTotalElapsedTime()),
+                    self.score/100,
+                    self.score_map[math.log(self.score*10+1,2)],
+                    KeyMapping.GetString("escape"),
+                    KeyMapping.GetString("accept")
+                ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        ))) is True:
+        )),(550,100),0.0,accepted) in accepted:
             self.Suspend()
+        raise NewFrame()
 
-    def _FadeOutAndShowStatusNotice(self,fade_time,text,size=(550,120)):
+    def _FadeOutAndShowStatusNotice(self,fade_time,text,size=(550,120),auto_time=0.0,break_codes=(KeyMapping.Get("accept"))):
         """Tiny utility to wrap the fade out effect used on game over
         and end of level. Alongside, a status message is displayed and
         control is not returned unless the user presses any key
-        to continue."""
+        to continue. The return value is False if the user closes the
+        application, otherwise one of the break_codes constants
+        indicating the key that was pressed by the user to flee
+        the status notice."""
 
         inp = self.app.GetInput()
-        #while inp.IsKeyDown(KeyMapping.Get("accept")):
-        #    pass
 
         ret = True
         clock = sf.Clock()
         event = sf.Event()
+
+        curtime = clock.GetElapsedTime()
         while self.running is True:
             if not self.app.IsOpened():
                 ret = False
                 break
 
+            if auto_time>0.0 and clock.GetElapsedTime()-curtime > auto_time:
+                break
+
             if self.app.GetEvent(event):
-                if event.Type == sf.Event.KeyPressed and event.Key.Code == KeyMapping.Get("accept"):
+                if event.Type == sf.Event.KeyPressed and event.Key.Code in break_codes:
+                    ret = event.Key.Code
                     break
 
             self.Clear(sf.Color.Black)
@@ -578,7 +622,7 @@ TimeDelta:         {dtime:.4}
         print("Loading level from disc: "+str(level))
         self.level = level
         self.origin = [0,0]
-        self.entities = set()
+        self.entities,entities_add,entities_remove = set(),set(),set()
 
         color_dict = collections.defaultdict(lambda: sf.Color.White, {
             "r" : sf.Color.Red,
@@ -616,8 +660,8 @@ TimeDelta:         {dtime:.4}
                         from tile import TileLoader
                         tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
                         tile.SetColor(color_dict[ccode])
+                        
                         tile.SetPosition((x//3, y - diff))
-
                         self.entities.add(tile)
 
                 self.level_size = (x//3,y)
@@ -636,17 +680,27 @@ TimeDelta:         {dtime:.4}
 
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
+
+        Game._DebugTrace()
+        print("Scale time by {0}%".format((defaults.speed_scale_per_level-1.0)*100))
         
         self.speed_scale *= defaults.speed_scale_per_level
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level))
 
-        if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("Hey, you solved Level {0}!.\n\nHit ENTER to continue .. (this is compulsory)").format(self.level),
+        accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+        key =  self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String(("""Hey, you solved Level {0}!.
+
+Hit {1} to continue .. (don't disappoint me)
+Hit {2} to return to the menu""").format(
+                    self.level,
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("escape")
+                ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        ))) is False:
-            self.Suspend()
+        )),(550,120),0.0,accepted) 
 
         if self.level == main.get_level_count():
             lidx = 1
@@ -656,6 +710,10 @@ TimeDelta:         {dtime:.4}
             
         if self.LoadLevel(lidx) is False:
             raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
+
+        if key == accepted[0]:
+            self.Suspend()
+        raise NewFrame()
 
     def GetLevelStats(self):
         """Return a 4-tuple: (level,round,num_levels,total_levels)"""
@@ -717,6 +775,10 @@ class Entity:
 
     def Interact(self,other,game):
         return Entity.BLOCK
+
+    def Respawn(self,game,enable_respawn_points):
+        """Invoked when the player is killed and needs to respawn"""
+        pass
 
     def _BBCollide(self,rect,mycorner):
         """Collide the first axis-aligned BB (x,y,x2,y2) with the

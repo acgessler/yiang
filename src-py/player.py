@@ -27,7 +27,7 @@ import sf
 # My own stuff
 import defaults
 import mathutil
-from game import Entity,Game
+from game import Entity,Game,NewFrame
 from tile import Tile
 from keys import KeyMapping
 
@@ -164,7 +164,7 @@ class Player(Entity):
             self.in_jump, self.block_jump = False,False
             self.vel[1] = 0
             
-        elif self.pos[1] < 1.0 or self.pos[1] > defaults.tiles[1]:
+        elif self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
             self._Kill(game)
 
         self._CheckForLeftMapBorder(game)
@@ -229,7 +229,7 @@ class Player(Entity):
         game.effect.SetParameter("cur",(self.pos[0]+self.pwidth//2-origin[0])/defaults.tiles[0],
             1.0-(self.pos[1]+self.pheight//2-origin[1])/defaults.tiles[1])
 
-    def _Kill(self,game):
+    def _Kill(self,game,killer="an unknown entity"):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event"""
         if game.GetLives() > 0:
@@ -237,7 +237,7 @@ class Player(Entity):
                 game.AddEntity(KillAnimStub(self.pos,random.uniform(-1.0,1.0),\
                     (random.random(),random.random()),random.random()*12.0))
             
-        game.Kill()
+        game.Kill(killer)
 
     def _HandleCollisions(self,newpos,newvel,game):
         """Handle any collision events, given the computed new position
@@ -361,14 +361,14 @@ class Player(Entity):
         self.respawn_positions.append(pos)
         print("Set respawn point {0}|{1}".format(pos[0],pos[1]))
 
-    def Respawn(self,game):
+    def Respawn(self,game,enable_respawn_points):
         """Used internally by Game.Respawn to respawn the player
         at a given position"""
         assert hasattr(self,"respawn_positions")
         assert len(self.respawn_positions)
 
         min_distance = float(defaults.min_respawn_distance)
-        for rpos in reversed(self.respawn_positions):
+        for rpos in reversed(self.respawn_positions if enable_respawn_points is True else ()):
             if rpos[0]>self.pos[0] or mathutil.Length((rpos[0]-self.pos[0],rpos[1]-self.pos[1])) < min_distance:
                 continue # this is to protect the player from being
                 # respawned in kill zones.
@@ -384,6 +384,7 @@ class Player(Entity):
 
         # Reset our status
         self._Reset(game)
+        raise NewFrame()
 
 class RespawnPoint(Entity):
     """A respawning point represents a possible position where
@@ -398,7 +399,13 @@ class RespawnPoint(Entity):
             if hasattr(entity,"_AddRespawnPoint"):
                 entity._AddRespawnPoint(self.pos)
                 
-        self.didit = True        
+        self.didit = True
+
+    def GetBoundingBox(self):
+        return (self.pos[0],self.pos[1],0.5,0.5)
+
+    def Interact(self,other,game):
+        return Entity.ENTER
 
 class KillAnimStub(Tile):
     """Implements the text string that is spawned whenever

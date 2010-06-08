@@ -2,19 +2,19 @@
 # -*- coding: UTF_8 -*-
 
 #/////////////////////////////////////////////////////////////////////////////////
-# Yet Another Jump'n'Run Game, unfair this time.
+# Yet Another Jump'n'Run Game", unfair this time.
 # (c) 2010 Alexander Christoph Gessler
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# ANY EXPRESS OR IMPLIED WARRANTIES", INCLUDING", BUT NOT LIMITED TO", THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
 # DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+# ANY DIRECT", INDIRECT", INCIDENTAL", SPECIAL", EXEMPLARY", OR CONSEQUENTIAL DAMAGES
+# (INCLUDING", BUT NOT LIMITED TO", PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+# LOSS OF USE", DATA", OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+# ON ANY THEORY OF LIABILITY", WHETHER IN CONTRACT", STRICT LIABILITY", OR TORT 
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# SOFTWARE", EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
 # Python core
@@ -26,31 +26,30 @@ class KeyMapping:
     """Implements a configurable key mapping"""
 
     mapping = {
-        "move-left"     : sf.Key.Left,
-        "move-right"    : sf.Key.Right,
-        "move-up"       : sf.Key.Up,
-        "move-down"     : sf.Key.Down,
-        "move-left"     : sf.Key.Left,
-        "menu-up"       : sf.Key.Up,
-        "menu-down"     : sf.Key.Down,
-        "menu-left"     : sf.Key.Left,
-        "menu-right"    : sf.Key.Right,
-        "debug-godmode" : sf.Key.X,
-        "debug-showbb"  : sf.Key.B,
-        "debug-showinfo": sf.Key.D,
-        "debug-allowup" : sf.Key.G,
-        "level-new"     : sf.Key.N,
-        "debug-kill"    : sf.Key.K,
-        "debug-gameover": sf.Key.Q,
-        "escape"        : sf.Key.Escape,
-        "accept"        : sf.Key.Return
+        "move-left"     : "Left",
+        "move-right"    : "Right",
+        "move-up"       : "Up",
+        "move-down"     : "Down",
+        "move-left"     : "Left",
+        "menu-up"       : "Up",
+        "menu-down"     : "Down",
+        "menu-left"     : "Left",
+        "menu-right"    : "Right",
+        "debug-godmode" : "X",
+        "debug-showbb"  : "B",
+        "debug-showinfo": "D",
+        "debug-allowup" : "G",
+        "level-new"     : "N",
+        "debug-kill"    : "K",
+        "debug-gameover": "Q",
+        "escape"        : "Escape",
+        "accept"        : "Return"
     }
 
     @classmethod
     def LoadFromFile(cls,file):
         """Load a set of key bindings from a particular file"""
         print("Loading key bindings from {0}".format(file))
-
 
         try:
             with open(file,"rt") as f:
@@ -71,14 +70,13 @@ class KeyMapping:
                         continue
 
                     try:
-                        #print("'{0}'".format(k),sf.Key.__dict__[v])
-                        attr = sf.Key.__dict__[v] #eval("sf.Key.{0}".format(v)) 
+                        sf.Key.__dict__[v] 
                     except AttributeError:
                         print("{0}:{1}: Key value {2} is not known".format(file,n,v))
                         continue
 
-                    cls.mapping[k] = attr
-                    #print(attr,cls.mapping[k],id(attr),id(cls.mapping[k]))
+                    cls.mapping[k] = v
+                    #print(attr",cls.mapping[k]",id(attr)",id(cls.mapping[k]))
                     print("{0}:{1}: Remap {2} action to {3} key".format(file,n,k,v))
                     
         except IOError:
@@ -88,7 +86,12 @@ class KeyMapping:
     @classmethod
     def Get(cls,name):
         """Query the SFML key constant for a specific action"""
-        return cls.mapping[name]
+        return sf.Key.__dict__[ cls.mapping[name] ]
+
+    @classmethod
+    def GetString(cls,name):
+        """Query the string key name specific action"""
+        return cls.mapping[name] 
 
     
                 
