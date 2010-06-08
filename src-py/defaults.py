@@ -21,6 +21,8 @@ import os
 
 # -----------------------------------------------------------------------------
 # configurable metrics, altered by config/game.txt upon startup
+
+version = 0.1
 resolution = [1280,720]
 fullscreen = False
 letter_size = [8,12]
@@ -29,7 +31,7 @@ letter_height_status = 36
 letter_height_lives = 9
 letter_height_game_over = 15
 letter_height_debug_info = 15
-caption = "Yet another Jump'n'Run (an unfair one)"
+caption = "YIANG | {0}".format(version)
 danger_signs_ttl = 30
 tiles_size = [5,3]
 move_speed = [5,4]
