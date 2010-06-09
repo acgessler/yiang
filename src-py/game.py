@@ -634,7 +634,12 @@ Hit {3} or {4} to return to the menu .. """).format(
 
         # the actual mapping table has been outsourced to config/colors.txt
         if not hasattr(self,"cached_color_dict"):
-            self.cached_color_dict = collections.defaultdict(lambda: sf.Color.White, color_dict_default)
+
+            def complain_on_fail():
+                print("Encountered unknown color key")
+                return sf.Color.White
+            
+            self.cached_color_dict = collections.defaultdict(complain_on_fail, color_dict_default)
             try:
                 with open(os.path.join(defaults.config_dir,"colors.txt"),"rt") as scores:
                     for n,line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
