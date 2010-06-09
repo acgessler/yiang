@@ -42,6 +42,9 @@ class DangerousBarrel(AnimTile):
     def Interact(self,other,game):
         return Entity.KILL
 
+    def GetVerboseName(self):
+        return "a deathly barrel (it's hilarious!)"
+
 
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but

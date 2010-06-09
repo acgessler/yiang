@@ -778,6 +778,13 @@ class Entity:
         """Invoked when the player is killed and needs to respawn"""
         pass
 
+    def GetVerboseName(self):
+        """Return a verbose (i.e. non-formal) description of the
+        entity. The returned string must be suitable to be
+        used in death reports, i.e. 'you got killed by {an unknown entity}',
+        'an unknown entity' being the verbose name"""
+        return "unknown"
+
     def _BBCollide(self,rect,mycorner):
         """Collide the first axis-aligned BB (x,y,x2,y2) with the
         second bounding box, return a ORed combination of the

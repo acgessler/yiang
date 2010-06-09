@@ -28,7 +28,14 @@ import defaults
 from game import Entity,Game
 from tile import Tile,AnimTile
 
-class SmallTraverser(AnimTile):
+class Enemy(AnimTile):
+    """Sentinel base class for all entities"""
+
+    def GetVerboseName(self):
+        return "an unknown enemy"
+
+
+class SmallTraverser(Enemy):
     """The simplest class of entities, it moves in a certain
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
@@ -43,6 +50,9 @@ class SmallTraverser(AnimTile):
 
     def Interact(self,other,game):
         return Entity.KILL
+
+    def GetVerboseName(self):
+        return "a Harmful Traverser Unit (HTU)"
 
     def Update(self,time_elapsed,time,game):
         rect = self.GetBoundingBox()

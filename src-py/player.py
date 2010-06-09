@@ -165,7 +165,7 @@ class Player(Entity):
             self.vel[1] = 0
             
         if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
-            self._Kill(game)
+            self._Kill(game,"the map's border")
 
         self._CheckForLeftMapBorder(game)
         self._MoveMap(game,time)
@@ -193,7 +193,7 @@ class Player(Entity):
                 self.SetColor(sf.Color.Yellow)
                 print("Entering left danger area")
             else:
-                self._Kill(game)
+                self._Kill(game,"the dangerous wall on the left")
 
         else:
             if hasattr(self,"restore_color"):
@@ -229,7 +229,7 @@ class Player(Entity):
         game.effect.SetParameter("cur",(self.pos[0]+self.pwidth//2-origin[0])/defaults.tiles[0],
             1.0-(self.pos[1]+self.pheight//2-origin[1])/defaults.tiles[1])
 
-    def _Kill(self,game,killer="an unknown entity"):
+    def _Kill(self,game,killer="<add reason>"):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event"""
         if game.GetLives() > 0:
@@ -271,7 +271,7 @@ class Player(Entity):
             if res == Entity.KILL:
                 print("hit deadly entity, need to commit suicide")
                 if defaults.debug_godmode is False and self.unkillable == 0:
-                    self._Kill(game)
+                    self._Kill(game,collider.GetVerboseName())
                 continue
 
             elif res != Entity.BLOCK:
