@@ -623,13 +623,34 @@ Hit {3} or {4} to return to the menu .. """).format(
         self.origin = [0,0]
         self.entities,entities_add,entities_remove = set(),set(),set()
 
-        color_dict = collections.defaultdict(lambda: sf.Color.White, {
+        # this remains as the default color table if we can't read config/color.txt
+        color_dict_default = collections.defaultdict(lambda: sf.Color.White, {
             "r" : sf.Color.Red,
             "g" : sf.Color.Green,
             "b" : sf.Color.Blue,
             "y" : sf.Color.Yellow,
             "_" : sf.Color.White,
         })
+
+        # the actual mapping table has been outsourced to config/colors.txt
+        if not hasattr(self,"cached_color_dict"):
+            self.cached_color_dict = collections.defaultdict(lambda: sf.Color.White, color_dict_default)
+            try:
+                with open(os.path.join(defaults.config_dir,"colors.txt"),"rt") as scores:
+                    for n,line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
+                        code,col = [l.strip() for l in line.split("=")]
+
+                        assert len(col)==6
+                        self.cached_color_dict[code] = sf.Color(int(col[0:2],16),int(col[2:4],16),int(col[4:6],16))
+
+                print("Caching colors.txt file, got {0} dict entries".format(len(self.cached_color_dict)))
+
+            except IOError:
+                print("Failure reading colors.txt file")
+            except AssertionError:
+                print("color.txt is not well-formed: ")
+                traceback.print_exc()
+       
 
         spaces = [" ","\t","."]
         line_idx = 0
@@ -658,7 +679,7 @@ Hit {3} or {4} to return to the menu .. """).format(
 
                         from tile import TileLoader
                         tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
-                        tile.SetColor(color_dict[ccode])
+                        tile.SetColor(self.cached_color_dict[ccode])
                         
                         tile.SetPosition((x//3, y - diff))
                         self.entities.add(tile)

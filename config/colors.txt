@@ -1,0 +1,25 @@
+# list of available color codes and the corresponding HTML colors
+
+# Red
+r=ff0000
+
+# Green
+g=00ff00
+
+# Blue
+b=0000ff
+
+# Yellow
+y=ffff00
+
+# Pink
+p=ff00ff
+
+# Black
+0=000000
+
+# White
+_=ffffff
+
+# Dark Gray
+~=999999

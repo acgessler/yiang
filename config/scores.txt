@@ -1,4 +1,4 @@
-#powers of two, two get to the next line the players must double their scores
+#powers of two, to get to the next line the players must double their scores
 
 bad. 'nuff said
 still bad, but better
