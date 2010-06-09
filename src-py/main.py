@@ -35,9 +35,11 @@ from game import Game
 from log import Log
 from renderer import Renderer,Drawable
 
-
 # numeric constants for the menu entries
-OPTION_NEWGAME,OPTION_RESUME,OPTION_CHOOSELEVEL,OPTION_CREDITS,OPTION_QUIT = range(5)
+OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
+
+# special level numbers, these levels aren't in the regular map rotation
+SPECIAL_LEVEL_TUTORIAL = 10000
 
 def get_level_count():
     """Get the number of levels in the data/levels folder."""
@@ -129,9 +131,13 @@ class MainMenu(Drawable):
         self.ShowCredits()
 
     def _OptionsNewGame(self):
-        
         self.game = Game(Renderer.app)
         self.game.LoadLevel(1)
+        self._OptionsResumeGame()
+
+    def _OptionsTutorial(self):
+        self.game = Game(Renderer.app)
+        self.game.LoadLevel(SPECIAL_LEVEL_TUTORIAL)
         self._OptionsResumeGame()
 
     def _OptionsNewGameChoose(self):
@@ -156,7 +162,7 @@ class MainMenu(Drawable):
     options = [
         ("New Game", _OptionsNewGame, "You will die",1.0),
         ("Resume Game", _OptionsResumeGame, "You will die soon",0.4),
-        ("Start Tutorial", _OptionsNewGame, "You will die",0.4),
+        ("Start Tutorial", _OptionsTutorial, "You will die",0.4),
         ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.4),
         ("Preferences", _OptionsCredits, "Options",1.0),
         ("Credits", _OptionsCredits, "CREDITS",1.0),
