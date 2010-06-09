@@ -33,6 +33,7 @@ import defaults
 import validator
 from fonts import FontCache
 from keys import KeyMapping
+from renderer import Drawable,Renderer
 
 class NewFrame(Exception):
     """Sentinel exception to abort the current frame and to
@@ -738,7 +739,7 @@ Hit {2} to return to the menu""").format(
         context"""
         self.entities_rem.add(entity)
 
-class Entity:
+class Entity(Drawable):
     """Base class for all kinds of entities, including the player.
     The term `entity` refers to a state machine which is in control
     of a set of tiles. Entities receive Update() callbacks once per
@@ -765,11 +766,6 @@ class Entity:
 
     def SetColor(self,color):
         self.color = color
-
-    def GetBoundingBox(self):
-        """Get the bounding box (x,y,w,h) of the entity or
-        None if the entity does not support this concept"""
-        return None
 
     def Interact(self,other,game):
         return Entity.BLOCK

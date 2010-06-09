@@ -59,6 +59,7 @@ player_caution_border = [2,7]
 draw_clamp_to_pixel = True
 debug_trace_keypoints = False
 show_window_caption = True
+enable_menu_image_bg = False
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
