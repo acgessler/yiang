@@ -508,7 +508,7 @@ Hit {3} or {4} to return to the menu .. """).format(
             self.Suspend()
         raise NewFrame()
 
-    def _FadeOutAndShowStatusNotice(self,fade_time,text,size=(550,120),auto_time=0.0,break_codes=(KeyMapping.Get("accept"))):
+    def _FadeOutAndShowStatusNotice(self,fade_time,text,size=(550,120),auto_time=0.0,break_codes=(KeyMapping.Get("accept")),text_color=sf.Color.Red):
         """Tiny utility to wrap the fade out effect used on game over
         and end of level. Alongside, a status message is displayed and
         control is not returned unless the user presses any key
@@ -549,13 +549,13 @@ Hit {3} or {4} to return to the menu .. """).format(
             self._DrawStatusBar()
 
             # now the message box showing the match result
-            self._DrawStatusNotice(text,size)
+            self._DrawStatusNotice(text,size,text_color)
             self.app.Display()
 
         self.effect.SetParameter("fade",1.0)
         return ret
 
-    def _DrawStatusNotice(self,text,size=(550,120)):
+    def _DrawStatusNotice(self,text,size=(550,120),text_color=sf.Color.Red):
         """Utility to draw a messagebox-like status notice in the
         center of the screen."""
         fg,bg = sf.Color(160,160,160),sf.Color(50,50,50)
@@ -572,11 +572,11 @@ Hit {3} or {4} to return to the menu .. """).format(
         self.Draw(shape)
         pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
         
-        text.SetColor(sf.Color.Black)
+        text.SetColor(sf.Color.Black if text_color != sf.Color.Black else sf.Color(220,220,220))
         text.SetPosition(pos[0]+1,pos[1]+1)
         self.Draw(text)
 
-        text.SetColor(sf.Color.Red)
+        text.SetColor(text_color)
         text.SetPosition(pos[0],pos[1])
         self.Draw(text)
 
