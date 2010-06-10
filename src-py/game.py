@@ -681,9 +681,19 @@ Hit {3} or {4} to return to the menu .. """).format(
 
                         if tcode[0] in spaces:
                             continue
-
+                    
                         from tile import TileLoader
-                        tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
+                        
+                        # read from the private attachment tiles of the level if the tile
+                        # code starts with a lower-case character
+                        if tcode[0] in "abcdefghijklmnopqrstuvwxyz":
+                            tile = TileLoader.Load(os.path.join(defaults.data_dir,"levels",str(level),tcode+".txt"),self)
+                        else:
+                            tile = None
+                        
+                        if tile is None:
+                            tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
+                            
                         tile.SetColor(self.cached_color_dict[ccode])
                         
                         tile.SetPosition((x//3, y - diff))
