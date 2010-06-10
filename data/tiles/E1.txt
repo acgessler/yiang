@@ -27,7 +27,6 @@ from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,3)
 |<|>|
 |<|>|
 
-
 |< >|
 |< >|
 |< >|
