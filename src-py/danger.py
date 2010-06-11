@@ -25,6 +25,7 @@ import defaults
 from game import Entity,Game
 from tile import Tile,AnimTile
 from player import Player
+from enemy import Enemy
 
 class DangerousBarrel(AnimTile):
     """This entity is an animated barrel which kills
@@ -64,6 +65,9 @@ class FakeDangerousBarrel(AnimTile):
         if isinstance(other,Player):
             print("Huh, you've found an special door which doesn't kill you!")
             game.RemoveEntity(self)
+
+        if isinstance(other,Enemy):
+            return Entity.BLOCK
             
         return Entity.ENTER
 
