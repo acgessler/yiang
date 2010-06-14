@@ -30,6 +30,7 @@ import os
 # My own stuff
 import defaults
 import validator
+from renderer import Renderer
 from fonts import FontCache
 
 
@@ -38,11 +39,12 @@ class Level:
     for both drawing and updating - also it maintains the list of all entities
     in the level"""
     
-    def __init__(self, level, game, lines):
+    def __init__(self, level, game, lines, color=sf.Color.Black):
         self.entities, self.entities_add, self.entities_rem = set(), set(), set()
         self.origin = [0, 0]
         self.game = game
         self.level = level
+        self.color = sf.Color(*color) if isinstance(color,tuple) else color
         
         assert self.game
         assert self.level >= 0
@@ -101,6 +103,8 @@ class Level:
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame
         and skip any other jobs for this frame"""
+        
+        Renderer.SetClearColor(self.color)
         for entity in self.entities:
             entity.Update(time, dtime)
                     

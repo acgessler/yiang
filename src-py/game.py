@@ -104,7 +104,6 @@ class Game(Drawable):
         self.running = True
         self.draw_counter = 0
         
-        Renderer.SetClearColor(sf.Color.Black)
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
 
