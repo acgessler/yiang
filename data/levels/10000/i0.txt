@@ -1,7 +1,7 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,sf.Color.Black,True)
-Hello and welcome to the tutorial! You are probably used to boring tutorials at the beginning of each game and may tend to get annoyed as soon as the word 'tutorial' shows up. Be aware, however, that this tutorial is special because you can always skip it if you should feel too skilled for its demands. If you play through it (which will take not more than 10 minutes), you will get a special item, so it miht be worth the efforts.
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_0",text_color=sf.Color.Black,only_once=True)
+Hello and welcome to THE tutorial! You are probably used to these nifty tutorials at the beginning of your video game and may tend to get annoyed as soon as the word 'tutorial' shows up. Be aware, however, that this tutorial is a bit special. If you play through it (which will take not more than 10 minutes), you might get a special item, so it might be worth the efforts.
 
-If you're still with me, use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump. Try to reach the next tutorial block (it is invisible, so you may experience severe difficulities at finding it). If this setup doesn't suit your typical workflow, or if the corresponding keys are missing on your keyboard, edit ./config/key_bindings.txt. 
+If you're still with me, use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump. Try to reach the next tutorial block (it is invisible and you might experience severe difficulties finding it). If this setup doesn't suit your typical workflow (or if the corresponding keys are missing on your keyboard) edit ./config/key_bindings.txt. 
 
-See you later.
+See you later (Oh, press {enter} or {accept} to continue!).
 

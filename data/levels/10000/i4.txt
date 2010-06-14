@@ -1,0 +1,5 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_4",text_color=sf.Color.Black,only_once=True)
+Sadly, I don't have more tutorial content at the moment. Have fun with the game. To be continued ...
+
+:-)
+

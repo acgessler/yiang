@@ -84,11 +84,11 @@ class Level:
                     if tile is None:
                         tile = TileLoader.Load(os.path.join(defaults.data_dir, "tiles", tcode + ".txt"), self)
                             
-                        tile.SetColor(LevelLoader.cached_color_dict[ccode])
-                        tile.SetPosition((x // 3, y - diff))
+                    tile.SetColor(LevelLoader.cached_color_dict[ccode])
+                    tile.SetPosition((x // 3, y - diff))
                         
-                        self.AddEntity(tile)
-                        ecnt += 1
+                    self.AddEntity(tile)
+                    ecnt += 1
                 
         except AssertionError as err:
             print("Level " + str(level) + " is not well-formatted (line {0})".format(line_idx))

@@ -31,14 +31,22 @@ class SimpleNotification(Entity):
     """The SimpleNotification class displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
-    def __init__(self, text, text_color = sf.Color.Red, only_once=True, width=1, height=1, line_length = 50):
+    def __init__(self, text, desc="<unnamed>", text_color = sf.Color.Red, only_once=True, width=1, height=1, line_length = 50, format=True):
+        Entity.__init__(self)
         self.text = text
         self.use_counter = 1 if only_once is True else 1000000000 
         self.dim = (width,height)
-        
         self.text_formatted = ""
         self.line_length = line_length
-        self.text_color = text_color
+        self.text_color = sf.Color(*text_color) if isinstance(text_color,tuple) else text_color
+        self.desc = desc
+        
+        if format is True:
+            try:
+                self.text = self.text.format(enter=KeyMapping.GetString("escape"),\
+                  accept=KeyMapping.GetString("accept"))
+            except:
+                print("format() failed, consider passing False for the 'format' parameter")
         
         # format the text nicely
         # XXX monospace is not everything, really
@@ -58,7 +66,7 @@ class SimpleNotification(Entity):
     def Interact(self, other):
         if isinstance(other, Player) and self.use_counter > 0 and not hasattr(self,"result"):
             
-            print("Show notification")
+            print("Show notification '{0}', use counter: {1}".format(self.desc,self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
             # closure to be called when the player has made his decision
@@ -66,8 +74,12 @@ class SimpleNotification(Entity):
                 self.use_counter -= 1
                 if self.use_counter == 0:
                     self.game.RemoveEntity(self)
+                    
+                    print("Disable notification '{0}'".format(self.desc))
+                    
+                delattr(outer,"result")
             
-            self.game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            self.result = self.game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
             	sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
