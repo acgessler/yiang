@@ -213,7 +213,7 @@ class Game(Drawable):
       O*O       \n\
        O        ".split("\n")))
         status = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
-        xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*12
+        xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
 
         status.SetPosition(xstart-2,5)
         status.SetColor(sf.Color.Black)
@@ -682,6 +682,11 @@ Hit {2} to return to the menu""").format(
         return value is a 2-tuple for both axes."""
         # XXX this moved to Level, using Game.GetLevelSize() is deprecated
         return self.level.GetLevelSize()
+    
+    def GetLevel(self):
+        """Obtain the current Level object, or None if no 
+        level is currently active."""
+        return self.level
 
 
 class Entity(Drawable):
