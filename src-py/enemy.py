@@ -63,10 +63,13 @@ class SmallTraverser(Enemy):
 
         # check for collisions on both sides, turn around if we have one.
         for collider in self.game._EnumEntities():
+            
+            if collider is self:
+                continue
 
             # traverers of the same color collide with each other, others don't.
-            if isinstance(collider,SmallTraverser) and not collider.color == self.color:
-                continue
+            #if isinstance(collider,SmallTraverser) and collider.color != self.color:
+            #    continue
             
             mycorner = collider.GetBoundingBox()
             if mycorner is None:
