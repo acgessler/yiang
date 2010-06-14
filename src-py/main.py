@@ -248,7 +248,7 @@ Hit {1} to cancel""").format(
         
         
         for i in range(len(MainMenu.options)):
-            hscaled = int(MainMenu.options[i][3]*height*(defaults.resolution[1]/720))
+            hscaled = int(MainMenu.options[i][3]*height*(defaults.scale[1]))
             self.menu_text[i] = sf_string_with_shadow(
                 MainMenu.options[i][0],
                 defaults.font_menu,
@@ -319,13 +319,16 @@ Hit {1} to cancel""").format(
         class LevelChooser(Drawable):
 
             def __init__(self,outer):
+                
+                self.base_height = 90
+                self.base_offset = (35,35)
 
-                self.height = 80
-                self.width_spacing, self.height_spacing = 120,100
+                self.height = int(self.base_height*defaults.scale[1])
+                self.width_spacing, self.height_spacing = int(self.height*1.55),int(self.height*1.2)
 
                 self.outer = outer
                 self.num   = get_level_count()+1
-                self.xnum  = defaults.resolution[0]//self.width_spacing
+                self.xnum  = (defaults.resolution[0]-self.base_offset[0]*2)//self.width_spacing
                 self.rows  = math.ceil( self.num/self.xnum )
                 self.level = 1
 
@@ -375,11 +378,11 @@ Hit {1} to cancel""").format(
                         #print(i)
 
                         tex2,tex = sf_string_with_shadow(
-                            str(i) if i < self.num else "\n\n\n... back to main menu ",
+                            str(i).zfill(2) if i < self.num else "\n... back",
                             defaults.font_menu,
                             self.height,
-                            20+ (x*self.width_spacing if i < self.num else 0),
-                            20+y*self.height_spacing,
+                            self.base_offset[0]+ (x*self.width_spacing if i < self.num else 0),
+                            self.base_offset[1]+y*self.height_spacing,
                             sf.Color.Red if self.level == i else sf.Color.Black )
                         
                         Renderer.app.Draw(tex2)

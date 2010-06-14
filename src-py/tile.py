@@ -63,8 +63,10 @@ class Tile(Entity):
 
     def _Recache(self):
         """Cache the tile string from self.text"""
-        font = FontCache.get(defaults.letter_size[1])
-        self.cached = sf.String(self.text,Font=font,Size=defaults.letter_size[1])
+        
+        rsize = defaults.letter_size[1]
+        font = FontCache.get(rsize)
+        self.cached = sf.String(self.text,Font=font,Size=rsize)
         
         self.cached.SetColor(self.color)
 

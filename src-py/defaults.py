@@ -23,7 +23,7 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 0.1
-resolution = [1280,720]
+resolution = [1280,650]
 fullscreen = False
 letter_size = [8,12]
 letter_height_intro = 10
@@ -84,6 +84,7 @@ cells_intro = None
 tiles = None
 tiles_size_px = None
 cull_distance = None
+scale = None
 
 # -----------------------------------------------------------------------------
 def update_derived():
@@ -98,14 +99,20 @@ def update_derived():
     global tiles_size_px
     global cull_distance_sqr
     global swapout_distance_sqr
+    global scale
+    global letter_size
 
     # derived values, do not change
+    scale = (resolution[0]/1280,resolution[1]/650)
+    letter_size = (int(letter_size[0]*scale[0]),int(letter_size[1]*scale[1]))
     cells = (resolution[0]//letter_size[0],resolution[1]//letter_size[1])
     cells_intro = ((resolution[0]*4)//(letter_height_intro*2),resolution[1]//letter_height_intro)
     tiles = (cells[0]//tiles_size[0],cells[1]//tiles_size[1])
     tiles_size_px = (letter_size[0]*tiles_size[0],letter_size[1]*tiles_size[1])
     cull_distance_sqr = (cull_distance_rel*tiles[0])**2+(cull_distance_rel*tiles[1])**2
     swapout_distance_sqr = (swapout_distance_rel*tiles[0])**2+(swapout_distance_rel*tiles[1])**2
+    
+    
 
 def merge_config(file):
     """Merge the current configuration with the settings
