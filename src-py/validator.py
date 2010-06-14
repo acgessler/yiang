@@ -37,8 +37,13 @@ def validate_level(lines,idx):
     """Validate a level in its ASCII representation, given a list of lines.
     If an error or a warning is issued, write it to stdout and return
     False if the level does not pass the validation"""
+    if len(lines) <= 1:
+        print("Level {0}, ERROR: The file has only {1} line, 2 are required".format(idx,len(lines)))
+        return False
+        
+    del lines[0]
 
-    if len(lines)>defaults.tiles[1]:
+    if len(lines)-1>defaults.tiles[1]:
         print("Level {0}, WARN: Level is probably too height - {1} tiles, but maximum visible is {2}".format(
             idx,len(lines),defaults.tiles[1]))
 

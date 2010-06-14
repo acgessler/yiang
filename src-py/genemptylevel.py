@@ -53,6 +53,12 @@ stipple     = IsYes(input("Stipple space with dots? Y/n"),True)
 if not floor_tile:
     floor_tile = def_floor
 
+r,g,b = (0,0,0)
+if IsYes(input("Specify player background color Y/n"),True) is True:
+    r = max(0,min(255,int(input("PlayerBG color - R: (0-255)"))))
+    g = max(0,min(255,int(input("PlayerBG color - G: (0-255)"))))
+    b = max(0,min(255,int(input("PlayerBG color - B: (0-255)"))))
+
 summary = """
 SUMMARY
 =============================================================
@@ -66,16 +72,18 @@ PadDanger:     {danger}
 AddFloor:      {floor}
 FloorTile:     {floor_tile}
 SpaceStipple:  {stipple}
+PlayerBgColor: {r} \ {g} \ {b}
 =============================================================
 
 Continue? (Y/n)
-""".format(**locals())
+""".format(**globals())
 
 if not IsYes(input(summary),True):
     Abort()
 
 danger_pad = 20
 with open(fpath,"wt") as outfile:
+    outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}))\n".format(**globals()))
     for y in range(height):
 
         s = ""
