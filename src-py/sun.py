@@ -34,18 +34,18 @@ class Sun(Tile):
 
         self.posy = posy
 
-    def Interact(self,other,game):
+    def Interact(self,other):
         return Entity.ENTER
 
-    def Update(self,time_elapsed,time,game):
-        for entity in game._EnumEntities():
+    def Update(self,time_elapsed,time):
+        for entity in self.game._EnumEntities():
             if isinstance(entity,Player):
                 pos = entity.pos
                 break
         else:
             return
         
-        self.pos = [pos[0] - self.dim[0]//2,self.posy]
+        self.pos = [self.game.GetOrigin()[0]+1.0,self.posy]
         self.SetPosition(self.pos)
             
         

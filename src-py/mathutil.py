@@ -18,15 +18,13 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 
-import math
-
 # XXX we need a dedicated vector class, actually. Currently I'm using
 # 2d tuples or lists to pass them around, but the lack of overloaded
 # operators is disturbing.
 
 def Length(vec):
     """Return the length of a 2D vector """
-    return math.sqrt(vec[0]*vec[0]+vec[1]*vec[1])
+    return (vec[0]*vec[0]+vec[1]*vec[1])**0.5
 
 
 def Normalize(vec):
@@ -35,3 +33,18 @@ def Normalize(vec):
     assert len
 
     return (vec[0]/len,vec[1]/len)
+
+
+def PointToBoxSqrEst(point,xywh):
+    """Find a quick estimate for the squared distance from a given 
+    point to an axis-aligned box, given as xywh tuple"""
+    x = max( abs(point[0]-xywh[0]),abs(point[0]-xywh[0]-xywh[2]) )
+    y = max( abs(point[1]-xywh[1]),abs(point[1]-xywh[1]-xywh[3]) )
+    return x**2+y**2
+
+
+def PointToBoxEst(point,xywh):
+    """Find a quick estimate for the distance from a given 
+    point to an axis-aligned box, given as xywh tuple"""
+    return PointToBoxSqrEst(point,xywh)**0.5
+    

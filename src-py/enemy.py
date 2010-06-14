@@ -33,6 +33,9 @@ class Enemy(AnimTile):
 
     def GetVerboseName(self):
         return "an unknown enemy"
+    
+    def GetDrawOrder(self):
+        return 100
 
 
 class SmallTraverser(Enemy):
@@ -48,18 +51,18 @@ class SmallTraverser(Enemy):
 
         self._ShrinkBB(0.8)
 
-    def Interact(self,other,game):
+    def Interact(self,other):
         return Entity.KILL
 
     def GetVerboseName(self):
         return "a Harmful Traverser Unit (HTU)"
 
-    def Update(self,time_elapsed,time,game):
+    def Update(self,time_elapsed,time):
         rect = self.GetBoundingBox()
         res = 0
 
         # check for collisions on both sides, turn around if we have one.
-        for collider in game._EnumEntities():
+        for collider in self.game._EnumEntities():
 
             # traverers of the same color collide with each other, others don't.
             if isinstance(collider,SmallTraverser) and not collider.color == self.color:
@@ -70,14 +73,14 @@ class SmallTraverser(Enemy):
                 continue
             
             tj = self._BBCollide_XYWH(rect,mycorner)
-            if tj>0 and collider.Interact(self,game) != Entity.ENTER:
-                game.AddToActiveBBs(collider)
+            if tj>0 and collider.Interact(self) != Entity.ENTER:
+                self.game.AddToActiveBBs(collider)
                 res |= tj
 
         if res>0:
-            game.AddToActiveBBs(self)
+            self.game.AddToActiveBBs(self)
             if self.direction == Entity.DIR_HOR:
-                x = game.GetLevelSize()[0]
+                x = self.game.GetLevelSize()[0]
                 if self.vel < 0 and (self.pos[0] < 0 or res & (Entity.UPPER_LEFT|Entity.LOWER_LEFT) == (Entity.UPPER_LEFT|Entity.LOWER_LEFT)) or\
                    self.vel > 0 and (self.pos[0] > x or res & (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT) == (Entity.UPPER_RIGHT|Entity.LOWER_RIGHT)):
                    
@@ -85,7 +88,7 @@ class SmallTraverser(Enemy):
                 
                 
             elif self.direction == Entity.DIR_VER:
-                y = game.GetLevelSize()[1]
+                y = self.game.GetLevelSize()[1]
                 if self.vel < 0 and (self.pos[1] < 0 or res & (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) == (Entity.UPPER_LEFT|Entity.UPPER_RIGHT)) or\
                    self.vel > 0 and (self.pos[1] > y or res & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) == (Entity.LOWER_LEFT|Entity.LOWER_RIGHT)):
                    
@@ -99,7 +102,7 @@ class SmallTraverser(Enemy):
         else:
             self.pos = (self.pos[0],self.pos[1]+self.vel*time)
             
-        AnimTile.Update(self,time_elapsed,time,game)
+        AnimTile.Update(self,time_elapsed,time)
         self.SetState(1 if self.vel >0 else 0)
             
 class Robot(SmallTraverser):

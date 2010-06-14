@@ -29,19 +29,13 @@ import math
 import traceback
 
 # My own stuff
+import mathutil
 import defaults
 import validator
 from fonts import FontCache
 from keys import KeyMapping
-from renderer import Drawable,Renderer
-
-class NewFrame(Exception):
-    """Sentinel exception to abort the current frame and to
-    resume with the next, immediately."""
-    def __init__(self):
-        print("Raising NewFrame sentinel signal")
-        Game._DebugTrace()
-
+from renderer import Drawable,Renderer,DebugTools,NewFrame
+from level import Level,LevelLoader
 
 class ReturnToMenuDueToFailure(Exception):
     """Sentinel exception to return control to the main
@@ -55,8 +49,17 @@ class ReturnToMenuDueToFailure(Exception):
     def __str__(self):
         return "(ReturnToMenuDueToFailure): {0}".format(self.message)
     
+   
+class SimpleDrawable(Drawable):
+    
+    def __init__(self,sfml_drawable):
+        self.draw = sfml_drawable
+        
+    def Draw(self):
+        Renderer.app.Draw(self.draw) 
+    
 
-class Game:
+class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
 
@@ -69,14 +72,12 @@ class Game:
             self.ToDeviceCoordinates = self._ToDeviceCoordinates_Floored
 
         # These are later changed by LoadLevel(...)
-        self.entities = set()
-        self.level = -1
+        self.level_idx = -1
         self.origin = [0,0]
 
         # Load the first level for testing purposes
         # self.LoadLevel(1)
          
-        self.clock = sf.Clock()
         self.total = 0.0
         self.total_accum = 0.0
         self.score = 0.0
@@ -86,89 +87,60 @@ class Game:
         self.speed_scale = 1.0
         self.rounds = 1
         self.level_size = (0,0)
-
-        self.entities_add,self.entities_rem = set(),set()
+        self.update = True
+        
+        self.draw_counter = 0
 
         self._LoadPostFX()
 
-    @staticmethod
-    def _DebugTrace():
-        """Invoke traceback.print_stack in debug builds"""
-        if defaults.debug_trace_keypoints is True:
-            import traceback
-
-            print("")
-            traceback.print_stack()
-
     def Run(self):
-        """ Run the main loop. If the game was previsouly suspended,
-        the old status is recovered. The function returns True if
-        the mainloop is quit due to a call to Suspend() and False
-        if the application was closed by the user"""
-        self.running = True
-        self.clock.Reset()
-
-        print("Enter mainloop")
-
-        try: # Do or do not. There is no try
-            event = sf.Event()
-            while self.running is True:
-                if not self.app.IsOpened():
-                    return False
-
-                if self.app.GetEvent(event):
-                    self._HandleIncomingEvent(event)
-
-                self.Clear(sf.Color.Black)
-                    
-                time = self.clock.GetElapsedTime()
-                self.total = time+self.total_accum
-
-                dtime = (time - self.last_time)*self.speed_scale
-                self.last_time = time
-
-                try:
-                    for entity in self._EnumEntities():
-                        entity.Update(time,dtime,self)
-
-                    for entity in self._EnumEntities():
-                        entity.Draw(self)
-                except NewFrame:
-                    self.last_time = self.clock.GetElapsedTime() 
-                    self.total -= self.last_time-time
-                    continue
-
-                self.app.Draw(self.effect)
-                
-                if defaults.debug_draw_bounding_boxes:
-                    self._DrawBoundingBoxes()
-
-                self._DrawStatusBar()
-
-                if defaults.debug_draw_info:
-                    self._DrawDebugInfo(dtime)
-
-                # update the entity list
-                for entity in self.entities_add:
-                    self.entities.add(entity)
-
-                for entity in self.entities_rem:
-                    try:
-                        self.entities.remove(entity)
-                    except KeyError:
-                        pass
-
-                self.entities_rem,self.entities_add = set(),set()
-                # Toggle buffers 
-                self.app.Display()
-
-            self.total_accum += self.clock.GetElapsedTime()
-
-        except ReturnToMenuDueToFailure as e:
-            return str(e)
+        print("Enter main loop")
+        Renderer.AddDrawable(self)
         
-        print("Leave mainloop")
-        return True
+    def GetDrawOrder(self):
+        return -10
+
+    def Draw(self):
+        self.running = True
+        self.draw_counter = 0
+        
+        Renderer.SetClearColor(sf.Color.Black)
+        if not hasattr(self,"clock"):
+            self.clock = sf.Clock()
+
+        for event in Renderer.GetEvents():
+            self._HandleIncomingEvent(event)
+            
+        self.time = self.clock.GetElapsedTime()
+        self.total = self.time+self.total_accum
+
+        dtime = (self.time - self.last_time)*self.speed_scale
+        self.last_time = self.time
+
+        if not self.level is None:
+            try:
+                self.level.Draw(self.time,dtime)
+
+            except NewFrame:
+                self._UndoFrameTime()
+                raise
+
+        Renderer.app.Draw(self.effect)
+        
+        if defaults.debug_draw_bounding_boxes:
+            self._DrawBoundingBoxes()
+
+        self._DrawStatusBar()
+
+        if defaults.debug_draw_info:
+            self._DrawDebugInfo(dtime)
+            
+    def IsGameRunning(self):
+        return self.update
+            
+    def _UndoFrameTime(self):
+        self.last_time = self.clock.GetElapsedTime() 
+        self.total -= self.last_time-self.time
 
     def _LoadPostFX(self):
         """Load all postprocessing effects which we might need"""
@@ -181,7 +153,9 @@ class Game:
     def _EnumEntities(self):
         """Use this wrapper generator to iterate through all enties
         in the global entity list"""
-        for entity in self.entities:
+        
+        # XXX move this to Level class. ...
+        for entity in self.level.entities:
             yield entity
 
     def _DrawStatusBar(self):
@@ -214,18 +188,18 @@ class Game:
         
         status = sf.String("Level {0}.{1}, {2:.2} days\n{3:4.5} $".format(
             self.rounds,
-            self.level,
+            self.level_idx,
             Game.SecondsToDays( self.GetTotalElapsedTime() ),
             self.GetScore()/100),
             Font=self.status_bar_font,Size=defaults.letter_height_status)
 
         status.SetPosition(8,5)
         status.SetColor(sf.Color.Black)
-        self.Draw(status)
+        self._Draw(status)
 
         status.SetColor(sf.Color.Yellow)
         status.SetPosition(10,5)
-        self.Draw(status)
+        self._Draw(status)
 
 
         # .. and the number of remaining lifes
@@ -243,14 +217,14 @@ class Game:
 
         status.SetPosition(xstart-2,5)
         status.SetColor(sf.Color.Black)
-        self.Draw(status)
+        self._Draw(status)
 
         status.SetPosition(xstart+2,5)
-        self.Draw(status)
+        self._Draw(status)
 
         status.SetPosition(xstart,6)        
         status.SetColor(sf.Color.Yellow)
-        self.Draw(status)
+        self._Draw(status)
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -263,7 +237,7 @@ class Game:
         try:
             if event.Type == sf.Event.KeyPressed:
                 if event.Key.Code == KeyMapping.Get("escape"):
-                    self.Suspend()
+                    Renderer.RemoveDrawable(self)
                     return
 
                 if not defaults.debug_keys:
@@ -289,7 +263,7 @@ class Game:
                     self.GameOver()
                     
                 elif event.Key.Code == KeyMapping.Get("level-new"):
-                    self.LoadLevel(self.level)
+                    self.LoadLevel(self.level_idx)
                 
         except NewFrame:
             print("Received NewFrame notification during event polling")
@@ -318,7 +292,7 @@ class Game:
             shape.EnableFill(False)
             shape.EnableOutline(True)
 
-            self.Draw(shape)
+            self._Draw(shape)
             entity.highlight_bb = False
 
     def _DrawDebugInfo(self,dtime):
@@ -328,7 +302,7 @@ class Game:
         if not hasattr(self,"debug_info_font"):
             self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
             
-        entity_count, entities_range = len(self.entities),0
+        entity_count,entities_inrange = len(0 if self.level is None else self.level.entities),0
         fps = 1.0/dtime
 
         import gc
@@ -340,8 +314,8 @@ class Game:
         locdef.update(self.__dict__)
         
         text = """
-EntitiesTotal:     {entity_count}
-EntitiesInRange:   {entities_range}
+DrawablesTotal:    {entity_count}
+DrawablesInRange:  {entities_inrange}
 DrawCalls:         {draw_counter}
 GCCollections:     {gcc}
 GodMode:           {debug_godmode}
@@ -364,21 +338,13 @@ TimeDelta:         {dtime:.4}
 
         s.SetPosition(defaults.resolution[0]-302,119)
         s.SetColor(sf.Color.White)
-        self.Draw(s)
+        self._Draw(s)
 
     def AddToActiveBBs(self,entity):
         """Debug feature, mark a specific entity for highlighting
         in the next frame. Its bounding box will then be drawn
         in red"""
         entity.highlight_bb = True # (HACK, inject a hidden attribute)
-
-    def Suspend(self):
-        """ Suspend the game """
-        self.running = False
-
-    def GetApp(self):
-        """ Get the sf.RenderWindow which we're rendering to """
-        return self.app
 
     def GetCurOrigin(self):
         """ Get the world space position the upper left corner
@@ -392,7 +358,7 @@ TimeDelta:         {dtime:.4}
 
     def GetTotalElapsedTime(self):
         """Get the total duration of this game, not counting in
-        suspend times. The return valuue is in seconds. """
+        suspend times. The return value is in seconds. """
         return self.total
 
     @staticmethod
@@ -413,48 +379,16 @@ TimeDelta:         {dtime:.4}
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         return pp
 
-    def Kill(self,killer="an unknown enemy "):
-        """Kill the player immediately, respawn if they have
-        another life, set game over alternatively"""
-        Game._DebugTrace()
-        
-        if self.lives == 0:
-            self.GameOver()
-            
-        self.lives = self.lives-1
-
-        accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
-        key = self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String("""You got killed by {0}
-
-Press {1} to restart at the last respawning point
-Press {2} to restart the level
-Press {3} to leave the game""".format(
-                    killer,
-                    KeyMapping.GetString("accept"),
-                    KeyMapping.GetString("level-new"),
-                    KeyMapping.GetString("escape")
-                ),
-                Size=defaults.letter_height_game_over,
-                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),(500,130),0.0,accepted)
-
-        if key == accepted[2]:
-            self.GameOver()
-    
-        self._Respawn(True if key == accepted[0] else False)
-
     def _Respawn(self,enable_respawn_points=True):
         """Respawn the player at the beginning of the level"""
         for entity in self._EnumEntities():
             #if hasattr(entity,"Respawn"):
-            entity.Respawn(self,enable_respawn_points)
+            entity.Respawn(enable_respawn_points)
 
     def GetLives(self):
         """Get the number of lives the player has. They
         die if they are killed and no more lives are available"""
         return self.lives
-
 
     def GetOrigin(self):
         """Get the current origin of the game. That is the
@@ -467,16 +401,47 @@ Press {3} to leave the game""".format(
         assert isinstance(origin,tuple)
         self.origin = origin
     
-
     def IsGameOver(self):
         """Check if the game is over. Once the game is over,
         it cannot be continued or reseted anymore."""
         return self.game_over
+    
+    def Kill(self,killer="an unknown enemy "):
+        """Kill the player immediately, respawn if they have
+        another life, set game over alternatively"""
+        DebugTools.Trace()
+        
+        if self.lives == 0:
+            self.GameOver()
+            
+        self.lives = self.lives-1
+
+        accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
+        def on_close(key,accepted=accepted,outer=self):
+            if key == accepted[2]:
+                outer.GameOver()
+                
+            outer._Respawn(True if key == accepted[0] else False)
+            
+        self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String("""You got killed by {0}
+
+Press {1} to restart at the last respawning point
+Press {2} to restart the level
+Press {3} to leave the game""".format(
+                    killer,
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("level-new"),
+                    KeyMapping.GetString("escape")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+        )),(500,130),0.0,accepted,sf.Color.Red,on_close)
 
     def GameOver(self):
         """Fade to black and show stats, then return to the main menu"""
         
-        Game._DebugTrace()
+        DebugTools.Trace()
         self.game_over = True
         print("Game over, score is {0} and time is {1}".format(self.score,
             self.clock.GetElapsedTime()))
@@ -492,7 +457,11 @@ Press {3} to leave the game""".format(
                 print("Failure reading scores.txt file")
 
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        if self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+        def on_close(key,accepted=accepted,outer=self):
+            Renderer.RemoveDrawable(self)
+            raise NewFrame()
+            
+        self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
             sf.String(("""You survived {0:.4} days and collected {1:.4} dollars.
 That's {2}.\n\n
 Hit {3} or {4} to return to the menu .. """).format(
@@ -504,56 +473,125 @@ Hit {3} or {4} to return to the menu .. """).format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),(550,100),0.0,accepted) in accepted:
-            self.Suspend()
-        raise NewFrame()
+        )),(550,100),0.0,accepted,sf.Color.Green,on_close)
+    
+    def NextLevel(self):
+        """Load the next level, cycle if the last level was reached"""
 
-    def _FadeOutAndShowStatusNotice(self,fade_time,text,size=(550,120),auto_time=0.0,break_codes=(KeyMapping.Get("accept")),text_color=sf.Color.Red):
+        DebugTools.Trace()
+        print("Scale time by {0}%".format((defaults.speed_scale_per_level-1.0)*100))
+        
+        self.speed_scale *= defaults.speed_scale_per_level
+        import main # XXX (hack)
+        print("Level {0} done, advancing to the next level".format(self.level_idx))
+        
+        for drawable in Renderer.drawables:
+            if isinstance(drawable,Entity):
+                Renderer.RemoveDrawable(drawable)
+        
+        accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+        def on_close(key,accepted=accepted,outer=self):
+            if outer.level_idx == main.get_level_count():
+                lidx = 1
+                outer.rounds += 1
+            else:
+                lidx = outer.level_idx+1
+                       
+            if self.LoadLevel(lidx) is False:
+                raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
+
+            if key == accepted[0]:
+                Renderer.RemoveDrawable(outer)
+                raise NewFrame()
+
+        self.box_result =  self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String(("""Hey, you solved Level {0}!.
+
+Hit {1} to continue .. (don't disappoint me)
+Hit {2} to return to the menu""").format(
+                    self.level_idx,
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("escape")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+        )),(550,120),0.0,accepted,sf.Color.Black,on_close) 
+        
+    def LoadLevel(self,idx):
+        """Load a particular level and drop the old one"""
+        self.level_idx = idx
+        self.level = LevelLoader.LoadLevel(idx,self)
+        return False if self.level is None else True
+
+    def _FadeOutAndShowStatusNotice(self,fade_time,text,
+        size=(550,120),
+        auto_time=0.0,
+        break_codes=(KeyMapping.Get("accept")),
+        text_color=sf.Color.Red,
+        on_close=lambda x:None):
         """Tiny utility to wrap the fade out effect used on game over
         and end of level. Alongside, a status message is displayed and
         control is not returned unless the user presses any key
-        to continue. The return value is False if the user closes the
-        application, otherwise one of the break_codes constants
-        indicating the key that was pressed by the user to flee
-        the status notice."""
-
-        inp = self.app.GetInput()
-
-        ret = True
-        clock = sf.Clock()
-        event = sf.Event()
-
-        curtime = clock.GetElapsedTime()
-        while self.running is True:
-            if not self.app.IsOpened():
-                ret = False
-                break
-
-            if auto_time>0.0 and clock.GetElapsedTime()-curtime > auto_time:
-                break
-
-            if self.app.GetEvent(event):
-                if event.Type == sf.Event.KeyPressed and event.Key.Code in break_codes:
-                    ret = event.Key.Code
-                    break
-
-            self.Clear(sf.Color.Black)
-            time = clock.GetElapsedTime()
-
-            # draw all entities, but don't update them
-            for entity in self._EnumEntities():
-                entity.Draw(self)
-
-            self.effect.SetParameter("fade",1.0 - time/fade_time)
-            self.Draw(self.effect)
-            self._DrawStatusBar()
-
-            # now the message box showing the match result
-            self._DrawStatusNotice(text,size,text_color)
-            self.app.Display()
-
-        self.effect.SetParameter("fade",1.0)
-        return ret
+        to continue. The return value is an empty list which is 
+        filled with a the key that closed the status notice as
+        a soon as this information is available. If the notice
+        is closed due to timeout, False is returned as only
+        list element. The on_close callback is called with the 
+        result value as first parameter, if a suitable function
+        is provided."""
+        
+        class FadeOutImpl(Drawable):
+            
+            def __init__(self,outer,result,auto_time,text,break_codes,fade_time,text_color,on_close):
+                self.outer = outer
+                self.result = result
+                self.break_codes = break_codes
+                self.fade_time = fade_time
+                self.text_color = text_color
+                self.auto_time = auto_time
+                self.text = text
+                self.on_close = on_close
+                
+                self.time_start = self.outer.time
+                
+            def Draw(self):
+                
+                curtime = self.outer.clock.GetElapsedTime()-self.time_start
+                if self.auto_time>0.0 and self.outer.clock.GetElapsedTime()-curtime > self.auto_time:
+                    self.result.append(False)
+                    self._RemoveMe()
+                
+                for event in Renderer.GetEvents():
+                    if event.Type == sf.Event.KeyPressed and event.Key.Code in self.break_codes:
+                        self.result.append(event.Key.Code)
+                        self._RemoveMe()
+                    
+                self.outer.effect.SetParameter("fade",1.0 - min(0.5, curtime*0.5/self.fade_time))
+                self.outer._DrawStatusNotice(text,size,text_color)
+                    
+                return True
+            
+            def _RemoveMe(self):
+                self.outer.effect.SetParameter("fade",1.0)
+                Renderer.RemoveDrawable(self)
+ 
+                # fix game time
+                self.outer.update = True
+                ctime = self.outer.clock.GetElapsedTime ()
+                self.outer.total -=  ctime - self.time_start
+                self.outer.last_time = ctime
+                
+                self.on_close(self.result[-1])
+                
+                raise NewFrame()
+            
+            def GetDrawOrder(self):
+                return 1100
+        
+        result = []
+        Renderer.AddDrawable(FadeOutImpl(self,result,auto_time,text,break_codes,fade_time,text_color,on_close))
+        self.update = False
+        return result
 
     def _DrawStatusNotice(self,text,size=(550,120),text_color=sf.Color.Red):
         """Utility to draw a messagebox-like status notice in the
@@ -569,18 +607,18 @@ Hit {3} or {4} to return to the menu .. """).format(
         shape.SetOutlineWidth(4)
         shape.EnableFill(True)
         shape.EnableOutline(True)
-        self.Draw(shape)
+        self._Draw(shape)
         pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
         
         text.SetColor(sf.Color.Black if text_color != sf.Color.Black else sf.Color(220,220,220))
         text.SetPosition(pos[0]+1,pos[1]+1)
-        self.Draw(text)
+        self._Draw(text)
 
         text.SetColor(text_color)
         text.SetPosition(pos[0],pos[1])
-        self.Draw(text)
+        self._Draw(text)
 
-    def Draw(self,drawable,pos=None):
+    def _Draw(self,drawable,pos=None):
         """Draw a sf.Drawable at a specific position, which is
         specified in tile coordinates."""
 
@@ -609,171 +647,42 @@ Hit {3} or {4} to return to the menu .. """).format(
     def ToCameraCoordinates(self,coords):
         """Get from world- to camera coordinates"""
         return (coords[0]-self.origin[0],coords[1]-self.origin[1])
-
-    def GetLevelSize(self):
-        """Get the size of the current level, in tiles. The return
-        value is a 2-tuple."""
-        return self.level_size
-
-    def LoadLevel(self,level):
-        """Load a particular level, return True on success"""
-
-        print("Loading level from disc: "+str(level))
-        self.level = level
-        self.origin = [0,0]
-        self.entities,entities_add,entities_remove = set(),set(),set()
-
-        # this remains as the default color table if we can't read config/color.txt
-        color_dict_default = collections.defaultdict(lambda: sf.Color.White, {
-            "r" : sf.Color.Red,
-            "g" : sf.Color.Green,
-            "b" : sf.Color.Blue,
-            "y" : sf.Color.Yellow,
-            "_" : sf.Color.White,
-        })
-
-        # the actual mapping table has been outsourced to config/colors.txt
-        if not hasattr(self,"cached_color_dict"):
-
-            def complain_on_fail():
-                print("Encountered unknown color key")
-                return sf.Color.White
-            
-            self.cached_color_dict = collections.defaultdict(complain_on_fail, color_dict_default)
-            try:
-                with open(os.path.join(defaults.config_dir,"colors.txt"),"rt") as scores:
-                    for n,line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
-                        code,col = [l.strip() for l in line.split("=")]
-
-                        assert len(col)==6
-                        self.cached_color_dict[code] = sf.Color(int(col[0:2],16),int(col[2:4],16),int(col[4:6],16))
-
-                print("Caching colors.txt file, got {0} dict entries".format(len(self.cached_color_dict)))
-
-            except IOError:
-                print("Failure reading colors.txt file")
-            except AssertionError:
-                print("color.txt is not well-formed: ")
-                traceback.print_exc()
-       
-
-        spaces = [" ","\t","."]
-        line_idx = 0
         
-        try:
-            with open(os.path.join(defaults.data_dir,"levels",str(level)+".txt"), "rt") as f:
-                self.lines = lines = f.readlines()
-                assert len(lines)>0
-
-                for y,line in enumerate(lines):
-
-                    line_idx += 1
-                    line = line.rstrip(" \n\t.")
-                    if len(line) == 0:
-                        continue
-
-                    diff = len(lines) - defaults.tiles[1]
-
-                    assert len(line)%3 == 0
-                    for x in range(0,len(line),3):
-                        ccode = line[x]
-                        tcode = line[x+1]+line[x+2]
-
-                        if tcode[0] in spaces:
-                            continue
-                    
-                        from tile import TileLoader
-                        
-                        # read from the private attachment tiles of the level if the tile
-                        # code starts with a lower-case character
-                        if tcode[0] in "abcdefghijklmnopqrstuvwxyz":
-                            tile = TileLoader.Load(os.path.join(defaults.data_dir,"levels",str(level),tcode+".txt"),self)
-                        else:
-                            tile = None
-                        
-                        if tile is None:
-                            tile = TileLoader.Load(os.path.join(defaults.data_dir,"tiles",tcode+".txt"),self)
-                            
-                        tile.SetColor(self.cached_color_dict[ccode])
-                        
-                        tile.SetPosition((x//3, y - diff))
-                        self.entities.add(tile)
-
-                self.level_size = (x//3,y)
-
-            print("Got {0} entities for level {1}".format(len(self.entities),level))
-                
-        except IOError:
-            print("Failure loading level "+str(level))
-            return False
-
-        except AssertionError as err:
-            print("Level "+str(level)+" is not well-formatted (line {0})".format(line_idx))
-            traceback.print_exc()
-
-        return validator.validate_level(self.lines,level)
-
-    def NextLevel(self):
-        """Load the next level, cycle if the last level was reached"""
-
-        Game._DebugTrace()
-        print("Scale time by {0}%".format((defaults.speed_scale_per_level-1.0)*100))
-        
-        self.speed_scale *= defaults.speed_scale_per_level
-        import main # XXX (hack)
-        print("Level {0} done, advancing to the next level".format(self.level))
-
-        accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        key =  self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("""Hey, you solved Level {0}!.
-
-Hit {1} to continue .. (don't disappoint me)
-Hit {2} to return to the menu""").format(
-                    self.level,
-                    KeyMapping.GetString("accept"),
-                    KeyMapping.GetString("escape")
-                ),
-                Size=defaults.letter_height_game_over,
-                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),(550,120),0.0,accepted) 
-
-        if self.level == main.get_level_count():
-            lidx = 1
-            self.rounds += 1
-        else:
-            lidx = self.level+1
-            
-        if self.LoadLevel(lidx) is False:
-            raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
-
-        if key == accepted[0]:
-            self.Suspend()
-        raise NewFrame()
-
     def GetLevelStats(self):
         """Return a 4-tuple: (level,round,num_levels,total_levels)"""
         import main # XXX (hack)
         rcnt = main.get_level_count()
         
-        return (self.level,self.rounds,rcnt,rcnt*(self.rounds-1)+self.level)
+        return (self.level_idx,self.rounds,rcnt,rcnt*(self.rounds-1)+self.level_idx)
             
     def GetEntities(self):
         """Get a list of all entities in the game"""
-        return self.entities
+        return Renderer.drawables
 
     def AddEntity(self,entity):
         """Dynamically add an entity to the list of all active
         entities. The operation is deferred until the next
         frame so it is safe to be called from enumeration
         context"""
-        self.entities_add.add(entity)
-
+        
+        # XXX this moved to Level, using Game.AddEntity() is deprecated
+        self.level.AddEntity(entity)
+        
     def RemoveEntity(self,entity):
         """Dynamically add an entity to the list of all active
         entities. The operation is deferred until the next
         frame so it is safe to be called from enumeration
         context"""
-        self.entities_rem.add(entity)
+        
+        # XXX this moved to Level, using Game.RemoveEntity() is deprecated
+        self.level.RemoveEntity(entity)
+        
+    def GetLevelSize(self):
+        """Get the size of the current level, in tiles. The
+        return value is a 2-tuple for both axes."""
+        # XXX this moved to Level, using Game.GetLevelSize() is deprecated
+        return self.level.GetLevelSize()
+
 
 class Entity(Drawable):
     """Base class for all kinds of entities, including the player.
@@ -790,12 +699,16 @@ class Entity(Drawable):
     def __init__(self):
         self.pos = [0,0]
         self.color = sf.Color.White
+        self.game = None
 
-    def Update(self,time_elapsed,time_delta,game):
+    def Update(self,time_elapsed,time_delta):
+        """To be implemented"""
         pass
 
-    def Draw(self,game):
-        pass
+    def SetGame(self,game):
+        """Binds the Entity to a Game instance. This is called
+        automatically for entities loaded with a level"""
+        self.game = game
 
     def SetPosition(self,pos):
         self.pos = list(pos)
@@ -803,10 +716,10 @@ class Entity(Drawable):
     def SetColor(self,color):
         self.color = color
 
-    def Interact(self,other,game):
+    def Interact(self,other):
         return Entity.BLOCK
 
-    def Respawn(self,game,enable_respawn_points):
+    def Respawn(self,enable_respawn_points):
         """Invoked when the player is killed and needs to respawn"""
         pass
 
@@ -853,6 +766,17 @@ class Entity(Drawable):
         Entity.UPPER/Entity.LOWER flags."""
         return self._BBCollide((a[0],a[1],a[0]+a[2],a[1]+a[3]),
             (b[0],b[1],b[0]+b[2],b[1]+b[3]))
+        
+        
+    def GetCullRegion(self):
+        
+        bb = self.GetBoundingBox()
+        if bb is None:
+            return 0
+        
+        dist =  mathutil.PointToBoxSqrEst( self.game.GetOrigin(),bb)
+        return dist > defaults.cull_distance_sqr and 1 or dist > defaults.swapout_distance_sqr and 2 or 0
+        
 
 
 

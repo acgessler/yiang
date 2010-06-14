@@ -36,12 +36,12 @@ class ScoreTile(AnimTile):
         if randomize is True:
             self.GotoRandom()
         
-    def Interact(self,other,game):
+    def Interact(self,other):
         if isinstance(other,Player):
-            points = game.Award(self.points)
+            points = self.game.Award(self.points)
             
-            game.RemoveEntity(self) 
-            game.AddEntity(ScoreTileAnimStub("{0:4.4} ct".format(points),self.pos,1.0))
+            self.game.RemoveEntity(self) 
+            self.game.AddEntity(ScoreTileAnimStub("{0:4.4} ct".format(points),self.pos,1.0))
             
         return Entity.ENTER
 
@@ -59,11 +59,11 @@ class ScoreTileAnimStub(Tile):
     def GetBoundingBox(self):
         return None
 
-    def Update(self,time_elapsed,time_delta,game):
+    def Update(self,time_elapsed,time_delta):
         self.SetPosition((self.pos[0],self.pos[1]-time_delta*self.speed))
 
         if self.pos[1] < 0:
-            game.RemoveEntity(self) 
+            self.game.RemoveEntity(self) 
 
 
     

@@ -40,7 +40,7 @@ class DangerousBarrel(AnimTile):
 
         self._ShrinkBB(bbadjust)
 
-    def Interact(self,other,game):
+    def Interact(self,other):
         return Entity.KILL
 
     def GetVerboseName(self):
@@ -61,10 +61,10 @@ class FakeDangerousBarrel(AnimTile):
 
         self._ShrinkBB(bbadjust)
 
-    def Interact(self,other,game):
+    def Interact(self,other):
         if isinstance(other,Player):
             print("Huh, you've found an special door which doesn't kill you!")
-            game.RemoveEntity(self)
+            self.game.RemoveEntity(self)
 
         if isinstance(other,Enemy):
             return Entity.BLOCK

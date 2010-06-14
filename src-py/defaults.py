@@ -60,6 +60,8 @@ draw_clamp_to_pixel = True
 debug_trace_keypoints = False
 show_window_caption = True
 enable_menu_image_bg = False
+cull_distance_rel = 1.5
+swapout_distance_rel = 3.0 
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
@@ -81,23 +83,29 @@ cells = None
 cells_intro = None
 tiles = None
 tiles_size_px = None
+cull_distance = None
 
 # -----------------------------------------------------------------------------
 def update_derived():
     """Update any properties in the `derived` section.
     Must be called at least once before one of them is
-    used"""
+    used. This mostly updates properties which depend
+    on screen resolution, etc..."""
     
     global cells
     global tiles
     global cells_intro
     global tiles_size_px
+    global cull_distance_sqr
+    global swapout_distance_sqr
 
     # derived values, do not change
     cells = (resolution[0]//letter_size[0],resolution[1]//letter_size[1])
     cells_intro = ((resolution[0]*4)//(letter_height_intro*2),resolution[1]//letter_height_intro)
     tiles = (cells[0]//tiles_size[0],cells[1]//tiles_size[1])
     tiles_size_px = (letter_size[0]*tiles_size[0],letter_size[1]*tiles_size[1])
+    cull_distance_sqr = (cull_distance_rel*tiles[0])**2+(cull_distance_rel*tiles[1])**2
+    swapout_distance_sqr = (swapout_distance_rel*tiles[0])**2+(swapout_distance_rel*tiles[1])**2
 
 def merge_config(file):
     """Merge the current configuration with the settings

@@ -1,0 +1,11 @@
+Game		-10
+Tile		0
+Enemy 		100
+Menu		1000
+NotiBox		1100
+
+StatusBar	2000
+BBoxes		3000
+DebugInfo	4000
+
+

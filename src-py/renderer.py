@@ -22,13 +22,31 @@ import sf
 
 # My own stuff
 import defaults
-
+import mathutil
 
 class Drawable:
     """Master class for all kinds of drawable objects, i.e. tiles,
     overlays, menues, ..."""
 
-    # CULL_ENABLE,CULL_DISABLE = range(2)
+    FLAG_DISABLE = 0x1 
+    
+    def __init__(self,flags=0):
+        self.flags = flags
+
+
+    def SetFlag(self,flag):
+        self.flags |= flag
+
+    def RemoveFlag(self,flag):
+        self.flags &= ~flag
+
+    def QueryFlag(self,flag):
+        return True if self.flags & flag else False
+
+
+    def GetDrawOrder(self):
+        """Drawable's are drawn with ascending draw order"""
+        return 0
 
     def GetBoundingBox(self):
         """Get the bounding box (x,y,w,h) of the entity or
@@ -39,18 +57,42 @@ class Drawable:
         should return None."""
         return None
 
+
     # def GetCullingPolicy(self):
     #    """ """
     #     return Drawable.CULL_ENABLE
 
 
-    def Draw(self,game):
+    def Draw(self):
         """To be implemented"""
         pass
+    
+    
+class DebugTools:
+    """Implements some state dumpers, tracing tools, etc."""
+    
+    @staticmethod
+    def Trace():
+        """Invoke traceback.print_stack in debug builds"""
+        if defaults.debug_trace_keypoints is True:
+            import traceback
+
+            print("")
+            traceback.print_stack()
 
 
 class _QuitNow(Exception):
+    """Throw this to force the main loop to return immediately.
+    You can use Renderer.Quit() instead."""
     pass
+
+
+class NewFrame(Exception):
+    """Sentinel exception to abort the current frame and to
+    resume with the next, immediately."""
+    def __init__(self):
+        print("Raising NewFrame sentinel signal")
+        DebugTools.Trace()
 
 class Renderer:
     """Static class, responsible for maintaining a list of Drawables()
@@ -58,7 +100,8 @@ class Renderer:
     responsible for initialization and termination"""
 
     app = sf.RenderWindow()
-    drawables = set()
+    drawables,drawables_add,drawables_rem = set(),set(),set()
+    drawables_active = []                                     
     clear_color = sf.Color.White
     event = None
     loop_running = False
@@ -125,7 +168,9 @@ class Renderer:
             
             event = sf.Event()
             while Renderer.app.IsOpened():
+                Renderer.draw_counter,Renderer.inrange = 0,0
                 Renderer.events = set()
+                
                 while Renderer.app.GetEvent(event):
                     #Close window : exit
                     if event.Type == sf.Event.Closed:
@@ -140,9 +185,40 @@ class Renderer:
                 # The background color is not a Drawable because it is *always* first, and active
                 Renderer.app.Clear(Renderer.clear_color)
 
-                for drawable in Renderer.drawables:
-                    drawable.Draw()
+                drawable = None
+                try:
+                    for drawable in sorted(Renderer.drawables,key=lambda x: x.GetDrawOrder()):
+                        drawable.Draw()
+                except NewFrame:
+                    pass
+                except Exception as ex:
+                    print("[Responsible seems to be a {0} instance]".format(type(drawable)))
+                    raise
 
+                # update the drawables list, handle dependencies of changed drawables.
+                for entity in Renderer.drawables_add:
+                    Renderer.drawables.add(entity)
+                    if hasattr(entity,"__drawable_deps__"):
+                        for dep in entity.__drawable_deps__:
+                            try:
+                                Renderer.drawables.remove(dep)
+                            except KeyError:
+                                pass
+
+                for entity in Renderer.drawables_rem:
+                    try:
+                        Renderer.drawables.remove(entity)
+                        if hasattr(entity, "__drawable_deps__"):
+                             for dep in entity.__drawable_deps__:
+                                 Renderer.drawables.add(dep)
+                                 
+                             delattr(entity,"__drawable_deps__")
+                    except KeyError:
+                        pass
+
+                Renderer.drawables_rem, Renderer.drawables_add = set(),set()
+
+                # toggle front and backbuffer
                 Renderer.app.Display()
 
         except _QuitNow:
@@ -156,12 +232,37 @@ class Renderer:
         return Renderer.events
 
     @staticmethod
-    def AddDrawable(drawable):
-        Renderer.drawables.add(drawable)
+    def AddDrawable(drawable,substitutes=None):
+        """Add a drawable to the list. If a valid active drawable
+        is specified for the substitutes parameter, the system will
+        disable the corresponding drawable (or list of drawables)
+        while the new drawable is active. As soon as this 
+        drawable is disabled using RemoveDrawable, all of its
+        dependencees are re-activated."""
+        assert not drawable is None
+        Renderer.drawables_add.add(drawable)
+        try:
+            Renderer.drawables_rem.remove(drawable)
+        except KeyError:
+            pass
+        
+        if not substitutes is None:
+            assert not substitutes is drawable
+            assert not hasattr(drawable,"__drawable_deps__")
+            # hijack the instance a bit
+            drawable.__drawable_deps__ = [substitutes] if isinstance(substitutes,Drawable) \
+                else substitutes
+
+    @staticmethod
+    def RemoveDrawable(drawable,handle_dependencees=True):
+        Renderer.drawables_rem.add(drawable)
+        
+        if handle_dependencees is False:
+            drawable.__drawable_deps__ = []
 
     @staticmethod
     def ClearDrawables():
-        Renderer.drawables = set()
+        Renderer.drawables_rem = Renderer.drawables_add.copy()
 
     @staticmethod
     def SetClearColor(color):

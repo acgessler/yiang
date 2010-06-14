@@ -46,7 +46,7 @@ class Tile(Entity):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\
             self.pos[0],self.pos[1],self.text)
 
-    def Interact(self,other,game):
+    def Interact(self,other):
         return self.collision
 
     def SetColor(self,color):
@@ -85,15 +85,15 @@ class Tile(Entity):
 
         return t
 
-    def Draw(self,game):
+    def Draw(self):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
-        game.Draw(self.cached,self.pos)
+        self.game._Draw(self.cached,self.pos)
 
-    def DrawRelative(self,game,offset):
+    def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile
         position. The offset is specified in tile coordinates"""
-        game.Draw(self.cached,(self.pos[0]+offset[0],
+        self.game._Draw(self.cached,(self.pos[0]+offset[0],
             self.pos[1]+offset[1]))
 
 
@@ -192,7 +192,7 @@ class AnimTile(Tile):
         """Advance to a random frame"""
         self.Set(random.randint(0,self.GetNumFrames()-1))
 
-    def Update(self,time_elapsed,time_delta,game):
+    def Update(self,time_elapsed,time_delta):
         """Overridden from Entity"""
        
         if self.speed == -1:

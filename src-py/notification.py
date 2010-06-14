@@ -55,21 +55,23 @@ class SimpleNotification(Entity):
         
         self.box_dim = (line_length*11, self.text_formatted.count("\n")*16)
         
-    def Interact(self, other, game):
-        if isinstance(other, Player) and self.use_counter > 0:
+    def Interact(self, other):
+        if isinstance(other, Player) and self.use_counter > 0 and not hasattr(self,"result"):
             
             print("Show notification")
-            
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
-            key = game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            
+            # closure to be called when the player has made his decision
+            def on_close(key,outer=self,accepted=accepted):
+                self.use_counter -= 1
+                if self.use_counter == 0:
+                    self.game.RemoveEntity(self)
+            
+            self.game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
             	sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), self.box_dim , 0.0, accepted, self.text_color) 
-            
-            self.use_counter -= 1
-            if self.use_counter == 0:
-                game.RemoveEntity(self)
+            )), self.box_dim , 0.0, accepted, self.text_color, on_close) 
             
         return Entity.ENTER
     

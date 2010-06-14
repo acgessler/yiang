@@ -22,7 +22,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,NewFrame
+from game import Entity
+from renderer import NewFrame
 from tile import Tile
 from player import Player
 
@@ -32,11 +33,11 @@ class LevelUp(Tile):
     def __init__(self,text,width,height):
         Tile.__init__(self,text,width,height)
         
-    def Interact(self,other,game):
+    def Interact(self,other):
         if isinstance(other,Player):
             print("Got level up!")
-            game.Award(0.1*game.GetLevelStats()[-1])
-            game.NextLevel()
+            self.game.Award(0.1*self.game.GetLevelStats()[-1])
+            self.game.NextLevel()
 
             raise NewFrame()
             

@@ -131,9 +131,35 @@ class MainMenu(Drawable):
         self.ShowCredits()
 
     def _OptionsNewGame(self):
-        self.game = Game(Renderer.app)
-        self.game.LoadLevel(1)
-        self._OptionsResumeGame()
+        if not self.game is None:
+            
+            accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+            def on_close(key, accepted=accepted, outer=self):
+                if key == accepted[1]:
+                    
+                    outer.game = Game(Renderer.app)
+                    outer.game.LoadLevel(1)
+                    outer._OptionsResumeGame()
+                    return
+                
+                    
+            self.game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
+            sf.String(("""You are currently in a game. 
+If you start a new game, all your progress will be lost.
+
+Hit {0} to continue
+Hit {1} to cancel""").format(
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("escape")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+        )), (550, 120), 0.0, accepted, sf.Color.Black, on_close) 
+            
+        else:
+            self.game = Game(Renderer.app)
+            self.game.LoadLevel(1)
+            self._OptionsResumeGame()
 
     def _OptionsTutorial(self):
         self.game = Game(Renderer.app)
@@ -141,23 +167,20 @@ class MainMenu(Drawable):
         self._OptionsResumeGame()
 
     def _OptionsNewGameChoose(self):
-        level = self.ChooseLevel()
-        if level == 0:
-            return
-
-        self.game = Game(Renderer.app)
-        self.game.LoadLevel(level)
-        self._OptionsResumeGame()
+        self.ChooseLevel()
 
     def _OptionsResumeGame(self):
         if self.game is None:
             return
-        
-        if self.game.Run() is True:
-            self.swallow_escape = True
 
-            if self.game.IsGameOver():
-                self.game = None
+        Renderer.AddDrawable(self.game,self)
+        
+        #if self.game.Run() is True:
+        #    self.swallow_escape = True
+
+        #    if self.game.IsGameOver():
+        #        self.game = None
+            
 
     options = [
         ("New Game", _OptionsNewGame, "You will die",1.0),
@@ -178,8 +201,13 @@ class MainMenu(Drawable):
                 print("failure loading menu bg")
 
             self.images.append(img)
+
+    def GetDrawOrder(self):
+        """Drawable's are drawn with ascending draw order"""
+        return 1000
     
     def Draw(self):
+        Renderer.SetClearColor(sf.Color.White)
         for event in Renderer.GetEvents():
             # Escape key : exit
             if event.Type == sf.Event.KeyPressed:
@@ -285,114 +313,127 @@ class MainMenu(Drawable):
 
     def ChooseLevel(self):
         """Switch to the choose level menu option and return the selected
-        level. 0 is returned if the user cancels the operaton"""
+        level. 0 is returned if the user cancels the operation"""
 
-        height = 80
-        width_spacing, height_spacing = 120,100
+        
+        class LevelChooser(Drawable):
 
-        num = get_level_count()+1
-        xnum = defaults.resolution[0]//width_spacing
-        rows = math.ceil( num/xnum )
-        level = 1
+            def __init__(self,outer):
 
-        event= sf.Event()
-        while True:
-            # XXX we ought to make this a normal Drawable() as well,
-            # rather than duplicating logic from Renderer.DoLoop()
+                self.height = 80
+                self.width_spacing, self.height_spacing = 120,100
 
-            if Renderer.app.GetEvent(event):
-                if event.Type == sf.Event.Closed:
-                    Renderer.Quit()
-                        
-                if event.Type == sf.Event.KeyPressed:
+                self.outer = outer
+                self.num   = get_level_count()+1
+                self.xnum  = defaults.resolution[0]//self.width_spacing
+                self.rows  = math.ceil( self.num/self.xnum )
+                self.level = 1
+
+            def _BackToMenu(self):
+                Renderer.RemoveDrawable(self)
                 
-                    if event.Key.Code == KeyMapping.Get("escape"):
-                        return 0
-
-                    elif event.Key.Code == KeyMapping.Get("menu-right"):
-                        level = (level+1)%(num)
-
-                    elif event.Key.Code == KeyMapping.Get("menu-left"):
-                        level = (level-1)%(num)
-
-                    elif event.Key.Code == KeyMapping.Get("menu-down"):
-                        level = (level+xnum)%(num)
-
-                        # improve the usability of the 'return to menu' field
-                        if (level // xnum) == rows-1:
-                            level = num
-
-                    elif event.Key.Code == KeyMapping.Get("menu-up"):
-                        level = (level-xnum)%(num)
-
-                    elif event.Key.Code == KeyMapping.Get("accept"):
-                        break
-
-            Renderer.app.Clear(sf.Color.White)
-            self.DrawBackground()
-
-            #print(rows,xnum)
-            for y in range(rows):
-                for x in range(min(num - y*xnum,xnum)):
-                    i = y*xnum +x +1
-                    #print(i)
-
-                    tex2,tex = sf_string_with_shadow(
-                        str(i) if i < num else "\n\n\n... back to main menu ",
-                        defaults.font_menu,
-                        height,
-                        20+ (x*width_spacing if i < num else 0),
-                        20+y*height_spacing,
-                        sf.Color.Red if level == i else sf.Color.Black )
+            def Draw(self):
+                for event in Renderer.GetEvents():
+                    if event.Type == sf.Event.KeyPressed:
                     
-                    Renderer.app.Draw(tex2)
-                    Renderer.app.Draw(tex)
+                        if event.Key.Code == KeyMapping.Get("escape"):
+                            return self._BackToMenu()
+
+                        elif event.Key.Code == KeyMapping.Get("menu-right"):
+                            self.level = (self.level+1)%(self.num)
+
+                        elif event.Key.Code == KeyMapping.Get("menu-left"):
+                            self.level = (self.level-1)%(self.num)
+
+                        elif event.Key.Code == KeyMapping.Get("menu-down"):
+                            self.level = (self.level+self.xnum)%(self.num)
+
+                            # improve the usability of the 'return to menu' field
+                            if (self.level // self.xnum) == self.rows-1:
+                                self.level = self.num
+
+                        elif event.Key.Code == KeyMapping.Get("menu-up"):
+                            self.level = (self.level-self.xnum)%(self.num)
+
+                        elif event.Key.Code == KeyMapping.Get("accept"):
+                            if self.level == self.num:
+                                return self._BackToMenu()
+                            
+                            self.outer.game = Game(Renderer.app)
+                            self.outer.game.LoadLevel(self.level)
+                            
+                            Renderer.RemoveDrawable(self,False)
+                            Renderer.AddDrawable(self.outer.game,self.outer)
+
             
-            Renderer.app.Display()
-        return level if level < num else 0
+                self.outer.DrawBackground()
+
+                #print(rows,xnum)
+                for y in range(self.rows):
+                    for x in range(min(self.num - y*self.xnum,self.xnum)):
+                        i = y*self.xnum +x +1
+                        #print(i)
+
+                        tex2,tex = sf_string_with_shadow(
+                            str(i) if i < self.num else "\n\n\n... back to main menu ",
+                            defaults.font_menu,
+                            self.height,
+                            20+ (x*self.width_spacing if i < self.num else 0),
+                            20+y*self.height_spacing,
+                            sf.Color.Red if self.level == i else sf.Color.Black )
+                        
+                        Renderer.app.Draw(tex2)
+                        Renderer.app.Draw(tex)
+
+        Renderer.AddDrawable(LevelChooser(self),self)
+
 
     def ShowCredits(self):
         """Show the game's credits"""
-        try:
-            with open(os.path.join("..","CREDITS"),"rt") as file:
-                cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
-                cred.insert(0,"(Press any key to continue)")
-        except IOError:
-            print("Failure loading credits file")
-            return
 
-        event= sf.Event()
-        height,height_spacing = 30, 5
-        while True:
-            # XXX we ought to make this a normal Drawable() as well,
-            # rather than duplicating logic from Renderer.DoLoop()
+        class Credits(Drawable):
 
-            if Renderer.app.GetEvent(event):
-                if event.Type == sf.Event.KeyPressed:
+            def __init__(self,outer):
+                self.outer = outer
+                try:
+                    with open(os.path.join("..","CREDITS"),"rt") as file:
+                        self.cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
+                        self.cred.insert(0,"(Press any key to continue)")
+                except IOError:
+                    print("Failure loading credits file")
                     return
-                if event.Type == sf.Event.Closed:
-                    Renderer.Quit()
 
-            Renderer.app.Clear(sf.Color.White)
-            self.DrawBackground()
+                self.height,self.height_spacing = 30,5
 
-            x,y = 100,50
-            for line in cred:
-                tex = sf_string(
-                    line+("\n" if line[0] == "=" else ""),
-                    defaults.font_menu,
-                    height,
-                    x,
-                    y,
-                    sf.Color.Red if line[0] == "=" else sf.Color.White)
-
-                y += height+height_spacing
-                if y > defaults.resolution[1]-100:
-                    x+= 500
-                    y = 130
+            def _BackToMenu(self):
+                Renderer.RemoveDrawable(self)
+                Renderer.AddDrawable(self.outer)
                 
-                Renderer.app.Draw(tex)
-            Renderer.app.Display()
+            def Draw(self):
+                for event in Renderer.GetEvents():
+                    if event.Type == sf.Event.KeyPressed:
+                        return self._BackToMenu()
+                        
+                self.outer.DrawBackground()
+
+                x,y = 100,50
+                for line in self.cred:
+                    tex = sf_string(
+                        line+("\n" if line[0] == "=" else ""),
+                        defaults.font_menu,
+                        self.height,
+                        x,
+                        y,
+                        sf.Color.Red if line[0] == "=" else sf.Color.White)
+
+                    y += self.height+self.height_spacing
+                    if y > defaults.resolution[1]-100:
+                        x+= 500
+                        y = 130
+                    
+                    Renderer.app.Draw(tex)
+                
+        Renderer.AddDrawable(Credits(self),self)
 
 def main():
     """Main entry point to the application"""
