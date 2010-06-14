@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>)
+<out> = Level(<level>,<game>,<raw>,color=(0,0,30))
                                                          _S0        
       gPL                                                _BL        
                                                                   
