@@ -1,0 +1,25 @@
+from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,3,direction=Entity.DIR_VER)
+[O O]
+{ | }
+{ - }
+
+[o O]
+{ | }
+{ - }
+
+[O o]
+{ | }
+{ - }
+
+
+{O O}
+{ | }
+[ - ]
+
+{o O}
+{ | }
+[ - ]
+
+{O o}
+{ | }
+[ - ]

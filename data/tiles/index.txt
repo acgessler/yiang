@@ -8,6 +8,22 @@ E0
  an obstacle, which causes it to change its direction.
  It kills on touch)
 
+[O O}
+{ | }
+{ - }
+
+E1
+
+TBD!
+
+E2
+
+Same as E0, except it moves vertically.
+
+[O O]
+{ | }
+{ - }
+
 RE
 
 (Respawn point, if touched once, the player respawns here)
