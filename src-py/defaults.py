@@ -62,8 +62,8 @@ show_window_caption = True
 enable_menu_image_bg = False
 cull_distance_rel = 1.5
 swapout_distance_rel = 3.0 
-fade_stop = 0.7
-fade_start = 0.3
+fade_stop = 0.75
+fade_start = 0.25
 dither = True
 
 # -----------------------------------------------------------------------------

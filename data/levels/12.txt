@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>)
+<out> = Level(<level>,<game>,<raw>,color=(15,15,3))
                                                                                                                                                                                                             bA1bDA    bA1bA2    bA1bA2    bA1bA0bA0                                                                                     
                                                             ySU                                                                                                                                                bDA       bA5       bA5          bA4                                                                         
                                                                                                                                                                                                                bDA    bA0bDA    bA0bDA          bA4                                                                           

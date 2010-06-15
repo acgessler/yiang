@@ -262,6 +262,8 @@ Hit {1} to cancel""").format(
                     if self.cur_option==i else sf.Color.White )
 
             y += hscaled*1.5
+            
+        Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
         
 
     def RecacheDangerSigns(self):
@@ -343,6 +345,7 @@ Hit {1} to cancel""").format(
             def Draw(self):
                 for event in Renderer.GetEvents():
                     if event.Type == sf.Event.KeyPressed:
+                        Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
                     
                         if event.Key.Code == KeyMapping.Get("escape"):
                             return self._BackToMenu()
