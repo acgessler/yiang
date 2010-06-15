@@ -132,7 +132,7 @@ class Level:
         self._UpdateEntityList()
         
         for fx in self.postfx_rt:
-            Renderer.app.Draw(fx.Get())
+            fx.Draw()
         
     def DrawSingle(self, drawable, pos=None):
         """Draw a sf.Drawable at a specific position, which is

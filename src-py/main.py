@@ -34,6 +34,7 @@ from keys import KeyMapping
 from game import Game
 from log import Log
 from renderer import Renderer,Drawable
+from posteffect import PostFXCache
 
 # numeric constants for the menu entries
 OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
@@ -104,9 +105,7 @@ class MainMenu(Drawable):
         self.font = FontCache.get(defaults.letter_height_intro)
 
         # Load the PostFX (I had to try them ...)
-        self.effect = sf.PostFX()
-        self.effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","intro.sfx"))
-        self.effect.SetTexture("framebuffer", None);
+        self.effect = PostFXCache.Get("intro.sfx")
             
         self.cur_option = 0
         self.menu_text = [(None,None)]*len(MainMenu.options)
@@ -305,7 +304,9 @@ Hit {1} to cancel""").format(
         #    Renderer.app.Draw(te)
 
         #self.effect.SetParameter("strength", (math.sin( self.clock.GetElapsedTime()/20.0 ) +1)*0.5);
-        Renderer.app.Draw(self.effect)
+        
+        if not self.effect is None:
+            self.effect.Draw()
 
         for image in self.images:
             sprite = sf.Sprite(image)

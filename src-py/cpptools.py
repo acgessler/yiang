@@ -65,13 +65,14 @@ class Preprocessor:
            Preprocessed list of lines.
         """
         env2 = []
+        # idea: accept virtually everything.
         for e in env:
             if not isinstance(e,tuple):
                 e = e.split("=")
                 if len(e)!=2:
                     e = (e,"")
                 
-            env2.append(e)
+            env2.append(e if len(e)==2 else (e[0],""))
         env = dict(env2)
         
         if isinstance(lines,str):

@@ -1,9 +1,9 @@
-texture framebuffer
+texture framebuffer = {FRAMEBUFFER}
 vec2 cur
 
 #ifdef ENABLE_DITHER
-texture noise
-vec2 randomUV
+texture noise = ../data/textures/noise.png
+vec2 randomUV = {RANDOM}
 #endif
 
 effect
@@ -11,14 +11,17 @@ effect
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
 	vec4 another = framebuffer(_in+vec2(-0.01,-0.004));
+	vec4 dither = noise(randomUV+_in);
 
 	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);
 	vec4 color = (pixel*1.0f+(another*0.25));
 
+	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
+
 #ifdef ENABLE_DITHER
+	_out.rgb += (dither.rgb-0.5f)*0.05;
 #endif
 
-	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 	_out.a = 1.f;
 }
 

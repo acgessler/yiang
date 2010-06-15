@@ -20,6 +20,7 @@
 # PySFML
 import sf
 import os
+import sys
 
 # My stuff
 import defaults
@@ -32,6 +33,8 @@ class PostFX:
         self.pfx = sf.PostFX()
         self.name = name 
         self.env = env
+        self.vars = set()
+        self.updater = []
         
     def __str__(self):
         return "PostFX: {0},{1} [sf.PostFX: {2}]".format(self.name,self.env,id(self.pfx))
@@ -39,22 +42,41 @@ class PostFX:
     def Get(self):
         return self.pfx
     
-    def SetParameter(self,*args):
-        # XXX swallow unused parameters to get rid of SFMl warnings?
-        self.pfx.SetParameter(*args)
+    def Draw(self):
+        for updater in self.updater:
+            updater()
+            
+        Renderer.app.Draw(self.pfx)
+    
+    def SetParameter(self,name,*args):
+        """See sf.PostFX.SetParameter()"""
+        # swallow unused parameters to get rid of SFML warnings
+        if not name in self.vars:
+            return
         
-    def SetTexture(self,*args):
-        self.pfx.SetTexture(*args)
+        self.pfx.SetParameter(name,*args)
+        
+    def SetTexture(self,name,*args):
+        """See sf.PostFX.SetTexture()"""
+        if not name in self.vars:
+            return
+        
+        self.pfx.SetTexture(name,*args)
     
 
 class PostFXCache:
     """Tiny utility to cache all postprocessing effect instances"""
     cached = {}
+    shared_env = None
 
     @staticmethod
     def Get(name="",env=()):
         assert name
+        
+        if PostFXCache.shared_env is None:
+            PostFXCache._SetupSharedEnv()
 
+        env = env+PostFXCache.shared_env
         pfx = PostFXCache.cached.get((name,env),None) 
         if not pfx is None:
             return pfx
@@ -71,16 +93,57 @@ class PostFXCache:
                 p = open(os.path.join(dir,name),"rt")
             
             try:
-                string = Preprocessor.Preprocess( p.readlines(), [], [dir]  )
+                string = Preprocessor.Preprocess( p.readlines(), env, [dir]  )
             except CppError as err:
                 print("Failure preprocessing postfx {0},{1}: {2}".format(name,env,err))
-                return None
+                return None                
         
             if not pfx.Get().LoadFromMemory("\n".join(string)) is True:
                 print("Failure creating postfx {0},{1}.\nCode after preprocessing: {2})".format(name,env,string))
                 return None
+            
+            # XXX improve this, myabe query SFML directly
+            data_types = ["texture","vec2","vec3","vec4","float","bool","double"]   
+            for line in string:
+                words = line.split(None,3)
+                if not words:
+                    continue
+                
+                if words[0] == "effect":
+                    break
+                
+                #print(words)
+                
+                if words[0] in data_types:
+                    pfx.vars.add(words[1])
+                    
+                    
+                    # handle texture loading manually, SFML doesn't do it.
+                    if len(words)>3 and words[2]=="=":
+                        words[3] = words[3].strip()
+                        if len(words[3]) and words[3][0] == "{" and words[3][-1] == "}":
+                            kwd = words[3][1:-1]
+                            
+                            def closure_maker(inner=PostFXCache._GetParameterUpdater(kwd),pfx=pfx,type=words[0],name=words[1]):
+                                return inner(pfx,type,name)
+                            
+                            pfx.updater.append(closure_maker)
+                        elif words[0]=="texture":
+                            # XXX unify this special case, too.
+                            
+                            tex = words[3].strip()
+                            print("Loading implicit texture {0} (shader var: {1})".format(tex, words[1]))
+                        
+                            img = sf.Image()
+                            if img.LoadFromFile(tex) is True:
+                                pfx.SetTexture(words[1],img)
+                                def tex_updater(pfx=pfx,type=words[0],name=words[1],tex=img):
+                                    pfx.SetTexture(name,tex)
+                                
+                                pfx.updater.append(tex_updater)  
+                            else:
+                                print(".. failure, ignoring this parameter")  
 
-            pfx.SetTexture("framebuffer", None);
             PostFXCache.cached[(name,env)] = pfx
     
         except IOError:
@@ -88,6 +151,44 @@ class PostFXCache:
             return None
         
         return pfx
+    
+    @staticmethod
+    def _GetParameterUpdater(type):
+        """Return a handler to be called once per frame to
+        update a specific postfx parameter according to 
+        certain rules (i.e. random). The handler function is 
+        loaded from within the ./updaters directory, where it
+        must be defined in a module with the same name (type),
+        providing an Update(postfx,var_type,var_name) member."""
+        def default_proc(pfx,type,name):
+            pass
+        
+        modname = "updaters."+type
+        
+        try:
+            __import__(modname,globals())
+        except ImportError:
+            print("Failure resolving PostFX updater: {0}".format(type))
+            return default_proc
+        
+        mymod= sys.modules[modname]
+        
+        try:
+            return getattr(mymod,"Update")
+        except AttributeError:
+            print("PostFX updater module {0} does not provide Update()".format(type))
+        return default_proc
+    
+    @staticmethod
+    def _SetupSharedEnv():
+        """Collect some global settings shared by all postfx's"""
+        PostFXCache.shared_env = []
+        
+        if defaults.dither is True:
+            PostFXCache.shared_env.append(("ENABLE_DITHER",))
+            
+        PostFXCache.shared_env = tuple(PostFXCache.shared_env)
+
 
 class PostFXOverlay(Drawable):
     """A drawable to draw a single postprocessing effect"""
@@ -97,7 +198,7 @@ class PostFXOverlay(Drawable):
         self.draworder = draworder
         
     def Draw(self):
-        Renderer.app.Draw(self.postfx.Get())
+        self.postfx.Draw()
         
     def GetDrawOrder(self):
         return self.draworder
