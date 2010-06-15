@@ -20,10 +20,10 @@
 # Delete all *.pyc recursively.
 import os
 
-def main(root='.'):
+def main(root):
     for t in os.listdir(root):
         fullp =os.path.join(root,t)
-        if os.path.isdir(t):
+        if os.path.isdir(fullp):
             main(fullp)
             continue
 
@@ -33,5 +33,4 @@ def main(root='.'):
 
 
 if __name__ ==  '__main__':
-    os.chdir("..")
-    main()
+    main("..")
