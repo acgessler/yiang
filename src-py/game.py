@@ -36,6 +36,7 @@ from fonts import FontCache
 from keys import KeyMapping
 from renderer import Drawable,Renderer,DebugTools,NewFrame
 from level import Level,LevelLoader
+from posteffect import PostFXCache, PostFXOverlay
 
 class ReturnToMenuDueToFailure(Exception):
     """Sentinel exception to return control to the main
@@ -90,7 +91,7 @@ class Game(Drawable):
         
         self.draw_counter = 0
 
-        self._LoadPostFX()
+        #self._LoadPostFX()
 
     def Run(self):
         print("Enter main loop")
@@ -122,8 +123,6 @@ class Game(Drawable):
             except NewFrame:
                 self._UndoFrameTime()
                 raise
-
-        Renderer.app.Draw(self.effect)
         
         if defaults.debug_draw_bounding_boxes:
             self._DrawBoundingBoxes()
@@ -139,14 +138,6 @@ class Game(Drawable):
     def _UndoFrameTime(self):
         self.last_time = self.clock.GetElapsedTime() 
         self.total -= self.last_time-self.time
-
-    def _LoadPostFX(self):
-        """Load all postprocessing effects which we might need"""
-        self.effect = sf.PostFX()
-        self.effect.LoadFromFile(os.path.join(defaults.data_dir,"effects","ingame1.sfx"))
-        self.effect.SetTexture("framebuffer", None);
-        self.effect.SetParameter("cur",0.0,0.0)
-        self.effect.SetParameter("fade",1.0)
 
     def _EnumEntities(self):
         """Use this wrapper generator to iterate through all enties
@@ -556,6 +547,11 @@ Hit {2} to return to the menu""").format(
                 
                 self.time_start = self.outer.time
                 
+                fx = PostFXCache.Get("fade.sfx",())
+                if not fx is None:
+                    self.fade = PostFXOverlay(fx)
+                    Renderer.AddDrawable(self.fade)
+                
             def Draw(self):
                 
                 curtime = self.outer.clock.GetElapsedTime()-self.time_start
@@ -568,13 +564,17 @@ Hit {2} to return to the menu""").format(
                         self.result.append(event.Key.Code)
                         self._RemoveMe()
                     
-                self.outer.effect.SetParameter("fade",1.0 - min(0.5, curtime*0.5/self.fade_time))
+                if hasattr(self,"fade"):
+                    self.fade.Get().SetParameter("fade",1.0 - min(defaults.fade_stop, curtime*0.5/self.fade_time))
                 self.outer._DrawStatusNotice(text,size,text_color)
                     
                 return True
             
             def _RemoveMe(self):
-                self.outer.effect.SetParameter("fade",1.0)
+                if hasattr(self,"fade"):
+                    self.fade.Get().SetParameter("fade",1.0)
+                    Renderer.RemoveDrawable(self.fade)
+                    
                 Renderer.RemoveDrawable(self)
  
                 # fix game time

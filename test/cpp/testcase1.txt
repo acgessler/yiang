@@ -1,0 +1,14 @@
+#ifdef FOO_DEFINED
+#  ifdef BAR_DEFINED
+#    ifdef FOO_DEFINED
+#ifdef BAR_DEFINED
+
+fine = 1
+#endif
+fine += 1
+#endif
+fine += 1
+# endif
+fine += 1
+#  endif
+fine += 1

@@ -34,6 +34,8 @@ class FontCache:
         font = FontCache.cached.get((face,height),None) 
         if not font is None:
             return font
+        
+        print("Loading font {0} / {1}".format(face,height))
 
         font = sf.Font()
         if not font.LoadFromFile(face,height) is True:

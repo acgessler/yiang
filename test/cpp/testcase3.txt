@@ -1,0 +1,22 @@
+
+fine = 0
+
+#if FOO_DEFINED==0
+fine += 1
+#  define FOO_DEFINED 1
+
+#elif FOO_DEFINED==1
+fine = 0
+#  define FOO_DEFINED 2
+#endif
+
+#if FOO_DEFINED==1
+fine += 1
+#if BAR_DEFINED==2 && true && 4!=5
+#  undef FOO_DEFINED 
+#endif
+#endif
+
+#ifdef FOO_DEFINED
+fine = 0
+#endif

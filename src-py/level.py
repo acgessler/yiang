@@ -32,6 +32,7 @@ import defaults
 import validator
 from renderer import Renderer
 from fonts import FontCache
+from posteffect import PostFXCache
 
 
 class Level:
@@ -39,7 +40,7 @@ class Level:
     for both drawing and updating - also it maintains the list of all entities
     in the level"""
     
-    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0):
+    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0, postfx = [("ingame1.sfx",())]):
         """Construct a level given its textual description 
         
         Parameters:
@@ -56,6 +57,10 @@ class Level:
         self.level = level
         self.color = sf.Color(*color) if isinstance(color, tuple) else color
         self.vis_ofs = vis_ofs
+        
+        self.postfx_rt = []
+        self.postfx = postfx
+        self._LoadPostFX()
         
         assert self.game
         assert self.level >= 0
@@ -126,6 +131,9 @@ class Level:
             
         self._UpdateEntityList()
         
+        for fx in self.postfx_rt:
+            Renderer.app.Draw(fx.Get())
+        
     def DrawSingle(self, drawable, pos=None):
         """Draw a sf.Drawable at a specific position, which is
         specified in level-relative tile coordinates."""
@@ -141,6 +149,26 @@ class Level:
         """Get from world- to camera coordinates. This transforms
         everything by the local level origin."""
         return (coords[0] - self.origin[0], coords[1] - self.origin[1])
+    
+    def GetPostFX(self):
+        """Get the list of all active postprocessing effects
+        on top of this level. Post effects are applied in-order"""
+        return self.postfx_rt
+    
+    def SetPostFXParameter(self,*arg):
+        """Set a shared parameter in all active postprocessing
+        effects on top of this level."""
+        for r in self.postfx_rt:
+            r.SetParameter(*arg)
+    
+    def _LoadPostFX(self):
+        """Load all postfx's in self.postfx and store them
+        in self.postfx_rt"""
+        self.postfx_rt = []
+        for pfx,env in self.postfx:
+            p = PostFXCache.Get(pfx,env)
+            if not p is None:
+                self.postfx_rt.append(p)
 
     def _UpdateEntityList(self):
         """Used internally to apply deferred changes to the entity

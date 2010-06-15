@@ -1,0 +1,11 @@
+texture framebuffer
+float fade
+
+effect
+{
+	vec4 pixel = framebuffer(_in);
+	
+	_out.rgb = pixel.rgb*fade;
+	_out.a = 1.0;
+}
+

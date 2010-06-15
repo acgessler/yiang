@@ -62,6 +62,7 @@ show_window_caption = True
 enable_menu_image_bg = False
 cull_distance_rel = 1.5
 swapout_distance_rel = 3.0 
+fade_stop = 0.7
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

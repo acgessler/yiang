@@ -236,12 +236,12 @@ class Player(Entity):
         origin = self.game.GetLevel().GetOrigin()
 
         # XXX Use Game's coordinate sustem conversion utilities
-        self.game.effect.SetParameter("cur", (self.pos[0] + self.pwidth // 2 - origin[0]) / defaults.tiles[0],
+        self.game.GetLevel().SetPostFXParameter("cur", (self.pos[0] + self.pwidth // 2 - origin[0]) / defaults.tiles[0],
             1.0 - (self.pos[1] + self.pheight // 2 - origin[1]) / defaults.tiles[1])
 
     def _Kill(self, killer="<add reason>"):
         """Internal stub to kill the player and to fire some nice
-        animations to celebrate the event"""
+        animations to celebrate the event."""
         if self.game.GetLives() > 0:
             for i in range(30):
                 self.game.AddEntity(KillAnimStub(self.pos, random.uniform(-1.0, 1.0), \

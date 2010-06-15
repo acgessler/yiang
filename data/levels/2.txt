@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,30,0))
+<out> = Level(<level>,<game>,<raw>,color=(0,50,0),postfx=[("ingame1.sfx",()),("invert.sfx",())])
       gPL
 
                      rS0

@@ -1,0 +1,7 @@
+# include <testcase1.txt>
+#ifdef FOO_DEFINED
+
+#else
+fine = 0
+#  endif
+fine += 1
