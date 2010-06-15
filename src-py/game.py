@@ -566,7 +566,7 @@ Hit {2} to return to the menu""").format(
                     
                 if hasattr(self,"fade"):
                     self.fade.Get().SetParameter("fade",1.0 - min(defaults.fade_stop, curtime*0.5/self.fade_time))
-                self.outer._DrawStatusNotice(text,size,text_color)
+                self.outer._DrawStatusNotice(text,size,text_color,min(1.0,curtime*5/self.fade_time))
                     
                 return True
             
@@ -595,10 +595,10 @@ Hit {2} to return to the menu""").format(
         self.update = False
         return result
 
-    def _DrawStatusNotice(self,text,size=(550,120),text_color=sf.Color.Red):
+    def _DrawStatusNotice(self,text,size=(550,120),text_color=sf.Color.Red,alpha=1.0):
         """Utility to draw a messagebox-like status notice in the
         center of the screen."""
-        fg,bg = sf.Color(160,160,160),sf.Color(50,50,50)
+        fg,bg = sf.Color(160,160,160,int(alpha*255)),sf.Color(50,50,50,int(alpha*255))
         
         shape = sf.Shape()
         shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
