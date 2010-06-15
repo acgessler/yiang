@@ -477,6 +477,8 @@ Hit {3} or {4} to return to the menu .. """).format(
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
         )),(550,100),0.0,accepted,sf.Color.Green,on_close)
+        
+        raise NewFrame()
     
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
@@ -487,10 +489,6 @@ Hit {3} or {4} to return to the menu .. """).format(
         self.speed_scale *= defaults.speed_scale_per_level
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level_idx))
-        
-        for drawable in Renderer.drawables:
-            if isinstance(drawable,Entity):
-                Renderer.RemoveDrawable(drawable)
         
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
         def on_close(key,accepted=accepted,outer=self):
@@ -519,6 +517,7 @@ Hit {2} to return to the menu""").format(
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
         )),(550,120),0.0,accepted,sf.Color.Black,on_close) 
+        raise NewFrame()
         
     def LoadLevel(self,idx):
         """Load a particular level and drop the old one"""

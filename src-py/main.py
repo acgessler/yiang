@@ -207,6 +207,10 @@ Hit {1} to cancel""").format(
         return 1000
     
     def Draw(self):
+        
+        if not self.game is None and self.game.IsGameOver():
+            self.game = None
+        
         Renderer.SetClearColor(sf.Color.White)
         for event in Renderer.GetEvents():
             # Escape key : exit
