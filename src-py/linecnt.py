@@ -30,13 +30,15 @@ def line_count (file):
 
 def line_count_all():
     total = 0
-    for t in os.listdir("."):
-        if not os.path.isfile(t) or os.path.splitext(t)[-1].lower() != ".py":
-            continue
+    for dirpath, dirnames, filenames in os.walk("."):
+        for file in filenames:
+            if os.path.splitext(file)[-1].lower() != ".py":
+                continue
 
-        cnt = line_count(t)
-        print("{0} {1} lines".format(t,cnt))
-        total += cnt
+            t = os.path.join(dirpath,file)
+            cnt = line_count(t)
+            print("{0} {1} lines".format(t,cnt))
+            total += cnt
         
     print("Total: {0} lines".format(total))
 
