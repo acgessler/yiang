@@ -27,7 +27,7 @@ import sf
 # My own stuff
 import defaults
 import mathutil
-from game import Entity,Game
+from game import Entity, Game
 from renderer import NewFrame
 from tile import Tile
 from keys import KeyMapping
@@ -38,10 +38,10 @@ class Player(Entity):
     player tiles accordingly. This entity is unique within a
     single game. """
 
-    ANIM_RIGHT,ANIM_JUMP_RIGHT,ANIM_LEFT,ANIM_JUMP_LEFT = range(4)
+    ANIM_RIGHT, ANIM_JUMP_RIGHT, ANIM_LEFT, ANIM_JUMP_LEFT = range(4)
     MAX_ANIMS = 4
 
-    def __init__(self,text,width,height,ofsx):
+    def __init__(self, text, width, height, ofsx):
         Entity.__init__(self)
 
         self.pwidth = width / defaults.tiles_size[0]
@@ -49,27 +49,27 @@ class Player(Entity):
         self.pofsx = ofsx / defaults.tiles_size[0]
 
         lines = text.split("\n")
-        height = len(lines)//Player.MAX_ANIMS
+        height = len(lines) // Player.MAX_ANIMS
 
         self._Reset()
 
         self.tiles = []
-        for i in range(0,(len(lines)//height)*height,height):
-            self.tiles.append(Tile("\n".join(lines[i:i+height])))
-            self.tiles[-1].SetPosition((0,0))
+        for i in range(0, (len(lines) // height) * height, height):
+            self.tiles.append(Tile("\n".join(lines[i:i + height])))
+            self.tiles[-1].SetPosition((0, 0))
 
         assert len(self.tiles) == Player.MAX_ANIMS
 
     def _Reset(self):
         """Reset the state of the player instance, this is needed
         for proper respawning"""
-        self.vel = [0,0]
-        self.acc = [0,-defaults.gravity]
-        self.in_jump, self.block_jump, self.moved_once = True,False,False
+        self.vel = [0, 0]
+        self.acc = [0, -defaults.gravity]
+        self.in_jump, self.block_jump, self.moved_once = True, False, False
         self.cur_tile = [Player.ANIM_RIGHT]
 
         # disable all perks
-        if hasattr(self,"perks"):
+        if hasattr(self, "perks"):
             for perk in self.perks.copy():
                 perk.DisablePerk(self)
         self.perks = set()
@@ -79,34 +79,34 @@ class Player(Entity):
         self.speed_scale = 1.0
         self.unkillable = 0
         
-    def SetGame(self,game):
+    def SetGame(self, game):
         self.game = game
         for tile in self.tiles:
             tile.SetGame(self.game)
 
-    def SetPosition(self,pos):
+    def SetPosition(self, pos):
         self.pos = list(pos)
         #for tile in self.tiles:
         #    tile._Recache()
 
         # keep the original position, for we need it to implement respawning
-        if not hasattr(self,"respawn_positions"):
+        if not hasattr(self, "respawn_positions"):
             self.respawn_positions = []
             self._AddRespawnPoint(pos)
 
-    def SetColor(self,pos):
+    def SetColor(self, pos):
         self.color = pos
         for tile in self.tiles:
             tile.SetColor(pos)
 
     def _SetJumpAnimState(self):
-        if len(self.cur_tile)<=1:
+        if len(self.cur_tile) <= 1:
             return
         
         self.cur_tile[-1] = (Player.ANIM_JUMP_LEFT if \
             self.cur_tile[-2] == Player.ANIM_LEFT else Player.ANIM_JUMP_RIGHT)
 
-    def Update(self,time_elapsed,time):
+    def Update(self, time_elapsed, time):
         
         if self.game.IsGameRunning() is False:
             return
@@ -117,19 +117,19 @@ class Player(Entity):
                 self.perks.remove(perk)
         
         inp = Renderer.app.GetInput()
-        vec = [0,0]
+        vec = [0, 0]
 
         pvely = self.vel[1]
 
         if inp.IsKeyDown(KeyMapping.Get("move-left")):
-            self.vel[0] = -defaults.move_speed[0]*self.speed_scale
+            self.vel[0] = -defaults.move_speed[0] * self.speed_scale
             self.cur_tile[0] = Player.ANIM_LEFT
 
             self._SetJumpAnimState()
             self.moved_once = True
             
         if inp.IsKeyDown(KeyMapping.Get("move-right")):
-            self.vel[0] = defaults.move_speed[0]*self.speed_scale
+            self.vel[0] = defaults.move_speed[0] * self.speed_scale
             self.cur_tile[0] = Player.ANIM_RIGHT
 
             self._SetJumpAnimState()
@@ -137,15 +137,15 @@ class Player(Entity):
 
         if defaults.debug_updown_move is True:
             if inp.IsKeyDown(KeyMapping.Get("move-up")):
-                self.pos[1] -= time*defaults.move_speed[1]
+                self.pos[1] -= time * defaults.move_speed[1]
                 self.moved_once = True
             if inp.IsKeyDown(KeyMapping.Get("move-down")):
-                self.pos[1] += time*defaults.move_speed[1]
+                self.pos[1] += time * defaults.move_speed[1]
                 self.moved_once = True
         else:
             if inp.IsKeyDown(sf.Key.Up):
                 if self.in_jump is False and self.block_jump is False:
-                    self.vel[1] -= defaults.jump_vel*self.jump_scale
+                    self.vel[1] -= defaults.jump_vel * self.jump_scale
                     self.in_jump = self.block_jump = True
 
                     self.cur_tile.append(0)
@@ -156,21 +156,21 @@ class Player(Entity):
                 self.block_jump = False
         
             
-        newvel = [self.vel[0] + self.acc[0]*time,self.vel[1] + (self.acc[1] +(defaults.gravity \
-            if defaults.debug_updown_move is True else 0))*time]
+        newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
+            if defaults.debug_updown_move is True else 0)) * time]
 
-        vec[0] += newvel[0]*time
-        vec[1] += newvel[1]*time
+        vec[0] += newvel[0] * time
+        vec[1] += newvel[1] * time
 
         newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
 
         # Check for collisions
-        self.pos,self.vel = self._HandleCollisions(newpos,newvel)
+        self.pos, self.vel = self._HandleCollisions(newpos, newvel)
 
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
             self.pos[1] = 1
-            self.in_jump, self.block_jump = False,False
+            self.in_jump, self.block_jump = False, False
             self.vel[1] = 0
             
         if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
@@ -187,18 +187,18 @@ class Player(Entity):
         """Check if we passed the left border of the game, which is
         generally a bad idea. """
 
-        origin = self.game.GetOrigin()
+        origin = self.game.GetLevel().GetOrigin()
         if defaults.debug_godmode is True or defaults.debug_scroll_both is True:
             # GODMODE: scroll to the left as usual
             rmax = float(defaults.right_scroll_distance)
-            if self.pos[0] < origin[0]+defaults.tiles[0]+rmax:
-                self.game.SetOrigin((self.pos[0]-rmax,origin[1]))
+            if self.pos[0] < origin[0] + defaults.tiles[0] + rmax:
+                self.game.GetLevel().SetOrigin((self.pos[0] - rmax, origin[1]))
                 return
         
         if self.pos[0] < origin[0]:
-            if self.pos[0]+self.pwidth > origin[0]:
+            if self.pos[0] + self.pwidth > origin[0]:
 
-                if not hasattr(self,"restore_color"):
+                if not hasattr(self, "restore_color"):
                     self.restore_color = self.color
                     self.SetColor(sf.Color.Yellow)
                     print("Entering left danger area")
@@ -206,50 +206,50 @@ class Player(Entity):
                 self._Kill("the dangerous wall on the left")
 
         else:
-            if hasattr(self,"restore_color"):
+            if hasattr(self, "restore_color"):
                 if not self.color is self.restore_color:
 
                     print("Leaving left danger area, restoring old state")
                     self.SetColor(self.restore_color)
                 else:
-                    print("Can't restore old color, seemingly the player color "+\
+                    print("Can't restore old color, seemingly the player color " + \
                           "changed while the entity resided in the left danger area")
-                delattr(self,"restore_color")
+                delattr(self, "restore_color")
 
     def _CheckForRightMapBorder(self):
         """Check if we approached the right border of the game, which
         forces the map to scroll immediately"""
-        origin = self.game.GetOrigin()
+        origin = self.game.GetLevel().GetOrigin()
         rmax = float(defaults.right_scroll_distance)
-        if self.pos[0] > origin[0]+defaults.tiles[0]-rmax:
-            self.game.SetOrigin((self.pos[0]-defaults.tiles[0]+rmax,origin[1]))
+        if self.pos[0] > origin[0] + defaults.tiles[0] - rmax:
+            self.game.GetLevel().SetOrigin((self.pos[0] - defaults.tiles[0] + rmax, origin[1]))
 
-    def _MoveMap(self,dtime):
+    def _MoveMap(self, dtime):
         """Move the map view origin according to a time function"""
         if self.moved_once is False:
             return
             
-        origin = self.game.GetOrigin()
-        self.game.SetOrigin((origin[0]+dtime*defaults.move_map_speed,origin[1]))
+        origin = self.game.GetLevel().GetOrigin()
+        self.game.GetLevel().SetOrigin((origin[0] + dtime * defaults.move_map_speed, origin[1]))
 
     def _UpdatePostFX(self):
-        origin = self.game.GetOrigin()
+        origin = self.game.GetLevel().GetOrigin()
 
         # XXX Use Game's coordinate sustem conversion utilities
-        self.game.effect.SetParameter("cur",(self.pos[0]+self.pwidth//2-origin[0])/defaults.tiles[0],
-            1.0-(self.pos[1]+self.pheight//2-origin[1])/defaults.tiles[1])
+        self.game.effect.SetParameter("cur", (self.pos[0] + self.pwidth // 2 - origin[0]) / defaults.tiles[0],
+            1.0 - (self.pos[1] + self.pheight // 2 - origin[1]) / defaults.tiles[1])
 
-    def _Kill(self,killer="<add reason>"):
+    def _Kill(self, killer="<add reason>"):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event"""
         if self.game.GetLives() > 0:
             for i in range(30):
-                self.game.AddEntity(KillAnimStub(self.pos,random.uniform(-1.0,1.0),\
-                    (random.random(),random.random()),random.random()*12.0))
+                self.game.AddEntity(KillAnimStub(self.pos, random.uniform(-1.0, 1.0), \
+                    (random.random(), random.random()), random.random()*12.0))
             
         self.game.Kill(killer)
 
-    def _HandleCollisions(self,newpos,newvel):
+    def _HandleCollisions(self, newpos, newvel):
         """Handle any collision events, given the computed new position
         of the player. The funtion returns the actual position after
         collision handling has been performed."""
@@ -258,7 +258,7 @@ class Player(Entity):
         # brute force collision detection for dummies .. actually I am not proud of it :-)
         # XXX rewrite this, do proper intersection between the movement vector and the
         # bb borders.
-        cnt,hasall = 0,0
+        cnt, hasall = 0, 0
         for collider in self.game._EnumEntities():
             if collider is self:
                 continue
@@ -267,10 +267,10 @@ class Player(Entity):
             if mycorner is None:
                 continue
 
-            mycorner = (mycorner[0],mycorner[1],mycorner[2]+mycorner[0],mycorner[3]+mycorner[1])
-            rect = (newpos[0]+self.pofsx, newpos[1],newpos[0]+self.pofsx+self.pwidth,newpos[1]+self.pheight)
+            mycorner = (mycorner[0], mycorner[1], mycorner[2] + mycorner[0], mycorner[3] + mycorner[1])
+            rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
                             
-            hasall = self._BBCollide(mycorner,rect)
+            hasall = self._BBCollide(mycorner, rect)
             if hasall == 0:
                 continue
 
@@ -288,22 +288,22 @@ class Player(Entity):
                 continue
 
             # collision with ceiling
-            if hasall & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) and hasall & (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) == 0:
+            if hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) and hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) == 0:
                 newpos[1] = mycorner[3]
-                newvel[1] = max(0,newvel[1])
+                newvel[1] = max(0, newvel[1])
                 #print("ceiling")
 
                 cnt += 1
                 self.game.AddToActiveBBs(collider)
 
             # collision with floor
-            elif hasall & (Entity.UPPER_LEFT|Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) == 0:
-                newpos[1] = mycorner[1]-self.pheight
-                newvel[1] = min(0,newvel[1])
+            elif hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == 0:
+                newpos[1] = mycorner[1] - self.pheight
+                newvel[1] = min(0, newvel[1])
 
                 #print("floor")
 
-                if len(self.cur_tile)>1:
+                if len(self.cur_tile) > 1:
                     del self.cur_tile[-1]
 
                 self.in_jump = False
@@ -320,10 +320,10 @@ class Player(Entity):
             if mycorner is None:
                 continue
 
-            mycorner = (mycorner[0],mycorner[1],mycorner[2]+mycorner[0],mycorner[3]+mycorner[1])
-            rect = (newpos[0]+self.pofsx, newpos[1],newpos[0]+self.pofsx+self.pwidth,newpos[1]+self.pheight)
+            mycorner = (mycorner[0], mycorner[1], mycorner[2] + mycorner[0], mycorner[3] + mycorner[1])
+            rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
                             
-            hasall = self._BBCollide(mycorner,rect)
+            hasall = self._BBCollide(mycorner, rect)
             if hasall == 0:
                 continue
 
@@ -332,18 +332,18 @@ class Player(Entity):
                 continue
 
             # collision on the left
-            if hasall & (Entity.LOWER_RIGHT|Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT|Entity.LOWER_RIGHT) == 0:
+            if hasall & (Entity.LOWER_RIGHT | Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == 0:
                 newpos[0] = mycorner[2]
-                newvel[0] = max(0,newvel[0])
+                newvel[0] = max(0, newvel[0])
                 #print("left")
 
                 cnt += 1
                 self.game.AddToActiveBBs(collider)
 
             # collision on the right
-            elif hasall & (Entity.LOWER_LEFT|Entity.UPPER_LEFT) and hasall & (Entity.LOWER_RIGHT|Entity.UPPER_RIGHT) == 0:
-                newpos[0] = mycorner[0]-self.pwidth-self.pofsx
-                newvel[0] = min(0,newvel[0])
+            elif hasall & (Entity.LOWER_LEFT | Entity.UPPER_LEFT) and hasall & (Entity.LOWER_RIGHT | Entity.UPPER_RIGHT) == 0:
+                newpos[0] = mycorner[0] - self.pwidth - self.pofsx
+                newvel[0] = min(0, newvel[0])
                 #print("right")
 
                 cnt += 1
@@ -351,7 +351,7 @@ class Player(Entity):
 
 
         #print("Active colliders: {0}".format(cnt))
-        return newpos,newvel
+        return newpos, newvel
             
     def Draw(self):
         self.tiles[self.cur_tile[-1]].DrawRelative(self.pos)
@@ -359,27 +359,27 @@ class Player(Entity):
     def GetBoundingBox(self):
         # Adjust the size of the bb slightly to increase the likelihood
         # to pass tight tunnels.
-        pcb = (defaults.player_caution_border[0]/defaults.tiles_size_px[0],\
-            defaults.player_caution_border[1]/defaults.tiles_size_px[1])
+        pcb = (defaults.player_caution_border[0] / defaults.tiles_size_px[0], \
+            defaults.player_caution_border[1] / defaults.tiles_size_px[1])
 
-        return (self.pos[0]+self.pofsx+pcb[0]/2, self.pos[1]+pcb[1],\
-            self.pwidth-pcb[0],self.pheight-pcb[1])
+        return (self.pos[0] + self.pofsx + pcb[0] / 2, self.pos[1] + pcb[1], \
+            self.pwidth - pcb[0], self.pheight - pcb[1])
 
-    def _AddRespawnPoint(self,pos):
+    def _AddRespawnPoint(self, pos):
         """Add a possible respawn position to the player entity."""
-        assert hasattr(self,"respawn_positions")
+        assert hasattr(self, "respawn_positions")
         self.respawn_positions.append(pos)
-        print("Set respawn point {0}|{1}".format(pos[0],pos[1]))
+        print("Set respawn point {0}|{1}".format(pos[0], pos[1]))
 
-    def Respawn(self,enable_respawn_points):
+    def Respawn(self, enable_respawn_points):
         """Used internally by Game.Respawn to respawn the player
         at a given position"""
-        assert hasattr(self,"respawn_positions")
+        assert hasattr(self, "respawn_positions")
         assert len(self.respawn_positions)
 
         min_distance = float(defaults.min_respawn_distance)
         for rpos in reversed(self.respawn_positions if enable_respawn_points is True else ()):
-            if rpos[0]>self.pos[0] or mathutil.Length((rpos[0]-self.pos[0],rpos[1]-self.pos[1])) < min_distance:
+            if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
                 continue # this is to protect the player from being
                 # respawned in kill zones.
             
@@ -388,9 +388,10 @@ class Player(Entity):
             
         else:
             self.SetPosition(self.respawn_positions[0])
-        print("Respawn at {0}|{1}".format(self.pos[0],self.pos[1]))
+        print("Respawn at {0}|{1}".format(self.pos[0], self.pos[1]))
         # Adjust the game origin accordingly
-        self.game.SetOrigin((self.pos[0]-defaults.respawn_origin_distance,0))
+        origin = self.game.GetLevel().GetOrigin()
+        self.game.GetLevel().SetOrigin((self.pos[0] - defaults.respawn_origin_distance, origin[1]))
 
         # Reset our status
         self._Reset()
@@ -401,44 +402,44 @@ class RespawnPoint(Entity):
     the player can respawn if he or she dies"""
 
 
-    def Update(self,time_elapsed,time):
-        if hasattr(self,"didit"):
+    def Update(self, time_elapsed, time):
+        if hasattr(self, "didit"):
             return
 
         for entity in self.game._EnumEntities():
-            if hasattr(entity,"_AddRespawnPoint"):
+            if hasattr(entity, "_AddRespawnPoint"):
                 entity._AddRespawnPoint(self.pos)
                 
         self.didit = True
 
     def GetBoundingBox(self):
-        return (self.pos[0],self.pos[1],0.5,0.5)
+        return (self.pos[0], self.pos[1], 0.5, 0.5)
 
-    def Interact(self,other):
+    def Interact(self, other):
         return Entity.ENTER
 
 class KillAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player is killed."""
 
-    def __init__(self,pos,speed,dirvec,ttl,text="YOU DIED HERE"):
-        Tile.__init__(self,text)
+    def __init__(self, pos, speed, dirvec, ttl, text="YOU DIED HERE"):
+        Tile.__init__(self, text)
 
         self.opos = pos
-        self.SetPosition( pos )
+        self.SetPosition(pos)
         self.speed = speed
         self.ttl = ttl
         
-        self.dirvec = mathutil.Normalize( dirvec )
+        self.dirvec = mathutil.Normalize(dirvec)
         self.SetColor(sf.Color.Red)
 
     def GetBoundingBox(self):
         return None
 
-    def Update(self,time_elapsed,time_delta):
-        self.SetPosition((self.pos[0]+self.dirvec[0]*time_delta*self.speed,self.pos[1]+self.dirvec[1]*time_delta*self.speed))
+    def Update(self, time_elapsed, time_delta):
+        self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, self.pos[1] + self.dirvec[1] * time_delta * self.speed))
 
-        if not hasattr(self,"time_start"):
+        if not hasattr(self, "time_start"):
             self.time_start = time_elapsed
             return
 
@@ -449,13 +450,13 @@ class KillAnimStub(Tile):
         Tile.Draw(self)
 
         # could use Rotate(), Scale() as well
-        start = self.game.ToDeviceCoordinates(self.game.ToCameraCoordinates((
-            self.pos[0]-(self.pos[0]-self.opos[0])*0.25+0.8,self.pos[1]-(self.pos[1]-self.opos[1])*0.25)))
-        end = self.game.ToDeviceCoordinates(self.game.ToCameraCoordinates(
-            (self.opos[0],self.opos[1])))
+        start = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates((
+            self.pos[0] - (self.pos[0] - self.opos[0]) * 0.25 + 0.8, self.pos[1] - (self.pos[1] - self.opos[1]) * 0.25)))
+        end = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates(
+            (self.opos[0], self.opos[1])))
         
-        shape = sf.Shape.Line(start[0],start[1],end[0],end[1],1,sf.Color.Red)
-        self.game._Draw(shape)
+        shape = sf.Shape.Line(start[0], start[1], end[0], end[1], 1, sf.Color.Red)
+        self.game.DrawSingle(shape)
 
 
         

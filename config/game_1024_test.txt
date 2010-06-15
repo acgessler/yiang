@@ -1,0 +1,5 @@
+
+
+fullscreen=False
+resolution.x=1024
+resolution.y=768

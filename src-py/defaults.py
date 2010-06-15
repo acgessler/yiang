@@ -23,9 +23,9 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 0.1
-resolution = [1280,650]
+resolution = [1280, 650]
 fullscreen = False
-letter_size = [8,12]
+letter_size = [8, 12]
 letter_height_intro = 10
 letter_height_status = 36
 letter_height_lives = 9
@@ -33,8 +33,8 @@ letter_height_game_over = 15
 letter_height_debug_info = 15
 caption = "YIANG | {0}".format(version)
 danger_signs_ttl = 30
-tiles_size = [5,3]
-move_speed = [5,4]
+tiles_size = [5, 3]
+move_speed = [5, 4]
 gravity = -15 # tiles/m*s^2
 jump_vel = 9 # tiles/m*s
 debug_updown_move = False
@@ -55,7 +55,7 @@ right_scroll_distance = 9
 respawn_origin_distance = 2.0
 speed_scale_per_level = 1.05
 antialiasing_level = 2
-player_caution_border = [2,7]
+player_caution_border = [2, 7]
 draw_clamp_to_pixel = True
 debug_trace_keypoints = False
 show_window_caption = True
@@ -67,11 +67,11 @@ swapout_distance_rel = 3.0
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.
 root_dir = ".."
-data_dir = os.path.join(root_dir,"data")
-config_dir = os.path.join(root_dir,"config")
-font_monospace = os.path.join(data_dir,"fonts","courier_new_bold.ttf")
+data_dir = os.path.join(root_dir, "data")
+config_dir = os.path.join(root_dir, "config")
+font_monospace = os.path.join(data_dir, "fonts", "courier_new_bold.ttf")
 font_lives = font_monospace
-font_menu = os.path.join(data_dir,"fonts","VeraSE.ttf")
+font_menu = os.path.join(data_dir, "fonts", "VeraSE.ttf")
 font_status = font_menu
 font_debug_info = font_monospace
 font_game_over = font_menu
@@ -103,14 +103,14 @@ def update_derived():
     global letter_size
 
     # derived values, do not change
-    scale = (resolution[0]/1280,resolution[1]/650)
-    letter_size = (int(letter_size[0]*scale[0]),int(letter_size[1]*scale[1]))
-    cells = (resolution[0]//letter_size[0],resolution[1]//letter_size[1])
-    cells_intro = ((resolution[0]*4)//(letter_height_intro*2),resolution[1]//letter_height_intro)
-    tiles = (cells[0]//tiles_size[0],cells[1]//tiles_size[1])
-    tiles_size_px = (letter_size[0]*tiles_size[0],letter_size[1]*tiles_size[1])
-    cull_distance_sqr = (cull_distance_rel*tiles[0])**2+(cull_distance_rel*tiles[1])**2
-    swapout_distance_sqr = (swapout_distance_rel*tiles[0])**2+(swapout_distance_rel*tiles[1])**2
+    scale = (resolution[0] / 1280, resolution[1] / 650)
+    letter_size = (int(letter_size[0] * scale[0]), int(letter_size[1] * scale[0]))
+    cells = (resolution[0] // letter_size[0], resolution[1] // letter_size[1])
+    cells_intro = ((resolution[0] * 4) // (letter_height_intro * 2), resolution[1] // letter_height_intro)
+    tiles = (cells[0] // tiles_size[0], cells[1] // tiles_size[1])
+    tiles_size_px = (letter_size[0] * tiles_size[0], letter_size[1] * tiles_size[1])
+    cull_distance_sqr = (cull_distance_rel * tiles[0]) ** 2 + (cull_distance_rel * tiles[1]) ** 2
+    swapout_distance_sqr = (swapout_distance_rel * tiles[0]) ** 2 + (swapout_distance_rel * tiles[1]) ** 2
     
     
 
@@ -126,7 +126,7 @@ def merge_config(file):
     --
     """
     try:
-        with open(file,"rt") as f:
+        with open(file, "rt") as f:
             lines = [t for t in [m.strip("\n ") for m in f.readlines()] if len(t) and t[0] != "#"]
 
             # convinience substitutions 
@@ -136,19 +136,19 @@ def merge_config(file):
             }
     
             for line in lines:
-                for k,v in replace.items():
-                    line = line.replace(k,v)
+                for k, v in replace.items():
+                    line = line.replace(k, v)
                     
                 try:
-                    exec(line,globals(),globals())
+                    exec(line, globals(), globals())
                 except Exception as e:
-                    print("Error parsing "+file+": "+str(e))
+                    print("Error parsing " + file + ": " + str(e))
                 
     except IOError:
-        print("Could not open configuration file: "+file)
+        print("Could not open configuration file: " + file)
         return
 
-    print("Processed "+file)
+    print("Processed " + file)
         
 
 

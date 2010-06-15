@@ -90,12 +90,12 @@ class Tile(Entity):
     def Draw(self):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
-        self.game._Draw(self.cached,self.pos)
+        self.game.GetLevel().DrawSingle(self.cached,self.pos)
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile
         position. The offset is specified in tile coordinates"""
-        self.game._Draw(self.cached,(self.pos[0]+offset[0],
+        self.game.GetLevel().DrawSingle(self.cached,(self.pos[0]+offset[0],
             self.pos[1]+offset[1]))
 
 

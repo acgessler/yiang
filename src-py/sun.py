@@ -22,30 +22,30 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,Game
+from game import Entity, Game
 from tile import Tile
 from player import Player
 
 class Sun(Tile):
     """The sun is a nice sun, for it always sticks to the player position"""
 
-    def __init__(self,text,width,height,posy=-0.3):
-        Tile.__init__(self,text,width,height)
+    def __init__(self, text, width, height, posy= -0.3):
+        Tile.__init__(self, text, width, height)
 
         self.posy = posy
 
-    def Interact(self,other):
+    def Interact(self, other):
         return Entity.ENTER
 
-    def Update(self,time_elapsed,time):
+    def Update(self, time_elapsed, time):
         for entity in self.game._EnumEntities():
-            if isinstance(entity,Player):
+            if isinstance(entity, Player):
                 pos = entity.pos
                 break
         else:
             return
         
-        self.pos = [self.game.GetOrigin()[0]+1.0,self.posy]
+        self.pos = [self.game.GetLevel().GetOrigin()[0] + 1.0, self.posy]
         self.SetPosition(self.pos)
             
         

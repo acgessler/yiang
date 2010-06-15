@@ -71,10 +71,9 @@ class Game(Drawable):
         if defaults.draw_clamp_to_pixel is True:
             self.ToDeviceCoordinates = self._ToDeviceCoordinates_Floored
 
-        # These are later changed by LoadLevel(...)
+        # These are later changed by LoadLevel(...), NextLevel(...)
         self.level_idx = -1
-        self.origin = [0,0]
-
+        
         # Load the first level for testing purposes
         # self.LoadLevel(1)
          
@@ -159,6 +158,11 @@ class Game(Drawable):
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
+        
+        if self.level is None:
+            return
+        
+        statush = max( 40, self.level.GetLevelVisibleSize()[1]/2 )
 
         if not hasattr(self,"status_bar_font"):
             self.status_bar_font = FontCache.get(defaults.letter_height_status,\
@@ -183,7 +187,7 @@ class Game(Drawable):
         shape.EnableFill(True)
         shape.EnableOutline(True)
 
-        self.app.Draw(shape)
+        self.DrawSingle(shape)
         
         status = sf.String("Level {0}.{1}, {2:.2} days\n{3:4.5} $".format(
             self.rounds,
@@ -194,12 +198,11 @@ class Game(Drawable):
 
         status.SetPosition(8,5)
         status.SetColor(sf.Color.Black)
-        self._Draw(status)
+        self.DrawSingle(status)
 
         status.SetColor(sf.Color.Yellow)
         status.SetPosition(10,5)
-        self._Draw(status)
-
+        self.DrawSingle(status)
 
         # .. and the number of remaining lifes
         string = "\n".join(map(lambda x:x*self.lives,
@@ -216,14 +219,30 @@ class Game(Drawable):
 
         status.SetPosition(xstart-2,5)
         status.SetColor(sf.Color.Black)
-        self._Draw(status)
+        self.DrawSingle(status)
 
         status.SetPosition(xstart+2,5)
-        self._Draw(status)
+        self.DrawSingle(status)
 
         status.SetPosition(xstart,6)        
         status.SetColor(sf.Color.Yellow)
-        self._Draw(status)
+        self.DrawSingle(status)
+        
+        # finally, the lower part of the cinema box
+        shape = sf.Shape()
+
+        fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
+        
+        shape.AddPoint(1,defaults.resolution[1]-statush,bcol,fcol)
+        shape.AddPoint(1,defaults.resolution[1],fcol,bcol)
+        shape.AddPoint(defaults.resolution[0]-1,defaults.resolution[1],fcol,bcol)
+        shape.AddPoint(defaults.resolution[0]-1,defaults.resolution[1]-statush,bcol,bcol)
+
+        shape.SetOutlineWidth(2)
+        shape.EnableFill(True)
+        shape.EnableOutline(True)
+
+        self.DrawSingle(shape)
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -278,8 +297,8 @@ class Game(Drawable):
             shape = sf.Shape()
 
             bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
-            bb[0:2] = self.ToDeviceCoordinates(self.ToCameraCoordinates( bb[0:2] ))
-            bb[2:4] = self.ToDeviceCoordinates(self.ToCameraCoordinates( bb[2:4] ))
+            bb[0:2] = self.ToDeviceCoordinates(self.level.ToCameraCoordinates( bb[0:2] ))
+            bb[2:4] = self.ToDeviceCoordinates(self.level.ToCameraCoordinates( bb[2:4] ))
 
             color = sf.Color.Red if getattr(entity,"highlight_bb",False) is True else sf.Color.Green
             shape.AddPoint(bb[0],bb[1],color,color)
@@ -291,7 +310,7 @@ class Game(Drawable):
             shape.EnableFill(False)
             shape.EnableOutline(True)
 
-            self._Draw(shape)
+            self.DrawSingle(shape)
             entity.highlight_bb = False
 
     def _DrawDebugInfo(self,dtime):
@@ -337,18 +356,13 @@ TimeDelta:         {dtime:.4}
 
         s.SetPosition(defaults.resolution[0]-302,119)
         s.SetColor(sf.Color.White)
-        self._Draw(s)
+        self.DrawSingle(s)
 
     def AddToActiveBBs(self,entity):
         """Debug feature, mark a specific entity for highlighting
         in the next frame. Its bounding box will then be drawn
         in red"""
         entity.highlight_bb = True # (HACK, inject a hidden attribute)
-
-    def GetCurOrigin(self):
-        """ Get the world space position the upper left corner
-        of the window is currently mapped to. """
-        return self.origin
 
     def GetClock(self):
         """ Get the timer used to measure time since this
@@ -388,17 +402,6 @@ TimeDelta:         {dtime:.4}
         """Get the number of lives the player has. They
         die if they are killed and no more lives are available"""
         return self.lives
-
-    def GetOrigin(self):
-        """Get the current origin of the game. That is the
-        tile coordinate to map to the upper left coordinate
-        of the window """
-        return self.origin
-
-    def SetOrigin(self,origin):
-        """Change the view origin"""
-        assert isinstance(origin,tuple)
-        self.origin = origin
     
     def IsGameOver(self):
         """Check if the game is over. Once the game is over,
@@ -607,23 +610,23 @@ Hit {2} to return to the menu""").format(
         shape.SetOutlineWidth(4)
         shape.EnableFill(True)
         shape.EnableOutline(True)
-        self._Draw(shape)
+        self.DrawSingle(shape)
         pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
         
         text.SetColor(sf.Color.Black if text_color != sf.Color.Black else sf.Color(220,220,220))
         text.SetPosition(pos[0]+1,pos[1]+1)
-        self._Draw(text)
+        self.DrawSingle(text)
 
         text.SetColor(text_color)
         text.SetPosition(pos[0],pos[1])
-        self._Draw(text)
+        self.DrawSingle(text)
 
-    def _Draw(self,drawable,pos=None):
+    def DrawSingle(self,drawable,pos=None):
         """Draw a sf.Drawable at a specific position, which is
         specified in tile coordinates."""
 
         if not pos is None:
-            pos = self.ToDeviceCoordinates(self.ToCameraCoordinates( pos ))
+            pos = self.ToDeviceCoordinates(pos)
             drawable.SetPosition(*pos)
             
         self.app.Draw(drawable)
@@ -643,10 +646,6 @@ Hit {2} to return to the menu""").format(
         """Get from camera coordinates to SFML (device) coordinates"""
         return (coords[0]*defaults.tiles_size_px[0],
                 coords[1]*defaults.tiles_size_px[1])
-
-    def ToCameraCoordinates(self,coords):
-        """Get from world- to camera coordinates"""
-        return (coords[0]-self.origin[0],coords[1]-self.origin[1])
         
     def GetLevelStats(self):
         """Return a 4-tuple: (level,round,num_levels,total_levels)"""

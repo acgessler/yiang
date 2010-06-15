@@ -30,17 +30,17 @@ class Drawable:
 
     FLAG_DISABLE = 0x1 
     
-    def __init__(self,flags=0):
+    def __init__(self, flags=0):
         self.flags = flags
 
 
-    def SetFlag(self,flag):
+    def SetFlag(self, flag):
         self.flags |= flag
 
-    def RemoveFlag(self,flag):
+    def RemoveFlag(self, flag):
         self.flags &= ~flag
 
-    def QueryFlag(self,flag):
+    def QueryFlag(self, flag):
         return True if self.flags & flag else False
 
 
@@ -100,7 +100,7 @@ class Renderer:
     responsible for initialization and termination"""
 
     app = sf.RenderWindow()
-    drawables,drawables_add,drawables_rem = set(),set(),set()
+    drawables, drawables_add, drawables_rem = set(), set(), set()
     drawables_active = []                                     
     clear_color = sf.Color.White
     event = None
@@ -123,19 +123,19 @@ class Renderer:
         dm = sf.VideoMode.GetDesktopMode()
         if defaults.fullscreen is True:
         
-            defaults.resolution = dm.Width,dm.Height
-            Renderer.app = sf.RenderWindow(dm, defaults.caption,sf.Style.Fullscreen, settings)
+            defaults.resolution = dm.Width, dm.Height
+            Renderer.app = sf.RenderWindow(dm, defaults.caption, sf.Style.Fullscreen, settings)
         else:
             tb = sf.Style.Close if defaults.show_window_caption else sf.Style._None
             Renderer.app = sf.RenderWindow(sf.VideoMode(
-                    min(defaults.resolution[0],dm.Width),
-                    min(defaults.resolution[1],dm.Height)
+                    min(defaults.resolution[0], dm.Width),
+                    min(defaults.resolution[1], dm.Height)
                 ),
-                defaults.caption,tb, settings)
+                defaults.caption, tb, settings)
 
 
         # Setup a dummy icon, I might add a proper one later
-        Renderer.app.SetIcon(16,16,b'\xcd\x22\x22\xff'*256)
+        Renderer.app.SetIcon(16, 16, b'\xcd\x22\x22\xff' * 256)
         if defaults.framerate_limit > 0:
             Renderer.app.SetFramerateLimit(defaults.framerate_limit)
 
@@ -168,7 +168,7 @@ class Renderer:
             
             event = sf.Event()
             while Renderer.app.IsOpened():
-                Renderer.draw_counter,Renderer.inrange = 0,0
+                Renderer.draw_counter, Renderer.inrange = 0, 0
                 Renderer.events = set()
                 
                 while Renderer.app.GetEvent(event):
@@ -187,7 +187,7 @@ class Renderer:
 
                 drawable = None
                 try:
-                    for drawable in sorted(Renderer.drawables,key=lambda x: x.GetDrawOrder()):
+                    for drawable in sorted(Renderer.drawables, key=lambda x: x.GetDrawOrder()):
                         drawable.Draw()
                 except NewFrame:
                     pass
@@ -198,7 +198,7 @@ class Renderer:
                 # update the drawables list, handle dependencies of changed drawables.
                 for entity in Renderer.drawables_add:
                     Renderer.drawables.add(entity)
-                    if hasattr(entity,"__drawable_deps__"):
+                    if hasattr(entity, "__drawable_deps__"):
                         for dep in entity.__drawable_deps__:
                             try:
                                 Renderer.drawables.remove(dep)
@@ -212,11 +212,11 @@ class Renderer:
                              for dep in entity.__drawable_deps__:
                                  Renderer.drawables.add(dep)
                                  
-                             delattr(entity,"__drawable_deps__")
+                             delattr(entity, "__drawable_deps__")
                     except KeyError:
                         pass
 
-                Renderer.drawables_rem, Renderer.drawables_add = set(),set()
+                Renderer.drawables_rem, Renderer.drawables_add = set(), set()
 
                 # toggle front and backbuffer
                 Renderer.app.Display()
@@ -232,7 +232,7 @@ class Renderer:
         return Renderer.events
 
     @staticmethod
-    def AddDrawable(drawable,substitutes=None):
+    def AddDrawable(drawable, substitutes=None):
         """Add a drawable to the list. If a valid active drawable
         is specified for the substitutes parameter, the system will
         disable the corresponding drawable (or list of drawables)
@@ -248,13 +248,13 @@ class Renderer:
         
         if not substitutes is None:
             assert not substitutes is drawable
-            assert not hasattr(drawable,"__drawable_deps__")
+            assert not hasattr(drawable, "__drawable_deps__")
             # hijack the instance a bit
-            drawable.__drawable_deps__ = [substitutes] if isinstance(substitutes,Drawable) \
+            drawable.__drawable_deps__ = [substitutes] if isinstance(substitutes, Drawable) \
                 else substitutes
 
     @staticmethod
-    def RemoveDrawable(drawable,handle_dependencees=True):
+    def RemoveDrawable(drawable, handle_dependencees=True):
         Renderer.drawables_rem.add(drawable)
         
         if handle_dependencees is False:

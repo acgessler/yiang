@@ -39,12 +39,23 @@ class Level:
     for both drawing and updating - also it maintains the list of all entities
     in the level"""
     
-    def __init__(self, level, game, lines, color=sf.Color.Black):
+    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0):
+        """Construct a level given its textual description 
+        
+        Parameters:
+            game -- Game instance to host the level
+            level -- 1-based level index
+            lines -- Textual level description, split into lines
+            color -- The 'halo' color behind the player
+            vis_ofs -- Offset on the y axis where the visible part 
+               of the level starts. The number of rows is constant.
+        """
         self.entities, self.entities_add, self.entities_rem = set(), set(), set()
         self.origin = [0, 0]
         self.game = game
         self.level = level
-        self.color = sf.Color(*color) if isinstance(color,tuple) else color
+        self.color = sf.Color(*color) if isinstance(color, tuple) else color
+        self.vis_ofs = vis_ofs
         
         assert self.game
         assert self.level >= 0
@@ -85,7 +96,7 @@ class Level:
                         tile = TileLoader.Load(os.path.join(defaults.data_dir, "tiles", tcode + ".txt"), self)
                             
                     tile.SetColor(LevelLoader.cached_color_dict[ccode])
-                    tile.SetPosition((x // 3, y - diff))
+                    tile.SetPosition((x // 3, y - vis_ofs))
                         
                     self.AddEntity(tile)
                     ecnt += 1
@@ -95,11 +106,13 @@ class Level:
             traceback.print_exc()
 
         self.level_size = (x // 3, y)
-        print("Got {0} entities for level {1}".format(ecnt, level))
+        print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
         
         validator.validate_level(self.lines, level)
+        
+        self._ComputeOrigin()
 
-    def Draw(self,time,dtime):
+    def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame
         and skip any other jobs for this frame"""
@@ -112,6 +125,22 @@ class Level:
             entity.Draw()
             
         self._UpdateEntityList()
+        
+    def DrawSingle(self, drawable, pos=None):
+        """Draw a sf.Drawable at a specific position, which is
+        specified in level-relative tile coordinates."""
+
+        if not pos is None:
+            pos = self.game.ToDeviceCoordinates(self.ToCameraCoordinates(pos))
+            drawable.SetPosition(*pos)
+            
+        Renderer.app.Draw(drawable)
+        self.game.draw_counter += 1
+        
+    def ToCameraCoordinates(self, coords):
+        """Get from world- to camera coordinates. This transforms
+        everything by the local level origin."""
+        return (coords[0] - self.origin[0], coords[1] - self.origin[1])
 
     def _UpdateEntityList(self):
         """Used internally to apply deferred changes to the entity
@@ -124,11 +153,33 @@ class Level:
             self.entities.add(entity)
             
         self.entities_add, self.entities_rem = set(), set()
+        
+    def _ComputeOrigin(self):
+        """Used internally to setup the initial origin of the
+        of the level view."""
+        self.origin = (0, -(defaults.tiles[1] - self.GetLevelVisibleSize()[1]) / 2)
     
     def GetLevelSize(self):
         """Get the size of the current level, in tiles. The return
         value is a 2-tuple."""
         return self.level_size
+    
+    def GetLevelVisibleSize(self):
+        """Get size of the visible part of the level. This is
+        usually a constant throughout the lifetime of the
+        level."""
+        return (defaults.tiles[0], self.level_size[1] - self.vis_ofs)
+    
+    def GetOrigin(self):
+        """Get the current origin of the game. That is the
+        tile coordinate to map to the upper left coordinate
+        of the window """
+        return self.origin
+
+    def SetOrigin(self, origin):
+        """Change the view origin"""
+        assert isinstance(origin, tuple)
+        self.origin = origin
     
     def AddEntity(self, entity):
         """Dynamically add an entity to the list of all active
@@ -157,7 +208,7 @@ class LevelLoader:
     cache = {}
     
     @staticmethod
-    def LoadLevel(level,game):
+    def LoadLevel(level, game):
         """Load a particular level, return a valid Level instance on success,
         otherwise None.
         
@@ -216,21 +267,21 @@ class LevelLoader:
                 traceback.print_exc()
        
         file = os.path.join(defaults.data_dir, "levels", str(level) + ".txt")
-        lines = LevelLoader.cache.get(file,None)
+        lines = LevelLoader.cache.get(file, None)
         if lines is None:
             try:
-                print("Loading level from "+file)
-                with open(file,"rt") as f:
-                    lines = f.read().split("\n",1)
-                    assert len(lines)==2
+                print("Loading level from " + file)
+                with open(file, "rt") as f:
+                    lines = f.read().split("\n", 1)
+                    assert len(lines) == 2
 
                     LevelLoader.cache[file] = lines
                       
             except IOError:
-                print("Could not open level file "+file+" for reading")
+                print("Could not open level file " + file + " for reading")
 
             except AssertionError as err:
-                print("Level file "+file+" is not well-formatted:")
+                print("Level file " + file + " is not well-formatted:")
                 traceback.print_exc()
 
         if lines is None:
@@ -238,25 +289,25 @@ class LevelLoader:
 
         replace = {
             "<out>"  : "level",
-            "<raw>"  : 'r"""'+lines[1].rstrip()+' """',
+            "<raw>"  : 'r"""' + lines[1].rstrip() + ' """',
             "<game>" : "game",
             "<level>"  : "level"
         }
 
         l = lines[0]
-        for k,v in replace.items():
-            l = l.replace(k,v)
+        for k, v in replace.items():
+            l = l.replace(k, v)
 
         #print(l)
         tempdict = dict(locals())
 
         try:
-            exec(l,globals(),tempdict)
+            exec(l, globals(), tempdict)
         except:
-            print("exec() fails loading level {0}, executing line: {1} ".format(file,l))
+            print("exec() fails loading level {0}, executing line: {1} ".format(file, l))
             traceback.print_exc()
             
-        return tempdict.get("level",None)
+        return tempdict.get("level", None)
     
     
     
