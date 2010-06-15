@@ -19,7 +19,7 @@ effect
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
 #ifdef ENABLE_DITHER
-	_out.rgb += (dither.rgb-0.5f)*0.05;
+	_out.rgb += (dither.rgb-0.5f)*0.0225;
 #endif
 
 	_out.a = 1.f;
