@@ -206,5 +206,93 @@ class PostFXOverlay(Drawable):
     def Get(self):
         return self.postfx.Get()
     
+    
+class FadeInOverlay(PostFXOverlay):
+    """A special overlay to fade from a specific color to the normal view"""
+    def __init__(self,fade_time=1.0,fade_start=defaults.fade_start,on_close=None,draworder=900):
+        """
+        Construct a FadeOverlay.
+        
+        Parameters:
+            fade_time -- Time to life
+            fade_start  -- Fade intensity to start with
+            on_close  -- Closure to be called when the end status of the
+               animation has been reached. Pass None to let the 
+               overlay automatically unregister itself.
+            draworder -- Draw order ordinal
+                         
+        """
+        PostFXOverlay.__init__(self,PostFXCache.Get("fade.sfx",()),draworder)
+        self.fade_time = fade_time
+        self.fade_start  = fade_start
+        self.on_close  = lambda x:Renderer.RemoveDrawable(x) if on_close is None else on_close 
+        
+    def Draw(self):
+        PostFXOverlay.Draw(self)
+        
+        if not hasattr(self,"clock"):
+            self.clock = sf.Clock()
+            print("Begin FadeInOverlay anim")
+            return
+            
+        curtime = self.clock.GetElapsedTime()
+        fade = min(1.0, self.fade_start + curtime/self.fade_time)
+        self.postfx.SetParameter("fade",fade)
+        
+        if fade>=1.0 and not self.on_close is None:
+            print("End FadeInOverlay anim")
+            
+            self.on_close(self)
+            self.on_close = None
+        
+            
+class FadeOutOverlay(PostFXOverlay):
+    """A special overlay to fade from the normal view to a specific color"""
+    def __init__(self,fade_time=1.0,fade_end=defaults.fade_stop,on_close=None,draworder=900):
+        """
+        Construct a FadeOverlay.
+        
+        Parameters:
+            fade_time -- Time to life
+            fade_end  -- Fade intensity to end at
+            on_close  -- Closure to be called when the end status of the
+               animation has been reached. Pass None to let the 
+               overlay automatically unregister itself.
+            draworder -- Draw order ordinal
+                         
+        """
+        PostFXOverlay.__init__(self,PostFXCache.Get("fade.sfx",()),draworder)
+        self.fade_time = fade_time
+        self.fade_end  = fade_end
+        self.on_close  = lambda x:Renderer.RemoveDrawable(x) if on_close is None else on_close 
+        
+    def Draw(self):
+        PostFXOverlay.Draw(self)
+        
+        if not hasattr(self,"clock"):
+            print("Begin FadeOutOverlay anim")
+            self.clock = sf.Clock()
+            return
+            
+        curtime = self.clock.GetElapsedTime()
+        fade = min(self.fade_end, curtime/self.fade_time)
+        self.postfx.SetParameter("fade",1.0 - fade)
+        
+        if fade >= self.fade_end and not self.on_close is None:
+            print("End FadeOutOverlay anim")
+            
+            self.on_close(self)
+            self.on_close = None
+            
+            
+        
+        
+        
+        
+        
+        
+        
+        
+    
         
         

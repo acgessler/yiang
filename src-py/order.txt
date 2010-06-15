@@ -7,4 +7,6 @@ StatusBar	2000
 BBoxes		3000
 DebugInfo	4000
 
+FadeMenuInAtVeryBeginning 50000  
+
 

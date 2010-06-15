@@ -1,11 +1,12 @@
 texture framebuffer = {FRAMEBUFFER}
 float fade
+vec3 color = vec3(0.0,0.0,0.0)
 
 effect
 {
 	vec4 pixel = framebuffer(_in);
 	
-	_out.rgb = pixel.rgb*fade;
+	_out.rgb = mix(color,pixel.rgb,fade);
 	_out.a = 1.0;
 }
 

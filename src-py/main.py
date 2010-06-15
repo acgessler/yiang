@@ -34,7 +34,7 @@ from keys import KeyMapping
 from game import Game
 from log import Log
 from renderer import Renderer,Drawable
-from posteffect import PostFXCache
+from posteffect import PostFXCache,FadeInOverlay,FadeOutOverlay
 
 # numeric constants for the menu entries
 OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
@@ -457,6 +457,8 @@ def main():
     Renderer.Initialize()
     
     Renderer.AddDrawable(MainMenu())
+    Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
+    
     Renderer.DoLoop()
     
     Renderer.Terminate()

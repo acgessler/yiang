@@ -36,7 +36,7 @@ from fonts import FontCache
 from keys import KeyMapping
 from renderer import Drawable,Renderer,DebugTools,NewFrame
 from level import Level,LevelLoader
-from posteffect import PostFXCache, PostFXOverlay
+from posteffect import PostFXCache, PostFXOverlay, FadeOutOverlay, FadeInOverlay
 
 class ReturnToMenuDueToFailure(Exception):
     """Sentinel exception to return control to the main
@@ -533,6 +533,9 @@ Hit {2} to return to the menu""").format(
         result value as first parameter, if a suitable function
         is provided."""
         
+        # XXX move to a separate class, it deserves one. Also the code can be
+        # used independently of a Game instance.
+        
         class FadeOutImpl(Drawable):
             
             def __init__(self,outer,result,auto_time,text,break_codes,fade_time,text_color,on_close):
@@ -547,10 +550,8 @@ Hit {2} to return to the menu""").format(
                 
                 self.time_start = self.outer.time
                 
-                fx = PostFXCache.Get("fade.sfx",())
-                if not fx is None:
-                    self.fade = PostFXOverlay(fx)
-                    Renderer.AddDrawable(self.fade)
+                self.fade = FadeOutOverlay(self.fade_time,on_close=lambda x:None)
+                Renderer.AddDrawable(self.fade)
                 
             def Draw(self):
                 
@@ -564,17 +565,11 @@ Hit {2} to return to the menu""").format(
                         self.result.append(event.Key.Code)
                         self._RemoveMe()
                     
-                if hasattr(self,"fade"):
-                    self.fade.Get().SetParameter("fade",1.0 - min(defaults.fade_stop, curtime*0.5/self.fade_time))
                 self.outer._DrawStatusNotice(text,size,text_color,min(1.0,curtime*5/self.fade_time))
-                    
                 return True
             
             def _RemoveMe(self):
-                if hasattr(self,"fade"):
-                    self.fade.Get().SetParameter("fade",1.0)
-                    Renderer.RemoveDrawable(self.fade)
-                    
+                Renderer.RemoveDrawable(self.fade)
                 Renderer.RemoveDrawable(self)
  
                 # fix game time
@@ -583,8 +578,9 @@ Hit {2} to return to the menu""").format(
                 self.outer.total -=  ctime - self.time_start
                 self.outer.last_time = ctime
                 
-                self.on_close(self.result[-1])
+                Renderer.AddDrawable(FadeInOverlay(self.fade_time*0.5))
                 
+                self.on_close(self.result[-1])
                 raise NewFrame()
             
             def GetDrawOrder(self):
