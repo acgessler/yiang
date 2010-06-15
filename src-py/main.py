@@ -118,7 +118,7 @@ class MainMenu(Drawable):
         self._LoadImages()
 
         print("Entering main menu")
-        self.SetMenuOption(0)
+        self.SetMenuOption(0,first=True)
 
         Renderer.SetClearColor(sf.Color.White)
 
@@ -238,7 +238,7 @@ Hit {1} to cancel""").format(
         for entry in itertools.chain(self.menu_text):
             Renderer.app.Draw(entry)
 
-    def SetMenuOption(self,i):
+    def SetMenuOption(self,i,first=False):
         """Choose the currently selected main menu option, entries
         are enumerated by the global 'options' array. """
         self.cur_option = i % len(MainMenu.options)
@@ -263,7 +263,8 @@ Hit {1} to cancel""").format(
 
             y += hscaled*1.5
             
-        Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
+        if first is False:
+            Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
         
 
     def RecacheDangerSigns(self):
