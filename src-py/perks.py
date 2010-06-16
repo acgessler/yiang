@@ -193,5 +193,5 @@ class Unkillable(Perk):
         print("Disable perk: Unkillable")
 
         player.unkillable -= 1
-        assert player.unkillable>0
+        assert player.unkillable>=0
     

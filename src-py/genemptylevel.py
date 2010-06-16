@@ -37,7 +37,8 @@ def Abort():
 
 
 def_floor = "_A0"
-width, height = int(input("Enter length of level: ")), defaults.tiles[1]-1
+width = int(input("Enter length of level: "))
+height = int(input("Enter height of level:  (max  visible: {0})".format(defaults.max_game_tiles_y)))
 name  = int(input("Enter level number: "))
 
 fname = str(name)+".txt"
