@@ -578,7 +578,7 @@ Hit {2} to return to the menu""").format(
                 self.outer.total -=  ctime - self.time_start
                 self.outer.last_time = ctime
                 
-                Renderer.AddDrawable(FadeInOverlay(self.fade_time*0.5))
+                Renderer.AddDrawable(FadeInOverlay(self.fade_time*0.5,self.fade.GetCurrentStrength()))
                 
                 self.on_close(self.result[-1])
                 raise NewFrame()

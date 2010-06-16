@@ -224,8 +224,11 @@ class FadeInOverlay(PostFXOverlay):
         """
         PostFXOverlay.__init__(self,PostFXCache.Get("fade.sfx",()),draworder)
         self.fade_time = fade_time
-        self.fade_start  = fade_start
+        self.fade = self.fade_start  = fade_start
         self.on_close  = lambda x:Renderer.RemoveDrawable(x) if on_close is None else on_close 
+        
+    def GetCurrentStrength(self):
+        return self.fade
         
     def Draw(self):
         PostFXOverlay.Draw(self)
@@ -236,10 +239,10 @@ class FadeInOverlay(PostFXOverlay):
             return
             
         curtime = self.clock.GetElapsedTime()
-        fade = min(1.0, self.fade_start + curtime/self.fade_time)
-        self.postfx.SetParameter("fade",fade)
+        self.fade = min(1.0, self.fade_start + curtime/self.fade_time)
+        self.postfx.SetParameter("fade",self.fade)
         
-        if fade>=1.0 and not self.on_close is None:
+        if self.fade>=1.0 and not self.on_close is None:
             print("End FadeInOverlay anim")
             
             self.on_close(self)
@@ -264,7 +267,11 @@ class FadeOutOverlay(PostFXOverlay):
         PostFXOverlay.__init__(self,PostFXCache.Get("fade.sfx",()),draworder)
         self.fade_time = fade_time
         self.fade_end  = fade_end
+        self.fade = 0.0
         self.on_close  = lambda x:Renderer.RemoveDrawable(x) if on_close is None else on_close 
+        
+    def GetCurrentStrength(self):
+        return self.fade
         
     def Draw(self):
         PostFXOverlay.Draw(self)
@@ -275,10 +282,10 @@ class FadeOutOverlay(PostFXOverlay):
             return
             
         curtime = self.clock.GetElapsedTime()
-        fade = min(self.fade_end, curtime/self.fade_time)
-        self.postfx.SetParameter("fade",1.0 - fade)
+        self.fade = min(self.fade_end, 1.0 - curtime/self.fade_time)
+        self.postfx.SetParameter("fade",self.fade)
         
-        if fade >= self.fade_end and not self.on_close is None:
+        if self.fade >= self.fade_end and not self.on_close is None:
             print("End FadeOutOverlay anim")
             
             self.on_close(self)
