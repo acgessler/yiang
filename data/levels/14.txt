@@ -1,6 +1,4 @@
 <out> = Level(<level>,<game>,<raw>)
-                                                                                                                           gA9gA9gA9gA9gA9                                                      
-   rA8                                                                                                                     bA9bA9bA9bA9bA9
    rA8                                                                                                                     gA9gA9gA9gA9gA9
    rA8                                                                                                                     bA9bA9bA9bA9bA9
    rA8                                                                                                                     gA9gA9gA9gA9gA9
