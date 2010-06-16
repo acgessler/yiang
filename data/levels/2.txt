@@ -1,19 +1,19 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,50,0),postfx=[("ingame1.sfx",()),("invert.sfx",())])
-      gPL
+<out> = Level(<level>,<game>,<raw>,color=(20,10,10),postfx=[("ingame1.sfx",())])
+      rPL                                                                                                                                                                                                                                    _RE      gA9
+                                                                                                                                                                                                                                          _MJ         gA9
+                                                                                                                                                                                                                                                      gA9
+                                                                                                                                                                                                                                          gA9gA9gA9gA9gA9           
 
-
-
-
-
-                     rS0
-            rA0rA0rA0rA0                        _A3      _A3      _A3      yA3
-                                                _A0_RE   _A0      _A0      yA0
-         rA0                                    _A0_A0_A0_A0      _A0      yA0
-                                                _A0      _A0      _A0       
-      rA0                                       _A6      _A6      _A6      yA4
+                                                                                                                                                                                                                                             
+                     rS0gE2
+            rA9rA9rA9rA9                        _A9      _A9      _A9      gA9                                                                                                                                    
+                                                _A9_RE   _A9      _A9      gA9                                                                                                                                                                                 gS4
+         rA9                                    _A9_A0_A0_A9      _A9      gA9                                                                                                                                                                                 gS4
+                                                _A9      _A9      _A9       
+      rA9                                       _A9      _A9      _A9      gA9
                  
-   rA0rA0rA0rA0      rS0      
-                  _A3            _A3   _A3                                                   _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+   rA9rA9rA9rA9      rS0gE2                                                                  _A9      rE0            gE0               bE0                     yE0                              _A9
+                  _A3            _A3   _A3                                                   _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0                                               
                _A1            _A1                                                                                                                                                                                                                              rFI_DA                      
-            _A1            _A1                  _A0         _A3rDA      _A3rDArDA_A3                                                                                                                                                                              _DA
+            _A1            _A1                  _A0         _A3rDA      _A3rDArDA_A3                                                                                                                                                                     _DA      _DA
 _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0                  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0            _A0_A0                           _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
