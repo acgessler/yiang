@@ -26,9 +26,93 @@ from game import Entity, NewFrame
 from player import Player
 from keys import KeyMapping
 from fonts import FontCache
+from renderer import Drawable, Renderer
+
+class MessageBox(Drawable):
+    """Implements a reusable, generic message box that is drawn as overlay"""
+    def __init__(self, text,
+        fade_time=1.0,
+        size=(550,120),
+        auto_time=0.0,
+        break_codes=(KeyMapping.Get("accept")),
+        text_color=sf.Color.Red,
+        on_close=lambda x:None):
+        
+        """Create a message box"""
+        self.result = []
+        self.break_codes = break_codes
+        self.fade_time = fade_time
+        self.text_color = text_color
+        self.auto_time = auto_time
+        self.text = text
+        self.on_close = on_close
+        self.size = size
+                
+        from posteffect import FadeOutOverlay
+        self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
+                
+    def Draw(self):
+        
+        if not hasattr(self,"clock"):
+            self.clock = sf.Clock()
+            Renderer.AddDrawable(self.fade)
+                
+        curtime = self.clock.GetElapsedTime() 
+        if self.auto_time > 0.0 and curtime > self.auto_time:
+            self.result.append(False)
+            self._RemoveMe()
+                
+        for event in Renderer.GetEvents():
+            if event.Type == sf.Event.KeyPressed and event.Key.Code in self.break_codes:
+                self.result.append(event.Key.Code)
+                self._RemoveMe()
+                    
+        MessageBox._DrawStatusNotice(self.text, self.size, self.text_color, min(1.0, curtime * 5 / self.fade_time))
+        return True
+            
+    def _RemoveMe(self):
+        Renderer.RemoveDrawable(self.fade)
+        Renderer.RemoveDrawable(self)
+      
+        from posteffect import FadeInOverlay
+        Renderer.AddDrawable(FadeInOverlay(self.fade_time * 0.5, self.fade.GetCurrentStrength()))
+                
+        self.on_close(self.result[-1])
+        raise NewFrame()
+            
+    def GetDrawOrder(self):
+        return 1100
+        
+        
+    @staticmethod
+    def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0):
+        """Utility to draw a messagebox-like status notice in the
+        center of the screen."""
+        fg,bg = sf.Color(160,160,160,int(alpha*255)),sf.Color(50,50,50,int(alpha*255))
+        
+        shape = sf.Shape()
+        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
+        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
+        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+        
+        shape.SetOutlineWidth(4)
+        shape.EnableFill(True)
+        shape.EnableOutline(True)
+        Renderer.app.Draw(shape)
+        pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
+        
+        text.SetColor(sf.Color.Black if text_color != sf.Color.Black else sf.Color(220,220,220))
+        text.SetPosition(pos[0]+1,pos[1]+1)
+        Renderer.app.Draw(text)
+
+        text.SetColor(text_color)
+        text.SetPosition(pos[0],pos[1])
+        Renderer.app.Draw(text)
+        
 
 class SimpleNotification(Entity):
-    """The SimpleNotification class displays a popup box when the players
+    """The SimpleNotification tile displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
     def __init__(self, text, desc="<unnamed>", text_color=sf.Color.Red, only_once=True, width=1, height=1, line_length=50, format=True):
@@ -64,26 +148,24 @@ class SimpleNotification(Entity):
         self.box_dim = (line_length * 11, self.text_formatted.count("\n") * 16)
         
     def Interact(self, other):
-        if isinstance(other, Player) and self.use_counter > 0 and not hasattr(self, "result"):
+        if isinstance(other, Player) and self.use_counter > 0 and not hasattr(self, "running"):
             
             print("Show notification '{0}', use counter: {1}".format(self.desc, self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
             # closure to be called when the player has made his decision
-            def on_close(key, outer=self, accepted=accepted):
+            def on_close(key, accepted=accepted):
+                delattr(self, "running")
                 self.use_counter -= 1
                 if self.use_counter == 0:
                     self.game.RemoveEntity(self)
-                    
                     print("Disable notification '{0}'".format(self.desc))
-                    
-                delattr(outer, "result")
             
-            self.result = self.game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            	sf.String(self.text_formatted,
+            self.running  = True
+            self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), self.box_dim , 0.0, accepted, self.text_color, on_close) 
+            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close)
             
         return Entity.ENTER
     

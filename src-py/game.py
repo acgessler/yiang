@@ -87,7 +87,7 @@ class Game(Drawable):
         self.speed_scale = 1.0
         self.rounds = 1
         self.level_size = (0,0)
-        self.update = True
+        self.suspended = []
         
         self.draw_counter = 0
 
@@ -133,7 +133,7 @@ class Game(Drawable):
             self._DrawDebugInfo(dtime)
             
     def IsGameRunning(self):
-        return self.update
+        return len(self.suspended) == 0
             
     def _UndoFrameTime(self):
         self.last_time = self.clock.GetElapsedTime() 
@@ -416,8 +416,7 @@ TimeDelta:         {dtime:.4}
                 
             outer._Respawn(True if key == accepted[0] else False)
             
-        self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String("""You got killed by {0}
+        self._FadeOutAndShowStatusNotice(sf.String("""You got killed by {0}
 
 Press {1} to restart at the last respawning point
 Press {2} to restart the level
@@ -429,7 +428,7 @@ Press {3} to leave the game""".format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),(500,130),0.0,accepted,sf.Color.Red,on_close)
+        )),defaults.game_over_fade_time,(500,130),0.0,accepted,sf.Color.Red,on_close)
 
     def GameOver(self):
         """Fade to black and show stats, then return to the main menu"""
@@ -458,10 +457,9 @@ Press {3} to leave the game""".format(
             Renderer.RemoveDrawable(self)
             raise NewFrame()
             
-        self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("""You survived {0:.4} days and collected {1:.4} dollars.
+        self._FadeOutAndShowStatusNotice(sf.String("""You survived {0:.4} days and collected {1:.4} dollars.
 That's {2}.\n\n
-Hit {3} or {4} to return to the menu .. """).format(
+Hit {3} or {4} to return to the menu .. """.format(
                     Game.SecondsToDays(self.GetTotalElapsedTime()),
                     self.score/100,
                     "a new high score record" if record is True else self.score_map[math.log(self.score*10+1,2)],
@@ -470,7 +468,7 @@ Hit {3} or {4} to return to the menu .. """).format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),(550,100),0.0,accepted,sf.Color.Green,on_close)
+        )),defaults.game_over_fade_time,(550,100),0.0,accepted,sf.Color.Green,on_close)
         
         raise NewFrame()
     
@@ -500,9 +498,7 @@ Hit {3} or {4} to return to the menu .. """).format(
                 Renderer.RemoveDrawable(outer)
                 raise NewFrame()
 
-        self.box_result =  self._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("""Hey, you solved Level {0}!.
-
+        self._FadeOutAndShowStatusNotice(sf.String(("""Hey, you solved Level {0}!.
 Hit {1} to continue .. (don't disappoint me)
 Hit {2} to return to the menu""").format(
                     self.level_idx,
@@ -511,7 +507,7 @@ Hit {2} to return to the menu""").format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),(550,120),0.0,accepted,sf.Color.Black,on_close) 
+        )),defaults.game_over_fade_time,(550,120),0.0,accepted,sf.Color.Black,on_close) 
         raise NewFrame()
         
     def LoadLevel(self,idx):
@@ -519,8 +515,23 @@ Hit {2} to return to the menu""").format(
         self.level_idx = idx
         self.level = LevelLoader.LoadLevel(idx,self)
         return False if self.level is None else True
+    
+    def PushSuspend(self):
+        """Increase the 'suspended' counter of the game by one. The
+        game halts while the counter is not 0."""
+        self.suspended.append(self.clock.GetElapsedTime())
+            
+    def PopSuspend(self):
+        """Decrease the 'suspended' counter of the game by one. The
+        game halts while the counter is not 0."""
+        assert len(self.suspended) > 0
+        
+        self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
+        self.suspended.pop()
 
-    def _FadeOutAndShowStatusNotice(self,fade_time,text,
+    def _FadeOutAndShowStatusNotice(self,
+        text,
+        fade_time=1.0,
         size=(550,120),
         auto_time=0.0,
         break_codes=(KeyMapping.Get("accept")),
@@ -537,88 +548,17 @@ Hit {2} to return to the menu""").format(
         result value as first parameter, if a suitable function
         is provided."""
         
-        # XXX move to a separate class, it deserves one. Also the code can be
-        # used independently of a Game instance.
-        
-        class FadeOutImpl(Drawable):
+        # Once this was a powerful god-function, now it is just a
+        # pointless wrapper to halt the game while the
+        # status notice is visible.
+        def on_close_wrapper(result,on_close=on_close,outer=self):
+            outer.PopSuspend()
+            on_close(result)
             
-            def __init__(self,outer,result,auto_time,text,break_codes,fade_time,text_color,on_close):
-                self.outer = outer
-                self.result = result
-                self.break_codes = break_codes
-                self.fade_time = fade_time
-                self.text_color = text_color
-                self.auto_time = auto_time
-                self.text = text
-                self.on_close = on_close
-                
-                self.time_start = self.outer.time
-                
-                self.fade = FadeOutOverlay(self.fade_time,on_close=lambda x:None)
-                Renderer.AddDrawable(self.fade)
-                
-            def Draw(self):
-                
-                curtime = self.outer.clock.GetElapsedTime()-self.time_start
-                if self.auto_time>0.0 and self.outer.clock.GetElapsedTime()-curtime > self.auto_time:
-                    self.result.append(False)
-                    self._RemoveMe()
-                
-                for event in Renderer.GetEvents():
-                    if event.Type == sf.Event.KeyPressed and event.Key.Code in self.break_codes:
-                        self.result.append(event.Key.Code)
-                        self._RemoveMe()
-                    
-                self.outer._DrawStatusNotice(text,size,text_color,min(1.0,curtime*5/self.fade_time))
-                return True
             
-            def _RemoveMe(self):
-                Renderer.RemoveDrawable(self.fade)
-                Renderer.RemoveDrawable(self)
- 
-                # fix game time
-                self.outer.update = True
-                ctime = self.outer.clock.GetElapsedTime ()
-                self.outer.total -=  ctime - self.time_start
-                self.outer.last_time = ctime
-                
-                Renderer.AddDrawable(FadeInOverlay(self.fade_time*0.5,self.fade.GetCurrentStrength()))
-                
-                self.on_close(self.result[-1])
-                raise NewFrame()
-            
-            def GetDrawOrder(self):
-                return 1100
-        
-        result = []
-        Renderer.AddDrawable(FadeOutImpl(self,result,auto_time,text,break_codes,fade_time,text_color,on_close))
-        self.update = False
-        return result
-
-    def _DrawStatusNotice(self,text,size=(550,120),text_color=sf.Color.Red,alpha=1.0):
-        """Utility to draw a messagebox-like status notice in the
-        center of the screen."""
-        fg,bg = sf.Color(160,160,160,int(alpha*255)),sf.Color(50,50,50,int(alpha*255))
-        
-        shape = sf.Shape()
-        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
-        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
-        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
-        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
-        
-        shape.SetOutlineWidth(4)
-        shape.EnableFill(True)
-        shape.EnableOutline(True)
-        self.DrawSingle(shape)
-        pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
-        
-        text.SetColor(sf.Color.Black if text_color != sf.Color.Black else sf.Color(220,220,220))
-        text.SetPosition(pos[0]+1,pos[1]+1)
-        self.DrawSingle(text)
-
-        text.SetColor(text_color)
-        text.SetPosition(pos[0],pos[1])
-        self.DrawSingle(text)
+        from notification import MessageBox
+        Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper))
+        self.PushSuspend()
 
     def DrawSingle(self,drawable,pos=None):
         """Draw a sf.Drawable at a specific position, which is

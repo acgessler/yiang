@@ -36,6 +36,7 @@ from log import Log
 from renderer import Renderer,Drawable
 from posteffect import PostFXCache,FadeInOverlay,FadeOutOverlay
 from highscore import HighscoreManager
+from notification import MessageBox
 
 # numeric constants for the menu entries
 OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
@@ -137,25 +138,20 @@ class MainMenu(Drawable):
             accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
             def on_close(key, accepted=accepted, outer=self):
                 if key == accepted[1]:
-                    
-                    outer.game = Game()
-                    outer.game.LoadLevel(1)
-                    outer._OptionsResumeGame()
-                    return
+                    outer.game = None
+                    outer._OptionsNewGame()
                 
-                    
-            self.game._FadeOutAndShowStatusNotice(defaults.game_over_fade_time,
-            sf.String(("""You are currently in a game. 
+            Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
 If you start a new game, all your progress will be lost.
 
 Hit {0} to continue
-Hit {1} to cancel""").format(
+Hit {1} to cancel""".format(
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("escape")
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-        )), (550, 120), 0.0, accepted, sf.Color.Black, on_close) 
+            )), defaults.game_over_fade_time, (550, 120), 0.0, accepted, sf.Color.Black, on_close))
             
         else:
             self.game = Game(Renderer.app)
@@ -472,11 +468,28 @@ def main():
     Renderer.Initialize()
     HighscoreManager.Initialize()
     
-    Renderer.AddDrawable(MainMenu())
-    Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
+    accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+    def on_close(key, accepted=accepted):
+        if key == accepted[1]:
+            Renderer.AddDrawable(MainMenu())
+            Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
+            return 
+        sys.exit(0)
+                
+    Renderer.AddDrawable( MessageBox(sf.String("""This game is dangerous and will damage your brain. 
+Do not continue unless you know what you're doing.
+
+
+Hit {0} to continue
+Hit {1} to cancel""".format(
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("escape")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+            )), defaults.game_over_fade_time, (550, 130), 0.0, accepted, sf.Color.Green, on_close))
     
     Renderer.DoLoop()
-    
     Renderer.Terminate()
     
 main()
