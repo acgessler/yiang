@@ -409,11 +409,10 @@ TimeDelta:         {dtime:.4}
         self.lives = self.lives-1
 
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
-        def on_close(key,accepted=accepted,outer=self):
+        def on_close(key):
             if key == accepted[2]:
-                outer.GameOver()
-                
-            outer._Respawn(True if key == accepted[0] else False)
+                self.GameOver()
+            self._Respawn(True if key == accepted[0] else False)
             
         self._FadeOutAndShowStatusNotice(sf.String("""You got killed by {0}
 
@@ -452,7 +451,7 @@ Press {3} to leave the game""".format(
                 print("Failure reading scores.txt file")
 
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        def on_close(key,accepted=accepted,outer=self):
+        def on_close(key):
             Renderer.RemoveDrawable(self)
             raise NewFrame()
             
@@ -482,7 +481,7 @@ Hit {3} or {4} to return to the menu .. """.format(
         print("Level {0} done, advancing to the next level".format(self.level_idx))
         
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        def on_close(key,accepted=accepted):
+        def on_close(key):
             if self.level_idx == main.get_level_count():
                 lidx = 1
                 self.rounds += 1
@@ -551,8 +550,8 @@ Hit {2} to return to the menu""").format(
         # Once this was a powerful god-function, now it is just a
         # pointless wrapper to halt the game while the
         # status notice is visible.
-        def on_close_wrapper(result,on_close=on_close,outer=self):
-            outer.PopSuspend()
+        def on_close_wrapper(result):
+            self.PopSuspend()
             on_close(result)
             
             

@@ -115,6 +115,8 @@ class MainMenu(Drawable):
         self.game = None
         self.swallow_escape = False
         self.ttl = 0
+        
+        self.block = False
 
         self.clock = sf.Clock()
         self.images = []
@@ -136,11 +138,13 @@ class MainMenu(Drawable):
         if not self.game is None:
             
             accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-            def on_close(key, accepted=accepted, outer=self):
+            def on_close(key, outer=self):
+                self.block = False
                 if key == accepted[1]:
                     outer.game = None
                     outer._OptionsNewGame()
                 
+            self.block = True
             Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
 If you start a new game, all your progress will be lost.
 
@@ -172,11 +176,17 @@ Hit {1} to cancel""".format(
 
         Renderer.AddDrawable(self.game,self)
         
-        #if self.game.Run() is True:
-        #    self.swallow_escape = True
-
-        #    if self.game.IsGameOver():
-        #        self.game = None
+    def _OptionsNotImplemented(self):
+        
+        def on_close(result):
+            self.block = False
+                        
+        self.block = True
+        accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+        Renderer.AddDrawable( MessageBox(sf.String("""This feature is currently not implemented, sorry.""",
+            Size=defaults.letter_height_game_over,
+            Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+        )), defaults.game_over_fade_time, (550, 50), 0.0, accepted, sf.Color.Black, on_close))
             
 
     options = [
@@ -184,11 +194,11 @@ Hit {1} to cancel""".format(
         ("Resume Game", _OptionsResumeGame, "You will die soon",0.4),
         ("Start Tutorial", _OptionsTutorial, "You will die",0.4),
         ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.4),
-        ("Preferences", _OptionsCredits, "Options",1.0),
+        ("Preferences", _OptionsNotImplemented, "Options",1.0),
         ("Credits", _OptionsCredits, "CREDITS",1.0),
+        ("Check for Updates", _OptionsNotImplemented, "Updates!",0.4),
         ("Quit!", _OptionsQuit ,"",1.0)
     ]
-
 
     def _LoadImages(self):
         # actually this is not used atm
@@ -209,28 +219,29 @@ Hit {1} to cancel""".format(
             self.game = None
         
         Renderer.SetClearColor(sf.Color.White)
-        for event in Renderer.GetEvents():
-            # Escape key : exit
-            if event.Type == sf.Event.KeyPressed:
-                if event.Key.Code == KeyMapping.Get("escape") and self.swallow_escape is False:
-                    Renderer.Quit()
-                    return
+        if self.block is False:
+            for event in Renderer.GetEvents():
+                # Escape key : exit
+                if event.Type == sf.Event.KeyPressed:
+                    if event.Key.Code == KeyMapping.Get("escape") and self.swallow_escape is False:
+                        Renderer.Quit()
+                        return
 
-                elif event.Key.Code == KeyMapping.Get("accept"):
-                    print("Enter menu entry {0}".format(self.cur_option))
-                    MainMenu.options[self.cur_option][1] (self)
+                    elif event.Key.Code == KeyMapping.Get("accept"):
+                        print("Enter menu entry {0}".format(self.cur_option))
+                        MainMenu.options[self.cur_option][1] (self)
                 
-                elif event.Key.Code == KeyMapping.Get("menu-down"):
-                    self.SetMenuOption(self.cur_option+1)
+                    elif event.Key.Code == KeyMapping.Get("menu-down"):
+                        self.SetMenuOption(self.cur_option+1)
                      
-                elif event.Key.Code == KeyMapping.Get("menu-up"):
-                    self.SetMenuOption(self.cur_option-1)
+                    elif event.Key.Code == KeyMapping.Get("menu-up"):
+                        self.SetMenuOption(self.cur_option-1)
 
-            elif event.Type == sf.Event.KeyReleased and event.Key.Code == KeyMapping.Get("escape"):
-                self.swallow_escape = False
+                elif event.Type == sf.Event.KeyReleased and event.Key.Code == KeyMapping.Get("escape"):
+                    self.swallow_escape = False
 
-            if event.Type == sf.Event.Resized:
-                assert False
+                if event.Type == sf.Event.Resized:
+                    assert False
 
         self.DrawBackground()
         for entry in itertools.chain(self.menu_text):
