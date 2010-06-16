@@ -182,7 +182,7 @@ class Game(Drawable):
         
         status = sf.String("Level {0}.{1}, {2:.2} days\n{3:4.5} $".format(
             self.rounds,
-            self.level_idx,
+            int(self.level_idx),
             Game.SecondsToDays( self.GetTotalElapsedTime() ),
             self.GetScore()/100),
             Font=self.status_bar_font,Size=defaults.letter_height_status)
