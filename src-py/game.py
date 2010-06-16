@@ -482,20 +482,21 @@ Hit {3} or {4} to return to the menu .. """.format(
         print("Level {0} done, advancing to the next level".format(self.level_idx))
         
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        def on_close(key,accepted=accepted,outer=self):
-            if outer.level_idx == main.get_level_count():
+        def on_close(key,accepted=accepted):
+            if self.level_idx == main.get_level_count():
                 lidx = 1
-                outer.rounds += 1
+                self.rounds += 1
             else:
-                lidx = outer.level_idx+1
+                lidx = self.level_idx+1
                        
             if self.LoadLevel(lidx) is False:
                 print("Failure loading level {0}, returning to main menu".format(lidx))
-                Renderer.RemoveDrawable(self.outer)
+                Renderer.RemoveDrawable(self)
 
             if key == accepted[0]:
-                Renderer.RemoveDrawable(outer)
-                raise NewFrame()
+                Renderer.RemoveDrawable(self)
+                
+            raise NewFrame()
 
         self._FadeOutAndShowStatusNotice(sf.String(("""Hey, you solved Level {0}!.
 Hit {1} to continue .. (don't disappoint me)
