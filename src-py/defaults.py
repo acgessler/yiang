@@ -23,9 +23,9 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 0.1
-resolution = [1280, 650]
+resolution = [1280, 750]
 fullscreen = False
-letter_size = [8, 12]
+letter_size = [8, 14]
 letter_height_intro = 10
 letter_height_status = 36
 letter_height_lives = 9
@@ -67,6 +67,7 @@ fade_start = 0.75
 dither = True
 enable_menu_background_danger_stubs = False
 death_sprites = 60
+status_bar_top_tiles = 2.5
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
@@ -81,6 +82,7 @@ font_status = font_menu
 font_debug_info = font_monospace
 font_game_over = font_menu
 credits_string = "(c) 2010 Alexander Christoph Gessler"
+resolution_base = [1280, 750]
 
 # -----------------------------------------------------------------------------
 # derived values, do not change. you have been warned.
@@ -108,8 +110,8 @@ def update_derived():
     global letter_size
 
     # derived values, do not change
-    scale = (resolution[0] / 1280, resolution[1] / 650)
-    letter_size = (int(letter_size[0] * scale[0]), int(letter_size[1] * scale[0]))
+    scale = (resolution[0] / resolution_base[0], resolution[1] / resolution_base[1])
+    letter_size = (int(letter_size[0] * scale[1]), int(letter_size[1] * scale[1]))
     cells = (resolution[0] // letter_size[0], resolution[1] // letter_size[1])
     cells_intro = ((resolution[0] * 4) // (letter_height_intro * 2), resolution[1] // letter_height_intro)
     tiles = (cells[0] // tiles_size[0], cells[1] // tiles_size[1])

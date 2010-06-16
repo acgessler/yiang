@@ -240,11 +240,10 @@ Hit {1} to cancel""").format(
         for entry in itertools.chain(self.menu_text):
             Renderer.app.Draw(entry)
             
-        hscaled = int(20*defaults.scale[1])
         a,b = sf_string_with_shadow(
                 "Best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100),
                 defaults.font_menu,
-                hscaled,
+                int(20*defaults.scale[1]),
                 defaults.resolution[0]-325*defaults.scale[1],
                 10,
                 sf.Color.Green)

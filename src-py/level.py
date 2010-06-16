@@ -78,7 +78,7 @@ class Level:
                 if len(line) == 0:
                     continue
 
-                diff = len(lines) - defaults.tiles[1]
+                #diff = len(lines) - (defaults.tiles[1]-3)
 
                 assert len(line) % 3 == 0
                 for x in range(0, len(line), 3):
@@ -185,7 +185,7 @@ class Level:
     def _ComputeOrigin(self):
         """Used internally to setup the initial origin of the
         of the level view."""
-        self.origin = (0, -(defaults.tiles[1] - self.GetLevelVisibleSize()[1]) / 2)
+        self.origin = (0, -defaults.status_bar_top_tiles)
     
     def GetLevelSize(self):
         """Get the size of the current level, in tiles. The return

@@ -153,8 +153,7 @@ class Game(Drawable):
         if self.level is None:
             return
         
-        statush = max( 40, self.level.GetLevelVisibleSize()[1]/2 )
-
+        statush = defaults.status_bar_top_tiles *  defaults.tiles_size_px[1]
         if not hasattr(self,"status_bar_font"):
             self.status_bar_font = FontCache.get(defaults.letter_height_status,\
                 face=defaults.font_status)
@@ -167,7 +166,6 @@ class Game(Drawable):
         shape = sf.Shape()
 
         fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
-        statush = 90
         
         shape.AddPoint(1,0,bcol,fcol)
         shape.AddPoint(defaults.resolution[0]-1,0,bcol,bcol)
@@ -223,6 +221,7 @@ class Game(Drawable):
         shape = sf.Shape()
 
         fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
+        statush = (defaults.tiles[1] - defaults.status_bar_top_tiles - self.level.GetLevelVisibleSize()[1])* defaults.tiles_size_px[1]
         
         shape.AddPoint(1,defaults.resolution[1]-statush,bcol,fcol)
         shape.AddPoint(1,defaults.resolution[1],fcol,bcol)
