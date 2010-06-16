@@ -1,0 +1,33 @@
+from player import KillAnimStub; <out> = KillAnimStub(<raw>)
+*****
+***
+
+***
+***
+
+**
+*x*
+
+**
+ **
+
+*
+
+*****
+**/
+ *
+
+A***
+ **
+
+  ____
+o|'O. |o
+ |___-|
+
+o_/ **
+  |__|
+ _|  |_
+
+*\_o
+
+'O

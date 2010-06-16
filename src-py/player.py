@@ -20,6 +20,7 @@
 # Python core
 import math
 import random
+import os
 
 # PySFML
 import sf
@@ -78,6 +79,10 @@ class Player(Entity):
         self.jump_scale = 1.0
         self.speed_scale = 1.0
         self.unkillable = 0
+        
+        # self.draw is set to False while the player is death and 
+        # his body is therefore not visible.
+        self.draw = True
         
     def SetGame(self, game):
         self.game = game
@@ -243,10 +248,19 @@ class Player(Entity):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event."""
         if self.game.GetLives() > 0:
-            for i in range(30):
-                self.game.AddEntity(KillAnimStub(self.pos, random.uniform(-1.0, 1.0), \
-                    (random.random(), random.random()), random.random()*12.0))
+            for i in range(50):
+                from tile import TileLoader
+                t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc","splatter1.txt"),self.game)
+                
+                t.SetSpeed(random.uniform(-1.0, 1.0))
+                t.SetDirection((random.random(), random.random()))
+                t.SetTTL(random.random()*12.0)
+                t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
+                t.SetColor(sf.Color.Red)
+                
+                self.game.AddEntity(t)
             
+        self.draw = False
         self.game.Kill(killer)
 
     def _HandleCollisions(self, newpos, newvel):
@@ -354,6 +368,9 @@ class Player(Entity):
         return newpos, newvel
             
     def Draw(self):
+        if self.draw is False:
+            return
+        
         self.tiles[self.cur_tile[-1]].DrawRelative(self.pos)
 
     def GetBoundingBox(self):
@@ -397,6 +414,7 @@ class Player(Entity):
         self._Reset()
         raise NewFrame()
 
+
 class RespawnPoint(Entity):
     """A respawning point represents a possible position where
     the player can respawn if he or she dies"""
@@ -418,20 +436,28 @@ class RespawnPoint(Entity):
     def Interact(self, other):
         return Entity.ENTER
 
+
 class KillAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player is killed."""
 
-    def __init__(self, pos, speed, dirvec, ttl, text="YOU DIED HERE"):
-        Tile.__init__(self, text)
+    def __init__(self, text):
+        Tile.__init__(self, random.choice(text.split("\n\n")))
 
-        self.opos = pos
-        self.SetPosition(pos)
-        self.speed = speed
-        self.ttl = ttl
+        #self.opos = pos
+        self.ttl = 0
         
-        self.dirvec = mathutil.Normalize(dirvec)
+        self.dirvec = [1.0,1.0]
         self.SetColor(sf.Color.Red)
+        
+    def SetDirection(self,dirvec):
+        self.dirvec = mathutil.Normalize(dirvec)
+        
+    def SetSpeed(self,speed):
+        self.speed = speed
+        
+    def SetTTL(self,ttl):
+        self.ttl = ttl
 
     def GetBoundingBox(self):
         return None
@@ -450,13 +476,13 @@ class KillAnimStub(Tile):
         Tile.Draw(self)
 
         # could use Rotate(), Scale() as well
-        start = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates((
-            self.pos[0] - (self.pos[0] - self.opos[0]) * 0.25 + 0.8, self.pos[1] - (self.pos[1] - self.opos[1]) * 0.25)))
-        end = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates(
-            (self.opos[0], self.opos[1])))
+        #start = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates((
+        #    self.pos[0] - (self.pos[0] - self.opos[0]) * 0.25 + 0.8, self.pos[1] - (self.pos[1] - self.opos[1]) * 0.25)))
+        #end = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates(
+        #    (self.opos[0], self.opos[1])))
         
-        shape = sf.Shape.Line(start[0], start[1], end[0], end[1], 1, sf.Color.Red)
-        self.game.DrawSingle(shape)
+        #shape = sf.Shape.Line(start[0], start[1], end[0], end[1], 1, sf.Color.Red)
+        #self.game.DrawSingle(shape)
 
 
         
