@@ -58,6 +58,9 @@ class SmallTraverser(Enemy):
         return "a Harmful Traverser Unit (HTU)"
 
     def Update(self, time_elapsed, time):
+        if not self.game.IsGameRunning():
+            return 
+            
         rect = self.GetBoundingBox()
         res = 0
 
