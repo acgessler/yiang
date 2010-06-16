@@ -248,7 +248,7 @@ class Player(Entity):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event."""
         if self.game.GetLives() > 0:
-            for i in range(50):
+            for i in range(defaults.death_sprites):
                 from tile import TileLoader
                 t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc","splatter1.txt"),self.game)
                 

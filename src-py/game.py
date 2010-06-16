@@ -437,6 +437,10 @@ Press {3} to leave the game""".format(
         
         DebugTools.Trace()
         self.game_over = True
+        
+        from highscore import HighscoreManager
+        record = HighscoreManager.SetHighscore(self.score)
+        
         print("Game over, score is {0} and time is {1}".format(self.score,
             self.clock.GetElapsedTime()))
 
@@ -461,7 +465,7 @@ That's {2}.\n\n
 Hit {3} or {4} to return to the menu .. """).format(
                     Game.SecondsToDays(self.GetTotalElapsedTime()),
                     self.score/100,
-                    self.score_map[math.log(self.score*10+1,2)],
+                    "a new high score record" if record is True else self.score_map[math.log(self.score*10+1,2)],
                     KeyMapping.GetString("escape"),
                     KeyMapping.GetString("accept")
                 ),
@@ -490,7 +494,8 @@ Hit {3} or {4} to return to the menu .. """).format(
                 lidx = outer.level_idx+1
                        
             if self.LoadLevel(lidx) is False:
-                raise ReturnToMenuDueToFailure("Failure loading level {0}".format(lidx))
+                print("Failure loading level {0}, returning to main menu".format(lidx))
+                Renderer.RemoveDrawable(self.outer)
 
             if key == accepted[0]:
                 Renderer.RemoveDrawable(outer)

@@ -66,6 +66,7 @@ fade_stop = 0.25
 fade_start = 0.75
 dither = True
 enable_menu_background_danger_stubs = False
+death_sprites = 60
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

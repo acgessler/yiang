@@ -35,6 +35,7 @@ from game import Game
 from log import Log
 from renderer import Renderer,Drawable
 from posteffect import PostFXCache,FadeInOverlay,FadeOutOverlay
+from highscore import HighscoreManager
 
 # numeric constants for the menu entries
 OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
@@ -238,6 +239,16 @@ Hit {1} to cancel""").format(
         self.DrawBackground()
         for entry in itertools.chain(self.menu_text):
             Renderer.app.Draw(entry)
+            
+        hscaled = int(20*defaults.scale[1])
+        a,b = sf_string_with_shadow(
+                "Best result so far: $ {0}".format(HighscoreManager.GetHighscoreRecord()),
+                defaults.font_menu,
+                hscaled,
+                defaults.resolution[0]-350,
+                10,
+                sf.Color.Green)
+        Renderer.app.Draw(a); Renderer.app.Draw(b)
 
     def SetMenuOption(self,i,first=False):
         """Choose the currently selected main menu option, entries
@@ -461,7 +472,7 @@ def main():
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
 
     Renderer.Initialize()
-    
+    HighscoreManager.Initialize()
     
     Renderer.AddDrawable(MainMenu())
     Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
