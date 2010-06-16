@@ -242,10 +242,10 @@ Hit {1} to cancel""").format(
             
         hscaled = int(20*defaults.scale[1])
         a,b = sf_string_with_shadow(
-                "Best result so far: $ {0}".format(HighscoreManager.GetHighscoreRecord()),
+                "Best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100),
                 defaults.font_menu,
                 hscaled,
-                defaults.resolution[0]-350,
+                defaults.resolution[0]-325*defaults.scale[1],
                 10,
                 sf.Color.Green)
         Renderer.app.Draw(a); Renderer.app.Draw(b)
