@@ -65,6 +65,7 @@ swapout_distance_rel = 3.0
 fade_stop = 0.75
 fade_start = 0.25
 dither = True
+enable_menu_background_danger_stubs = False
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

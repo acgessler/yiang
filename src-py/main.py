@@ -251,7 +251,7 @@ Hit {1} to cancel""").format(
         
         
         for i in range(len(MainMenu.options)):
-            hscaled = int(MainMenu.options[i][3]*height*(defaults.scale[1]))
+            hscaled = int(MainMenu.options[i][3]*height*defaults.scale[1])
             self.menu_text[i] = sf_string_with_shadow(
                 MainMenu.options[i][0],
                 defaults.font_menu,
@@ -298,13 +298,14 @@ Hit {1} to cancel""").format(
         text.SetColor(sf.Color.Black)
         Renderer.app.Draw(text)
 
-        # if self.ttl == 0:
-        #    self.cached_danger_signs = self.RecacheDangerSigns()
-        #    self.ttl = defaults.danger_signs_ttl
-        # self.ttl = self.ttl-1
+        if defaults.enable_menu_background_danger_stubs is True:
+            if self.ttl == 0:
+                self.cached_danger_signs = self.RecacheDangerSigns()
+                self.ttl = defaults.danger_signs_ttl
+                self.ttl = self.ttl-1
             
-        #for te in self.cached_danger_signs:
-        #    Renderer.app.Draw(te)
+            for te in self.cached_danger_signs:
+                Renderer.app.Draw(te)
 
         #self.effect.SetParameter("strength", (math.sin( self.clock.GetElapsedTime()/20.0 ) +1)*0.5);
         
@@ -415,7 +416,7 @@ Hit {1} to cancel""").format(
                     print("Failure loading credits file")
                     return
 
-                self.height,self.height_spacing = 30,5
+                self.height,self.height_spacing = int(30*defaults.scale[1]),int(5*defaults.scale[1])
 
             def _BackToMenu(self):
                 Renderer.RemoveDrawable(self)
