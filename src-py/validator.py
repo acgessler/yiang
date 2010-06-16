@@ -43,9 +43,9 @@ def validate_level(lines,idx):
         
     del lines[0]
 
-    if len(lines)-1>defaults.tiles[1]:
+    if len(lines)-1>defaults.max_game_tiles_y:
         print("Level {0}, WARN: Level is probably too height - {1} tiles, but maximum visible is {2}".format(
-            idx,len(lines),defaults.tiles[1]))
+            idx,len(lines),defaults.max_game_tiles_y))
 
     player,final = False,False
     for n,line in enumerate(lines):

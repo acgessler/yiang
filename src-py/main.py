@@ -255,14 +255,13 @@ Hit {1} to cancel""").format(
         self.cur_option = i % len(MainMenu.options)
         print("Select menu option {0}".format(self.cur_option))
 
-        height = 80
         y = 120
         for i in range(self.cur_option):
-            y -= height*MainMenu.options[i][3]
+            y -= defaults.letter_height_menu*MainMenu.options[i][3]*defaults.scale[1]
         
         
         for i in range(len(MainMenu.options)):
-            hscaled = int(MainMenu.options[i][3]*height*defaults.scale[1])
+            hscaled = int(MainMenu.options[i][3]*defaults.letter_height_menu*defaults.scale[1])
             self.menu_text[i] = sf_string_with_shadow(
                 MainMenu.options[i][0],
                 defaults.font_menu,

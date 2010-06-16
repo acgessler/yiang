@@ -23,10 +23,11 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 0.1
-resolution = [1280, 750]
+resolution = [1280, 850]
 fullscreen = False
-letter_size = [8, 14]
-letter_height_intro = 10
+letter_size = [8, 13]
+letter_height_intro = 12
+letter_height_menu = 100
 letter_height_status = 36
 letter_height_lives = 9
 letter_height_game_over = 15
@@ -82,7 +83,7 @@ font_status = font_menu
 font_debug_info = font_monospace
 font_game_over = font_menu
 credits_string = "(c) 2010 Alexander Christoph Gessler"
-resolution_base = [1280, 750]
+resolution_base = [1280, 850]
 
 # -----------------------------------------------------------------------------
 # derived values, do not change. you have been warned.
@@ -92,6 +93,7 @@ tiles = None
 tiles_size_px = None
 cull_distance = None
 scale = None
+max_game_tiles_y = None
 
 # -----------------------------------------------------------------------------
 def update_derived():
@@ -108,18 +110,20 @@ def update_derived():
     global swapout_distance_sqr
     global scale
     global letter_size
+    global max_game_tiles_y
 
-    # derived values, do not change
+    # this is a mess and we ought to clean up here ..
     scale = (resolution[0] / resolution_base[0], resolution[1] / resolution_base[1])
     letter_size = (int(letter_size[0] * scale[1]), int(letter_size[1] * scale[1]))
     cells = (resolution[0] // letter_size[0], resolution[1] // letter_size[1])
     cells_intro = ((resolution[0] * 4) // (letter_height_intro * 2), resolution[1] // letter_height_intro)
     tiles = (cells[0] // tiles_size[0], cells[1] // tiles_size[1])
-    tiles_size_px = (letter_size[0] * tiles_size[0], letter_size[1] * tiles_size[1])
+    tiles_size_px = (letter_size[0] * tiles_size[0], letter_size[1] * tiles_size[1] + 1)
     cull_distance_sqr = (cull_distance_rel * tiles[0]) ** 2 + (cull_distance_rel * tiles[1]) ** 2
     swapout_distance_sqr = (swapout_distance_rel * tiles[0]) ** 2 + (swapout_distance_rel * tiles[1]) ** 2
+    max_game_tiles_y = int(tiles[1]-status_bar_top_tiles)
     
-    
+    # leave the other font heights unscaled
 
 def merge_config(file):
     """Merge the current configuration with the settings
