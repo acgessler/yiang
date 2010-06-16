@@ -64,10 +64,10 @@ class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
 
-    def __init__(self, app):
+    def __init__(self, undecorated=False):
         """ Initialize a new Game instance given the primary
         RenderWindow """
-        self.app = app
+        self.undecorated = undecorated
 
         if defaults.draw_clamp_to_pixel is True:
             self.ToDeviceCoordinates = self._ToDeviceCoordinates_Floored
@@ -624,7 +624,7 @@ Hit {2} to return to the menu""").format(
             pos = self.ToDeviceCoordinates(pos)
             drawable.SetPosition(*pos)
             
-        self.app.Draw(drawable)
+        Renderer.app.Draw(drawable)
         self.draw_counter += 1
 
     def Clear(self,color):

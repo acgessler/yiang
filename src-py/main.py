@@ -41,6 +41,7 @@ OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPT
 
 # special level numbers, these levels aren't in the regular map rotation
 SPECIAL_LEVEL_TUTORIAL = 10000
+SPECIAL_LEVEL_INTRO = 20000
 
 def get_level_count():
     """Get the number of levels in the data/levels folder."""
@@ -136,7 +137,7 @@ class MainMenu(Drawable):
             def on_close(key, accepted=accepted, outer=self):
                 if key == accepted[1]:
                     
-                    outer.game = Game(Renderer.app)
+                    outer.game = Game()
                     outer.game.LoadLevel(1)
                     outer._OptionsResumeGame()
                     return
@@ -161,7 +162,7 @@ Hit {1} to cancel""").format(
             self._OptionsResumeGame()
 
     def _OptionsTutorial(self):
-        self.game = Game(Renderer.app)
+        self.game = Game()
         self.game.LoadLevel(SPECIAL_LEVEL_TUTORIAL)
         self._OptionsResumeGame()
 
@@ -460,6 +461,7 @@ def main():
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
 
     Renderer.Initialize()
+    
     
     Renderer.AddDrawable(MainMenu())
     Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
