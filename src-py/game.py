@@ -149,7 +149,6 @@ class Game(Drawable):
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
-        
         if self.level is None:
             return
         
@@ -221,7 +220,7 @@ class Game(Drawable):
         shape = sf.Shape()
 
         fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
-        statush = (defaults.tiles[1] - defaults.status_bar_top_tiles - 0.5 - self.level.GetLevelVisibleSize()[1])* defaults.tiles_size_px[1]
+        statush = (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1])* defaults.tiles_size_px[1]
         
         shape.AddPoint(1,defaults.resolution[1]-statush,bcol,fcol)
         shape.AddPoint(1,defaults.resolution[1],fcol,bcol)
