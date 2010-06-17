@@ -404,6 +404,9 @@ TimeDelta:         {dtime:.4}
         another life, set game over alternatively"""
         DebugTools.Trace()
         
+        if not self.IsGameRunning():
+            return 
+        
         self.score *= 0.9
         if self.lives == 0:
             self.GameOver()
