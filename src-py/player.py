@@ -269,7 +269,7 @@ class Player(Entity):
         """Handle any collision events, given the computed new position
         of the player. The funtion returns the actual position after
         collision handling has been performed."""
-        self.game.AddToActiveBBs(self)
+        self.AddToActiveBBs()
 
         # brute force collision detection for dummies .. actually I am not proud of it :-)
         # XXX rewrite this, do proper intersection between the movement vector and the
@@ -291,7 +291,7 @@ class Player(Entity):
                 continue
 
             cnt += 1
-            self.game.AddToActiveBBs(collider)
+            collider.AddToActiveBBs()
 
             res = collider.Interact(self)
             if res == Entity.KILL:
@@ -310,7 +310,7 @@ class Player(Entity):
                 #print("ceiling")
 
                 cnt += 1
-                self.game.AddToActiveBBs(collider)
+                collider.AddToActiveBBs()
 
             # collision with floor
             elif hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == 0:
@@ -325,7 +325,7 @@ class Player(Entity):
                 self.in_jump = False
 
                 cnt += 1
-                self.game.AddToActiveBBs(collider)
+                collider.AddToActiveBBs()
 
             
         for collider in self.game._EnumEntities():
@@ -354,7 +354,7 @@ class Player(Entity):
                 #print("left")
 
                 cnt += 1
-                self.game.AddToActiveBBs(collider)
+                collider.AddToActiveBBs()
 
             # collision on the right
             elif hasall & (Entity.LOWER_LEFT | Entity.UPPER_LEFT) and hasall & (Entity.LOWER_RIGHT | Entity.UPPER_RIGHT) == 0:
@@ -363,7 +363,7 @@ class Player(Entity):
                 #print("right")
 
                 cnt += 1
-                self.game.AddToActiveBBs(collider)
+                collider.AddToActiveBBs()
 
 
         #print("Active colliders: {0}".format(cnt))

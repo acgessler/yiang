@@ -124,8 +124,8 @@ class Game(Drawable):
                 self._UndoFrameTime()
                 raise
         
-        if defaults.debug_draw_bounding_boxes:
-            self._DrawBoundingBoxes()
+            if defaults.debug_draw_bounding_boxes:
+                self.level.DrawBoundingBoxes()
 
         self._DrawStatusBar()
 
@@ -276,32 +276,6 @@ class Game(Drawable):
         except NewFrame:
             print("Received NewFrame notification during event polling")
             raise
-                
-    def _DrawBoundingBoxes(self):
-        """Draw visible bounding boxes around all entities in the scene"""
-        for entity in self._EnumEntities():
-            bb = entity.GetBoundingBox()
-            if bb is None:
-                continue
-
-            shape = sf.Shape()
-
-            bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
-            bb[0:2] = self.ToDeviceCoordinates(self.level.ToCameraCoordinates( bb[0:2] ))
-            bb[2:4] = self.ToDeviceCoordinates(self.level.ToCameraCoordinates( bb[2:4] ))
-
-            color = sf.Color.Red if getattr(entity,"highlight_bb",False) is True else sf.Color.Green
-            shape.AddPoint(bb[0],bb[1],color,color)
-            shape.AddPoint(bb[2],bb[1],color,color)
-            shape.AddPoint(bb[2],bb[3],color,color)
-            shape.AddPoint(bb[0],bb[3],color,color)
-
-            shape.SetOutlineWidth(1)
-            shape.EnableFill(False)
-            shape.EnableOutline(True)
-
-            self.DrawSingle(shape)
-            entity.highlight_bb = False
 
     def _DrawDebugInfo(self,dtime):
         """Dump debug information (i.e. entity stats) to the upper right
@@ -349,12 +323,6 @@ TimeDelta:         {dtime:.4}
         s.SetPosition(defaults.resolution[0]-302,140)
         s.SetColor(sf.Color.White)
         self.DrawSingle(s)
-
-    def AddToActiveBBs(self,entity):
-        """Debug feature, mark a specific entity for highlighting
-        in the next frame. Its bounding box will then be drawn
-        in red"""
-        entity.highlight_bb = True # (HACK, inject a hidden attribute)
 
     def GetClock(self):
         """ Get the timer used to measure time since this
@@ -666,6 +634,12 @@ class Entity(Drawable):
 
     def SetColor(self,color):
         self.color = color
+        
+    def AddToActiveBBs(self,color=sf.Color.Red):
+        """Debug feature, mark a specific entity for highlighting
+        in the next frame. Its bounding box will then be drawn
+        in the color specified"""
+        self.highlight_bb = color
 
     def Interact(self,other):
         return Entity.BLOCK

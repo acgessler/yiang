@@ -347,6 +347,42 @@ class Level:
         position in this frame. This is used internally by
         Entity.SetPosition()"""
         self.entities_mov.add(entity)
+        
+    def _GetEntityDefBBColor(self,entity):
+        """Set the bounding box color for an entity that doesn't override
+        this setting explicitly."""    
+        return sf.Color.Yellow if len(entity.windows)>1 else sf.Color.Green 
+        
+    def DrawBoundingBoxes(self):
+        """Draw visible bounding boxes around all entities in the level"""
+        for entity in self.EnumVisibleEntities():
+            bb = entity.GetBoundingBox()
+            if bb is None:
+                continue
+
+            shape = sf.Shape()
+
+            bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
+            bb[0:2] = self.game.ToDeviceCoordinates(self.ToCameraCoordinates( bb[0:2] ))
+            bb[2:4] = self.game.ToDeviceCoordinates(self.ToCameraCoordinates( bb[2:4] ))
+
+            color = self._GetEntityDefBBColor(entity) if getattr(entity,"highlight_bb",None) is None else entity.highlight_bb
+            shape.AddPoint(bb[0],bb[1],color,color)
+            shape.AddPoint(bb[2],bb[1],color,color)
+            shape.AddPoint(bb[2],bb[3],color,color)
+            shape.AddPoint(bb[0],bb[3],color,color)
+
+            shape.SetOutlineWidth(1)
+            shape.EnableFill(False)
+            shape.EnableOutline(True)
+
+            self.game.DrawSingle(shape)
+            
+            # entities are forced to update their color once per frame
+            try:
+                delattr(entity,"highlight_bb")
+            except AttributeError:
+                pass
     
     
 class LevelLoader:

@@ -77,11 +77,11 @@ class SmallTraverser(Enemy):
             
             tj = self._BBCollide_XYWH(rect, mycorner)
             if tj > 0 and collider.Interact(self) != Entity.ENTER:
-                self.game.AddToActiveBBs(collider)
+                collider.AddToActiveBBs()
                 res |= tj
 
         if res > 0:
-            self.game.AddToActiveBBs(self)
+            self.AddToActiveBBs()
             if self.direction == Entity.DIR_HOR:
                 x = self.game.GetLevelSize()[0]
                 if self.vel < 0 and (self.pos[0] < 0 or res & (Entity.UPPER_LEFT | Entity.LOWER_LEFT) == (Entity.UPPER_LEFT | Entity.LOWER_LEFT)) or\
