@@ -82,7 +82,6 @@ class Game(Drawable):
         self.total_accum = 0.0
         self.score = 0.0
         self.lives = defaults.lives
-        self.last_time = 0
         self.game_over = False
         self.speed_scale = 1.0
         self.rounds = 1
@@ -106,6 +105,7 @@ class Game(Drawable):
         
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
+            self.last_time = 0.0
 
         for event in Renderer.GetEvents():
             self._HandleIncomingEvent(event)
@@ -136,6 +136,8 @@ class Game(Drawable):
         return len(self.suspended) == 0
             
     def _UndoFrameTime(self):
+        #if not hasattr(self,"clock"):
+        #    return
         self.last_time = self.clock.GetElapsedTime() 
         self.total -= self.last_time-self.time
 
@@ -235,17 +237,17 @@ class Game(Drawable):
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
-        # Close window : exit
-        # if event.Type == sf.Event.Closed:
-        #    self.app.Close()
-        #    break
-
-        # Escape key : return to main menu, suspend the game
+        if not self.IsGameRunning():
+            return
+        
         try:
             if event.Type == sf.Event.KeyPressed:
                 if event.Key.Code == KeyMapping.Get("escape"):
+                    self.total_accum += self.time
+                    delattr(self,"clock")
+                    
                     Renderer.RemoveDrawable(self)
-                    return
+                    raise NewFrame()
 
                 if not defaults.debug_keys:
                     return
@@ -274,7 +276,7 @@ class Game(Drawable):
                 
         except NewFrame:
             print("Received NewFrame notification during event polling")
-            pass
+            raise
                 
     def _DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the scene"""
