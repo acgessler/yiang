@@ -183,7 +183,7 @@ Hit {1} to cancel""".format(
                         
         self.block = True
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        Renderer.AddDrawable( MessageBox(sf.String("""This feature is currently not implemented, sorry.""",
+        Renderer.AddDrawable( MessageBox(sf.String("""This feature is not currently implemented, sorry.""",
             Size=defaults.letter_height_game_over,
             Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
         )), defaults.game_over_fade_time, (550, 50), 0.0, accepted, sf.Color.Black, on_close))
@@ -487,7 +487,7 @@ def main():
             return 
         sys.exit(0)
                 
-    Renderer.AddDrawable( MessageBox(sf.String("""This game is dangerous and will damage your brain. 
+    Renderer.AddDrawable( MessageBox(sf.String("""This game is dangerous and will damage your mind. 
 Do not continue unless you know what you're doing.
 
 

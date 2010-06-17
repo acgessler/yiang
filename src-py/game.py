@@ -146,8 +146,7 @@ class Game(Drawable):
         in the global entity list"""
         
         # XXX move this to Level class. ...
-        for entity in self.level.entities:
-            yield entity
+        return self.level.EnumActiveEntities()
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
@@ -311,7 +310,7 @@ class Game(Drawable):
         if not hasattr(self,"debug_info_font"):
             self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
             
-        entity_count,entities_inrange = len(0 if self.level is None else self.level.entities),0
+        entity_count,entities_active,entities_visible,entities_nowindow = self.level.GetEntityStats()
         fps = 1.0/dtime
 
         import gc
@@ -323,8 +322,10 @@ class Game(Drawable):
         locdef.update(self.__dict__)
         
         text = """
-DrawablesTotal:    {entity_count}
-DrawablesInRange:  {entities_inrange}
+EntitiesTotal:     {entity_count}
+EntitiesActive:    {entities_active}
+EntitiesVisible:   {entities_visible}
+EntitiesNoWindow:  {entities_nowindow}
 DrawCalls:         {draw_counter}
 GCCollections:     {gcc}
 GodMode:           {debug_godmode}
@@ -345,7 +346,7 @@ TimeDelta:         {dtime:.4}
         s = sf.String(text,Font=self.debug_info_font,\
             Size=defaults.letter_height_debug_info)
 
-        s.SetPosition(defaults.resolution[0]-302,119)
+        s.SetPosition(defaults.resolution[0]-302,140)
         s.SetColor(sf.Color.White)
         self.DrawSingle(s)
 
@@ -659,6 +660,9 @@ class Entity(Drawable):
 
     def SetPosition(self,pos):
         self.pos = list(pos)
+        
+        if not self.game is None:
+            self.game.level._MarkEntityAsMoved(self)
 
     def SetColor(self,color):
         self.color = color

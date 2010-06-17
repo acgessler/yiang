@@ -91,7 +91,7 @@ class Player(Entity):
             tile.SetGame(self.game)
 
     def SetPosition(self, pos):
-        self.pos = list(pos)
+        Entity.SetPosition(self,pos)
         #for tile in self.tiles:
         #    tile._Recache()
 
@@ -171,7 +171,8 @@ class Player(Entity):
         newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
 
         # Check for collisions
-        self.pos, self.vel = self._HandleCollisions(newpos, newvel)
+        pos, self.vel = self._HandleCollisions(newpos, newvel)
+        self.SetPosition(pos)
 
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:

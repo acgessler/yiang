@@ -26,6 +26,7 @@ import random
 import itertools
 import collections
 import os
+import itertools
 
 # My own stuff
 import defaults
@@ -51,7 +52,7 @@ class Level:
             vis_ofs -- Offset on the y axis where the visible part 
                of the level starts. The number of rows is constant.
         """
-        self.entities, self.entities_add, self.entities_rem = set(), set(), set()
+        self.entities, self.entities_add, self.entities_rem, self.entities_mov = set(), set(), set(), set()
         self.origin = [0, 0]
         self.game = game
         self.level = level
@@ -61,6 +62,9 @@ class Level:
         self.postfx_rt = []
         self.postfx = postfx
         self._LoadPostFX()
+        
+        self.entities_active = set()
+        self.window_unassigned = set()
         
         assert self.game
         assert self.level >= 0
@@ -77,8 +81,6 @@ class Level:
                 line = line.rstrip(" \n\t.")
                 if len(line) == 0:
                     continue
-
-                #diff = len(lines) - (defaults.tiles[1]-3)
 
                 assert len(line) % 3 == 0
                 for x in range(0, len(line), 3):
@@ -116,18 +118,150 @@ class Level:
         validator.validate_level(self.lines, level)
         
         self._ComputeOrigin()
+        self._GenerateWindows()
+        self._UpdateEntityList()
+        
+    def _GenerateWindows(self):
+        """Subdivide the whole scene into windows"""
+        self.windows = []
+        
+        # note: add 1.0 because self.level_size could be off a bit.
+        num =  (int(self.level_size[0] / defaults.level_window_size_abs[0] + 1.5), 
+            int(self.level_size[1] / defaults.level_window_size_abs[1] + 1.5))
+        
+        #print(num)
+        for y in range(num[1]):
+            self.windows.append([])
+            l = self.windows[-1]
+            
+            for x in range(num[0]):
+                l.append([])
+                
+        for e in self.entities:
+            self._AddEntityToWindows(e)
+                    
+    def _AddEntityToWindows(self,e):
+        """Determine the rectangle covered by an entity and add
+        it to the appropriate windows."""
+        bb = e.GetBoundingBox()
+        if bb is None:
+            self.window_unassigned.add(e)
+            
+            # elements with no explicit bounding box are
+            # a) collected in a special 'window' and
+            # b) always assumed to be visible, they are responsible
+            #    for removing themselves from all relevant lists when
+            #    they are no longer visible.
+            e.window_unassigned = True
+            e.in_visible_set = True
+            e.windows = []
+            return
+            
+        xx,yy = int(bb[0] / defaults.level_window_size_abs[0]), int(bb[1] / defaults.level_window_size_abs[1])
+        xe,ye = int((bb[0]+bb[2]) / defaults.level_window_size_abs[0]), int((bb[1]+bb[3]) / defaults.level_window_size_abs[1])
+        #print(xx,yy,xe,ye)
+        for xxx in range(xx,xe+1):
+            for yyy in range(yy,ye+1):
+                thiswnd = self.windows[yyy][xxx]
+                thiswnd.append(e)
+                    
+                if not hasattr(e,""):
+                    e.windows = []
+                        
+                e.windows.append(thiswnd)
+                    
+    def _EnumWindows(self):
+        """Enumerate all windows in the scene as a 2-tuple (cull-level, window). 
+        cull-level is either 0 (visible), 1 (close) or 2 (away)"""
+        dl,tiles = defaults.level_window_size_abs,defaults.tiles
+        for y,ww in enumerate( self.windows ):
+            y = y*dl[1] - self.origin[1]
+            
+            for x,window in enumerate( ww ):
+                x = x*dl[0] - self.origin[0]
+                
+                if (0 < x < tiles[0] or 0 < x+dl[0] < tiles[0]) and (0 < y < tiles[1] or 0 < y+dl[1] < tiles[1]):
+                    yield 0,window
+            
+    def _LoadPostFX(self):
+        """Load all postfx's in self.postfx and store them
+        in self.postfx_rt"""
+        self.postfx_rt = []
+        for pfx,env in self.postfx:
+            p = PostFXCache.Get(pfx,env)
+            if not p is None:
+                self.postfx_rt.append(p)
 
+    def _UpdateEntityList(self):
+        """Used internally to apply deferred changes to the entity
+        list. Changes are deferred till the end of the frame to
+        avoid changing list sizes while iterating through them."""
+        for entity in self.entities_rem:
+            try:
+                self.entities.remove(entity)
+                for window in entity.windows:
+                    window.remove(entity)
+            except KeyError:
+                pass
+                
+            if hasattr(entity,"window_unassigned"):
+                self.window_unassigned.remove(entity)
+            
+        for entity in self.entities_add:
+            self.entities.add(entity)
+            self._AddEntityToWindows(entity)
+            
+        for entity in self.entities_mov:
+            if not entity in self.entities or entity in self.entities_add:
+                continue
+            
+            for window in entity.windows:
+                window.remove(entity)
+                
+            self._AddEntityToWindows(entity)
+            
+        self.entities_add, self.entities_rem, self.entities_mov = set(), set(), set()
+        
+    def GetEntityStats(self):
+        """Return a 4-tuple (entities_total,entities_active,entities_visible,entities_nowindow).
+        These numbers are for statistical and informative purposes, they need not be exact."""
+        return (len(self.entities),
+                len(self.entities_active), 
+                len([e for e in self.entities_active if e.in_visible_set is True]),
+                len(self.window_unassigned)
+         )
+        
+    def EnumActiveEntities(self):
+        """Enum all entities which are currently 'active', that is
+        they are subject to regular updates and some of them
+        are visible."""
+        return self.entities_active
+            
+    def EnumVisibleEntities(self):
+        """Enum all entities which are currently 'visible'.
+        Visible entities are always active."""
+        return [ e for e in self.entities_active if e.in_visible_set is True]
+            
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame
         and skip any other jobs for this frame"""
         
         Renderer.SetClearColor(self.color)
-        for entity in self.entities:
-            entity.Update(time, dtime)
-                    
-        for entity in self.entities:
-            entity.Draw()
+        self.entities_active = set()
+        for n,window in self._EnumWindows():
+            if n == 2:
+                continue
+            
+            for entity in window:
+                self.entities_active.add(entity)
+                entity.in_visible_set = n == 0
+                
+        self.entities_active.update(self.window_unassigned)
+        for entity in self.EnumActiveEntities():
+            entity.Update(time,dtime)
+            if entity.in_visible_set is True:
+                entity.Draw()
             
         self._UpdateEntityList()
         
@@ -160,27 +294,6 @@ class Level:
         effects on top of this level."""
         for r in self.postfx_rt:
             r.SetParameter(*arg)
-    
-    def _LoadPostFX(self):
-        """Load all postfx's in self.postfx and store them
-        in self.postfx_rt"""
-        self.postfx_rt = []
-        for pfx,env in self.postfx:
-            p = PostFXCache.Get(pfx,env)
-            if not p is None:
-                self.postfx_rt.append(p)
-
-    def _UpdateEntityList(self):
-        """Used internally to apply deferred changes to the entity
-        list. Changes are deferred till the end of the frame to
-        avoid changing list sizes while iterating through them."""
-        for entity in self.entities_rem:
-            self.entities.remove(entity)
-            
-        for entity in self.entities_add:
-            self.entities.add(entity)
-            
-        self.entities_add, self.entities_rem = set(), set()
         
     def _ComputeOrigin(self):
         """Used internally to setup the initial origin of the
@@ -228,6 +341,12 @@ class Level:
         frame so it is safe to be called from enumeration
         context"""
         self.entities_rem.add(entity)
+        
+    def _MarkEntityAsMoved(self, entity):
+        """Indicate that a particular entity has changed its
+        position in this frame. This is used internally by
+        Entity.SetPosition()"""
+        self.entities_mov.add(entity)
     
     
 class LevelLoader:

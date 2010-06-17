@@ -69,6 +69,7 @@ dither = True
 enable_menu_background_danger_stubs = False
 death_sprites = 60
 status_bar_top_tiles = 2.5
+level_window_size_rel = [0.4,1.0]
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
@@ -94,6 +95,7 @@ tiles_size_px = None
 cull_distance = None
 scale = None
 max_game_tiles_y = None
+level_window_size_abs = None
 
 # -----------------------------------------------------------------------------
 def update_derived():
@@ -111,6 +113,7 @@ def update_derived():
     global scale
     global letter_size
     global max_game_tiles_y
+    global level_window_size_abs
 
     # this is a mess and we ought to clean up here ..
     scale = (resolution[0] / resolution_base[0], resolution[1] / resolution_base[1])
@@ -122,6 +125,7 @@ def update_derived():
     cull_distance_sqr = (cull_distance_rel * tiles[0]) ** 2 + (cull_distance_rel * tiles[1]) ** 2
     swapout_distance_sqr = (swapout_distance_rel * tiles[0]) ** 2 + (swapout_distance_rel * tiles[1]) ** 2
     max_game_tiles_y = int(tiles[1]-status_bar_top_tiles)
+    level_window_size_abs = (level_window_size_rel[0]*tiles[0],level_window_size_rel[1]*tiles[1])
     
     # leave the other font heights unscaled
 

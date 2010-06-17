@@ -1,5 +1,5 @@
 from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_1",text_color=sf.Color.Black,only_once=True)
-You got it, these DANGER tiles are dangerous. They will kill you immediately. But some of them are special. If you are not brave enough to try them, you won't find the next part of me.
+You got it, these DANGER tiles are DANGERous. They will kill you immediately. But some of them are special - if you are not brave enough to try them, you won't find the next part of me (I'm the tutorial).
 
 See you.
 

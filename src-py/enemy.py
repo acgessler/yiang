@@ -101,9 +101,10 @@ class SmallTraverser(Enemy):
                 assert False
 
         if self.direction == Entity.DIR_HOR:
-            self.pos = (self.pos[0] + self.vel * time, self.pos[1])
+            pos = (self.pos[0] + self.vel * time, self.pos[1])
         else:
-            self.pos = (self.pos[0], self.pos[1] + self.vel * time)
+            pos = (self.pos[0], self.pos[1] + self.vel * time)
+        self.SetPosition(pos)
             
         AnimTile.Update(self, time_elapsed, time)
         self.SetState(1 if self.vel > 0 else 0)
