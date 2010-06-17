@@ -21,6 +21,7 @@
 import math
 import random
 import os
+import operator
 
 # PySFML
 import sf
@@ -395,7 +396,7 @@ class Player(Entity):
         assert len(self.respawn_positions)
 
         min_distance = float(defaults.min_respawn_distance)
-        for rpos in reversed(self.respawn_positions if enable_respawn_points is True else ()):
+        for rpos in sorted(self.respawn_positions if enable_respawn_points is True else (),key=operator.itemgetter(0),reverse=True):
             if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
                 continue # this is to protect the player from being
                 # respawned in kill zones.
