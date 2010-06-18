@@ -112,7 +112,7 @@ class Level:
             print("Level " + str(level) + " is not well-formatted (line {0})".format(line_idx))
             traceback.print_exc()
 
-        self.level_size = (x // 3, y)
+        self.level_size = (x // 3 + 1, y)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
         
         validator.validate_level(self.lines, level)
@@ -162,7 +162,16 @@ class Level:
         #print(xx,yy,xe,ye)
         for xxx in range(xx,xe+1):
             for yyy in range(yy,ye+1):
-                thiswnd = self.windows[yyy][xxx]
+                
+                for y in range(len(self.windows),yyy+1):
+                    self.windows.append([])
+                    
+                for y in range(yyy+1):
+                    this = self.windows[y]
+                    for x in range(len(this), xxx+1 ):
+                        this.append([])
+      
+                thiswnd = self.windows[yyy][xxx]              
                 thiswnd.append(e)
                     
                 if not hasattr(e,""):
