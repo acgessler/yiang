@@ -139,6 +139,13 @@ class Level:
                 
         for e in self.entities:
             self._AddEntityToWindows(e)
+            
+    def _BBToWindowRange(self,bb):
+        """Get the range of windows a BB spans itself"""
+        return (int(bb[0] / defaults.level_window_size_abs[0]), 
+            int(bb[1] / defaults.level_window_size_abs[1]),
+            int((bb[0]+bb[2]) / defaults.level_window_size_abs[0]), 
+            int((bb[1]+bb[3]) / defaults.level_window_size_abs[1]))
                     
     def _AddEntityToWindows(self,e):
         """Determine the rectangle covered by an entity and add
@@ -157,8 +164,8 @@ class Level:
             e.windows = []
             return
             
-        xx,yy = int(bb[0] / defaults.level_window_size_abs[0]), int(bb[1] / defaults.level_window_size_abs[1])
-        xe,ye = int((bb[0]+bb[2]) / defaults.level_window_size_abs[0]), int((bb[1]+bb[3]) / defaults.level_window_size_abs[1])
+        xx,yy,xe,ye = self._BBToWindowRange(bb)
+        
         #print(xx,yy,xe,ye)
         for xxx in range(xx,xe+1):
             for yyy in range(yy,ye+1):
@@ -249,7 +256,27 @@ class Level:
     def EnumVisibleEntities(self):
         """Enum all entities which are currently 'visible'.
         Visible entities are always active."""
-        return [ e for e in self.entities_active if e.in_visible_set is True]
+        return [e for e in self.entities_active if e.in_visible_set is True]
+    
+    def EnumPossibleColliders(self,bb):
+        """Given a bounding box (x,y,w,h), enumerate all entities
+        within the same window that could possibly collide."""
+        had = set()
+        xx,yy,xe,ye = self._BBToWindowRange(bb)
+        xx = min(xx,len(self.windows[0]))
+        xe = min(xe,len(self.windows[0])-1)
+        yy = min(yy,len(self.windows))
+        ye = min(ye,len(self.windows)-1)
+        for yyy in range(yy,ye+1):
+            for xxx in range(xx,xe+1):
+                thiswnd = self.windows[yyy][xxx]
+                
+                for entity in thiswnd:
+                    if entity in had:
+                        continue
+                    
+                    yield entity
+                    had.add(entity)
             
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,
@@ -355,7 +382,8 @@ class Level:
         """Indicate that a particular entity has changed its
         position in this frame. This is used internally by
         Entity.SetPosition()"""
-        self.entities_mov.add(entity)
+        if not hasattr(entity,"window_unassigned"):
+            self.entities_mov.add(entity)
         
     def _GetEntityDefBBColor(self,entity):
         """Set the bounding box color for an entity that doesn't override

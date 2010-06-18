@@ -124,7 +124,20 @@ class Player(Entity):
         
         inp = Renderer.app.GetInput()
         vec = [0, 0]
+        
+        # (HACK) -- for debugging, prevent the player from falling below the map
+        if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
+            self.pos[1] = 1
+            self.in_jump, self.block_jump = False, False
+            self.vel[1] = 0
+            
+        if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
+            self._Kill("the map's border")
 
+        self._CheckForLeftMapBorder()
+        self._MoveMap(time)
+        self._CheckForRightMapBorder()
+        
         pvely = self.vel[1]
 
         if inp.IsKeyDown(KeyMapping.Get("move-left")):
@@ -173,19 +186,6 @@ class Player(Entity):
         # Check for collisions
         pos, self.vel = self._HandleCollisions(newpos, newvel)
         self.SetPosition(pos)
-
-        # (HACK) -- for debugging, prevent the player from falling below the map
-        if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
-            self.pos[1] = 1
-            self.in_jump, self.block_jump = False, False
-            self.vel[1] = 0
-            
-        if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
-            self._Kill("the map's border")
-
-        self._CheckForLeftMapBorder()
-        self._MoveMap(time)
-        self._CheckForRightMapBorder()
 
         self.vel[0] = 0
         self._UpdatePostFX()
@@ -275,7 +275,8 @@ class Player(Entity):
         # XXX rewrite this, do proper intersection between the movement vector and the
         # bb borders.
         cnt, hasall = 0, 0
-        for collider in self.game._EnumEntities():
+        rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
+        for collider in self.game.GetLevel().EnumPossibleColliders(rect):
             if collider is self:
                 continue
             
@@ -283,9 +284,7 @@ class Player(Entity):
             if mycorner is None:
                 continue
 
-            mycorner = (mycorner[0], mycorner[1], mycorner[2] + mycorner[0], mycorner[3] + mycorner[1])
-            rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
-                            
+            mycorner = (mycorner[0], mycorner[1], mycorner[2] + mycorner[0], mycorner[3] + mycorner[1])                            
             hasall = self._BBCollide(mycorner, rect)
             if hasall == 0:
                 continue
