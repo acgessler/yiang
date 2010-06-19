@@ -37,6 +37,7 @@ from renderer import Renderer,Drawable
 from posteffect import PostFXCache,FadeInOverlay,FadeOutOverlay
 from highscore import HighscoreManager
 from notification import MessageBox
+from audio import SoundEffectCache,BerlinerPhilharmoniker
 
 # numeric constants for the menu entries
 OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
@@ -204,6 +205,7 @@ Hit {1} to cancel""".format(
             self.game = Game(Renderer.app)
             self.game.LoadLevel(level)
             Renderer.AddDrawable(self.game,old)
+            
 
     def _LoadImages(self):
         # actually this is not used atm
@@ -482,6 +484,15 @@ def main():
 
     Renderer.Initialize()
     HighscoreManager.Initialize()
+    BerlinerPhilharmoniker.Initialize()
+    
+
+    SoundEffectCache.Get("logo.ogg").Play()
+    
+    class DummyMusicPlayer(Drawable):
+        def Draw(self):
+            BerlinerPhilharmoniker.Process()
+    Renderer.AddDrawable(DummyMusicPlayer())
     
     accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):

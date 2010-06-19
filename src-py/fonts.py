@@ -27,6 +27,7 @@ class FontCache:
 
     cached = {}
 
+    @staticmethod
     def get(height,face=""):
         if not face:
             face = defaults.font_monospace
