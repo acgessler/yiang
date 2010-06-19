@@ -43,19 +43,20 @@ class SmallTraverser(Enemy):
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR):
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose="a Harmful Traverser Unit (HTU)",shrinkbb=0.8):
         AnimTile.__init__(self, text, height, frames, speed, 2)
 
+        self.verbose = verbose
         self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
         self.direction = direction
 
-        self._ShrinkBB(0.8)
+        self._ShrinkBB(shrinkbb)
 
     def Interact(self, other):
         return Entity.KILL
 
     def GetVerboseName(self):
-        return "a Harmful Traverser Unit (HTU)"
+        return self.verbose
 
     def Update(self, time_elapsed, time):
         if not self.game.IsGameRunning():
