@@ -135,37 +135,10 @@ class MainMenu(Drawable):
         self.ShowCredits()
 
     def _OptionsNewGame(self):
-        if not self.game is None:
-            
-            accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-            def on_close(key, outer=self):
-                self.block = False
-                if key == accepted[1]:
-                    outer.game = None
-                    outer._OptionsNewGame()
-                
-            self.block = True
-            Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
-If you start a new game, all your progress will be lost.
-
-Hit {0} to continue
-Hit {1} to cancel""".format(
-                    KeyMapping.GetString("accept"),
-                    KeyMapping.GetString("escape")
-                ),
-                Size=defaults.letter_height_game_over,
-                Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), defaults.game_over_fade_time, (550, 120), 0.0, accepted, sf.Color.Black, on_close))
-            
-        else:
-            self.game = Game(Renderer.app)
-            self.game.LoadLevel(1)
-            self._OptionsResumeGame()
+        self._TryStartGameFromLevel(1)
 
     def _OptionsTutorial(self):
-        self.game = Game()
-        self.game.LoadLevel(SPECIAL_LEVEL_TUTORIAL)
-        self._OptionsResumeGame()
+        self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL)
 
     def _OptionsNewGameChoose(self):
         self.ChooseLevel()
@@ -199,6 +172,38 @@ Hit {1} to cancel""".format(
         ("Check for Updates", _OptionsNotImplemented, "Updates!",0.4),
         ("Quit!", _OptionsQuit ,"",1.0)
     ]
+    
+    def _TryStartGameFromLevel(self,level,old=None):
+        if old is None:
+            old = self
+            
+        if not self.game is None:
+            
+            accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+            def on_close(key):
+                self.block = False
+                if key == accepted[1]:
+                    self.game = None
+                    self._TryStartGameFromLevel(level,old)
+                
+            self.block = True
+            Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
+If you start a new game, all your progress will be lost.
+
+Hit {0} to continue
+Hit {1} to cancel""".format(
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("escape")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+            )), defaults.game_over_fade_time, (550, 120), 0.0, accepted, sf.Color.Black, on_close))
+            
+        else:
+        
+            self.game = Game(Renderer.app)
+            self.game.LoadLevel(level)
+            Renderer.AddDrawable(self.game,old)
 
     def _LoadImages(self):
         # actually this is not used atm
@@ -389,13 +394,10 @@ Hit {1} to cancel""".format(
                             if self.level == self.num:
                                 return self._BackToMenu()
                             
-                            self.outer.game = Game(Renderer.app)
-                            self.outer.game.LoadLevel(self.level)
-                            
                             Renderer.RemoveDrawable(self,False)
-                            Renderer.AddDrawable(self.outer.game,self.outer)
-
-            
+                            self.outer._TryStartGameFromLevel(self.level) 
+                           
+                                
                 self.outer.DrawBackground()
 
                 #print(rows,xnum)
