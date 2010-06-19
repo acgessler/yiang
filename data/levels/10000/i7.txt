@@ -1,0 +1,2 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_6",text_color=sf.Color.Black,only_once=True)
+The next enemies will be much more demanding than the HTUs - 'cause they are highly intelligent. You can, however, collect ammo and shoot them by pressing SPACE. Note that this feature hasn't been implemented either, so you just wasted your time staring at your space key.

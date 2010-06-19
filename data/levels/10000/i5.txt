@@ -1,0 +1,4 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_6",text_color=sf.Color.Black,only_once=True)
+MegaJump makes you jump much, much higher. It cannot be accumulated as well.
+
+Note: There are many other perks in the game. I am not going to explain all of them, because most of them do what they look like. Most. Be careful: some may affect you negatively.
