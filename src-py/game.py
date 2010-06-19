@@ -644,6 +644,9 @@ class Entity(Drawable):
     def SetColor(self,color):
         self.color = color
         
+    def GetDrawOrder(self):
+        return 500
+        
     def AddToActiveBBs(self,color=sf.Color.Red):
         """Debug feature, mark a specific entity for highlighting
         in the next frame. Its bounding box will then be drawn

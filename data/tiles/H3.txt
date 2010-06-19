@@ -1,4 +1,4 @@
-from tile import Tile; <out> = Tile(<raw>,20,10,Entity.ENTER)
+from tile import Tile; <out> = Tile(<raw>,20,10,Entity.ENTER,draworder=-1500)
        /\
       /__\
        <>

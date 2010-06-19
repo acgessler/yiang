@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,20,10,Entity.ENTER)
+<out> = Tile(<raw>,20,10,Entity.ENTER,draworder=-1500)
                                  XXX
                                 XXX
                                 XXX                       

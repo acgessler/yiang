@@ -104,6 +104,9 @@ class Player(Entity):
         self.color = pos
         for tile in self.tiles:
             tile.SetColor(pos)
+            
+    def GetDrawOrder(self):
+        return 1000
 
     def _SetJumpAnimState(self):
         if len(self.cur_tile) <= 1:

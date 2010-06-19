@@ -1,0 +1,11 @@
+BackgroundsLarge	-2000
+BackgroundsSmall	-1500
+Sun					-1000
+Tile				10
+AnimTile			20
+Entity				500
+Player				1000
+Enemy				2000
+SmallTraverser		2100
+
+

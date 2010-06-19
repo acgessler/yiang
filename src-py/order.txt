@@ -1,11 +1,7 @@
 Game		-10
 Menu		1000
-Fade         990
+Fade        990
 NotiBox		1100
-
-StatusBar	2000
-BBoxes		3000
-DebugInfo	4000
 
 FadeMenuInAtVeryBeginning 50000  
 

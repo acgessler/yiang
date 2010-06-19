@@ -35,7 +35,7 @@ class Enemy(AnimTile):
         return "an unknown enemy"
     
     def GetDrawOrder(self):
-        return 100
+        return 2000
 
 
 class SmallTraverser(Enemy):
@@ -57,6 +57,9 @@ class SmallTraverser(Enemy):
 
     def GetVerboseName(self):
         return self.verbose
+    
+    def GetDrawOrder(self):
+        return 2100
 
     def Update(self, time_elapsed, time):
         if not self.game.IsGameRunning():

@@ -34,13 +34,14 @@ class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing.
     Extends Entity with more specialized behaviour."""
          
-    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=defaults.tiles_size[1],collision=Entity.BLOCK):
+    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=defaults.tiles_size[1],collision=Entity.BLOCK,draworder=10):
         Entity.__init__(self)
 
         self.collision = collision
         self.text = text
         self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
         self._Recache()
+        self.draworder = draworder
 
     def __str__(self):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\
@@ -52,6 +53,11 @@ class Tile(Entity):
     def SetColor(self,color):
         Entity.SetColor(self,color)
         self.cached.SetColor(self.color)
+        
+    def GetDrawOrder(self):
+        # unlike most other kinds of Entities, the draw order is
+        # freely configurable here.
+        return self.draworder
 
     def GetBoundingBox(self):
         if hasattr(self,"shrink_percentage"):
@@ -105,7 +111,7 @@ class AnimTile(Tile):
     played automatically or manually."""
 
     
-    def __init__(self,text,height,frames,speed,states=1,width=0):
+    def __init__(self,text,height,frames,speed,states=1,width=0,draworder=20):
         """ Read an animated tile from a text block. Such a textual
         description contains the ASCII images for all frames,
         separated by an empty line for clarity. There can be multiple
@@ -126,7 +132,7 @@ class AnimTile(Tile):
                 AssertionError
         """
 
-        Tile.__init__(self)
+        Tile.__init__(self,draworder=draworder)
         
         lines = text.split("\n")
         n = 0

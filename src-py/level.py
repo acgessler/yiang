@@ -305,8 +305,9 @@ class Level:
         self.entities_active.update(self.window_unassigned)
         for entity in self.EnumActiveEntities():
             entity.Update(time,dtime)
-            if entity.in_visible_set is True:
-                entity.Draw()
+        
+        for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
+            entity.Draw()
             
         self._UpdateEntityList()
         

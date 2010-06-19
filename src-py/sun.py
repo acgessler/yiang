@@ -36,6 +36,9 @@ class Sun(Tile):
 
     def Interact(self, other):
         return Entity.ENTER
+    
+    def GetDrawOrder(self):
+        return -1000
 
     def Update(self, time_elapsed, time):
         for entity in self.game._EnumEntities():
