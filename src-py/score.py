@@ -48,7 +48,7 @@ class ScoreTile(AnimTile):
 
 class ScoreTileAnimStub(Tile):
     """Implements the text string that is spawned whenever
-    the aplyer triggers a score item."""
+    the player triggers a score item."""
 
     def __init__(self,text,pos,speed):
         Tile.__init__(self,text)

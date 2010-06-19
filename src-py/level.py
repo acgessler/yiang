@@ -181,7 +181,7 @@ class Level:
                 thiswnd = self.windows[yyy][xxx]              
                 thiswnd.append(e)
                     
-                if not hasattr(e,""):
+                if not hasattr(e,"windows"):
                     e.windows = []
                         
                 e.windows.append(thiswnd)
@@ -213,10 +213,12 @@ class Level:
         list. Changes are deferred till the end of the frame to
         avoid changing list sizes while iterating through them."""
         for entity in self.entities_rem:
-            try:
-                self.entities.remove(entity)
+            if hasattr(entity,"windows"):
                 for window in entity.windows:
                     window.remove(entity)
+            
+            try:    
+                self.entities.remove(entity)
             except KeyError:
                 pass
                 
@@ -231,8 +233,11 @@ class Level:
             if not entity in self.entities or entity in self.entities_add:
                 continue
             
-            for window in entity.windows:
-                window.remove(entity)
+            if hasattr(entity,"windows"):
+                for window in entity.windows:
+                    window.remove(entity)
+                    
+                entity.windows = []
                 
             self._AddEntityToWindows(entity)
             
