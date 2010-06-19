@@ -34,12 +34,23 @@ class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing.
     Extends Entity with more specialized behaviour."""
          
-    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=defaults.tiles_size[1],collision=Entity.BLOCK,draworder=10):
+    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None):
+        
+        # Note: the 'constants' from defaults may change during startup, but 
+        # this file may get parsed BEFORE this happens, so we can't
+        # access defaults safely from default arguments which are 
+        # stored at parse-time.
+        height = height or defaults.tiles_size[1]  
+        width  = width  or defaults.tiles_size[0] 
+        rsize  = rsize  or defaults.letter_size[1]
+        scale  =  rsize / defaults.letter_size[1] 
+            
         Entity.__init__(self)
 
+        self.rsize = rsize
         self.collision = collision
         self.text = text
-        self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
+        self.dim = (width*scale/defaults.tiles_size[0],height*scale/defaults.tiles_size[1])
         self._Recache()
         self.draworder = draworder
 
@@ -68,11 +79,9 @@ class Tile(Entity):
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
 
     def _Recache(self):
-        """Cache the tile string from self.text"""
-        
-        rsize = defaults.letter_size[1]
-        font = FontCache.get(rsize)
-        self.cached = sf.String(self.text,Font=font,Size=rsize)
+        """Cache the tile string from self.text with font size self.rsize"""
+        font = FontCache.get(self.rsize)
+        self.cached = sf.String(self.text,Font=font,Size=self.rsize)
         
         self.cached.SetColor(self.color)
 
@@ -274,4 +283,7 @@ class TileLoader:
             print("exec() fails loading tile {0}, executing line: {1} ".format(file,l))
             traceback.print_exc()
             
-        return tempdict.get("entity",Tile())
+        tile = tempdict.get("entity",Tile())
+        tile.SetGame(game)
+        
+        return tile

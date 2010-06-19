@@ -38,7 +38,10 @@ class MessageBox(Drawable):
         text_color=sf.Color.Red,
         on_close=lambda x:None):
         
-        """Create a message box"""
+        """Create a message box.
+        XXX document parameters
+        """
+        Drawable.__init__(self)
         self.result = []
         self.break_codes = break_codes
         self.fade_time = fade_time

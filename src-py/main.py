@@ -77,7 +77,7 @@ def sf_string_with_shadow(text,font_name,size,x,y,color,bgcolor=sf.Color(100,100
     font = FontCache.get(size+shadow_diff, font_name)
 
     tex2 = sf.String(text,Font=font,Size=size+shadow_diff)
-    tex2.SetPosition(x-5*(size/80.0),y-1*(size/80.0)) # found by guess
+    tex2.SetPosition(x-5*(size/80.0),y-1*(size/80.0)) # found by guessing
     tex2.SetColor(bgcolor)
 
     return (tex2,tex)
@@ -350,6 +350,7 @@ Hit {1} to cancel""".format(
         class LevelChooser(Drawable):
 
             def __init__(self,outer):
+                Drawable.__init__(self)
                 
                 self.base_height = 90
                 self.base_offset = (35,35)
@@ -424,6 +425,7 @@ Hit {1} to cancel""".format(
         """Show the game's credits"""
 
         class Credits(Drawable):
+            Drawable.__init__(self)
 
             def __init__(self,outer):
                 self.outer = outer

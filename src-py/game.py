@@ -67,6 +67,7 @@ class Game(Drawable):
     def __init__(self, undecorated=False):
         """ Initialize a new Game instance given the primary
         RenderWindow """
+        Drawable.__init__(self)
         self.undecorated = undecorated
 
         if defaults.draw_clamp_to_pixel is True:
@@ -74,6 +75,7 @@ class Game(Drawable):
 
         # These are later changed by LoadLevel(...), NextLevel(...)
         self.level_idx = -1
+        self.level = None
         
         # Load the first level for testing purposes
         # self.LoadLevel(1)
@@ -89,8 +91,6 @@ class Game(Drawable):
         self.suspended = []
         
         self.draw_counter = 0
-
-        #self._LoadPostFX()
 
     def Run(self):
         print("Enter main loop")
@@ -147,13 +147,21 @@ class Game(Drawable):
         
         # XXX move this to Level class. ...
         return self.level.EnumActiveEntities()
+    
+    def GetUpperStatusBarHeight(self):
+        """Get the height of the upper status bar, in tiles"""
+        return defaults.status_bar_top_tiles
+    
+    def GetLowerStatusBarHeight(self):
+        """Get the height of the lower status bar, in tiles"""
+        return (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1])
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
         if self.level is None:
             return
         
-        statush = defaults.status_bar_top_tiles *  defaults.tiles_size_px[1]
+        statush = self.GetUpperStatusBarHeight()*defaults.tiles_size_px[1]
         if not hasattr(self,"status_bar_font"):
             self.status_bar_font = FontCache.get(defaults.letter_height_status,\
                 face=defaults.font_status)
@@ -217,11 +225,11 @@ class Game(Drawable):
         status.SetColor(sf.Color.Yellow)
         self.DrawSingle(status)
         
-        # finally, the lower part of the cinema box
+        # finally, the lower part of the cinematic box
         shape = sf.Shape()
 
         fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
-        statush = (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1])* defaults.tiles_size_px[1]
+        statush = self.GetLowerStatusBarHeight() * defaults.tiles_size_px[1]
         
         shape.AddPoint(1,defaults.resolution[1]-statush,bcol,fcol)
         shape.AddPoint(1,defaults.resolution[1],fcol,bcol)
@@ -265,7 +273,7 @@ class Game(Drawable):
                     defaults.debug_godmode = not defaults.debug_godmode
 
                 elif event.Key.Code == KeyMapping.Get("debug-kill"):
-                    self.Kill()
+                    self.Kill("(yourself, you pressed the KILL button!)")
                     
                 elif event.Key.Code == KeyMapping.Get("debug-gameover"):
                     self.GameOver()
@@ -285,6 +293,7 @@ class Game(Drawable):
             self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
             
         entity_count,entities_active,entities_visible,entities_nowindow = self.level.GetEntityStats()
+        drawables_global = len(Renderer.GetDrawables())
         fps = 1.0/dtime
 
         import gc
@@ -299,8 +308,9 @@ class Game(Drawable):
 EntitiesTotal:     {entity_count}
 EntitiesActive:    {entities_active}
 EntitiesVisible:   {entities_visible}
-EntitiesNoWindow:  {entities_nowindow}
 DrawCalls:         {draw_counter}
+EntitiesNoWindow:  {entities_nowindow}
+DrawablesGlobal:   {drawables_global}
 GCCollections:     {gcc}
 GodMode:           {debug_godmode}
 UpDownMove:        {debug_updown_move}
@@ -367,6 +377,7 @@ TimeDelta:         {dtime:.4}
         entities for the current level. Usually there is just
         a single player in a level, so the return value is 
         predictable."""
+        from player import Player
         for entity in self.level.EnumAllEntities():
             if isinstance(entity,Player):
                 return entity
@@ -494,9 +505,22 @@ Hit {2} to return to the menu""").format(
         
     def LoadLevel(self,idx):
         """Load a particular level and drop the old one"""
+        self.DropLevel()
         self.level_idx = idx
         self.level = LevelLoader.LoadLevel(idx,self)
         return False if self.level is None else True
+    
+    def DropLevel(self):
+        """Unload the current level, leaving the game area totally
+        empty (which is a valid state, however)"""
+        if self.level is None:
+            return
+        
+        print("Unloading level {0}".format(self.level_idx))
+        for entity in self.level.EnumAllEntities():
+            entity.OnLeaveLevel()
+            
+        self.level = None
     
     def PushSuspend(self):
         """Increase the 'suspended' counter of the game by one. The
@@ -622,6 +646,7 @@ class Entity(Drawable):
     UPPER_LEFT,UPPER_RIGHT,LOWER_LEFT,LOWER_RIGHT,CONTAINS,ALL = 0x1,0x2,0x4,0x8,0x10,0xf|0x10
 
     def __init__(self):
+        Drawable.__init__(self)
         self.pos = [0,0]
         self.color = sf.Color.White
         self.game = None
@@ -638,8 +663,8 @@ class Entity(Drawable):
     def SetPosition(self,pos):
         self.pos = list(pos)
         
-        if not self.game is None:
-            self.game.level._MarkEntityAsMoved(self)
+        if not self.game is None and not self.game.GetLevel() is None:
+            self.game.GetLevel()._MarkEntityAsMoved(self)
 
     def SetColor(self,color):
         self.color = color
@@ -658,6 +683,13 @@ class Entity(Drawable):
 
     def Respawn(self,enable_respawn_points):
         """Invoked when the player is killed and needs to respawn"""
+        pass
+    
+    def OnLeaveLevel(self):
+        """Invoked when the level the entity belongs to is 
+        about to be unloaded. This means the entity will be
+        destroyed as well, but the exact time cannot be
+        determined due to the GC."""
         pass
 
     def GetVerboseName(self):

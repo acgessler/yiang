@@ -26,13 +26,19 @@ import mathutil
 
 class Drawable:
     """Master class for all kinds of drawable objects, i.e. tiles,
-    overlays, menues, ..."""
+    overlays, menues, .... Drawable defines some basic traits
+    of these objects. High-level drawable objects are maintained
+    by the Renderer class, which wraps the main loop of the game.
+    
+    Level tiles and game entities are Drawable's as well, but 
+    they are maintained by the Game class (which is itself a
+    Drawable)."""
 
-    FLAG_DISABLE = 0x1 
+    FLAG_ACTIVE = 0x1
     
     def __init__(self, flags=0):
         self.flags = flags
-
+        self.slaves = []
 
     def SetFlag(self, flag):
         self.flags |= flag
@@ -57,16 +63,43 @@ class Drawable:
         should return None."""
         return None
 
-
-    # def GetCullingPolicy(self):
-    #    """ """
-    #     return Drawable.CULL_ENABLE
-
+    def OnRemoveFromRenderer(self):
+        """Called by Renderer when the Drawable has actually
+        been removed from the list of all active drawables.
+        Note that calling Renderer.RemoveDrawable() does not
+        immediately lead to removal of the entity because 
+        the operation may be deferred a bit."""
+        self.RemoveFlag(Drawable.FLAG_ACTIVE)
+        for d in self.slaves:
+            Renderer.RemoveDrawable(d)
+    
+    def OnAddToRenderer(self):
+        """Called by Renderer when the Drawable has actually
+        been add to the list of all active drawables.
+        Note that calling Renderer.AddDrawable() does not
+        immediately lead to registration of the entity because 
+        the operation may be deferred a bit."""
+        self.SetFlag(Drawable.FLAG_ACTIVE)
+        for d in self.slaves:
+            Renderer.AddDrawable(d)
+    
+    def AddSlaveDrawable(self,drawable):
+        """Add a slave to the drawable object. The slave 
+        is automatically enabled and disabled with the 
+        drawable itself."""
+        self.slaves.append(drawable)
+        Renderer.AddDrawable(drawable) if self.QueryFlag(Drawable.FLAG_ACTIVE) else Renderer.RemoveDrawable(drawable)
+        
+    def RemoveSlaveDrawable(self,drawable):
+        """Remove a specific slave drawable from the object."""
+        self.slaves.remove(drawable)
+        Renderer.RemoveDrawable(drawable)
 
     def Draw(self):
-        """To be implemented"""
+        """To be implemented to perform any drawing operations
+        for the drawable entity (a drawable should represent 
+        something that can be drawn, shouldn't it?)"""
         pass
-    
     
 class DebugTools:
     """Implements some state dumpers, tracing tools, etc."""
@@ -195,28 +228,37 @@ class Renderer:
                     print("[Responsible seems to be a {0} instance]".format(type(drawable)))
                     raise
 
-                # update the drawables list, handle dependencies of changed drawables.
-                for entity in Renderer.drawables_add:
+                # update the drawables list, handle dependencies of changed drawables, notify the drawables.
+                cpy = set(Renderer.drawables_add)
+                Renderer.drawables_add = set()
+                
+                for entity in cpy:
                     Renderer.drawables.add(entity)
                     if hasattr(entity, "__drawable_deps__"):
                         for dep in entity.__drawable_deps__:
                             try:
                                 Renderer.drawables.remove(dep)
+                                dep.OnRemoveFromRenderer()
                             except KeyError:
                                 pass
+                            
+                    entity.OnAddToRenderer()
 
-                for entity in Renderer.drawables_rem:
+                cpy = set(Renderer.drawables_rem)
+                Renderer.drawables_rem = set()
+                for entity in cpy:
                     try:
                         Renderer.drawables.remove(entity)
                         if hasattr(entity, "__drawable_deps__"):
                              for dep in entity.__drawable_deps__:
                                  Renderer.drawables.add(dep)
+                                 dep.OnAddToRenderer()
                                  
                              delattr(entity, "__drawable_deps__")
                     except KeyError:
                         pass
-
-                Renderer.drawables_rem, Renderer.drawables_add = set(), set()
+                    
+                    entity.OnRemoveFromRenderer()
 
                 # toggle front and backbuffer
                 Renderer.app.Display()
@@ -263,6 +305,10 @@ class Renderer:
     @staticmethod
     def ClearDrawables():
         Renderer.drawables_rem = Renderer.drawables_add.copy()
+        
+    @staticmethod
+    def GetDrawables():
+        return Renderer.drawables
 
     @staticmethod
     def SetClearColor(color):

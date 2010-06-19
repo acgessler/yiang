@@ -70,6 +70,9 @@ enable_menu_background_danger_stubs = False
 death_sprites = 60
 status_bar_top_tiles = 2.5
 level_window_size_rel = [0.4,1.0]
+perks_overlay_start = 2.0
+perks_overlay_spacing = 1.0
+perks_overlay_letter_height = 15
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

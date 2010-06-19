@@ -114,16 +114,24 @@ class Player(Entity):
         
         self.cur_tile[-1] = (Player.ANIM_JUMP_LEFT if \
             self.cur_tile[-2] == Player.ANIM_LEFT else Player.ANIM_JUMP_RIGHT)
+        
+    def OnLeaveLevel(self):
+        for perk in list(self.perks):
+            perk.DisablePerk(self)
+    
+    def Draw(self):
+        if self.draw is False:
+            return
+        
+        self.tiles[self.cur_tile[-1]].DrawRelative(self.pos)
 
     def Update(self, time_elapsed, time):
-        
         if self.game.IsGameRunning() is False:
             return
 
         # Check if one of our perks has expired
         for perk in list(self.perks):
-            if perk._CheckIfExpired(self) is True:
-                self.perks.remove(perk)
+            perk._CheckIfExpired(self) 
         
         inp = Renderer.app.GetInput()
         vec = [0, 0]
@@ -371,12 +379,6 @@ class Player(Entity):
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel
-            
-    def Draw(self):
-        if self.draw is False:
-            return
-        
-        self.tiles[self.cur_tile[-1]].DrawRelative(self.pos)
 
     def GetBoundingBox(self):
         # Adjust the size of the bb slightly to increase the likelihood

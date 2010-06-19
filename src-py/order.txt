@@ -1,4 +1,5 @@
 Game		-10
+PerkOverlay	100
 Menu		1000
 Fade        990
 NotiBox		1100
