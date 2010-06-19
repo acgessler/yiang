@@ -125,19 +125,6 @@ class Player(Entity):
         inp = Renderer.app.GetInput()
         vec = [0, 0]
         
-        # (HACK) -- for debugging, prevent the player from falling below the map
-        if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
-            self.pos[1] = 1
-            self.in_jump, self.block_jump = False, False
-            self.vel[1] = 0
-            
-        if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
-            self._Kill("the map's border")
-
-        self._CheckForLeftMapBorder()
-        self._MoveMap(time)
-        self._CheckForRightMapBorder()
-        
         pvely = self.vel[1]
 
         if inp.IsKeyDown(KeyMapping.Get("move-left")):
@@ -186,6 +173,19 @@ class Player(Entity):
         # Check for collisions
         pos, self.vel = self._HandleCollisions(newpos, newvel)
         self.SetPosition(pos)
+        
+        # (HACK) -- for debugging, prevent the player from falling below the map
+        if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
+            self.pos[1] = 1
+            self.in_jump, self.block_jump = False, False
+            self.vel[1] = 0
+            
+        if self.pos[1] < -5.0 or self.pos[1] > defaults.tiles[1]:
+            self._Kill("the map's border")
+
+        self._CheckForLeftMapBorder()
+        self._MoveMap(time)
+        self._CheckForRightMapBorder()
 
         self.vel[0] = 0
         self._UpdatePostFX()
@@ -249,6 +249,7 @@ class Player(Entity):
     def _Kill(self, killer="<add reason>"):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event."""
+        print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
             for i in range(defaults.death_sprites):
                 from tile import TileLoader
@@ -263,7 +264,7 @@ class Player(Entity):
                 self.game.AddEntity(t)
             
         self.draw = False
-        self.game.Kill(killer)
+        self.game.Kill(killer,self)
 
     def _HandleCollisions(self, newpos, newvel):
         """Handle any collision events, given the computed new position

@@ -35,7 +35,6 @@ from renderer import Renderer
 from fonts import FontCache
 from posteffect import PostFXCache
 
-
 class Level:
     """The Level class represents the currently loaded level and is responsible
     for both drawing and updating - also it maintains the list of all entities
@@ -251,6 +250,11 @@ class Level:
                 len([e for e in self.entities_active if e.in_visible_set is True]),
                 len(self.window_unassigned)
          )
+        
+    def EnumAllEntities(self):
+        """Return an sequence (actually a set) of all entities
+        in the level, be they active or not."""
+        return self.entities
         
     def EnumActiveEntities(self):
         """Enum all entities which are currently 'active', that is

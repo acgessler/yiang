@@ -352,12 +352,6 @@ TimeDelta:         {dtime:.4}
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         return pp
 
-    def _Respawn(self,enable_respawn_points=True):
-        """Respawn the player at the beginning of the level"""
-        for entity in self._EnumEntities():
-            #if hasattr(entity,"Respawn"):
-            entity.Respawn(enable_respawn_points)
-
     def GetLives(self):
         """Get the number of lives the player has. They
         die if they are killed and no more lives are available"""
@@ -368,13 +362,28 @@ TimeDelta:         {dtime:.4}
         it cannot be continued or reseted anymore."""
         return self.game_over
     
-    def Kill(self,killer="an unknown enemy "):
+    def _GetAPlayer(self):
+        """Get an arbitrary player instance in the list of 
+        entities for the current level. Usually there is just
+        a single player in a level, so the return value is 
+        predictable."""
+        for entity in self.level.EnumAllEntities():
+            if isinstance(entity,Player):
+                return entity
+        
+        # we can safely assume that there MUST be a player.
+        assert False
+    
+    def Kill(self,killer="an unknown enemy ",player=None):
         """Kill the player immediately, respawn if they have
         another life, set game over alternatively"""
         DebugTools.Trace()
         
         if not self.IsGameRunning():
             return 
+        
+        if player is None:
+            player = self._GetAPlayer()
         
         self.score *= 0.9
         if self.lives == 0:
@@ -386,7 +395,7 @@ TimeDelta:         {dtime:.4}
         def on_close(key):
             if key == accepted[2]:
                 self.GameOver()
-            self._Respawn(True if key == accepted[0] else False)
+            player.Respawn(True if key == accepted[0] else False)
             
         self._FadeOutAndShowStatusNotice(sf.String("""You got killed by {0}
 
