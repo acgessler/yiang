@@ -19,14 +19,13 @@
 
 # Python core
 import os
+import random
 
 # PySFML
 import sf
 
 # My stuff
 import defaults
-
-
 
 # NOTE: the following code was hacked together with approx. .2% of ethanol in my blood.
 # It took hours.
@@ -98,7 +97,8 @@ class BerlinerPhilharmoniker:
             cls.current_music = sf.Music()
             
         if cls.current_music.GetStatus() == sf.Sound.Stopped:
-            cls.current_index = (cls.current_index +1) % len(cls.playlist)
+            cls.current_index = random.randint(0,len(cls.playlist)-1) if defaults.audio_randomize_playlist is True \
+                else (cls.current_index +1) % len(cls.playlist)
             path = cls.playlist[cls.current_index]
             if path.find("/") == -1 and path.find("\\") == -1:
                 path = os.path.join(defaults.data_dir,"sounds",path)

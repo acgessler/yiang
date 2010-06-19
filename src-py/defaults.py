@@ -73,6 +73,7 @@ level_window_size_rel = [0.4,1.0]
 perks_overlay_start = 2.0
 perks_overlay_spacing = 1.0
 perks_overlay_letter_height = 15
+audio_randomize_playlist = True
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
