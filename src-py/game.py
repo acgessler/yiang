@@ -441,6 +441,7 @@ Press {3} to leave the game""".format(
                     for n,line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
                         self.score_map[n+1] = line.strip()
 
+                print("Got scores.txt file")
             except IOError:
                 print("Failure reading scores.txt file")
 
@@ -454,7 +455,7 @@ That's {2}.\n\n
 Hit {3} or {4} to return to the menu .. """.format(
                     Game.SecondsToDays(self.GetTotalElapsedTime()),
                     self.score/100,
-                    "a new high score record" if record is True else self.score_map[math.log(self.score*10+1,2)],
+                    "a new high score record" if record is True else self.score_map[int(math.log((self.score/100)+1,2))],
                     KeyMapping.GetString("escape"),
                     KeyMapping.GetString("accept")
                 ),

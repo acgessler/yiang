@@ -74,6 +74,7 @@ perks_overlay_start = 2.0
 perks_overlay_spacing = 1.0
 perks_overlay_letter_height = 15
 audio_randomize_playlist = True
+levelup_score_base = 15.0
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
