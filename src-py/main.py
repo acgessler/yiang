@@ -427,9 +427,9 @@ Hit {1} to cancel""".format(
         """Show the game's credits"""
 
         class Credits(Drawable):
-            Drawable.__init__(self)
 
             def __init__(self,outer):
+                Drawable.__init__(self)
                 self.outer = outer
                 try:
                     with open(os.path.join("..","CREDITS"),"rt") as file:
