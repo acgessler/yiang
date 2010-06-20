@@ -157,7 +157,7 @@ class SimpleNotification(Entity):
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
             # closure to be called when the player has made his decision
-            def on_close(key, accepted=accepted):
+            def on_close(key):
                 delattr(self, "running")
                 self.use_counter -= 1
                 if self.use_counter == 0:
@@ -168,7 +168,7 @@ class SimpleNotification(Entity):
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close)
+            )), defaults.game_over_fade_time, (550,250) , 0.0, accepted, self.text_color, on_close)
             
         return Entity.ENTER
     

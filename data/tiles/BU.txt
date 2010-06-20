@@ -1,0 +1,234 @@
+from buy import OrganTransplantMachine; <out> = OrganTransplantMachine(<raw>,12,18,3.0)
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(X)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (X) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (X) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (X) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (X) TRANSPLANT
+| (o)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (X)           |
+| (o)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (X)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL_XX_______|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL____XX____|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL______XX__|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL________XX|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL________  |
+\---------------/XX
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           | XX
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   XX
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   X.
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   ..
+
+  (O)
+/-(O)-----------
+| (O) ORGAN     |
+| (O) TRANSPLANT
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   .
