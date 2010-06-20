@@ -74,9 +74,9 @@ Press {0} to accept the deal (-$1.0, +L) and {1} to leave.
             
         self.running  = True
         self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
-            Size=defaults.letter_height_game_over,
+            Size=defaults.letter_height_machines,
             Font=FontCache.get(defaults.letter_height_machines, face=defaults.font_machines
-        )),defaults.game_over_fade_time, (640,210) , 0.0, accepted, sf.Color.Red, on_close)
+        )),defaults.game_over_fade_time, (670,200) , 0.0, accepted, sf.Color.Red, on_close)
 
     def GetVerboseName(self):
         return "the Instant Organ Transplant Machine (OTM)"
