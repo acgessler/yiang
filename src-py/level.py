@@ -140,7 +140,7 @@ class Level:
             self._AddEntityToWindows(e)
             
     def _BBToWindowRange(self,bb):
-        """Get the range of windows a BB spans itself"""
+        """Get the range of windows a BB is spanned over"""
         return (int(bb[0] / defaults.level_window_size_abs[0]), 
             int(bb[1] / defaults.level_window_size_abs[1]),
             int((bb[0]+bb[2]) / defaults.level_window_size_abs[0]), 
