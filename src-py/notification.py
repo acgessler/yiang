@@ -168,7 +168,7 @@ class SimpleNotification(Entity):
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), defaults.game_over_fade_time, (550,250) , 0.0, accepted, self.text_color, on_close)
+            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close)
             
         return Entity.ENTER
     
