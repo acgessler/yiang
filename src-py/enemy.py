@@ -90,7 +90,7 @@ class SmallTraverser(Enemy):
                 if self.vel < 0 and (self.pos[0] < 0 or res & (Entity.UPPER_LEFT | Entity.LOWER_LEFT) == (Entity.UPPER_LEFT | Entity.LOWER_LEFT)) or\
                    self.vel > 0 and (self.pos[0] > x or res & (Entity.UPPER_RIGHT | Entity.LOWER_RIGHT) == (Entity.UPPER_RIGHT | Entity.LOWER_RIGHT)):
                    
-                    self.vel = -self.vel
+                    self._Return()
                 
                 
             elif self.direction == Entity.DIR_VER:
@@ -98,7 +98,7 @@ class SmallTraverser(Enemy):
                 if self.vel < 0 and (self.pos[1] < 0 or res & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) == (Entity.UPPER_LEFT | Entity.UPPER_RIGHT)) or\
                    self.vel > 0 and (self.pos[1] > y or res & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == (Entity.LOWER_LEFT | Entity.LOWER_RIGHT)):
                    
-                    self.vel = -self.vel
+                    self._Return()
                 
             else:
                 assert False
@@ -111,6 +111,12 @@ class SmallTraverser(Enemy):
             
         AnimTile.Update(self, time_elapsed, time)
         self.SetState(1 if self.vel > 0 else 0)
+        
+    def _Return(self):
+        self.vel = -self.vel
+        # XXX the sound effect seems to shoort for SFMl to handle it.
+        #from audio import SoundEffectCache
+        #SoundEffectCache.Get("click8a.wav").Play()
             
 class Robot(SmallTraverser):
     pass

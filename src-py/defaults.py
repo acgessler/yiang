@@ -78,6 +78,7 @@ perks_overlay_letter_height = 15
 audio_randomize_playlist = True
 levelup_score_base = 15.0
 organ_transplant_dollar_in = 1.0
+no_bg_music = False
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

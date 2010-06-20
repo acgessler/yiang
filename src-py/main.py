@@ -486,13 +486,13 @@ def main():
     HighscoreManager.Initialize()
     BerlinerPhilharmoniker.Initialize()
     
-
     SoundEffectCache.Get("logo.ogg").Play()
     
-    class DummyMusicPlayer(Drawable):
-        def Draw(self):
-            BerlinerPhilharmoniker.Process()
-    Renderer.AddDrawable(DummyMusicPlayer())
+    if defaults.no_bg_music is False:
+        class DummyMusicPlayer(Drawable):
+            def Draw(self):
+                BerlinerPhilharmoniker.Process()
+                Renderer.AddDrawable(DummyMusicPlayer())
     
     accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):
