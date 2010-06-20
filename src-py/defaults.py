@@ -23,6 +23,7 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 0.1
+revision = 183
 resolution = [1280, 850]
 fullscreen = False
 letter_size = [8, 13]
@@ -33,7 +34,7 @@ letter_height_lives = 9
 letter_height_game_over = 15
 letter_height_debug_info = 15
 letter_height_machines = 14
-caption = "YIANG | {0}".format(version)
+caption = "YIANG | {0}             [HGREV {1}]".format(version,revision)
 danger_signs_ttl = 30
 tiles_size = [5, 3]
 move_speed = [5, 4]
