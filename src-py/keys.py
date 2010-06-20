@@ -43,7 +43,8 @@ class KeyMapping:
         "debug-kill"    : "K",
         "debug-gameover": "Q",
         "escape"        : "Escape",
-        "accept"        : "Return"
+        "accept"        : "Return",
+        "interact"      : "Return"
     }
 
     @classmethod
