@@ -492,7 +492,7 @@ def main():
         class DummyMusicPlayer(Drawable):
             def Draw(self):
                 BerlinerPhilharmoniker.Process()
-                Renderer.AddDrawable(DummyMusicPlayer())
+        Renderer.AddDrawable(DummyMusicPlayer())
     
     accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):

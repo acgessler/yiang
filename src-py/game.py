@@ -655,7 +655,10 @@ class Entity(Drawable):
     DIR_HOR,DIR_VER=range(2)
 
     BLOCK_LEFT,BLOCK_RIGHT,BLOCK_UPPER,BLOCK_LOWER,BLOCK = 0x1,0x2,0x4,0x8,0xf
+    
+    # deprecated, pertain to _CollideBB
     UPPER_LEFT,UPPER_RIGHT,LOWER_LEFT,LOWER_RIGHT,CONTAINS,ALL = 0x1,0x2,0x4,0x8,0x10,0xf|0x10
+    
 
     def __init__(self):
         Drawable.__init__(self)
@@ -714,7 +717,11 @@ class Entity(Drawable):
     def _BBCollide(self,rect,mycorner):
         """Collide the first axis-aligned BB (x,y,x2,y2) with the
         second bounding box, return a ORed combination of the
-        Entity.UPPER/Entity.LOWER flags."""
+        Entity.UPPER/Entity.LOWER flags.
+        
+        
+        This is DEPRECATED, use CollideLineSegmentWithRectangle().
+        """
         has = 0
         
         # upper left corner

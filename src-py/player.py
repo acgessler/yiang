@@ -283,9 +283,10 @@ class Player(Entity):
         collision handling has been performed."""
         self.AddToActiveBBs()
 
-        # brute force collision detection for dummies .. actually I am not proud of it :-)
-        # XXX rewrite this, do proper intersection between the movement vector and the
-        # bb borders.
+        # XX THIS IS SILLY!!!!!!!!! ... I just don't know how to fix it,
+        # the physically correct approach failed due to numeric
+        # inaccuracies.
+        # Idea: might be possible to use Box2D as physics engine.
         cnt, hasall = 0, 0
         rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
         for collider in self.game.GetLevel().EnumPossibleColliders(rect):
@@ -298,6 +299,7 @@ class Player(Entity):
 
             mycorner = (mycorner[0], mycorner[1], mycorner[2] + mycorner[0], mycorner[3] + mycorner[1])                            
             hasall = self._BBCollide(mycorner, rect)
+            hastwo = self._BBCollide(rect, mycorner)
             if hasall == 0:
                 continue
 
@@ -315,7 +317,7 @@ class Player(Entity):
                 continue
 
             # collision with ceiling
-            if hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) and hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) == 0:
+            if hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) and hastwo & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT):
                 newpos[1] = mycorner[3]
                 newvel[1] = max(0, newvel[1])
                 #print("ceiling")
@@ -324,10 +326,9 @@ class Player(Entity):
                 collider.AddToActiveBBs()
 
             # collision with floor
-            elif hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == 0:
+            elif hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) and hastwo & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT):
                 newpos[1] = mycorner[1] - self.pheight
                 newvel[1] = min(0, newvel[1])
-
                 #print("floor")
 
                 if len(self.cur_tile) > 1:
@@ -337,9 +338,27 @@ class Player(Entity):
 
                 cnt += 1
                 collider.AddToActiveBBs()
+                
+            # collision on the left
+            elif hasall & (Entity.LOWER_RIGHT | Entity.UPPER_RIGHT): 
+                newpos[0] = mycorner[2] - self.pofsx
+                newvel[0] = max(0, newvel[0])
+                #print("left")
 
-            
-        for collider in self.game._EnumEntities():
+                cnt += 1
+                collider.AddToActiveBBs()
+
+            # collision on the right
+            elif hasall & (Entity.LOWER_LEFT | Entity.UPPER_LEFT):
+                newpos[0] = mycorner[0] - self.pwidth - self.pofsx
+                newvel[0] = min(0, newvel[0])
+                #print("right")
+
+                cnt += 1
+                collider.AddToActiveBBs()
+
+                
+        for collider in self.game.GetLevel().EnumPossibleColliders(rect):
             if collider is self:
                 continue
             
@@ -351,6 +370,7 @@ class Player(Entity):
             rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
                             
             hasall = self._BBCollide(mycorner, rect)
+            hastwo = self._BBCollide(rect,mycorner)
             if hasall == 0:
                 continue
 
@@ -358,24 +378,7 @@ class Player(Entity):
             if res != Entity.BLOCK:
                 continue
 
-            # collision on the left
-            if hasall & (Entity.LOWER_RIGHT | Entity.UPPER_RIGHT) and hasall & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == 0:
-                newpos[0] = mycorner[2]
-                newvel[0] = max(0, newvel[0])
-                #print("left")
-
-                cnt += 1
-                collider.AddToActiveBBs()
-
-            # collision on the right
-            elif hasall & (Entity.LOWER_LEFT | Entity.UPPER_LEFT) and hasall & (Entity.LOWER_RIGHT | Entity.UPPER_RIGHT) == 0:
-                newpos[0] = mycorner[0] - self.pwidth - self.pofsx
-                newvel[0] = min(0, newvel[0])
-                #print("right")
-
-                cnt += 1
-                collider.AddToActiveBBs()
-
+            
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel
