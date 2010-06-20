@@ -27,9 +27,6 @@ import sf
 # My stuff
 import defaults
 
-# NOTE: the following code was hacked together with approx. .2% of ethanol in my blood.
-# It took hours.
-
 
 class SoundEffectCache:
     """Tiny utility to cache all sound effects which we use."""

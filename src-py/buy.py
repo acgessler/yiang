@@ -17,6 +17,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# Python core
+import os
+
 # PySFML
 import sf
 
@@ -28,55 +31,78 @@ from player import Player
 from notification import MessageBox
 from keys import KeyMapping
 from fonts import FontCache
+from renderer import Renderer
 
-class OrganTransplantMachine(AnimTile):
-    """The OrganTransplantMachine allows the player to trade
-    money for lives."""
 
-    def __init__(self,text,height,frames,speed,use_counter=1):
+class Machine(AnimTile):
+    """Base class for all kinds of machines, buy stocks, ..."""
+    def __init__(self,message_text_file,text,height,frames,speed,use_counter=1):
         AnimTile.__init__(self,text,height,frames,speed)
         self.use_counter = use_counter
-        self.text_formatted = """Welcome to the Instant Organ Transplantation Machine (IOTM)!
-
-Do you want to buy new organs and have them transplanted immediately 
-to heal your wounds? This gives you an extra life for not more than 
-$ 1! 
-This is a truly incredible offer! This is the time to get rid of your
-ill organs and get a fresh body! Note: No orphans were harmed for 
-building this machine. 
-
-
-Press {0} to accept the deal (-$1.0, +L) and {1} to leave.
-""".format(KeyMapping.GetString("accept"),KeyMapping.GetString("escape"))
-
+        
+        path =os.path.join(defaults.data_dir,"messages",message_text_file)
+        try:
+            with open(path,"rt") as file:
+                tdict = dict(KeyMapping.mapping)
+                tdict.update(defaults.__dict__)
+                self.messages = [message.format(**tdict) for message in file.read().split("###NEXT###\n")]
+        except IOError:
+            self.messages = ["Error, see the log file for more details"] * 50
+            print("Failure reading {0}".format(path))
+            
     def Interact(self,other):
-        if isinstance(other,Player) and not hasattr(self, "running") and self.use_counter > 0:
+        if isinstance(other,Player) and not hasattr(self, "running") and self.use_counter > 0 and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
             self._RunMachine()
         
         return Entity.ENTER
     
-    def _RunMachine(self):
+    def DisableMachine(self):
+        self.use_counter= 0
+        self.SetColor(sf.Color(60,60,60))
+        print("Disable Machine '{0}'".format(id(self)))
+        
+    def _ShowMachineDialog(self,on_close,accepted,text):
+        
+        def on_close_wrapped(key):
+            delattr(self, "running")
+            on_close(key)
+            
+        print("Show Machine '{0}', use counter: {1}".format(id(self), self.use_counter))
+        
+        self.running  = True
+        self.game._FadeOutAndShowStatusNotice( sf.String(self.messages [text],
+            Size=defaults.letter_height_machines,
+            Font=FontCache.get(defaults.letter_height_machines, face=defaults.font_machines
+        )),defaults.game_over_fade_time, (670,200) , 0.0, accepted, sf.Color.Red, on_close_wrapped)
     
-        print("Show OrganTransplantMachine '{0}', use counter: {1}".format(id(self), self.use_counter))
+    def _RunMachine(self):
+        pass
+    
+
+class OrganTransplantMachine(Machine):
+    """The OrganTransplantMachine allows the player to trade
+    money for lives."""
+    Message_Normal,Message_NotEnoughMoney = range(2)
+    
+    def __init__(self,text,height,frames,speed,use_counter=1):
+        Machine.__init__(self, "organ_transplant.txt", text, height, frames, speed, use_counter)
+
+    def _RunMachine(self):
         accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
         # closure to be called when the player has made his decision
         def on_close(key):
-            delattr(self, "running")
-            if key == accepted[1]:
-                self.game.lives += 1
-                self.game.score -= 1.0
+            if key == accepted[1] and self.game.GetScore() >= defaults.organ_transplant_dollar_in:
+                self.game.AddLife()
+                self.game.TakeScore(defaults.organ_transplant_dollar_in*100.0)
             
                 self.use_counter -= 1
                 if self.use_counter == 0:
-                    self.SetColor(sf.Color(60,60,60))
-                    print("Disable OrganTransplantMachine '{0}'".format(id(self)))
+                    self.DisableMachine()
             
-        self.running  = True
-        self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
-            Size=defaults.letter_height_machines,
-            Font=FontCache.get(defaults.letter_height_machines, face=defaults.font_machines
-        )),defaults.game_over_fade_time, (670,200) , 0.0, accepted, sf.Color.Red, on_close)
+        self._ShowMachineDialog(on_close,accepted, OrganTransplantMachine.Message_Normal 
+            if self.game.GetScore() >= defaults.organ_transplant_dollar_in 
+            else OrganTransplantMachine.Message_NotEnoughMoney)
 
     def GetVerboseName(self):
         return "the Instant Organ Transplant Machine (OTM)"

@@ -19,3 +19,4 @@ level-new=N
 debug-kill=K
 escape=Escape
 accept=Return
+interact=Space

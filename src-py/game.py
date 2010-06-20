@@ -361,6 +361,17 @@ TimeDelta:         {dtime:.4}
         self.score += pp
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         return pp
+    
+    def TakeScore(self,points):
+        """Take a certain amount of money from the player's score."""
+        pp = points/self.speed_scale
+        self.score = max(self.score-pp,0)
+        print("Stealing myself {0} points (total: {1})".format(points,self.score))
+        return pp
+    
+    def AddLife(self,count=1):
+        self.lives += count
+        print("Donating {0} fresh lives to myself".format(count))
 
     def GetLives(self):
         """Get the number of lives the player has. They
