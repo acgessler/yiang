@@ -23,7 +23,7 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 0.1
-revision = 183
+revision = 188
 resolution = [1280, 850]
 fullscreen = False
 letter_size = [8, 13]
