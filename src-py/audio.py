@@ -51,6 +51,8 @@ class SoundEffectCache:
             if not sound.OpenFromFile(filename):
                 print("Failure creating music {0} [{1}]".format(name,filename))
                 return None
+            
+            sound.SetVolume(defaults.audio_volume_scale*100)
         else:
             if not sound.LoadFromFile(filename):
                 print("Failure creating sound {0} [{1}]".format(name,filename))
@@ -60,6 +62,7 @@ class SoundEffectCache:
                 def __init__(self,buffer):
                     self.sound = sf.Sound()
                     self.sound.SetBuffer(buffer)
+                    self.sound.SetVolume(defaults.audio_volume_scale*100)
                     
                 def Play(self):
                     self.sound.Play()

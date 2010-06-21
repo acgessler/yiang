@@ -1,6 +1,17 @@
 #Note: the CREDITS file directly feeds the 'credits' main menu option,
 #so try not to break the layout. The hash sign starts comment lines.
 
+YIANG was originally designed 
+as entry for the ZFX Action
+game competition, which took
+place during June 2010. Devel-
+opment did, however, continue.
+
+YIANG is licensed under the
+BSD license and is thus Open
+Source. Feel free to join,
+comment or improve.
+
 == Programming ==
 Alexander Gessler
 
@@ -14,5 +25,11 @@ Alexander Gessler
 Nicolai Müller
 
 == Testing ==
-www.zfx.info community
+zfx.info community
+Friends & Family
+
+== Third party / FOSS ==
+Python Foundation (python.org)
+SFML (sfml-dev.org)
+Vera Font Family (gnome.org/fonts/)
 

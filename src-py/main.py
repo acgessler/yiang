@@ -434,12 +434,12 @@ Hit {1} to cancel""".format(
                 try:
                     with open(os.path.join("..","CREDITS"),"rt") as file:
                         self.cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
-                        self.cred.insert(0,"(Press any key to continue)")
+                        #self.cred.insert(0,"(Press any key to continue)")
                 except IOError:
                     print("Failure loading credits file")
                     return
 
-                self.height,self.height_spacing = int(30*defaults.scale[1]),int(5*defaults.scale[1])
+                self.height,self.height_spacing = int(defaults.letter_height_credits*defaults.scale[1]),int(5*defaults.scale[1])
 
             def _BackToMenu(self):
                 Renderer.RemoveDrawable(self)
@@ -464,7 +464,7 @@ Hit {1} to cancel""".format(
 
                     y += self.height+self.height_spacing
                     if y > defaults.resolution[1]-100:
-                        x+= 500
+                        x+= (defaults.resolution[0]-200)/2 
                         y = 130
                     
                     Renderer.app.Draw(tex)

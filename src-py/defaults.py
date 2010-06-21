@@ -34,6 +34,7 @@ letter_height_lives = 9
 letter_height_game_over = 15
 letter_height_debug_info = 15
 letter_height_machines = 14
+letter_height_credits = 25
 caption = "YIANG | {0}             [HGREV {1}]".format(version,revision)
 danger_signs_ttl = 30
 tiles_size = [5, 3]
@@ -79,6 +80,7 @@ audio_randomize_playlist = True
 levelup_score_base = 15.0
 organ_transplant_dollar_in = 1.0
 no_bg_music = False
+audio_volume_scale = 0.5
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

@@ -13,7 +13,7 @@ Welcome to the Instant Organ Transplantation Machine (IOTM)!
 
 Do you want to buy new organs and have them transplanted immediately 
 to heal your wounds? This gives you an extra life FOR JUST $ {organ_transplant_dollar_in}! 
-This is a truly incredible offer! This is the time to get rid of your
+This is truly an incredible offer! Now is the time to get rid of your
 ill organs and get a fresh body! Note: No orphans were harmed for 
 building this machine. 
 
