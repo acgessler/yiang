@@ -72,8 +72,8 @@ class PerkOverlay(Tile):
             offset += other.dim[0]+defaults.perks_overlay_spacing
             
         height = self.game.GetLowerStatusBarHeight()
-        coords = self.game.ToDeviceCoordinates((defaults.perks_overlay_start+offset, defaults.tiles[1] - 
-            (height-(height-self.dim[1])/2)))
+        coords = self.game.ToDeviceCoordinates((defaults.perks_overlay_start+offset, min(defaults.tiles[1] - self.dim[1]*1.2,  defaults.tiles[1] - 
+            (height-(height-self.dim[1])/2))))
         
         # XXX add utilities to draw our 'shadowed' text to Renderer
         # to avoid code duplication

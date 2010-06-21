@@ -1,6 +1,6 @@
 <out> = Level(<level>,<game>,<raw>,color=(0,0,30))
                                                          _S0        
-      gPL            gPL                                 _BL        
+      gPL                                                _BL        
                _IN                                                
                _IN
                _IN
