@@ -94,7 +94,7 @@ font_menu = os.path.join(data_dir, "fonts", "VeraSE.ttf")
 font_status = font_menu
 font_debug_info = font_monospace
 font_game_over = font_menu
-font_machines = os.path.join(data_dir, "fonts", "courier_new.ttf")
+font_machines = os.path.join(data_dir, "fonts", "VeraMono.ttf")
 credits_string = "(c) 2010 Alexander Christoph Gessler"
 resolution_base = [1280, 850]
 
