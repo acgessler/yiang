@@ -432,7 +432,7 @@ Hit {1} to cancel""".format(
                 Drawable.__init__(self)
                 self.outer = outer
                 try:
-                    with open(os.path.join("..","CREDITS"),"rt") as file:
+                    with open(os.path.join("..","CREDITS"),"rt",errors="ignore") as file:
                         self.cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
                         #self.cred.insert(0,"(Press any key to continue)")
                 except IOError:
