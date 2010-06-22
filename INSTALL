@@ -1,1 +1,42 @@
-Basically, run bin-x86-windows/game.exe or game_conapp.exe if you're interested in debug information.
+
+==========================
+YIANG INSTALL INSTRUCTIONS
+==========================
+
+
+Windows
+=======
+
+Basically, run bin-x86-windows/game.exe or game_conapp.exe if you're interested in debug information. This will start the game in 16:10 widescreen (windowed) mode. You can also use thee BAT files in the root directory to launch the game in one of the predefined resolutions or in fullscreen mode.
+
+
+Linux
+=====
+
+This is a bit tricky. The main difference is that we don't embedd PySFML on Linux, so the system-wide package is to be taken. The following instructions where tested on Ubuntu 10.04 and may need minor changes to suit your distribution.
+
+1. Make sure python3.x is installed. You need the developer files as well
+	sudo apt-get install python3 python3-dev
+
+2. Install SFML 1.5 (1.6 may work as well, but I could not test it!) and the corresponding developer files (you can get them either from their sf.net download page or from your package manager).
+	sudo apt-get install libsfml-dev 
+	(+ all the libsfml-.... packages if necessary)
+
+3. Get PySFML 1.5 for Python 3.x. Taking it from the sf.net page is at the time of this writing (2010-07-22) the only way to do it.
+	wget, unzip, ... etc.
+
+4. Install PySFML - this can be done using distutils / setup.py in the PySFML folder. You may, however, need to edit the setup.py file and add '/usr/include/python3.1' (or at whichever location your python 3 headers are placed at!) to the list of include directories (syntactically, it's a python list, so it needs to look like this: ['entry','entry2',...] or you will get errors during installing).
+	sudo setup.py install
+
+5. Verify everything is working fine by firing up a python 3 shell (`python3`) and trying to import the PySFML.sf module. If PySFML.sf.Version is '1.5', everything is fine.
+
+6. If there isn't a prebuilt YIANG binary in ./bin-<yourArchitecture>-linux, build it. There's no makefile because building is really straightforward (x being your python minor version):
+	g++ main.cpp lpython3.<x> -o./../bin-<yourArchitecture>-linux/yiang1.1
+
+7. Run the created executable. 
+
+
+GENERAL
+=======
+
+Please any flaws you may encounter in this instructions.

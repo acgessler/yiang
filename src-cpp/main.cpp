@@ -72,8 +72,10 @@ int PyMain(int argc, wchar_t* argv[])
 		"\tprint(e)\n"
 		"\ttraceback.print_exc()\n"
 	;
-
+#ifdef _MSC_VER
 	PyImport_AppendInittab("sf", & PyInit_sf);
+#endif
+
 	Py_Initialize();   
 
 	PySys_SetArgv(argc, argv);
@@ -111,12 +113,27 @@ int WINAPI WinMain(
 
 #else
 
-int main(int argc, char* argv)
-{
-	// on Windows only for debugging purposes to get a console easily
+#include <stdlib.h>
 
-	static wchar_t* name[] = {L"game.exe"};
-	return PyMain(1,name);
+int main(int argc, char* argv[])
+{
+	// on Windows only for debugging purposes to easily get a console 
+	wchar_t** const dat = new wchar_t*[argc]();
+	for(int i = 0; i < argc; ++i) {
+
+		const size_t len = strlen(argv[i]);
+		dat[i] = new wchar_t[len+1]();
+
+		mbstowcs(dat[i],argv[i],len);
+	}
+	
+	const int ret = PyMain(argc,dat);
+
+	for(int i = 0; i < argc; ++i) {
+		delete[] dat[i];
+	}
+	delete[] dat;
+	return ret;
 }
 
 #endif

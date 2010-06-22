@@ -132,7 +132,7 @@ class Renderer:
     and rendering them. Also, Renderer owns the window and is
     responsible for initialization and termination"""
 
-    app = sf.RenderWindow()
+    app = None
     drawables, drawables_add, drawables_rem = set(), set(), set()
     drawables_active = []                                     
     clear_color = sf.Color.White
