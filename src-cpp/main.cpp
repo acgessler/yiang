@@ -16,6 +16,7 @@
 
 // Main entry point, initializes Python and calls main.py
 
+#ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 
 #define WIN32_LEAN_AND_MEAN
@@ -33,10 +34,15 @@
 // fixup code for some missing SFML symbols
 #include "fixers.h"
 
-
 // Python C API, PySFML module initialization stub
 #include <Python.h>
 #pragma comment (lib, "Python31.lib")
+
+#else
+
+#include <python3.1/Python.h>
+
+#endif
 
 PyMODINIT_FUNC PyInit_sf(void);
 
