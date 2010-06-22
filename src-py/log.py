@@ -17,10 +17,10 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-
 # Python Core
 import sys
 import io
+import os
 
 # My own stuff
 import defaults
@@ -31,6 +31,7 @@ class Log(io.IOBase):
 
     enabled = False
     old = sys.stdout
+    nostdout = os.name == "posix"
 
     def __init__(self,file,old):
         io.IOBase.__init__(self)
@@ -41,7 +42,7 @@ class Log(io.IOBase):
     def write(self,*args,**kwargs):
         self.file.write(*args,**kwargs)
 
-        if not self.old is None:
+        if not self.old is None and not Log.nostdout:
             self.old.write(*args,**kwargs)
 
         self.file.flush()
