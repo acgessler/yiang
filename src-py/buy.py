@@ -73,7 +73,7 @@ class Machine(AnimTile):
         self.game._FadeOutAndShowStatusNotice( sf.String(self.messages [text],
             Size=defaults.letter_height_machines,
             Font=FontCache.get(defaults.letter_height_machines, face=defaults.font_machines
-        )),defaults.game_over_fade_time, (670,200) , 0.0, accepted, sf.Color.Red, on_close_wrapped)
+        )),defaults.game_over_fade_time, (580,180) , 0.0, accepted, sf.Color.Red, on_close_wrapped)
     
     def _RunMachine(self):
         pass
