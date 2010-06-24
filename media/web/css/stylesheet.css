@@ -1,15 +1,16 @@
 
 
 div.main {
-	width: 450px;
-/*	height: 1200px; */
+
+	width: 420px;
 BACKGROUND-COLOR: #101010;
 COLOR: #40cd40;
   TEXT-ALIGN: left;
   TEXT-DECORATION: none;
 margin-left: auto ;
-	margin-right: auto ;
-  
+margin-right: auto ;
+margin-top: 100px;
+
 PADDING: 10px 10px 10px 10px;
 BORDER: #404040 10px ridge;
 font-family:"Georgia", "Arial", serif;
