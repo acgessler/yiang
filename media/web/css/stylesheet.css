@@ -1,0 +1,38 @@
+
+
+div.main {
+	width: 450px;
+/*	height: 1200px; */
+BACKGROUND-COLOR: #101010;
+COLOR: #40cd40;
+  TEXT-ALIGN: left;
+  TEXT-DECORATION: none;
+margin-left: auto ;
+	margin-right: auto ;
+  
+PADDING: 10px 10px 10px 10px;
+BORDER: #404040 10px ridge;
+font-family:"Georgia", "Arial", serif;
+z-index: 1;
+}
+
+div.imgbox {
+	width: 230px;
+	height: 150px;
+BACKGROUND-COLOR: #101010;
+COLOR: #40cd40;
+  TEXT-ALIGN: left;
+  TEXT-DECORATION: none
+MARGIN: 10px 10% 10px 10px;  
+PADDING: 5px 5px 5px 5px;
+BORDER: #404040 1px groove;
+font-family:"Georgia", "Arial", serif;
+position: relative;
+z-index: -100;
+float: left;
+}
+
+
+a,h2 {
+COLOR: #cd4040;
+}
