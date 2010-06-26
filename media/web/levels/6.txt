@@ -1,0 +1,15 @@
+<out> = Level(<level>,<game>,<raw>,color=(15,15,15))
+   gPL   ySU
+ 
+
+
+
+
+
+                                     
+_H0                                                                                                      rRE                                                                                          bFI 
+                                                                                                                                                                                                                                                                                 
+                                                                                                         _A1_A2      _A0_A0               rDA_A0            _A0_A0         _A0_A0      _A0_A0rDArDA_A0_A0             
+                                                                                                      _A1_A0_S0                                                                        rDArDArDArDArDArDA
+                                                                                                _A1_A0_A0_A0_S1_S1_S1_S1_S1_S1rE0_S1_S1_S1_S1_S1_S1_S1_S1_S1_S1_S1_S1_S1_S1rE0_S1_S1_S1_A0rDArDArDArDArDA    
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA                
