@@ -42,6 +42,9 @@ class PerkOverlay(Tile):
             rsize=int(defaults.perks_overlay_letter_height*defaults.scale[1]))
         
         self.SetFormatters()
+        
+    def _GetHaloImage(self):
+        return None
             
     def Enable(self):
         """Register the overlay and enable it for drawing."""
@@ -77,13 +80,15 @@ class PerkOverlay(Tile):
         
         # XXX add utilities to draw our 'shadowed' text to Renderer
         # to avoid code duplication
-        self.cached.SetPosition(coords[0]-1,coords[1]-1)
-        self.cached.SetColor(sf.Color.Black)
-        Renderer.app.Draw(self.cached)
+        for elem in self.cached:
+            elem.SetPosition(coords[0]-1,coords[1]-1)
+            elem.SetColor(sf.Color.Black)
+            Renderer.app.Draw(elem)
         
-        self.cached.SetPosition(*coords)
-        self.cached.SetColor(sf.Color.Yellow)
-        Renderer.app.Draw(self.cached)
+        for elem in self.cached:
+            elem.SetPosition(*coords)
+            elem.SetColor(sf.Color.Yellow)
+            Renderer.app.Draw(elem)
     
     def GetDrawOrder(self):
         return 100

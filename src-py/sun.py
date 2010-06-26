@@ -30,7 +30,7 @@ class Sun(Tile):
     """The sun is a nice sun, for it always sticks to the player position"""
 
     def __init__(self, text, width, height, posy= -0.3):
-        Tile.__init__(self, text, width, height)
+        Tile.__init__(self, text, width, height, halo_img="halo_sun.png")
 
         self.posy = posy
 

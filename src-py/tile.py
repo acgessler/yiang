@@ -24,17 +24,33 @@ import sf
 import traceback
 import random
 import itertools
+import os
 
 # My own stuff
 import defaults
 from fonts import FontCache
 from game import Entity,Game
 
+
+def gen_halo_default():
+    """Programmatically generate the default 'halo', which 
+    is a simple background rectangle behind the tile"""
+    text = bytes([0x80,0x40,0x40,0x40])
+    
+    img = sf.Image()
+    img.LoadFromPixels(64,64,text*(64*64))
+    return img
+
 class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing.
     Extends Entity with more specialized behaviour."""
-         
-    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None):
+    
+    halo_cache = {None:None}
+    default_halo_providers = {
+            "default":gen_halo_default
+    }
+        
+    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default"):
         
         # Note: the 'constants' from defaults may change during startup, but 
         # this file may get parsed BEFORE this happens, so we can't
@@ -51,8 +67,10 @@ class Tile(Entity):
         self.collision = collision
         self.text = text
         self.dim = (width*scale/defaults.tiles_size[0],height*scale/defaults.tiles_size[1])
-        self._Recache()
         self.draworder = draworder
+        self.halo_img = halo_img
+        
+        self._Recache()
 
     def __str__(self):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\
@@ -63,7 +81,12 @@ class Tile(Entity):
 
     def SetColor(self,color):
         Entity.SetColor(self,color)
-        self.cached.SetColor(self.color)
+        for elem in self.cached:
+            elem.SetColor(self.color)
+            
+    def SetDim(self,dim):
+        self.dim = dim
+        self._Recache()
         
     def GetDrawOrder(self):
         # unlike most other kinds of Entities, the draw order is
@@ -77,13 +100,39 @@ class Tile(Entity):
             return (self.pos[0]+hs[0]/2,self.pos[1]+hs[1]/2,self.dim[0]-hs[0],self.dim[1]-hs[1])    
             
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
+    
+    def _GetHaloImage(self):
+        """Obtain the halo image to be shown in the background of
+        the tile (not too strong, alpha should be pretty low).
+        None is a valid return value, it disables the whole effect."""
+        if not self.halo_img in Tile.halo_cache:
+            if self.halo_img in Tile.default_halo_providers:
+                img = Tile.default_halo_providers[self.halo_img]()
+            else:
+                img = sf.Image()
+                if not img.LoadFromFile(self.halo_img):
+                    file = os.path.join(defaults.data_dir,"textures",self.halo_img)
+                    if not img.LoadFromFile(file):
+                        print("Failure loading halo from {0}".format(file))
+                
+            Tile.halo_cache[self.halo_img] = img
+            return img
+            
+        return Tile.halo_cache[self.halo_img]
 
     def _Recache(self):
         """Cache the tile string from self.text with font size self.rsize"""
         font = FontCache.get(self.rsize)
-        self.cached = sf.String(self.text,Font=font,Size=self.rsize)
+        self.cached = [sf.String(self.text,Font=font,Size=self.rsize)]
         
-        self.cached.SetColor(self.color)
+        img = self._GetHaloImage()
+        if not img is None:
+            self.cached.append(sf.Sprite(img))
+            self.cached[-1].Resize(self.dim[0] * defaults.tiles_size_px[0],self.dim[1] * defaults.tiles_size_px[1])
+        
+        for elem in self.cached:
+            elem.SetColor(self.color)
+        
 
     def _ShrinkBB(self,shrink_percentage):
         """Helper function, changes the behaviour of GetBoundingBox()
@@ -105,13 +154,16 @@ class Tile(Entity):
     def Draw(self):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
-        self.game.GetLevel().DrawSingle(self.cached,self.pos)
+        lv = self.game.GetLevel()
+        for elem in self.cached: 
+            lv.DrawSingle(elem,(self.pos[0],self.pos[1]))
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile
         position. The offset is specified in tile coordinates"""
-        self.game.GetLevel().DrawSingle(self.cached,(self.pos[0]+offset[0],
-            self.pos[1]+offset[1]))
+        lv = self.game.GetLevel()
+        for elem in self.cached: 
+            lv.DrawSingle(elem,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
 
 
 class AnimTile(Tile):

@@ -57,7 +57,8 @@ class Player(Entity):
 
         self.tiles = []
         for i in range(0, (len(lines) // height) * height, height):
-            self.tiles.append(Tile("\n".join(lines[i:i + height])))
+            self.tiles.append(Tile("\n".join(lines[i:i + height]),halo_img=None))
+            self.tiles[-1].SetDim((self.pwidth,self.pheight))
             self.tiles[-1].SetPosition((0, 0))
 
         assert len(self.tiles) == Player.MAX_ANIMS

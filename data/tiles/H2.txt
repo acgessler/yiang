@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,20,10,Entity.ENTER,draworder=-1500)
+<out> = Tile(<raw>,20,10,Entity.ENTER,draworder=-1500,halo_img=None)
                                  XXX
                                 XXX
                                 XXX                       

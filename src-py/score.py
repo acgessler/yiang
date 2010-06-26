@@ -64,6 +64,9 @@ class ScoreTileAnimStub(Tile):
 
         if self.pos[1] < 0:
             self.game.RemoveEntity(self) 
+            
+    def _GetHaloImage(self):
+        return None
 
 
     
