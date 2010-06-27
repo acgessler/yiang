@@ -10,18 +10,20 @@ effect
 {
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
-	vec4 another = framebuffer(_in+vec2(-0.01,-0.004));
+	vec4 another = framebuffer(_in+vec2(-0.010,-0.004)* (cur-0.5)*3.0);
+	vec4 evenmor = framebuffer(_in+vec2(-0.015,-0.006) * (cur-0.5)*3.0);
 	vec4 dither = noise(randomUV+_in);
 
 	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);
-	vec4 color = (pixel*1.0f+(another*0.25));
+	vec4 color = (pixel*1.0f+(another*0.25)+(evenmor*0.15));
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
 #ifdef ENABLE_DITHER
-	_out.rgb += (dither.rgb-0.5f)*0.0225;
+	_out.rgb += (dither.rgb-0.5f)*0.0175;
 #endif
 
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.2f);
 	_out.a = 1.f;
 }
 

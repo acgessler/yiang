@@ -8,4 +8,6 @@ Player				1000
 Enemy				2000
 SmallTraverser		2100
 
+---- PostFX			10000
+KillStub			11000
 

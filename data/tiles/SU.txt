@@ -1,4 +1,4 @@
-from sun import Sun; <out> = Sun(<raw>,20,16)
+from sun import Sun; <out> = Sun(<raw>,40,20)
                     $$$
              $$     $$$    $$
              $$$$   $$$   $$$

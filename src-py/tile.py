@@ -172,7 +172,7 @@ class AnimTile(Tile):
     played automatically or manually."""
 
     
-    def __init__(self,text,height,frames,speed,states=1,width=0,draworder=20):
+    def __init__(self,text,height,frames,speed,states=1,width=0,draworder=20,*args, **kwargs):
         """ Read an animated tile from a text block. Such a textual
         description contains the ASCII images for all frames,
         separated by an empty line for clarity. There can be multiple
@@ -193,7 +193,7 @@ class AnimTile(Tile):
                 AssertionError
         """
 
-        Tile.__init__(self,draworder=draworder)
+        Tile.__init__(self,draworder=draworder,*args, **kwargs)
         
         lines = text.split("\n")
         n = 0

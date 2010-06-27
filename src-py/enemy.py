@@ -117,6 +117,35 @@ class SmallTraverser(Enemy):
         # XXX the sound effect seems to shoort for SFMl to handle it.
         #from audio import SoundEffectCache
         #SoundEffectCache.Get("click8a.wav").Play()
+        
+        
+class SmallBob(Enemy):
+    """This guy is not actually friendly, but he's much less a danger
+    as his older (and bigger) brothers are. He does nto shoot, for
+    example."""
+    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 2.0, shrinkbb=0.8):
+        AnimTile.__init__(self, text, height, frames, speed, 2)
+        self._ShrinkBB(shrinkbb)
+
+    def Interact(self, other):
+        return Entity.KILL
+
+    def GetVerboseName(self):
+        return "Small Bob"
+    
+    def GetDrawOrder(self):
+        return 2100
+
+    def Update(self, time_elapsed, time):
+        if not self.game.IsGameRunning():
+            return 
+            
+        rect = self.GetBoundingBox()
+        res = 0
+            
+        AnimTile.Update(self, time_elapsed, time)
+        self.SetState(1 if self.vel > 0 else 0)
+        
             
 class Robot(SmallTraverser):
     pass

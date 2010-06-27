@@ -306,13 +306,20 @@ class Level:
         for entity in self.EnumActiveEntities():
             entity.Update(time,dtime)
         
+        havepfx = False
         for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
+            if entity.GetDrawOrder() > 10000 and havepfx is False:
+                for fx in self.postfx_rt:
+                    fx.Draw()
+                havepfx = True
+                
             entity.Draw()
             
         self._UpdateEntityList()
         
-        for fx in self.postfx_rt:
-            fx.Draw()
+        if havepfx is False:
+            for fx in self.postfx_rt:
+                fx.Draw()
         
     def DrawSingle(self, drawable, pos=None):
         """Draw a sf.Drawable at a specific position, which is
