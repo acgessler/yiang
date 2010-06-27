@@ -1,14 +1,13 @@
 <out> = Level(<level>,<game>,<raw>,postfx=[("ingame1.sfx",()),("grayscale.sfx",())])
 bPL
 
-
-
-
-
-
-   
-               
-
-                                                   _FI
-               rS0rS0rS0   
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0
+                             
+                                                   _RE
+                                    rDArDArDArDArDAgFI
+                                    rDArDArDArDArDA
+                                    rDArDArDArDArDA
+                                    rDArDArDArDArDA            bH4
+               gUK                  rDArDArDArDArDA
+                                   
+               rS0rS0rS0            rDArDArDArDArDAgS1gS1rDA
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0_A0_A0
