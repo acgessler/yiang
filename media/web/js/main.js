@@ -488,7 +488,7 @@ $(document).ready(function(){
     $("div.main").hide().wait(1000).fadeIn(1000, function(){});
     $('div.header').hide().animate({
         opacity: "show",
-        top: '+=30px',
+        top: '+=26px',
     }, 500, function(){
     });
 	

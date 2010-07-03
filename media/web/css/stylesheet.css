@@ -2,7 +2,7 @@
 
 body {
 
-		BACKGROUND-COLOR: #808080;
+		BACKGROUND-COLOR: #101010;
 }
 
 font {
@@ -12,11 +12,11 @@ font {
 div.game {
 
 	position: fixed;
-	top: 0px;
+	top: 26px;
 	left: 0px;
 	width: 100%;
 	height: 100%;
-	BACKGROUND-COLOR: #000000;
+	BACKGROUND-COLOR: #000000; 
 	color: #ff0000;
 	z-index: -100;
 
@@ -27,13 +27,13 @@ div.game {
 }
 
 div.header {
+	position: fixed;
 	background-image: url("./../img/header1.png");
 	background-repeat: repeat-x;
-	position: absolute;
-	top: -30px;
+	top: -26px;
 	left: 0px;
 	width: 100%;
-	height: 30px;
+	height: 26px;
 	BACKGROUND-COLOR: #707070;
 	color: #cdcdcd;
 	z-index: 0;
@@ -42,23 +42,23 @@ div.header {
 }
 
 .tile_white {
-	color: #ffffff;
+	color: #909090;
 }
 
 .tile_green {
-	color: #00ff00;
+	color: #009000;
 }
 
-.tile_white {
-	color: #ffffff;
+.tile_black {
+	color: #000000;
 }
 
 .tile_red {
-	color: #ff0000;
+	color: #900000;
 }
 
 .tile_blue {
-	color: #0000ff;
+	color: #000090;
 }
 
 div.main {
