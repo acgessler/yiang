@@ -14,37 +14,91 @@ cells_x = tiles_x * tile_size_x;
 cells_y = tiles_y * tile_size_y;
 
 lines = new Array();
+entities = new Array();
 
 
+// ***********************************************************************************
+// Each class serves as factory class for a specific entity class, i.e.
+// Tile.instance() yields an object of type TileInstance() which can then
+// be placed on the game area using TileInstance.setPosition().
+// ***********************************************************************************
 
 function Tile(lines){
     this.lines = lines;
-	this.getTextLines = function() {
-		return this.lines;
-	}
-	
-	this.update = function() {
-		
-	}
     return this;
 }
+
+Tile.prototype.instance = function() {
+	return new TileInstance(this);
+};
 
 function AnimTile(lines,speed){
     this.anim_lines = lines;
-	this.lines = lines[0];
+	//this.lines = lines[0];
 	this.speed = speed;
-	this.cur_anim = 0;
-	
-	this.getTextLines = function(x,y) {
-		return this.anim_lines[this.cur_anim % this.anim_lines.length];
-	}
-	
-	this.update = function(tick) {
-		this.cur_anim += 1;
-	}
     return this;
 }
 
+AnimTile.prototype.instance = function() {
+	return new AnimTileInstance(this);
+};
+
+// -----------------------------------------------------------------------------------
+
+function TileInstance(outer) {
+	this.outer = outer;
+}
+
+TileInstance.prototype.setPosition = function(x,y) {
+	this.x = x;
+	this.y = y;
+}
+
+TileInstance.prototype.setColor = function(color) {
+	this.color = color;
+}
+
+TileInstance.prototype.draw = function() {
+
+	var tlines = this.getTextLines();
+    for (var yy = this.y * tile_size_y; yy < this.y * tile_size_y + tlines.length; ++yy) {
+        line = tlines[yy - this.y * tile_size_y];
+        for (var xx = this.x * tile_size_x; xx < this.x * tile_size_x + line.length; ++xx) {
+            lines[yy][xx] = [line[xx - this.x * tile_size_x], this.color];
+        }
+    }
+}
+TileInstance.prototype.update = function(tick) {
+	// the default update does actually nothing.
+}
+
+TileInstance.prototype.getTextLines = function() {
+	return this.outer.lines;
+}
+
+// -----------------------------------------------------------------------------------
+
+function AnimTileInstance(outer){
+    this.outer = outer;
+    this.cur_anim = 0;
+    
+    return this;
+}
+
+AnimTileInstance.prototype = new TileInstance();
+AnimTileInstance.prototype.constructor = AnimTileInstance;
+AnimTileInstance.prototype.update = function(tick){
+    this.cur_anim += 1;
+}
+
+AnimTileInstance.prototype.getTextLines = function(x, y) {
+    return this.outer.anim_lines[this.cur_anim % this.outer.anim_lines.length];
+}
+
+// ***********************************************************************************
+// These are the actual entity definitions. Most are simple Tiles, only few
+// are animated (AnimTile) and probably even interactive (i.e. Enemy, Player).
+// ***********************************************************************************
 
 entity_showcase = {};
 entity_showcase["PL"] = new Tile([
@@ -176,17 +230,36 @@ testMap1 =
 "            _A1            _A1_B0_B0_B0_B0_A5                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA\n"+                                                                                                                                         
 "_A0_A0_A0_A0_A0_A0_A0_A0_A0_B0_B0_B0_B0_B0_B0_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA\n";       
 
-function placeTile(tile, x, y, color){
-	var tlines = tile.getTextLines();
-    for (var yy = y * tile_size_y; yy < y * tile_size_y + tlines.length; ++yy) {
-        line = tlines[yy - y * tile_size_y];
-        for (var xx = x * tile_size_x; xx < x * tile_size_x + line.length; ++xx) {
-            lines[yy][xx] = [line[xx - x * tile_size_x], color, (tile ? tile : null)];
-			tile = undefined;
-        }
-    }
+// -----------------------------------------------------------------------------------
+/**
+ * Add a specific entity to the list of active entities. This operation may
+ * be deferred if this is necessary.
+ * @param {Object} entity
+ */
+// -----------------------------------------------------------------------------------
+function addEntity(entity)  {
+	entities.push(entity)
 }
 
+// -----------------------------------------------------------------------------------
+/**
+ * Remove a specific entity from the list of active entities. This operation may
+ * be deferred if this is necessary.
+ * @param {Object} entity
+ */
+// -----------------------------------------------------------------------------------
+function removeEntity(entity)  {
+	entities.splice(entities.indexOf(entity),1)
+}
+
+// -----------------------------------------------------------------------------------
+/** Load a given map, specified as simple ascii text
+ *  
+ * @param {String} map A simple string describing the map in the usual syntax, as for
+ *   the offline game. This include a 'shebang' python line, which is skipped
+ *   and is required to be present (i.e. '<out> = new Tile()');
+ */
+// -----------------------------------------------------------------------------------
 function loadMap(map){
     clearPlayGround();
     
@@ -214,13 +287,23 @@ function loadMap(map){
 				continue;
 			}
 			
-			placeTile(tcode,y/3,x-1,ccode);     
+			tcode = tcode.instance();
+			tcode.setPosition( y/3,x-1 );
+			tcode.setColor(ccode);  
+			
+			addEntity(tcode);   
         }
     }
 
     updatePlayGround(false);
 }
 
+// -----------------------------------------------------------------------------------
+/**
+ * Load a map asychronously.
+ * @param {Object} index Map index, same as for the offline game.
+ */
+// -----------------------------------------------------------------------------------
 function loadMapFromServerAsync(index){
 	var url = '/yiang/levels/' + index + ".txt";
     $.ajax({
@@ -237,10 +320,55 @@ function loadMapFromServerAsync(index){
 	});
 }
 
-function updatePlayGround(update){
+// -----------------------------------------------------------------------------------
+/**
+ * Clear the drawing plane and call draw() on all entities.
+ */
+// -----------------------------------------------------------------------------------
+function drawEntities() {
+	
+	clearPlayGround();
+	for (var entity in entities) {
+		entities[entity].draw();
+	}
+}
+
+// -----------------------------------------------------------------------------------
+/** 
+ * Call update() on all entities.
+ */
+// -----------------------------------------------------------------------------------
+function updateEntities() {
+	
+	for (var entity in entities) {
+		entities[entity].update();
+	}
+}
+
+// -----------------------------------------------------------------------------------
+/**
+ * Update the game area - this includes calling drawEntities() and updateEntities()
+ * unless explicitly disabled by parameters. Afterwards, the
+ * actual HTML code for the drawing plane is re-generated and comitted to the DOM.
+ * @param {Object} update
+ * @param {Object} draw
+ */
+// -----------------------------------------------------------------------------------
+function updatePlayGround(update,draw){
 	
 	if (update==undefined) {
 		update = false;
+	}
+	if (draw==undefined) {
+		draw = true;
+	}
+	
+	if (update) {
+		updateEntities();
+	}
+	
+	if (draw) {
+		drawEntities();
 	}
 	
     var text = "<pre>";
@@ -253,10 +381,6 @@ function updatePlayGround(update){
                 continue;
                 
             }        
-			if (update && elem.length>2 && elem[2] != null) {
-				elem[2].update();
-				//placeTile(elem[2],x,i);
-			}
 			
 			if (elem[1] != cur_color) {
                 text += "</span><span class=\"tile_" + elem[1] + "\">";
@@ -271,26 +395,42 @@ function updatePlayGround(update){
     $('div.game').html(text);
 }
 
-function clearPlayGround(){
+// -----------------------------------------------------------------------------------
+/**
+ * Clear the whole game area (represented by the global lines array).
+ */
+// -----------------------------------------------------------------------------------
+function clearPlayGround() {
     for (var i = 0; i < cells_y; ++i) {
         lines[i] = new Array();
         for (var x = 0; x < cells_x; ++x) {
-            lines[i][x] = [" ", "white",null];
+            lines[i][x] = [" ", "white"];
         }
     }
 }
 
-function setupPlayGround(){
-
+// -----------------------------------------------------------------------------------
+/** 
+ * Load a specific map and setup the timer to update it regularly.
+ * @param index Index of the map to be loaded, alternatively the map as string.
+ */
+// -----------------------------------------------------------------------------------
+function setupPlayGround(index){
     clearPlayGround();
-    //loadMapFromServerAsync(1);
 	
-	loadMap(testMap1);
+	if (typeof(index) == "string") {
+		loadMap(testMap1);
+	}
+	else {
+		loadMapFromServerAsync(index);
+	}
 	
-	$(document).everyTime("1000ms",function() {
-		updatePlayGround(true);	
-	});
+	//$(document).everyTime("1000ms",function() {
+	//	updatePlayGround(true);	
+	//});
 }
+
+
 
 $.fn.wait = function(time, type){
     // http://docs.jquery.com/Cookbook/wait
@@ -315,6 +455,6 @@ $(document).ready(function(){
     }, 500, function(){
     });
     
-    setupPlayGround();
+    setupPlayGround(testMap1);
 });
 
