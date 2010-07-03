@@ -1,5 +1,10 @@
 
 
+body {
+
+		BACKGROUND-COLOR: #808080;
+}
+
 font {
 	font-family:"Georgia", "Arial", serif;
 }
@@ -18,7 +23,7 @@ div.game {
 	PADDING: 5px 5px 5px 5px;
 
 	font-family:"Courier New", monospace;
-	font-size: 10px;
+	font-size: 11px;
 }
 
 div.header {
@@ -50,6 +55,10 @@ div.header {
 
 .tile_red {
 	color: #ff0000;
+}
+
+.tile_blue {
+	color: #0000ff;
 }
 
 div.main {
