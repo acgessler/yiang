@@ -1,4 +1,4 @@
-<out> = Tile(<raw>)
+<out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO)
  ___
 [___]
 [___]

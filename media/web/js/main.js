@@ -6,6 +6,8 @@
 // NO redistribution, reuse or change without written permission.
 ///////////////////////////////////////////////////////////////////////////////////
 
+
+// Global settings
 tile_size_x = 5;
 tile_size_y = 3;
 
@@ -17,10 +19,25 @@ cells_y = tiles_y * tile_size_y;
 
 current_plane = 1;
 update_ms = 200;
+cur_tick = 0;
 
-lines = new Array();
-entities = new Array();
+show_stats = true;
+// ---------------------------------------------------------
+stats = { // debug statistics, can be shown with the 'D' key
+	entities_total : 0,
+	entities_visible : 0,
+	seconds: 0,
+	current_map: -1, // -1 means 'test map' or 'no map' 
+	
+	
+	sentinel: 0  
+}
+// ---------------------------------------------------------
 
+lines = [];
+entities = [];
+visible_entities = [];
+map_cache = [];
 
 // -----------------------------------------------------------------------------------
 // Each class serves as factory class for a specific entity class, i.e.
@@ -36,14 +53,32 @@ Tile.prototype.instance = function() {
 	return new TileInstance(this);
 };
 
+// ---------------------------------------------------------
 function AnimTile(lines,speed){
+	//assert("lines",this);
+	
     this.anim_lines = lines;
 	this.speed = speed;
+	this.num_frames = lines.length;
     return this;
 }
 
 AnimTile.prototype.instance = function() {
 	return new AnimTileInstance(this);
+};
+
+// ---------------------------------------------------------
+DIR_HORIZONTAL = 0, DIR_VERTICAL = 1;
+function SmallTraverser(lines,speed,dir){
+	//assert("lines",this);
+	
+    this.anim_lines = lines;
+	this.speed = speed;
+    return this;
+}
+
+SmallTraverser.prototype.instance = function() {
+	return new SmallTraverserInstance(this);
 };
 
 // ---------------------------------------------------------
@@ -61,7 +96,6 @@ TileInstance.prototype.setColor = function(color) {
 }
 
 TileInstance.prototype.draw = function() {
-
 	var tlines = this.getTextLines();
     for (var yy = this.y * tile_size_y; yy < this.y * tile_size_y + tlines.length; ++yy) {
         line = tlines[yy - this.y * tile_size_y];
@@ -70,6 +104,12 @@ TileInstance.prototype.draw = function() {
         }
     }
 }
+
+TileInstance.prototype.isVisible = function(x0,y0,w,h) {
+	alert(w,h);
+    return true;
+}
+
 TileInstance.prototype.update = function() {
 	// the default update does actually nothing.
 }
@@ -90,18 +130,37 @@ function AnimTileInstance(outer){
 AnimTileInstance.prototype = new TileInstance();
 AnimTileInstance.prototype.constructor = AnimTileInstance;
 AnimTileInstance.prototype.update = function(){
-    ++this.cur_tick;
 	this.updateAnim();
 }
 
 AnimTileInstance.prototype.updateAnim = function(){
-	this.cur_anim =  Math.floor(((update_ms/1000.0)*this.cur_tick / (this.outer.speed/this.outer.anim_lines.length))) 
+	this.cur_anim =  Math.floor(((update_ms/1000.0)*cur_tick / (this.outer.speed/this.outer.num_frames))) 
 		% this.outer.anim_lines.length;
 }
 
 AnimTileInstance.prototype.getTextLines = function(x, y) {
     return this.outer.anim_lines[this.cur_anim];
 }
+
+// ---------------------------------------------------------
+function SmallTraverserInstance(outer){
+    this.outer = outer;
+    this.cur_anim = 0;
+	this.cur_tick = 0;
+    
+    return this;
+}
+
+SmallTraverserInstance.prototype = new AnimTileInstance();
+SmallTraverserInstance.prototype.constructor =SmallTraverserInstance;
+SmallTraverserInstance.prototype.update = function(){
+	this.updateAnim();
+}
+
+SmallTraverserInstance.prototype.getTextLines = function(x, y) {
+    return this.outer.anim_lines[this.cur_anim];
+}
+
 
 // ***********************************************************************************
 // These are the actual entity definitions. Most are simple Tiles, only few
@@ -280,6 +339,41 @@ testMap1 =
 
 // -----------------------------------------------------------------------------------
 /**
+ * Get the size of the visible screen, in pixels, as a dict with 
+ * 'width' and 'height' as keys. Return null if the information is not available.
+ */
+// -----------------------------------------------------------------------------------
+function getViewportSize() {
+	// http://www.geekdaily.net/2007/07/04/javascript-cross-browser-window-size-and-centering/
+	var w = 0;
+	var h = 0;
+
+	//IE
+	if(!window.innerWidth){
+		//strict mode
+		if(!(document.documentElement.clientWidth == 0))
+		{
+			w = document.documentElement.clientWidth;
+			h = document.documentElement.clientHeight;
+		}
+		//quirks mode
+		else
+		{
+			w = document.body.clientWidth;
+			h = document.body.clientHeight;
+		}
+	} 
+	// w3c
+	else
+	{
+		w = window.innerWidth;
+		h = window.innerHeight;
+	}
+	return {width:w,height:h};
+}
+
+// -----------------------------------------------------------------------------------
+/**
  * Add a specific entity to the list of active entities. This operation may
  * be deferred if this is necessary.
  * @param {Object} entity
@@ -306,9 +400,12 @@ function removeEntity(entity){
  * @param {String} map A simple string describing the map in the usual syntax, as for
  *   the offline game. This include a 'shebang' python line, which is skipped
  *   and is required to be present (i.e. '<out> = new Tile()');
+ * @param {int} index original index of the map, may be left out.
  */
 // -----------------------------------------------------------------------------------
-function loadMap(map){
+function loadMap(map,index){
+	index = index || -1;
+	
 	entities = new Array();
     clearPlayGround();
     
@@ -344,12 +441,15 @@ function loadMap(map){
         }
     }
     
+	gatherVisibleEntities();
     updatePlayGround(false);
 	
 	// XXX
 	$('div#game'+current_plane).animate({
         opacity: "show"
     }, 1000, function(){});
+	
+	stats.current_map = index;
 }
 
 // -----------------------------------------------------------------------------------
@@ -359,6 +459,11 @@ function loadMap(map){
  */
 // -----------------------------------------------------------------------------------
 function loadMapFromServerAsync(index){
+	// first check if we have this map already
+	if (index in map_cache) {
+		loadMap(map_cache[index],index);
+		return;
+	}
     var url = '/yiang/levels/' + index + ".txt";
     $.ajax({
         url: url,
@@ -366,7 +471,8 @@ function loadMapFromServerAsync(index){
         dataType: "text",
         
         success: function(data, status, xmlhttp){
-            loadMap(data);
+            loadMap(data,index);
+			map_cache[index] = data;
         },
         error: function(xhr, err, e){
             alert("Error: " + err);
@@ -376,12 +482,37 @@ function loadMapFromServerAsync(index){
 
 // -----------------------------------------------------------------------------------
 /**
+ * Update the 'visible_entities' array with a up-to=date list of all visible
+ * entities, that is entities that are presumably visible in the user's current
+ * viewport. Of course, this depends on our ability to determine the current
+ * screen size. If we can't find proper values, all entities are assumed visible.
+ */
+// -----------------------------------------------------------------------------------
+function gatherVisibleEntities() {
+	visible_entities = new Array();
+	
+	var screen = getViewportSize();
+	if (screen == null || screen.width <= 0 || screen.height <= 0) {
+		// we make a copy because we need to emulate the behaviour that
+		// visible_entities is not necessarily up-to-date.
+		visible_entities = entities.clone();
+	}
+	
+	for (var entity in entities) {
+		if (entities[entity].isVisible(0,0,screen.width,screen.height)) {
+			visible_entities.push(entities[entity]);
+		}
+	}
+}
+
+// -----------------------------------------------------------------------------------
+/**
  * Clear the drawing plane and call draw() on all entities.
  */
 // -----------------------------------------------------------------------------------
 function drawEntities(){
     clearPlayGround();
-    for (var entity in entities) {
+    for (var entity in visible_entities) {
         entities[entity].draw();
     }
 }
@@ -392,7 +523,8 @@ function drawEntities(){
  */
 // -----------------------------------------------------------------------------------
 function updateEntities(){
-    for (var entity in entities) {
+	++cur_tick;
+    for (var entity in visible_entities) {
         entities[entity].update();
     }
 }
@@ -407,6 +539,18 @@ function updateEntities(){
  */
 // -----------------------------------------------------------------------------------
 function updatePlayGround(update, draw){
+
+	// update stats
+	stats.entities_total = entities.length;
+	stats.entities_visible = visible_entities.length;
+	stats.seconds = update_ms*cur_tick/1000.0;
+	if (show_stats) {
+		$('div.stats').html("<b>***DEBUG***</b> ('D' to toggle)<br/>entities_total: "+stats.entities_total+"<br />"+
+			"entities_visible: "+stats.entities_visible+"<br />"+
+			"seconds_running: "+stats.seconds+"<br />"+
+			"current_map: "+stats.current_map+"<br />");
+	}
+
     update = (update == undefined ? true : update);
     draw = (draw == undefined ? true : draw);
     
@@ -474,7 +618,9 @@ function setupPlayGround(index){
     }
 }
 
-
+// -----------------------------------------------------------------------------------
+// jQuery customization
+// -----------------------------------------------------------------------------------
 $.fn.wait = function(time, type){
     // http://docs.jquery.com/Cookbook/wait
     time = time || 1000;
@@ -487,12 +633,10 @@ $.fn.wait = function(time, type){
     });
 };
 
-
 // -----------------------------------------------------------------------------------
 // jQuery startup
 // -----------------------------------------------------------------------------------
 $(document).ready(function(){
-
     $("div.main").hide().wait(1000).fadeIn(1000, function(){});
     $('div.header').hide().animate({
         opacity: "show",

@@ -20,10 +20,28 @@ div.game {
 	color: #ff0000;
 	z-index: -100;
 
+
 	PADDING: 5px 5px 5px 5px;
 
-	font-family:"Courier New", monospace;
+	font-family: "Courier New", monospace;
 	font-size: 11px;
+}
+div.stats {
+	
+	position: fixed;
+	top: 120px;
+	left: 30px;
+	width: 210px;
+	height: 140px;
+	opacity: 0.3;
+	padding: 8px 8px 8px 8px;
+	
+	background-color: #202020;
+	color: #cdcdcd;
+	
+	BORDER: #606060 2px dashed;
+	font-family:"Arial", sans-serif;
+	font-size: 14px; 
 }
 
 div.header {
@@ -71,6 +89,7 @@ COLOR: #40cd40;
 margin-left: auto ;
 margin-right: auto ;
 margin-top: 100px;
+opacity: 0.6;
 
 PADDING: 10px 10px 10px 10px;
 BORDER: #404040 10px ridge;

@@ -121,7 +121,7 @@ class SmallTraverser(Enemy):
         
 class SmallBob(Enemy):
     """This guy is not actually friendly, but he's much less a danger
-    as his older (and bigger) brothers are. He does nto shoot, for
+    as his older (and bigger) brothers are. He does not shoot, for
     example."""
     def __init__(self, text, height, frames, speed=1.0, move_speed_base = 2.0, shrinkbb=0.8):
         AnimTile.__init__(self, text, height, frames, speed, 2)
@@ -144,7 +144,7 @@ class SmallBob(Enemy):
         res = 0
             
         AnimTile.Update(self, time_elapsed, time)
-        self.SetState(1 if self.vel > 0 else 0)
+        self.SetState(0)
         
             
 class Robot(SmallTraverser):

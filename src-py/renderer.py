@@ -184,6 +184,7 @@ class Renderer:
     
         if sf.PostFX.CanUsePostFX() is False:
             print("Need to support postprocessing effects, buy better hardware!")
+            import sys
             sys.exit(-100)
 
     @staticmethod

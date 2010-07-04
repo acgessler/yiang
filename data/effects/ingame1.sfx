@@ -10,8 +10,8 @@ effect
 {
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
-	vec4 another = framebuffer(_in+vec2(-0.010,-0.004)* (cur-0.5)*3.0);
-	vec4 evenmor = framebuffer(_in+vec2(-0.015,-0.006) * (cur-0.5)*3.0);
+	vec4 another = framebuffer(_in+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
+	vec4 evenmor = framebuffer(_in+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
 	vec4 dither = noise(randomUV+_in);
 
 	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);

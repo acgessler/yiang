@@ -1,0 +1,66 @@
+from enemy import SmallBob; <out> = SmallBob(<raw>,9,3)
+    [[[ ]]]
+   ( O   O )
+   |   u   |
+    \UUIUU/
+[OO\       /OO];
+  [|B o_B  ]
+  \\ __u_ \/
+   \|     /
+   /      \
+
+    [[[ ]]]
+   ( o   O )
+   \ UUIUU /
+    \UUIUU/
+[OO\       /OO];
+  [|B o_B  ]
+  \\ __u_ \/
+   \|     /
+   /      \
+
+    [[[ ]]]
+   ( O   o )
+   |  uuu  |
+    \UUIUU/
+[OO\       /OO];
+  [|B o_B  ]
+  \\ __u_ \/
+   \|     /
+   /      \
+
+ 
+   /000;
+ O- ol  \
+  |     |
+   Uu- /
+   _/'_ 
+   ;  OO/P
+  | Oo   |
+   \____/ 
+     || 
+  o==/P 
+
+   /000;
+ O- ol  \
+  |     |
+   Uu- /
+   _/'_ 
+   ;  OO/P
+  | Oo   |
+   \____/  
+  o==/P   
+
+   /000;
+ O- ol  \
+  |     |
+   Uu- /
+   _/'_ 
+   ;  OO/P
+  | Oo   |
+   \____/  
+     |\
+  o==/P   
+  
+  
+ 

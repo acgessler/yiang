@@ -45,12 +45,14 @@ class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing.
     Extends Entity with more specialized behaviour."""
     
+    AUTO=-1
+    
     halo_cache = {None:None}
     default_halo_providers = {
             "default":gen_halo_default
     }
         
-    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default"):
+    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default",width_ofs=0,height_ofs=0):
         
         # Note: the 'constants' from defaults may change during startup, but 
         # this file may get parsed BEFORE this happens, so we can't
@@ -66,15 +68,74 @@ class Tile(Entity):
         self.rsize = rsize
         self.collision = collision
         self.text = text
+            
         self.dim = (width*scale/defaults.tiles_size[0],height*scale/defaults.tiles_size[1])
+        self.ofs = (width_ofs,height_ofs)
         self.draworder = draworder
         self.halo_img = halo_img
         
+        # if both width and height are AUTO, compute the minimum bounding
+        # rectangle for all glyph bounding rectangles.
+        if width==Tile.AUTO and height==Tile.AUTO:
+            self.dim,self.ofs = self._GuessRealBB()
+            
         self._Recache()
 
     def __str__(self):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\
             self.pos[0],self.pos[1],self.text)
+        
+    def _GuessRealBB(self):
+        """Return adjusted (width,height) (xofs,yofs) tuples
+        basing on the current values and self.text"""
+        
+        font = FontCache.get(self.rsize)
+        assert font
+        
+        t,r,b,l = 0,0,0,0
+        
+        lines = [e for e in enumerate(self.text.split("\n"))]
+        for y,line in lines:
+            if len(line)==0:
+                continue
+            
+            if y==0:
+                for c in line:
+                    gl = font.GetGlyph(ord(c))
+                    assert gl
+                    
+                    t = max(gl.Rectangle.Top,t)
+            elif y==len(lines)-1:
+                for c in line:
+                    gl = font.GetGlyph(ord(c))
+                    assert gl
+                    
+                    b = max(gl.Rectangle.Bottom,t)
+                    
+            thisone = [e for e in enumerate(line)]
+            for y,c in thisone:
+                if c==" ":
+                    continue
+                gl = font.GetGlyph(ord(c))
+                assert gl
+                    
+                l = max(gl.Rectangle.Left,l)
+            
+            for y,c in reversed(thisone):
+                if c==" ":
+                    continue
+                print(c,ord(c))
+                gl = font.GetGlyph(ord(c))
+                assert gl
+                    
+                print(gl.Rectangle.Top)
+                print(gl.Rectangle.Left)
+                print(gl.Rectangle.Right)
+                print(gl.Rectangle.Bottom)
+                r = max(gl.Rectangle.Right,r)
+                
+        
+        return self.dim,self.ofs
 
     def Interact(self,other):
         return self.collision
