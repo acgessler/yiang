@@ -16,6 +16,7 @@ cells_x = tiles_x * tile_size_x;
 cells_y = tiles_y * tile_size_y;
 
 current_plane = 1;
+update_ms = 200;
 
 lines = new Array();
 entities = new Array();
@@ -69,7 +70,7 @@ TileInstance.prototype.draw = function() {
         }
     }
 }
-TileInstance.prototype.update = function(tick) {
+TileInstance.prototype.update = function() {
 	// the default update does actually nothing.
 }
 
@@ -81,18 +82,25 @@ TileInstance.prototype.getTextLines = function() {
 function AnimTileInstance(outer){
     this.outer = outer;
     this.cur_anim = 0;
+	this.cur_tick = 0;
     
     return this;
 }
 
 AnimTileInstance.prototype = new TileInstance();
 AnimTileInstance.prototype.constructor = AnimTileInstance;
-AnimTileInstance.prototype.update = function(tick){
-    this.cur_anim += 1;
+AnimTileInstance.prototype.update = function(){
+    ++this.cur_tick;
+	this.updateAnim();
+}
+
+AnimTileInstance.prototype.updateAnim = function(){
+	this.cur_anim =  Math.floor(((update_ms/1000.0)*this.cur_tick / (this.outer.speed/this.outer.anim_lines.length))) 
+		% this.outer.anim_lines.length;
 }
 
 AnimTileInstance.prototype.getTextLines = function(x, y) {
-    return this.outer.anim_lines[this.cur_anim % this.outer.anim_lines.length];
+    return this.outer.anim_lines[this.cur_anim];
 }
 
 // ***********************************************************************************
@@ -189,7 +197,7 @@ entity_showcase["DA"] = new AnimTile([[
 "|Dan|", 
 "|   |", 
 "|   |"
-]]);
+]],3.0);
 
 entity_showcase["S0"] = new AnimTile([[
 "/...\\",
@@ -211,7 +219,7 @@ entity_showcase["S0"] = new AnimTile([[
 "/...\\",
 "|0,1.",
 "\\.../"
-]]);
+]],3.0);
 
 entity_showcase["S1"] = new AnimTile([[
 "[(.)]",
@@ -234,7 +242,7 @@ entity_showcase["S1"] = new AnimTile([[
 ],[
 "[(.)]",
 "[   ]"
-]]);
+]],2.0);
 
 entity_showcase["B0"] = new Tile([
 "AAAAA",
@@ -517,7 +525,7 @@ $(document).ready(function(){
     	setupPlayGround(nxt++);
     });
 	
-	$(document).everyTime("1000ms",function() {
+	$(document).everyTime(update_ms+"ms",function() {
     	updatePlayGround(true);	
     });
 });
