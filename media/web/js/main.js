@@ -21,14 +21,14 @@ current_plane = 1;
 update_ms = 200;
 cur_tick = 0;
 
-show_stats = true;
+show_stats = false;
 // ---------------------------------------------------------
 stats = { // debug statistics, can be shown with the 'D' key
 	entities_total : 0,
 	entities_visible : 0,
 	seconds: 0,
 	current_map: -1, // -1 means 'test map' or 'no map' 
-	
+	map_changes: 0,
 	
 	sentinel: 0  
 }
@@ -449,6 +449,7 @@ function loadMap(map,index){
     }, 1000, function(){});
 	
 	stats.current_map = index;
+	++stats.map_changes;
 }
 
 // -----------------------------------------------------------------------------------
@@ -547,7 +548,8 @@ function updatePlayGround(update, draw){
 		$('div.stats').html("<b>***DEBUG***</b> ('D' to toggle)<br/>entities_total: "+stats.entities_total+"<br />"+
 			"entities_visible: "+stats.entities_visible+"<br />"+
 			"seconds_running: "+stats.seconds+"<br />"+
-			"current_map: "+stats.current_map+"<br />");
+			"current_map: "+stats.current_map+"<br />"+
+			"map_changes: "+stats.map_changes+"<br />");
 	}
 
     update = (update == undefined ? true : update);
@@ -674,18 +676,54 @@ $.fn.wait = function(time, type){
 // jQuery startup
 // -----------------------------------------------------------------------------------
 $(document).ready(function(){
-    $("div.main").hide().wait(1000).fadeIn(1000, function(){});
+	
+	// slowly fade the main info field in.
+    $("div.main").hide().wait(1000).fadeIn(1000, function(){
+		var old_opacity = parseFloat($(this).css("opacity"));
+		assert(old_opacity > 0.0 && old_opacity <= 1.0, this);
+		
+		$(this).mouseenter(function() { // hover()
+			$(this).animate({
+				opacity: 1.0
+			}, 500, function() {
+				// empty
+			});
+		});		
+		
+		$(this).mouseleave(function() {
+			$(this).animate({
+				opacity: old_opacity
+			}, 500, function() {
+				// empty
+			});
+		});
+		
+		// register an additional timer to deactivate the main info field
+		// automatically after a specific time interval.
+		
+		$(this).everyTime("15s",function() {
+    		$(this).animate({
+				opacity: old_opacity
+			}, 500, function() {
+				// empty
+			});
+    	});
+    			
+	});
+	
+	// scroll the header
     $('div.header').hide().animate({
         opacity: "show",
         top: '+=26px',
     }, 500, function(){
+		// empty
     });
 	
 	$('div#game'+0).hide();
 	current_plane = 1;
 	
 	// some levels are too short, don't bother displaying them
-	var skip = {18:1,19:1,1:1,5:1,9:1};
+	var skip = {18:1,19:1,1:1,5:1,9:1,16:1};
     
 	nxt = 17;
 	max = 20;
