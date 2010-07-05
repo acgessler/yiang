@@ -106,7 +106,6 @@ TileInstance.prototype.draw = function() {
 }
 
 TileInstance.prototype.isVisible = function(x0,y0,w,h) {
-	alert(w,h);
     return true;
 }
 
@@ -619,6 +618,44 @@ function setupPlayGround(index){
 }
 
 // -----------------------------------------------------------------------------------
+/**
+ * Check if a specific ASCII code matches a character. Ignore case
+ * @param {Object} code ASCII code, 0..127
+ * @param {Object} c Character to check for, may be either lower or upper case.
+ */
+// -----------------------------------------------------------------------------------
+function matchCodeI(code,c) {
+	var icode = parseInt(code); // manual version, might be faster than fromCharCode()
+	assert(icode > 0 && icode < 128 && c.length, this);
+	var ch = c.charCodeAt(0);
+	
+	if (icode >=  97 && icode <= 122) {
+		icode -= 32;
+	}
+	if (ch >=  97 && ch <= 122) {
+		ch -= 32;
+	}
+	return icode==ch;
+}
+
+// -----------------------------------------------------------------------------------
+/**
+ * Setup basic keyboard event handlers (i.e. debug gui).
+ */
+// -----------------------------------------------------------------------------------
+function setupBasicKeyHandlers() {
+	$(document).keydown(function(event) {
+		if (matchCodeI(event.keyCode, "d" )) {
+			$("div.stats").animate({
+        		opacity: ( (show_stats = !show_stats) ? "show" : "hide" )
+    		}, 1000, function(){
+				// empty
+			});
+		}
+	});
+}
+
+// -----------------------------------------------------------------------------------
 // jQuery customization
 // -----------------------------------------------------------------------------------
 $.fn.wait = function(time, type){
@@ -653,7 +690,7 @@ $(document).ready(function(){
 	nxt = 17;
 	max = 20;
 	setupPlayGround(nxt++);
-	$(document).everyTime("4500ms",function() {
+	$(document).everyTime("6500ms",function() {
 		$('div#game'+current_plane).animate({
         	opacity: "hide"
     	}, 1000, function(){
@@ -672,6 +709,8 @@ $(document).ready(function(){
 	$(document).everyTime(update_ms+"ms",function() {
     	updatePlayGround(true);	
     });
+	
+	setupBasicKeyHandlers();
 });
 
 
