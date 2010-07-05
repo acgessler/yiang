@@ -98,7 +98,7 @@ div.main {
     z-index: 1;
 }
 
-div.main_wide {
+.main_wide {
     width: 665px;
     BACKGROUND-COLOR: #101010;
     COLOR: #40cd40;
@@ -154,6 +154,9 @@ pre.force_cn {
 	font-family: "Courier New", monospace;
 	font-size: 12px;	
 }
+
+
+
 
 
 

@@ -786,8 +786,7 @@ $.fn.wait = function(time, type){
 // -----------------------------------------------------------------------------------
 $(document).ready(function(){
 	
-	// slowly fade the main info field in.
-    $("div.main").hide().wait(1000).fadeIn(1000, function(){
+	var func = function(){
 		var old_opacity = parseFloat($(this).css("opacity"));
 		assert(old_opacity > 0.0 && old_opacity <= 1.0, this);
 		
@@ -818,13 +817,20 @@ $(document).ready(function(){
 			});
     	});
     			
-	});
+	};
+	
+	// slowly fade the main info field in. apply slightly different behaviour for the sub-pages, i.e. highscore.
+	// all of them use a single main_wide div.
+    if ((cached = $("div.main")).length) {
+		cached.hide().wait(1000).fadeIn(1000, func);
+	}
+	else $("div.main_wide").hide().fadeIn(300, func);
 	
 	// scroll the header
     $('div.header').hide().animate({
         opacity: "show",
         top: '+=26px',
-    }, 500, function(){
+    }, (cached.length ? 500 : 0), function(){
 		// empty
     });
 	
