@@ -145,4 +145,11 @@ div.header_about {
     padding-right: 50px;
 }
 
+pre.force_cn {
+
+	font-family: "Courier New", monospace;
+	font-size: 12px;	
+}
+
+
 

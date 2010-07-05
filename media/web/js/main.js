@@ -374,7 +374,7 @@ function getViewportSize() {
 // -----------------------------------------------------------------------------------
 /**
  * Add a specific entity to the list of active entities. This operation may
- * be deferred if this is necessary.
+ * be deferred when necessary.
  * @param {Object} entity
  */
 // -----------------------------------------------------------------------------------
@@ -385,7 +385,7 @@ function addEntity(entity){
 // -----------------------------------------------------------------------------------
 /**
  * Remove a specific entity from the list of active entities. This operation may
- * be deferred if this is necessary.
+ * be deferred when necessary.
  * @param {Object} entity
  */
 // -----------------------------------------------------------------------------------
