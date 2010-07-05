@@ -12,10 +12,13 @@ tile_size_x = 5;
 tile_size_y = 3;
 
 tiles_x = 80;
-tiles_y = 25;
+tiles_y = 35;
 
 cells_x = tiles_x * tile_size_x;
 cells_y = tiles_y * tile_size_y;
+
+tiles_size_px_x = 9 * tile_size_x;
+tiles_size_px_y = 13 * tile_size_y;
 
 current_plane = 1;
 update_ms = 200;
@@ -29,6 +32,9 @@ stats = { // debug statistics, can be shown with the 'D' key
 	seconds: 0,
 	current_map: -1, // -1 means 'test map' or 'no map' 
 	map_changes: 0,
+	
+	viewport_width: 0,
+	viewport_height: 0,
 	
 	sentinel: 0  
 }
@@ -106,7 +112,7 @@ TileInstance.prototype.draw = function() {
 }
 
 TileInstance.prototype.isVisible = function(x0,y0,w,h) {
-    return true;
+    return true; // this.x*tiles_size_px_x < x0+w;
 }
 
 TileInstance.prototype.update = function() {
@@ -231,6 +237,80 @@ entity_showcase["A9"] = new Tile([
 "[___]"
 ]);
 
+entity_showcase["SU"] = new Tile([
+"                    $$$",
+"             $$     $$$    $$",
+"             $$$$   $$$   $$$",
+"              $$$$  $$$  $$$$",
+"        $$$    $$$  $$$ $$$$   $$$$",
+"        $$$$$$  $$$$$$$$$$$  $$$$$",
+"         $$$$$$ $$$$$$$$$$ $$$$$$",
+"             $$$$$        $$$$$$",
+"     $$$$$$$$$$$$        $$$$$$$$$$$",
+"      $$$$$$$$$$$  SUN   $$$$$$$$$$$",
+"             $$$          $$$ ",
+"       $$$$$$$$$         $$$$$$$$$",
+"     $$$$$$$$ $$$$$$$$$$$$$ $$$$$$$",
+"     $$$$    $$$$$$$$$$$$$$$   $$$$",
+"            $$$$$ $$$ $$$ $$$$$",
+"           $$$$$ $$$$ $$$   $$$$$",
+"          $$$    $$$  $$$$   $$$",
+"                $$$$   $$$",
+"                 $$     $$"
+]);
+
+entity_showcase["H1"] = new Tile([
+"    /",
+"   / ==========",
+"   \ ==========" ,
+"    \ ",
+"_____          ___",
+"  |   |___| | |___",
+"  |   |   | |  ___|",
+"       ____ _  _",
+"\    /|____| \/",
+" \/\/ |    | /"
+ ]);
+ 
+entity_showcase["H2"] = new Tile([
+"                                 XXX",
+"                                XXX",
+"                                XXX  ",                     
+"                                XXX",
+"                      XXXXXXXXXXXXXXXXXXXXXXXXX",        
+"                    XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"                  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"                XXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXX",
+"              XXXXXXXXX   XXXXXXXXXXXXXX   XXXXXXXXX",
+"            XXXXXXXXXX     XXXXXXXXXXXX     XXXXXXXXXX",
+"           XXXXXXXXXX       XXXXXXXXXX       XXXXXXXXXX",
+"           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"           XXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX  XXXXXXXXX",
+"            XXXXXXXX     XXXXXXXXXXXXXXX      XXXXXXXX",
+"              XXXXXXX     XXXXXXXXXXXXX       XXXXXXX",
+"                XXXXXX                      XXXXXX",
+"                  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+"                    XXXXXXXXXXXXXXXXXXXXXXXXXX",
+"                      XXXXXXXXXXXXXXXXXXXXXX"
+ ]);
+ 
+ entity_showcase["H3"] = new Tile([
+"       /\\",
+"      /__\\",
+"       <>",
+"       <>",
+"_____          ___",
+"  |   |___| | |___",
+"  |   |   | |  ___|",
+"       ____ _  _",
+"\\    /|____| \\/",
+" \\/\/ |    | /"
+]);
+ 
+
 entity_showcase["DA"] = new AnimTile([[
 "|Dan|", 
 "|ger|", 
@@ -247,6 +327,32 @@ entity_showcase["DA"] = new AnimTile([[
 "|   |", 
 "|   |", 
 "|   |"
+],[
+"|Dan|", 
+"|   |", 
+"|ger|"
+],[
+"|Dan|", 
+"|   |", 
+"|   |"
+]],3.0);
+
+entity_showcase["TR"] = new AnimTile([[
+"|Dan|", 
+"|ger|", 
+"|   |"
+],[
+"|   |", 
+"|Dan|", 
+"|ger|"
+],[
+"|   |", 
+"|Dan|", 
+"|   |"
+],[
+"|TRE|", 
+"|ASU|", 
+"|RE |"
 ],[
 "|Dan|", 
 "|   |", 
@@ -498,6 +604,7 @@ function gatherVisibleEntities() {
 		visible_entities = entities.clone();
 	}
 	
+	stats.viewport_width = screen.width, stats.viewport_height = screen.height;
 	for (var entity in entities) {
 		if (entities[entity].isVisible(0,0,screen.width,screen.height)) {
 			visible_entities.push(entities[entity]);
@@ -549,7 +656,9 @@ function updatePlayGround(update, draw){
 			"entities_visible: "+stats.entities_visible+"<br />"+
 			"seconds_running: "+stats.seconds+"<br />"+
 			"current_map: "+stats.current_map+"<br />"+
-			"map_changes: "+stats.map_changes+"<br />");
+			"map_changes: "+stats.map_changes+"<br />"+
+			"viewport_width: "+stats.viewport_width+"<br />"+
+			"viewport_height: "+stats.viewport_height+"<br />");
 	}
 
     update = (update == undefined ? true : update);
