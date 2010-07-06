@@ -23,7 +23,7 @@ function assert(cond, thisobj) {
 	catch (e) {
 		var str = e.toString();
 		if (str != null && str.length > 6 && str.substring(0,6)=="ASSERT") {
-			throw ex;
+			throw e;
 		} 
 		throw new Error("ASSERT '"+cond+"' caused exception: "+str);
 	}

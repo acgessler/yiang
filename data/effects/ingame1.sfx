@@ -24,7 +24,7 @@ effect
 	_out.rgb += (dither.rgb-0.5f)*0.0175;
 #endif
 
-	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.2f);
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);
 	_out.a = 1.f;
 }
 

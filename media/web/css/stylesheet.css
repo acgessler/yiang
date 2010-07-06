@@ -152,7 +152,13 @@ div.header_about {
 pre.force_cn {
 
 	font-family: "Courier New", monospace;
-	font-size: 12px;	
+	font-size: 11px;
+}
+
+img.preview_img {
+	width: 300px;
+	height: 200px;
+	border: #858585 1px solid;
 }
 
 

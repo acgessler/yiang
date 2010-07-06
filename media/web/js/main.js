@@ -767,28 +767,13 @@ function setupBasicKeyHandlers() {
 }
 
 // -----------------------------------------------------------------------------------
-// jQuery customization
+/** Startup function */
 // -----------------------------------------------------------------------------------
-$.fn.wait = function(time, type){
-    // http://docs.jquery.com/Cookbook/wait
-    time = time || 1000;
-    type = type || "fx";
-    return this.queue(type, function(){
-        var self = this;
-        setTimeout(function(){
-            $(self).dequeue();
-        }, time);
-    });
-};
+function main() {
 
-// -----------------------------------------------------------------------------------
-// jQuery startup
-// -----------------------------------------------------------------------------------
-$(document).ready(function(){
-	
-	var func = function(){
+	var func = function(elem){
 		var old_opacity = parseFloat($(this).css("opacity"));
-		assert(old_opacity > 0.0 && old_opacity <= 1.0, this);
+		//assert("old_opacity > 0.0 && old_opacity <= 1.0", this);
 		
 		$(this).mouseenter(function() { // hover()
 			$(this).animate({
@@ -824,7 +809,7 @@ $(document).ready(function(){
     if ((cached = $("div.main")).length) {
 		cached.hide().wait(1000).fadeIn(1000, func);
 	}
-	else $("div.main_wide").hide().fadeIn(300, func);
+	else (cached = $("div.main_wide")).hide().fadeIn(300, func);
 	
 	// scroll the header
     $('div.header').hide().animate({
@@ -864,7 +849,30 @@ $(document).ready(function(){
     });
 	
 	setupBasicKeyHandlers();
-});
+}
+
+// -----------------------------------------------------------------------------------
+// jQuery customization
+// -----------------------------------------------------------------------------------
+$.fn.wait = function(time, type){
+    // http://docs.jquery.com/Cookbook/wait
+    time = time || 1000;
+    type = type || "fx";
+    return this.queue(type, function(){
+        var self = this;
+        setTimeout(function(){
+            $(self).dequeue();
+        }, time);
+    });
+};
+
+// -----------------------------------------------------------------------------------
+// jQuery startup
+// -----------------------------------------------------------------------------------
+$(document).ready(main);
+
+	
+	
 
 
 
