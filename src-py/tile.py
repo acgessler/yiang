@@ -25,6 +25,7 @@ import traceback
 import random
 import itertools
 import os
+import collections
 
 # My own stuff
 import defaults
@@ -65,6 +66,7 @@ class Tile(Entity):
             
         Entity.__init__(self)
 
+        self.scale = scale
         self.rsize = rsize
         self.collision = collision
         self.text = text
@@ -74,9 +76,9 @@ class Tile(Entity):
         self.draworder = draworder
         self.halo_img = halo_img
         
-        # if both width and height are AUTO, compute the minimum bounding
+        # if either width and height are AUTO, compute the minimum bounding
         # rectangle for all glyph bounding rectangles.
-        if width==Tile.AUTO and height==Tile.AUTO:
+        if width==Tile.AUTO or height==Tile.AUTO:
             self.dim,self.ofs = self._GuessRealBB()
             
         self._Recache()
@@ -85,10 +87,15 @@ class Tile(Entity):
         return "Tile, pos: {0}|{1}, text:\n{2}".format(\
             self.pos[0],self.pos[1],self.text)
         
+        
     def _GuessRealBB(self):
         """Return adjusted (width,height) (xofs,yofs) tuples
         basing on the current values and self.text"""
         
+        
+        # XXX Font.Glyph[i].Rectangle() does not seem to provide reliable results
+        # XXX I'm guessing this is an issue with PySFML
+        """
         font = FontCache.get(self.rsize)
         assert font
         
@@ -128,14 +135,66 @@ class Tile(Entity):
                 gl = font.GetGlyph(ord(c))
                 assert gl
                     
-                print(gl.Rectangle.Top)
-                print(gl.Rectangle.Left)
-                print(gl.Rectangle.Right)
-                print(gl.Rectangle.Bottom)
                 r = max(gl.Rectangle.Right,r)
-                
+        """
         
-        return self.dim,self.ofs
+        b,r,t,l = 0,0,1e6,1e6
+        
+        # and because the aboce solution does not work, why not do it manually?
+        lookup = collections.defaultdict(lambda : (0.0,0.0,1.0,1.0), {
+            "_" : (0.0,0.9,1.0,1.0),
+            "-" : (0.0,0.5,1.0,0.7),
+            "." : (0.0,0.5,1.0,0.9)
+        } )
+        
+        def do_lookup(c):
+            #if c in "abcdefghijklmnopqrstuvwxyz":
+            #    return (0.0,0.9,1.0,0.1)
+            
+            return lookup[c]
+        
+        space = " \t"
+        ls = defaults.tiles_size
+        
+        lines = [e for e in enumerate(self.text.split("\n")) if not len(e[1])==0]
+        for y,line in lines:
+            
+            thisone = [e for e in enumerate(line)]
+            for x,c in thisone:
+                if not c in space:
+                    l = min(do_lookup(c)[0]+x,l)
+                    break
+            
+            for x,c in reversed(thisone):
+                if not c in space:
+                    r = max(do_lookup(c)[2]+x,r)
+                    break
+                
+        out = False
+        for y,line in lines:
+            for c in line:
+                if not c in space:
+                    t = min(do_lookup(c)[1]+y,t)
+                    out = True
+                    break
+            if out is True:
+                break
+                
+        out = False
+        for y,line in reversed(lines):
+            for c in line:
+                if not c in space:
+                    b = max(do_lookup(c)[3]+y,b)
+                    out = True
+                    break
+            if out is True:
+                break
+            
+        dim = (r-l)*self.scale/ls[0],(b-t)*self.scale/ls[1]  
+        ofs = l*self.scale/ls[0],t*self.scale/ls[1]  
+        print(dim,ofs)
+        
+        return dim,ofs
 
     def Interact(self,other):
         return self.collision
@@ -217,7 +276,7 @@ class Tile(Entity):
         render target and the coordinate system origin for the tile"""
         lv = self.game.GetLevel()
         for elem in self.cached: 
-            lv.DrawSingle(elem,(self.pos[0],self.pos[1]))
+            lv.DrawSingle(elem,(self.pos[0],self.pos[1]-self.ofs[1]))
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile

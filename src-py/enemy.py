@@ -70,7 +70,7 @@ class SmallTraverser(Enemy):
 
         # check for collisions on both sides, turn around if we have one.
         for collider in self.game.GetLevel().EnumPossibleColliders(rect):
-            # traverers of the same color collide with each other, others don't.
+            # traversers of the same color collide with each other, others don't.
             if isinstance(collider, SmallTraverser) and not collider.color == self.color:
                 continue
             
