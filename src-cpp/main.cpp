@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////
-// Yet Another Jump'n'Run Game, unfair this time.
+// Yet Another Jump'n'Run Game
 // (c) 2010 Alexander Christoph Gessler
 //
 // HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
@@ -45,6 +45,7 @@
 #endif
 
 PyMODINIT_FUNC PyInit_sf(void);
+#include "StartupDialog.h"
 
 #if 0
 // --------------------------------------------------------------------------------------------
@@ -107,7 +108,11 @@ int WINAPI WinMain(
 		&argc
 	);
 
-		
+	if (argc == 1) {
+		// if no configuration file is specified, show our startup GUI
+		ShowStartupDialog();
+	}
+
 	return PyMain(argc,argv);
 }
 

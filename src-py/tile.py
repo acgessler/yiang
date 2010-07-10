@@ -36,7 +36,7 @@ from game import Entity,Game
 def gen_halo_default():
     """Programmatically generate the default 'halo', which 
     is a simple background rectangle behind the tile"""
-    text = bytes([0x80,0x40,0x40,0x40])
+    text = bytes([0x40,0x40,0x90,0x45])
     
     img = sf.Image()
     img.LoadFromPixels(64,64,text*(64*64))
@@ -79,7 +79,7 @@ class Tile(Entity):
         # if either width and height are AUTO, compute the minimum bounding
         # rectangle for all glyph bounding rectangles.
         if width==Tile.AUTO or height==Tile.AUTO:
-            self.dim,self.ofs = self._GuessRealBB()
+            self.dim,self.ofs = self._GuessRealBB(self.text)
             
         self._Recache()
 
@@ -88,7 +88,7 @@ class Tile(Entity):
             self.pos[0],self.pos[1],self.text)
         
         
-    def _GuessRealBB(self):
+    def _GuessRealBB(self,text):
         """Return adjusted (width,height) (xofs,yofs) tuples
         basing on the current values and self.text"""
         
@@ -156,7 +156,7 @@ class Tile(Entity):
         space = " \t"
         ls = defaults.tiles_size
         
-        lines = [e for e in enumerate(self.text.split("\n")) if not len(e[1])==0]
+        lines = [e for e in enumerate(text.split("\n")) if not len(e[1])==0]
         for y,line in lines:
             
             thisone = [e for e in enumerate(line)]
@@ -192,7 +192,7 @@ class Tile(Entity):
             
         dim = (r-l)*self.scale/ls[0],(b-t)*self.scale/ls[1]  
         ofs = l*self.scale/ls[0],t*self.scale/ls[1]  
-        print(dim,ofs)
+        #print(dim,ofs)
         
         return dim,ofs
 
@@ -202,7 +202,7 @@ class Tile(Entity):
     def SetColor(self,color):
         Entity.SetColor(self,color)
         for elem in self.cached:
-            elem.SetColor(self.color)
+            elem[1].SetColor(self.color)
             
     def SetDim(self,dim):
         self.dim = dim
@@ -243,16 +243,18 @@ class Tile(Entity):
     def _Recache(self):
         """Cache the tile string from self.text with font size self.rsize"""
         font = FontCache.get(self.rsize)
-        self.cached = [sf.String(self.text,Font=font,Size=self.rsize)]
+        self.cached = [(True,sf.String(self.text,Font=font,Size=self.rsize))]
         
         img = self._GetHaloImage()
         if not img is None:
-            self.cached.append(sf.Sprite(img))
-            self.cached[-1].Resize(self.dim[0] * defaults.tiles_size_px[0],self.dim[1] * defaults.tiles_size_px[1])
+            self.cached.append((False,sf.Sprite(img)))
+            self.cached[-1][1].Resize(self.dim[0] * defaults.tiles_size_px[0],self.dim[1] * defaults.tiles_size_px[1])
         
         for elem in self.cached:
-            elem.SetColor(self.color)
-        
+            elem[1].SetColor(self.color)
+            
+    def _EnumCached(self):
+        return [e[1] for e in self.cached]
 
     def _ShrinkBB(self,shrink_percentage):
         """Helper function, changes the behaviour of GetBoundingBox()
@@ -275,14 +277,17 @@ class Tile(Entity):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
         lv = self.game.GetLevel()
-        for elem in self.cached: 
-            lv.DrawSingle(elem,(self.pos[0],self.pos[1]-self.ofs[1]))
+        for offsetit, elem in self.cached: 
+            if offsetit is True:
+                lv.DrawSingle(elem,(self.pos[0]-self.ofs[0],self.pos[1]-self.ofs[1]))
+            else:
+                lv.DrawSingle(elem,(self.pos[0],self.pos[1]))
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile
         position. The offset is specified in tile coordinates"""
         lv = self.game.GetLevel()
-        for elem in self.cached: 
+        for offsetit, elem in self.cached: 
             lv.DrawSingle(elem,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
 
 
@@ -315,16 +320,20 @@ class AnimTile(Tile):
 
         Tile.__init__(self,draworder=draworder,*args, **kwargs)
         
+        assert states > 0 and frames > 0
+        
         lines = text.split("\n")
         n = 0
 
-        self.texts, self.state = [],0
+        self.texts, self.cached_sizes, self.state = [],[],0
         for state in range(states):
             self.texts.append([])
+            self.cached_sizes.append([])
             
             for frame in range(frames):
                 #assert n+height<=len(lines)
                 self.texts[state].append("\n".join(l.rstrip() for l in lines[n:n+height]))
+                self.cached_sizes[state].append( self._GuessRealBB(self.texts[state][-1]))
                 n += height+1
             n += 1
 
@@ -336,13 +345,7 @@ class AnimTile(Tile):
         for i in range(1,len(self.texts)):
             assert len(self.texts[i]) == len(self.texts[0])
 
-        # update width and height to get a proper bounding box.
-        if width==0:
-            for text in itertools.chain(*self.texts):
-                for line in text.split("\n"):
-                    width = max(width,len(line))
-
-        self.dim = (width//defaults.tiles_size[0],height//defaults.tiles_size[1])
+        self.dim,self.ofs = self.cached_sizes[0][0]
                 
 
     def __str__(self):
@@ -395,8 +398,11 @@ class AnimTile(Tile):
         self._UpdateAnim()
 
     def _UpdateAnim(self):
-        self.text = self.texts[self.state][int(self.animidx) % self.GetNumFrames()]
+        idx = int(self.animidx) % self.GetNumFrames()
+        self.text = self.texts[self.state][idx]
         self._Recache()
+        
+        self.dim,self.ofs = self.cached_sizes[self.state][idx]
         
 
 class TileLoader:
