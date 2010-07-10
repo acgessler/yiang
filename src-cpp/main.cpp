@@ -61,8 +61,6 @@ FILE* FindScript(const char* name)
 // --------------------------------------------------------------------------------------------
 int PyMain(int argc, wchar_t* argv[])
 {
-	ShowStartupDialog();
-
 	// bootstrapping script, hands control over to main.py
 	static char start_script_name[] =  "__launch_stub__.py";
 	const char* start_stub = 
@@ -110,7 +108,11 @@ int WINAPI WinMain(
 		&argc
 	);
 
-		
+	if (argc == 1) {
+		// if no configuration file is specified, show our startup GUI
+		ShowStartupDialog();
+	}
+
 	return PyMain(argc,argv);
 }
 
