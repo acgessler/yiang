@@ -108,12 +108,21 @@ int WINAPI WinMain(
 		&argc
 	);
 
+	std::wstring command_line_new;
 	if (argc == 1) {
 		// if no configuration file is specified, show our startup GUI
-		ShowStartupDialog();
+		command_line_new = ShowStartupDialog();
+
+		LocalFree(argv);
+		argv = ::CommandLineToArgvW(
+			command_line_new.c_str(),
+			&argc);
 	}
 
-	return PyMain(argc,argv);
+	const int ret = PyMain(argc,argv);
+	LocalFree(argv);
+
+	return ret;
 }
 
 #else

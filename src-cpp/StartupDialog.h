@@ -18,6 +18,6 @@
 #ifndef INCLUDED_STARTUPDIALOG_H
 #define INCLUDED_STARTUPDIALOG_H
 
-void ShowStartupDialog ();
+std::wstring ShowStartupDialog ();
 
 #endif

@@ -101,7 +101,7 @@ class Perk(AnimTile):
     other may not accept more than one of their kind to be active.)"""
     
     def __init__(self,overlay_file,*args,**kwargs):
-        AnimTile.__init__(self,*args,**kwargs)
+        AnimTile.__init__(self,halo_img=None,*args,**kwargs)
         self.players = {}
         self.overlay_file = overlay_file
         self.subs = []
