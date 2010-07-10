@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="game"
 	ProjectGUID="{CBCE0DF1-FDF8-415C-BF88-76A086DDD057}"
 	RootNamespace="game"
@@ -292,6 +292,22 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src-cpp\StartupDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src-cpp\StartupDialog_Win.cpp"
+				>
+			</File>
 			<Filter
 				Name="PySFML"
 				>
@@ -567,14 +583,18 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\bitmap1.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\dialog.rc"
+				>
+			</File>
+			<File
 				RelativePath=".\version.rc"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\resource.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

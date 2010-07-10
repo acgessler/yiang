@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////
-// Yet Another Jump'n'Run Game, unfair this time.
+// Yet Another Jump'n'Run Game
 // (c) 2010 Alexander Christoph Gessler
 //
 // HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
@@ -45,6 +45,7 @@
 #endif
 
 PyMODINIT_FUNC PyInit_sf(void);
+#include "StartupDialog.h"
 
 #if 0
 // --------------------------------------------------------------------------------------------
@@ -60,6 +61,8 @@ FILE* FindScript(const char* name)
 // --------------------------------------------------------------------------------------------
 int PyMain(int argc, wchar_t* argv[])
 {
+	ShowStartupDialog();
+
 	// bootstrapping script, hands control over to main.py
 	static char start_script_name[] =  "__launch_stub__.py";
 	const char* start_stub = 

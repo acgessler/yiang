@@ -80,12 +80,12 @@ class PerkOverlay(Tile):
         
         # XXX add utilities to draw our 'shadowed' text to Renderer
         # to avoid code duplication
-        for elem in self.cached:
+        for elem in self._EnumCached():
             elem.SetPosition(coords[0]-1,coords[1]-1)
             elem.SetColor(sf.Color.Black)
             Renderer.app.Draw(elem)
         
-        for elem in self.cached:
+        for elem in self._EnumCached():
             elem.SetPosition(*coords)
             elem.SetColor(sf.Color.Yellow)
             Renderer.app.Draw(elem)

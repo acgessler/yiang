@@ -168,7 +168,7 @@ class MainMenu(Drawable):
         ("Resume Game", _OptionsResumeGame, "You will die soon",0.4),
         ("Start Tutorial", _OptionsTutorial, "You will die",0.4),
         ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.4),
-        ("Preferences", _OptionsNotImplemented, "Options",1.0),
+     #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
         ("Credits", _OptionsCredits, "CREDITS",1.0),
         ("Check for Updates", _OptionsNotImplemented, "Updates!",0.4),
         ("Quit!", _OptionsQuit ,"",1.0)
