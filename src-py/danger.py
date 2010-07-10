@@ -48,9 +48,9 @@ class DangerousBarrel(AnimTile):
 
 class Mine(AnimTile):
     """This entity is an animated mine which kills
-    the player immediately when he touches it"""
+    the player after the animation of the explosion ended"""
     def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
-        AnimTile.__init__(self,text,height,frames,speed)
+        AnimTile.__init__(self,text,height,frames,speed,2)
 
         self.hideontouch = hideontouch
         if randomize is True:
@@ -59,10 +59,24 @@ class Mine(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
-        return Entity.KILL
+        self.SetState(1)
+        self.DeathTimer = sf.Clock()
+        self.DeathTimerEnd = self.GetNumFrames()*self.speed
+        self.__other = other
+        return
+    
+    def Update(self,time_elapsed,time_delta):
+        AnimTile.Update(self,time_elapsed,time_delta)
+        if self.GetState() == 1:
+            if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
+                self.game.Kill("an exploded mine (BOOooOOM!)",self.__other)
+                self.SetState(0)
+        
+            
+        
 
     def GetVerboseName(self):
-        return "a exploded mine (BOOooOOM!)"
+        return "an exploded mine (BOOooOOM!)"
     
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but

@@ -1,4 +1,23 @@
-from danger import Mine; <out> = Mine(<raw>,5,6,5.0,False,0.55)       
+from danger import Mine; <out> = Mine(<raw>,5,8,2.0,False,0.55)
+   |   
+  \ /  
+ - * - 
+  / \  
+   |   
+
+   |   
+  \ /  
+ - # - 
+  / \  
+   |   
+
+   |   
+  \ /  
+ - X - 
+  / \  
+   |   
+
+
    .   
    |   
   -*-  
@@ -22,12 +41,6 @@ from danger import Mine; <out> = Mine(<raw>,5,6,5.0,False,0.55)
 - (+) -
  - - - 
 /  |  \
-
--  -  -
-   ~   
-(  §  )
-   ~   
--  -  -
 
  _      _ 
 ( B\oo/M )
