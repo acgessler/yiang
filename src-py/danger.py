@@ -31,7 +31,7 @@ class DangerousBarrel(AnimTile):
     """This entity is an animated barrel which kills
     the player immediately when he touches it"""
 
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.75,hideontouch=False):
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
         AnimTile.__init__(self,text,height,frames,speed)
 
         self.hideontouch = hideontouch
