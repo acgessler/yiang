@@ -66,27 +66,32 @@
 	"language='*'\"")
 #endif
 
+static std::wstring temp_file;
 // ------------------------------------------------------------------------------------
-std::wstring FlushSettings(const std::map<std::wstring,std::wstring>& settings)
+void FlushSettings(const std::map<std::wstring,std::wstring>& settings)
 {
-	WCHAR temp[MAX_PATH];
-	GetTempPathW(MAX_PATH,temp);
-	GetTempFileNameW(temp,L"yiang",0,temp);
+	// WCHAR temp[MAX_PATH];
+	// GetTempPathW(MAX_PATH,temp);
+	// GetTempFileNameW(temp,L"yiang",0,temp);
 
-	std::wofstream of(temp);
+	std::wofstream of(temp_file.c_str());
 	if (!of) {
 		MessageBoxW(NULL,L"Failure writing settings",L"YIANG Launcher",MB_ICONERROR|MB_OK);
-		return L"";
+		return;
 	}
 
 	for(std::map<std::wstring,std::wstring>::const_iterator it = settings.begin(); it != settings.end(); ++it) {
 		of << (*it).first << "=" << (*it).second << std::endl;
 	}
 
-	return temp;
 }
 
-std::wstring temp_file;
+// ------------------------------------------------------------------------------------
+void LoadSettings(std::map<std::wstring,std::wstring>& settings)
+{
+	std::wifstream of(temp_file.c_str());
+}
+
 // ------------------------------------------------------------------------------------
 INT_PTR CALLBACK DialogProc(
   __in  HWND hwndDlg,
@@ -99,6 +104,7 @@ INT_PTR CALLBACK DialogProc(
 	switch (uMsg) 
 	{
 	case WM_INITDIALOG:
+		LoadSettings(props);
 		break;
 
 	case WM_CLOSE:
@@ -111,7 +117,7 @@ INT_PTR CALLBACK DialogProc(
 		{
 		case IDOK: 
 			if (HIWORD(wParam) == BN_CLICKED) {
-				temp_file = FlushSettings(props);
+				FlushSettings(props);
 				EndDialog(hwndDlg,0);
 			}
 			break;
@@ -131,13 +137,13 @@ INT_PTR CALLBACK DialogProc(
 }
 
 // ------------------------------------------------------------------------------------
-std::wstring ShowStartupDialog () 
+void ShowStartupDialog (const std::wstring& out_config) 
 {
+	temp_file = out_config;
+
 	InitCommonControls();
 	if ( DialogBoxW(NULL,MAKEINTRESOURCEW(IDD_DIALOG1),NULL,DialogProc)) {
 		TerminateProcess(GetCurrentProcess(),-1);
 	}
-
-	return temp_file;
 }
 

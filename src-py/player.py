@@ -192,7 +192,8 @@ class Player(Entity):
             self.in_jump, self.block_jump = False, False
             self.vel[1] = 0
             
-        if self.pos[1] < -0.0 or self.pos[1] > defaults.tiles[1]:
+        lv = self.game.GetLevel()
+        if self.pos[1] < lv.GetLevelVisibleSize()[1]-lv.GetLevelSize()[1] or self.pos[1] > defaults.tiles[1]:
             self._Kill("the map's border")
 
         self._CheckForLeftMapBorder()

@@ -1,4 +1,7 @@
-<out> = Level(<level>,<game>,<raw>,color=(200,200,200))
+<out> = Level(<level>,<game>,<raw>,color=(200,200,200),vis_ofs=3)
+   
+   
+  
 .  bPL.  .  .  0AA.  .  .  .  .  .  rDA.  .  bRE.  .  .  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  .  0AA.  .  .  .  .  .  rDA.  .  0AA0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 0AA0AA.  .  0AA0AA.  0AA.  .  .  .  rTR0AA.  0AA.  .  .  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  

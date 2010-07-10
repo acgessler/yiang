@@ -24,6 +24,8 @@
 
 // CommandLineToArgvW, GetCommandLineW
 #include <Shellapi.h>
+// ShCreateDirectory()
+#include <Shlobj.h>
 
 // SFML libs
 #pragma comment (lib, "sfml-graphics.lib")
@@ -108,14 +110,18 @@ int WINAPI WinMain(
 		&argc
 	);
 
-	std::wstring command_line_new;
+	std::wstring old_config;
+
 	if (argc == 1) {
+		SHCreateDirectory(NULL,L"%APPDATA%\\yiang");
+		old_config = L"%appdata%\\yiang\\custom_config.txt";
+
 		// if no configuration file is specified, show our startup GUI
-		command_line_new = ShowStartupDialog();
+		ShowStartupDialog(old_config);
 
 		LocalFree(argv);
-		argv = ::CommandLineToArgvW(
-			command_line_new.c_str(),
+		argv = ::CommandLineToArgvW( //
+			old_config.c_str(),
 			&argc);
 	}
 

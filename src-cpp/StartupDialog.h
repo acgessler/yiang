@@ -18,6 +18,8 @@
 #ifndef INCLUDED_STARTUPDIALOG_H
 #define INCLUDED_STARTUPDIALOG_H
 
-std::wstring ShowStartupDialog ();
+// old_config: Name of a writable configuration file
+//
+void ShowStartupDialog (const std::wstring& old_config);
 
 #endif
