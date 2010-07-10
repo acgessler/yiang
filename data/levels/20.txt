@@ -1,5 +1,5 @@
 <out> = Level(<level>,<game>,<raw>,color=(200,200,200))
-.  bPL.  .  .  0AA.  .  .  .  .  .  rDA.  .  .  .  .  .  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
+.  bPL.  .  .  0AA.  .  .  .  .  .  rDA.  .  bRE.  .  .  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  .  0AA.  .  .  .  .  .  rDA.  .  0AA0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 0AA0AA.  .  0AA0AA.  0AA.  .  .  .  rTR0AA.  0AA.  .  .  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  0AA.  yS30AA0AA0AA.  .  rDA.  .  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
@@ -10,10 +10,10 @@
 .  .  .  .  .  .  0AA.  .  rTR.  .  0AA0AA.  0AA.  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 0AA.  .  .  .  .  0AA.  0AA0AA.  .  rDA.  .  rDA.  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  .  .  0AA.  yS40AA.  .  0AA.  .  0AA.  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
-.  .  .  .  .  .  0AArDA0AA0AA.  .  rDA.  0AArDA.  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
+.  .  .  .  .  .  0AArDA0AA0AA.  .  rDA.  0AArDA.  rDA.  .  .  .  .  0AA0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  .  0AA0AA.  .  .  .  .  0AA.  .  0AA.  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 rH4.  .  .  .  rDA0AA.  .  .  .  .  rDA.  .  rDA.  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
-.  .  .  .  .  .  0AA.  .  0AA.  .  0AA0AA.  0AA.  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
-.  .  .  .  .  .  0AA.  .  0AA.  .  .  .  .  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
-rDArDArDArDA.  .  0AAyS3yS30AA.  .  .  .  .  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
+.  .  .  .  .  .  0AA.  .  0AA.  .  0AA0AA.  0AA.  0AA.  .  .  rBO.  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
+.  .  .  .  .  .  0AA.  .  0AA.  .  .  .  .  rDA.  .  .  .  .  .  .  .  .  rDA0AA0AArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
+rDArDArDArDA.  .  0AAyS3yS30AA.  .  .  .  .  0AA.  .  .  gMJ.  .  .  .  rDA0AA0AA0AArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA

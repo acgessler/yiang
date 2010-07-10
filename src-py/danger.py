@@ -46,7 +46,24 @@ class DangerousBarrel(AnimTile):
     def GetVerboseName(self):
         return "a deathly barrel (it's hilarious!)"
 
+class Mine(AnimTile):
+    """This entity is an animated mine which kills
+    the player immediately when he touches it"""
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
+        AnimTile.__init__(self,text,height,frames,speed)
 
+        self.hideontouch = hideontouch
+        if randomize is True:
+            self.GotoRandom()
+
+        self._ShrinkBB(bbadjust)
+
+    def Interact(self,other):
+        return Entity.KILL
+
+    def GetVerboseName(self):
+        return "a exploded mine (BOOooOOM!)"
+    
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but
     actually it doesn't kill the player - it just
