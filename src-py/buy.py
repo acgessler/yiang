@@ -92,7 +92,7 @@ class OrganTransplantMachine(Machine):
             
         # closure to be called when the player has made his decision
         def on_close(key):
-            if key == accepted[1] and self.game.GetScore() >= defaults.organ_transplant_dollar_in:
+            if key == accepted[1] and self.game.GetScore() >= defaults.organ_transplant_dollar_in*100.0:
                 self.game.AddLife()
                 self.game.TakeScore(defaults.organ_transplant_dollar_in*100.0)
             
