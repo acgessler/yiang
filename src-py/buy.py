@@ -101,7 +101,7 @@ class OrganTransplantMachine(Machine):
                     self.DisableMachine()
             
         self._ShowMachineDialog(on_close,accepted, OrganTransplantMachine.Message_Normal 
-            if self.game.GetScore() >= defaults.organ_transplant_dollar_in 
+            if self.game.GetScore() >= defaults.organ_transplant_dollar_in*100 
             else OrganTransplantMachine.Message_NotEnoughMoney)
 
     def GetVerboseName(self):
