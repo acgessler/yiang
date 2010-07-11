@@ -50,7 +50,7 @@ class Mine(AnimTile):
     """This entity is an animated mine which kills
     the player after the animation of the explosion ended"""
     def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
-        AnimTile.__init__(self,text,height,frames,speed,2)
+        AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None)
 
         self.hideontouch = hideontouch
         if randomize is True:

@@ -1,5 +1,8 @@
 texture framebuffer = {FRAMEBUFFER}
+
+#ifndef NO_INTENSE_PPFX
 vec2 cur
+#endif
 
 #ifdef ENABLE_DITHER
 texture noise = ../data/textures/noise.png
@@ -8,6 +11,11 @@ vec2 randomUV = {RANDOM}
 
 effect
 {
+#ifdef NO_INTENSE_PPFX
+	vec4 pixel = framebuffer(_in);
+	_out.rgba = pixel.rgba;
+#else
+
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
 	vec4 another = framebuffer(_in+vec2(-0.010,-0.004));
@@ -26,5 +34,7 @@ effect
 
 	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);
 	_out.a = 1.f;
+
+#endif
 }
 

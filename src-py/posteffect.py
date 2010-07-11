@@ -187,6 +187,9 @@ class PostFXCache:
         if defaults.dither is True:
             PostFXCache.shared_env.append(("ENABLE_DITHER",))
             
+        if defaults.no_ppfx is True:
+            PostFXCache.shared_env.append(("NO_INTENSE_PPFX",))
+            
         PostFXCache.shared_env = tuple(PostFXCache.shared_env)
 
 

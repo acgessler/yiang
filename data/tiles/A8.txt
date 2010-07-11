@@ -1,4 +1,4 @@
-<out> = Tile(<raw>)
+<out> = Tile(<raw>,Tile.AUTO,Tile.AUTO)
  ___ 
 /   \
 \___/

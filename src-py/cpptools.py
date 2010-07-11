@@ -38,6 +38,7 @@ class Preprocessor:
     include_re = re.compile(r'include\s*(\<|\")([a-zA-Z0-9_.]+)(\>|\")',re.DOTALL)
     define_re = re.compile(r'define\s+(\w+)\s*(\w+)',re.DOTALL)
     ifdef_re = re.compile(r'ifdef\s+(\w+)',re.DOTALL)
+    ifndef_re = re.compile(r'ifndef\s+(\w+)',re.DOTALL)
     endif_re = re.compile(r'endif',re.DOTALL)
     else_re = re.compile(r'else',re.DOTALL)
     elif_re = re.compile(r'elif\s+(.*)',re.DOTALL)
@@ -174,6 +175,14 @@ class Preprocessor:
             if not matched is None:
 
                 match = matched.groups()[0].strip() in env
+                nested += [[match,match]]
+                continue
+            
+            # ifndef
+            matched = re.match(Preprocessor.ifndef_re,s)
+            if not matched is None:
+
+                match = not matched.groups()[0].strip() in env
                 nested += [[match,match]]
                 continue
 

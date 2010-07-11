@@ -1,4 +1,4 @@
-from buy import OrganTransplantMachine; <out> = OrganTransplantMachine(<raw>,12,18,3.0)
+from buy import OrganTransplantMachine; <out> = OrganTransplantMachine(<raw>,12,18,3.0,halo_img=None)
   (O)
 /-(O)-----------
 | (O) ORGAN     |

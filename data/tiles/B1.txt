@@ -1,4 +1,4 @@
-from tile import Tile; <out> = Tile(<raw>,7,5)
+from tile import Tile; <out> = Tile(<raw>,7,5,halo_img=None)
    _   
  _| |_ 
 (_   _)

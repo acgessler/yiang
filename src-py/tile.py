@@ -225,6 +225,9 @@ class Tile(Entity):
         """Obtain the halo image to be shown in the background of
         the tile (not too strong, alpha should be pretty low).
         None is a valid return value, it disables the whole effect."""
+        if defaults.no_halos is True:
+            return None
+            
         if not self.halo_img in Tile.halo_cache:
             if self.halo_img in Tile.default_halo_providers:
                 img = Tile.default_halo_providers[self.halo_img]()
