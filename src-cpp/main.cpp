@@ -35,6 +35,7 @@
 
 // fixup code for some missing SFML symbols
 #include "fixers.h"
+#include <fstream>
 
 // Python C API, PySFML module initialization stub
 #include <Python.h>
@@ -112,7 +113,7 @@ int WINAPI WinMain(
 
 	std::wstring old_config;
 
-	if (argc == 1) {
+	if (argc == 1 || argc == 2 && std::wstring(argv[1]) == L"--c") {
 		TCHAR szPath[MAX_PATH];
 
 		SHGetFolderPath(NULL, 
@@ -123,10 +124,14 @@ int WINAPI WinMain(
 
 		old_config = std::wstring(szPath) + L"\\yiang";
 		SHCreateDirectory(NULL,old_config.c_str());
-		old_config += L"\\custom_config.txt";
 
-		// if no configuration file is specified, show our startup GUI
-		ShowStartupDialog(old_config);
+		if (!std::wifstream((old_config+L"\\donotask").c_str()) || argc == 2) {
+
+			// if no configuration file is specified, show our startup GUI
+			old_config += L"\\custom_config.txt";
+			ShowStartupDialog(old_config);
+		}
+		else old_config += L"\\custom_config.txt";
 
 		LPWSTR* const old = argv;
 		argv = ::CommandLineToArgvW( //

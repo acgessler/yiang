@@ -23,11 +23,14 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
-
+#include "ManifestStubs.h"
 
 // WinAPI includes
 #include <Windows.h>
 #include <Commctrl.h>
+
+// ShCreateDirectory()
+#include <Shlobj.h>
 
 // resource IDs
 #include "../vc9/resource1.h"
@@ -38,34 +41,6 @@
 #include <map>
 #include <boost/algorithm/string/trim.hpp>
 
-// ------------------------------------------------------------------------------------
-// Windows CommonControls 6.0 Manifest Extensions  
-#pragma comment (lib, "Comctl32.lib")
-
-#if defined _M_IX86
-#	define MGL_BUILD_X86
-#	pragma comment(linker,"/manifestdependency:\"type='win32'   "		\
-	"name='Microsoft.Windows.Common-Controls' version='6.0.0.0' "		\
-	"processorArchitecture='x86' publicKeyToken='6595b64144ccf1df'"		\
-	"language='*'\"")
-#elif defined _M_IA64
-#	define MGL_BUILD_IA64
-#	pragma comment(linker,"/manifestdependency:\"type='win32'   "		\
-	"name='Microsoft.Windows.Common-Controls' version='6.0.0.0' "		\
-	"processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df'"	\
-	"language='*'\"")
-#elif defined _M_X64
-#	define MGL_BUILD_AMD64
-#	pragma comment(linker,"/manifestdependency:\"type='win32'   "		\
-	"name='Microsoft.Windows.Common-Controls' version='6.0.0.0' "		\
-	"processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df'"	\
-	"language='*'\"")
-#else
-#	pragma comment(linker,"/manifestdependency:\"type='win32'   "		\
-	"name='Microsoft.Windows.Common-Controls' version='6.0.0.0' "		\
-	"processorArchitecture='*' publicKeyToken='6595b64144ccf1df'"		\
-	"language='*'\"")
-#endif
 
 static std::wstring temp_file;
 // ------------------------------------------------------------------------------------
@@ -103,7 +78,7 @@ void LoadSettings(std::map<std::wstring,std::wstring>& settings)
 		if (s == std::wstring::npos) {
 			continue;
 		}
-		settings[line.substr(0,s)] = line.substr(s+1);
+		settings[boost::trim_right_copy( line.substr(0,s) )] = boost::trim_left_copy( line.substr(s+1) );
 	}
 }
 
@@ -154,6 +129,9 @@ INT_PTR CALLBACK DialogProc(
 		if( props[L"no_bg_sound"] == L"True") {
 			CheckDlgButton(hwndDlg,IDC_NOSOUND,BST_CHECKED);	
 		}
+
+		CheckDlgButton(hwndDlg,IDC_NOTASKAGAIN, std::wifstream((temp_file+L"\\..\\donotask").c_str()) 
+			? BST_CHECKED : BST_UNCHECKED);
 
 		break;
 
@@ -219,8 +197,31 @@ INT_PTR CALLBACK DialogProc(
 				EndDialog(hwndDlg,1);
 			}
 			break;
-		};
-		break;
+
+		case IDC_NOTASKAGAIN:
+			if (HIWORD(wParam) == BN_CLICKED) {
+				std::wstring old_config;
+				TCHAR szPath[MAX_PATH];
+
+				SHGetFolderPath(NULL, 
+					CSIDL_APPDATA|CSIDL_FLAG_CREATE, 
+					NULL, 
+					0, 
+					szPath);
+
+				old_config = std::wstring(szPath) + L"\\yiang";
+				SHCreateDirectory(NULL,old_config.c_str());
+
+				old_config += L"\\donotask";
+				if (IsDlgButtonChecked(hwndDlg,IDC_NOTASKAGAIN) == BST_CHECKED) {
+					std::wofstream(old_config.c_str());
+				}
+				else {
+					DeleteFileW(old_config.c_str());
+				}
+			}
+			break;
+		}
 
 	default:
 		return FALSE;

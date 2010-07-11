@@ -297,10 +297,6 @@
 				RelativePath="..\src-cpp\StartupDialog.h"
 				>
 			</File>
-			<File
-				RelativePath="..\src-cpp\StartupDialog_Win.cpp"
-				>
-			</File>
 			<Filter
 				Name="PySFML"
 				>
@@ -566,6 +562,18 @@
 				</File>
 				<File
 					RelativePath="..\contrib\SFML-1.6\python\src\WindowStyle.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="win"
+				>
+				<File
+					RelativePath="..\src-cpp\ManifestStubs.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src-cpp\StartupDialog_Win.cpp"
 					>
 				</File>
 			</Filter>
