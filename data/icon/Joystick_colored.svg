@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="Joystick_colored.svg">
+  <title
+     id="title4082">YIANG Icon</title>
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4030">
+      <stop
+         style="stop-color:#ffcec6;stop-opacity:1;"
+         offset="0"
+         id="stop4032" />
+      <stop
+         style="stop-color:#ff3b17;stop-opacity:1;"
+         offset="1"
+         id="stop4034" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4020">
+      <stop
+         style="stop-color:#a8a4a4;stop-opacity:1;"
+         offset="0"
+         id="stop4022" />
+      <stop
+         style="stop-color:#cdc5c5;stop-opacity:1;"
+         offset="1"
+         id="stop4024" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3992">
+      <stop
+         style="stop-color:#74b1ff;stop-opacity:1;"
+         offset="0"
+         id="stop3994" />
+      <stop
+         style="stop-color:#6497d8;stop-opacity:1;"
+         offset="1"
+         id="stop3996" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3848">
+      <stop
+         style="stop-color:#2bbee7;stop-opacity:1;"
+         offset="0"
+         id="stop3850" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop3852" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3848"
+       id="linearGradient3854"
+       x1="227.41072"
+       y1="262.31755"
+       x2="236.25002"
+       y2="262.36218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.046875,0,0,1.0165867,-11.686663,-4.373309)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3992"
+       id="radialGradient4006"
+       cx="229.715"
+       cy="630.8219"
+       fx="229.715"
+       fy="630.8219"
+       r="120.11346"
+       gradientTransform="matrix(2.0101182,-1.9842941e-7,1.5533149e-7,1.5735303,-232.03938,-425.96941)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3992"
+       id="radialGradient4008"
+       cx="229.715"
+       cy="563.50427"
+       fx="229.715"
+       fy="563.50427"
+       r="24.13331"
+       gradientTransform="matrix(10.004522,-2.6652807e-6,2.2006277e-6,8.260379,-2068.4748,-4088.1104)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3992"
+       id="radialGradient4016"
+       cx="229.715"
+       cy="500.06006"
+       fx="229.715"
+       fy="500.06006"
+       r="96.587814"
+       gradientTransform="matrix(2.4997175,6.2635304e-7,-3.1036997e-7,1.9577938,-344.50746,-412.36676)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4020"
+       id="linearGradient4026"
+       x1="341.28067"
+       y1="485.25626"
+       x2="358.6673"
+       y2="485.25626"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="reflect" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4030"
+       id="radialGradient4036"
+       cx="355.91519"
+       cy="402.56"
+       fx="355.91519"
+       fy="402.56"
+       r="23.191965"
+       gradientTransform="matrix(1,0,0,1.0923964,0,-37.995614)"
+       gradientUnits="userSpaceOnUse" />
+    <inkscape:perspective
+       id="perspective4048"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4048-2"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4048-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2924"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3992-7"
+       id="radialGradient4006-1"
+       cx="229.715"
+       cy="630.8219"
+       fx="229.715"
+       fy="630.8219"
+       r="120.11346"
+       gradientTransform="matrix(2.0101182,-1.9842941e-7,1.5533149e-7,1.5735303,-232.03938,-425.96941)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3992-7">
+      <stop
+         style="stop-color:#74b1ff;stop-opacity:1;"
+         offset="0"
+         id="stop3994-4" />
+      <stop
+         style="stop-color:#6497d8;stop-opacity:1;"
+         offset="1"
+         id="stop3996-0" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="translate(262.95998,9.5386626)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient4020-4"
+       id="linearGradient4026-9"
+       x1="341.28067"
+       y1="485.25626"
+       x2="358.6673"
+       y2="485.25626"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="reflect" />
+    <linearGradient
+       id="linearGradient4020-4">
+      <stop
+         style="stop-color:#a8a4a4;stop-opacity:1;"
+         offset="0"
+         id="stop4022-8" />
+      <stop
+         style="stop-color:#cdc5c5;stop-opacity:1;"
+         offset="1"
+         id="stop4024-8" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3992-7"
+       id="radialGradient4016-2"
+       cx="229.715"
+       cy="500.06006"
+       fx="229.715"
+       fy="500.06006"
+       r="96.587814"
+       gradientTransform="matrix(2.4997175,6.2635304e-7,-3.1036997e-7,1.9577938,-57.168674,-422.95437)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient2937">
+      <stop
+         style="stop-color:#74b1ff;stop-opacity:1;"
+         offset="0"
+         id="stop2939" />
+      <stop
+         style="stop-color:#6497d8;stop-opacity:1;"
+         offset="1"
+         id="stop2941" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2944">
+      <stop
+         style="stop-color:#74b1ff;stop-opacity:1;"
+         offset="0"
+         id="stop2946" />
+      <stop
+         style="stop-color:#6497d8;stop-opacity:1;"
+         offset="1"
+         id="stop2948" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4030-5"
+       id="radialGradient4036-5"
+       cx="356.29401"
+       cy="392.85052"
+       fx="356.29401"
+       fy="392.85052"
+       r="23.191965"
+       gradientTransform="matrix(1,0,0,1.0923964,262.95998,-28.456957)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient4030-5">
+      <stop
+         style="stop-color:#ffcec6;stop-opacity:1;"
+         offset="0"
+         id="stop4032-1" />
+      <stop
+         style="stop-color:#ff3b17;stop-opacity:1;"
+         offset="1"
+         id="stop4034-7" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="593.18556"
+     inkscape:cy="580.41144"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1680"
+     inkscape:window-height="988"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <sodipodi:guide
+       orientation="0,1"
+       position="211.74107,799.64286"
+       id="guide3858" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="345.71429,485.71429"
+       id="guide3968" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="232.14286,425.71429"
+       id="guide3970" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="306.42857,555.71429"
+       id="guide3972" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="229.715,474.29819"
+       id="guide3976" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="422.89063,483.87277"
+       id="guide3978" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="471.15725,554.27386"
+       id="guide3980" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="471.15725,494.46429"
+       id="guide3982" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>YIANG Icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:url(#radialGradient4006);stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 229.77814,566.57351 -1.79934,0.0744 41.73193,-70 198.49498,0 -45.31508,78.13311 0,-8.13311"
+       id="path3990" />
+    <path
+       style="fill:url(#linearGradient4026);stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 340.10574,536.61617 14.64721,-0.0631 3.91434,-8.01809 -2.14658,-1.01015 -0.12626,-93.62851 -1.76777,2.71478 -14.64721,-0.0631 -1.4521,-2.58852 -0.1894,93.56538 -2.14658,1.07329"
+       id="path4018" />
+    <rect
+       style="fill:url(#radialGradient4016);fill-opacity:1"
+       id="rect3974"
+       width="193.17563"
+       height="60.000004"
+       x="229.715"
+       y="566.64789" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2978"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"
+       transform="translate(224.14286,315.42857)"><flowRegion
+         id="flowRegion2980"><rect
+           id="rect2982"
+           width="86.071426"
+           height="61.785713"
+           x="31.785715"
+           y="248.79076"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Lucida Console;-inkscape-font-specification:Lucida Console" /></flowRegion><flowPara
+         id="flowPara2984">  ____</flowPara><flowPara
+         id="flowPara2986">o|'O.O|o</flowPara><flowPara
+         id="flowPara2988"> |___-|</flowPara><flowPara
+         id="flowPara2990">  /  \ </flowPara><flowPara
+         id="flowPara2992"> o____o </flowPara><flowPara
+         id="flowPara2994"> _|  |_</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"
+       x="343.07144"
+       y="570.29077"
+       id="text3016"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3018"
+         x="343.07144"
+         y="570.29077">  ____</tspan><tspan
+         sodipodi:role="line"
+         x="343.07144"
+         y="580.29077"
+         id="tspan3020">o|'O.O|o</tspan><tspan
+         sodipodi:role="line"
+         x="343.07144"
+         y="590.29077"
+         id="tspan3022"> |___-|</tspan><tspan
+         sodipodi:role="line"
+         x="343.07144"
+         y="600.29077"
+         id="tspan3024">o_/  \_o</tspan><tspan
+         sodipodi:role="line"
+         x="343.07144"
+         y="610.29077"
+         id="tspan3026">  |__|</tspan><tspan
+         sodipodi:role="line"
+         x="343.07144"
+         y="620.29077"
+         id="tspan3030"> _|  |_</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3034"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:12683768.75%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"><flowRegion
+         id="flowRegion3036"><rect
+           id="rect3038"
+           width="28.928572"
+           height="21.071426"
+           x="217.5"
+           y="257.36218" /></flowRegion><flowPara
+         id="flowPara3040">as&gt;fasfasdfijoüasdf</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3042"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:12683771.09375%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"><flowRegion
+         id="flowRegion3044"><rect
+           id="rect3046"
+           width="62.142857"
+           height="23.928572"
+           x="235"
+           y="224.14789" /></flowRegion><flowPara
+         id="flowPara3048">abc y</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3050"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"><flowRegion
+         id="flowRegion3052"><rect
+           id="rect3054"
+           width="0"
+           height="0"
+           x="330"
+           y="298.43362" /></flowRegion><flowPara
+         id="flowPara3056">yzz</flowPara></flowRoot>    <path
+       style="fill:url(#radialGradient4008);stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 422.89063,574.81257 0,51.83532 4.27763,0 40.51031,-68.75 3.47868,0 0,-61.25 -2.98761,0"
+       id="path3988" />
+    <path
+       style="fill:url(#radialGradient4036);stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 340.08929,436.55861 14.6875,0 4.01785,-8.08036 1.51786,-0.80357 4.50893,-9.0625 5.71429,-11.07143 -4.01786,-8.92857 -1.875,-1.07143 -4.24107,-8.97321 -3.83929,-2.67857 -18.48214,0 -3.66072,2.76785 -4.24107,8.88393 -1.74107,1.07143 -4.28571,8.97321 5.98214,10.9375 4.41964,9.10715 1.60715,0.98214"
+       id="path4028" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,0,57.359333)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-8"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,12.098211,67.359334)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-7"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,30.223211,67.359334)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-1"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,42.276782,57.537905)" />
+    <rect
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="rect4080"
+       width="6.0714288"
+       height="6.0714288"
+       x="344.10715"
+       y="380.04074" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"
+       x="148.28571"
+       y="386.21933"
+       id="text3912"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3914"
+         x="148.28571"
+         y="386.21933">                               .II.                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="396.21933"
+         id="tspan3916">                              /    \                  </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="406.21933"
+         id="tspan3918">                             /    * \                 </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="416.21933"
+         id="tspan3920">                             O      O                 </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="426.21933"
+         id="tspan3922">                              \O--O/                  </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="436.21933"
+         id="tspan3924">                               \__/                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="446.21933"
+         id="tspan3926">                               |  |                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="456.21933"
+         id="tspan3928">                               |  |                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="466.21933"
+         id="tspan3930">                               |  |                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="476.21933"
+         id="tspan3932">                               |  |                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="486.21933"
+         id="tspan3934">                               |  |                   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="496.21933"
+         id="tspan3936">                    ___________|  |__________________ </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="506.21933"
+         id="tspan3938">                   /  ____     |  |                 /|</tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="516.21936"
+         id="tspan3940">                  /   |  |     |  |                / |</tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="526.2193"
+         id="tspan3942">                 /  ____       |  |               /  |</tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="536.2193"
+         id="tspan3944">                /   |  |       \__/              /   |</tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="546.2193"
+         id="tspan3946">               /  ____                          /    |</tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="556.2193"
+         id="tspan3948">              /   |  |                         /     |</tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="566.2193"
+         id="tspan3950">             /_______________________________ /     / </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="576.2193"
+         id="tspan3952">            ~|                               |     /  </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="586.2193"
+         id="tspan3954">    .-,    ° |                               |    /   </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="596.2193"
+         id="tspan3956">  .°   °--'  |                               |   /    </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="606.2193"
+         id="tspan3958">.°           |                               |  /     </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="616.2193"
+         id="tspan3960">             |                               | /      </tspan><tspan
+         sodipodi:role="line"
+         x="148.28571"
+         y="626.2193"
+         id="tspan3962">             |_______________________________|/       </tspan></text>
+    <path
+       style="fill:url(#linearGradient4026-9);fill-opacity:1;stroke:none"
+       d="m 619.41755,557.89789 -0.0631,-114.4629 -1.76777,2.71478 -14.64721,-0.0631 -1.4521,-2.58852 -0.31567,114.84171"
+       id="path4018-1"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <rect
+       style="fill:url(#radialGradient4016-2);fill-opacity:1"
+       id="rect3974-5"
+       width="193.17563"
+       height="60.000004"
+       x="517.05377"
+       y="556.0603"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2978-2"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"
+       transform="translate(511.48165,304.84097)"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478"><flowRegion
+         id="flowRegion2980-7"><rect
+           id="rect2982-6"
+           width="86.071426"
+           height="61.785713"
+           x="31.785715"
+           y="248.79076"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Lucida Console;-inkscape-font-specification:Lucida Console" /></flowRegion><flowPara
+         id="flowPara2984-1">  ____</flowPara><flowPara
+         id="flowPara2986-4">o|'O.O|o</flowPara><flowPara
+         id="flowPara2988-2"> |___-|</flowPara><flowPara
+         id="flowPara2990-3">  /  \ </flowPara><flowPara
+         id="flowPara2992-2"> o____o </flowPara><flowPara
+         id="flowPara2994-2"> _|  |_</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"
+       x="630.41022"
+       y="559.70319"
+       id="text3016-1"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478"><tspan
+         sodipodi:role="line"
+         id="tspan3018-6"
+         x="630.41022"
+         y="559.70319">  ____</tspan><tspan
+         sodipodi:role="line"
+         x="630.41022"
+         y="569.70319"
+         id="tspan3020-8">o|'O.O|o</tspan><tspan
+         sodipodi:role="line"
+         x="630.41022"
+         y="579.70319"
+         id="tspan3022-5"> |___-|</tspan><tspan
+         sodipodi:role="line"
+         x="630.41022"
+         y="589.70319"
+         id="tspan3024-7">o_/  \_o</tspan><tspan
+         sodipodi:role="line"
+         x="630.41022"
+         y="599.70319"
+         id="tspan3026-6">  |__|</tspan><tspan
+         sodipodi:role="line"
+         x="630.41022"
+         y="609.70319"
+         id="tspan3030-1"> _|  |_</tspan></text>
+    <flowRoot
+       transform="translate(-547.04721,-452.87605)"
+       xml:space="preserve"
+       id="flowRoot3034-8"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:12683768.75%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"><flowRegion
+         id="flowRegion3036-9"><rect
+           id="rect3038-2"
+           width="28.928572"
+           height="21.071426"
+           x="217.5"
+           y="257.36218" /></flowRegion><flowPara
+         id="flowPara3040-7">as&gt;fasfasdfijoüasdf</flowPara></flowRoot>    <flowRoot
+       transform="translate(-547.04721,-452.87605)"
+       xml:space="preserve"
+       id="flowRoot3042-9"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:12683771.09375%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"><flowRegion
+         id="flowRegion3044-5"><rect
+           id="rect3046-4"
+           width="62.142857"
+           height="23.928572"
+           x="235"
+           y="224.14789" /></flowRegion><flowPara
+         id="flowPara3048-3">abc y</flowPara></flowRoot>    <flowRoot
+       transform="translate(-547.04721,-452.87605)"
+       xml:space="preserve"
+       id="flowRoot3050-1"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"><flowRegion
+         id="flowRegion3052-2"><rect
+           id="rect3054-3"
+           width="0"
+           height="0"
+           x="330"
+           y="298.43362" /></flowRegion><flowPara
+         id="flowPara3056-3">yzz</flowPara></flowRoot>    <path
+       style="fill:url(#radialGradient4036-5);fill-opacity:1;stroke:none"
+       d="m 603.04926,446.09728 14.6875,0 4.01785,-8.08036 1.51786,-0.80357 4.50893,-9.0625 5.71429,-11.07143 -4.01786,-8.92857 -1.875,-1.07143 -4.24107,-8.97321 -3.83929,-2.67857 -18.48214,0 -3.66072,2.76785 -4.24107,8.88393 -1.74107,1.07143 -4.28571,8.97321 5.98214,10.9375 4.41964,9.10715 1.60715,0.98214"
+       id="path4028-1"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-13"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,262.95998,66.897993)"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-8-8"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,275.0582,76.897993)"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-7-7"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,293.1832,76.897993)"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="path4038-1-4"
+       sodipodi:cx="326.29465"
+       sodipodi:cy="412.98718"
+       sodipodi:rx="2.0982144"
+       sodipodi:ry="3.2142856"
+       d="m 328.39286,412.98718 a 2.0982144,3.2142856 0 1 1 -4.19643,0 2.0982144,3.2142856 0 1 1 4.19643,0 z"
+       transform="matrix(1,0,0,0.8611111,305.23677,67.076563)"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <rect
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="rect4080-2"
+       width="6.0714288"
+       height="6.0714288"
+       x="607.06714"
+       y="389.57941"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lucida Console;-inkscape-font-specification:Lucida Console"
+       x="513.62451"
+       y="395.63171"
+       id="text3912-7"
+       sodipodi:linespacing="100%"
+       inkscape:export-xdpi="202.33478"
+       inkscape:export-ydpi="202.33478"
+       inkscape:export-filename="C:\Users\Tobias\Repository\YIANG\data\icon\Joystick_front.png"><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="395.63171"
+         id="tspan3962-3">              .II.               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="405.63171"
+         id="tspan3521">             /   *\              </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="415.63171"
+         id="tspan3523">            /      \             </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="425.63171"
+         id="tspan3525">            O O--O O             </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="435.63171"
+         id="tspan3527">             \    /              </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="445.63171"
+         id="tspan3529">              \__/               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="455.63171"
+         id="tspan3531">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="465.63171"
+         id="tspan3533">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="475.63171"
+         id="tspan3535">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="485.63171"
+         id="tspan3537">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="495.63171"
+         id="tspan3539">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="505.63171"
+         id="tspan3541">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="515.63171"
+         id="tspan3543">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="525.63171"
+         id="tspan3545">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="535.63171"
+         id="tspan3547">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="545.63171"
+         id="tspan3549">              |  |               </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="555.63171"
+         id="tspan3551"> _____________|__|______________ </tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="565.63171"
+         id="tspan3553">|                               |</tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="575.63171"
+         id="tspan3555">|                               |</tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="585.63171"
+         id="tspan3557">|                               |</tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="595.63171"
+         id="tspan3559">|                               |</tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="605.63171"
+         id="tspan3561">|                               |</tspan><tspan
+         sodipodi:role="line"
+         x="513.62451"
+         y="615.63171"
+         id="tspan3563">|_______________________________|</tspan></text>
+  </g>
+</svg>
