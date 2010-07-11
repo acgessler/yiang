@@ -69,7 +69,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,234,256,8
     CONTROL         "Keine Soundeffekte - noch ruhiger, aber mit höherer Sterblichkeit im Spiel",IDC_NOSOUND,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,246,267,8
-    CONTROL         107,IDB_PNG2,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,297,88
+    CONTROL         108,IDB_SPLASHB,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,297,88
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,88,297,1
 END
 
@@ -85,32 +85,6 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
-
-#ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
-
-1 TEXTINCLUDE 
-BEGIN
-    "resource1.h\0"
-END
-
-2 TEXTINCLUDE 
-BEGIN
-    "#include ""afxres.h""\r\n"
-    "\0"
-END
-
-3 TEXTINCLUDE 
-BEGIN
-    "\r\n"
-    "\0"
-END
-
-#endif    // APSTUDIO_INVOKED
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -141,9 +115,35 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,234,256,8
     CONTROL         "No sound effects - you will sleep even better, but you will also die sooner",IDC_NOSOUND,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,246,267,8
-    CONTROL         107,IDB_PNG2,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,297,88,WS_EX_TRANSPARENT
+    CONTROL         108,IDB_SPLASHB,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,297,88,WS_EX_TRANSPARENT
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,88,297,1
 END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource1.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

@@ -119,6 +119,12 @@ INT_PTR CALLBACK DialogProc(
 	switch (uMsg) 
 	{
 	case WM_INITDIALOG:
+
+		// XXX workaround, WinDlg doesn't load the bitmap automatically.
+		SendDlgItemMessage(hwndDlg,IDB_SPLASHB, STM_SETIMAGE, IMAGE_BITMAP, LPARAM(
+			LoadImage(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDB_SPLASH), IMAGE_BITMAP, 0, 0, 0)
+		)); 
+
 		LoadSettings(props);
 
 		if( props[L"fullscreen"] != L"False") {

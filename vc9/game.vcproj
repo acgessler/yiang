@@ -132,6 +132,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				ShowProgress="true"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -291,14 +292,6 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\resource1.h"
-				>
 			</File>
 			<File
 				RelativePath="..\src-cpp\StartupDialog.h"
@@ -587,7 +580,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\bmp00001.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\dialog.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource1.h"
 				>
 			</File>
 			<File
