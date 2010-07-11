@@ -1,0 +1,20 @@
+from teleport import Receiver; <out> = Receiver(<raw>, 3,5)
+|||||||     
+| OUT |
+|_____|
+
+| |||||     
+| OUT |
+|_____|
+
+|| ||||     
+| OUT |
+|_____|
+
+||| |||     
+| OUT |
+|_____|
+
+||||| |     
+| OUT |
+|_____|

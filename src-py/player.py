@@ -93,13 +93,20 @@ class Player(Entity):
 
     def SetPosition(self, pos):
         Entity.SetPosition(self,pos)
-        #for tile in self.tiles:
-        #    tile._Recache()
 
-        # keep the original position, for we need it to implement respawning
+        # (HACK) keep the original position, for we need it to implement respawning
         if not hasattr(self, "respawn_positions"):
             self.respawn_positions = []
             self._AddRespawnPoint(pos)
+            
+            
+    def SetPositionAndMoveView(self, pos):
+        """Change the players position and change the viewport accordingly"""
+        self.SetPosition(pos)
+            
+        lv  = self.game.GetLevel()
+        if not lv is None:
+            lv.SetOriginX(self.pos[0] - 5.0)
 
     def SetColor(self, pos):
         self.color = pos

@@ -375,6 +375,10 @@ class Level:
         """Change the view origin"""
         assert isinstance(origin, tuple)
         self.origin = origin
+        
+    def SetOriginX(self, origin):
+        """Change the view origin but leave the y axis intact"""
+        self.origin = (origin,self.origin[1])
     
     def AddEntity(self, entity):
         """Dynamically add an entity to the list of all active
