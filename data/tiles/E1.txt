@@ -1,4 +1,41 @@
-from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,3)
+from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,8)
+<< >>
+<< >>
+<<H>>
+
+<< >>
+<<H>>
+<<O>>
+
+<<H>>
+<<o>>
+<<T>>
+
+<<!>>
+<<!>>
+<<!>>
+
+<<|>>
+<<|>>
+<<|>>
+
+<| |>
+<| |>
+<| |>
+
+|<|>|
+|<|>|
+|<|>|
+
+|< >|
+|< >|
+|< >|
+
+<< >>
+<< >>
+<< >>
+
+
 << >>
 << >>
 <<H>>
