@@ -486,7 +486,8 @@ def main():
     HighscoreManager.Initialize()
     BerlinerPhilharmoniker.Initialize()
     
-    SoundEffectCache.Get("logo.ogg").Play()
+    if defaults.no_bg_sound is False:
+        SoundEffectCache.Get("logo.ogg").Play()
     
     if defaults.no_bg_music is False:
         class DummyMusicPlayer(Drawable):
