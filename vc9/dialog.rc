@@ -91,8 +91,9 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 297, 308
+IDD_DIALOG1 DIALOGEX 0, 0, 297, 310
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
 CAPTION "YIANG’s „Annoying Startup Customer Experience Evaluation Dialog”"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -145,6 +146,31 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 308
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "I:\\dev\\YIANG\\YANG2.hg\\data\\icon\\YIANG.ico"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

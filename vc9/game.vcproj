@@ -607,6 +607,10 @@
 				RelativePath=".\version.rc"
 				>
 			</File>
+			<File
+				RelativePath="..\data\icon\YIANG.ico"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
