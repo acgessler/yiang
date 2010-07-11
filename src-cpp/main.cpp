@@ -113,16 +113,27 @@ int WINAPI WinMain(
 	std::wstring old_config;
 
 	if (argc == 1) {
-		SHCreateDirectory(NULL,L"%APPDATA%\\yiang");
-		old_config = L"%appdata%\\yiang\\custom_config.txt";
+		TCHAR szPath[MAX_PATH];
+
+		SHGetFolderPath(NULL, 
+			CSIDL_APPDATA|CSIDL_FLAG_CREATE, 
+			NULL, 
+			0, 
+			szPath);
+
+		old_config = std::wstring(szPath) + L"\\yiang";
+		SHCreateDirectory(NULL,old_config.c_str());
+		old_config += L"\\custom_config.txt";
 
 		// if no configuration file is specified, show our startup GUI
 		ShowStartupDialog(old_config);
 
-		LocalFree(argv);
+		LPWSTR* const old = argv;
 		argv = ::CommandLineToArgvW( //
-			old_config.c_str(),
+			(old[0] + (L" " + old_config)).c_str(),
 			&argc);
+
+		LocalFree(old);
 	}
 
 	const int ret = PyMain(argc,argv);

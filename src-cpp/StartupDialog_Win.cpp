@@ -36,6 +36,7 @@
 #include <string>
 #include <fstream>
 #include <map>
+#include <boost/algorithm/string/trim.hpp>
 
 // ------------------------------------------------------------------------------------
 // Windows CommonControls 6.0 Manifest Extensions  
@@ -81,7 +82,9 @@ void FlushSettings(const std::map<std::wstring,std::wstring>& settings)
 	}
 
 	for(std::map<std::wstring,std::wstring>::const_iterator it = settings.begin(); it != settings.end(); ++it) {
-		of << (*it).first << "=" << (*it).second << std::endl;
+		if ((*it).second.length()) {
+			of << (*it).first << "=" << (*it).second << std::endl;
+		}
 	}
 
 }
@@ -90,6 +93,18 @@ void FlushSettings(const std::map<std::wstring,std::wstring>& settings)
 void LoadSettings(std::map<std::wstring,std::wstring>& settings)
 {
 	std::wifstream of(temp_file.c_str());
+	std::wstring line;
+	while (std::getline(of,line)) {
+		boost::trim(line);
+		if (!line.length()) {
+			continue;
+		}
+		const std::wstring::size_type s = line.find(L"=");
+		if (s == std::wstring::npos) {
+			continue;
+		}
+		settings[line.substr(0,s)] = line.substr(s+1);
+	}
 }
 
 // ------------------------------------------------------------------------------------
@@ -105,6 +120,35 @@ INT_PTR CALLBACK DialogProc(
 	{
 	case WM_INITDIALOG:
 		LoadSettings(props);
+
+		if( props[L"fullscreen"] != L"False") {
+			CheckDlgButton(hwndDlg,IDC_FS,BST_CHECKED);	
+		}
+		else {
+			if( props[L"resolution"]== L"[1024,768]" ) {
+				CheckDlgButton(hwndDlg,IDC_WND1024,BST_CHECKED);	
+			} 
+			else if( props[L"resolution"]== L"[1280,1024]" ) {
+				CheckDlgButton(hwndDlg,IDC_WND1280,BST_CHECKED);	
+			} 
+			else { // if( props[L"resolution"]== L"[1024,768]" ) {
+				CheckDlgButton(hwndDlg,IDC_WND1200,BST_CHECKED);	
+			} 
+		}
+
+		if( props[L"no_ppfx"] == L"True") {
+			CheckDlgButton(hwndDlg,IDC_NOPPFX,BST_CHECKED);	
+		}
+		if( props[L"no_halos"] == L"True") {
+			CheckDlgButton(hwndDlg,IDC_LOWEND,BST_CHECKED);	
+		}
+		if( props[L"no_bg_music"] == L"True") {
+			CheckDlgButton(hwndDlg,IDC_NOMUSIC,BST_CHECKED);	
+		}
+		if( props[L"no_bg_sound"] == L"True") {
+			CheckDlgButton(hwndDlg,IDC_NOSOUND,BST_CHECKED);	
+		}
+
 		break;
 
 	case WM_CLOSE:
@@ -115,6 +159,49 @@ INT_PTR CALLBACK DialogProc(
 
 		switch (LOWORD(wParam))
 		{
+		case IDC_FS:
+			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_FS) == BST_CHECKED) {
+				props[L"fullscreen"] = L"True";
+			}
+			break;
+		case IDC_WND1024:
+			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_WND1024) == BST_CHECKED) {
+				props[L"resolution"] = L"[1024,768]";
+				props[L"fullscreen"] = L"False";
+			}
+			break;
+		case IDC_WND1200:
+			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_WND1200) == BST_CHECKED) {
+				props[L"resolution"] = L"[1200,750]";
+				props[L"fullscreen"] = L"False";
+			}
+			break;
+		case IDC_WND1280:
+			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_WND1280) == BST_CHECKED) {
+				props[L"resolution"] = L"[1280,1024]";
+				props[L"fullscreen"] = L"False";
+			}
+			break;
+		case IDC_NOMUSIC:
+			if (HIWORD(wParam) == BN_CLICKED) {
+				props[L"no_bg_music"] =  IsDlgButtonChecked(hwndDlg,IDC_NOMUSIC)==BST_CHECKED ? L"True" : L"False";
+			}
+			break;
+		case IDC_NOSOUND:
+			if (HIWORD(wParam) == BN_CLICKED) {
+				props[L"no_bg_sound"] =  IsDlgButtonChecked(hwndDlg,IDC_NOSOUND)==BST_CHECKED ? L"True" : L"False";
+			}
+			break;
+		case IDC_NOPPFX:
+			if (HIWORD(wParam) == BN_CLICKED) {
+				props[L"no_ppfx"] =  IsDlgButtonChecked(hwndDlg,IDC_NOPPFX)==BST_CHECKED ? L"True" : L"False";
+			}
+			break;
+		case IDC_LOWEND:
+			if (HIWORD(wParam) == BN_CLICKED) {
+				props[L"no_halos"] =  IsDlgButtonChecked(hwndDlg,IDC_LOWEND)==BST_CHECKED ? L"True" : L"False";
+			}
+			break;
 		case IDOK: 
 			if (HIWORD(wParam) == BN_CLICKED) {
 				FlushSettings(props);
