@@ -59,9 +59,10 @@ class Mine(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
+        self.Set(self.GetNumFrames())
         self.SetState(1)
         self.DeathTimer = sf.Clock()
-        self.DeathTimerEnd = self.GetNumFrames()*self.speed
+        self.DeathTimerEnd = (self.GetNumFrames()+1)*self.speed
         self.__other = other
         return
     

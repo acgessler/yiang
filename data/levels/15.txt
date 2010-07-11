@@ -1,4 +1,7 @@
 <out> = Level(<level>,<game>,<raw>,color=(0,0,30),vis_ofs=3)
+
+
+
 .  bPL.  .  .  .  .  .  .  .  .  .  yS2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yFI.  .  .  .  .  
 .  .  .  .  .  .  .  .  .  .  .  .  yS2.  .  .  .  .  .  .  .  .  .  .  .  .  0RE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  .  .  .  .  .  .  .  .  yS2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  
@@ -15,6 +18,6 @@
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA9bA9bA9bA9bA9bA9bA9bA9bA9bA9bA9bA9bA9bA9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA9yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS3
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bTRyS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS3
-.  .  .  .  .  bA1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bTRyS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS3
+.  .  .  .  .  bBO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bTRyS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS2yS3
 .  .  .  .  bA1bA1.  .  .  .  .  .  .  bA1rTRrE0rTRbA1.  .  .  .  .  .  .  .  rDA.  .  .  .  .  .  .  .  .  bTRyS2yS2yS2yS2bA8yS2yS2yS2yS2yS2yS2yS2yS3yE0
 bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bMJbA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1
