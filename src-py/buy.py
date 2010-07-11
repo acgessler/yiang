@@ -37,7 +37,7 @@ from renderer import Renderer
 class Machine(AnimTile):
     """Base class for all kinds of machines, buy stocks, ..."""
     def __init__(self,message_text_file,text,height,frames,speed,use_counter=1):
-        AnimTile.__init__(self,text,height,frames,speed)
+        AnimTile.__init__(self,text,height,frames,speed,halo_img=None)
         self.use_counter = use_counter
         
         path =os.path.join(defaults.data_dir,"messages",message_text_file)
