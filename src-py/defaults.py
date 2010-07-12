@@ -81,7 +81,7 @@ levelup_score_base = 15.0
 organ_transplant_dollar_in = 1.0
 no_bg_music = False
 no_bg_sound = False
-audio_volume_scale = 0.5
+audio_volume_scale = 0.10
 no_halos = False
 no_ppfx = False
 

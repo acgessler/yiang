@@ -35,6 +35,14 @@ from tile import Tile
 from keys import KeyMapping
 from renderer import Renderer
 
+
+class InventoryItem:
+    """Defines the necessary protocol for inventory items.
+    Such items are collected by the player and are subsequently
+    reused to perform specific actions, i.e. open doors."""
+
+    #def 
+
 class Player(Entity):
     """Special entity which responds to user input and moves the
     player tiles accordingly. This entity is unique within a
@@ -53,6 +61,7 @@ class Player(Entity):
         lines = text.split("\n")
         height = len(lines) // Player.MAX_ANIMS
 
+        self.inventory = set()
         self._Reset()
 
         self.tiles = []
