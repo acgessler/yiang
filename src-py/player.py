@@ -62,6 +62,8 @@ class Player(Entity):
         height = len(lines) // Player.MAX_ANIMS
 
         self.inventory = set()
+        self.ordered_respawn_positions = []
+        
         self._Reset()
 
         self.tiles = []
@@ -115,7 +117,7 @@ class Player(Entity):
             
         lv  = self.game.GetLevel()
         if not lv is None:
-            lv.SetOriginX(self.pos[0] - 5.0)
+            lv.SetOriginX(self.pos[0] - defaults.respawn_origin_distance)
 
     def SetColor(self, pos):
         self.color = pos
@@ -415,6 +417,14 @@ class Player(Entity):
         assert hasattr(self, "respawn_positions")
         self.respawn_positions.append(pos)
         print("Set respawn point {0}|{1}".format(pos[0], pos[1]))
+        
+    def _AddOrderedRespawnPoint(self, pos):
+        """Add a possible respawn position to the player entity,
+        that is a respawn point the player jumps to, without regard
+        to the position of death. If multiple ordered respawn
+        points are registered, the last is taken."""
+        self.ordered_respawn_positions.append(pos)
+        print("Set ordered respawn point {0}|{1}".format(pos[0], pos[1]))
 
     def Respawn(self, enable_respawn_points):
         """Used internally by Game.Respawn to respawn the player
@@ -422,21 +432,27 @@ class Player(Entity):
         assert hasattr(self, "respawn_positions")
         assert len(self.respawn_positions)
 
+        # XXX ordered and normal respawn point can be mixed, although this is a corner-case
+        # and not really useful at all.
         min_distance = float(defaults.min_respawn_distance)
         for rpos in sorted(self.respawn_positions if enable_respawn_points is True else (),key=operator.itemgetter(0),reverse=True):
             if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
                 continue # this is to protect the player from being
                 # respawned in kill zones.
+                
+            # favour the last ordered respawn point if there is one
+            if len(self.ordered_respawn_positions):
+                self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
             
-            self.SetPosition(rpos)
+            else:
+                self.SetPositionAndMoveView(rpos)
             break
             
         else:
-            self.SetPosition(self.respawn_positions[0])
-        print("Respawn at {0}|{1}".format(self.pos[0], self.pos[1]))
-        # Adjust the game origin accordingly
-        origin = self.game.GetLevel().GetOrigin()
-        self.game.GetLevel().SetOrigin((self.pos[0] - defaults.respawn_origin_distance, origin[1]))
+            if len(self.ordered_respawn_positions):
+                self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
+            else:
+                self.SetPositionAndMoveView(self.respawn_positions[0])
 
         # Reset our status
         self._Reset()
@@ -462,6 +478,28 @@ class RespawnPoint(Entity):
         return (self.pos[0], self.pos[1], 0.5, 0.5)
 
     def Interact(self, other):
+        return Entity.ENTER
+    
+    
+class DisabledRespawnPoint(Entity):
+    """A disabled respawning point needs to be touched
+    once by the player in order to serve as respawn
+    point candidate."""
+
+
+    def Update(self, time_elapsed, time):
+        pass
+
+    def GetBoundingBox(self):
+        return (self.pos[0], self.pos[1], 0.5, 0.5)
+
+    def Interact(self, other):
+        if isinstance(other,Player):
+
+            for entity in self.game._EnumEntities():
+                if hasattr(entity, "_AddRespawnPoint"):
+                    entity._AddRespawnPoint(self.pos)
+                
         return Entity.ENTER
 
 
