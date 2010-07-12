@@ -33,25 +33,14 @@ from fonts import FontCache
 from game import Entity,Game
 
 
-def gen_halo_default():
-    """Programmatically generate the default 'halo', which 
-    is a simple background rectangle behind the tile"""
-    text = bytes([0x40,0x40,0x90,0x45])
-    
-    img = sf.Image()
-    img.LoadFromPixels(64,64,text*(64*64))
-    return img
+
 
 class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing.
     Extends Entity with more specialized behaviour."""
     
     AUTO=-1
-    
-    halo_cache = {None:None}
-    default_halo_providers = {
-            "default":gen_halo_default
-    }
+
         
     def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default",width_ofs=0,height_ofs=0):
         
@@ -222,26 +211,7 @@ class Tile(Entity):
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
     
     def _GetHaloImage(self):
-        """Obtain the halo image to be shown in the background of
-        the tile (not too strong, alpha should be pretty low).
-        None is a valid return value, it disables the whole effect."""
-        if defaults.no_halos is True:
-            return None
-            
-        if not self.halo_img in Tile.halo_cache:
-            if self.halo_img in Tile.default_halo_providers:
-                img = Tile.default_halo_providers[self.halo_img]()
-            else:
-                img = sf.Image()
-                if not img.LoadFromFile(self.halo_img):
-                    file = os.path.join(defaults.data_dir,"textures",self.halo_img)
-                    if not img.LoadFromFile(file):
-                        print("Failure loading halo from {0}".format(file))
-                
-            Tile.halo_cache[self.halo_img] = img
-            return img
-            
-        return Tile.halo_cache[self.halo_img]
+        return Entity._GetHaloImage(self,self.halo_img)
 
     def _Recache(self):
         """Cache the tile string from self.text with font size self.rsize"""
@@ -284,7 +254,7 @@ class Tile(Entity):
             if offsetit is True:
                 lv.DrawSingle(elem,(self.pos[0]-self.ofs[0],self.pos[1]-self.ofs[1]))
             else:
-                lv.DrawSingle(elem,(self.pos[0],self.pos[1]))
+                lv.DrawSingle(elem,self.pos)
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile

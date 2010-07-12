@@ -56,6 +56,9 @@ class Player(Entity):
         self.pwidth = width / defaults.tiles_size[0]
         self.pheight = height / defaults.tiles_size[1]
         self.pofsx = ofsx / defaults.tiles_size[0]
+        
+        # XXX get rid of pwith and pheight
+        self.dim = self.pwidth,self.pheight
 
         lines = text.split("\n")
         height = len(lines) // Player.MAX_ANIMS
@@ -65,10 +68,11 @@ class Player(Entity):
         
         self._Reset()
 
+        # XXX use AnimTile instead
         self.tiles = []
         for i in range(0, (len(lines) // height) * height, height):
             self.tiles.append(Tile("\n".join(lines[i:i + height]),halo_img=None))
-            self.tiles[-1].SetDim((self.pwidth,self.pheight))
+            self.tiles[-1].SetDim(self.dim)
             self.tiles[-1].SetPosition((0, 0))
 
         assert len(self.tiles) == Player.MAX_ANIMS
@@ -113,14 +117,20 @@ class Player(Entity):
             def Draw(self):
                 if self.timer.GetElapsedTime()>self.time:
                     outer.unkillable -= 1
-                    delattr( outer, "enable_flash_halo" )
+                    delattr( outer, "flash_halo" )
                     
                     print("End respawn protection on {0}".format(outer))
                     Renderer.RemoveDrawable(self)
         
         print("Set respawn protection on {0}".format(self))
         self.unkillable += 1
-        self.enable_flash_halo = True
+        
+        img = self._GetHaloImage("halo_protect.png")
+        if not img is None:
+            self.flash_halo = sf.Sprite(img)
+            self.flash_halo.Resize(self.pwidth * defaults.tiles_size_px[0],self.pheight * defaults.tiles_size_px[1])
+            self.flash_halo.SetColor(sf.Color(255,255,0,160))
+            
         Renderer.AddDrawable(Proxy())
         
     def SetGame(self, game):
@@ -151,7 +161,7 @@ class Player(Entity):
             self.inventory.remove(item)
             
     def SetPositionAndMoveView(self, pos):
-        """Change the players position and change the viewport accordingly"""
+        """Change the players position and adjust the viewport accordingly"""
         self.SetPosition(pos)
             
         lv  = self.game.GetLevel()
@@ -180,6 +190,10 @@ class Player(Entity):
     def Draw(self):
         if self.draw is False:
             return
+        
+        # XXX 
+        if hasattr(self,"flash_halo"):
+            self.game.GetLevel().DrawSingle( self.flash_halo, (self.pos[0]-0.2,self.pos[1]-1.55) )
         
         self.tiles[self.cur_tile[-1]].DrawRelative(self.pos)
 

@@ -645,6 +645,15 @@ Hit {2} to return to the menu""").format(
         return self.level
 
 
+def gen_halo_default():
+    """Programmatically generate the default 'halo', which 
+    is a simple background rectangle behind the tile"""
+    text = bytes([0x40,0x40,0x90,0x45])
+    
+    img = sf.Image()
+    img.LoadFromPixels(64,64,text*(64*64))
+    return img
+
 class Entity(Drawable):
     """Base class for all kinds of entities, including the player.
     The term `entity` refers to a state machine which is in control
@@ -659,7 +668,12 @@ class Entity(Drawable):
     # deprecated, pertain to _CollideBB
     UPPER_LEFT,UPPER_RIGHT,LOWER_LEFT,LOWER_RIGHT,CONTAINS,ALL = 0x1,0x2,0x4,0x8,0x10,0xf|0x10
     
-
+    halo_cache = {None:None}
+    default_halo_providers = {
+            "default":gen_halo_default
+    }
+    
+    
     def __init__(self):
         Drawable.__init__(self)
         self.pos = [0,0]
@@ -755,15 +769,36 @@ class Entity(Drawable):
         return self._BBCollide((a[0],a[1],a[0]+a[2],a[1]+a[3]),
             (b[0],b[1],b[0]+b[2],b[1]+b[3]))
         
-        
     def GetCullRegion(self):
-        
+        """Deprecated"""
         bb = self.GetBoundingBox()
         if bb is None:
             return 0
         
         dist =  mathutil.PointToBoxSqrEst( self.game.GetOrigin(),bb)
         return dist > defaults.cull_distance_sqr and 1 or dist > defaults.swapout_distance_sqr and 2 or 0
+    
+    def _GetHaloImage(self,halo_img):
+        """Obtain the halo image to be shown in the background of
+        the entity (not too strong, alpha should be pretty low).
+        None is a valid return value, it disables the whole effect."""
+        if defaults.no_halos is True:
+            return None
+            
+        if not halo_img in Entity.halo_cache:
+            if halo_img in Entity.default_halo_providers:
+                img = Entity.default_halo_providers[halo_img]()
+            else:
+                img = sf.Image()
+                if not img.LoadFromFile(halo_img):
+                    file = os.path.join(defaults.data_dir,"textures",halo_img)
+                    if not img.LoadFromFile(file):
+                        print("Failure loading halo from {0}".format(file))
+                
+            Entity.halo_cache[halo_img] = img
+            return img
+            
+        return Entity.halo_cache[halo_img]
         
 
 
