@@ -1,1 +1,5 @@
-from player import RespawnPoint; <out> = RespawnPoint()
+from locked import Key; <out> = Key(<raw>)
+/PP
+\p
+p
+ |

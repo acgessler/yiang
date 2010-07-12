@@ -1,4 +1,6 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,0,30),vis_ofs=2)
+<out> = Level(<level>,<game>,<raw>,color=(0,0,30),vis_ofs=4)
+
+
 
                                                    yTB   _S0        
       gTB      _AA   gPL               _DA               _BL        

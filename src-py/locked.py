@@ -23,21 +23,56 @@ import sf
 # My own stuff
 import defaults
 from game import Entity, Game
-from tile import Tile
-from player import Player
+from tile import AnimTile, Tile
+from player import Player, InventoryItem
 
-class Door(Tile):
+class Door(AnimTile):
     """A door blocks the player unless he presents a key of the same color"""
-    def __init__(self, text, width=Tile.AUTO, height=Tile.AUTO, posy= -0.3):
-        Tile.__init__(self, text, width, height, halo_img=None)
-
+    def __init__(self, text, height, frames, speed = 1.0, halo_img = None):
+        AnimTile.__init__(self, text, height, frames, states=2, speed=speed, halo_img=halo_img)
+        self.unlocked = False
 
     def Interact(self, other):
-        return Entity.ENTER
+        if isinstance(other,Player) and self.unlocked is False:
+            inv = other.EnumInventoryItems()
+            
+            try:
+                while True:
+                    item = inv.send(None)
+                    if isinstance(item,Key) and item.color == self.color:
+                        self.Unlock()
+                        item = inv.send(item)
+                        break
+            except StopIteration:
+                pass
+        
+        return Entity.ENTER if self.unlocked else Entity.BLOCK
+    
+    def Unlock(self):
+        """Unlock the door, does not alter the players inventory"""
+        self.SetState(1)
+        self.unlocked = True
+        print("Unlocking door {0}".format(self))
+        
+    def Lock(self):
+        """Lock the door again"""
+        self.SetState(0)
+        self.unlocked = False
+        print("Locking door {0}".format(self))
     
     
-class Key(AnimTile,InventoryItem):
+class Key(Tile,InventoryItem):
     """A door blocks the player unless he presents a key of the same color"""
+    def __init__(self,width=Tile.AUTO,height=Tile.AUTO):
+        Tile.__init__(self,width,height)
+        InventoryItem.__init__(self)
+        
+    def Interact(self, other):
+        if isinstance(other,Player):
+            other.inventory.add(self)
+            self.game.RemoveEntity(self)
+        
+        return Entity.ENTER
    
 
             

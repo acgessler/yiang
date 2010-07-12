@@ -1,15 +1,15 @@
 <out> = Level(<level>,<game>,<raw>,color=(15,0,15))
-                                                                              gE2_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-   gPL                                                                           _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                                 _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                                 _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                                 _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+                                                         _A9                  gE2_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+   gPL                                                   _A9                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+                                                         _A9                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+                                                         _A9rE2                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+                                                         rDO                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
                         _E0                                                      _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                   yE2gA5rE2                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                      yA5                        _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+                                                   yE2gA5yA6                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+                                                      yA5yA6                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
                                        gA1_A5   gE2   rA5                        _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
                                     _A1bB0_A5         bA5                        _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
                                  bA1_B0_B0_A5bE2rE2   rA5               bE0   rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                              _A1rB0gB0_B0_A5         bA5            rE0         _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                                                                                                                         
+   gTB                        _A1rB0gB0_B0_A5   rKEgTAbA5            rE0         _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                                                                                                                         
                      _E0   bA1_B0yB0_B0rB0_A5         gA5                        _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                                                                                                                                           
 _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                 

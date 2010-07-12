@@ -1,0 +1,17 @@
+from locked import Door; <out> = Door(<raw>,8,1)
+##C##
+##L##
+##O##
+##S##
+##E##
+##D##
+
+
+
+
+
+
+
+
+
+#####

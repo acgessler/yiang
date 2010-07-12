@@ -37,11 +37,11 @@ from renderer import Renderer
 
 
 class InventoryItem:
-    """Defines the necessary protocol for inventory items.
+    """Base class for inventory items.
     Such items are collected by the player and are subsequently
     reused to perform specific actions, i.e. open doors."""
+    pass
 
-    #def 
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -110,6 +110,19 @@ class Player(Entity):
             self.respawn_positions = []
             self._AddRespawnPoint(pos)
             
+    def EnumInventoryItems(self):
+        """Yields all inventory items in unspecified order.
+        use send(item) to mark a specific item for deletion"""
+        erase = []
+        for item in self.inventory:
+            assert isinstance(item,InventoryItem)
+            
+            item = ( yield item )
+            if not item is None:
+                erase.append(item)
+                
+        for item in erase:
+            self.inventory.remove(item)
             
     def SetPositionAndMoveView(self, pos):
         """Change the players position and change the viewport accordingly"""
@@ -443,6 +456,7 @@ class Player(Entity):
             # favour the last ordered respawn point if there is one
             if len(self.ordered_respawn_positions):
                 self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
+                self.ordered_respawn_positions.pop()
             
             else:
                 self.SetPositionAndMoveView(rpos)
@@ -451,6 +465,7 @@ class Player(Entity):
         else:
             if len(self.ordered_respawn_positions):
                 self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
+                self.ordered_respawn_positions.pop()
             else:
                 self.SetPositionAndMoveView(self.respawn_positions[0])
 
