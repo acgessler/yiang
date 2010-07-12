@@ -39,8 +39,11 @@ class InventoryItem:
     """Base class for inventory items.
     Such items are collected by the player and are subsequently
     reused to perform specific actions, i.e. open doors."""
-    pass
-
+    
+    
+    def GetItemName(self):
+        """Return a descriptive item name to be displayed to the user"""
+        return "an unnamed inventory item"
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -63,7 +66,7 @@ class Player(Entity):
         lines = text.split("\n")
         height = len(lines) // Player.MAX_ANIMS
 
-        self.inventory = set()
+        self.inventory = []
         self.ordered_respawn_positions = []
         
         self._Reset()
@@ -159,6 +162,25 @@ class Player(Entity):
                 
         for item in erase:
             self.inventory.remove(item)
+            self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos))
+            
+    def AddToInventory(self,item):
+        """Adds an item to the player's inventory. The same
+        item can be added multiple times."""
+        assert isinstance(item,InventoryItem)
+        self.inventory.append(item)
+        self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName(),self.pos))
+        
+    def RemoveFromInventory(self,item):
+        """Removes an item from the player's inventory. If the
+        same item exists multiple times, only its first
+        occurences is removed. ValueError is raised it
+        the item does not exist. Note: do not use from
+        within EnumInventoryItems() -- ! it provides a different
+        scheme to remove entities. """
+        assert isinstance(item,InventoryItem)
+        self.inventory.remove(item)
+        self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos))
             
     def SetPositionAndMoveView(self, pos):
         """Change the players position and adjust the viewport accordingly"""
@@ -560,7 +582,7 @@ class DisabledRespawnPoint(Entity):
 
 
 class KillAnimStub(Tile):
-    """Implements the text string that is spawned whenever
+    """Implements the text strings that are spawned whenever
     the player is killed."""
 
     def __init__(self, text):
@@ -570,7 +592,7 @@ class KillAnimStub(Tile):
         self.ttl = 0
         
         self.dirvec = [1.0,1.0]
-        self.SetColor(sf.Color.Red)
+        self.SetColor(sf.Color(100,0,0,160))
         
     def SetDirection(self,dirvec):
         self.dirvec = mathutil.Normalize(dirvec)
@@ -597,15 +619,29 @@ class KillAnimStub(Tile):
     def Draw(self):
         Tile.Draw(self)
 
-        # could use Rotate(), Scale() as well
-        #start = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates((
-        #    self.pos[0] - (self.pos[0] - self.opos[0]) * 0.25 + 0.8, self.pos[1] - (self.pos[1] - self.opos[1]) * 0.25)))
-        #end = self.game.ToDeviceCoordinates(self.game.GetLevel().ToCameraCoordinates(
-        #    (self.opos[0], self.opos[1])))
-        
-        #shape = sf.Shape.Line(start[0], start[1], end[0], end[1], 1, sf.Color.Red)
-        #self.game.DrawSingle(shape)
 
+class InventoryChangeAnimStub(Tile):
+    """Implements the text string that is spawned whenever
+    the player adds or removes an item from the inventory."""
+
+    def __init__(self,text,pos,speed=1.0):
+        Tile.__init__(self,text)
+        
+        self.SetPosition( pos )
+        self.speed = speed
+        self.SetColor(sf.Color.Green)
+
+    def GetBoundingBox(self):
+        return None
+
+    def Update(self,time_elapsed,time_delta):
+        self.SetPosition((self.pos[0],self.pos[1]+time_delta*self.speed))
+
+        if self.pos[1] > defaults.tiles[1]:
+            self.game.RemoveEntity(self) 
+            
+    def _GetHaloImage(self):
+        return None
 
         
         

@@ -17,6 +17,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# Python Core
+import collections
+
 # PySFML
 import sf
 
@@ -63,16 +66,37 @@ class Door(AnimTile):
     
 class Key(Tile,InventoryItem):
     """A door blocks the player unless he presents a key of the same color"""
+    
+    color_names = collections.defaultdict(lambda : "colorful",{
+        sf.Color.Red: "Red",
+        sf.Color.Green: "Green",
+        sf.Color.Blue: "Blue"
+    })
+    
     def __init__(self,width=Tile.AUTO,height=Tile.AUTO):
         Tile.__init__(self,width,height)
         InventoryItem.__init__(self)
         
     def Interact(self, other):
         if isinstance(other,Player):
-            other.inventory.add(self)
+            other.AddToInventory(self)
             self.game.RemoveEntity(self)
         
         return Entity.ENTER
+    
+    def GetItemName(self):
+        return "{0} key".format(Key.color_names[ self.color ])
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    
 
             
