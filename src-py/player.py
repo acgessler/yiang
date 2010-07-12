@@ -120,7 +120,10 @@ class Player(Entity):
             def Draw(self):
                 if self.timer.GetElapsedTime()>self.time:
                     outer.unkillable -= 1
-                    delattr( outer, "flash_halo" )
+                    try:
+                        delattr( outer, "flash_halo" )
+                    except AttributeError:
+                        pass
                     
                     print("End respawn protection on {0}".format(outer))
                     Renderer.RemoveDrawable(self)

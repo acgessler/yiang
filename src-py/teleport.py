@@ -76,10 +76,11 @@ class Sender(AnimTile):
             
             def unsuspender(x):
                 Renderer.RemoveDrawable(x)
-                self.game.PopSuspend()
+                #self.game.PopSuspend()
             
             Renderer.RemoveDrawable(x)
             Renderer.AddDrawable(FadeInOverlay(fade_time=fade_time*0.4,fade_start=fade_end,on_close=unsuspender))
+            self.game.PopSuspend()
             
             print("Teleport to {0} at position {1}".format(target,target.pos))
             player.SetPositionAndMoveView(target.pos)
