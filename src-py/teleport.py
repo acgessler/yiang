@@ -83,6 +83,7 @@ class Sender(AnimTile):
             
             print("Teleport to {0} at position {1}".format(target,target.pos))
             player.SetPositionAndMoveView(target.pos)
+            player.Protect(defaults.teleport_protection_time)
             
         self.game.PushSuspend()
         Renderer.AddDrawable(FadeOutOverlay(fade_time=fade_time,fade_end=fade_end,on_close=fadeback))

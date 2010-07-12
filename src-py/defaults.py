@@ -84,6 +84,8 @@ no_bg_sound = False
 audio_volume_scale = 0.10
 no_halos = False
 no_ppfx = False
+respawn_protection_time = 2.0
+teleport_protection_time = 1.5
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

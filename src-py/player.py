@@ -30,10 +30,9 @@ import sf
 import defaults
 import mathutil
 from game import Entity, Game
-from renderer import NewFrame
+from renderer import NewFrame, Drawable, Renderer
 from tile import Tile
 from keys import KeyMapping
-from renderer import Renderer
 
 
 class InventoryItem:
@@ -91,11 +90,38 @@ class Player(Entity):
         # these are used and modified by the various 'upgrades' in perks.py
         self.jump_scale = 1.0
         self.speed_scale = 1.0
+        
+        # unkillable is used by Protect() as well
         self.unkillable = 0
         
         # self.draw is set to False while the player is death and 
         # his body is therefore not visible.
         self.draw = True
+        
+    def Protect(self,time):
+        """Protect the player from being killed for a specific
+        amount of time. The player is shown with a bright
+        halo during this time."""
+        
+        outer = self
+        class Proxy(Drawable):
+            def __init__(self):
+                Drawable.__init__(self)
+                self.time = time
+                self.timer = sf.Clock()
+            
+            def Draw(self):
+                if self.timer.GetElapsedTime()>self.time:
+                    outer.unkillable -= 1
+                    delattr( outer, "enable_flash_halo" )
+                    
+                    print("End respawn protection on {0}".format(outer))
+                    Renderer.RemoveDrawable(self)
+        
+        print("Set respawn protection on {0}".format(self))
+        self.unkillable += 1
+        self.enable_flash_halo = True
+        Renderer.AddDrawable(Proxy())
         
     def SetGame(self, game):
         self.game = game
@@ -471,6 +497,7 @@ class Player(Entity):
 
         # Reset our status
         self._Reset()
+        self.Protect(defaults.respawn_protection_time)
         raise NewFrame()
 
 
