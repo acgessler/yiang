@@ -92,16 +92,16 @@ class OrganTransplantMachine(Machine):
             
         # closure to be called when the player has made his decision
         def on_close(key):
-            if key == accepted[1] and self.game.GetScore() >= defaults.organ_transplant_dollar_in*100.0:
+            if key == accepted[1] and self.game.GetScore() >= defaults.organ_transplant_dollar_in:
                 self.game.AddLife()
-                self.game.TakeScore(defaults.organ_transplant_dollar_in*100.0)
+                self.game.TakeScore(defaults.organ_transplant_dollar_in)
             
                 self.use_counter -= 1
                 if self.use_counter == 0:
                     self.DisableMachine()
             
         self._ShowMachineDialog(on_close,accepted, OrganTransplantMachine.Message_Normal 
-            if self.game.GetScore() >= defaults.organ_transplant_dollar_in*100 
+            if self.game.GetScore() >= defaults.organ_transplant_dollar_in 
             else OrganTransplantMachine.Message_NotEnoughMoney)
 
     def GetVerboseName(self):

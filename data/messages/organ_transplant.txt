@@ -1,18 +1,18 @@
 Welcome to the Instant Organ Transplantation Machine (IOTM)!
 
 Do you want to buy new organs and have them transplanted immediately 
-to heal your wounds? This gives you an extra life FOR JUST $ {organ_transplant_dollar_in}! 
+to heal your wounds? This gives you an extra life FOR JUST ct. {organ_transplant_dollar_in}! 
 This is a truly incredible offer! This is the time to get rid of your
 ill organs and get a fresh body! Note: No orphans were harmed for 
 building this machine. 
 
 
-Press {accept} to accept the deal (-$1.0, +L) and {escape} to leave.
+Press {accept} to accept the deal (-ct {organ_transplant_dollar_in}! , +L) and {escape} to leave.
 ###NEXT###
 Welcome to the Instant Organ Transplantation Machine (IOTM)!
 
 Do you want to buy new organs and have them transplanted immediately 
-to heal your wounds? This gives you an extra life FOR JUST $ {organ_transplant_dollar_in}! 
+to heal your wounds? This gives you an extra life FOR JUST ct. {organ_transplant_dollar_in}! 
 This is truly an incredible offer! Now is the time to get rid of your
 ill organs and get a fresh body! Note: No orphans were harmed for 
 building this machine. 

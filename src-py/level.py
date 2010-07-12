@@ -288,6 +288,12 @@ class Level:
                     yield entity
                     had.add(entity)
             
+    def IsVisible(self,point):
+        """Check if a particular point is currently within
+        the visible part of the level"""
+        return point[0] > self.origin[0] and point[0] < self.origin[0]+defaults.tiles[0] and \
+            point[1] > self.origin[1] and point[1] < self.origin[1]+defaults.tiles[1]
+            
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame

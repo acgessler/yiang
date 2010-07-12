@@ -26,7 +26,8 @@ from game import Entity,Game
 from tile import Tile,AnimTile
 from player import Player
 from level import Level
-from renderer import NewFrame
+from renderer import NewFrame, Renderer
+from posteffect import FadeInOverlay,FadeOutOverlay
 
 # Python stuff
 import operator
@@ -58,11 +59,35 @@ class Sender(AnimTile):
                 
             else:
                 target = sorted(candidates,key=operator.itemgetter(0))[0][1]
-                print("Teleport to {0} at position {1}".format(target,target.pos))
-                other.SetPositionAndMoveView(target.pos)
+                self.TeleportPlayer(target,other)
                 raise NewFrame()
         
         return Entity.ENTER
+    
+    def TeleportPlayer(self,target,player):
+        """Teleport 'player' to 'target', which must be a Receiver brick"""
+        assert isinstance(target,Receiver)
+        
+        # Don't fade out entirely if the target of the teleport
+        # is within the current view.
+        fade_time, fade_end = (0.7, 0.75) if self.game.GetLevel().IsVisible( target.pos ) else (1.0, 0.0)
+        
+        def fadeback(x):
+            
+            def unsuspender(x):
+                Renderer.RemoveDrawable(x)
+                self.game.PopSuspend()
+            
+            Renderer.RemoveDrawable(x)
+            Renderer.AddDrawable(FadeInOverlay(fade_time=fade_time*0.4,fade_start=fade_end,on_close=unsuspender))
+            
+            print("Teleport to {0} at position {1}".format(target,target.pos))
+            player.SetPositionAndMoveView(target.pos)
+            
+        self.game.PushSuspend()
+        Renderer.AddDrawable(FadeOutOverlay(fade_time=fade_time,fade_end=fade_end,on_close=fadeback))
+                              
+        
 
     def GetVerboseName(self):
         return "a sender teleport brick"

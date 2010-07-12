@@ -1,18 +1,18 @@
-from score import ScoreTile; <out> = ScoreTile(<raw>,3,7,3.0,100.0)
+from score import ScoreTile; <out> = ScoreTile(<raw>,3,7,3.0,1.0)
  /$$$\
-( $1$ )
+( $1c )
  \$$$/
 
  /$$$\
-( $1$ )
+( $1c )
  \%%%/
 
  /$$$\
-( %1% )
+( %1c )
  \$$$/
 
  /%%%\
-( $1$ )
+( $1c )
  \$$$/
 
  /   \
@@ -20,7 +20,7 @@ from score import ScoreTile; <out> = ScoreTile(<raw>,3,7,3.0,100.0)
  \   /
 
  /$$$\
-( $1$ )
+( $1c )
  \$$$/
 
  /   \

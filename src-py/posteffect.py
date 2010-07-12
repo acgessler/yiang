@@ -228,7 +228,7 @@ class FadeInOverlay(PostFXOverlay):
         PostFXOverlay.__init__(self,PostFXCache.Get("fade.sfx",()),draworder)
         self.fade_time = fade_time
         self.fade = self.fade_start  = fade_start
-        self.on_close  = lambda x:Renderer.RemoveDrawable(x) if on_close is None else on_close 
+        self.on_close  = (lambda x:Renderer.RemoveDrawable(x)) if on_close is None else on_close 
         
     def GetCurrentStrength(self):
         return self.fade
@@ -271,7 +271,7 @@ class FadeOutOverlay(PostFXOverlay):
         self.fade_time = fade_time
         self.fade_end  = fade_end
         self.fade = 1.0
-        self.on_close  = lambda x:Renderer.RemoveDrawable(x) if on_close is None else on_close 
+        self.on_close  = (lambda x:Renderer.RemoveDrawable(x)) if on_close is None else on_close 
         
     def GetCurrentStrength(self):
         return self.fade
@@ -288,7 +288,7 @@ class FadeOutOverlay(PostFXOverlay):
         self.fade = max(self.fade_end, 1.0 - curtime/self.fade_time)
         self.postfx.SetParameter("fade",self.fade)
         
-        if self.fade >= self.fade_end and not self.on_close is None:
+        if self.fade <= self.fade_end and not self.on_close is None:
             print("End FadeOutOverlay anim")
             
             self.on_close(self)
