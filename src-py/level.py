@@ -205,6 +205,7 @@ class Level:
         for pfx,env in self.postfx:
             p = PostFXCache.Get(pfx,env)
             if not p is None:
+                p.SetUpdaterParam("game",self.game)
                 self.postfx_rt.append(p)
 
     def _UpdateEntityList(self):

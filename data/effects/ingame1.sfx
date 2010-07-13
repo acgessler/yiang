@@ -2,6 +2,11 @@ texture framebuffer = {FRAMEBUFFER}
 
 #ifndef NO_INTENSE_PPFX
 vec2 cur
+
+#ifndef NO_MIRROR
+vec2 lowerh = {STATUS_BAR_DIM}
+#endif
+
 #endif
 
 #ifdef ENABLE_DITHER
@@ -16,14 +21,23 @@ effect
 	_out.rgba = pixel.rgba;
 #else
 
-	// XXX compilation fails if these statements are put on one line, SFML what do you do?
-	vec4 pixel = framebuffer(_in);
-	vec4 another = framebuffer(_in+vec2(-0.010,-0.004));
-	//vec4 another = framebuffer(_in+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
-	//vec4 evenmor = framebuffer(_in+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
-	vec4 dither = noise(randomUV+_in);
+	vec2 tin = _in;
+#ifndef NO_MIRROR
+	float overall_scale = 1.0;
+	if (tin[1] < lowerh[1]) {
+		tin[1] = lowerh[1] + (lowerh[1] - tin[1]);
+		overall_scale = 0.45 * ( 1.0 - (tin[1]-lowerh[1]) / lowerh[1] );
+	}
+#endif
 
-	float scale =  clamp((length(_in-cur))*1.5,0.0,1.0);
+	// XXX compilation fails if these statements are put on one line, SFML what do you do?
+	vec4 pixel = framebuffer(tin);
+	vec4 another = framebuffer(tin+vec2(-0.010,-0.004));
+	//vec4 another = framebuffer(tin+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
+	//vec4 evenmor = framebuffer(tin+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
+	vec4 dither = noise(randomUV+tin);
+
+	float scale =  clamp((length(tin-cur))*1.5,0.0,1.0);
 	vec4 color = (pixel*1.0f+(another*0.25)/*+(evenmor*0.15)*/);
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
@@ -33,6 +47,9 @@ effect
 #endif
 
 	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);
+#ifndef NO_MIRROR
+	_out.rgb *= overall_scale;
+#endif
 	_out.a = 1.f;
 
 #endif

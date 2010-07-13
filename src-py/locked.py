@@ -67,12 +67,6 @@ class Door(AnimTile):
 class Key(Tile,InventoryItem):
     """A door blocks the player unless he presents a key of the same color"""
     
-    color_names = collections.defaultdict(lambda : "colorful",{
-        sf.Color.Red: "Red",
-        sf.Color.Green: "Green",
-        sf.Color.Blue: "Blue"
-    })
-    
     def __init__(self,width=Tile.AUTO,height=Tile.AUTO):
         Tile.__init__(self,width,height)
         InventoryItem.__init__(self)
@@ -85,7 +79,34 @@ class Key(Tile,InventoryItem):
         return Entity.ENTER
     
     def GetItemName(self):
-        return "{0} key".format(Key.color_names[ self.color ])
+    
+        # XXX temporary solution
+        def GetName(col):
+            if col.r > 60:
+                if col.g > 60:
+                    if col.b > 60:
+                        return "Gray" if col.r+col.b+col.g!=255*3 else  "White"
+                    else:
+                        return "Yellow"
+                else:         
+                    if col.b > 60:
+                        return "Pink"
+                    else:
+                        return "Red"
+            else:
+                if col.g > 60:
+                    if col.b > 60:
+                        return "Azure"
+                    else:
+                        return "Green"
+                else:         
+                    if col.b > 60:
+                        return "Blue"
+                    else:
+                        return "Black"
+            assert False
+        
+        return "{0} key".format(GetName( self.color ))
     
     
     

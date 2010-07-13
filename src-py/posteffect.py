@@ -62,6 +62,12 @@ class PostFX:
             return
         
         self.pfx.SetTexture(name,*args)
+        
+    def SetUpdaterParam(self,name,value):
+        print(self.updater)
+        for updater in self.updater:
+            if hasattr(updater,"SetOuterParam"):
+                updater.SetOuterParam(name,value)
     
 
 class PostFXCache:
@@ -70,7 +76,11 @@ class PostFXCache:
     shared_env = None
 
     @staticmethod
-    def Get(name="",env=()):
+    def Get(name="",env=(),**kwargs):
+        """Obtain a postfx, given either a full path or a file name
+        relative to ./data/effects. 'env' is a set of preprocessir
+        directives, each is a 2-tuple (name,value) (becomes #define 
+        name value). Shaders are cached internally."""
         assert name
         
         if PostFXCache.shared_env is None:
@@ -112,11 +122,8 @@ class PostFXCache:
                 if words[0] == "effect":
                     break
                 
-                #print(words)
-                
                 if words[0] in data_types:
                     pfx.vars.add(words[1])
-                    
                     
                     # handle texture loading manually, SFML doesn't do it.
                     if len(words)>3 and words[2]=="=":
@@ -124,10 +131,19 @@ class PostFXCache:
                         if len(words[3]) and words[3][0] == "{" and words[3][-1] == "}":
                             kwd = words[3][1:-1]
                             
-                            def closure_maker(inner=PostFXCache._GetParameterUpdater(kwd),pfx=pfx,type=words[0],name=words[1]):
-                                return inner(pfx,type,name)
+                            class closure_maker:
+                                def __init__(self,inner=PostFXCache._GetParameterUpdater(kwd),type=words[0],name=words[1]):
+                                    self.inner = inner
+                                    self.type = type
+                                    self.name = name
+                                    
+                                def __getattr__(self,name):
+                                    return getattr( self.inner, name )
+                                
+                                def __call__(self):
+                                    return self.inner(pfx,self.type,self.name)
                             
-                            pfx.updater.append(closure_maker)
+                            pfx.updater.append(closure_maker())
                         elif words[0]=="texture":
                             # XXX unify this special case, too.
                             
@@ -174,7 +190,7 @@ class PostFXCache:
         mymod= sys.modules[modname]
         
         try:
-            return getattr(mymod,"Update")
+            return getattr(mymod,"GetUpdater",None)() or getattr(mymod,"Update")
         except AttributeError:
             print("PostFX updater module {0} does not provide Update()".format(type))
         return default_proc

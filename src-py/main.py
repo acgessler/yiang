@@ -113,7 +113,7 @@ class MainMenu(Drawable):
         # Load the PostFX (I had to try them ...)
         self.effect = PostFXCache.Get("intro.sfx")
             
-        self.cur_option = 0
+        self.cur_option = 2
         self.menu_text = [(None,None)]*len(MainMenu.options)
         self.game = None
         self.swallow_escape = False
@@ -126,7 +126,7 @@ class MainMenu(Drawable):
         self._LoadImages()
 
         print("Entering main menu")
-        self.SetMenuOption(0,first=True)
+        self.SetMenuOption(self.cur_option,first=True)
 
         Renderer.SetClearColor(sf.Color.White)
 
@@ -225,6 +225,10 @@ Hit {1} to cancel""".format(
     def GetDrawOrder(self):
         """Drawable's are drawn with ascending draw order"""
         return 1000
+    
+    def GetCurrentGame(self):
+        """Get the currently active Game or None if none is active"""
+        return self.game
     
     def Draw(self):
         
