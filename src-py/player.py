@@ -165,7 +165,7 @@ class Player(Entity):
                 
         for item in erase:
             self.inventory.remove(item)
-            self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos))
+            self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos,color=sf.Color.Red))
             
     def AddToInventory(self,item):
         """Adds an item to the player's inventory. The same
@@ -183,7 +183,7 @@ class Player(Entity):
         scheme to remove entities. """
         assert isinstance(item,InventoryItem)
         self.inventory.remove(item)
-        self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos))
+        self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos,color=sf.Color.Red))
             
     def SetPositionAndMoveView(self, pos):
         """Change the players position and adjust the viewport accordingly"""
@@ -463,7 +463,10 @@ class Player(Entity):
 
                 
         if floor_touch is False:
-            newvel[0] = max(0.0, newvel[0] - 0.1*time)
+            # simulate air friction while we *are* in air. increase the effect
+            # the higher the y velocity is. this allows for better control
+            # during jumps.
+            newvel[0] = max(0.0, newvel[0] - 0.3*time*(math.log(max(2, newvel[1]))/math.log(2)))
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel
@@ -614,12 +617,12 @@ class InventoryChangeAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player adds or removes an item from the inventory."""
 
-    def __init__(self,text,pos,speed=1.0):
+    def __init__(self,text,pos,speed=1.0,color=sf.Color.Green):
         Tile.__init__(self,text)
         
         self.SetPosition( pos )
         self.speed = speed
-        self.SetColor(sf.Color.Green)
+        self.SetColor(color)
 
     def GetBoundingBox(self):
         return None

@@ -40,11 +40,13 @@ from notification import MessageBox
 from audio import SoundEffectCache,BerlinerPhilharmoniker
 
 # numeric constants for the menu entries
-OPTION_NEWGAME,OPTION_RESUME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(7)
+OPTION_RESUME,OPTION_NEWCAMPAGIN,OPTION_NEWGAME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,\
+OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(8)
 
 # special level numbers, these levels aren't in the regular map rotation
 SPECIAL_LEVEL_TUTORIAL = 10000
 SPECIAL_LEVEL_INTRO = 20000
+SPECIAL_LEVEL_CAMPAIGN = 30000
 
 def get_level_count():
     """Get the number of levels in the data/levels folder."""
@@ -137,6 +139,9 @@ class MainMenu(Drawable):
 
     def _OptionsNewGame(self):
         self._TryStartGameFromLevel(1)
+        
+    def _OptionsNewCampaignGame(self):
+        self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN)
 
     def _OptionsTutorial(self):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL)
@@ -164,8 +169,9 @@ class MainMenu(Drawable):
             
 
     options = [
-        ("New Game", _OptionsNewGame, "You will die",1.0),
         ("Resume Game", _OptionsResumeGame, "You will die soon",0.4),
+        ("Launch Campaign", _OptionsNewCampaignGame, "You will die",1.0),
+        ("Launch Quick Game", _OptionsNewGame, "You will die",0.4),
         ("Start Tutorial", _OptionsTutorial, "You will die",0.4),
         ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.4),
      #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
