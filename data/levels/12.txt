@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(17,15,3),vis_ofs=2)
+<out> = Level(<level>,<game>,<raw>,color=(17,15,3),vis_ofs=2,name="Wild West revisited")
                                                                                                                                                                                                                                                                                              
                                                             ySU                                                                                                                                                                                                           
                                              

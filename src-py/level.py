@@ -40,7 +40,7 @@ class Level:
     for both drawing and updating - also it maintains the list of all entities
     in the level"""
     
-    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0, postfx = [("ingame1.sfx",())]):
+    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0, postfx= [("ingame1.sfx",())], name=None):
         """Construct a level given its textual description 
         
         Parameters:
@@ -57,6 +57,7 @@ class Level:
         self.level = level
         self.color = sf.Color(*color) if isinstance(color, tuple) else color
         self.vis_ofs = vis_ofs
+        self.name = name
         
         self.postfx_rt = []
         self.postfx = postfx
@@ -349,6 +350,10 @@ class Level:
         """Get the list of all active postprocessing effects
         on top of this level. Post effects are applied in-order"""
         return self.postfx_rt
+    
+    def GetName(self):
+        """Get the name of the level or None if the level is unnamed"""
+        return self.name
     
     def SetPostFXParameter(self,*arg):
         """Set a shared parameter in all active postprocessing

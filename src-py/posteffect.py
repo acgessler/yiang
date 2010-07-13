@@ -64,7 +64,6 @@ class PostFX:
         self.pfx.SetTexture(name,*args)
         
     def SetUpdaterParam(self,name,value):
-        print(self.updater)
         for updater in self.updater:
             if hasattr(updater,"SetOuterParam"):
                 updater.SetOuterParam(name,value)

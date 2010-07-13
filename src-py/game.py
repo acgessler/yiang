@@ -160,7 +160,7 @@ class Game(Drawable):
         """draw the status bar with the player's score, lives and total game duration"""
         if self.level is None:
             return
-        
+    
         statush = self.GetUpperStatusBarHeight()*defaults.tiles_size_px[1]
         if not hasattr(self,"status_bar_font"):
             self.status_bar_font = FontCache.get(defaults.letter_height_status,\
@@ -186,10 +186,9 @@ class Game(Drawable):
 
         self.DrawSingle(shape)
         
-        status = sf.String("Level {0}.{1}, {2:.2} days\n{3:4.5} $".format(
-            self.rounds,
-            int(self.level_idx),
-            Game.SecondsToDays( self.GetTotalElapsedTime() ),
+        status = sf.String("{0}\n{1:4.5} $".format(
+            ("Level {0}.{1} {2:.2} days".format(self.rounds,int(self.level_idx),Game.SecondsToDays( self.GetTotalElapsedTime() )) \
+                if self.level.GetName() is None else self.level.GetName()),
             self.GetScore()/100),
             Font=self.status_bar_font,Size=defaults.letter_height_status)
 

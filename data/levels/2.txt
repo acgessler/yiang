@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(20,10,10),postfx=[("ingame1.sfx",())])
+<out> = Level(<level>,<game>,<raw>,color=(20,10,10),postfx=[("ingame1.sfx",())],name="Welcome to your last journey")
       rPL                                                                                                                                                                                                                                 _RE         gA9
                                                                                                                                                                                                                                           _MJ         gA9
                                                                                                                                                                                                                                                       gA9

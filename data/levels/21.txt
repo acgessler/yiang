@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,0,40),vis_ofs=6)
+<out> = Level(<level>,<game>,<raw>,color=(0,0,40),vis_ofs=6,name="Hell is here")
 
 
 

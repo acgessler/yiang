@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,15,15),postfx=[("ingame1.sfx",()),("invert_screen.sfx",())])
+<out> = Level(<level>,<game>,<raw>,color=(0,15,15),postfx=[("ingame1.sfx",()),("invert_screen.sfx",())],name="So what is 'up'?")
                                                                                                                                                                                     _DA
    gPL                                                                                                                                                                              _DA
                                                                                                                                                                                     _DA
