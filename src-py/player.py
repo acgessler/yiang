@@ -295,9 +295,6 @@ class Player(Entity):
         self._CheckForLeftMapBorder()
         self._MoveMap(time)
         self._CheckForRightMapBorder()
-
-        # air friction
-        self.vel[0] *= (1.0 - time*5)
         
         self._UpdatePostFX()
 
@@ -467,6 +464,7 @@ class Player(Entity):
             # the higher the y velocity is. this allows for better control
             # during jumps.
             newvel[0] = max(0.0, newvel[0] - 0.3*time*(math.log(max(2, newvel[1]))/math.log(2)))
+            newvel[0] *= (1.0 - time*5)
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel
@@ -491,8 +489,9 @@ class Player(Entity):
         that is a respawn point the player jumps to, without regard
         to the position of death. If multiple ordered respawn
         points are registered, the last is taken."""
-        self.ordered_respawn_positions.append(pos)
-        print("Set ordered respawn point {0}|{1}".format(pos[0], pos[1]))
+        if (pos != self.ordered_respawn_positions[-1]):
+            self.ordered_respawn_positions.append(pos)
+            print("Set ordered respawn point {0}|{1}".format(pos[0], pos[1]))
 
     def Respawn(self, enable_respawn_points):
         """Used internally by Game.Respawn to respawn the player

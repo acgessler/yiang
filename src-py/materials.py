@@ -33,7 +33,7 @@ from renderer import Renderer,Drawable
 class Iceblock(Tile):
     """Iceblock is a normal tile with low friction"""
     
-    def __init__(self,*args,**kwargs):
+    def __init__(self,*args,friction=0.0,**kwargs):
         Tile.__init__(self,*args,**kwargs)
         self.friction = friction
         

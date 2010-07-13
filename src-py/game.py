@@ -154,7 +154,7 @@ class Game(Drawable):
     
     def GetLowerStatusBarHeight(self):
         """Get the height of the lower status bar, in tiles"""
-        return (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1])
+        return max(1.5, (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1]))
 
     def _DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
@@ -173,7 +173,7 @@ class Game(Drawable):
         # and finally the border
         shape = sf.Shape()
 
-        fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
+        fcol,bcol = sf.Color(120,120,120,90), sf.Color(50,50,50,255)
         
         shape.AddPoint(1,0,bcol,fcol)
         shape.AddPoint(defaults.resolution[0]-1,0,bcol,bcol)
@@ -228,17 +228,18 @@ class Game(Drawable):
         # finally, the lower part of the cinematic box
         shape = sf.Shape()
 
-        fcol,bcol = sf.Color(120,120,120), sf.Color(50,50,50)
+        bcol,fcol = sf.Color(80,80,80,200), sf.Color(20,20,20,140)
         statush = self.GetLowerStatusBarHeight() * defaults.tiles_size_px[1]
         
-        shape.AddPoint(1,defaults.resolution[1]-statush,bcol,fcol)
-        shape.AddPoint(1,defaults.resolution[1],fcol,bcol)
-        shape.AddPoint(defaults.resolution[0]-1,defaults.resolution[1],fcol,bcol)
-        shape.AddPoint(defaults.resolution[0]-1,defaults.resolution[1]-statush,bcol,bcol)
+        shape.AddPoint(defaults.resolution[0]-1,defaults.resolution[1],bcol,fcol)
+        shape.AddPoint(defaults.resolution[0]-1,defaults.resolution[1]-statush,fcol,bcol)
+        shape.AddPoint(1,defaults.resolution[1]-statush,fcol,bcol)
+        shape.AddPoint(1,defaults.resolution[1],bcol,fcol)
+        
 
-        shape.SetOutlineWidth(2)
+        shape.SetOutlineWidth(1)
         shape.EnableFill(True)
-        shape.EnableOutline(True)
+        shape.EnableOutline(False)
 
         self.DrawSingle(shape)
 

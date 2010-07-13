@@ -1,0 +1,4 @@
+from materials import Iceblock; <out> = Iceblock(<raw>,friction=0)
+[[[[[
+[[[[[
+[[[[[

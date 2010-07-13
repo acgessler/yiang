@@ -23,3 +23,6 @@ _=ffffff
 
 # Dark Gray
 ~=999999
+
+# Light blue (azure)
+a=007FFF
