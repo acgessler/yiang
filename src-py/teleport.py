@@ -83,7 +83,7 @@ class Sender(AnimTile):
             self.game.PopSuspend()
             
             print("Teleport to {0} at position {1}".format(target,target.pos))
-            player.SetPositionAndMoveView(target.pos)
+            target.OnDoTeleport(self,player)
             player.Protect(defaults.teleport_protection_time)
             
         self.game.PushSuspend()
@@ -103,9 +103,48 @@ class Receiver(AnimTile):
         
     def Interact(self,other):
         return Entity.ENTER
+    
+    def OnDoTeleport(self,source,player):
+        player.SetPositionAndMoveView(self.pos)
 
     def GetVerboseName(self):
         return "a receiver teleport brick"
+    
+    
+class ReceiverRotateRight(Receiver):
+    """This receiver rotates the incoming velocity vector
+    of the player by 90 degrees to the right"""
+    
+    def __init__(self,text,height=3,frames=5,speed=4.0):
+        Receiver.__init__(self, text, height, frames, speed)
+    
+    def OnDoTeleport(self,source,player):
+        Receiver.OnDoTeleport(self,source,player)
+        player.vel = [player.vel[1]*2.0, -player.vel[0]]
+
+    def GetVerboseName(self):
+        return "a receiver right-rotating teleport brick"
+    
+    
+class ReceiverRotateLeft(Receiver):
+    """This receiver rotates the incoming velocity vector
+    of the player by 90 degrees to the left"""
+    
+    def __init__(self,text,height=3,frames=5,speed=4.0):
+        Receiver.__init__(self, text, height, frames, speed)
+    
+    def OnDoTeleport(self,source,player):
+        Receiver.OnDoTeleport(self,source,player)
+        player.vel = [-player.vel[1]*2.0, player.vel[0]]
+
+    def GetVerboseName(self):
+        return "a receiver left-rotating teleport brick"
+    
+    
+    
+    
+    
+    
     
     
     

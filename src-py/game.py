@@ -700,6 +700,9 @@ class Entity(Drawable):
         
     def GetDrawOrder(self):
         return 500
+    
+    def GetFriction(self):
+        return 1000
         
     def AddToActiveBBs(self,color=sf.Color.Red):
         """Debug feature, mark a specific entity for highlighting

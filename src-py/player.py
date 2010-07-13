@@ -279,7 +279,7 @@ class Player(Entity):
         newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
 
         # Check for collisions
-        pos, self.vel = self._HandleCollisions(newpos, newvel)
+        pos, self.vel = self._HandleCollisions(newpos, newvel, time)
         self.SetPosition(pos)
         
         # (HACK) -- for debugging, prevent the player from falling below the map
@@ -296,7 +296,9 @@ class Player(Entity):
         self._MoveMap(time)
         self._CheckForRightMapBorder()
 
-        self.vel[0] = 0
+        # air friction
+        self.vel[0] *= (1.0 - time*5)
+        
         self._UpdatePostFX()
 
     def _CheckForLeftMapBorder(self):
@@ -375,7 +377,7 @@ class Player(Entity):
         self.draw = False
         self.game.Kill(killer,self)
 
-    def _HandleCollisions(self, newpos, newvel):
+    def _HandleCollisions(self, newpos, newvel, time):
         """Handle any collision events, given the computed new position
         of the player. The funtion returns the actual position after
         collision handling has been performed."""
@@ -386,6 +388,7 @@ class Player(Entity):
         # inaccuracies.
         # Idea: might be possible to use Box2D as physics engine.
         cnt, hasall = 0, 0
+        floor_touch = False
         rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
         for collider in self.game.GetLevel().EnumPossibleColliders(rect):
             if collider is self:
@@ -427,6 +430,9 @@ class Player(Entity):
             elif hasall & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) and hastwo & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT):
                 newpos[1] = mycorner[1] - self.pheight
                 newvel[1] = min(0, newvel[1])
+                
+                newvel[0] = max(0.0, newvel[0] - collider.GetFriction()*time)
+                floor_touch = True
                 #print("floor")
 
                 if len(self.cur_tile) > 1:
@@ -456,27 +462,8 @@ class Player(Entity):
                 collider.AddToActiveBBs()
 
                 
-        for collider in self.game.GetLevel().EnumPossibleColliders(rect):
-            if collider is self:
-                continue
-            
-            mycorner = collider.GetBoundingBox()
-            if mycorner is None:
-                continue
-
-            mycorner = (mycorner[0], mycorner[1], mycorner[2] + mycorner[0], mycorner[3] + mycorner[1])
-            rect = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
-                            
-            hasall = self._BBCollide(mycorner, rect)
-            hastwo = self._BBCollide(rect,mycorner)
-            if hasall == 0:
-                continue
-
-            res = collider.Interact(self)
-            if res != Entity.BLOCK:
-                continue
-
-            
+        if floor_touch is False:
+            newvel[0] = max(0.0, newvel[0] - 0.1*time)
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel

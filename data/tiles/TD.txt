@@ -1,0 +1,24 @@
+from teleport import ReceiverRotateLeft; <out> = ReceiverRotateLeft(<raw>, 3,6)
+OOOOO
+<<<<<
+OOOOO
+
+OO OO
+<<<<<
+OOOOO
+
+OOOOO
+<< <<
+OOOOO
+
+OOOOO
+<<<<<
+OO OO
+
+OOOOO
+<< <<
+OOOOO
+
+OO OO
+<<<<<
+OOOOO
