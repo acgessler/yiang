@@ -437,7 +437,8 @@ class Player(Entity):
                 newpos[1] = mycorner[1] - self.pheight
                 newvel[1] = min(0, newvel[1])
                 
-                newvel[0] = max(0.0, newvel[0] - collider.GetFriction()*time)
+                fric = collider.GetFriction()*time # XXX too layz to think of a pure arithmetic solution
+                newvel[0] = newvel[0] - (min(newvel[0],fric) if newvel[0]>0 else max(newvel[0],-fric))
                 floor_touch = True
                 #print("floor")
 
