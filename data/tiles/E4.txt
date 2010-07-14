@@ -1,0 +1,23 @@
+from enemy import RotatingInferno; <out> = RotatingInferno(<raw>,3,5)
+/--\
+||||
+\--/
+
+/--\
+////
+\--/
+
+/--\
+\\\\
+\--/
+
+/--\
+||\|
+\--/
+
+/--\
+||||
+\--/
+  
+  
+ 

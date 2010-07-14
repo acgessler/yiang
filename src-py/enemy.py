@@ -19,6 +19,7 @@
 
 # Python Core
 import random
+import math
 
 # PySFML
 import sf
@@ -36,6 +37,9 @@ class Enemy(AnimTile):
     
     def GetDrawOrder(self):
         return 2000
+    
+    def Interact(self, other):
+        return Entity.KILL
 
 
 class SmallTraverser(Enemy):
@@ -62,6 +66,7 @@ class SmallTraverser(Enemy):
         return 2100
 
     def Update(self, time_elapsed, time):
+        AnimTile.Update(self, time_elapsed, time)
         if not self.game.IsGameRunning():
             return 
             
@@ -108,8 +113,6 @@ class SmallTraverser(Enemy):
         else:
             pos = (self.pos[0], self.pos[1] + self.vel * time)
         self.SetPosition(pos)
-            
-        AnimTile.Update(self, time_elapsed, time)
         self.SetState(1 if self.vel > 0 else 0)
         
     def _Return(self):
@@ -117,6 +120,41 @@ class SmallTraverser(Enemy):
         # XXX the sound effect seems to shoort for SFMl to handle it.
         #from audio import SoundEffectCache
         #SoundEffectCache.Get("click8a.wav").Play()
+        
+        
+class RotatingInferno(Enemy):
+    """The RotatingInfero class of entities is simply an animated
+    tile which rotates around its center in a certain distance."""
+    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 6.0, radius = 4.5):
+        AnimTile.__init__(self, text, height, frames, speed, 1)
+        
+        self.rotate_speed_base = rotate_speed_base
+        self.ofs_vec = [radius,0]
+        
+    def Interact(self, other):
+        return Entity.KILL
+    
+    def GetVerboseName(self):
+        return "Rotating Inferno"
+    
+    def Update(self, time_elapsed, time):
+        Enemy.Update(self,time_elapsed, time)
+        if not self.game.IsGameRunning():
+            return 
+        
+        angle = (math.pi*2.0*time) / self.rotate_speed_base
+        a,b = math.cos(angle), math.sin(angle)
+        
+        self.ofs_vec = [self.ofs_vec[0]*a-self.ofs_vec[1]*b,self.ofs_vec[0]*b+self.ofs_vec[1]*a]
+        
+    def GetBoundingBox(self):
+        return (self.pos[0]+self.ofs_vec[0],self.pos[1]+self.ofs_vec[1],self.dim[0],self.dim[1])
+    
+    def Draw(self):
+        lv = self.game.GetLevel()
+        for offsetit, elem in self.cached: 
+            lv.DrawSingle(elem,(self.pos[0]+self.ofs_vec[0],self.pos[1]+self.ofs_vec[1]))
+
         
         
 class SmallBob(Enemy):

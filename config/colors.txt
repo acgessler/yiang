@@ -26,3 +26,9 @@ _=ffffff
 
 # Light blue (azure)
 a=007FFF
+
+# Orange
+o=FF9F00
+
+# Dummy 1
+x=121314
