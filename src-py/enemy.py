@@ -126,7 +126,7 @@ class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated
     tile which rotates around its center in a certain distance."""
     def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 6.0, radius = 4.5):
-        AnimTile.__init__(self, text, height, frames, speed, 1)
+        AnimTile.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
         
         self.rotate_speed_base = rotate_speed_base
         self.ofs_vec = [radius,0]

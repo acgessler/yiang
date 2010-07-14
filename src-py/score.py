@@ -62,7 +62,7 @@ class ScoreTileAnimStub(Tile):
     def Update(self,time_elapsed,time_delta):
         self.SetPosition((self.pos[0],self.pos[1]-time_delta*self.speed))
 
-        if self.pos[1] < 0:
+        if self.pos[1] < -1:
             self.game.RemoveEntity(self) 
             
     def _GetHaloImage(self):

@@ -105,7 +105,7 @@ class Receiver(AnimTile):
         return Entity.ENTER
     
     def OnDoTeleport(self,source,player):
-        player.SetPositionAndMoveView(self.pos)
+        player.SetPositionAndMoveView(self.pos,defaults.teleport_origin_distance)
 
     def GetVerboseName(self):
         return "a receiver teleport brick"

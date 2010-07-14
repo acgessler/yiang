@@ -148,6 +148,10 @@ class MainMenu(Drawable):
 
     def _OptionsNewGameChoose(self):
         self.ChooseLevel()
+        
+    def _OptionsViewHighscore(self):
+        import webbrowser
+        webbrowser.open(defaults.homepage_url+"/highscore.html",)
 
     def _OptionsResumeGame(self):
         if self.game is None:
@@ -174,8 +178,10 @@ class MainMenu(Drawable):
         ("Launch Quick Game", _OptionsNewGame, "You will die",0.4),
         ("Start Tutorial", _OptionsTutorial, "You will die",0.4),
         ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.4),
+        ("Achievements", _OptionsNotImplemented, "Updates!",0.4),
      #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
         ("Credits", _OptionsCredits, "CREDITS",1.0),
+        ("Online Highscore", _OptionsViewHighscore, "Updates!",0.4),
         ("Check for Updates", _OptionsNotImplemented, "Updates!",0.4),
         ("Quit!", _OptionsQuit ,"",1.0)
     ]

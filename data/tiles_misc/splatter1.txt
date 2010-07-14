@@ -2,7 +2,7 @@ from player import KillAnimStub; <out> = KillAnimStub(<raw>)
 *****
 ***
 
-***
+*;
 ***
 
 **
@@ -20,17 +20,16 @@ from player import KillAnimStub; <out> = KillAnimStub(<raw>)
 A***
  **
 
-  ____
-o|'O. |o
- |___-|
-
-o_/ **
-  |__|
- _|  |_
-
 *\_o
 
 'O
+  
+--o
+
+pOo
+*
+
+pain ..
 
 
 

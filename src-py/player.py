@@ -185,13 +185,15 @@ class Player(Entity):
         self.inventory.remove(item)
         self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos,color=sf.Color.Red))
             
-    def SetPositionAndMoveView(self, pos):
-        """Change the players position and adjust the viewport accordingly"""
+    def SetPositionAndMoveView(self, pos, ofs=None):
+        """Change the players position and adjust the viewport accordingly.
+        The optional offset value is the distance from the left viewport
+        border."""
         self.SetPosition(pos)
             
         lv  = self.game.GetLevel()
         if not lv is None:
-            lv.SetOriginX(self.pos[0] - defaults.respawn_origin_distance)
+            lv.SetOriginX(self.pos[0] - (ofs or defaults.respawn_origin_distance))
 
     def SetColor(self, pos):
         self.color = pos
@@ -359,15 +361,22 @@ class Player(Entity):
         animations to celebrate the event."""
         print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
+            name = "splatter1.txt"
             for i in range(defaults.death_sprites):
                 from tile import TileLoader
-                t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc","splatter1.txt"),self.game)
+                
+                # add human body parts plus generic splatter
+                if i == defaults.death_sprites-2:
+                    name = "splatter_player_special.txt"
+                elif i == defaults.death_sprites-1:
+                    name = "splatter_player_special2.txt"
+                    
+                t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
                 
                 t.SetSpeed(random.uniform(-1.0, 1.0))
                 t.SetDirection((random.random(), random.random()))
                 t.SetTTL(random.random()*12.0)
                 t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
-                t.SetColor(sf.Color.Red)
                 
                 self.game.AddEntity(t)
             
@@ -577,14 +586,18 @@ class KillAnimStub(Tile):
     """Implements the text strings that are spawned whenever
     the player is killed."""
 
-    def __init__(self, text):
-        Tile.__init__(self, random.choice(text.split("\n\n")),draworder=11000,halo_img=None)
+    def __init__(self, text, index=None):
+        Tile.__init__(self, random.choice(text.split("\n\n")),draworder=11000)
 
-        #self.opos = pos
         self.ttl = 0
         
         self.dirvec = [1.0,1.0]
-        self.SetColor(sf.Color(100,0,0,160))
+        self.SetColor(sf.Color(150,0,0,255))
+        
+    def _GetHaloImage(self):
+        return Entity._GetHaloImage(self,random.choice(
+            ("halo_blood.png","halo_blood2.png","halo_blood3.png","halo_blood4.png","halo_blood5.png")
+        ))
         
     def SetDirection(self,dirvec):
         self.dirvec = mathutil.Normalize(dirvec)

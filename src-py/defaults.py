@@ -24,6 +24,8 @@ import os
 
 version = 1.1
 revision = 196
+server_name = "www.greentoken.de"
+homepage_url = "http://"+server_name+"//yiang"
 resolution = [1280, 850]
 fullscreen = False
 letter_size = [8, 13]
@@ -57,6 +59,7 @@ framerate_limit = 60
 min_respawn_distance = 2.0
 right_scroll_distance = 9
 respawn_origin_distance = 2.0
+teleport_origin_distance = 8.0
 speed_scale_per_level = 1.025
 antialiasing_level = 2
 player_caution_border = [2, 7]

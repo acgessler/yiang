@@ -1,0 +1,6 @@
+from player import KillAnimStub; <out> = KillAnimStub(<raw>)
+  ____
+o|'O. |o
+ |___-|
+
+
