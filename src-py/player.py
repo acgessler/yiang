@@ -68,8 +68,6 @@ class Player(Entity):
 
         self.inventory = []
         self.ordered_respawn_positions = []
-        
-        self._Reset()
 
         # XXX use AnimTile instead
         self.tiles = []
@@ -79,12 +77,16 @@ class Player(Entity):
             self.tiles[-1].SetPosition((0, 0))
 
         assert len(self.tiles) == Player.MAX_ANIMS
+        
+    def SetLevel(self,level):
+        Entity.SetLevel(self,level)
+        self._Reset()
 
     def _Reset(self):
         """Reset the state of the player instance, this is needed
         for proper respawning"""
         self.vel = [0, 0]
-        self.acc = [0, -defaults.gravity]
+        self.acc = [0, self.level.gravity]
         self.in_jump, self.block_jump, self.moved_once = True, False, False
         self.cur_tile = [Player.ANIM_RIGHT]
 

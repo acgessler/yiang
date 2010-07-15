@@ -686,8 +686,13 @@ class Entity(Drawable):
 
     def SetGame(self,game):
         """Binds the Entity to a Game instance. This is called
-        automatically for entities loaded with a level"""
+        automatically for all entities loaded as part of a level"""
         self.game = game
+        
+    def SetLevel(self,level):
+        """Binds the Entity to a Level instance. This is called
+        automatically for all entities loaded as part of a level"""
+        self.level = level
 
     def SetPosition(self,pos):
         self.pos = list(pos)

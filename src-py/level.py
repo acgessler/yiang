@@ -40,7 +40,7 @@ class Level:
     for both drawing and updating - also it maintains the list of all entities
     in the level"""
     
-    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0, postfx= [("ingame1.sfx",())], name=None):
+    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0, postfx= [("ingame1.sfx",())], name=None, gravity=None):
         """Construct a level given its textual description 
         
         Parameters:
@@ -58,6 +58,7 @@ class Level:
         self.color = sf.Color(*color) if isinstance(color, tuple) else color
         self.vis_ofs = vis_ofs
         self.name = name
+        self.gravity = gravity or defaults.gravity
         
         self.postfx_rt = []
         self.postfx = postfx
@@ -104,6 +105,7 @@ class Level:
                             
                     tile.SetColor(LevelLoader.cached_color_dict[ccode])
                     tile.SetPosition((x // 3, y - vis_ofs))
+                    tile.SetLevel(self)
                         
                     self.AddEntity(tile)
                     ecnt += 1
