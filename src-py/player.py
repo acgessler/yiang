@@ -192,10 +192,7 @@ class Player(Entity):
         The optional offset value is the distance from the left viewport
         border."""
         self.SetPosition(pos)
-            
-        lv  = self.game.GetLevel()
-        if not lv is None:
-            lv.SetOriginX(self.pos[0] - (ofs or defaults.respawn_origin_distance))
+        self.level.SetOriginX(self.pos[0] - (ofs or defaults.respawn_origin_distance))
 
     def SetColor(self, pos):
         self.color = pos
