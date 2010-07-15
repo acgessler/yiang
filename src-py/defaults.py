@@ -25,7 +25,7 @@ import os
 version = 1.1
 revision = 196
 server_name = "www.greentoken.de"
-homepage_url = "http://"+server_name+"//yiang"
+homepage_url = "http://"+server_name+"/yiang"
 resolution = [1280, 850]
 fullscreen = False
 letter_size = [8, 13]
