@@ -51,7 +51,7 @@ class Mine(AnimTile):
     the player after the animation of the explosion ended"""
     def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None)
-
+        self.mine_activated = False
         self.hideontouch = hideontouch
         if randomize is True:
             self.GotoRandom()
@@ -59,19 +59,25 @@ class Mine(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
-        self.Set(self.GetNumFrames())
-        self.SetState(1)
-        self.DeathTimer = sf.Clock()
-        self.DeathTimerEnd = (self.GetNumFrames()+1)*self.speed
-        self.__other = other
-        return
-    
+        if self.mine_activated:
+            return
+        else:
+            self.Set(0)
+            self.SetState(1)
+            self.DeathTimer = sf.Clock()
+            self.DeathTimerEnd = (self.GetNumFrames()-1)*self.speed
+            self.__other = other
+            self.mine_activated = True
+            return
+        
     def Update(self,time_elapsed,time_delta):
         AnimTile.Update(self,time_elapsed,time_delta)
         if self.GetState() == 1:
             if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
+                self.Set(self.GetNumFrames())
                 self.game.Kill("an exploded mine (BOOooOOM!)",self.__other)
                 self.SetState(0)
+                self.mine_activated = False
         
             
         
