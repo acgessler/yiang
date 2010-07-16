@@ -107,10 +107,12 @@ class Player(Entity):
         # his body is therefore not visible.
         self.draw = True
         
-    def Protect(self,time):
+    def Protect(self,time=None):
         """Protect the player from being killed for a specific
         amount of time. The player is shown with a bright
         halo during this time."""
+        
+        time = time or defaults.respawn_protection_time
         
         outer = self
         class Proxy(Drawable):

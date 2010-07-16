@@ -37,7 +37,7 @@ effect
 	//vec4 evenmor = framebuffer(tin+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
 	vec4 dither = noise(randomUV+tin);
 
-	float scale =  clamp((length(tin-cur))*1.8,0.0,1.0);
+	float scale =  clamp((length(tin-cur))*1.25,0.0,1.0);
 	vec4 color = (pixel*1.0f+(another*0.25)/*+(evenmor*0.15)*/);
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
