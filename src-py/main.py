@@ -332,7 +332,9 @@ Hit {1} to cancel""".format(
         
         out = []
         for i in range(random.randint(0,count)):
-            tex = sf.String(MainMenu.options[self.cur_option][2],Font=self.font,Size=defaults.letter_height_intro*scale)
+            str = MainMenu.options[self.cur_option][2]
+            #str = "soon"
+            tex = sf.String(str,Font=self.font,Size=defaults.letter_height_intro*scale)
             tex.SetPosition(random.randint(-defaults.resolution[0],defaults.resolution[0]),
                 random.randint(-10,defaults.resolution[1]))
             tex.SetColor(color)
@@ -343,7 +345,7 @@ Hit {1} to cancel""".format(
     def DrawBackground(self):
         """Draw the fuzzy menu background """           
         s = ""
-        abc = "abcdefghijklmnopqrstuvABCDEFGHJIKLMNOPQRSTUVWXYZ#@/^%$"
+        abc = "ABCDE_"
         for y in range(defaults.cells_intro[1]):
             for x in range(defaults.cells_intro[0]):
                 s += random.choice(abc)
@@ -359,7 +361,7 @@ Hit {1} to cancel""".format(
             if self.ttl == 0:
                 self.cached_danger_signs = self.RecacheDangerSigns()
                 self.ttl = defaults.danger_signs_ttl
-                self.ttl = self.ttl-1
+            self.ttl = self.ttl-1
             
             for te in self.cached_danger_signs:
                 Renderer.app.Draw(te)
@@ -443,10 +445,10 @@ Hit {1} to cancel""".format(
                         #print(i)
 
                         sf_draw_string_with_shadow(
-                            str(i).zfill(2) if i < self.num else "\n... back",
+                            str(i).zfill(2) ,
                             defaults.font_menu,
                             self.height,
-                            self.base_offset[0]+ (x*self.width_spacing if i < self.num else 0),
+                            self.base_offset[0]+ (x*self.width_spacing),
                             self.base_offset[1]+y*self.height_spacing,
                             sf.Color.Red if self.level == i else sf.Color.Black )
                         
@@ -494,13 +496,6 @@ Hit {1} to cancel""".format(
                         elif event.Key.Code == KeyMapping.Get("accept"):
                             if self.level == self.num:
                                 return self._BackToMenu()
-                                   
-                #sf_draw_string_with_shadow("... back",
-                #    defaults.font_menu,
-                #    self.height*2,
-                #    self.base_offset[0],
-                #    self.base_offset[1]-50,
-                #    sf.Color.Red if self.level == 0 else sf.Color.Black )
                                 
                 self.outer.DrawBackground()
                 for y, ach in zip( range(self.num), sorted( Achievements.all, key=lambda x: Achievements.GetInfo(x)["order"]) ):
@@ -577,7 +572,7 @@ Hit {1} to cancel""".format(
 
                 x,y = 100,50
                 for line in self.cred:
-                    tex = sf_string(
+                    sf_draw_string_with_shadow(
                         line+("\n" if line[0] == "=" else ""),
                         defaults.font_menu,
                         self.height,
@@ -590,7 +585,7 @@ Hit {1} to cancel""".format(
                         x+= (defaults.resolution[0]-200)/2 
                         y = 130
                     
-                    Renderer.app.Draw(tex)
+                    #Renderer.app.Draw(tex)
                 
         Renderer.AddDrawable(Credits(self),self)
 

@@ -6,11 +6,11 @@ effect
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(_in);
 	vec4 other = framebuffer(_in+vec2(strength,0.2));
-	vec4 another = framebuffer(_in+vec2(-0.4,strength));
+	//vec4 another = framebuffer(_in+vec2(-0.4,strength));
 
 	float scale = clamp((length(_in)),0.0,1.0);
 
-	_out = pixel*0.1f+(other*0.05f+another*0.05) * clamp(1.f-scale+0.3,0.0,1.0);
+	_out = (pixel*0.1f+(other*0.05f) * clamp(1.f-scale+0.3,0.0,1.0)); // / vec4( 1.0,(length(_in)+0.05),1.0,1.0 );
 	_out.a = 1.f;
 
 }
