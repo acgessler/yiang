@@ -376,7 +376,7 @@ class Player(Entity):
                 
                 t.SetSpeed(random.uniform(-1.0, 1.0))
                 t.SetDirection((random.random(), random.random()))
-                t.SetTTL(random.random()*12.0)
+                t.SetTTL(random.random()*18.0)
                 t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
                 
                 self.game.AddEntity(t)

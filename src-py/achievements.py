@@ -19,10 +19,13 @@
 
 # Python core
 import os
+import itertools
 
 # PySFML
 import sf
 
+# Our stuff
+import defaults
 
 class Achievements:
     """Static class to keep track of all achievements which
@@ -42,25 +45,55 @@ class Achievements:
             with open(Achievements.file,"rt") as r:
                 Achievements.have = Achievements.have | set(f.strip() for f in r.readlines())
                 
-                print("Current achievements: {0}".format(Achievements.have))
+                print("Current achievements: {0}".format(list(Achievements.have)))
+                print("Known achievements: {0}".format(list(Achievements.all.keys())))
         except IOError:
-            print("Found no highscore file, seemingly this is the first try :-)")
+            print("Found no achievements file, seemingly this is the first try :-)")
             Achievements._Flush()
     
     @staticmethod
     def EarnAchievement(name):
-        """Submit new highscore, return True if this is a new record"""
-     
-    
+        """Award a specific achievement to the player """
+        assert name in Achievements.all
+        Achievements.have.add(name)
+        
+        print("Earn achievement: {0}".format(name))
+        
     @staticmethod
-    def GetHighscoreRecord():
-        """Get highscore record so far"""
-        return HighscoreManager.record
-    
+    def GetInfo(name):
+        """Get a dict with information on a specific achievements. Entries:
+        - name: the display name of the achievement
+        - desc: the description of the achievement 
+        - icon: The ASCII icon for the achievement
+        - order: The relative position if this achievement in official listings"""
+        if Achievements.all[name] is None:
+            d = os.path.join( defaults.data_dir,"achievements",name+".txt")
+            try:
+                with open(d,"rt") as r:
+                    Achievements.all[name] = dict(itertools.zip_longest( ["name","desc","icon","order"],\
+                        r.read().split("\n\n"), fillvalue=""))
+                    
+                    Achievements.all[name]["order"] = float(Achievements.all[name]["order"] or 100.0)
+                    
+            except IOError:
+                print("No information available for achievement {0}".format(name))
+                return {name:"Unnamed achievement",desc:"Hey, fix this!"}
+            
+        return Achievements.all[name]
+
     @staticmethod
     def _Flush():
         try:
             with open(Achievements.file,"wt") as r:
-                r.write(str(HighscoreManager.record))
+                for a in Achievements.have:
+                    r.write(a+"\n")
         except IOError:
-            print("Failed to flush highscore file")
+            print("Failed to flush achievements file")
+            
+            
+            
+            
+            
+            
+            
+            

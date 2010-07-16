@@ -38,6 +38,7 @@ from posteffect import PostFXCache,FadeInOverlay,FadeOutOverlay
 from highscore import HighscoreManager
 from notification import MessageBox
 from audio import SoundEffectCache,BerlinerPhilharmoniker
+from achievements import Achievements
 
 # numeric constants for the menu entries
 OPTION_RESUME,OPTION_NEWCAMPAGIN,OPTION_NEWGAME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,\
@@ -86,6 +87,11 @@ def sf_string_with_shadow(text,font_name,size,x,y,color,bgcolor=sf.Color(100,100
     return (tex2,tex)
 
 
+def sf_draw_string_with_shadow(*args,**kwargs):
+    t1,t2 = sf_string_with_shadow(*args,**kwargs)
+    Renderer.app.Draw(t1)
+    Renderer.app.Draw(t2)
+
 def sf_string(text,font_name,size,x,y,color):
     """Create a sf.String from the given parameters and
     return it. Unlike XXX_with_shadow, this method does not
@@ -112,8 +118,8 @@ class MainMenu(Drawable):
 
         # Load the PostFX (I had to try them ...)
         self.effect = PostFXCache.Get("intro.sfx")
-            
-        self.cur_option = 2
+
+        self.cur_option = 4
         self.menu_text = [(None,None)]*len(MainMenu.options)
         self.game = None
         self.swallow_escape = False
@@ -149,6 +155,9 @@ class MainMenu(Drawable):
     def _OptionsNewGameChoose(self):
         self.ChooseLevel()
         
+    def _OptionsShowAchievements(self):
+        self.ShowAchievements()
+        
     def _OptionsViewHighscore(self):
         import webbrowser
         webbrowser.open(defaults.homepage_url+"/highscore.html",)
@@ -170,19 +179,27 @@ class MainMenu(Drawable):
             Size=defaults.letter_height_game_over,
             Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
         )), defaults.game_over_fade_time, (550, 50), 0.0, accepted, sf.Color.Black, on_close))
+        
+    def _OptionsLoadGame(self):
+        pass
+    
+    def _OptionsSaveGame(self):
+        pass
             
 
     options = [
         ("Resume Game", _OptionsResumeGame, "You will die soon",0.4),
-        ("Launch Campaign", _OptionsNewCampaignGame, "You will die",1.0),
-        ("Launch Quick Game", _OptionsNewGame, "You will die",0.4),
-        ("Start Tutorial", _OptionsTutorial, "You will die",0.4),
-        ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.4),
-        ("Achievements", _OptionsNotImplemented, "Updates!",0.4),
+        ("Campaign", _OptionsNewCampaignGame, "You will die",1.0),
+        ("Load", _OptionsLoadGame, "You will die soon",0.7),
+        ("Save", _OptionsSaveGame, "You will die soon",0.5),
+        ("Quick Game", _OptionsNewGame, "You will die",1.0),
+        ("Start Tutorial", _OptionsTutorial, "You will die",0.5),
+        ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.35),
+        ("Achievements", _OptionsShowAchievements, "Updates!",0.7),
      #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
-        ("Credits", _OptionsCredits, "CREDITS",1.0),
-        ("Online Highscore", _OptionsViewHighscore, "Updates!",0.4),
-        ("Check for Updates", _OptionsNotImplemented, "Updates!",0.4),
+        ("Credits", _OptionsCredits, "CREDITS",0.4),
+        ("Online Highscore", _OptionsViewHighscore, "Updates!",0.35),
+        ("Check for Updates", _OptionsNotImplemented, "Updates!",0.35),
         ("Quit!", _OptionsQuit ,"",1.0)
     ]
     
@@ -403,8 +420,8 @@ Hit {1} to cancel""".format(
                             self.level = (self.level+self.xnum)%(self.num)
 
                             # improve the usability of the 'return to menu' field
-                            if (self.level // self.xnum) == self.rows-1:
-                                self.level = self.num
+                            #if (self.level // self.xnum) == self.rows-1:
+                            #    self.level = self.num
 
                         elif event.Key.Code == KeyMapping.Get("menu-up"):
                             self.level = (self.level-self.xnum)%(self.num)
@@ -425,7 +442,7 @@ Hit {1} to cancel""".format(
                         i = y*self.xnum +x +1
                         #print(i)
 
-                        tex2,tex = sf_string_with_shadow(
+                        sf_draw_string_with_shadow(
                             str(i).zfill(2) if i < self.num else "\n... back",
                             defaults.font_menu,
                             self.height,
@@ -433,10 +450,100 @@ Hit {1} to cancel""".format(
                             self.base_offset[1]+y*self.height_spacing,
                             sf.Color.Red if self.level == i else sf.Color.Black )
                         
-                        Renderer.app.Draw(tex2)
-                        Renderer.app.Draw(tex)
-
+    
         Renderer.AddDrawable(LevelChooser(self),self)
+        
+        
+    def ShowAchievements(self):
+        """Show a list of all achievements, highlight those earned by the player"""
+
+        
+        class AchievementList(Drawable):
+
+            def __init__(self,outer):
+                Drawable.__init__(self)
+                
+                self.base_height = 32
+                self.base_offset = (70,80)
+
+                self.height = int(self.base_height*defaults.scale[1])
+                self.outer = outer
+                self.num = len(Achievements.all)
+                self.level = 0
+                self.width_spacing, self.height_spacing = 500*defaults.scale[1],int(self.height*1.2)
+                self.maxdesclenperline = (defaults.resolution[0] - self.width_spacing)/self.height
+                
+                
+            def _BackToMenu(self):
+                Renderer.RemoveDrawable(self)
+                
+            def Draw(self):
+                for event in Renderer.GetEvents():
+                    if event.Type == sf.Event.KeyPressed:
+                        Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
+                    
+                        if event.Key.Code == KeyMapping.Get("escape"):
+                            return self._BackToMenu()
+
+                        elif event.Key.Code == KeyMapping.Get("menu-down"):
+                            self.level = (self.level+1)%(self.num)
+
+                        elif event.Key.Code == KeyMapping.Get("menu-up"):
+                            self.level = (self.level-1)%(self.num)
+
+                        elif event.Key.Code == KeyMapping.Get("accept"):
+                            if self.level == self.num:
+                                return self._BackToMenu()
+                                   
+                #sf_draw_string_with_shadow("... back",
+                #    defaults.font_menu,
+                #    self.height*2,
+                #    self.base_offset[0],
+                #    self.base_offset[1]-50,
+                #    sf.Color.Red if self.level == 0 else sf.Color.Black )
+                                
+                self.outer.DrawBackground()
+                for y, ach in zip( range(self.num), sorted( Achievements.all, key=lambda x: Achievements.GetInfo(x)["order"]) ):
+                    info = Achievements.GetInfo(ach)
+
+                    sf_draw_string_with_shadow(
+                       info["name"] or "<missing>",
+                        defaults.font_menu,
+                        self.height,
+                        self.base_offset[0]+50,
+                        self.base_offset[1]+y*self.height_spacing,
+                        sf.Color.Red if self.level == y else sf.Color.Black )
+                    
+                    if self.level == y:
+                        sf_draw_string_with_shadow(
+                           info["icon"],
+                            defaults.font_monospace,
+                            self.height,
+                            self.base_offset[0]+self.width_spacing,
+                            self.base_offset[1],
+                            sf.Color.Yellow )
+                   
+                        out = ""
+                        for paragraph in info["desc"].split("\n"):
+                            cnt = 0
+                            for word in paragraph.split(" "):
+                                if cnt + len(word) > self.maxdesclenperline:
+                                    out += "\n"
+                                    cnt = 0
+                                out += word + " "
+                                cnt += len(word)
+                            out += "\n\n"
+                        
+                        sf_draw_string_with_shadow(
+                            out,
+                            defaults.font_menu,
+                            self.height,
+                            self.base_offset[0]+self.width_spacing,
+                            self.base_offset[1]+200*defaults.scale[1],
+                            sf.Color(150,150,150) )
+                    
+
+        Renderer.AddDrawable(AchievementList(self),self)
 
 
     def ShowCredits(self):
@@ -500,6 +607,7 @@ def main():
 
     Renderer.Initialize()
     HighscoreManager.Initialize()
+    Achievements.Initialize()
     BerlinerPhilharmoniker.Initialize()
     
     if defaults.no_bg_sound is False:
@@ -510,6 +618,9 @@ def main():
             def Draw(self):
                 BerlinerPhilharmoniker.Process()
         Renderer.AddDrawable(DummyMusicPlayer())
+        
+    if defaults.no_halos is True:
+        defaults.death_sprites = min( 20, defaults.death_sprites )
     
     accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):
