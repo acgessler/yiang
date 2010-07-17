@@ -1,0 +1,9 @@
+Teleport Junkie
+
+Survive in a teleport chain for more than 1 minute.
+
+II II
+IIIII
+IIIII
+
+30
