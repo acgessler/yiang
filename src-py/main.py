@@ -345,7 +345,7 @@ Hit {1} to cancel""".format(
     def DrawBackground(self):
         """Draw the fuzzy menu background """           
         s = ""
-        abc = "ABCDE_"
+        abc = "AGCT_"
         for y in range(defaults.cells_intro[1]):
             for x in range(defaults.cells_intro[0]):
                 s += random.choice(abc)
