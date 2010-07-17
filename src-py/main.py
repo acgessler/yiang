@@ -440,8 +440,8 @@ Hit {1} to cancel""".format(
 
                 #print(rows,xnum)
                 for y in range(self.rows):
-                    for x in range(min(self.num - y*self.xnum,self.xnum)):
-                        i = y*self.xnum +x +1
+                    for x in range(min(self.num-1 - y*self.xnum,self.xnum)):
+                        i = y*self.xnum +x+1
                         #print(i)
 
                         sf_draw_string_with_shadow(
@@ -450,7 +450,7 @@ Hit {1} to cancel""".format(
                             self.height,
                             self.base_offset[0]+ (x*self.width_spacing),
                             self.base_offset[1]+y*self.height_spacing,
-                            sf.Color.Red if self.level == i else sf.Color.Black )
+                            sf.Color.Red if self.level == i else sf.Color.White )
                         
     
         Renderer.AddDrawable(LevelChooser(self),self)
@@ -507,7 +507,7 @@ Hit {1} to cancel""".format(
                         self.height,
                         self.base_offset[0]+50,
                         self.base_offset[1]+y*self.height_spacing,
-                        sf.Color.Red if self.level == y else sf.Color.Black )
+                        sf.Color.Red if self.level == y else sf.Color.White )
                     
                     if self.level == y:
                         sf_draw_string_with_shadow(
@@ -534,8 +534,8 @@ Hit {1} to cancel""".format(
                             defaults.font_menu,
                             self.height,
                             self.base_offset[0]+self.width_spacing,
-                            self.base_offset[1]+200*defaults.scale[1],
-                            sf.Color(150,150,150) )
+                            self.base_offset[1]+300*defaults.scale[1],
+                            sf.Color(200,200,200) )
                     
 
         Renderer.AddDrawable(AchievementList(self),self)

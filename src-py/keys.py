@@ -44,7 +44,8 @@ class KeyMapping:
         "debug-gameover": "Q",
         "escape"        : "Escape",
         "accept"        : "Return",
-        "interact"      : "Return"
+        "interact"      : "Return",
+        "shoot"         : "LControl"
     }
 
     @classmethod

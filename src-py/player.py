@@ -34,7 +34,6 @@ from renderer import NewFrame, Drawable, Renderer
 from tile import Tile
 from keys import KeyMapping
 
-
 class InventoryItem:
     """Base class for inventory items.
     Such items are collected by the player and are subsequently
@@ -50,8 +49,10 @@ class Player(Entity):
     player tiles accordingly. This entity is unique within a
     single game. """
 
-    ANIM_RIGHT, ANIM_JUMP_RIGHT, ANIM_LEFT, ANIM_JUMP_LEFT = range(4)
-    MAX_ANIMS = 4
+    ANIM_WALK, ANIM_JUMP, ANIM_SHOOT = range(3)
+    MAX_ANIMS = 3
+    
+    LEFT,RIGHT=range(2)
 
     def __init__(self, text, width, height, ofsx):
         Entity.__init__(self)
@@ -64,10 +65,12 @@ class Player(Entity):
         self.dim = self.pwidth,self.pheight
 
         lines = text.split("\n")
-        height = len(lines) // Player.MAX_ANIMS
+        height = len(lines) // (Player.MAX_ANIMS*2)
 
-        self.inventory = []
+        from weapon import Weapon
+        self.inventory = [Weapon()]
         self.ordered_respawn_positions = []
+        self.ammo = 0
 
         # XXX use AnimTile instead
         self.tiles = []
@@ -76,7 +79,7 @@ class Player(Entity):
             self.tiles[-1].SetDim(self.dim)
             self.tiles[-1].SetPosition((0, 0))
 
-        assert len(self.tiles) == Player.MAX_ANIMS
+        assert len(self.tiles) == (Player.MAX_ANIMS*2)
         
     def SetLevel(self,level):
         Entity.SetLevel(self,level)
@@ -87,8 +90,9 @@ class Player(Entity):
         for proper respawning"""
         self.vel = [0, 0]
         self.acc = [0, self.level.gravity]
-        self.in_jump, self.block_jump, self.moved_once = True, False, False
-        self.cur_tile = [Player.ANIM_RIGHT]
+        self.in_jump, self.block_jump, self.block_shoot, self.moved_once = True, False, False, False
+        self.cur_tile = Player.ANIM_WALK
+        self.dir = Player.RIGHT
 
         # disable all perks
         if hasattr(self, "perks"):
@@ -178,6 +182,14 @@ class Player(Entity):
         self.inventory.append(item)
         self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName(),self.pos))
         
+    def AddAmmo(self,ammo):
+        """Add a specific amount of ammo to the player's inventory.
+        One shoot consumes one unit of ammo.""" 
+        assert ammo > 0
+        self.ammo += ammo
+        self.game.AddEntity(InventoryChangeAnimStub("++ {0}x ammo".format(ammo),
+            self.pos,color=sf.Color.Yellow))
+        
     def RemoveFromInventory(self,item):
         """Removes an item from the player's inventory. If the
         same item exists multiple times, only its first
@@ -203,13 +215,6 @@ class Player(Entity):
             
     def GetDrawOrder(self):
         return 1000
-
-    def _SetJumpAnimState(self):
-        if len(self.cur_tile) <= 1:
-            return
-        
-        self.cur_tile[-1] = (Player.ANIM_JUMP_LEFT if \
-            self.cur_tile[-2] == Player.ANIM_LEFT else Player.ANIM_JUMP_RIGHT)
         
     def OnLeaveLevel(self):
         for perk in list(self.perks):
@@ -218,13 +223,46 @@ class Player(Entity):
     def Draw(self):
         if self.draw is False:
             return
-        
-        # XXX 
-        if hasattr(self,"flash_halo"):
+        if hasattr(self,"flash_halo"): # XXX
             self.game.GetLevel().DrawSingle( self.flash_halo, (self.pos[0]-0.2,self.pos[1]-1.55) )
         
-        self.tiles[self.cur_tile[-1]].DrawRelative(self.pos)
+        self.tiles[self._GetTileIndex(self.cur_tile)].DrawRelative(self.pos)
+        
+    def _GetTileIndex(self,index):
+        return self.cur_tile if self.dir == Player.RIGHT else self.cur_tile + Player.MAX_ANIMS
+    
+    def _Shoot(self):
+        # first find a suitable weapon in our inventory
+        from weapon import Weapon
+        for elem in self.EnumInventoryItems():
+            if (isinstance(elem,Weapon)):
+                weapon = elem
+                break
+        else:
+            if self.block_shoot is False:
+                self.game.AddEntity(InventoryChangeAnimStub("Dude, you have no weapon ...",
+                    self.pos,color=sf.Color.Yellow))
+            return
+        
+        self.cur_tile = Player.ANIM_SHOOT        
+        if self.block_shoot is True:
+            return
+            
+        self.moved_once = self.block_shoot = True
+        if self.ammo == 0:
+            self.game.AddEntity(InventoryChangeAnimStub("Out of ammo, idiot",
+                self.pos,color=sf.Color.Yellow))
+            return 
+        
+        self.ammo -= 1
+        if self.ammo == 2:
+            self.game.AddEntity(InventoryChangeAnimStub("Warn: low ammo",
+                self.pos,color=sf.Color.Yellow))
 
+        print("Shoot!")
+        weapon.Shoot(((1.0 if self.dir == Player.RIGHT else -1.0),0.0),sf.Color(200,200,255))
+        
+        
     def Update(self, time_elapsed, time):
         if self.game.IsGameRunning() is False:
             return
@@ -240,16 +278,16 @@ class Player(Entity):
 
         if inp.IsKeyDown(KeyMapping.Get("move-left")):
             self.vel[0] = -defaults.move_speed[0] * self.speed_scale
-            self.cur_tile[0] = Player.ANIM_LEFT
+            self.cur_tile = Player.ANIM_WALK
+            self.dir = Player.LEFT
 
-            self._SetJumpAnimState()
             self.moved_once = True
             
         if inp.IsKeyDown(KeyMapping.Get("move-right")):
             self.vel[0] = defaults.move_speed[0] * self.speed_scale
-            self.cur_tile[0] = Player.ANIM_RIGHT
+            self.cur_tile = Player.ANIM_WALK
+            self.dir = Player.RIGHT
 
-            self._SetJumpAnimState()
             self.moved_once = True
 
         if defaults.debug_updown_move is True:
@@ -265,13 +303,10 @@ class Player(Entity):
                     self.vel[1] -= defaults.jump_vel * self.jump_scale
                     self.in_jump = self.block_jump = True
 
-                    self.cur_tile.append(0)
-                    self._SetJumpAnimState()
-
+                    self.cur_tile = Player.ANIM_JUMP
                 self.moved_once = True
             else:
                 self.block_jump = False
-        
             
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
             if defaults.debug_updown_move is True else 0)) * time]
@@ -284,6 +319,11 @@ class Player(Entity):
         # Check for collisions
         pos, self.vel = self._HandleCollisions(newpos, newvel, time)
         self.SetPosition(pos)
+        
+        if inp.IsKeyDown(KeyMapping.Get("shoot")):
+            self._Shoot()
+        else:
+            self.block_shoot = False
         
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
@@ -443,9 +483,7 @@ class Player(Entity):
                 floor_touch = True
                 #print("floor")
 
-                if len(self.cur_tile) > 1:
-                    del self.cur_tile[-1]
-
+                self.cur_tile = Player.ANIM_WALK
                 self.in_jump = False
 
                 cnt += 1

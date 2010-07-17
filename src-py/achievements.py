@@ -73,7 +73,7 @@ class Achievements:
                     Achievements.all[name] = dict(itertools.zip_longest( ["name","desc","icon","order"],\
                         r.read().split("\n\n"), fillvalue=""))
                     
-                    Achievements.all[name]["order"] = float(Achievements.all[name]["order"] or 100.0)
+                    Achievements.all[name]["order"] = float(Achievements.all[name]["order"] or 150.0)
                     
             except IOError:
                 print("No information available for achievement {0}".format(name))
