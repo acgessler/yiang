@@ -37,7 +37,7 @@ class Weapon(InventoryItem):
     def GetItemName(self):
         return "Hot-zoop's Steak'n'Slay Gun"
     
-    def Shoot(self,dir,color):
+    def Shoot(self,dir,color,on_hit=lambda x: True):
         pass
     
     

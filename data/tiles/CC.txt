@@ -1,0 +1,21 @@
+from colorchanger import ColorChanger; <out> = ColorChanger(<raw>,3,5,3.0,halo_img="halo_cc.png")
+_____
+BGRGB
+RGBGR
+
+_____
+GRGBR
+GBGRR
+
+_____
+RGBRG
+BGRGB
+
+_____
+GBRGR
+GRGBB
+
+_____
+BGRGB
+RGBGB
+
