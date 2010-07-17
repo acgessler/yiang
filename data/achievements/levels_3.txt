@@ -1,0 +1,9 @@
+Discoverer
+
+Find the 4 magical items: 'Eye of Columbus', 'Hand of Hammurabi', 'Skull of Charlemagne', 'Wand of the Inquisitor'.
+
+II II
+IIIII
+IIIII
+
+50
