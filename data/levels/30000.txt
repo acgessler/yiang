@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,0,0),name="Map of the World")
+<out> = Level(<level>,<game>,<raw>,color=(0,0,0),name="Map of the World",gravity=0.0)
 
 
 

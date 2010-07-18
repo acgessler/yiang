@@ -58,7 +58,7 @@ class Level:
         self.color = sf.Color(*color) if isinstance(color, tuple) else color
         self.vis_ofs = vis_ofs
         self.name = name
-        self.gravity = gravity or defaults.gravity
+        self.gravity = defaults.gravity if gravity is None else gravity
         
         self.postfx_rt = []
         self.postfx = postfx
