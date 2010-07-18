@@ -1,4 +1,5 @@
 from tile import Tile; <out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO)
 _____
 \\-\\
-99999
+96999
+99969
