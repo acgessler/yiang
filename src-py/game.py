@@ -466,7 +466,7 @@ That's {2}.\n\n
 Hit {3} or {4} to return to the menu .. """.format(
                     Game.SecondsToDays(self.GetTotalElapsedTime()),
                     self.score/100,
-                    "a new high score record" if record is True else self.score_map[int(math.log((self.score/100)+1,2))],
+                    "a new high score record" if record is True else self.score_map[int(math.log((self.score*10)+1,2))],
                     KeyMapping.GetString("escape"),
                     KeyMapping.GetString("accept")
                 ),

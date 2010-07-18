@@ -519,7 +519,7 @@ Hit {1} to cancel""".format(
                             sf.Color.Yellow )
                    
                         out = ""
-                        for paragraph in info["desc"].split("\n"):
+                        for paragraph in  info["desc"].split("\n"):
                             cnt = 0
                             for word in paragraph.split(" "):
                                 if cnt + len(word) > self.maxdesclenperline:

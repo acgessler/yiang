@@ -1,4 +1,4 @@
-from tile import Tile; <out> = Tile(<raw>)
-*****
+from tile import Tile; <out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO)
+_____
 \\-\\
 99999

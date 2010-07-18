@@ -1,0 +1,4 @@
+from weapon import Shot; <out> = Shot(<raw>,Tile.AUTO,Tile.AUTO,halo_img="halo_shot.png")
+>>>
+
+

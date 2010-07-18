@@ -1,4 +1,4 @@
 from tile import Tile; <out> = Tile(<raw>)
-/===\
-\\\\\
+ ___
+/\\\\
 =====

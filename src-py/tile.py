@@ -42,14 +42,14 @@ class Tile(Entity):
     AUTO=-1
 
         
-    def __init__(self,text="<no text specified>",width=defaults.tiles_size[0],height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default",width_ofs=0,height_ofs=0):
+    def __init__(self,text="<no text specified>",width=None,height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default",width_ofs=0,height_ofs=0):
         
         # Note: the 'constants' from defaults may change during startup, but 
         # this file may get parsed BEFORE this happens, so we can't
         # access defaults safely from default arguments which are 
         # stored at parse-time.
-        height = height or defaults.tiles_size[1]  
-        width  = width  or defaults.tiles_size[0] 
+        height = height or Tile.AUTO
+        width  = width  or Tile.AUTO
         rsize  = rsize  or defaults.letter_size[1]
         scale  =  rsize / defaults.letter_size[1] 
             

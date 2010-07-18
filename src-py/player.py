@@ -68,7 +68,7 @@ class Player(Entity):
         height = len(lines) // (Player.MAX_ANIMS*2)
 
         from weapon import Weapon
-        self.inventory = [Weapon()]
+        self.inventory = []
         self.ordered_respawn_positions = []
         self.ammo = 0
 
@@ -242,6 +242,8 @@ class Player(Entity):
             if self.block_shoot is False:
                 self.game.AddEntity(InventoryChangeAnimStub("Dude, you have no weapon ...",
                     self.pos,color=sf.Color.Yellow))
+                
+                self.block_shoot = True
             return
         
         self.cur_tile = Player.ANIM_SHOOT        
@@ -263,8 +265,16 @@ class Player(Entity):
             return entity.color == self.color
 
         print("Shoot!")
-        weapon.Shoot(((1.0 if self.dir == Player.RIGHT else -1.0),0.0),sf.Color(200,200,255),on_hit)
+        def check(other):
+            return other.color == self.color
         
+        if self.dir == Player.RIGHT:
+            weapon.Shoot((self.pos[0]+self.pwidth*1.2,self.pos[1]+self.pheight*0.4),\
+                (1.0,0.0),sf.Color(200,200,255),check)
+        else:
+            weapon.Shoot((self.pos[0]-1.0,self.pos[1]+self.pheight*0.4),\
+                (-1.0,0.0),sf.Color(200,200,255),check)
+                         
         
     def Update(self, time_elapsed, time):
         if self.game.IsGameRunning() is False:
