@@ -70,7 +70,7 @@ class Weapon(InventoryItem, Tile):
     to touch it. Weapon classes implement only logic and shot visuals, 
     they are not responsible for drawing the actual weapons"""
     
-    def __init__(self, text="", width=Tile.AUTO,height = Tile.AUTO,shot_tile="shot1.txt",speed=5.0,halo_img=None):
+    def __init__(self, text="", width=Tile.AUTO,height = Tile.AUTO,shot_tile="shot1.txt",speed=10.0,halo_img=None):
         Tile.__init__(self,text,width,height,halo_img=halo_img)
         InventoryItem.__init__(self)
         self.shot_tile= shot_tile
