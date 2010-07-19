@@ -64,7 +64,7 @@ class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
     
-    QUICKGAME,CAMPAIGN = range(2)
+    QUICKGAME,CAMPAIGN,SINGLE = range(3)
 
     def __init__(self, undecorated=False, mode=None):
         """ Initialize a new Game instance given the primary
@@ -449,10 +449,17 @@ Press {3} to leave the game""".format(
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
         )),defaults.game_over_fade_time,(500,130),0.0,accepted,sf.Color.Red,on_close)
+        
+    def GameOverQuitToMenu():
+        """Set immediate Game Over and switch to the menu. Don't
+        report highscore or so."""
+        DebugTools.Trace()
+        self.game_over = True
+        
+        Renderer.RemoveDrawable(self)
 
     def GameOver(self):
         """Fade to black and show stats, then return to the main menu"""
-        
         DebugTools.Trace()
         self.game_over = True
         

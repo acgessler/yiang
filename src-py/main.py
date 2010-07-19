@@ -150,7 +150,7 @@ class MainMenu(Drawable):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN,mode=Game.CAMPAIGN)
 
     def _OptionsTutorial(self):
-        self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL)
+        self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL,mode=Game.SINGLE)
 
     def _OptionsNewGameChoose(self):
         self.ChooseLevel()

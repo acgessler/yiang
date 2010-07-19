@@ -273,10 +273,10 @@ class Player(Entity):
             return other.color == self.color
         
         if self.dir == Player.RIGHT:
-            weapon.Shoot((self.pos[0]+self.pwidth*1.2,self.pos[1]+self.pheight*0.4),\
+            weapon.Shoot((self.pos[0]+self.pwidth*1.2,self.pos[1]+self.pheight*0.6),\
                 (1.0,0.0),sf.Color(200,200,255),check)
         else:
-            weapon.Shoot((self.pos[0]-1.0,self.pos[1]+self.pheight*0.4),\
+            weapon.Shoot((self.pos[0]-1.0,self.pos[1]+self.pheight*0.6),\
                 (-1.0,0.0),sf.Color(200,200,255),check)
                          
         

@@ -40,6 +40,8 @@ class LevelUp(Tile):
             
             if self.game.GetGameMode() == Game.CAMPAIGN:
                 self.game.DropLevel()
+            elif self.game.GetGameMode() == Game.SINGLE:
+                self.game.GameOverQuitToMenu()
             else:
                 self.game.NextLevel()
 

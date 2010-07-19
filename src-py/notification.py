@@ -160,9 +160,13 @@ class SimpleNotification(Entity):
             def on_close(key):
                 delattr(self, "running")
                 self.use_counter -= 1
+                self.level.PopAutoScroll()
+                
                 if self.use_counter == 0:
                     self.game.RemoveEntity(self)
                     print("Disable notification '{0}'".format(self.desc))
+                    
+            self.level.PushAutoScroll(0.0)
             
             self.running  = True
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
