@@ -450,7 +450,7 @@ Press {3} to leave the game""".format(
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
         )),defaults.game_over_fade_time,(500,130),0.0,accepted,sf.Color.Red,on_close)
         
-    def GameOverQuitToMenu():
+    def GameOverQuitToMenu(self):
         """Set immediate Game Over and switch to the menu. Don't
         report highscore or so."""
         DebugTools.Trace()
