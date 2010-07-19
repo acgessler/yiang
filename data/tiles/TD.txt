@@ -1,24 +1,24 @@
 from teleport import ReceiverRotateLeft; <out> = ReceiverRotateLeft(<raw>, 3,6)
-OOOOO
+[OOO]
 <<<<<
-OOOOO
+[OOO]
 
-OO OO
+[O O]
 <<<<<
-OOOOO
+[OOO]
 
-OOOOO
+[OOO]
 << <<
-OOOOO
+[OOO]
 
-OOOOO
+[OOO]
 <<<<<
-OO OO
+[O O]
 
-OOOOO
+[OOO]
 << <<
-OOOOO
+[OOO]
 
-OO OO
+[O O]
 <<<<<
-OOOOO
+[OOO]

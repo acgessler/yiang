@@ -1,24 +1,24 @@
 from teleport import Receiver; <out> = Receiver(<raw>, 3,6)
-OOOOO
-OOOOO
-OOOOO
+[OOO]
+[OOO]
+[OOO]
 
-OO OO
-OOOOO
-OOOOO
+[O O]
+[OOO]
+[OOO]
 
-OOOOO
-OO OO
-OOOOO
+[OOO]
+[O O]
+[OOO]
 
-OOOOO
-OOOOO
-OO OO
+[OOO]
+[OOO]
+[O O]
 
-OOOOO
-OO OO
-OOOOO
+[OOO]
+[O O]
+[OOO]
 
-OO OO
-OOOOO
-OOOOO
+[O O]
+[OOO]
+[OOO]

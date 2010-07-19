@@ -1,24 +1,24 @@
 from teleport import Sender; <out> = Sender( <raw>, 3,6)
-IIIII
-IIIII
-IIIII
+[III]
+[III]
+[III]
 
-II II
-IIIII
-IIIII
+[I I]
+[III]
+[III]
 
-IIIII
-II II
-IIIII
+[III]
+[I I]
+[III]
 
-IIIII
-IIIII
-II II
+[III]
+[III]
+[I I]
 
-IIIII
-II II
-IIIII
+[III]
+[I I]
+[III]
 
-II II
-IIIII
-IIIII
+[I I]
+[III]
+[III]

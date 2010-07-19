@@ -328,7 +328,7 @@ PreventFallDown:   {debug_prevent_fall_down}
 ShowBoundingBoxes: {debug_draw_bounding_boxes}
 ScrollBoth:        {debug_scroll_both}
 ScrollSpeed:       {move_map_speed}
-SpeedScale/Level:  {speed_scale_per_level}
+SpeedScale/Level:  {speed_scale_per_round}
 SpeedScale:        {speed_scale}
 LevelSize:         {level_size}
 
@@ -488,11 +488,8 @@ Hit {3} or {4} to return to the menu .. """.format(
     
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
-
         DebugTools.Trace()
-        print("Scale time by {0}%".format((defaults.speed_scale_per_level-1.0)*100))
         
-        self.speed_scale *= defaults.speed_scale_per_level
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level_idx))
         
@@ -501,6 +498,9 @@ Hit {3} or {4} to return to the menu .. """.format(
             if self.level_idx == main.get_level_count():
                 lidx = 1
                 self.rounds += 1
+                
+                print("Scale time by {0}%".format((defaults.speed_scale_per_round-1.0)*100))
+                self.speed_scale *= defaults.speed_scale_per_round
             else:
                 lidx = self.level_idx+1
                        
