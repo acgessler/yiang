@@ -20,6 +20,7 @@
 # Python Core
 import random
 import math
+import os
 
 # PySFML
 import sf
@@ -28,6 +29,9 @@ import sf
 import defaults
 from game import Entity, Game
 from tile import Tile, AnimTile
+from weapon import Shot
+from score import ScoreTileAnimStub
+from player import KillAnimStub
 
 class Enemy(AnimTile):
     """Sentinel base class for all entities"""
@@ -38,7 +42,35 @@ class Enemy(AnimTile):
     def GetDrawOrder(self):
         return 2000
     
+    def _Die(self):
+        """Invoked when the enemy is slayed"""
+        self.game.RemoveEntity(self)
+        self.game.AddEntity(ScoreTileAnimStub("Bonus for Slaying: {0:4.4} ct".format(self.game.Award(self._GetScoreAmount())),self.pos,1.0))
+        self._SpreadSplatter()
+        
+    def _GetScoreAmount(self):
+        """Get the score the player receives for slaying this enemy"""
+        return 0.05
+        
+    def _SpreadSplatter(self):
+        name = "splatter1.txt"
+        for i in range(defaults.death_sprites):
+            from tile import TileLoader
+                
+            t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
+            
+            t.SetSpeed(random.uniform(-1.0, 1.0))
+            t.SetDirection((random.random(), random.random()))
+            t.SetTTL(random.random()*18.0)
+            t.SetPosition(self.pos)
+            
+            self.game.AddEntity(t)
+    
     def Interact(self, other):
+        """The default behaviour for enemies is to be killable by a shot with any gun"""
+        if isinstance(other,Shot):
+            self._Die()
+            
         return Entity.KILL
 
 
@@ -56,14 +88,14 @@ class SmallTraverser(Enemy):
 
         self._ShrinkBB(shrinkbb)
 
-    def Interact(self, other):
-        return Entity.KILL
-
     def GetVerboseName(self):
         return self.verbose
     
     def GetDrawOrder(self):
         return 2100
+    
+    def _GetScoreAmount(self):
+        return 0.05
 
     def Update(self, time_elapsed, time):
         AnimTile.Update(self, time_elapsed, time)
@@ -164,15 +196,25 @@ class SmallBob(Enemy):
     def __init__(self, text, height, frames, speed=1.0, move_speed_base = 2.0, shrinkbb=0.8):
         AnimTile.__init__(self, text, height, frames, speed, 2)
         self._ShrinkBB(shrinkbb)
-
-    def Interact(self, other):
-        return Entity.KILL
+        self.hits = 4
 
     def GetVerboseName(self):
         return "Small Bob"
     
     def GetDrawOrder(self):
         return 2100
+    
+    def _GetScoreAmount(self):
+        return 0.08
+    
+    def Interact(self, other):
+        """SmallBob needs 4 hits to die"""
+        if isinstance(other,Shot):
+            self.hits -= 1
+            if self.hits == 0:
+                self._Die()
+            
+        return Entity.KILL
 
     def Update(self, time_elapsed, time):
         if not self.game.IsGameRunning():

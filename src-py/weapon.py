@@ -58,7 +58,7 @@ class Shot(Tile):
                 continue
             
             tj = self._BBCollide_XYWH(rect, mycorner)
-            if tj > 0 and collider.Interact(self) != Entity.ENTER and self.onhit(collider) is True:
+            if tj > 0 and self.onhit(collider) is True and collider.Interact(self) != Entity.ENTER:
                 self.game.RemoveEntity(self)
                 
         Tile.Update(self,time_elapsed,time)

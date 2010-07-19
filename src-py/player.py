@@ -264,9 +264,6 @@ class Player(Entity):
         if self.ammo == 2:
             self.game.AddEntity(InventoryChangeAnimStub("Warn: low ammo",
                 self.pos,color=sf.Color.Yellow))
-            
-        def on_hit(entity):
-            return entity.color == self.color
 
         print("Shoot!")
         def check(other):
