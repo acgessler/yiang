@@ -147,7 +147,7 @@ class MainMenu(Drawable):
         self._TryStartGameFromLevel(1)
         
     def _OptionsNewCampaignGame(self):
-        self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN)
+        self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN,mode=Game.CAMPAIGN)
 
     def _OptionsTutorial(self):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL)
@@ -203,7 +203,7 @@ class MainMenu(Drawable):
         ("Quit!", _OptionsQuit ,"",1.0)
     ]
     
-    def _TryStartGameFromLevel(self,level,old=None):
+    def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME):
         if old is None:
             old = self
             
@@ -214,7 +214,7 @@ class MainMenu(Drawable):
                 self.block = False
                 if key == accepted[1]:
                     self.game = None
-                    self._TryStartGameFromLevel(level,old)
+                    self._TryStartGameFromLevel(level,old,mode)
                 
             self.block = True
             Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
@@ -231,7 +231,7 @@ Hit {1} to cancel""".format(
             
         else:
         
-            self.game = Game(Renderer.app)
+            self.game = Game(Renderer.app,mode=mode)
             self.game.LoadLevel(level)
             Renderer.AddDrawable(self.game,old)
             

@@ -22,30 +22,30 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity, Game
-from renderer import NewFrame
+from game import Entity
+from renderer import NewFrame, Renderer
 from tile import Tile
 from player import Player
+from keys import KeyMapping
 
-class LevelUp(Tile):
-    """The player enters the next level upon touching this tile"""
-
-    def __init__(self,text,width,height):
-        Tile.__init__(self,text,width,height)
+class LevelEntrance(Tile):
+    """Only found on the campaign world map, marks the entrance
+    to a particular level"""
+    
+    def __init__(self,width=Tile.AUTO,height=Tile.AUTO,next_level=5):
+        Tile.__init__(self,width,height)
+        self.next_level = next_level
         
     def Interact(self,other):
-        if isinstance(other,Player):
-            print("Level completed: {0}!".format(self.level.GetName() or ""))
-            self.game.Award(defaults.levelup_score_base*self.game.GetLevelStats()[-1])
-            
-            if self.game.GetGameMode() == Game.CAMPAIGN:
-                self.game.DropLevel()
-            else:
-                self.game.NextLevel()
-
-            raise NewFrame()
-            
+        if isinstance(other,Player) and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
+            self._RunLevel()
+        
         return Entity.ENTER
+        
+    def _RunLevel(self):
+        self.game.PushLevel(self.next_level)
+        #self.game.Set
+        raise NewFrame()
+        
 
-
-    
+        

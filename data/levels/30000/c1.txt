@@ -1,0 +1,8 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,next_level=3)
+  _______
+ |       |
+|         |
+|    O    |
+|  __O__  |
+| |     | |
+PPO     OPP

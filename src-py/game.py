@@ -63,12 +63,15 @@ class SimpleDrawable(Drawable):
 class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
+    
+    QUICKGAME,CAMPAIGN = range(2)
 
-    def __init__(self, undecorated=False):
+    def __init__(self, undecorated=False, mode=None):
         """ Initialize a new Game instance given the primary
         RenderWindow """
         Drawable.__init__(self)
         self.undecorated = undecorated
+        self.mode = mode or Game.QUICKGAME
 
         if defaults.draw_clamp_to_pixel is True:
             self.ToDeviceCoordinates = self._ToDeviceCoordinates_Floored
@@ -76,6 +79,7 @@ class Game(Drawable):
         # These are later changed by LoadLevel(...), NextLevel(...)
         self.level_idx = -1
         self.level = None
+        self.level_chain = []
         
         # Load the first level for testing purposes
         # self.LoadLevel(1)
@@ -91,6 +95,9 @@ class Game(Drawable):
         self.suspended = []
         
         self.draw_counter = 0
+        
+    def GetGameMode(self):
+        return self.mode
 
     def Run(self):
         print("Enter main loop")
@@ -532,17 +539,30 @@ Hit {2} to return to the menu""").format(
         self.level = LevelLoader.LoadLevel(idx,self)
         return False if self.level is None else True
     
+    def PushLevel(self,idx):
+        """Load another level on top of this level"""
+        if not self.level is None:
+            self.level_chain += [(self.level_idx,self.level)]
+            
+        self.level_idx = idx
+        self.level = LevelLoader.LoadLevel(idx,self)
+        return False if self.level is None else True
+    
+    def GetLevelChain(self):
+        """ """
+        return self.level_chain
+    
     def DropLevel(self):
         """Unload the current level, leaving the game area totally
         empty (which is a valid state, however)"""
         if self.level is None:
             return
         
-        print("Unloading level {0}".format(self.level_idx))
+        print("Leaving level {0}".format(self.level_idx))
         for entity in self.level.EnumAllEntities():
             entity.OnLeaveLevel()
             
-        self.level = None
+        self.level_idx, self.level = self.level_chain.pop() if len(self.level_chain) else (-1,None)
     
     def PushSuspend(self):
         """Increase the 'suspended' counter of the game by one. The

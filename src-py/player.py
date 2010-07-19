@@ -311,9 +311,11 @@ class Player(Entity):
             if inp.IsKeyDown(KeyMapping.Get("move-up")):
                 self.pos[1] -= time * defaults.move_speed[1]
                 self.moved_once = True
+                self.cur_tile = Player.ANIM_JUMP
             if inp.IsKeyDown(KeyMapping.Get("move-down")):
                 self.pos[1] += time * defaults.move_speed[1]
                 self.moved_once = True
+                self.cur_tile = Player.ANIM_JUMP
         else:
             if inp.IsKeyDown(KeyMapping.Get("move-up")):
                 if self.in_jump is False and self.block_jump is False:

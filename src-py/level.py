@@ -76,7 +76,7 @@ class Level:
         self.gravity = defaults.gravity if gravity is None else gravity
         
         self.postfx_rt = []
-        self.postfx = postfx
+        self.postfx = postfx or []
         self._LoadPostFX()
         
         self.entities_active = set()
