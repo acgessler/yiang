@@ -34,8 +34,9 @@ class ColorChanger(AnimTile):
         
     def Interact(self, other):
         if isinstance(other,Player):
-            other.SetColor(self.color)
-            print("ColorChanger changes player color to  {0}".format(self.color))
+            if self.color != other.color:
+                other.SetColor(self.color)
+                print("ColorChanger changes player color to  {0}".format(self.color))
         
         return Entity.ENTER
     

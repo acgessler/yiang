@@ -271,6 +271,16 @@ class Game(Drawable):
 
                 elif event.Key.Code == KeyMapping.Get("debug-godmode"):
                     defaults.debug_godmode = not defaults.debug_godmode
+                    """
+                    if not self.level is None:
+            
+                        if defaults.debug_godmode is True:
+                            self.level.PushScroll(Level.SCROLL_ALL)
+                            self.level.PushAutoScroll(0.0)
+                        else:
+                            self.level.PopScroll()
+                            self.level.PopAutoScroll()
+                    """
 
                 elif event.Key.Code == KeyMapping.Get("debug-kill"):
                     self.Kill("(yourself, you pressed the KILL button!)")

@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0,0,0),name="Map of the World",gravity=0.0)
+<out> = Level(<level>,<game>,<raw>,color=(0,0,0),name="Map of the World",gravity=0.0,autoscroll_speed=0.0,scroll=Level.SCROLL_ALL)
 
 
 
@@ -10,7 +10,7 @@
 
 _AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA
 
-_PL
+_pl
 
 
 

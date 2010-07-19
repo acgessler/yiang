@@ -46,15 +46,15 @@ class InventoryItem:
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
-    player tiles accordingly. This entity is unique within a
-    single game. """
+    player tiles accordingly. Multiple player's can coexist in
+    a single level."""
 
     ANIM_WALK, ANIM_JUMP, ANIM_SHOOT = range(3)
     MAX_ANIMS = 3
     
     LEFT,RIGHT=range(2)
 
-    def __init__(self, text, width, height, ofsx):
+    def __init__(self, text, width, height, ofsx, move_freely=False):
         Entity.__init__(self)
 
         self.pwidth = width / defaults.tiles_size[0]
@@ -71,6 +71,7 @@ class Player(Entity):
         self.inventory = []
         self.ordered_respawn_positions = []
         self.ammo = 0
+        self.move_freely = move_freely
 
         # XXX use AnimTile instead
         self.tiles = []
@@ -90,9 +91,12 @@ class Player(Entity):
         for proper respawning"""
         self.vel = [0, 0]
         self.acc = [0, self.level.gravity]
-        self.in_jump, self.block_jump, self.block_shoot, self.moved_once = True, False, False, False
+        self.in_jump = self.block_jump = self.level.gravity > 0
+        self.block_shoot, self.moved_once, self.setup_autoscroll = False, False, False
         self.cur_tile = Player.ANIM_WALK
         self.dir = Player.RIGHT
+        
+        self.level.PushAutoScroll(0.0)
 
         # disable all perks
         if hasattr(self, "perks"):
@@ -303,7 +307,7 @@ class Player(Entity):
 
             self.moved_once = True
 
-        if defaults.debug_updown_move is True:
+        if defaults.debug_updown_move is True or self.move_freely is True:
             if inp.IsKeyDown(KeyMapping.Get("move-up")):
                 self.pos[1] -= time * defaults.move_speed[1]
                 self.moved_once = True
@@ -311,7 +315,7 @@ class Player(Entity):
                 self.pos[1] += time * defaults.move_speed[1]
                 self.moved_once = True
         else:
-            if inp.IsKeyDown(sf.Key.Up):
+            if inp.IsKeyDown(KeyMapping.Get("move-up")):
                 if self.in_jump is False and self.block_jump is False:
                     self.vel[1] -= defaults.jump_vel * self.jump_scale
                     self.in_jump = self.block_jump = True
@@ -349,23 +353,18 @@ class Player(Entity):
             self._Kill("the map's border")
 
         self._CheckForLeftMapBorder()
-        self._MoveMap(time)
-        self._CheckForRightMapBorder()
-        
         self._UpdatePostFX()
+        
+        self.level.Scroll(self.pos)
+        if self.moved_once is True:
+            if self.setup_autoscroll is False:
+                self.level.PopAutoScroll()
+                self.setup_autoscroll = True
 
     def _CheckForLeftMapBorder(self):
         """Check if we passed the left border of the game, which is
-        generally a bad idea. """
-
-        origin = self.game.GetLevel().GetOrigin()
-        if defaults.debug_godmode is True or defaults.debug_scroll_both is True:
-            # GODMODE: scroll to the left as usual
-            rmax = float(defaults.right_scroll_distance)
-            if self.pos[0] < origin[0] + defaults.tiles[0] + rmax:
-                self.game.GetLevel().SetOrigin((self.pos[0] - rmax, origin[1]))
-                return
-        
+        generally a bad idea because it's the last thing you do """
+        origin = self.level.GetOrigin()
         if self.pos[0] < origin[0]:
             if self.pos[0] + self.pwidth > origin[0]:
 
@@ -386,22 +385,6 @@ class Player(Entity):
                     print("Can't restore old color, seemingly the player color " + \
                           "changed while the entity resided in the left danger area")
                 delattr(self, "restore_color")
-
-    def _CheckForRightMapBorder(self):
-        """Check if we approached the right border of the game, which
-        forces the map to scroll immediately"""
-        origin = self.game.GetLevel().GetOrigin()
-        rmax = float(defaults.right_scroll_distance)
-        if self.pos[0] > origin[0] + defaults.tiles[0] - rmax:
-            self.game.GetLevel().SetOrigin((self.pos[0] - defaults.tiles[0] + rmax, origin[1]))
-
-    def _MoveMap(self, dtime):
-        """Move the map view origin according to a time function"""
-        if self.moved_once is False:
-            return
-            
-        origin = self.game.GetLevel().GetOrigin()
-        self.game.GetLevel().SetOrigin((origin[0] + dtime * defaults.move_map_speed, origin[1]))
 
     def _UpdatePostFX(self):
         origin = self.game.GetLevel().GetOrigin()
@@ -491,7 +474,7 @@ class Player(Entity):
                 newpos[1] = mycorner[1] - self.pheight
                 newvel[1] = min(0, newvel[1])
                 
-                fric = collider.GetFriction()*time # XXX too layz to think of a pure arithmetic solution
+                fric = collider.GetFriction()*time # XXX too lazy to think of a pure arithmetic solution
                 newvel[0] = newvel[0] - (min(newvel[0],fric) if newvel[0]>0 else max(newvel[0],-fric))
                 floor_touch = True
                 #print("floor")

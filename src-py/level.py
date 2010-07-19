@@ -40,7 +40,18 @@ class Level:
     for both drawing and updating - also it maintains the list of all entities
     in the level"""
     
-    def __init__(self, level, game, lines, color=sf.Color.Black, vis_ofs=0, postfx= [("ingame1.sfx",())], name=None, gravity=None):
+    SCROLL_LEFT,SCROLL_RIGHT,SCROLL_TOP,SCROLL_BOTTOM = 1,2,4,8
+    SCROLL_ALL = 0xf
+    
+    def __init__(self, level, game, lines, 
+        color=sf.Color.Black, 
+        vis_ofs=0, 
+        postfx= [("ingame1.sfx",())], 
+        name=None, 
+        gravity=None,
+        autoscroll_speed=None,
+        scroll=None
+        ):
         """Construct a level given its textual description 
         
         Parameters:
@@ -51,6 +62,10 @@ class Level:
             vis_ofs -- Offset on the y axis where the visible part 
                of the level starts. The number of rows is constant.
         """
+        
+        self.scroll = [scroll or Level.SCROLL_RIGHT]
+        self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
+        
         self.entities, self.entities_add, self.entities_rem, self.entities_mov = set(), set(), set(), set()
         self.origin = [0, 0]
         self.game = game
@@ -298,6 +313,52 @@ class Level:
         return point[0] > self.origin[0] and point[0] < self.origin[0]+defaults.tiles[0] and \
             point[1] > self.origin[1] and point[1] < self.origin[1]+defaults.tiles[1]
             
+    def _DoAutoScroll(self, dtime):
+        """Move the map view origin to the right according to a time function"""    
+        if self.scroll[-1] & Level.SCROLL_LEFT == 0:
+            self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1], self.origin[1]))
+        
+    def Scroll(self,pos):
+        """ Update the view according to the player's position 'pos' 
+        and the levels scrolling settings"""
+        scroll = self.scroll[-1] 
+        if defaults.debug_godmode is True:
+            scroll |= Level.SCROLL_RIGHT|Level.SCROLL_LEFT if (scroll & (Level.SCROLL_LEFT|Level.SCROLL_RIGHT)) else 0
+            scroll |= Level.SCROLL_TOP|Level.SCROLL_BOTTOM if (scroll & (Level.SCROLL_TOP|Level.SCROLL_BOTTOM)) else 0
+        
+        if scroll & Level.SCROLL_LEFT:
+            rmax = float(defaults.left_scroll_distance)
+            if pos[0] < self.origin[0] + rmax:
+                self.SetOrigin((pos[0] - rmax, self.origin[1]))
+                return
+            
+        if scroll & Level.SCROLL_RIGHT:
+            rmax = float(defaults.right_scroll_distance)
+            if pos[0] > self.origin[0] + defaults.tiles[0] - rmax:
+                self.SetOrigin((pos[0] - defaults.tiles[0] + rmax, self.origin[1]))
+                
+        if scroll & Level.SCROLL_TOP:
+            rmax = float(defaults.top_scroll_distance)
+            if pos[1] < self.origin[1] + rmax:
+                self.SetOrigin((self.origin[0], pos[1] - rmax))
+                
+        if scroll & Level.SCROLL_BOTTOM:
+            rmax = float(defaults.bottom_scroll_distance)
+            if pos[1] > self.origin[1] + defaults.tiles[1] - rmax:
+                self.SetOrigin((self.origin[0], pos[1] - defaults.tiles[1] + rmax))
+                
+    def PushAutoScroll(self,status):
+        self.autoscroll_speed += [status]
+        
+    def PopAutoScroll(self):
+        del self.autoscroll_speed[-1]
+        
+    def PushScroll(self,scroll):
+        self.scroll += [scroll]
+        
+    def PopScroll(self):
+        del self.scroll[-1]
+            
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame
@@ -316,6 +377,8 @@ class Level:
         self.entities_active.update(self.window_unassigned)
         for entity in self.EnumActiveEntities():
             entity.Update(time,dtime)
+            
+        self._DoAutoScroll(dtime)
         
         havepfx = False
         for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
