@@ -62,7 +62,7 @@ class Level:
             vis_ofs -- Offset on the y axis where the visible part 
                of the level starts. The number of rows is constant.
         """
-        
+        from tile import TileLoader
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
         
@@ -91,6 +91,9 @@ class Level:
         self.lines = lines = lines.split("\n")
         assert len(lines) > 0
         
+        lvbase = os.path.join(defaults.data_dir, "levels", str(level))
+        tlbase = os.path.join(defaults.data_dir, "tiles")
+        
         try:
             for y, line in enumerate(lines):
                 line_idx += 1
@@ -100,23 +103,23 @@ class Level:
 
                 assert len(line) % 3 == 0
                 for x in range(0, len(line), 3):
-                    ccode = line[x]
                     tcode = line[x + 1] + line[x + 2]
 
                     if tcode[0] in spaces:
                         continue
                     
-                    from tile import TileLoader
+                    ccode = line[x]
                         
                     # read from the private attachment tiles of the level if the tile
                     # code starts with a lower-case character
-                    if tcode[0] in "abcdefghijklmnopqrstuvwxyz":
-                        tile = TileLoader.Load(os.path.join(defaults.data_dir, "levels", str(level), tcode + ".txt"), game)
+                    if 122 >= ord( tcode[0] ) >= 97: #   in "abcdefghijklmnopqrstuvwxyz":
+                        tile = TileLoader.Load(lvbase + "/" + tcode + ".txt", game)
                     else:
                         tile = None
                         
                     if tile is None:
-                        tile = TileLoader.Load(os.path.join(defaults.data_dir, "tiles", tcode + ".txt"), game)
+                        # (HACK) avoid os.path.join() calls
+                        tile = TileLoader.Load(tlbase + "/" + tcode + ".txt", game)
                             
                     tile.SetColor(LevelLoader.cached_color_dict[ccode])
                     tile.SetPosition((x // 3, y - vis_ofs))

@@ -40,8 +40,14 @@ class Tile(Entity):
     Extends Entity with more specialized behaviour."""
     
     AUTO=-1
-
-        
+    
+    # These caches are a quick attempt to optimize performance.
+    # Obvisouly, since these dicts are indexed by full-length
+    # tile strings, lookup performance is quite low.
+    
+    global_dim_cache = {} # stores (dim,ofs) tuples
+    global_str_cache = {} # stores sf.String's indexed by (str,rsize) pairs
+           
     def __init__(self,text="<no text specified>",width=None,height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default",width_ofs=0,height_ofs=0):
         
         # Note: the 'constants' from defaults may change during startup, but 
@@ -79,7 +85,7 @@ class Tile(Entity):
         
     def _GuessRealBB(self,text):
         """Return adjusted (width,height) (xofs,yofs) tuples
-        basing on the current values and self.text"""
+        basing on the current values and 'text' """
         
         
         # XXX Font.Glyph[i].Rectangle() does not seem to provide reliable results
@@ -126,6 +132,10 @@ class Tile(Entity):
                     
                 r = max(gl.Rectangle.Right,r)
         """
+        
+        res = Tile.global_dim_cache.get(text)
+        if not res is None:
+            return res
         
         b,r,t,l = 0,0,1e6,1e6
         
@@ -183,6 +193,7 @@ class Tile(Entity):
         ofs = l*self.scale/ls[0],t*self.scale/ls[1]  
         #print(dim,ofs)
         
+        Tile.global_dim_cache[text] = dim,ofs
         return dim,ofs
 
     def Interact(self,other):
@@ -215,16 +226,19 @@ class Tile(Entity):
 
     def _Recache(self):
         """Cache the tile string from self.text with font size self.rsize"""
-        font = FontCache.get(self.rsize)
-        self.cached = [(True,sf.String(self.text,Font=font,Size=self.rsize))]
+        res = Tile.global_str_cache.get((self.rsize,self.text))
+        if res is None:
+            font = FontCache.get(self.rsize)
+            res = sf.String(self.text,Font=font,Size=self.rsize)
+            
+            Tile.global_str_cache[(self.rsize,self.text)] = res
+        
+        self.cached = [(True,res)]
         
         img = self._GetHaloImage()
         if not img is None:
             self.cached.append((False,sf.Sprite(img)))
             self.cached[-1][1].Resize(self.dim[0] * defaults.tiles_size_px[0],self.dim[1] * defaults.tiles_size_px[1])
-        
-        for elem in self.cached:
-            elem[1].SetColor(self.color)
             
     def _EnumCached(self):
         return [e[1] for e in self.cached]
@@ -251,6 +265,8 @@ class Tile(Entity):
         render target and the coordinate system origin for the tile"""
         lv = self.game.GetLevel()
         for offsetit, elem in self.cached: 
+            
+            elem.SetColor(self.color)
             if offsetit is True:
                 lv.DrawSingle(elem,(self.pos[0]-self.ofs[0],self.pos[1]-self.ofs[1]))
             else:
@@ -261,6 +277,7 @@ class Tile(Entity):
         position. The offset is specified in tile coordinates"""
         lv = self.game.GetLevel()
         for offsetit, elem in self.cached: 
+            elem.SetColor(self.color)
             lv.DrawSingle(elem,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
 
 
