@@ -32,8 +32,8 @@ class LevelEntrance(Tile):
     """Only found on the campaign world map, marks the entrance
     to a particular level"""
     
-    def __init__(self,width=Tile.AUTO,height=Tile.AUTO,next_level=5):
-        Tile.__init__(self,width,height)
+    def __init__(self,width=Tile.AUTO,height=Tile.AUTO,next_level=5,draworder=15000):
+        Tile.__init__(self,width,height,draworder=draworder)
         self.next_level = next_level
         
     def Interact(self,other):
