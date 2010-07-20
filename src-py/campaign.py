@@ -17,6 +17,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# Python core
+import os
+
 # PySFML
 import sf
 
@@ -74,18 +77,36 @@ class LevelEntrance(AnimTile):
         if self.done is True:
             return
         
+        # try to obtain the written name of the level by
+        # skimming through its shebang line looking
+        # for name="..."
+        file = os.path.join(defaults.data_dir, "levels", str(self.next_level)+".txt")
+        name = "Level {0}".format(self.next_level)
+        try:
+            with open(file,"rt") as file:
+                import re
+                look = re.search(r"name=\"(.+?)\"",file.read(250))
+                if not look is None:
+                    name = look.groups()[0]
+                    print("Guess level name for {0}: {1}".format(self.next_level,name))
+        except IOError:
+            # LevelLoader will take care of this error, we don't bother for now
+            pass
+        
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("escape"))
         def on_close(key):
             if key == accepted[0]:
                 self.game.PushLevel(self.next_level)
                 raise NewFrame()
             
-        self.game.FadeOutAndShowStatusNotice("""Enter {1}? You might die here, so be careful. 
+        self.game.FadeOutAndShowStatusNotice("""Enter '{1}'? 
+You might die at this place, so be careful. 
+
 Press {0} to risk it and {2} to leave.""".format(
                 KeyMapping.GetString("accept"),
-                "Level {0}".format(self.next_level),
+                name,
                 KeyMapping.GetString("escape")),
-            defaults.game_over_fade_time,(550,60),0.0,accepted,sf.Color.White,on_close)
+            defaults.game_over_fade_time,(550,85),0.0,accepted,sf.Color.White,on_close)
         
         
 class Blocker(AnimTile):
