@@ -403,8 +403,6 @@ class TileLoader:
                 with open(file,"rt") as f:
                     lines = f.read().split("\n",1)
                     assert len(lines)==2
-
-                    TileLoader.cache[file] = lines
                       
             except IOError:
                 print("Could not open "+file+" for reading")
@@ -413,26 +411,25 @@ class TileLoader:
                 print("File "+file+" is not well-formatted:")
                 traceback.print_exc()
 
-        if lines is None:
-            return Tile()
+            replace = {
+                    "<out>"  : "entity",
+                    "<raw>"  : 'r"""'+lines[1].rstrip()+' """',
+                    "<game>" : "game"
+            }
 
-        replace = {
-            "<out>"  : "entity",
-            "<raw>"  : 'r"""'+lines[1].rstrip()+' """',
-            "<game>" : "game"
-        }
-
-        l = lines[0]
-        for k,v in replace.items():
-            l = l.replace(k,v)
+            lines = lines[0]
+            for k,v in replace.items():
+                lines = lines.replace(k,v)
+                
+            TileLoader.cache[file] = lines = compile(lines,"<shebang-string>","exec")
 
         #print(l)
         tempdict = dict(locals())
 
         try:
-            exec(l,globals(),tempdict)
+            exec(lines,globals(),tempdict)
         except:
-            print("exec() fails loading tile {0}, executing line: {1} ".format(file,l))
+            print("exec() fails loading tile {0}, executing line: {1} ".format(file,lines))
             traceback.print_exc()
             
         tile = tempdict.get("entity",Tile())
