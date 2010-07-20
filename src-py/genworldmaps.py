@@ -29,11 +29,18 @@ defaults.update_derived()
 from bitmaploader import Bitmap
 
 color_dict = collections.defaultdict(lambda : ".  ", {
-    (0x0,0x0,0xff)   : "bg1",    
+    (0x0,0x0,0xff)   : "bw1",    
     (0x0,0xff,0x0)   : "gg1",
     (0x0,0x90,0x0)   : "dg1",
+    (0x0,0x0,0x90)   : "bw1",
     (0x0,0x0,0x0)    : "_c0"                                   
 })
+
+large_tiles = {
+    ("bw1") : { (2,2) : "bw2", (4,4) : "bw3", (6,6) : "bw0" },
+    ("gg1") : { (2,2) : "gg2", (4,4) : "gg3"},
+    ("dg1") : { (2,2) : "dg2", (4,4) : "dg3"} 
+}
 
 path = os.path.join( defaults.data_dir, "levels", "30000" )
 level_file = os.path.join(defaults.data_dir,"levels","30000.txt")
@@ -45,15 +52,61 @@ def main():
     bm.output()
     
     output = ""
+    cells = []
     
     w,h = bm.width,bm.height
     for y in range(h):
+        cells.append([])
         for x in range(w):
-            output += color_dict[tuple( reversed( bm.get_pixel_color(x,y) ))] # bgr - rgb
+            cells[-1].append(color_dict[tuple( reversed( bm.get_pixel_color(x,y) ))]) # bgr - rgb
+    
+    # look for optimization opportunities. Just a quick implementation,
+    # I won't bother solving the packaging problem *again* ...
+    for y in range(h):
+        for x in range(w):
+            thiscell = cells[y][x]
+            d = large_tiles.get(thiscell)
+            if d is None:
+                continue
+            
+            for k,v in sorted( d.items(), key=lambda e:e[0][0]*e[0][1], reverse=True ):
+                ww,hh = k
+                ww = min(x+ww,w-1)-x
+                hh = min(y+hh,h-1)-y
+                for yy in range(hh):
+                    for xx in range(ww):
+                        if cells[yy+y][xx+x] != thiscell:
+                            break
+                    else:
+                        continue
+                    break
+                else:
+                    print("match: {0} {1} for {2}".format(k[0],k[1],cells[y][x]))
+                    cells[y][x] = v 
+                    for yy in range(0,hh):
+                        for xx in range(0,ww):
+                            if yy+xx > 0:
+                                cells[y+yy][x+xx] = ".  "
+                            
+                    break
+                
+    # Merge with extra_items.txt
+    with open(os.path.join(path,"extra_items.txt"),"rt") as extra:
+        lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
+        for x,y,e in lines:
+            cells[int(x)][int(y)] = e
+            print("place entity {0} at {1}/{2}".format(e,x,y))
+    
+    for row in cells:
+        for cell in row:     
+            output += cell
+            
         output += "\n"
             
     with open(level_file,"wt") as out:
         out.write(level_template+output)
+        
+    print("***DONE*** wrote output file")
 
 if __name__ == "__main__":
     main()
