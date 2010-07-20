@@ -1,5 +1,5 @@
 from tile import Tile; <out> = Tile(<raw>,5,3,halo_img=None,collision=Entity.ENTER)
-iiiii
-iiiii
-iiiii
+igiii
+iippi
+poopp
 

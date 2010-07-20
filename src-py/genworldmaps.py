@@ -30,8 +30,10 @@ from bitmaploader import Bitmap
 
 color_dict = collections.defaultdict(lambda : ".  ", {
     (0x0,0x0,0xff)   : "bw1",    
+    (0x50,0x50,0xff) : "Bw1",    
     (0x0,0xff,0x0)   : "gg1",
-    (0x0,0x90,0x0)   : "dg1",
+    (0x0,0x90,0x0)   : "dd1",
+    (0x90,0x90,0x0)  : "~d1",
     (0x0,0x0,0x90)   : "bw1",
     (0x0,0x0,0x0)    : "_c0"                                   
 })
@@ -39,7 +41,8 @@ color_dict = collections.defaultdict(lambda : ".  ", {
 large_tiles = {
     ("bw1") : { (2,2) : "bw2", (4,4) : "bw3", (6,6) : "bw0" },
     ("gg1") : { (2,2) : "gg2", (4,4) : "gg3"},
-    ("dg1") : { (2,2) : "dg2", (4,4) : "dg3"} 
+    ("dd1") : { (2,2) : "dd2", (4,4) : "dd3"},
+    ("~d1") : { (2,2) : "~d2", (4,4) : "~d3"} 
 }
 
 path = os.path.join( defaults.data_dir, "levels", "30000" )

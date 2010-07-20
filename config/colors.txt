@@ -9,6 +9,9 @@ g=00ff00
 # Blue
 b=0000ff
 
+# Light Blue
+B=5050ff
+
 # Yellow
 y=ffff00
 

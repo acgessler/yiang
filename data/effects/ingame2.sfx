@@ -38,7 +38,7 @@ effect
 #ifdef ENABLE_DITHER
 	vec4 dither = noise(randomUV+tin);
 #endif
-	float scale =  clamp((length(tin-cur))*1.55,0.0,1.0);
+	float scale =  clamp((length(tin-cur))*0.8,0.0,1.0);
 	vec4 color = (pixel+another+notthis+evenmor)*0.25;
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);

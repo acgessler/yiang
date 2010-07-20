@@ -1,4 +1,4 @@
-from tile import Tile; <out> = Tile(<raw>,20,12,halo_img=None,collision=Entity.ENTER)
+from tile import Tile; <out> = Tile(<raw>,20,12,halo_img=None,collision=Entity.BLOCK)
 iiiiiiiiiiiiiiiiiiii
 iiiiiPiiiiiiiiiiiiii
 iiiiiiiiiiiiiiiiiiii
