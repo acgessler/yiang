@@ -567,6 +567,25 @@ Hit {2} to return to the menu""").format(
     
     def PushLevel(self,idx):
         """Load another level on top of this level"""
+        if [e for e in self.level_chain if e[0] == idx]:
+            # if this level is already in the chain,
+            # drop all levels until we're back there.
+            # This way, the player can enter lv N from
+            # the world map, move over to lv N+1 and
+            # find a teleporter that brings him back
+            # to his last position in the world map.
+            for n,(i,l) in enumerate(reversed(self.level_chain)):
+                if i==idx:
+                    break
+                 
+                print("Leaving level {0} [unwinding level chain]".format(i))
+                for entity in l.EnumAllEntities():
+                    entity.OnLeaveLevel()
+                    
+            self.level_chain = self.level_chain[:-n]
+            self.level_idx, self.level = i,l
+            return
+        
         if not self.level is None:
             self.level_chain += [(self.level_idx,self.level)]
             
@@ -578,7 +597,7 @@ Hit {2} to return to the menu""").format(
         """ """
         return self.level_chain
     
-    def DropLevel(self):
+    def DropLevel(self,idx=None):
         """Unload the current level, leaving the game area totally
         empty (which is a valid state, however)"""
         if self.level is None:
