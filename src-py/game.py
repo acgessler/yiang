@@ -81,6 +81,8 @@ class Game(Drawable):
         self.level = None
         self.level_chain = []
         
+        self.levels_done = set()
+        
         # Load the first level for testing purposes
         # self.LoadLevel(1)
          
@@ -95,6 +97,12 @@ class Game(Drawable):
         self.suspended = []
         
         self.draw_counter = 0
+        
+    def GetDoneLevels(self):
+        return self.levels_done
+    
+    def MarkLevelDone(self,level):
+        self.levels_done.add(level)
         
     def GetGameMode(self):
         return self.mode
@@ -594,6 +602,9 @@ Hit {2} to return to the menu""").format(
         
         self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
         self.suspended.pop()
+        
+    def FadeOutAndShowStatusNotice(self,*args,**kwargs):
+        return self._FadeOutAndShowStatusNotice(*args,**kwargs)
 
     def _FadeOutAndShowStatusNotice(self,
         text,
@@ -621,6 +632,10 @@ Hit {2} to return to the menu""").format(
             self.PopSuspend()
             on_close(result)
             
+        if not isinstance(text,sf.String):
+            text = sf.String(text,Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+            ))
             
         from notification import MessageBox
         Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper))

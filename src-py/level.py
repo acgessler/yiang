@@ -141,6 +141,9 @@ class Level:
         self._GenerateWindows()
         self._UpdateEntityList()
         
+    def GetLevelIndex(self):
+        return self.level
+        
     def _GenerateWindows(self):
         """Subdivide the whole scene into windows"""
         self.windows = []

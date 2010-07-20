@@ -1,6 +1,15 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,next_level=2)
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,7,1,1.0,2,next_level=2)
   _______
  |       |
+|         |
+|    O    |
+|  __O__  |
+| |     | |
+PPO     OPP
+
+
+  _______
+ | DONE  |
 |         |
 |    O    |
 |  __O__  |
