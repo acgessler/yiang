@@ -375,7 +375,7 @@ TimeDelta:         {dtime:.4}
         """Award a certain amount of points to the player's
         score as a reward for extreme skillz."""
         pp = points*self.speed_scale
-        self.score += pp
+        self.score = max(0, self.score + pp )
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         return pp
     
