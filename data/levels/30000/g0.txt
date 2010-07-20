@@ -1,4 +1,4 @@
-from tile import AnimTile; <out> = AnimTile(<raw>,18,3,5.0,halo_img=None,collision=Entity.ENTER,randomize=True)
+from tile import AnimTile; <out> = AnimTile(<raw>,18,3,5.4,halo_img=None,collision=Entity.ENTER,randomize=True)
 iiiiiiiiiiiiiiiiiiiiiiiiiiiiii
 iiiiiiiiiiiiiiiiiiiiiiiiiiiiii
 iiiiiiiiiiiiiiiiiiiiiiiiiiiiii

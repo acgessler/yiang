@@ -45,12 +45,12 @@ class Enemy(AnimTile):
     def _Die(self):
         """Invoked when the enemy is slayed"""
         self.game.RemoveEntity(self)
-        self.game.AddEntity(ScoreTileAnimStub("Bonus for Slaying: {0:4.4} ct".format(self.game.Award(self._GetScoreAmount())),self.pos,1.0))
+        self.game.AddEntity(ScoreTileAnimStub("Slayer's Penalty: {0:4.4} ct".format(self.game.Award(self._GetScoreAmount())),self.pos,1.0))
         self._SpreadSplatter()
         
     def _GetScoreAmount(self):
         """Get the score the player receives for slaying this enemy"""
-        return 0.05
+        return -0.05
         
     def _SpreadSplatter(self):
         name = "splatter1.txt"
@@ -95,7 +95,7 @@ class SmallTraverser(Enemy):
         return 2100
     
     def _GetScoreAmount(self):
-        return 0.05
+        return -0.05
 
     def Update(self, time_elapsed, time):
         AnimTile.Update(self, time_elapsed, time)
@@ -205,7 +205,7 @@ class SmallBob(Enemy):
         return 2100
     
     def _GetScoreAmount(self):
-        return 0.08
+        return -0.08
     
     def Interact(self, other):
         """SmallBob needs 4 hits to die"""

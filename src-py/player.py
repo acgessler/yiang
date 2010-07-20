@@ -54,7 +54,7 @@ class Player(Entity):
     
     LEFT,RIGHT=range(2)
 
-    def __init__(self, text, width, height, ofsx, move_freely=False):
+    def __init__(self, text, width, height, ofsx, move_freely=False, draworder=1000):
         Entity.__init__(self)
 
         self.pwidth = width / defaults.tiles_size[0]
@@ -63,6 +63,7 @@ class Player(Entity):
         
         # XXX get rid of pwith and pheight
         self.dim = self.pwidth,self.pheight
+        self.draworder = draworder
 
         lines = text.split("\n")
         height = len(lines) // (Player.MAX_ANIMS*2)
@@ -218,7 +219,7 @@ class Player(Entity):
             tile.SetColor(pos)
             
     def GetDrawOrder(self):
-        return 1000
+        return self.draworder
         
     def OnLeaveLevel(self):
         for perk in list(self.perks):
@@ -665,7 +666,7 @@ class InventoryChangeAnimStub(Tile):
     the player adds or removes an item from the inventory."""
 
     def __init__(self,text,pos,speed=1.0,color=sf.Color.Green):
-        Tile.__init__(self,text)
+        Tile.__init__(self,text,draworder=11002)
         
         self.SetPosition( pos )
         self.speed = speed
