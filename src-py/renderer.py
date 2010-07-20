@@ -17,6 +17,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# Python core
+import os
+
 # PySFML
 import sf
 
@@ -186,6 +189,72 @@ class Renderer:
             print("Need to support postprocessing effects, buy better hardware!")
             import sys
             sys.exit(-100)
+            
+    @staticmethod
+    def _DoSingleFrame():
+        """ """
+        event = sf.Event()
+        Renderer.draw_counter, Renderer.inrange = 0, 0
+        Renderer.events = set()
+        
+        while Renderer.app.GetEvent(event):
+            #Close window : exit
+            if event.Type == sf.Event.Closed:
+                Renderer.app.Close()
+
+                Renderer.loop_running = False
+                return True
+
+            Renderer.events.add(event)
+            event = sf.Event()
+
+        # The background color is not a Drawable because it is *always* first, and active
+        Renderer.app.Clear(Renderer.clear_color)
+
+        drawable = None
+        try:
+            for drawable in sorted(Renderer.drawables, key=lambda x: x.GetDrawOrder()):
+                drawable.Draw()
+        except NewFrame:
+            pass
+        except Exception as ex:
+            print("[Responsible seems to be a {0} instance]".format(type(drawable)))
+            raise
+
+        # update the drawables list, handle dependencies of changed drawables, notify the drawables.
+        cpy = set(Renderer.drawables_add)
+        Renderer.drawables_add = set()
+        
+        for entity in cpy:
+            Renderer.drawables.add(entity)
+            if hasattr(entity, "__drawable_deps__"):
+                for dep in entity.__drawable_deps__:
+                    try:
+                        Renderer.drawables.remove(dep)
+                        dep.OnRemoveFromRenderer()
+                    except KeyError:
+                        pass
+                    
+            entity.OnAddToRenderer()
+
+        cpy = set(Renderer.drawables_rem)
+        Renderer.drawables_rem = set()
+        for entity in cpy:
+            try:
+                Renderer.drawables.remove(entity)
+                if hasattr(entity, "__drawable_deps__"):
+                     for dep in entity.__drawable_deps__:
+                         Renderer.drawables.add(dep)
+                         dep.OnAddToRenderer()
+                         
+                     delattr(entity, "__drawable_deps__")
+            except KeyError:
+                pass
+            
+            entity.OnRemoveFromRenderer()
+
+        # toggle front and backbuffer
+        Renderer.app.Display()
 
     @staticmethod
     def DoLoop():
@@ -200,74 +269,29 @@ class Renderer:
 
         try:
             
-            event = sf.Event()
+            cnt, profiles = 0,0
             while Renderer.app.IsOpened():
-                Renderer.draw_counter, Renderer.inrange = 0, 0
-                Renderer.events = set()
                 
-                while Renderer.app.GetEvent(event):
-                    #Close window : exit
-                    if event.Type == sf.Event.Closed:
-                        Renderer.app.Close()
-
-                        Renderer.loop_running = False
-                        return True
-
-                    Renderer.events.add(event)
-                    event = sf.Event()
-
-                # The background color is not a Drawable because it is *always* first, and active
-                Renderer.app.Clear(Renderer.clear_color)
-
-                drawable = None
-                try:
-                    for drawable in sorted(Renderer.drawables, key=lambda x: x.GetDrawOrder()):
-                        drawable.Draw()
-                except NewFrame:
-                    pass
-                except Exception as ex:
-                    print("[Responsible seems to be a {0} instance]".format(type(drawable)))
-                    raise
-
-                # update the drawables list, handle dependencies of changed drawables, notify the drawables.
-                cpy = set(Renderer.drawables_add)
-                Renderer.drawables_add = set()
-                
-                for entity in cpy:
-                    Renderer.drawables.add(entity)
-                    if hasattr(entity, "__drawable_deps__"):
-                        for dep in entity.__drawable_deps__:
-                            try:
-                                Renderer.drawables.remove(dep)
-                                dep.OnRemoveFromRenderer()
-                            except KeyError:
-                                pass
-                            
-                    entity.OnAddToRenderer()
-
-                cpy = set(Renderer.drawables_rem)
-                Renderer.drawables_rem = set()
-                for entity in cpy:
-                    try:
-                        Renderer.drawables.remove(entity)
-                        if hasattr(entity, "__drawable_deps__"):
-                             for dep in entity.__drawable_deps__:
-                                 Renderer.drawables.add(dep)
-                                 dep.OnAddToRenderer()
-                                 
-                             delattr(entity, "__drawable_deps__")
-                    except KeyError:
-                        pass
-                    
-                    entity.OnRemoveFromRenderer()
-
-                # toggle front and backbuffer
-                Renderer.app.Display()
+                # profile rendering
+                if defaults.profile_rendering is True and cnt == 600:
+                    cnt = 0
+                    profiles += 1
+                    import cProfile
+            
+                    fname = filename=os.path.join(defaults.profile_dir,"render_{0}.cprof".format(profiles))
+                    cProfile.runctx("Renderer._DoSingleFrame()", globals(), locals(), fname)
+            
+                    import pstats
+                    stats = pstats.Stats(fname)
+                    stats.strip_dirs().sort_stats('time').print_stats(20)
+                else:
+                    Renderer._DoSingleFrame()
+                    cnt += 1
 
         except _QuitNow:
             pass
 
-        Renderer.loop_running
+        Renderer.loop_running = False
         return False
 
     @staticmethod

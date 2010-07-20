@@ -88,16 +88,41 @@ organ_transplant_dollar_in = 1.0
 no_bg_music = False
 no_bg_sound = False
 audio_volume_scale = 0.10
+
+# don't render background bitmaps (halos)
+# this is what the configuration GUI calls 
+# 'optimize for low-end systems'
 no_halos = False
+
+# completely disable postprocessing
 no_ppfx = False
+
+# time the player is protected against harm 
+# after respawning, in seconds
 respawn_protection_time = 2.0
+
+# time the player is protected against harm 
+# after a teleport, in seconds
 teleport_protection_time = 1.5
+
+# profile any calls to LevelLoader.Load(), 
+# writes cProfile results to the profile directory
+# and dumps the 20 hottest locations to the console
+profile_level_loading = True
+
+# profile rendering. This is done by observing
+# every 600st frame for a level (~10s).
+# writes cProfile results to the profile directory
+# and dumps the 20 hottest locations to the console
+profile_rendering = True
+
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.
 root_dir = ".."
 data_dir = os.path.join(root_dir, "data")
+profile_dir = os.path.join(root_dir, "profile")
 config_dir = os.path.join(root_dir, "config")
 font_monospace = os.path.join(data_dir, "fonts", "VeraMoBd.ttf")
 font_lives = font_monospace

@@ -543,7 +543,18 @@ Hit {2} to return to the menu""").format(
         """Load a particular level and drop the old one"""
         self.DropLevel()
         self.level_idx = idx
-        self.level = LevelLoader.LoadLevel(idx,self)
+        
+        if defaults.profile_level_loading is True:
+            import cProfile
+            
+            fname = filename=os.path.join(defaults.profile_dir,"load_level.cprof")
+            cProfile.runctx("self.level = LevelLoader.LoadLevel(idx,self)", globals(), locals(), fname)
+    
+            import pstats
+            stats = pstats.Stats(fname)
+            stats.strip_dirs().sort_stats('time').print_stats(20)
+        else: 
+            self.level = LevelLoader.LoadLevel(idx,self)
         return False if self.level is None else True
     
     def PushLevel(self,idx):
