@@ -361,6 +361,12 @@ class Level:
         
     def PopScroll(self):
         del self.scroll[-1]
+        
+    def GetScroll(self):
+        return self.scroll[-1]
+    
+    def GetAutoScroll(self):
+        return self.autoscroll_speed[-1]
             
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,

@@ -33,6 +33,7 @@ from game import Entity, Game
 from renderer import NewFrame, Drawable, Renderer
 from tile import Tile
 from keys import KeyMapping
+from level import Level
 
 class InventoryItem:
     """Base class for inventory items.
@@ -347,11 +348,9 @@ class Player(Entity):
             self.pos[1] = 1
             self.in_jump, self.block_jump = False, False
             self.vel[1] = 0
-            
-        lv = self.game.GetLevel()
-        if self.pos[1] < lv.GetLevelVisibleSize()[1]-lv.GetLevelSize()[1] or self.pos[1] > defaults.tiles[1]:
-            self._Kill("the map's border")
 
+        self._CheckForTopMapBorder()
+        self._CheckForBottomMapBorder()
         self._CheckForLeftMapBorder()
         self._UpdatePostFX()
         
@@ -360,6 +359,16 @@ class Player(Entity):
             if self.setup_autoscroll is False:
                 self.level.PopAutoScroll()
                 self.setup_autoscroll = True
+                
+    def _CheckForTopMapBorder(self):
+        lv = self.game.GetLevel()
+        if lv.GetScroll() & Level.SCROLL_TOP == 0 and self.pos[1] < lv.GetLevelVisibleSize()[1]-lv.GetLevelSize()[1]:
+            self._Kill("the map's upper border")
+            
+    def _CheckForBottomMapBorder(self):
+        lv = self.game.GetLevel()
+        if  lv.GetScroll() & Level.SCROLL_BOTTOM == 0 and self.pos[1] > defaults.tiles[1]:
+            self._Kill("the map's lower border")
 
     def _CheckForLeftMapBorder(self):
         """Check if we passed the left border of the game, which is
