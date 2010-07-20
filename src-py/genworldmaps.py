@@ -47,7 +47,7 @@ large_tiles = {
 
 path = os.path.join( defaults.data_dir, "levels", "30000" )
 level_file = os.path.join(defaults.data_dir,"levels","30000.txt")
-level_template = """<out> = Level(<level>,<game>,<raw>,color=(15,30,15),postfx=[("ingame2.sfx",())],name="Map of the World",gravity=0.0,autoscroll_speed=0.0,scroll=Level.SCROLL_ALL)
+level_template = """from campaign import CampaignLevel; <out> = CampaignLevel(<level>,<game>,<raw>,name="Map of the World")
 """
 
 def main():

@@ -27,6 +27,26 @@ from renderer import NewFrame, Renderer
 from tile import AnimTile
 from player import Player
 from keys import KeyMapping
+from level import Level
+
+class CampaignLevel(Level):
+    """Slightly adjust the default level behaviour to allow for the
+    world's map to be rendered fluently."""
+    
+    def __init__(self, level, game, lines, name="Map of the World"):
+        Level.__init__(self,level,game, lines, 
+            color=(15,30,15),
+            postfx=[("ingame2.sfx",())],
+            name=name,
+            gravity=0.0,
+            autoscroll_speed=0.0,
+            scroll=Level.SCROLL_ALL)
+        
+    def Scroll(self,pos):
+        # Center the viewport around the player (this completely
+        # replaces the original implementation)
+        self.SetOrigin((pos[0]-defaults.tiles[0]/2,pos[1]-defaults.tiles[1]/2))
+        
 
 class LevelEntrance(AnimTile):
     """Only found on the campaign world map, marks the entrance
@@ -67,6 +87,15 @@ Press {0} to risk it and {2} to leave.""".format(
                 KeyMapping.GetString("escape")),
             defaults.game_over_fade_time,(550,60),0.0,accepted,sf.Color.White,on_close)
         
+        
+class Blocker(AnimTile):
+    pass
+
+
+
+
+
+
         
 
         
