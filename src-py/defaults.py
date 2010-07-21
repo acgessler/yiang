@@ -116,6 +116,13 @@ profile_level_loading = True
 # and dumps the 20 hottest locations to the console
 profile_rendering = True
 
+# Draw the HUD (minimap) in world maps. Disable if
+# this causes problems with your screen setup (i.e.
+# the player is no longer visible)
+world_draw_hud = True
+
+# Relative size of the minimap, x-axis
+minimap_size = 0.2
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

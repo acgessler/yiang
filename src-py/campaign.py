@@ -36,7 +36,7 @@ class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
     world's map to be rendered fluently."""
     
-    def __init__(self, level, game, lines, name="Map of the World"):
+    def __init__(self, level, game, lines, name="Map of the World", minimap="map.bmp"):
         Level.__init__(self,level,game, lines, 
             color=(15,30,15),
             postfx=[("ingame2.sfx",())],
@@ -44,6 +44,38 @@ class CampaignLevel(Level):
             gravity=0.0,
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL)
+        
+        self.minimap = minimap
+        if defaults.world_draw_hud is True:
+            self._LoadHUD()
+        
+    def Draw(self, time, dtime):
+        Level.Draw(self,time,dtime)
+        
+        if defaults.world_draw_hud is True:
+            self._DrawHUD()
+            
+    def _LoadHUD(self):
+        self.minimap_img, self.minimap_sprite = sf.Image(), None
+        if not self.minimap_img.LoadFromFile(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap )):
+            print("Failure loading HUD minimap from {0}".format(self.minimap))
+            return
+            
+        self.minimap_sprite = sf.Sprite(self.minimap_img)
+        
+        x = defaults.resolution[0]*defaults.minimap_size
+        y = x*self.minimap_img.GetWidth()/self.minimap_img.GetHeight()
+        self.minimap_sprite.SetPosition(100,defaults.resolution[1]-y-100)
+        
+        self.minimap_sprite.Resize(x,y)
+        self.minimap_sprite.SetColor(sf.Color(0xff,0xff,0xff,0x90))
+        self.minimap_sprite.SetBlendMode(sf.Blend.Alpha)
+            
+    def _DrawHUD(self):
+        if self.minimap_sprite is None:
+            return
+        
+        Renderer.app.Draw(self.minimap_sprite)
         
     def Scroll(self,pos):
         # Center the viewport around the player (this completely
