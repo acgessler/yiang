@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<gadget>
+  <name>YIANG Gadget</name>
+  <namespace>windows.sdk</namespace>
+  <version>0.1</version>
+  <author name="Tobias Rittig">
+    <info url="http://www.greentoken.de/yiang" />
+    <logo src="images/Joystick_colored.png" />
+  </author>
+  <copyright>&#169; 2010 Tobias Rittig</copyright>
+  <description>Sidebar gadget to view the Highscore, Updates or to communicate with other YIANG players.</description>
+  <icons>
+    <icon height="128" width="128" src="images/Joystick_colored.png" />
+  </icons>
+  <hosts>
+    <host name="sidebar">
+      <base type="HTML" apiVersion="1.0.0" src="YIANG.html" />
+      <permissions>Full</permissions>
+      <platform minPlatformVersion="1.0" />
+      <defaultImage src="images/Joystick_colored.png" />
+    </host>
+  </hosts>
+</gadget>

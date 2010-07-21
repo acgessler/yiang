@@ -1,0 +1,63 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=Unicode" />
+        <title>Hello World</title>
+        <style type="text/css">
+        body
+        {
+            margin: 0px;
+            width: 250px;
+            height: 200px;
+            font-family: verdana;
+            font-size: 15px;
+			overflow: visible;
+			/*filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr="#A0A0A0",EndColorStr="#CDCDCD");*/	
+        }
+		a
+		{
+		
+		}
+		a.Header:hover{color:#CBCBCB;font-size: 11px;}
+        #gadgetContent
+        {
+            
+            width: 230px;
+			height: 180px;
+            text-align: center;
+            overflow: hidden;
+			position:absolute;
+			left:2px;top:2px;
+			
+        }
+		.Header
+		{
+		margin-top: 10px;
+		font-size:12px;
+		color:#FAFAFA;
+		text-decoration:none;
+		}
+		.Highscore
+		{
+		font-size: 14px;
+		}
+		.Version
+		{
+		}
+        </style>
+        <script>
+            function init(){
+                var oBackground = document.getElementById("imgBackground");
+                oBackground.src = "images/background.png";
+			}
+        </script>
+    </head>
+    <body onload="init();" bgcolor="white" border="2">
+        <g:background id="imgBackground">
+            <div id="gadgetContent">
+				<div class="Header"><a class="Header" href="http://www.greentoken.de/yiang">the YIANG</a> | Gadget</div><br><br>
+				<div class="Highscore"><b>Highscore:</b><br>{Name}<br>{Highscore}</div><br>
+				<div class="Version"><b>current Version:</b><br>{Version}</div>
+			</div>
+		</g:background>
+    </body>
+</html>
