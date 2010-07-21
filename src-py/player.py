@@ -92,7 +92,6 @@ class Player(Entity):
         """Reset the state of the player instance, this is needed
         for proper respawning"""
         self.vel = [0, 0]
-        self.acc = [0, self.level.gravity]
         self.in_jump = self.block_jump = self.level.gravity > 0
         self.block_shoot, self.moved_once, self.setup_autoscroll = False, False, False
         self.cur_tile = Player.ANIM_WALK
@@ -282,12 +281,13 @@ class Player(Entity):
     def Update(self, time_elapsed, time):
         if self.game.IsGameRunning() is False:
             return
-
+        
         # Check if one of our perks has expired
         for perk in list(self.perks):
             perk._CheckIfExpired(self) 
         
         inp = Renderer.app.GetInput()
+        self.acc = [0, self.level.gravity]
         vec = [0, 0]
         
         pvely = self.vel[1]

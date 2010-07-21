@@ -45,12 +45,20 @@ large_tiles = {
     ("~d1") : { (2,2) : "~d2", (4,4) : "~d3"} 
 }
 
-path = os.path.join( defaults.data_dir, "levels", "30000" )
-level_file = os.path.join(defaults.data_dir,"levels","30000.txt")
-level_template = """from campaign import CampaignLevel; <out> = CampaignLevel(<level>,<game>,<raw>,name="Map of the World",minimap="map.bmp")
-"""
 
 def main():
+    for level in (30000,30001,30002,30003):
+        try:
+            process_map(level)
+        except IOError:
+            print("Failure processing level {0}, IOError occured".format(level))
+            
+    
+def process_map(level):
+    path = os.path.join( defaults.data_dir, "levels", str(level) )
+    level_file = os.path.join(defaults.data_dir,"levels",str(level)+".txt")
+    level_template = open(os.path.join(path, "shebang_template.txt"),"rt").read()
+    
     bm = Bitmap(os.path.join( path, "map.bmp" ))
     bm.output()
     
@@ -122,7 +130,7 @@ def main():
                         continue
                     break
                 else:
-                    print("match: {0} {1} for {2}".format(k[0],k[1],cells[y][x]))
+                    print("match: {0} {1} for {2} at {3}\{4}".format(k[0],k[1],cells[y][x],x,y))
                     cells[y][x] = v 
                     for yy in range(0,hh):
                         for xx in range(0,ww):
@@ -151,7 +159,7 @@ def main():
     with open(level_file,"wt") as out:
         out.write(level_template+output)
         
-    print("***DONE*** wrote output file, {0} tiles".format(cnt))
+    print("***DONE*** level {0}, wrote output file, {1} tiles".format(level,cnt))
 
 if __name__ == "__main__":
     main()
