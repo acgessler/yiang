@@ -141,17 +141,19 @@ class Game(Drawable):
 
         dtime = (self.time - self.last_time)*self.speed_scale
         self.last_time = self.time
-
-        if not self.level is None:
-            try:
-                self.level.Draw(self.time,dtime)
-
-            except NewFrame:
-                self._UndoFrameTime()
-                raise
         
-            if defaults.debug_draw_bounding_boxes:
-                self.level.DrawBoundingBoxes()
+        if dtime < defaults.delta_t_treshold: # swallow huge deltas
+
+            if not self.level is None:
+                try:
+                    self.level.Draw(self.time,dtime)
+
+                except NewFrame:
+                    self._UndoFrameTime()
+                    raise
+        
+                if defaults.debug_draw_bounding_boxes:
+                    self.level.DrawBoundingBoxes()
 
         self._DrawStatusBar()
 
@@ -624,6 +626,7 @@ Hit {2} to return to the menu""").format(
         """Increase the 'suspended' counter of the game by one. The
         game halts while the counter is not 0."""
         self.suspended.append(self.clock.GetElapsedTime())
+        self.level.PushAutoScroll(0.0)
             
     def PopSuspend(self):
         """Decrease the 'suspended' counter of the game by one. The
@@ -632,6 +635,7 @@ Hit {2} to return to the menu""").format(
         
         self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
         self.suspended.pop()
+        self.level.PopAutoScroll()
         
     def FadeOutAndShowStatusNotice(self,*args,**kwargs):
         return self._FadeOutAndShowStatusNotice(*args,**kwargs)
@@ -660,16 +664,14 @@ Hit {2} to return to the menu""").format(
         # status notice is visible.
         def on_close_wrapper(result):
             self.PopSuspend()
-            on_close(result)
             
-            self.level.PopAutoScroll(0.0)
+            on_close(result)
             
         if not isinstance(text,sf.String):
             text = sf.String(text,Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
             ))
             
-        self.level.PushAutoScroll(0.0)
             
         from notification import MessageBox
         Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper))

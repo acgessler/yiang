@@ -128,6 +128,9 @@ minimap_size = 0.2
 # Base alpha value for uncovered areas of the minimap
 minimap_alpha = 0x75
 
+# Maximum delta t - dt's over this limit are silently ignored
+delta_t_treshold = 0.2
+
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.
