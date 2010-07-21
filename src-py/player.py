@@ -174,6 +174,7 @@ class Player(Entity):
             
             item = ( yield item )
             if not item is None:
+                print("Remove inventory item during EnumInventoryItems!")
                 erase.append(item)
                 
         for item in erase:

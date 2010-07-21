@@ -49,6 +49,11 @@ class Shot(Tile):
         
     def Update(self,time_elapsed,time):
         self.pos = (self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed)
+        lvdim = self.level.GetLevelSize()
+        if self.pos[0] < 0 or self.pos[0] > lvdim[0] or self.pos[1] < 0 or self.pos[1] > lvdim[1]:
+            self.game.RemoveEntity(self)
+            return
+        
         rect = self.GetBoundingBox()
     
         # check for any collisions
@@ -94,6 +99,7 @@ class Weapon(InventoryItem, Tile):
         t.SetPosition(pos)
         t.SetOnHit(on_hit)
         t.SetColor(color)
+        t.SetLevel(self.level)
                 
         self.game.AddEntity(t)
     

@@ -206,7 +206,7 @@ class LevelEntrance(AnimTile):
         self.done = False
         
     def Interact(self,other):
-        if isinstance(other,Player) and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")) and not hasattr(self,"now_locked"):
+        if isinstance(other,Player) and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("accept")) and not hasattr(self,"now_locked"):
             self._RunLevel()
         
         return Entity.ENTER
