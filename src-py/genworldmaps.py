@@ -97,7 +97,7 @@ def main():
     with open(os.path.join(path,"extra_items.txt"),"rt") as extra:
         lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
         for x,y,e in lines:
-            cells[int(x)][int(y)] = e
+            cells[int(y)][int(x)] = e
             print("place entity {0} at {1}/{2}".format(e,x,y))
     
     for row in cells:

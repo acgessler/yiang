@@ -140,6 +140,7 @@ class Level:
         self._ComputeOrigin()
         self._GenerateWindows()
         self._UpdateEntityList()
+        self._ComputeOrigin()
         
     def GetLevelIndex(self):
         return self.level
@@ -441,7 +442,17 @@ class Level:
     def _ComputeOrigin(self):
         """Used internally to setup the initial origin of the
         of the level view."""
-        self.origin = (0, -defaults.status_bar_top_tiles)
+        
+        # (HACK) Locate the first Player entity
+        from player import Player
+        for entity in self.EnumAllEntities():
+            if isinstance(entity, Player):
+                self.SetOrigin((entity.pos[0]-defaults.tiles[0]/2,entity.pos[1]-defaults.tiles[1]/2))
+                break
+                
+        else:
+            self.SetOrigin((0, -defaults.status_bar_top_tiles))
+        
     
     def GetLevelSize(self):
         """Get the size of the current level, in tiles. The return
@@ -463,7 +474,7 @@ class Level:
     def SetOrigin(self, origin):
         """Change the view origin"""
         assert isinstance(origin, tuple)
-        self.origin = (max(origin[0],0), origin[1])
+        self.origin = (max(origin[0],0), origin[1] if self.scroll[-1] & Level.SCROLL_TOP  else -defaults.status_bar_top_tiles )
         
     def SetOriginX(self, origin):
         """Change the view origin but leave the y axis intact"""
