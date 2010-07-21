@@ -27,7 +27,7 @@ import sf
 import defaults
 from game import Entity
 from renderer import NewFrame, Renderer
-from tile import AnimTile
+from tile import AnimTile, Tile
 from player import Player
 from keys import KeyMapping
 from level import Level
@@ -205,7 +205,6 @@ class LevelEntrance(AnimTile):
         
         self.now_locked = True
         
-        
         # try to obtain the written name of the level by
         # skimming through its shebang line looking
         # for name="..."
@@ -239,10 +238,28 @@ Press {0} to risk it and {2} to leave.""".format(
             defaults.game_over_fade_time,(550,85),0.0,accepted,sf.Color.White,on_close)
         
         
-class Blocker(AnimTile):
-    pass
-
-
+class Blocker(Tile):
+    """Blockers prevent the player from entering certain
+    areas of the game world."""
+    
+    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[]):
+        Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img)
+        self.need_levels = need_levels
+        
+    def Interact(self,other):
+        #if isinstance(other, Player):
+        #    return Entity.ENTER if self.opened is True else Entity.BLOCK
+        
+        return Entity.BLOCK
+        
+    def Update(self,time_elapsed,time):
+        if not (set(self.need_levels ) - set(self.game.GetDoneLevels())):
+            self.game.RemoveEntity(self)
+            #raise NewFrame()
+            
+        Tile.Update(self,time_elapsed,time)
+        
+        
 
 
 
