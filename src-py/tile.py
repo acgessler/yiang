@@ -327,7 +327,7 @@ class AnimTile(Tile):
                 n += height+1
             n += 1
 
-        self.speed = -1 if speed == -1 else speed / len(self.texts[self.state])
+        self.SetSpeed(speed)
         self.animidx = -1
         self.animofs = 0
 
@@ -338,6 +338,12 @@ class AnimTile(Tile):
         self.dim,self.ofs = self.cached_sizes[0][0]
         if randomize is True:
             self.GotoRandom()
+            
+    def SetSpeed(self,speed):
+        """Change the playback speed of the animation. The
+        given duration is for the whole set of frames, in
+        seconds. Pass -1 to animate manually."""
+        self.speed = -1 if speed == -1 else speed / len(self.texts[self.state])
 
     def __str__(self):
         return "AnimTile, pos: {0}|{1}, frames: {2}, speed: {3}, text:\n{4}".format(\

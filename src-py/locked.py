@@ -32,11 +32,11 @@ from player import Player, InventoryItem
 class Door(AnimTile):
     """A door blocks the player unless he presents a key of the same color"""
     def __init__(self, text, height, frames, speed = 1.0, halo_img = None):
-        AnimTile.__init__(self, text, height, frames, states=2, speed=speed, halo_img=halo_img)
+        AnimTile.__init__(self, text, height, frames, states=3, speed=speed, halo_img=halo_img)
         self.unlocked = False
 
     def Interact(self, other):
-        if isinstance(other,Player) and self.unlocked is False:
+        if isinstance(other,Player) and self.unlocked is False and not hasattr( self, "during_interact" ):
             inv = other.EnumInventoryItems()
             
             try:
@@ -51,11 +51,22 @@ class Door(AnimTile):
         
         return Entity.ENTER if self.unlocked else Entity.BLOCK
     
+    def Update(self, time_elapsed, time):
+        if hasattr( self, "during_interact" ):
+            if self.Get() == self.GetNumFrames()-1:
+                print("Unlocking door {0}".format(self))
+                self.SetState(2)
+                self.Set(0)
+                self.unlocked = True
+                
+                delattr(self,"during_interact")
+        AnimTile.Update(self,time_elapsed,time)
+    
     def Unlock(self):
         """Unlock the door, does not alter the players inventory"""
         self.SetState(1)
-        self.unlocked = True
-        print("Unlocking door {0}".format(self))
+        self.Set(0)
+        self.during_interact = True
         
     def Lock(self):
         """Lock the door again"""
