@@ -64,7 +64,9 @@ class CampaignLevel(Level):
         
         # the visible minimap is initially black and is uncovered as the player moves
         w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
-        self.minimap_vis.LoadFromPixels(w,h, b'\x00\x00\x00\x50' * (w*h))
+        b = bytearray(b'\x00\x00\x00')
+        b.append(defaults.minimap_alpha)
+        self.minimap_vis.LoadFromPixels(w,h, bytes(b) * (w*h))
         
         if len(self.minimap_offline) != h:
             for y in range(h):
@@ -77,6 +79,7 @@ class CampaignLevel(Level):
                     col.r *= s
                     col.g *= s
                     col.b *= s
+                    col.a = max(defaults.minimap_alpha, col.a*s*0.5)
                     self.minimap_vis.SetPixel(x,y,col)
             
         self.minimap_sprite = sf.Sprite(self.minimap_vis)
@@ -134,7 +137,7 @@ class CampaignLevel(Level):
                 col.r *= dsq
                 col.g *= dsq
                 col.b *= dsq
-                col.a = max(0x50, col.a*dsq*0.5)
+                col.a = max(defaults.minimap_alpha, col.a*dsq*0.5)
                     
                 self.minimap_vis.SetPixel(x,y, col)
                 
