@@ -662,10 +662,14 @@ Hit {2} to return to the menu""").format(
             self.PopSuspend()
             on_close(result)
             
+            self.level.PopAutoScroll(0.0)
+            
         if not isinstance(text,sf.String):
             text = sf.String(text,Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
             ))
+            
+        self.level.PushAutoScroll(0.0)
             
         from notification import MessageBox
         Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper))
