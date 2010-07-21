@@ -181,13 +181,13 @@ class LevelEntrance(AnimTile):
     """Only found on the campaign world map, marks the entrance
     to a particular level"""
     
-    def __init__(self,text,height,frames,speed,states,next_level=5,draworder=15000):
-        AnimTile.__init__(self,text,height,frames,speed,states,draworder=draworder)
+    def __init__(self,text,height,frames,speed,states,next_level=5,draworder=15000,halo_img=None):
+        AnimTile.__init__(self,text,height,frames,speed,states,draworder=draworder,halo_img=halo_img)
         self.next_level = next_level
         self.done = False
         
     def Interact(self,other):
-        if isinstance(other,Player) and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
+        if isinstance(other,Player) and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")) and not hasattr(self,"now_locked"):
             self._RunLevel()
         
         return Entity.ENTER
@@ -202,6 +202,9 @@ class LevelEntrance(AnimTile):
     def _RunLevel(self):
         if self.done is True:
             return
+        
+        self.now_locked = True
+        
         
         # try to obtain the written name of the level by
         # skimming through its shebang line looking
@@ -223,6 +226,7 @@ class LevelEntrance(AnimTile):
         def on_close(key):
             if key == accepted[0]:
                 self.game.PushLevel(self.next_level)
+                delattr( self, "now_locked" )
                 raise NewFrame()
             
         self.game.FadeOutAndShowStatusNotice("""Enter '{1}'? 

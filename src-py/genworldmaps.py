@@ -34,8 +34,9 @@ color_dict = collections.defaultdict(lambda : ".  ", {
     (0x0,0xff,0x0)   : "gg1",
     (0x0,0x90,0x0)   : "dd1",
     (0x90,0x90,0x0)  : "~d1",
-    (0x0,0x0,0x90)   : "bw1",
-    (0x0,0x0,0x0)    : "_c0"                                   
+    (0x0,0x0,0x90)   : "bw1",    
+    
+    (0x0,0x0,0x0)   : "gg1", ## city locations  
 })
 
 large_tiles = {
@@ -65,14 +66,24 @@ def process_map(level):
     output = ""
     cells, orig, overlap = [],[],[]
     
+    # dump all city locations to a separate text file
+    citypos = open(os.path.join(path,"city_pos_dump.txt"),"wt")
+    
     w,h = bm.width,bm.height
     for y in range(h):
         cells.append([])
         orig.append([])
         overlap.append([1]*w)
         for x in range(w):
-            cells[-1].append(color_dict[tuple( reversed( bm.get_pixel_color(x,y) ))]) # bgr - rgb
+            col = tuple( reversed( bm.get_pixel_color(x,y) ))
+            cells[-1].append(color_dict[col]) # bgr - rgb
             orig[-1].append(cells[-1][-1])
+            
+            if col == (0,0,0):
+                citypos.write("{0} {1} \n".format(x,y))
+                
+    citypos.close()
+                 
     
     # look for optimization opportunities. Just a quick implementation,
     # I won't bother solving the packaging problem *again* ...
@@ -144,7 +155,7 @@ def process_map(level):
     with open(os.path.join(path,"extra_items.txt"),"rt") as extra:
         lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
         for x,y,e in lines:
-            cells[int(y)][int(x)] = e
+            cells[int(y)][int(x)] = e[:3]
             print("place entity {0} at {1}/{2}".format(e,x,y))
     
     cnt = 0
