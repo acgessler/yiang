@@ -124,6 +124,11 @@ class Level:
         self._UpdateEntityList()
         self._ComputeOrigin()
         
+        from game import Game
+        if self.game.GetGameMode() == Game.CAMPAIGN:
+            from posteffect import FadeInOverlay
+            Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
+        
     def _LoadSingleTile(self,tcode,ccode,x,y):
         from tile import TileLoader
         # read from the private attachment tiles of the level if the tile

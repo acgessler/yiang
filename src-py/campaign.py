@@ -243,10 +243,17 @@ class LevelEntrance(AnimTile):
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("escape"))
         def on_close(key):
             if key == accepted[0]:
-                self.game.PushLevel(self.next_level)
-                delattr( self, "now_locked" )
-                raise NewFrame()
-            
+                
+                def pushit(x):
+                    self.game.PushLevel(self.next_level)
+                    delattr( self, "now_locked" )
+                    Renderer.RemoveDrawable(x)
+                    
+                    raise NewFrame()
+                
+                from posteffect import FadeOutOverlay
+                Renderer.AddDrawable( FadeOutOverlay(2.5, fade_end=0.0, on_close=pushit) )
+        
         self.game.FadeOutAndShowStatusNotice("""Enter '{1}'? 
 You might die at this place, so be careful. 
 

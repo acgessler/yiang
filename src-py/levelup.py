@@ -34,17 +34,33 @@ class LevelUp(Tile):
         Tile.__init__(self,text,width,height)
         
     def Interact(self,other):
-        if isinstance(other,Player):
+        if isinstance(other,Player) and not hasattr(self,"working_now"):
             print("Level completed: {0}!".format(self.level.GetName() or ""))
             self.game.Award(defaults.levelup_score_base*self.game.GetLevelStats()[-1])
-            
+                      
             # in campaign mode, make sure the level is correctly marked done
             # so the player won't be able to enter it again, even if he
             # wants to because there's so much score in it.
             self.game.MarkLevelDone(self.level.GetLevelIndex())
             
+            self.working_now = True
             if self.game.GetGameMode() == Game.CAMPAIGN:
+                from posteffect import FadeOutOverlay, FadeInOverlay
+                from renderer import Renderer
+                
+                """
+                def dropit(x):
+                    delattr(self,"working_now")
+                    Renderer.RemoveDrawable(x)
+                    self.game.DropLevel()
+                    
+                    #Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
+                    raise NewFrame()
+                """
+                    
+                Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
                 self.game.DropLevel()
+                
             elif self.game.GetGameMode() == Game.SINGLE:
                 self.game.GameOverQuitToMenu()
             else:
