@@ -40,7 +40,7 @@ color_dict = collections.defaultdict(lambda : ".  ", {
 
 large_tiles = {
     ("bw1") : { (2,2) : "bw2", (4,4) : "bw3", (6,6) : "bw0" },
-    ("gg1") : { (2,2) : "gg2", (4,4) : "gg3"},
+    ("gg1") : { (2,2) : "gg2", (4,4) : "gg3", (2,1) : "gg4", (1,2) : "gg5"},
     ("dd1") : { (2,2) : "dd2", (4,4) : "dd3"},
     ("~d1") : { (2,2) : "~d2", (4,4) : "~d3"} 
 }
@@ -55,13 +55,16 @@ def main():
     bm.output()
     
     output = ""
-    cells = []
+    cells, orig, overlap = [],[],[]
     
     w,h = bm.width,bm.height
     for y in range(h):
         cells.append([])
+        orig.append([])
+        overlap.append([1]*w)
         for x in range(w):
             cells[-1].append(color_dict[tuple( reversed( bm.get_pixel_color(x,y) ))]) # bgr - rgb
+            orig[-1].append(cells[-1][-1])
     
     # look for optimization opportunities. Just a quick implementation,
     # I won't bother solving the packaging problem *again* ...
@@ -72,6 +75,9 @@ def main():
             if d is None:
                 continue
             
+            def area(x,y):
+                return x*y
+            
             for k,v in sorted( d.items(), key=lambda e:e[0][0]*e[0][1], reverse=True ):
                 ww,hh = k
                 ww = min(x+ww,w-1)-x
@@ -79,6 +85,38 @@ def main():
                 for yy in range(hh):
                     for xx in range(ww):
                         if cells[yy+y][xx+x] != thiscell:
+                            if area(*k)>4:
+                                """
+                                # hack: split 2x1 and 1x2 tiles into pieces if this
+                                # helps us place a larger one
+                                if cells[yy+y][xx+x] == ".  ":
+                                    yyy,xxx = yy+y,xx+x
+                                    xmax,ymax = 0,0
+                                    while yyy > 0:
+                                        yyy -= 1
+                                        xxxx = xxx-1 if yyy==yy+y else xxx
+                                        while cells[yyy][xxxx]  == ".  ":
+                                            xxxx -= 1
+                                            if xxxx == 0:
+                                                break
+                                        else:
+                                            # yyy,xxxx is the piece to be split
+                                            break
+                                            
+                                    for k,v in sorted( d.items() ):
+                                        if v[0] == cells[yyy][xxxx][0]:
+                                            break
+                                    else:
+                                        break
+                                    
+                                    continue
+                                """
+                                if orig[yy+y][xx+x][0] == v[0] and overlap[yy+y][xx+x] == 1 and \
+                                    area(*[k for k,v in d.items() if orig[yy+y][xx+x]==v][0]) <= 4:
+                                    
+                                    overlap[yy+y][xx+x] += 1
+                                    continue
+                                    
                             break
                     else:
                         continue
@@ -90,6 +128,7 @@ def main():
                         for xx in range(0,ww):
                             if yy+xx > 0:
                                 cells[y+yy][x+xx] = ".  "
+                                orig[y+yy][x+xx] = v 
                             
                     break
                 
@@ -100,8 +139,11 @@ def main():
             cells[int(y)][int(x)] = e
             print("place entity {0} at {1}/{2}".format(e,x,y))
     
+    cnt = 0
     for row in cells:
         for cell in row:     
+            if cell != ".  ":
+                cnt += 1
             output += cell
             
         output += "\n"
@@ -109,7 +151,7 @@ def main():
     with open(level_file,"wt") as out:
         out.write(level_template+output)
         
-    print("***DONE*** wrote output file")
+    print("***DONE*** wrote output file, {0} tiles".format(cnt))
 
 if __name__ == "__main__":
     main()
