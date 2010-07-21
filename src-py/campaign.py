@@ -46,6 +46,7 @@ class CampaignLevel(Level):
             scroll=Level.SCROLL_ALL)
         
         self.minimap = minimap
+        self.minimap_offline = game.GetCookie("lv_{0}_minimap_offline".format(level),[])
         if defaults.world_draw_hud is True:
             self._LoadHUD()
         
@@ -56,20 +57,83 @@ class CampaignLevel(Level):
             self._DrawHUD()
             
     def _LoadHUD(self):
-        self.minimap_img, self.minimap_sprite = sf.Image(), None
+        self.minimap_img, self.minimap_vis, self.minimap_sprite = sf.Image(), sf.Image(), None
         if not self.minimap_img.LoadFromFile(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap )):
             print("Failure loading HUD minimap from {0}".format(self.minimap))
             return
-            
-        self.minimap_sprite = sf.Sprite(self.minimap_img)
         
-        x = defaults.resolution[0]*defaults.minimap_size
-        y = x*self.minimap_img.GetWidth()/self.minimap_img.GetHeight()
-        self.minimap_sprite.SetPosition(100,defaults.resolution[1]-y-100)
+        # the visible minimap is initially black and is uncovered as the player moves
+        w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
+        self.minimap_vis.LoadFromPixels(w,h, b'\x00\x00\x00\xff' * (w*h))
+        
+        if len(self.minimap_offline) != h:
+            for y in range(h):
+                self.minimap_offline.append([0.0]*w)
+      
+        else: # recover the saved minimap
+            for y in range(h):
+                for x in range(w):
+                    col,s = self.minimap_img.GetPixel(x,y),self.minimap_offline[y][x]
+                    col.r *= s
+                    col.g *= s
+                    col.b *= s
+                    self.minimap_vis.SetPixel(x,y,col)
+            
+        self.minimap_sprite = sf.Sprite(self.minimap_vis)
+        
+        x = max(w, defaults.resolution[0]*defaults.minimap_size)
+        y = max(h,x*self.minimap_img.GetWidth()/self.minimap_img.GetHeight())
+        
+        # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
+        self.minimap_sprite.SetPosition(100-0.5,defaults.resolution[1]-y-100-0.5)
         
         self.minimap_sprite.Resize(x,y)
         self.minimap_sprite.SetColor(sf.Color(0xff,0xff,0xff,0x90))
         self.minimap_sprite.SetBlendMode(sf.Blend.Alpha)
+        
+    def UncoverMinimap(self,pos,radius=None):
+        """Uncover all minimap pixels given a position on the map
+        and a radius, in tile units as well."""
+        radius = radius or (defaults.tiles[0]+defaults.tiles[1])*0.5
+        
+        # tiles map one by one to pixels on the minimap
+        w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
+        rsq = radius**2
+        for y in range(max(0, int(pos[1]-radius) ), min(h-1,int(pos[1]+radius ))):
+            for x in range(max(0, int(pos[0]-radius) ), min(w-1,int(pos[0]+radius ))):
+                dsq = (y-pos[1])**2 + (x-pos[0])**2
+                if dsq > rsq:
+                    continue
+                
+                if self.minimap_offline[y][x] >= 1.0:
+                    continue
+                
+                col = self.minimap_img.GetPixel(x,y) 
+                
+                dsq = min(1.0, 1.7 - dsq*1.7/rsq)
+                if dsq < self.minimap_offline[y][x]:
+                    continue
+                
+                self.minimap_offline[y][x] = dsq
+                col.r *= dsq
+                col.g *= dsq
+                col.b *= dsq
+                    
+                self.minimap_vis.SetPixel(x,y, col)
+                
+        ipos = (int(pos[0]),int(pos[1]))
+               
+        # draw a cross around the player's position
+        crossdim = 4
+        for i in range(-1,2):
+            for y in range(max(0, int(pos[1]-crossdim) ), min(h-1,int(pos[1]+crossdim +1 ))):
+                self.minimap_vis.SetPixel(ipos[0]+i,y,sf.Color(0xff,0,0,0xff))
+                self.minimap_offline[y][ipos[0]+i] = False
+            
+            for x in range(max(0, int(pos[0]-crossdim) ), min(w-1,int(pos[0]+crossdim +1 ))):
+                self.minimap_vis.SetPixel(x,ipos[1]+i,sf.Color(0xff,0,0,0xff))
+                self.minimap_offline[ipos[1]+i][x] = False
+                
             
     def _DrawHUD(self):
         if self.minimap_sprite is None:
@@ -81,6 +145,15 @@ class CampaignLevel(Level):
         # Center the viewport around the player (this completely
         # replaces the original implementation)
         self.SetOrigin((pos[0]-defaults.tiles[0]/2,pos[1]-defaults.tiles[1]/2))
+        
+        # (Hack) This ought to be in the player's logic, but
+        # this way we can safe a custom Player-derived class.
+        if hasattr(self,"oldpos"):
+            if abs(pos[0]-self.oldpos[0])<1.0 and abs(pos[1]-self.oldpos[1])<1.0:
+                return
+            
+        self.UncoverMinimap(pos)
+        self.oldpos = pos
         
 
 class LevelEntrance(AnimTile):

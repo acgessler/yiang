@@ -270,16 +270,23 @@ class Renderer:
         try:
             
             cnt, profiles = 0,0
-            while Renderer.app.IsOpened():
+            while Renderer.app.IsOpened() is True:
                 
-                # profile rendering
+                # profile rendering (10 frames in a row)
                 if defaults.profile_rendering is True and cnt == 600:
                     cnt = 0
                     profiles += 1
                     import cProfile
             
                     fname = filename=os.path.join(defaults.profile_dir,"render_{0}.cprof".format(profiles))
-                    cProfile.runctx("Renderer._DoSingleFrame()", globals(), locals(), fname)
+                    
+                    def Do10Frames():
+                        for i in range(10):
+                            if Renderer.app.IsOpened() is False:
+                                break
+                            Renderer._DoSingleFrame()
+                        
+                    cProfile.runctx("Do10Frames()", globals(), locals(), fname)
             
                     import pstats
                     stats = pstats.Stats(fname)

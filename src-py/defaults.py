@@ -122,6 +122,7 @@ profile_rendering = True
 world_draw_hud = True
 
 # Relative size of the minimap, x-axis
+# Note: the minimap is never minified.
 minimap_size = 0.2
 
 # -----------------------------------------------------------------------------

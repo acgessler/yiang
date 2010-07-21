@@ -97,6 +97,17 @@ class Game(Drawable):
         self.suspended = []
         
         self.draw_counter = 0
+        self.cookies = {}
+        
+    def GetCookie(self,name,default):
+        """Get/set a cookie. Cookies are small chunks of data
+        which are saved together with the game session,
+        so they qualify as persistent storage."""
+        res = self.cookies.get(name,default)
+        if res is default:
+            self.cookies[name] = default
+            
+        return res
         
     def GetDoneLevels(self):
         return self.levels_done
