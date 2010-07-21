@@ -64,7 +64,7 @@ class CampaignLevel(Level):
         
         # the visible minimap is initially black and is uncovered as the player moves
         w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
-        self.minimap_vis.LoadFromPixels(w,h, b'\x00\x00\x00\xff' * (w*h))
+        self.minimap_vis.LoadFromPixels(w,h, b'\x00\x00\x00\x50' * (w*h))
         
         if len(self.minimap_offline) != h:
             for y in range(h):
@@ -81,15 +81,29 @@ class CampaignLevel(Level):
             
         self.minimap_sprite = sf.Sprite(self.minimap_vis)
         
-        x = max(w, defaults.resolution[0]*defaults.minimap_size)
-        y = max(h,x*self.minimap_img.GetWidth()/self.minimap_img.GetHeight())
+        w = max(w, defaults.resolution[0]*defaults.minimap_size)
+        h = max(h,w*self.minimap_img.GetWidth()/self.minimap_img.GetHeight())
         
         # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
-        self.minimap_sprite.SetPosition(100-0.5,defaults.resolution[1]-y-100-0.5)
+        x,y = 100-0.5,defaults.resolution[1]-h-100-0.5
+        self.minimap_sprite.SetPosition(x,y)
+        self.minimap_sprite.Resize(w,h)
         
-        self.minimap_sprite.Resize(x,y)
-        self.minimap_sprite.SetColor(sf.Color(0xff,0xff,0xff,0x90))
+        self.minimap_sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
         self.minimap_sprite.SetBlendMode(sf.Blend.Alpha)
+        
+        # finally, construct the rectangle around the minimap
+        self.minimap_shape = sf.Shape()
+        bcol = sf.Color(120,120,120,255)
+        
+        self.minimap_shape.AddPoint(x,y,bcol)
+        self.minimap_shape.AddPoint(x+w,y,bcol)
+        self.minimap_shape.AddPoint(x+w,y+h,bcol)
+        self.minimap_shape.AddPoint(x,y+h,bcol)
+
+        self.minimap_shape.SetOutlineWidth(2)
+        self.minimap_shape.EnableFill(False)
+        self.minimap_shape.EnableOutline(True)
         
     def UncoverMinimap(self,pos,radius=None):
         """Uncover all minimap pixels given a position on the map
@@ -118,6 +132,7 @@ class CampaignLevel(Level):
                 col.r *= dsq
                 col.g *= dsq
                 col.b *= dsq
+                col.a = max(0x50, col.a*dsq*0.5)
                     
                 self.minimap_vis.SetPixel(x,y, col)
                 
@@ -139,7 +154,8 @@ class CampaignLevel(Level):
         if self.minimap_sprite is None:
             return
         
-        Renderer.app.Draw(self.minimap_sprite)
+        self.game.DrawSingle(self.minimap_sprite)
+        self.game.DrawSingle(self.minimap_shape)
         
     def Scroll(self,pos):
         # Center the viewport around the player (this completely
