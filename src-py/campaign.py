@@ -97,7 +97,7 @@ class CampaignLevel(Level):
         
         # finally, construct the rectangle around the minimap
         self.minimap_shape = sf.Shape()
-        bcol = sf.Color(0x0,0x0,0x0,0xff)
+        bcol = sf.Color(0x10,0x10,0x0,0xff)
         
         # interestingly, the 0.5px offset is not needed for
         # lines and other geometric shapes. Awesome.
@@ -144,7 +144,7 @@ class CampaignLevel(Level):
         ipos = (int(pos[0]),int(pos[1]))
                
         # draw a cross around the player's position
-        crossdim = 4
+        crossdim = 6
         for i in range(-1,2):
             for y in range(max(0, int(pos[1]-crossdim) ), min(h-1,int(pos[1]+crossdim +1 ))):
                 self.minimap_vis.SetPixel(ipos[0]+i,y,sf.Color(0xff,0,0,0xff))

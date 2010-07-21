@@ -126,7 +126,7 @@ world_draw_hud = True
 minimap_size = 0.2
 
 # Base alpha value for uncovered areas of the minimap
-minimap_alpha = 0x50
+minimap_alpha = 0x75
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
