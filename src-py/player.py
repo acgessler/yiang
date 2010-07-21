@@ -435,10 +435,8 @@ class Player(Entity):
         collision handling has been performed."""
         self.AddToActiveBBs()
 
-        # XX THIS IS SILLY!!!!!!!!! ... I just don't know how to fix it,
-        # the physically correct approach failed due to numeric
-        # inaccuracies.
-        # Idea: might be possible to use Box2D as physics engine.
+        # That's not a physically correct collision detection -
+        # and the algorithm works for rectangles only.
         cnt, hasall = 0, 0
         floor_touch = False
         ab = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
