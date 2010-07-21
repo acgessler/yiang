@@ -36,7 +36,7 @@ class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
     world's map to be rendered fluently."""
     
-    def __init__(self, level, game, lines, name="Map of the World", minimap="map.bmp"):
+    def __init__(self, level, game, lines, name="Map of the World", minimap="map.bmp", overlays=["extra_items.txt"]):
         Level.__init__(self,level,game, lines, 
             color=(15,30,15),
             postfx=[("ingame2.sfx",())],
@@ -45,10 +45,29 @@ class CampaignLevel(Level):
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL)
         
+        for elem in overlays:
+            self._ReadOverlay(elem)
+            
+        # need to do this again, we might not have had a player the last time we tried
+        self._UpdateEntityList()
+        self._ComputeOrigin()
+        
         self.minimap = minimap
         self.minimap_offline = game.GetCookie("lv_{0}_minimap_offline".format(level),[])
         if defaults.world_draw_hud is True:
             self._LoadHUD()
+            
+    def _ReadOverlay(self,filename):
+        cnt = 0
+        filename = os.path.join(self.lvbase, filename)
+        with open(filename,"rt") as extra:
+            lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
+            for x,y,e in lines:
+                #cells[int(y)][int(x)] = e[:3]
+                
+                self._LoadSingleTile(e[1:3],e[0],int(x),int(y))
+                cnt += 1
+        print("Load level overlay {0}, got {1} tiles".format(filename,cnt))
         
     def Draw(self, time, dtime):
         Level.Draw(self,time,dtime)

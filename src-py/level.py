@@ -62,7 +62,6 @@ class Level:
             vis_ofs -- Offset on the y axis where the visible part 
                of the level starts. The number of rows is constant.
         """
-        from tile import TileLoader
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
         
@@ -91,8 +90,8 @@ class Level:
         self.lines = lines = lines.split("\n")
         assert len(lines) > 0
         
-        lvbase = os.path.join(defaults.data_dir, "levels", str(level))
-        tlbase = os.path.join(defaults.data_dir, "tiles")
+        self.lvbase = os.path.join(defaults.data_dir, "levels", str(level))
+        self.tlbase = os.path.join(defaults.data_dir, "tiles")
         
         try:
             for y, line in enumerate(lines):
@@ -108,24 +107,7 @@ class Level:
                     if tcode[0] in spaces:
                         continue
                     
-                    ccode = line[x]
-                        
-                    # read from the private attachment tiles of the level if the tile
-                    # code starts with a lower-case character
-                    if 122 >= ord( tcode[0] ) >= 97: #   in "abcdefghijklmnopqrstuvwxyz":
-                        tile = TileLoader.Load(lvbase + "/" + tcode + ".txt", game)
-                    else:
-                        tile = None
-                        
-                    if tile is None:
-                        # (HACK) avoid os.path.join() calls
-                        tile = TileLoader.Load(tlbase + "/" + tcode + ".txt", game)
-                            
-                    tile.SetColor(LevelLoader.cached_color_dict[ccode])
-                    tile.SetPosition((x // 3, y - vis_ofs))
-                    tile.SetLevel(self)
-                        
-                    self.AddEntity(tile)
+                    self._LoadSingleTile(tcode, line[x],x//3,y)
                     ecnt += 1
                 
         except AssertionError as err:
@@ -141,6 +123,26 @@ class Level:
         self._GenerateWindows()
         self._UpdateEntityList()
         self._ComputeOrigin()
+        
+    def _LoadSingleTile(self,tcode,ccode,x,y):
+        from tile import TileLoader
+        # read from the private attachment tiles of the level if the tile
+        # code starts with a lower-case character
+        if 122 >= ord( tcode[0] ) >= 97: #   in "abcdefghijklmnopqrstuvwxyz":
+            tile = TileLoader.Load(self.lvbase + "/" + tcode + ".txt", self.game)
+        else:
+            tile = None
+            
+        if tile is None:
+            # (HACK) avoid os.path.join() calls
+            tile = TileLoader.Load(self.tlbase + "/" + tcode + ".txt", self.game)
+                
+        tile.SetColor(LevelLoader.cached_color_dict[ccode])
+        tile.SetPosition((x, y - self.vis_ofs))
+        tile.SetLevel(self)
+            
+        self.AddEntity(tile)
+        return tile
         
     def GetLevelIndex(self):
         return self.level

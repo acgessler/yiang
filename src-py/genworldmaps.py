@@ -150,13 +150,6 @@ def process_map(level):
                                 orig[y+yy][x+xx] = v 
                             
                     break
-                
-    # Merge with extra_items.txt
-    with open(os.path.join(path,"extra_items.txt"),"rt") as extra:
-        lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
-        for x,y,e in lines:
-            cells[int(y)][int(x)] = e[:3]
-            print("place entity {0} at {1}/{2}".format(e,x,y))
     
     cnt = 0
     for row in cells:
@@ -169,6 +162,16 @@ def process_map(level):
             
     with open(level_file,"wt") as out:
         out.write(level_template+output)
+        
+        
+    # process extra_items.txt
+    # this task is now done by CampaignLevel at runtime! 
+    
+    # with open(os.path.join(path,"extra_items.txt"),"rt") as extra:
+    #    lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
+    #    for x,y,e in lines:
+    #        cells[int(y)][int(x)] = e[:3]
+    #        print("place entity {0} at {1}/{2}".format(e,x,y))
         
     print("***DONE*** level {0}, wrote output file, {1} tiles".format(level,cnt))
 
