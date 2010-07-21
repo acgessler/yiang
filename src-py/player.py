@@ -444,6 +444,7 @@ class Player(Entity):
         # left, top, right, bottom
         intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
         colliders = []
+        fric = 1e10
         for collider in self.game.GetLevel().EnumPossibleColliders(ab):
             if collider is self:
                 continue
@@ -506,6 +507,7 @@ class Player(Entity):
                         intersect[3][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
                         
                         colliders.append(collider)
+                        fric = min(fric, collider.GetFriction())
                                            
                     
             # is our top border intersecting?
@@ -521,6 +523,7 @@ class Player(Entity):
             
                     elif res == Entity.BLOCK:
         
+                        # XXX one day, I need to cleanup these messy size calculations in Player
                         intersect[1][0] = min(intersect[1][0], cd[3])
                         intersect[1][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
                         
@@ -540,8 +543,8 @@ class Player(Entity):
                     newpos[1] = elem[0]
                     newvel[1] = min(0, newvel[1])
                                 
-                    fric = collider.GetFriction()*time # XXX too lazy to think of a pure arithmetic solution
-                    newvel[0] = newvel[0] - (min(newvel[0],fric) if newvel[0]>0 else max(newvel[0],-fric))
+                    f = fric*time # XXX too lazy to think of a pure arithmetic solution
+                    newvel[0] = newvel[0] - (min(newvel[0],f) if newvel[0]>0 else max(newvel[0],-f))
                     floor_touch = True
                     #print("floor")
         
