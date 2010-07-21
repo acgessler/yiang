@@ -250,7 +250,7 @@ class Blocker(Tile):
         #if isinstance(other, Player):
         #    return Entity.ENTER if self.opened is True else Entity.BLOCK
         
-        return Entity.BLOCK
+        return Entity.ENTER if defaults.debug_godmode else Entity.BLOCK
         
     def Update(self,time_elapsed,time):
         if not (set(self.need_levels ) - set(self.game.GetDoneLevels())):

@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,3,13,halo_img=None,need_levels=[1])
+from campaign import Blocker; <out> = Blocker(<raw>,3,13,need_levels=[1])
 ====
  II
  II
