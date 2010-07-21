@@ -98,7 +98,7 @@ class Perk(AnimTile):
     which are used to alter the original behaviour of the Player
     class slightly. Some perks can be accumulated (i.e. if the
     activates multiple of them at once, their effect sums up,
-    other may not accept more than one of their kind to be active.)"""
+    other may not allow more than one of their kind to be active.)"""
     
     def __init__(self,overlay_file,*args,**kwargs):
         AnimTile.__init__(self,halo_img=None,*args,**kwargs)
