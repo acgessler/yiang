@@ -85,8 +85,8 @@ class CampaignLevel(Level):
         h = max(h,w*self.minimap_img.GetWidth()/self.minimap_img.GetHeight())
         
         # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
-        x,y = 100-0.5,defaults.resolution[1]-h-100-0.5
-        self.minimap_sprite.SetPosition(x,y)
+        x,y = 100,defaults.resolution[1]-h-100
+        self.minimap_sprite.SetPosition(x-0.5,y-0.5)
         self.minimap_sprite.Resize(w,h)
         
         self.minimap_sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
@@ -94,14 +94,16 @@ class CampaignLevel(Level):
         
         # finally, construct the rectangle around the minimap
         self.minimap_shape = sf.Shape()
-        bcol = sf.Color(120,120,120,255)
+        bcol = sf.Color(0x0,0x0,0x0,0xff)
         
-        self.minimap_shape.AddPoint(x,y,bcol)
-        self.minimap_shape.AddPoint(x+w,y,bcol)
-        self.minimap_shape.AddPoint(x+w,y+h,bcol)
-        self.minimap_shape.AddPoint(x,y+h,bcol)
+        # interestingly, the 0.5px offset is not needed for
+        # lines and other geometric shapes. Awesome.
+        self.minimap_shape.AddPoint(x,y,bcol,bcol)
+        self.minimap_shape.AddPoint(x+w,y,bcol,bcol)
+        self.minimap_shape.AddPoint(x+w,y+h,bcol,bcol)
+        self.minimap_shape.AddPoint(x,y+h,bcol,bcol)
 
-        self.minimap_shape.SetOutlineWidth(2)
+        self.minimap_shape.SetOutlineWidth(3)
         self.minimap_shape.EnableFill(False)
         self.minimap_shape.EnableOutline(True)
         
