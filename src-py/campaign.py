@@ -165,13 +165,17 @@ class CampaignLevel(Level):
         # draw a cross around the player's position
         crossdim = 6
         for i in range(-1,2):
-            for y in range(max(0, int(pos[1]-crossdim) ), min(h-1,int(pos[1]+crossdim +1 ))):
-                self.minimap_vis.SetPixel(ipos[0]+i,y,sf.Color(0xff,0,0,0xff))
-                self.minimap_offline[y][ipos[0]+i] = False
+            try:
+                for y in range(max(0, int(pos[1]-crossdim) ), min(h-1,int(pos[1]+crossdim +1 ))):
+                    self.minimap_vis.SetPixel(ipos[0]+i,y,sf.Color(0xff,0,0,0xff))
+                    self.minimap_offline[y][ipos[0]+i] = False
             
-            for x in range(max(0, int(pos[0]-crossdim) ), min(w-1,int(pos[0]+crossdim +1 ))):
-                self.minimap_vis.SetPixel(x,ipos[1]+i,sf.Color(0xff,0,0,0xff))
-                self.minimap_offline[ipos[1]+i][x] = False
+                for x in range(max(0, int(pos[0]-crossdim) ), min(w-1,int(pos[0]+crossdim +1 ))):
+                    self.minimap_vis.SetPixel(x,ipos[1]+i,sf.Color(0xff,0,0,0xff))
+                    self.minimap_offline[ipos[1]+i][x] = False
+            except IndexError:
+                # this happens if the player moves outside the map
+                pass
                 
             
     def _DrawHUD(self):
