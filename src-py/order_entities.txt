@@ -10,6 +10,8 @@ SmallTraverser		2100
 
 ---- PostFX			10000
 PlayerMap			10500
+LevelEntranceMap	10500
+BlockerMap			10500
 KillStub			11000
 ScoreStub			11001
 InventoryStub		11002

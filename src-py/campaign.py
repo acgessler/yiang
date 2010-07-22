@@ -195,6 +195,18 @@ class CampaignLevel(Level):
         self.UncoverMinimap(pos)
         self.oldpos = pos
         
+        
+class CampaignPlayer(Player):
+    """Slightly adjust the default player behaviour for the world map.
+    For example, shooting does not work on the world map and the
+    respective keys remain disabled"""
+    
+    def __init__(self, text, width, height, ofsx, move_freely=True, draworder=10500):
+        Player.__init__(self,text,width,height,ofsx,move_freely,draworder)
+        
+    def _Shoot(self):
+        return
+    
 
 class LevelEntrance(AnimTile):
     """Only found on the campaign world map, marks the entrance
@@ -255,6 +267,9 @@ class LevelEntrance(AnimTile):
                 
                 from posteffect import FadeOutOverlay
                 Renderer.AddDrawable( FadeOutOverlay(defaults.enter_level_fade_time, fade_end=0.0, on_close=pushit) )
+                return
+            
+            self.game.PopSuspend()
         
         from notification import MessageBox
         self.game.FadeOutAndShowStatusNotice("""Enter '{1}'? 

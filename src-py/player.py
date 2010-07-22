@@ -278,7 +278,6 @@ class Player(Entity):
             weapon.Shoot((self.pos[0]-1.0,self.pos[1]+self.pheight*0.6),\
                 (-1.0,0.0),sf.Color(200,200,255),check)
                          
-        
     def Update(self, time_elapsed, time):
         if self.game.IsGameRunning() is False:
             return

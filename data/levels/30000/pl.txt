@@ -1,4 +1,4 @@
-from player import Player; <out> = Player(<raw>,5,6,1,move_freely=True,draworder=10500)
+from campaign import CampaignPlayer; <out> = CampaignPlayer(<raw>,5,6,1)
   ____
 o|'O.O|o
  |___-|

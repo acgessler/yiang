@@ -1,17 +1,11 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,7,1,1.0,2,halo_img=None,next_level=2)
-  _______
- |       |
-|         |
-|    O    |
-|  __O__  |
-| |     | |
-PPO     OPP
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,4,1,1.0,2,halo_img=None,next_level=2)
+_||__________
+|  ____     |
+|  |  | HI! |
+|  |  |     |
 
 
-  _______
- | DONE  |
-|         |
-|    O    |
-|  __O__  |
-| |     | |
-PPO     OPP
+_||__________
+|  ____     |
+|  |  |DONE!|
+|  |  |     |
