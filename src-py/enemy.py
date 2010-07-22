@@ -48,6 +48,8 @@ class Enemy(AnimTile):
         self.game.AddEntity(ScoreTileAnimStub("Slayer's Penalty: {0:4.4} ct".format(self.game.Award(self._GetScoreAmount())),self.pos,1.0))
         self._SpreadSplatter()
         
+        self.level.CountStats("s_kills",1)
+        
     def _GetScoreAmount(self):
         """Get the score the player receives for slaying this enemy"""
         return -0.05

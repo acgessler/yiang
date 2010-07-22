@@ -103,6 +103,10 @@ class MessageBox(Drawable):
     def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0):
         """Utility to draw a messagebox-like status notice in the
         center of the screen."""
+        
+        # FIX: avoid odd numbers to get pixel-exact font rendering
+        size = (size[0]&~0x1,size[1]&~0x1)
+        
         fg,bg = sf.Color(160,160,160,int(alpha*255)),sf.Color(50,50,50,int(alpha*255))
         
         shape = sf.Shape()

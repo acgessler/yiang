@@ -394,14 +394,13 @@ TimeDelta:         {dtime:.4}
         pp = points*self.speed_scale
         self.score = max(0, self.score + pp )
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
+        
+        self.level.CountStats("score",pp)
         return pp
     
     def TakeScore(self,points):
-        """Take a certain amount of money from the player's score."""
-        pp = points/self.speed_scale
-        self.score = max(self.score-pp,0)
-        print("Stealing myself {0} points (total: {1})".format(points,self.score))
-        return pp
+        """Take a certain amount of money from the player's score. DEPRECATED, use Award()"""
+        return self.Award(-points)
     
     def AddLife(self,count=1):
         self.lives += count
@@ -437,6 +436,8 @@ TimeDelta:         {dtime:.4}
         if not self.IsGameRunning():
             return 
         
+        self.level.CountStats("deaths",1)
+        
         if player is None:
             player = self._GetAPlayer()
         
@@ -452,7 +453,8 @@ TimeDelta:         {dtime:.4}
                 self.GameOver()
             player.Respawn(True if key == accepted[0] else False)
             
-        self._FadeOutAndShowStatusNotice(sf.String("""You got killed by {0}
+        self._FadeOutAndShowStatusNotice(sf.String("""You committed suicide! 
+Your friendly guide was: {0}
 
 Press {1} to restart at the last respawning point
 Press {2} to restart the level
@@ -464,11 +466,11 @@ Press {3} to leave the game""".format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),defaults.game_over_fade_time,(500,130),0.0,accepted,sf.Color.Red,on_close)
+        )),defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Red,on_close)
         
     def GameOverQuitToMenu(self):
         """Set immediate Game Over and switch to the menu. Don't
-        report highscore or so."""
+        report highscore or notify the user."""
         DebugTools.Trace()
         self.game_over = True
         
@@ -503,16 +505,18 @@ Press {3} to leave the game""".format(
             
         self._FadeOutAndShowStatusNotice(sf.String("""You survived {0:.4} days and collected {1:.4} dollars.
 That's {2}.\n\n
-Hit {3} or {4} to return to the menu .. """.format(
-                    Game.SecondsToDays(self.GetTotalElapsedTime()),
-                    self.score/100,
-                    "a new high score record" if record is True else self.score_map[int(math.log((self.score*10)+1,2))],
+""".format(Game.SecondsToDays(self.GetTotalElapsedTime()),self.score/100,
+           "a new high score record" if record is True else self.score_map[int(math.log((self.score*10)+1,2))]) +
+self.level.GetStatsString()+
+"""
+
+Hit {0} or {1} to return to the menu .. """.format(
                     KeyMapping.GetString("escape"),
                     KeyMapping.GetString("accept")
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),defaults.game_over_fade_time,(550,100),0.0,accepted,sf.Color.Green,on_close)
+        )),defaults.game_over_fade_time,(550,250),0.0,accepted,sf.Color.Green,on_close)
         
         raise NewFrame()
     
@@ -523,7 +527,6 @@ Hit {3} or {4} to return to the menu .. """.format(
         from notification import MessageBox
         
         accepted = KeyMapping.Get("accept"),
-    
         
         def dropit(x):
             self.PopSuspend()
@@ -534,8 +537,14 @@ Hit {3} or {4} to return to the menu .. """.format(
                 Renderer.RemoveDrawable(x)
                 pass
             
-            self.FadeOutAndShowStatusNotice("Hi",
-    defaults.messagebox_fade_time,(550,140),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_IN)
+            self.FadeOutAndShowStatusNotice("""You did it! Now go on, there's more to win.
+            
+"""+self.level.GetStatsString()+
+"""
+
+Hit any key to continue.
+""",
+    defaults.messagebox_fade_time,(550,220),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_IN)
             
         Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
         self.PushSuspend()
@@ -568,6 +577,11 @@ Hit {3} or {4} to return to the menu .. """.format(
             raise NewFrame()
 
         self._FadeOutAndShowStatusNotice(sf.String(("""Hey, you solved Level {0}!.
+
+"""+
+            self.level.GetStatsString()+                                                 
+
+"""
 Hit {1} to continue .. (don't disappoint me)
 Hit {2} to return to the menu""").format(
                     self.level_idx,
@@ -576,7 +590,7 @@ Hit {2} to return to the menu""").format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),defaults.game_over_fade_time,(550,120),0.0,accepted,sf.Color.Black,on_close) 
+        )),defaults.game_over_fade_time,(550,225),0.0,accepted,sf.Color.Black,on_close) 
         raise NewFrame()
         
     def LoadLevel(self,idx):

@@ -74,6 +74,9 @@ class Level:
         self.name = name
         self.gravity = defaults.gravity if gravity is None else gravity
         
+        # pre-defined ('well-known')
+        self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0],"achievements":[0]}
+        
         self.postfx_rt = []
         self.postfx = postfx or []
         self._LoadPostFX()
@@ -148,8 +151,29 @@ class Level:
             
         self.AddEntity(tile)
         return tile
+    
+    def CountStats(self,name,add):
+        """Change a specific entry in the stats dictionary.
+        'name' is the name of the counter to modify, 
+        and 'add' is the signed amount."""
+        self.stats.setdefault(name,[0])[0] += add
+    
+    def GetStatsString(self):
+        """Take the current gameplay statistics and format them nicely.
+        The resulting string takes 8 lines.
+        """
+        return """Statistics (last level played):
+        
+        {deaths:4} - Suicidal Deaths Committed
+        {score:4} - Score Received
+        {s_kills:4} - Minor Enemy Kills:   
+        {l_kills:4} - Major Enemy Kills:  
+        {e_kills:4} - Epic Enemy Kills
+        {achievements:4} - Achievements earned
+""".format(**dict( [(k,v[0]) for k,v in self.stats.items()]  ))
         
     def GetLevelIndex(self):
+        """Get the one-based index of the current level"""
         return self.level
         
     def _GenerateWindows(self):
