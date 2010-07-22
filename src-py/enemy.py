@@ -156,6 +156,78 @@ class SmallTraverser(Enemy):
         #SoundEffectCache.Get("click8a.wav").Play()
         
         
+class NaughtyPongPong(Enemy):
+    """Jumps to a certain height, then falls down, and halts
+    a few moments. Can be killed only by Mario-style (
+    jump on its top ..)"""
+
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose="a Naughty Pong Pong (NPP)",shrinkbb=0.65):
+        AnimTile.__init__(self, text, height, frames, speed, 2)
+
+        self.verbose = verbose
+        #self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
+        self.vel = -defaults.jump_vel
+
+        self._ShrinkBB(shrinkbb)
+
+    def GetVerboseName(self):
+        return self.verbose
+    
+    def GetDrawOrder(self):
+        return 2100
+    
+    def _GetScoreAmount(self):
+        return -0.01
+
+    def Update(self, time_elapsed, time):
+        AnimTile.Update(self, time_elapsed, time)
+        if not self.game.IsGameRunning():
+            return 
+        
+        if hasattr(self,"relaunch_time"):
+            if self.relaunch_time.GetElapsedTime() > 0.5:
+                self.vel = -defaults.jump_vel
+                delattr(self,"relaunch_time")
+            return
+        
+        self.acc = self.level.gravity*10
+        vec = (self.vel + self.acc * time) * time
+
+        self.pos[1] += vec
+        
+        # check for possible colliders on the bottom to determine when we
+        # are touching the ground
+        
+        ab = self.GetBoundingBox()
+        ab = (ab[0], ab[1], ab[2] + ab[0], ab[3] + ab[1])     
+        for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+            if collider is self:
+                continue
+            
+            cd = collider.GetBoundingBox()
+            if cd is None:
+                continue
+            
+            cd = (cd[0], cd[1], cd[2] + cd[0], cd[3] + cd[1]) 
+            
+            # lower border    
+            if cd[1] <= ab[3] <= cd[3]:
+                if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2] and min( ab[2], cd[2]) - max(ab[0], cd[0]) >= 0.1:
+                    self.vel = min(0,self.vel)
+                    collider.AddToActiveBBs()     
+                    
+                    self.relaunch_time = sf.Clock()    
+                    break
+                    
+            # top border
+            if cd[1] <= ab[1] <= cd[3]:
+                if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2] and  min( ab[2], cd[2]) - max(ab[0], cd[0]) >= 0.1:
+                    self.vel = max(0,self.vel)
+                    #if isinstance(collider,Player):
+                    #    self._Die()
+                        
+                    break
+        
 class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated
     tile which rotates around its center in a certain distance."""

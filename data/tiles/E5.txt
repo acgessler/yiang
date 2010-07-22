@@ -1,4 +1,4 @@
-from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,3,direction=Entity.DIR_VER)
+from enemy import NaughtyPongPong; <out> = NaughtyPongPong(<raw>,3,3)
 _/^\_
 ]HIT[
 /ME!\
