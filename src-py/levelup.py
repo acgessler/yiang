@@ -43,24 +43,11 @@ class LevelUp(Tile):
             # wants to because there's so much score in it.
             self.game.MarkLevelDone(self.level.GetLevelIndex())
             
+    
             self.working_now = True
             if self.game.GetGameMode() == Game.CAMPAIGN:
-                from posteffect import FadeOutOverlay, FadeInOverlay
-                from renderer import Renderer
-                
-                """
-                def dropit(x):
-                    delattr(self,"working_now")
-                    Renderer.RemoveDrawable(x)
-                    self.game.DropLevel()
-                    
-                    #Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
-                    raise NewFrame()
-                """
-                    
-                Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
-                self.game.DropLevel()
-                
+                self.game.BackToWorldMap()
+            
             elif self.game.GetGameMode() == Game.SINGLE:
                 self.game.GameOverQuitToMenu()
             else:

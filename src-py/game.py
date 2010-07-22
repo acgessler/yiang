@@ -103,11 +103,7 @@ class Game(Drawable):
         """Get/set a cookie. Cookies are small chunks of data
         which are saved together with the game session,
         so they qualify as persistent storage."""
-        res = self.cookies.get(name,default)
-        if res is default:
-            self.cookies[name] = default
-            
-        return res
+        return self.cookies.setdefault(name,default)
         
     def GetDoneLevels(self):
         return self.levels_done
@@ -438,7 +434,6 @@ TimeDelta:         {dtime:.4}
         """Kill the player immediately, respawn if they have
         another life, set game over alternatively"""
         DebugTools.Trace()
-        
         if not self.IsGameRunning():
             return 
         
@@ -520,6 +515,30 @@ Hit {3} or {4} to return to the menu .. """.format(
         )),defaults.game_over_fade_time,(550,100),0.0,accepted,sf.Color.Green,on_close)
         
         raise NewFrame()
+    
+    def BackToWorldMap(self):
+        """Display level statistics and move the player back to the world map"""
+        
+        from posteffect import FadeOutOverlay, FadeInOverlay
+        from notification import MessageBox
+        
+        accepted = KeyMapping.Get("accept"),
+    
+        
+        def dropit(x):
+            self.PopSuspend()
+            self.DropLevel()
+            #Renderer.AddDrawable( FadeInOverlay(defaults.enter_worldmap_fade_time, fade_start=0.0, on_close=show_stats) )
+            
+            def on_close(key):
+                Renderer.RemoveDrawable(x)
+                pass
+            
+            self.FadeOutAndShowStatusNotice("Hi",
+    defaults.messagebox_fade_time,(550,140),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_IN)
+            
+        Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
+        self.PushSuspend()
     
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
@@ -647,7 +666,8 @@ Hit {2} to return to the menu""").format(
         auto_time=0.0,
         break_codes=(KeyMapping.Get("accept")),
         text_color=sf.Color.Red,
-        on_close=lambda x:None):
+        on_close=lambda x:None,
+        flags=0):
         """Tiny utility to wrap the fade out effect used on game over
         and end of level. Alongside, a status message is displayed and
         control is not returned unless the user presses any key
@@ -672,9 +692,8 @@ Hit {2} to return to the menu""").format(
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
             ))
             
-            
         from notification import MessageBox
-        Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper))
+        Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper,flags))
         self.PushSuspend()
 
     def DrawSingle(self,drawable,pos=None):

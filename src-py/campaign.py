@@ -219,7 +219,7 @@ class LevelEntrance(AnimTile):
             self.SetState(1)
         
     def _RunLevel(self):
-        if self.done is True:
+        if self.done is True and defaults.debug_godmode is False:
             return
         
         self.now_locked = True
@@ -245,15 +245,18 @@ class LevelEntrance(AnimTile):
             if key == accepted[0]:
                 
                 def pushit(x):
+                    self.game.PopSuspend()
                     self.game.PushLevel(self.next_level)
+                    
                     delattr( self, "now_locked" )
                     Renderer.RemoveDrawable(x)
                     
                     raise NewFrame()
                 
                 from posteffect import FadeOutOverlay
-                Renderer.AddDrawable( FadeOutOverlay(2.5, fade_end=0.0, on_close=pushit) )
+                Renderer.AddDrawable( FadeOutOverlay(defaults.enter_level_fade_time, fade_end=0.0, on_close=pushit) )
         
+        from notification import MessageBox
         self.game.FadeOutAndShowStatusNotice("""Enter '{1}'? 
 You might die at this place, so be careful. 
 
@@ -261,7 +264,9 @@ Press {0} to risk it and {2} to leave.""".format(
                 KeyMapping.GetString("accept"),
                 name,
                 KeyMapping.GetString("escape")),
-            defaults.game_over_fade_time,(550,85),0.0,accepted,sf.Color.White,on_close)
+            defaults.messagebox_fade_time,(550,90),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_OUT)
+        
+        self.game.PushSuspend()
         
         
 class Blocker(Tile):

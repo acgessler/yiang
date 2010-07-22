@@ -30,13 +30,17 @@ from renderer import Drawable, Renderer
 
 class MessageBox(Drawable):
     """Implements a reusable, generic message box that is drawn as overlay"""
+    
+    NO_FADE_IN, NO_FADE_OUT = 0x10000,0x20000
+    
     def __init__(self, text,
         fade_time=1.0,
         size=(550,120),
         auto_time=0.0,
         break_codes=(KeyMapping.Get("accept")),
         text_color=sf.Color.Red,
-        on_close=lambda x:None):
+        on_close=lambda x:None,
+        flags=0):
         
         """Create a message box.
         XXX document parameters
@@ -50,15 +54,20 @@ class MessageBox(Drawable):
         self.text = text
         self.on_close = on_close
         self.size = size
+        self.flags |= flags
                 
         from posteffect import FadeOutOverlay
-        self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
+        
+        if self.flags & MessageBox.NO_FADE_IN == 0:
+            self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
                 
     def Draw(self):
         
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
-            Renderer.AddDrawable(self.fade)
+            
+            if self.flags & MessageBox.NO_FADE_IN == 0:
+                Renderer.AddDrawable(self.fade)
                 
         curtime = self.clock.GetElapsedTime() 
         if self.auto_time > 0.0 and curtime > self.auto_time:
@@ -74,11 +83,14 @@ class MessageBox(Drawable):
         return True
             
     def _RemoveMe(self):
-        Renderer.RemoveDrawable(self.fade)
+        if self.flags & MessageBox.NO_FADE_IN == 0:
+            Renderer.RemoveDrawable(self.fade)
+            
         Renderer.RemoveDrawable(self)
       
-        from posteffect import FadeInOverlay
-        Renderer.AddDrawable(FadeInOverlay(self.fade_time * 0.5, self.fade.GetCurrentStrength()))
+        if self.flags & MessageBox.NO_FADE_OUT == 0:
+            from posteffect import FadeInOverlay
+            Renderer.AddDrawable(FadeInOverlay(self.fade_time * 0.5, defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()))
                 
         self.on_close(self.result[-1])
         raise NewFrame()
