@@ -14,6 +14,7 @@
   </icons>
   <hosts>
     <host name="sidebar">
+	  <autoscaleDPI>true</autoscaleDPI>
       <base type="HTML" apiVersion="1.0.0" src="YIANG.html" />
       <permissions>Full</permissions>
       <platform minPlatformVersion="1.0" />

@@ -1,7 +1,7 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=Unicode" />
-        <title>Main Gadget | YIANG</title>
+        <title>Highscore Flyout | YIANG</title>
         <style type="text/css">
         body
         {
@@ -9,7 +9,7 @@
             width: 160px;
             height: 150px;
             font-family: verdana;
-            font-size: 15px;
+            font-size: 5px;
 			color:#FAFAFA;
 			overflow: visible;
 			/*filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr="#A0A0A0",EndColorStr="#CDCDCD");*/	
@@ -18,7 +18,7 @@
 		{
 		color:#FAFAFA;
 		}
-		a.Header:hover{color:#CBCBCB;font-size: 11px;}
+		a.Header:hover{color:#CBCBCB;font-size: 7px;}
         #gadgetContent
         {
             
@@ -32,13 +32,13 @@
         }
 		.Header
 		{
-		margin-top: 10px;
-		font-size:12px;
+		margin-top: 5px;
+		font-size:8px;
 		text-decoration:none;
 		}
 		.Highscore
 		{
-		font-size: 14px;
+		font-size: 18px;
 		text-decoration:none;
 		}
 		.Version
@@ -49,7 +49,7 @@
 			var gDocument = System.Gadget.document;
             function init(){
 				var bgcolor = "black";
-				var size = "small";
+				var size = "big";
 				//bgcolor = gDocument.Settings.read('bgcolor');
 				setBackground(size,bgcolor);
                 }
@@ -66,7 +66,7 @@
 				document.body.style.height = "200px";
 				document.getElementById("gadgetContent").style.width = "230px";
 				document.getElementById("gadgetContent").style.height = "180px";}}
-				oBackground.src = "images/"+size+bgcolor+".png";
+				oBackground.src = "../images/"+size+bgcolor+".png";
 				}
 				
 			// Show the flyout
@@ -84,8 +84,8 @@
     <body onload="init();" bgcolor="white" border="2">
         <g:background id="imgBackground">
             <div id="gadgetContent">
-				<div class="Header"><a class="Header" href="http://www.greentoken.de/yiang">the YIANG</a> | Gadget</div><br>
-				<div class="Highscore"><a class="Highscore" onClick="showFlyout('highscore')"><b>Highscore:</b></a><br>{Name}<br>{Highscore}</div>
+				<div class="Header"><a class="Header" href="http://www.greentoken.de/yiang">the YIANG</a> | Gadget</div>
+				<div class="Highscore"><b>Highscore:</b></a><br>{Name1}<br>{Highscore1}<br>{Name2}<br>{Highscore2}<br>{Name3}<br>{Highscore3}</div>
 				<div class="Version"><b>current Version:</b><br>{Version}</div>
 			</div>
 		</g:background>

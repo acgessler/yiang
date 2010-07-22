@@ -16,8 +16,8 @@
    version="1.1"
    inkscape:version="0.47 r22583"
    inkscape:export-filename="C:\Users\Tobias\AppData\Local\Microsoft\Windows Sidebar\Gadgets\YIANG.gadget\background.png"
-   inkscape:export-xdpi="135.6297"
-   inkscape:export-ydpi="135.6297"
+   inkscape:export-xdpi="135.39095"
+   inkscape:export-ydpi="135.39095"
    sodipodi:docname="background.svg">
   <defs
      id="defs4">
@@ -287,11 +287,11 @@
     <linearGradient
        id="linearGradient3590-7-8-0">
       <stop
-         style="stop-color:#ebedef;stop-opacity:1;"
+         style="stop-color:#7b7b7b;stop-opacity:1;"
          offset="0"
          id="stop3592-4-8-0" />
       <stop
-         style="stop-color:#0000ff;stop-opacity:1;"
+         style="stop-color:#242424;stop-opacity:1;"
          offset="1"
          id="stop3594-0-2-6" />
     </linearGradient>
@@ -315,7 +315,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="270.25693"
+     inkscape:cx="201.86407"
      inkscape:cy="889.07527"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -352,6 +352,9 @@
        height="155.71428"
        x="70"
        y="72.362183"
-       ry="17.142857" />
+       ry="17.142857"
+       inkscape:export-xdpi="112.92181"
+       inkscape:export-ydpi="112.92181"
+       inkscape:export-filename="C:\Users\Tobias\AppData\Local\Microsoft\Windows Sidebar\Gadgets\yiang.gadget\background.png" />
   </g>
 </svg>
