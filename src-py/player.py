@@ -188,6 +188,8 @@ class Player(Entity):
         self.inventory.append(item)
         self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName(),self.pos))
         
+        print("Add item to inventory: {0}".format(item))
+        
     def AddAmmo(self,ammo):
         """Add a specific amount of ammo to the player's inventory.
         One shoot consumes one unit of ammo.""" 
@@ -195,6 +197,8 @@ class Player(Entity):
         self.ammo += ammo
         self.game.AddEntity(InventoryChangeAnimStub("++ {0}x ammo".format(ammo),
             self.pos,color=sf.Color.Yellow))
+        
+        print("Add ammo: {0}".format(ammo))
         
     def RemoveFromInventory(self,item):
         """Removes an item from the player's inventory. If the
