@@ -366,7 +366,7 @@ class Player(Entity):
                 
     def _CheckForTopMapBorder(self):
         lv = self.game.GetLevel()
-        if lv.GetScroll() & Level.SCROLL_TOP == 0 and self.pos[1] < lv.GetLevelVisibleSize()[1]-lv.GetLevelSize()[1]:
+        if lv.GetScroll() & Level.SCROLL_TOP == 0 and self.pos[1] < lv.GetLevelVisibleSize()[1]-lv.GetLevelSize()[1] and defaults.debug_godmode is False:
             self._Kill("the map's upper border")
             
     def _CheckForBottomMapBorder(self):

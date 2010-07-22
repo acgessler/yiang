@@ -450,7 +450,7 @@ TimeDelta:         {dtime:.4}
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
         def on_close(key):
             if key == accepted[2]:
-                self.GameOver()
+                self.BackToWorldMap() if self.GetGameMode() == Game.CAMPAIGN else self.GameOver()
             player.Respawn(True if key == accepted[0] else False)
             
         self._FadeOutAndShowStatusNotice(sf.String("""You committed suicide! 
@@ -458,11 +458,12 @@ Your friendly guide was: {0}
 
 Press {1} to restart at the last respawning point
 Press {2} to restart the level
-Press {3} to leave the game""".format(
+Press {3} to {4}""".format(
                     killer,
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("level-new"),
-                    KeyMapping.GetString("escape")
+                    KeyMapping.GetString("escape"),
+                    "return to the map" if self.GetGameMode() == Game.CAMPAIGN else "leave the game"
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
@@ -537,9 +538,8 @@ Hit {0} or {1} to return to the menu .. """.format(
                 Renderer.RemoveDrawable(x)
                 pass
             
-            self.FadeOutAndShowStatusNotice("""You did it! Now go on, there's more to win.
-            
-"""+self.level.GetStatsString()+
+            self.FadeOutAndShowStatusNotice("""Go on, there's more to do.
+"""+ ("" if self.level is None else self.level.GetStatsString())+
 """
 
 Hit any key to continue.
@@ -548,6 +548,7 @@ Hit any key to continue.
             
         Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
         self.PushSuspend()
+        raise NewFrame()
     
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""

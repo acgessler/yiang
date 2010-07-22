@@ -269,6 +269,7 @@ class LevelEntrance(AnimTile):
                 Renderer.AddDrawable( FadeOutOverlay(defaults.enter_level_fade_time, fade_end=0.0, on_close=pushit) )
                 return
             
+            delattr( self, "now_locked" )
             self.game.PopSuspend()
         
         from notification import MessageBox
