@@ -1,0 +1,26 @@
+from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,3,direction=Entity.DIR_VER)
+_/^\_
+]HIT[
+/ME!\
+
+_/^\_
+]O N[
+/TOP\
+
+_/^\_
+]HIT[
+/ME!\
+
+
+_/^\_
+]O N[
+/TOP\
+
+_/^\_
+]HEY[
+/HO!\
+
+_/^\_
+]LET[
+/SGO\
+
