@@ -38,3 +38,6 @@ x=121314
 
 # Dark Green
 d=009000
+
+# Invisible :-)
+i=00000000

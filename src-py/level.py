@@ -628,8 +628,13 @@ class LevelLoader:
                     for n, line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
                         code, col = [l.strip() for l in line.split("=")]
 
-                        assert len(col) == 6
-                        LevelLoader.cached_color_dict[code] = sf.Color(int(col[0:2], 16), int(col[2:4], 16), int(col[4:6], 16))
+                        assert len(col) in (6,8)
+                        LevelLoader.cached_color_dict[code] = sf.Color(
+                            int(col[0:2], 16), 
+                            int(col[2:4], 16), 
+                            int(col[4:6], 16), 
+                            int(col[6:8], 16) if len(col)==8 else 255 
+                        )
 
                 print("Caching colors.txt file, got {0} dict entries".format(len(LevelLoader.cached_color_dict)))
 
