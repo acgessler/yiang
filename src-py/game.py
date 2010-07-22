@@ -395,7 +395,7 @@ TimeDelta:         {dtime:.4}
         self.score = max(0, self.score + pp )
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         
-        self.level.CountStats("score",pp)
+        self.level.CountStats("score",pp*0.01)
         return pp
     
     def AddLives(self,num):
