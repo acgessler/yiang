@@ -93,6 +93,9 @@ class Key(Tile,InventoryItem):
     
         # XXX temporary solution
         def GetName(col):
+            if col.a == 0:
+                return "Invisible"
+                
             if col.r > 60:
                 if col.g > 60:
                     if col.b > 60:
