@@ -2,4 +2,11 @@
 # extra items to be placed on the generated world map
 # this is an input file to genworldmaps.py
 
-27 22 _pl
+51 126 _pl
+37 10 _a0
+109 12 _a1
+196 29 _a2
+23 71 _a3
+117 74 _a4
+12 110 _a5
+138 118 _a6

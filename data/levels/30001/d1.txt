@@ -1,0 +1,5 @@
+from tile import Tile; <out> = Tile(<raw>,5,3,halo_img=None,collision=Entity.BLOCK)
+igiii
+iippi
+poopp
+

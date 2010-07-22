@@ -31,7 +31,7 @@ _=ffffff
 a=007FFF
 
 # Orange
-o=FF9F00
+o=FF9F40
 
 # Dummy 1
 x=121314
@@ -41,3 +41,6 @@ d=009000
 
 # Invisible :-)
 i=00000000
+
+# Brown
+P=554c2c
