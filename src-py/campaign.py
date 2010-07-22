@@ -36,9 +36,9 @@ class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
     world's map to be rendered fluently."""
     
-    def __init__(self, level, game, lines, name="Map of the World", minimap="map.bmp", overlays=["extra_items.txt"]):
+    def __init__(self, level, game, lines, name="Map of the World", minimap="map.bmp", overlays=["extra_items.txt"], color=(15,30,15)):
         Level.__init__(self,level,game, lines, 
-            color=(15,30,15),
+            color=color,
             postfx=[("ingame2.sfx",())],
             name=name,
             gravity=0.0,
@@ -104,7 +104,7 @@ class CampaignLevel(Level):
         self.minimap_sprite = sf.Sprite(self.minimap_vis)
         
         w = max(w, defaults.resolution[0]*defaults.minimap_size)
-        h = max(h,w*self.minimap_img.GetWidth()/self.minimap_img.GetHeight())
+        h = max(h,w*self.minimap_img.GetHeight()/self.minimap_img.GetWidth())
         
         # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
         x,y = 100,defaults.resolution[1]-h-100
