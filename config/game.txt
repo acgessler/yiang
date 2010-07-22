@@ -4,6 +4,10 @@
 # To access 2-tuples (such as resolution), .x and .y can be
 # used to access the values (i.e. resolution.x)
 
+<<<<<<< local
+
+=======
+>>>>>>> other
 fullscreen=False
 resolution.x=1280
 resolution.y=750
