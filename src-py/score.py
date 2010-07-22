@@ -30,11 +30,8 @@ class ScoreTile(AnimTile):
     entering this tile"""
 
     def __init__(self,text,height,frames,speed,points,randomize=False):
-        AnimTile.__init__(self,text,height,frames,speed,halo_img="halo_score.png")
+        AnimTile.__init__(self,text,height,frames,speed,halo_img="halo_score.png",randomize=randomize)
         self.points = points
-
-        if randomize is True:
-            self.GotoRandom()
         
     def Interact(self,other):
         if isinstance(other,Player):
@@ -45,6 +42,22 @@ class ScoreTile(AnimTile):
             
         return Entity.ENTER
 
+class LifeTile(AnimTile):
+    """The player receives an extra life upon
+    entering a LifeTile"""
+
+    def __init__(self,text,height,frames,speed,lives=1,randomize=False):
+        AnimTile.__init__(self,text,height,frames,speed,halo_img="halo_score.png",randomize=randomize)
+        self.lives = lives
+        
+    def Interact(self,other):
+        if isinstance(other,Player):
+            self.game.AddLife(self.lives)
+            
+            self.game.RemoveEntity(self) 
+            self.game.AddEntity(ScoreTileAnimStub("+ 1 Life",self.pos,1.0))
+            
+        return Entity.ENTER
 
 class ScoreTileAnimStub(Tile):
     """Implements the text string that is spawned whenever

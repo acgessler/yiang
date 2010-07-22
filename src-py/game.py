@@ -398,6 +398,11 @@ TimeDelta:         {dtime:.4}
         self.level.CountStats("score",pp)
         return pp
     
+    def AddLives(self,num):
+        """Award 'num' lives to the player"""
+        self.lives += num
+        print("Awarding myself {0} fresh lives (total: {1})".format(num,self.lives))
+    
     def TakeScore(self,points):
         """Take a certain amount of money from the player's score. DEPRECATED, use Award()"""
         return self.Award(-points)

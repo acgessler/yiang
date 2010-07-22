@@ -1,0 +1,28 @@
+from score import LifeTile; <out> = LifeTile(<raw>,3,7,3.0,1)
+ \O/
+  | 
+  /\ 
+
+ \O/
+  | 
+  /\ 
+
+  O/
+ /| 
+ /\ 
+
+  O
+ /|\ 
+  /\
+
+ \O
+  |\ 
+ /\
+
+ \O/
+  | 
+  /\
+
+ \O/
+  | 
+  /\
