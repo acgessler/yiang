@@ -75,6 +75,22 @@ class CampaignLevel(Level):
         if defaults.world_draw_hud is True:
             self._DrawHUD()
             
+    def _GetImg(self,img):
+        sprite = sf.Sprite(img)
+        
+        w,h = img.GetWidth(),img.GetHeight()
+        w = max(w, defaults.resolution[0]*defaults.minimap_size)
+        h = max(h,w*img.GetHeight()/img.GetWidth())
+        
+        # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
+        x,y = 100,defaults.resolution[1]-h-100
+        sprite.SetPosition(x-0.5,y-0.5)
+        sprite.Resize(w,h)
+        
+        sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
+        sprite.SetBlendMode(sf.Blend.Alpha)
+        return sprite,w,h,x,y
+            
     def _LoadHUD(self):
         self.minimap_img, self.minimap_vis, self.minimap_sprite = sf.Image(), sf.Image(), None
         if not self.minimap_img.LoadFromFile(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap )):
@@ -101,18 +117,7 @@ class CampaignLevel(Level):
                     col.a = max(defaults.minimap_alpha, col.a*s*0.5)
                     self.minimap_vis.SetPixel(x,y,col)
             
-        self.minimap_sprite = sf.Sprite(self.minimap_vis)
-        
-        w = max(w, defaults.resolution[0]*defaults.minimap_size)
-        h = max(h,w*self.minimap_img.GetHeight()/self.minimap_img.GetWidth())
-        
-        # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
-        x,y = 100,defaults.resolution[1]-h-100
-        self.minimap_sprite.SetPosition(x-0.5,y-0.5)
-        self.minimap_sprite.Resize(w,h)
-        
-        self.minimap_sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
-        self.minimap_sprite.SetBlendMode(sf.Blend.Alpha)
+        self.minimap_sprite,self.sw,self.sh,self.sx,self.sy = self._GetImg(self.minimap_vis)
         
         # finally, construct the rectangle around the minimap
         self.minimap_shape = sf.Shape()
@@ -120,10 +125,10 @@ class CampaignLevel(Level):
         
         # interestingly, the 0.5px offset is not needed for
         # lines and other geometric shapes. Awesome.
-        self.minimap_shape.AddPoint(x,y,bcol,bcol)
-        self.minimap_shape.AddPoint(x+w,y,bcol,bcol)
-        self.minimap_shape.AddPoint(x+w,y+h,bcol,bcol)
-        self.minimap_shape.AddPoint(x,y+h,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx,self.sy,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx+self.sw,self.sy,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx+self.sw,self.sy+self.sh,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx,self.sy+self.sh,bcol,bcol)
 
         self.minimap_shape.SetOutlineWidth(3)
         self.minimap_shape.EnableFill(False)
@@ -177,13 +182,46 @@ class CampaignLevel(Level):
                 # this happens if the player moves outside the map
                 pass
                 
+    def _SetPlayerPos(self,mx,my):
+        for entity in self.EnumAllEntities():
+            if isinstance(entity,Player):
+            
+                entity.SetPosition((mx,my))
+                self.Scroll((mx,my))
+                print("CampaignLevel: Move player to {0}\{1}".format(mx,my))
+                raise NewFrame()
+        else:
+            assert False # we have a player there must be one!
             
     def _DrawHUD(self):
         if self.minimap_sprite is None:
             return
         
+        if defaults.debug_godmode is True:
+            if not hasattr(self,"minimap_debug_shape"):
+                self.minimap_debug_shape,w,h,x,y = self._GetImg(self.minimap_img)
+                
+            inp = Renderer.app.GetInput()
+            if inp.IsMouseButtonDown(sf.Mouse.Left):
+                if not hasattr(self,"block_hud_click"):
+                    self.block_hud_click = True
+                    mx,my = inp.GetMouseX(),inp.GetMouseY()
+                    if self.sx <= mx < self.sx+self.sw and self.sy <= my < self.sy+self.sh:
+                        mx -= self.sx
+                        my -= self.sy
+                        
+                        self._SetPlayerPos(mx,my)
+            else:
+                try:
+                    delattr(self,"block_hud_click")
+                except AttributeError:
+                    pass
+                    
+            self.game.DrawSingle(self.minimap_debug_shape)
+            
         self.game.DrawSingle(self.minimap_sprite)
         self.game.DrawSingle(self.minimap_shape)
+        
         
     def Scroll(self,pos):
         # Center the viewport around the player (this completely

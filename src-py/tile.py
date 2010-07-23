@@ -425,15 +425,16 @@ class TileLoader:
                 print("Loading tile from "+file)
                 with open(file,"rt") as f:
                     lines = f.read().split("\n",1)
-                    assert len(lines)==2
                       
             except IOError:
                 print("Could not open "+file+" for reading")
+                lines = ["<out> = Tile(<raw>,Tile.AUTO,Tile.AUTO,collision=Entity.ENTER)","(Missing tile: {0})".format(file)]
 
             except AssertionError as err:
                 print("File "+file+" is not well-formatted:")
                 traceback.print_exc()
 
+            assert len(lines)==2
             replace = {
                     "<out>"  : "entity",
                     "<raw>"  : 'r"""'+lines[1].rstrip().replace('\"\"\"','\"\"\" + \'\"\"\"\' + \"\"\"') +' """',
