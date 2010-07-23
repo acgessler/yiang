@@ -75,7 +75,8 @@ class Mine(AnimTile):
         if self.GetState() == 1:
             if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
                 self.Set(self.GetNumFrames())
-                self.game.Kill("an exploded mine (BOOooOOM!)",self.__other)
+                if not defaults.debug_godmode:
+                    self.game.Kill("an exploded mine (BOOooOOM!)",self.__other)
                 self.SetState(0)
                 self.mine_activated = False
         
