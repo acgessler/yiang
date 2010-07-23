@@ -457,7 +457,8 @@ class Player(Entity):
             if cd is None:
                 continue
             
-            cd = (cd[0], cd[1], cd[2] + cd[0], cd[3] + cd[1])     
+            cd = (cd[0], cd[1], cd[2] + cd[0], cd[3] + cd[1])  
+            res = None   
             
             # is our left border intersecting?
             if cd[2] >= ab[0] >= cd[0]:
@@ -480,7 +481,7 @@ class Player(Entity):
             if cd[2] >= ab[2] >= cd[0]:
                 if ab[1] <= cd[1] <= ab[3] or cd[1] <= ab[1] <= cd[3]:
                     
-                    res = collider.Interact(self)
+                    res = res or collider.Interact(self)
                     if res == Entity.KILL:
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:
@@ -498,7 +499,7 @@ class Player(Entity):
             if cd[1] <= ab[3] <= cd[3]:
                 if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2]:
                     
-                    res = collider.Interact(self)
+                    res = res or collider.Interact(self)
                     if res == Entity.KILL:
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:
@@ -518,7 +519,7 @@ class Player(Entity):
             if cd[1] <= ab[1] <= cd[3]:
                 if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2]:
                     
-                    res = collider.Interact(self)
+                    res = res or collider.Interact(self)
                     if res == Entity.KILL:
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:

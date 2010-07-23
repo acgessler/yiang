@@ -75,7 +75,7 @@ class Level:
         self.gravity = defaults.gravity if gravity is None else gravity
         
         # pre-defined ('well-known')
-        self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0],"achievements":[0]}
+        self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0.0],"achievements":[0]}
         
         self.postfx_rt = []
         self.postfx = postfx or []
@@ -165,7 +165,7 @@ class Level:
         return """Statistics (last level played):
         
         {deaths:4} - Suicidal Deaths Committed
-        {score:4} - Score Received
+        {score:4.4} ct. - Score Received
         {s_kills:4} - Minor Enemy Kills:   
         {l_kills:4} - Major Enemy Kills:  
         {e_kills:4} - Epic Enemy Kills

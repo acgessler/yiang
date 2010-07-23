@@ -395,7 +395,7 @@ TimeDelta:         {dtime:.4}
         self.score = max(0, self.score + pp )
         print("Awarding myself {0} points (total: {1})".format(points,self.score))
         
-        self.level.CountStats("score",pp*0.01)
+        self.level.CountStats("score",pp)
         return pp
     
     def AddLives(self,num):
@@ -798,7 +798,7 @@ class Entity(Drawable):
     of a set of tiles. Entities receive Update() callbacks once per
     logical frame."""
 
-    ENTER,KILL = range(2)
+    ENTER,KILL = 0x100,0x200
     DIR_HOR,DIR_VER=range(2)
 
     BLOCK_LEFT,BLOCK_RIGHT,BLOCK_UPPER,BLOCK_LOWER,BLOCK = 0x1,0x2,0x4,0x8,0xf
