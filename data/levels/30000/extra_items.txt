@@ -43,5 +43,12 @@
 # story components
 # see draft/story_xxx.txt for more details and the full text
 
+# story_0
 30 22 _n0
+
+# story_1
 50 24 _n1
+
+# story_2 + flower
+56 37 _n2
+56 37 gfl

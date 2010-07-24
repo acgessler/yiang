@@ -1,0 +1,6 @@
+from tile import Tile; <out> = Tile(<raw>,6,4,halo_img=None,collision=Entity.ENTER,draworder=10001)
+O  O .
+ \ |/ O
+\|  \/
+  \/
+
