@@ -22,15 +22,15 @@ import os
 # -----------------------------------------------------------------------------
 # configurable metrics, altered by config/game.txt upon startup
 
-version = 1.1
-revision = 196
+version = 2.0
+revision = 374
 server_name = "www.greentoken.de"
 homepage_url = "http://"+server_name+"/yiang"
 resolution = [1280, 850]
 fullscreen = False
 letter_size = [8, 13]
 letter_height_intro = 13
-letter_height_menu = 100
+letter_height_menu = 120
 letter_height_status = 36
 letter_height_lives = 9
 letter_height_game_over = 17 

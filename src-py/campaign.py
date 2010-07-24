@@ -19,6 +19,7 @@
 
 # Python core
 import os
+import random
 
 # PySFML
 import sf
@@ -45,7 +46,7 @@ class CampaignLevel(Level):
             gravity=0.0,
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL,
-            distortion_params=(30.0,5.0,0.5))
+            distortion_params=(30.0,5.0,1.5))
         
         self.status_message = ""
         self.SetStatusMessage("")
@@ -323,8 +324,13 @@ class CampaignTile(Tile):
     """Tile for the campaign map, randomly permutes parts of
     its image to achieve greater realism"""
     
-    def __init__(self,*args, **kwargs):
-        Tile.__init__(self,*args,**kwargs)
+    def __init__(self,text, *args, **kwargs):
+        # randomly permute every tile into 4 different display tiles.
+        # if we made more, the number of different strings tyo be rendered
+        # would get too high, so performance would potentially degrade.
+        rand = random.random() 
+        sp = list(("".join(reversed(n)) if rand>0.5 else n) for n in text.split("\n"))
+        Tile.__init__(self, "\n".join(reversed(sp) if random.random()>0.5 else sp), *args,**kwargs)
     
 
 class LevelEntrance(AnimTile):
