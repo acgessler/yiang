@@ -316,8 +316,8 @@ class LevelEntrance(AnimTile):
         self.done = False
         
     def Interact(self,other):
-        if isinstance(other,Player):
-            if hasattr(self,"now_locked"):
+        if isinstance(other,Player) and not hasattr(self,"now_locked"):
+            if self.done is True and defaults.debug_godmode is False:
                 self.level.SetStatusMessage("You completed this level!",sf.Color.Green)
             else:
                 self.level.SetStatusMessage("Press {0} to enter '{1}'".format(KeyMapping.GetString("accept"),self._GuessLevelName()))
@@ -354,11 +354,7 @@ class LevelEntrance(AnimTile):
             pass
         
     def _RunLevel(self):
-        if self.done is True and defaults.debug_godmode is False:
-            return
-        
         self.now_locked = True
-        
         
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("escape"))
         def on_close(key):
