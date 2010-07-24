@@ -79,9 +79,6 @@ class Mine(AnimTile):
                     self.game.Kill("an exploded mine (BOOooOOM!)",self.__other)
                 self.SetState(0)
                 self.mine_activated = False
-        
-            
-        
 
     def GetVerboseName(self):
         return "an exploded mine (BOOooOOM!)"

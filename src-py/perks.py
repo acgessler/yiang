@@ -315,4 +315,30 @@ class ZeroG(Perk):
         self.level.gravity = self.startgrav
         assert self.level.gravity>=0
         
+        
+class Minimi(Perk):
+    """The minimi perk halves the player's body dimensions,
+    which make him fit in one-tile-long caves"""
+    
+    def __init__(self,text,height,frames,time=1.0,anim_speed=1.0):
+        Perk.__init__(self,os.path.join(defaults.data_dir,"tiles_misc","minimi.txt"),text,height,frames,anim_speed)
+        self.time = time
+        
+    def EnablePerk(self,player):
+        if player in self.players:
+            return
+        print("Enable perk: Minimi")
+        other = Perk.EnablePerk(self,player)
+        if other is None:
+            self._SetAutoExpire(player,self.time)
+            return
+
+        other._SetAutoExpire(player,self.time,True)
+        
+    def DisablePerk(self,player):
+        Perk.DisablePerk(self,player)
+        print("Disable perk: Minimi")
+        
+        
+        
     

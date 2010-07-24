@@ -90,6 +90,17 @@ class CampaignLevel(Level):
         sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
         sprite.SetBlendMode(sf.Blend.Alpha)
         return sprite,w,h,x,y
+    
+    def _RebuildMinimap(self):
+        w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
+        for y in range(h):
+            for x in range(w):
+                col,s = self.minimap_img.GetPixel(x,y),self.minimap_offline[y][x]
+                col.r *= s
+                col.g *= s
+                col.b *= s
+                col.a = max(defaults.minimap_alpha, col.a*s*0.5)
+                self.minimap_vis.SetPixel(x,y,col)
             
     def _LoadHUD(self):
         self.minimap_img, self.minimap_vis, self.minimap_sprite = sf.Image(), sf.Image(), None
@@ -108,14 +119,7 @@ class CampaignLevel(Level):
                 self.minimap_offline.append([0.0]*w)
       
         else: # recover the saved minimap
-            for y in range(h):
-                for x in range(w):
-                    col,s = self.minimap_img.GetPixel(x,y),self.minimap_offline[y][x]
-                    col.r *= s
-                    col.g *= s
-                    col.b *= s
-                    col.a = max(defaults.minimap_alpha, col.a*s*0.5)
-                    self.minimap_vis.SetPixel(x,y,col)
+            self._RebuildMinimap()
             
         self.minimap_sprite,self.sw,self.sh,self.sx,self.sy = self._GetImg(self.minimap_vis)
         
@@ -188,6 +192,11 @@ class CampaignLevel(Level):
             
                 entity.SetPosition((mx,my))
                 self.Scroll((mx,my))
+                
+                # needed or the cross at the player position
+                # remains sticky at its old place.
+                self._RebuildMinimap()
+                
                 print("CampaignLevel: Move player to {0}\{1}".format(mx,my))
                 raise NewFrame()
         else:
