@@ -1,0 +1,3 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_1",text_color=sf.Color(180,0,0),only_once=True)
+Also sprach der Prophet:
+So einfach wie ihre Staedte, ist auch ihr Glaube: sie selbst reduzierten ihre Welt auf 128 Zeichen. Sie sind linguistische Heiden, die es auszurotten gilt. Sie sind eine GEFAHR fuer uns und unseren Glauben.

@@ -231,12 +231,12 @@ class Game(Drawable):
             # .. and the number of remaining lifes
             string = "\n".join(map(lambda x:x*self.lives,
 " OOO     OOO   \n\
-O****O  O***O  \n\
- O****OO***O   \n\
-  O*******O    \n\
-   O*****O     \n\
-    O***O      \n\
-     O*O       \n\
+OOOOOO  OOOOO  \n\
+ OOOOOOOOOOO   \n\
+  OOOOOOOOO    \n\
+   OOOOOOO     \n\
+    OOOOO      \n\
+     OOO       \n\
       O        ".split("\n")))
             self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
             self.old_lives = self.lives
@@ -250,7 +250,7 @@ O****O  O***O  \n\
         self.DrawSingle(self.cached_lives_text)
 
         self.cached_lives_text.SetPosition(xstart,6)        
-        self.cached_lives_text.SetColor(sf.Color.Red)
+        self.cached_lives_text.SetColor(sf.Color(180,0,0))
         self.DrawSingle(self.cached_lives_text)
         
         # finally, the lower part of the cinematic box
@@ -520,14 +520,13 @@ That's {2}.\n\n
            "a new high score record" if record is True else self.score_map[int(math.log((self.score*10)+1,2))]) +
 self.level.GetStatsString()+
 """
-
 Hit {0} or {1} to return to the menu .. """.format(
                     KeyMapping.GetString("escape"),
                     KeyMapping.GetString("accept")
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),defaults.game_over_fade_time,(550,250),0.0,accepted,sf.Color.Green,on_close)
+        )),defaults.game_over_fade_time,(550,260),0.0,accepted,sf.Color.Green,on_close)
         
         raise NewFrame()
     
@@ -551,10 +550,9 @@ Hit {0} or {1} to return to the menu .. """.format(
             self.FadeOutAndShowStatusNotice("""Go on, there's more to do.
 """+ ("" if self.level is None else self.level.GetStatsString())+
 """
-
 Hit any key to continue.
 """,
-    defaults.messagebox_fade_time,(550,220),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_IN)
+    defaults.messagebox_fade_time,(550,230),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_IN)
             
         Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
         self.PushSuspend()

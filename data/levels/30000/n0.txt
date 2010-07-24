@@ -1,0 +1,3 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_0",text_color=sf.Color(180,0,0),only_once=True)
+Also sprach der Prophet:
+Gehe zu den Unglaeubigen, und bringe ihnen GLAUBEN UND FRIEDEN mit dem Schwert. Zerstoere all ihre Zeichen, Buchstaben, Ligaturen und Akzente denn sie sind boese und primitiv. ER ist mir erschienen und hat mir den Weg aufgezeigt.

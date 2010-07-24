@@ -554,7 +554,7 @@ class Level:
         """Get size of the visible part of the level. This is
         usually a constant throughout the lifetime of the
         level."""
-        return (defaults.tiles[0], self.level_size[1] - self.vis_ofs)
+        return (defaults.tiles[0], min(defaults.tiles[1], self.level_size[1] - self.vis_ofs ))
     
     def GetOrigin(self):
         """Get the current origin of the game. That is the

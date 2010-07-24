@@ -1,4 +1,4 @@
-from tile import Tile; <out> = Tile(<raw>,20,12,halo_img=None,collision=Entity.ENTER)
+from campaign import CampaignTile; <out> = CampaignTile(<raw>,20,12,halo_img=None,collision=Entity.ENTER)
 iiiiiiiiiiiiiiiiiiii
 iiiiiPiiiiiiiiiiiiii
 iiiiiiiiiiiiiiiiiiii

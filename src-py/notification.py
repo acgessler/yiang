@@ -164,7 +164,7 @@ class SimpleNotification(Entity):
             
             self.text_formatted += "\n\n"
         
-        self.box_dim = (line_length * 11, self.text_formatted.count("\n") * 16)
+        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.1))
         
     def Interact(self, other):
         if isinstance(other, Player) and self.use_counter > 0 and not hasattr(self, "running"):

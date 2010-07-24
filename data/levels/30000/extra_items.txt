@@ -36,3 +36,12 @@
 50 29 ~b1
 48 120 ~b2
 182 17 _cd
+
+
+
+
+# story components
+# see draft/story_xxx.txt for more details and the full text
+
+30 22 _n0
+50 24 _n1

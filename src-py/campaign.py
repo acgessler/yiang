@@ -45,7 +45,7 @@ class CampaignLevel(Level):
             gravity=0.0,
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL,
-            distortion_params=(30.0,5.0,2.0))
+            distortion_params=(30.0,5.0,0.5))
         
         self.status_message = ""
         self.SetStatusMessage("")
@@ -118,7 +118,7 @@ class CampaignLevel(Level):
             a = int(240.0 * (1.0 - min(1.0, abs((self.status_msg_fade.GetElapsedTime()*0.4+0.05) - 0.6) )))
             if a > 0:
                 self.status_msg_text.SetColor(sf.Color( 60,60,60, a))
-                self.status_msg_text.SetPosition(self.status_msg_pos[0]-2,self.status_msg_pos[1])
+                self.status_msg_text.SetPosition(self.status_msg_pos[0]-1,self.status_msg_pos[1])
                 self.game.DrawSingle(self.status_msg_text)
                 
                 self.status_msg_text.SetColor(sf.Color( c.r, c.g, c.b, a))
@@ -285,8 +285,7 @@ class CampaignLevel(Level):
             
         self.game.DrawSingle(self.minimap_sprite)
         self.game.DrawSingle(self.minimap_shape)
-        
-        
+           
     def Scroll(self,pos):
         # Center the viewport around the player (this completely
         # replaces the original implementation)
@@ -301,6 +300,12 @@ class CampaignLevel(Level):
         self.UncoverMinimap(pos)
         self.oldpos = pos
         
+    def ToCameraCoordinates(self, coords):
+        # This fixes small gaps between the tiles caused by ascii characters which 
+        # are not as tall as they could be for their font size (i.e. 'a' leaves a
+        # gap underneath)
+        return ( (coords[0] - self.origin[0])* 29.8/30.0, (coords[1] - self.origin[1])* 28.9/30.0)
+        
         
 class CampaignPlayer(Player):
     """Slightly adjust the default player behaviour for the world map.
@@ -312,6 +317,14 @@ class CampaignPlayer(Player):
         
     def _Shoot(self):
         return
+    
+
+class CampaignTile(Tile):
+    """Tile for the campaign map, randomly permutes parts of
+    its image to achieve greater realism"""
+    
+    def __init__(self,*args, **kwargs):
+        Tile.__init__(self,*args,**kwargs)
     
 
 class LevelEntrance(AnimTile):
