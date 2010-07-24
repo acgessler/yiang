@@ -1,7 +1,7 @@
 texture framebuffer = {FRAMEBUFFER}
 
 #ifndef NO_INTENSE_PPFX
-vec2 cur
+vec2 cur = {PLAYER_POS}
 
 #ifndef NO_MIRROR
 vec2 lowerh = {STATUS_BAR_DIM}

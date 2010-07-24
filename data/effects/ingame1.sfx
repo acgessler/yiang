@@ -1,7 +1,7 @@
 texture framebuffer = {FRAMEBUFFER}
 
 #ifndef NO_INTENSE_PPFX
-vec2 cur
+vec2 cur = {PLAYER_POS}
 
 #ifndef NO_MIRROR
 vec2 lowerh = {STATUS_BAR_DIM}
@@ -33,14 +33,14 @@ effect
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(tin);
 	vec4 another = framebuffer(tin+vec2(-0.010,-0.004));
-	//vec4 another = framebuffer(tin+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
+	//vec4 anotheb = framebuffer(tin+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
 	//vec4 evenmor = framebuffer(tin+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
 #ifdef ENABLE_DITHER
 	vec4 dither = noise(randomUV+tin);
 #endif
 
 	float scale =  clamp((length(tin-cur))*1.25,0.0,1.0);
-	vec4 color = (pixel*1.0f+(another*0.25)/*+(evenmor*0.15)*/);
+	vec4 color = (pixel*1.0f+(another*0.25)/*+(evenmor*0.10)+(anotheb*0.15)*/);
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 

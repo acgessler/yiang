@@ -400,11 +400,12 @@ class Player(Entity):
                 delattr(self, "restore_color")
 
     def _UpdatePostFX(self):
-        origin = self.game.GetLevel().GetOrigin()
+        #origin = self.game.GetLevel().GetOrigin()
 
         # XXX Use Game's coordinate sustem conversion utilities
-        self.game.GetLevel().SetPostFXParameter("cur", (self.pos[0] + self.pwidth // 2 - origin[0]) / defaults.tiles[0],
-            1.0 - (self.pos[1] + self.pheight // 2 - origin[1]) / defaults.tiles[1])
+        #self.game.GetLevel().SetPostFXParameter("cur", (self.pos[0] + self.pwidth // 2 - origin[0]) / defaults.tiles[0],
+        #    1.0 - (self.pos[1] + self.pheight // 2 - origin[1]) / defaults.tiles[1])
+        pass
 
     def _Kill(self, killer="<add reason>"):
         """Internal stub to kill the player and to fire some nice
