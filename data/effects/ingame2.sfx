@@ -1,3 +1,7 @@
+
+#define NO_MIRROR
+
+
 texture framebuffer = {FRAMEBUFFER}
 
 #ifndef NO_INTENSE_PPFX
@@ -12,6 +16,7 @@ vec2 lowerh = {STATUS_BAR_DIM}
 #ifdef ENABLE_DITHER
 texture noise = ../data/textures/noise.png
 vec2 randomUV = {RANDOM}
+float dither_strength = {DITHER_STRENGTH}
 #endif
 
 effect
@@ -36,15 +41,15 @@ effect
 	vec4 notthis = framebuffer(tin+vec2( 0.003,-0.002));
 	vec4 evenmor = framebuffer(tin+vec2(-0.003, 0.002));
 #ifdef ENABLE_DITHER
-	vec4 dither = noise(randomUV+tin);
+	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
 #endif
-	float scale =  clamp((length(tin-cur))*0.8,0.0,1.0);
+	float scale =  clamp((length(tin-cur))*1.5,0.0,1.0);
 	vec4 color = (pixel+another+notthis+evenmor)*0.25;
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
 #ifdef ENABLE_DITHER
-	_out.rgb += (dither.rgb-0.5f)*0.0100;
+	_out.rgb += (dither.rgb-0.5f)*0.0200 * dither_strength;
 #endif
 
 	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);

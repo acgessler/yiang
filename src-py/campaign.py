@@ -100,6 +100,7 @@ class CampaignLevel(Level):
     def Draw(self, time, dtime):
         self._UpdateEntities(time,dtime)
         self._DoAutoScroll(dtime)
+        self._UpdateDistortion(time,dtime)
         self._DrawEntities()
         self._UpdateEntityList()
         

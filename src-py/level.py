@@ -27,6 +27,7 @@ import itertools
 import collections
 import os
 import itertools
+import math
 
 # My own stuff
 import defaults
@@ -50,7 +51,8 @@ class Level:
         name=None, 
         gravity=None,
         autoscroll_speed=None,
-        scroll=None
+        scroll=None,
+        distortion_params =None
         ):
         """Construct a level given its textual description 
         
@@ -61,6 +63,12 @@ class Level:
             color -- The 'halo' color behind the player
             vis_ofs -- Offset on the y axis where the visible part 
                of the level starts. The number of rows is constant.
+            scroll -- Any combination of the SCROLL_XXX constants, defaults to SCROLL_RIGHT
+            autoscroll_speed -- Automatic side-scrolling speed, in units per second.
+                Defaults to 0.0. May be a 2-tuple, in which case the second value is
+                the scrolling speed on the y axis.
+            distortion_params -- Audio&video distortion density. Must be a
+                 3-tuple (time_between,distortion_time,distortion_strength).
         """
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
@@ -73,8 +81,9 @@ class Level:
         self.vis_ofs = vis_ofs
         self.name = name
         self.gravity = defaults.gravity if gravity is None else gravity
+        self.SetDistortionParams((distortion_params and not defaults.no_distortion) or (30.0,5.0,10.0))
         
-        # pre-defined ('well-known')
+        # pre-defined ('well-known') stats entries
         self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0.0],"achievements":[0]}
         
         self.postfx_rt = []
@@ -151,6 +160,13 @@ class Level:
             
         self.AddEntity(tile)
         return tile
+    
+    def SetDistortionParams(self,distortion_params):
+        """Control the frequency, length and strength of 'high-distortion' periods.
+        distortio_params is a 3-tuple of exactly these parameters."""
+        self.distortion_params = distortion_params
+        self.distortion_sine_treshold = math.sin(math.pi* (0.5 - self.distortion_params[1]/self.distortion_params[0]) )
+        self.dither_strength = 1.0 # accessed by updaters/DITHER_STRENGTH
     
     def CountStats(self,name,add):
         """Change a specific entry in the stats dictionary.
@@ -259,10 +275,26 @@ class Level:
         in self.postfx_rt"""
         self.postfx_rt = []
         for pfx,env in self.postfx:
-            p = PostFXCache.Get(pfx,env)
-            if not p is None:
-                p.SetUpdaterParam("game",self.game)
-                self.postfx_rt.append(p)
+            self.AddPostFX(pfx, env)
+                
+    def AddPostFX(self,name,env):
+        """Temporarily push another postprocessing effect onto
+        the effect stack. Use RemovePostFX() to revert."""
+        p = PostFXCache.Get(name,env)
+        if not p is None:
+            p.SetUpdaterParam("game",self.game)
+        self.postfx_rt.append((name,p,env))
+
+    def RemovePostFX(self,name):
+        """Remove a specific postfx from the stack. If there is
+        more than one effect with this name on the stack,
+        the most recently added is taken"""
+        self.postfx_rt.reverse()
+        try:
+            self.postfx_rt.remove([e for e in self.postfx_rt if e[0] == name][0])
+        except IndexError:
+            pass
+        self.postfx_rt.reverse()
 
     def _UpdateEntityList(self):
         """Used internally to apply deferred changes to the entity
@@ -354,7 +386,10 @@ class Level:
     def _DoAutoScroll(self, dtime):
         """Move the map view origin to the right according to a time function"""    
         if self.scroll[-1] & Level.SCROLL_LEFT == 0:
-            self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1], self.origin[1]))
+            if isinstance(self.autoscroll_speed[-1],tuple):
+                self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1][0], self.origin[1] +  dtime * self.autoscroll_speed[-1][1]))
+            else:
+                self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1], self.origin[1]))
         
     def Scroll(self,pos):
         """ Update the view according to the player's position 'pos' 
@@ -408,15 +443,17 @@ class Level:
         havepfx = False
         for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
             if entity.GetDrawOrder() > 10000 and havepfx is False:
-                for fx in self.postfx_rt:
-                    fx.Draw()
+                for name,fx,env in self.postfx_rt:
+                    if not fx is None:
+                        fx.Draw()
                 havepfx = True
                 
             entity.Draw()
         
         if havepfx is False:
-            for fx in self.postfx_rt:
-                fx.Draw()
+            for name,fx,env in self.postfx_rt:
+                if not fx is None:
+                    fx.Draw()
                 
     def _UpdateEntities(self,time,dtime):
         self.entities_active = set()
@@ -432,6 +469,24 @@ class Level:
         for entity in self.EnumActiveEntities():
             entity.Update(time,dtime)
             
+    def _UpdateDistortion(self,time,dtime):
+        # distortion_params is (time_between,distortion_time,scale).
+        # Use the sine function to get a smooth transition.
+        sint = math.sin(time * math.pi * 0.5  / self.distortion_params[0])
+        if sint > self.distortion_sine_treshold:
+            d = (sint - self.distortion_sine_treshold) / (1.0 - self.distortion_sine_treshold)
+            #print(d)
+            self.dither_strength = 1.0 + d * self.distortion_params[2]
+                
+            if 0.98 > d > 0.5: # and int(d*20) % 4 != 0:
+                if not "grayscale.sfx" in [ n for n,p,e in self.postfx_rt ]:
+                    self.AddPostFX("grayscale.sfx", ())
+            else:
+                self.RemovePostFX("grayscale.sfx")
+        else:
+            self.dither_strength = 1.0
+            self.RemovePostFX("grayscale.sfx")
+            
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame
@@ -439,6 +494,7 @@ class Level:
             
         self._UpdateEntities(time,dtime)
         self._DoAutoScroll(dtime)
+        self._UpdateDistortion(time,dtime)
         self._DrawEntities()
         self._UpdateEntityList()
         self.game.DrawStatusBar()

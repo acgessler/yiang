@@ -12,6 +12,7 @@ vec2 lowerh = {STATUS_BAR_DIM}
 #ifdef ENABLE_DITHER
 texture noise = ../data/textures/noise.png
 vec2 randomUV = {RANDOM}
+float dither_strength = {DITHER_STRENGTH}
 #endif
 
 effect
@@ -36,7 +37,7 @@ effect
 	//vec4 anotheb = framebuffer(tin+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
 	//vec4 evenmor = framebuffer(tin+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
 #ifdef ENABLE_DITHER
-	vec4 dither = noise(randomUV+tin);
+	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
 #endif
 
 	float scale =  clamp((length(tin-cur))*1.25,0.0,1.0);
@@ -45,7 +46,7 @@ effect
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
 #ifdef ENABLE_DITHER
-	_out.rgb += (dither.rgb-0.5f)*0.0160;
+	_out.rgb += (dither.rgb-0.5f)*0.0160*dither_strength;
 #endif
 
 	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);

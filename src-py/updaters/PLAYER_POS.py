@@ -8,7 +8,8 @@ def GetUpdater():
         def __call__(self,pfx, type, name):
             
             assert type == "vec2"
-            assert self.game and self.game.GetLevel()
+            if hasattr(self,"game") is False or not self.game.GetLevel():
+                return
             
             candidates = (entity for entity in self.game.GetLevel().EnumActiveEntities() if isinstance(entity,Player))
             
