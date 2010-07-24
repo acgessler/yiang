@@ -607,12 +607,6 @@ def main():
     
     if defaults.no_bg_sound is False:
         SoundEffectCache.Get("logo.ogg").Play()
-    
-    if defaults.no_bg_music is False:
-        class DummyMusicPlayer(Drawable):
-            def Draw(self):
-                BerlinerPhilharmoniker.Process()
-        Renderer.AddDrawable(DummyMusicPlayer())
         
     if defaults.no_halos is True:
         defaults.death_sprites = min( 20, defaults.death_sprites )
@@ -620,6 +614,12 @@ def main():
     accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):
         if key == accepted[1]:
+            if defaults.no_bg_music is False:
+                class DummyMusicPlayer(Drawable):
+                    def Draw(self):
+                        BerlinerPhilharmoniker.Process()
+                Renderer.AddDrawable(DummyMusicPlayer())
+        
             Renderer.AddDrawable(MainMenu())
             Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
             return 

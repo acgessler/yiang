@@ -79,7 +79,7 @@ class BerlinerPhilharmoniker:
     it's a bit too expensive, but it is definitely worth the
     effort."""
     playlist = []
-    current_index = 0
+    current_index = -1
     current_music = None
     
     @classmethod
