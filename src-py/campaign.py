@@ -44,7 +44,8 @@ class CampaignLevel(Level):
             name=name,
             gravity=0.0,
             autoscroll_speed=0.0,
-            scroll=Level.SCROLL_ALL)
+            scroll=Level.SCROLL_ALL,
+            distortion_params=(30.0,5.0,2.0))
         
         self.status_message = ""
         self.SetStatusMessage("")
