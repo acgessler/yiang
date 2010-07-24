@@ -37,6 +37,7 @@ letter_height_game_over = 15
 letter_height_debug_info = 15
 letter_height_machines = 14
 letter_height_credits = 25
+letter_height_worldmap_status = 18
 caption = "YIANG | {0}  [revision {1}]".format(version,revision)
 danger_signs_ttl = 100
 tiles_size = [5, 3]

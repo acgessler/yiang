@@ -151,8 +151,6 @@ class Game(Drawable):
                 if defaults.debug_draw_bounding_boxes:
                     self.level.DrawBoundingBoxes()
 
-        self._DrawStatusBar()
-
         if defaults.debug_draw_info:
             self._DrawDebugInfo(dtime)
             
@@ -180,7 +178,7 @@ class Game(Drawable):
         """Get the height of the lower status bar, in tiles"""
         return max(1.5, (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1]))
 
-    def _DrawStatusBar(self):
+    def DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
         if self.level is None:
             return
@@ -210,43 +208,50 @@ class Game(Drawable):
 
         self.DrawSingle(shape)
         
-        status = sf.String("{0}\n{1:4.5} $".format(
-            ("Level {0}.{1} {2:.2} days".format(self.rounds,int(self.level_idx),Game.SecondsToDays( self.GetTotalElapsedTime() )) \
-                if self.level.GetName() is None else self.level.GetName()),
-            self.GetScore()/100),
-            Font=self.status_bar_font,Size=defaults.letter_height_status)
+        text = "{0}\n{1:4.5} $".format(("Level {0}.{1} {2:.2} days".format(
+            self.rounds,
+            int(self.level_idx),
+            Game.SecondsToDays( self.GetTotalElapsedTime() )
+            ) if self.level.GetName() is None else self.level.GetName()),
+            self.GetScore()/100)
+        
+        if not hasattr(self,"cached_status_text") or self.old_status_text != text:
+            self.cached_status_text = sf.String(text,Font=self.status_bar_font,Size=defaults.letter_height_status)
+            self.old_status_text = text
 
-        status.SetPosition(8,5)
-        status.SetColor(sf.Color.Black)
-        self.DrawSingle(status)
+        self.cached_status_text.SetPosition(8,5)
+        self.cached_status_text.SetColor(sf.Color.Black)
+        self.DrawSingle(self.cached_status_text)
 
-        status.SetColor(sf.Color.Yellow)
-        status.SetPosition(10,5)
-        self.DrawSingle(status)
+        self.cached_status_text.SetColor(sf.Color.Yellow)
+        self.cached_status_text.SetPosition(10,5)
+        self.DrawSingle(self.cached_status_text)
 
-        # .. and the number of remaining lifes
-        string = "\n".join(map(lambda x:x*self.lives,
-"  OOO     OOO   \n\
- O****O  O***O  \n\
-  O****OO***O   \n\
-   O*******O    \n\
-    O*****O     \n\
-     O***O      \n\
-      O*O       \n\
-       O        ".split("\n")))
-        status = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
+        if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
+            # .. and the number of remaining lifes
+            string = "\n".join(map(lambda x:x*self.lives,
+" OOO     OOO   \n\
+O****O  O***O  \n\
+ O****OO***O   \n\
+  O*******O    \n\
+   O*****O     \n\
+    O***O      \n\
+     O*O       \n\
+      O        ".split("\n")))
+            self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
+            self.old_lives = self.lives
+            
         xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
+        self.cached_lives_text.SetPosition(xstart-2,5)
+        self.cached_lives_text.SetColor(sf.Color.Black)
+        self.DrawSingle(self.cached_lives_text)
 
-        status.SetPosition(xstart-2,5)
-        status.SetColor(sf.Color.Black)
-        self.DrawSingle(status)
+        self.cached_lives_text.SetPosition(xstart+2,5)
+        self.DrawSingle(self.cached_lives_text)
 
-        status.SetPosition(xstart+2,5)
-        self.DrawSingle(status)
-
-        status.SetPosition(xstart,6)        
-        status.SetColor(sf.Color.Yellow)
-        self.DrawSingle(status)
+        self.cached_lives_text.SetPosition(xstart,6)        
+        self.cached_lives_text.SetColor(sf.Color.Red)
+        self.DrawSingle(self.cached_lives_text)
         
         # finally, the lower part of the cinematic box
         shape = sf.Shape()

@@ -402,13 +402,23 @@ class Level:
     
     def GetAutoScroll(self):
         return self.autoscroll_speed[-1]
-            
-    def Draw(self, time, dtime):
-        """Called by the Game matchmaker class once per frame,
-        may raise Game.NewFrame to advance to the next frame
-        and skip any other jobs for this frame"""
-        
+    
+    def _DrawEntities(self):
         Renderer.SetClearColor(self.color)
+        havepfx = False
+        for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
+            if entity.GetDrawOrder() > 10000 and havepfx is False:
+                for fx in self.postfx_rt:
+                    fx.Draw()
+                havepfx = True
+                
+            entity.Draw()
+        
+        if havepfx is False:
+            for fx in self.postfx_rt:
+                fx.Draw()
+                
+    def _UpdateEntities(self,time,dtime):
         self.entities_active = set()
         for n,window in self._EnumWindows():
             if n == 2:
@@ -422,22 +432,16 @@ class Level:
         for entity in self.EnumActiveEntities():
             entity.Update(time,dtime)
             
-        self._DoAutoScroll(dtime)
-        
-        havepfx = False
-        for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
-            if entity.GetDrawOrder() > 10000 and havepfx is False:
-                for fx in self.postfx_rt:
-                    fx.Draw()
-                havepfx = True
-                
-            entity.Draw()
+    def Draw(self, time, dtime):
+        """Called by the Game matchmaker class once per frame,
+        may raise Game.NewFrame to advance to the next frame
+        and skip any other jobs for this frame"""
             
+        self._UpdateEntities(time,dtime)
+        self._DoAutoScroll(dtime)
+        self._DrawEntities()
         self._UpdateEntityList()
-        
-        if havepfx is False:
-            for fx in self.postfx_rt:
-                fx.Draw()
+        self.game.DrawStatusBar()
         
     def DrawSingle(self, drawable, pos=None):
         """Draw a sf.Drawable at a specific position, which is

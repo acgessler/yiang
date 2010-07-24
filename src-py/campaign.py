@@ -31,6 +31,7 @@ from tile import AnimTile, Tile
 from player import Player
 from keys import KeyMapping
 from level import Level
+from fonts import FontCache
 
 class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
@@ -45,6 +46,9 @@ class CampaignLevel(Level):
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL)
         
+        self.status_message = ""
+        self.SetStatusMessage("")
+        
         for elem in overlays:
             self._ReadOverlay(elem)
             
@@ -56,6 +60,30 @@ class CampaignLevel(Level):
         self.minimap_offline = game.GetCookie("lv_{0}_minimap_offline".format(level),[])
         if defaults.world_draw_hud is True:
             self._LoadHUD()
+            
+    def SetStatusMessage(self,msg,color=sf.Color.Yellow):
+        self.status_color = color
+        
+        if not msg:
+            self.status_msg_text = None
+            return
+        
+        
+        if self.status_message == msg:
+            if self.status_msg_text:
+                self.status_msg_text.SetColor(color)
+            return
+        
+        self.status_message = msg
+        
+        height = defaults.letter_height_worldmap_status
+        font = FontCache.get(height, face=defaults.font_status)
+        
+        self.status_msg_text = sf.String(msg,Font=font,Size=height)
+        self.status_msg_text.SetPosition(10, defaults.resolution[1] - self.game.GetLowerStatusBarHeight()*defaults.tiles_size_px[1]/2 - height/2  )
+        self.status_msg_text.SetColor(color)
+        
+        self.status_msg_fade = sf.Clock()
             
     def _ReadOverlay(self,filename):
         cnt = 0
@@ -70,10 +98,29 @@ class CampaignLevel(Level):
         print("Load level overlay {0}, got {1} tiles".format(filename,cnt))
         
     def Draw(self, time, dtime):
-        Level.Draw(self,time,dtime)
+        self._UpdateEntities(time,dtime)
+        self._DoAutoScroll(dtime)
+        self._DrawEntities()
+        self._UpdateEntityList()
         
+        self.game.DrawStatusBar()
+        
+        # draw minimap
         if defaults.world_draw_hud is True:
             self._DrawHUD()
+                
+        # draw & update status message
+        if not self.status_msg_text is None:
+            c = self.status_color
+            a = int(255.0 * (1.0 - min(1.0, abs((self.status_msg_fade.GetElapsedTime()*0.4+0.05) - 0.6) )))
+            if a > 0:
+                self.status_msg_text.SetColor(sf.Color( c.r, c.g, c.b, a))
+                self.game.DrawSingle(self.status_msg_text)
+            else:
+                self.status_msg_text = None
+                self.status_message = ""
+        #elif hasattr(self,"status_msg_fade") and self.status_msg_fade.GetElapsedTime() > 4.0:
+        #    self.status_msg_text = ""
             
     def _GetImg(self,img):
         sprite = sf.Sprite(img)
@@ -269,8 +316,13 @@ class LevelEntrance(AnimTile):
         self.done = False
         
     def Interact(self,other):
-        if isinstance(other,Player) and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("accept")) and not hasattr(self,"now_locked"):
-            self._RunLevel()
+        if isinstance(other,Player):
+            if hasattr(self,"now_locked"):
+                self.level.SetStatusMessage("You completed this level!",sf.Color.Green)
+            else:
+                self.level.SetStatusMessage("Press {0} to enter '{1}'".format(KeyMapping.GetString("accept"),self._GuessLevelName()))
+                if Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("accept")):
+                    self._RunLevel()
         
         return Entity.ENTER
     
@@ -280,6 +332,26 @@ class LevelEntrance(AnimTile):
         if done != self.done:
             self.done = done
             self.SetState(1)
+            
+    def _GuessLevelName(self):
+        if hasattr(self,"cached_level_name"):
+            return self.cached_level_name
+        
+        # try to obtain the written name of the level by
+        # skimming through its shebang line looking
+        # for name="..."
+        file = os.path.join(defaults.data_dir, "levels", str(self.next_level)+".txt")
+        self.cached_level_name = "Level {0}".format(self.next_level)
+        try:
+            with open(file,"rt") as file:
+                import re
+                look = re.search(r"name=\"(.+?)\"",file.read(250))
+                if not look is None:
+                    self.cached_level_name = look.groups()[0]
+                    print("Guess level name for {0}: {1}".format(self.next_level,self.cached_level_name))
+        except IOError:
+            # LevelLoader will take care of this error, we don't bother for now
+            pass
         
     def _RunLevel(self):
         if self.done is True and defaults.debug_godmode is False:
@@ -287,21 +359,6 @@ class LevelEntrance(AnimTile):
         
         self.now_locked = True
         
-        # try to obtain the written name of the level by
-        # skimming through its shebang line looking
-        # for name="..."
-        file = os.path.join(defaults.data_dir, "levels", str(self.next_level)+".txt")
-        name = "Level {0}".format(self.next_level)
-        try:
-            with open(file,"rt") as file:
-                import re
-                look = re.search(r"name=\"(.+?)\"",file.read(250))
-                if not look is None:
-                    name = look.groups()[0]
-                    print("Guess level name for {0}: {1}".format(self.next_level,name))
-        except IOError:
-            # LevelLoader will take care of this error, we don't bother for now
-            pass
         
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("escape"))
         def on_close(key):
@@ -329,7 +386,7 @@ You might die at this place, so be careful.
 
 Press {0} to risk it and {2} to leave.""".format(
                 KeyMapping.GetString("accept"),
-                name,
+                self._GuessLevelName(),
                 KeyMapping.GetString("escape")),
             defaults.messagebox_fade_time,(550,90),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_OUT)
         
@@ -345,8 +402,8 @@ class Blocker(Tile):
         self.need_levels = need_levels
         
     def Interact(self,other):
-        #if isinstance(other, Player):
-        #    return Entity.ENTER if self.opened is True else Entity.BLOCK
+        if isinstance(other, Player):
+            self.level.SetStatusMessage("You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur.",sf.Color.Red)
         
         return Entity.ENTER if defaults.debug_godmode else Entity.BLOCK
         
