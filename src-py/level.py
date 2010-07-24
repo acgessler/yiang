@@ -81,7 +81,7 @@ class Level:
         self.vis_ofs = vis_ofs
         self.name = name
         self.gravity = defaults.gravity if gravity is None else gravity
-        self.SetDistortionParams((distortion_params and not defaults.no_distortion) or (30.0,5.0,10.0))
+        self.SetDistortionParams((not defaults.no_distortion and distortion_params) or (30.0,5.0,10.0))
         
         # pre-defined ('well-known') stats entries
         self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0.0],"achievements":[0]}
