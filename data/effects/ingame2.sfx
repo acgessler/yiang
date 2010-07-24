@@ -43,7 +43,7 @@ effect
 #ifdef ENABLE_DITHER
 	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
 #endif
-	float scale =  clamp((length(tin-cur))*1.5,0.0,1.0);
+	float scale =  clamp((length(tin-cur))*2.0,0.0,1.0);
 	vec4 color = (pixel+another+notthis+evenmor)*0.25;
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
@@ -52,7 +52,7 @@ effect
 	_out.rgb += (dither.rgb-0.5f)*0.0300 * dither_strength * scale;
 #endif
 
-	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.2f);
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.18f);
 #ifndef NO_MIRROR
 	_out.rgb *= overall_scale;
 #endif

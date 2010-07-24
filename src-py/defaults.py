@@ -131,7 +131,7 @@ world_draw_hud = True
 minimap_size = 0.2
 
 # Base alpha value for uncovered areas of the minimap
-minimap_alpha = 0x75
+minimap_alpha = 0x45
 
 # Maximum delta t - dt's over this limit are silently ignored
 delta_t_treshold = 0.2

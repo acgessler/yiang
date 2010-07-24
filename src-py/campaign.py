@@ -80,7 +80,7 @@ class CampaignLevel(Level):
         font = FontCache.get(height, face=defaults.font_status)
         
         self.status_msg_text = sf.String(msg,Font=font,Size=height)
-        self.status_msg_pos = 10, defaults.resolution[1] - self.game.GetLowerStatusBarHeight()*defaults.tiles_size_px[1]/2 - height/2  
+        self.status_msg_pos = 35, defaults.resolution[1] - self.game.GetLowerStatusBarHeight()*defaults.tiles_size_px[1]/2 - height/2  
         #self.status_msg_text.SetPosition(*self.status_msg_pos)
         self.status_msg_text.SetColor(color)
         
@@ -105,7 +105,7 @@ class CampaignLevel(Level):
         self._DrawEntities()
         self._UpdateEntityList()
         
-        self.game.DrawStatusBar()
+        #self.game.DrawStatusBar()
         
         # draw minimap
         if defaults.world_draw_hud is True:
@@ -114,9 +114,9 @@ class CampaignLevel(Level):
         # draw & update status message
         if not self.status_msg_text is None:
             c = self.status_color
-            a = int(255.0 * (1.0 - min(1.0, abs((self.status_msg_fade.GetElapsedTime()*0.4+0.05) - 0.6) )))
+            a = int(240.0 * (1.0 - min(1.0, abs((self.status_msg_fade.GetElapsedTime()*0.4+0.05) - 0.6) )))
             if a > 0:
-                self.status_msg_text.SetColor(sf.Color( 0, 0, 0, a))
+                self.status_msg_text.SetColor(sf.Color( 60,60,60, a))
                 self.status_msg_text.SetPosition(self.status_msg_pos[0]-2,self.status_msg_pos[1])
                 self.game.DrawSingle(self.status_msg_text)
                 
@@ -137,7 +137,7 @@ class CampaignLevel(Level):
         h = max(h,w*img.GetHeight()/img.GetWidth())
         
         # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
-        x,y = 100,defaults.resolution[1]-h-100
+        x,y = 35,25 #defaults.resolution[1]-h-100
         sprite.SetPosition(x-0.5,y-0.5)
         sprite.Resize(w,h)
         
