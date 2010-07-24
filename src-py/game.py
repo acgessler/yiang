@@ -668,7 +668,8 @@ Hit {2} to return to the menu""").format(
         """Increase the 'suspended' counter of the game by one. The
         game halts while the counter is not 0."""
         self.suspended.append(self.clock.GetElapsedTime())
-        self.level.PushAutoScroll(0.0)
+        if self.level:
+            self.level.PushAutoScroll(0.0)
             
     def PopSuspend(self):
         """Decrease the 'suspended' counter of the game by one. The
