@@ -80,7 +80,8 @@ class CampaignLevel(Level):
         font = FontCache.get(height, face=defaults.font_status)
         
         self.status_msg_text = sf.String(msg,Font=font,Size=height)
-        self.status_msg_text.SetPosition(10, defaults.resolution[1] - self.game.GetLowerStatusBarHeight()*defaults.tiles_size_px[1]/2 - height/2  )
+        self.status_msg_pos = 10, defaults.resolution[1] - self.game.GetLowerStatusBarHeight()*defaults.tiles_size_px[1]/2 - height/2  
+        #self.status_msg_text.SetPosition(*self.status_msg_pos)
         self.status_msg_text.SetColor(color)
         
         self.status_msg_fade = sf.Clock()
@@ -115,7 +116,12 @@ class CampaignLevel(Level):
             c = self.status_color
             a = int(255.0 * (1.0 - min(1.0, abs((self.status_msg_fade.GetElapsedTime()*0.4+0.05) - 0.6) )))
             if a > 0:
+                self.status_msg_text.SetColor(sf.Color( 0, 0, 0, a))
+                self.status_msg_text.SetPosition(self.status_msg_pos[0]-2,self.status_msg_pos[1])
+                self.game.DrawSingle(self.status_msg_text)
+                
                 self.status_msg_text.SetColor(sf.Color( c.r, c.g, c.b, a))
+                self.status_msg_text.SetPosition(*self.status_msg_pos)
                 self.game.DrawSingle(self.status_msg_text)
             else:
                 self.status_msg_text = None
