@@ -49,10 +49,10 @@ effect
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
 #ifdef ENABLE_DITHER
-	_out.rgb += (dither.rgb-0.5f)*0.0200 * dither_strength;
+	_out.rgb += (dither.rgb-0.5f)*0.0300 * dither_strength * scale;
 #endif
 
-	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.2f);
 #ifndef NO_MIRROR
 	_out.rgb *= overall_scale;
 #endif
