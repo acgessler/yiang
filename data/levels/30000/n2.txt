@@ -1,2 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_2",text_color=sf.Color(0,150,0),only_once=True)
-Eine zufaellig anwesende Blume fragt sich gerade wie er wohl heißt - dieser aufrechte Mann, der in diesen Gefilden fuer seinen Glauben sterben wird. Dann beschliesst sie, dass es nicht notwendig ist ihn vor dem Highscore-Screen danach zu fragen und tankt weiter Sonnenlicht und Wasser.
+Eine zufällig anwesende Blume fragt sich gerade wie er wohl heißt - dieser aufrechte Mann, der in diesen Gefilden für seinen Glauben sterben wird. Dann beschliesst sie, dass es nicht notwendig ist ihn vor dem Highscore-Screen danach zu fragen und tankt weiter Sonnenlicht und Wasser.
