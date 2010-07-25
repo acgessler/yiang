@@ -429,13 +429,14 @@ class Blocker(Tile):
     """Blockers prevent the player from entering certain
     areas of the game world."""
     
-    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[]):
+    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None):
         Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img)
         self.need_levels = need_levels
+        self.status_msg = status_msg or "You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur."
         
     def Interact(self,other):
         if isinstance(other, Player):
-            self.level.SetStatusMessage("You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur.",sf.Color.Red)
+            self.level.SetStatusMessage(self.status_msg,sf.Color.Red)
         
         return Entity.ENTER if defaults.debug_godmode else Entity.BLOCK
         

@@ -97,8 +97,7 @@ class MessageBox(Drawable):
             
     def GetDrawOrder(self):
         return 1100
-        
-        
+           
     @staticmethod
     def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0):
         """Utility to draw a messagebox-like status notice in the
@@ -167,9 +166,12 @@ class SimpleNotification(Entity):
         self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.1))
         
     def Interact(self, other):
-        if isinstance(other, Player) and self.use_counter > 0 and not hasattr(self, "running"):
+        inp = Renderer.app.GetInput()
+        # note: the notification can always be activated by pressing interact,
+        # regardless of the use counter.
+        if isinstance(other, Player) and (self.use_counter > 0 or inp.IsKeyDown(KeyMapping.Get("interact"))) and not hasattr(self, "running"):
             
-            print("Show notification '{0}', use counter: {1}".format(self.desc, self.use_counter))
+            print("Show notification '{0}', regular use counter: {1}".format(self.desc, self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
             # closure to be called when the player has made his decision
@@ -179,7 +181,7 @@ class SimpleNotification(Entity):
                 self.level.PopAutoScroll()
                 
                 if self.use_counter == 0:
-                    self.game.RemoveEntity(self)
+                    #self.game.RemoveEntity(self)
                     print("Disable notification '{0}'".format(self.desc))
                     
             self.level.PushAutoScroll(0.0)
