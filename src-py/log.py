@@ -38,8 +38,25 @@ class Log(io.IOBase):
         
         self.file = open(file,"wt")
         self.old = old
+        self.prev_arg = ""
 
     def write(self,*args,**kwargs):
+        # fixme: find out what's wrong here -- it does not filter the log messages
+        """ 
+        if len(args) == 1:
+
+            if args[0] == self.prev_arg.replace("\n","").strip():
+                
+                # swallow duplicate log messages
+                self.duplicates = True
+                return
+            self.prev_arg = args[0]
+        
+        if hasattr(self,"duplicates"):
+            delattr(self,"duplicates")
+            self.write("(last message was probably repeated several times)")
+        """
+               
         self.file.write(*args,**kwargs)
 
         if not self.old is None and not Log.nostdout:

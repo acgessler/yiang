@@ -78,18 +78,46 @@ class BerlinerPhilharmoniker:
     """The background orchestra which we're paying for. Actually
     it's a bit too expensive, but it is definitely worth the
     effort."""
-    playlist = []
+    playlist = {}
     current_index = -1
     current_music = None
+    section = "default"
     
     @classmethod
     def Initialize(cls):
+        """
         try:
             with open(os.path.join(defaults.config_dir,"playlist.txt"),"rt") as o:
                 cls.playlist = [o.strip("\n \t") for o in o.readlines()]   
             print("Got {0} play list entries from playlist.txt".format(len(cls.playlist)))         
         except IOError:
             print("Failure reading playlist.txt, disabling background music")
+        """
+        import configparser
+        
+        config = configparser.RawConfigParser()
+        config.read(os.path.join(defaults.config_dir,"playlist.cfg"))
+        
+        pieces = 0
+        for elem in config.sections():
+            
+            e = cls.playlist[elem] = []
+            for k,v in config.items(elem):
+                e.append(v)
+                pieces += 1
+                
+        print("Got {0} sections with totally {1} pieces from playlist.cfg".format(len(cls.playlist),pieces))         
+        
+    @classmethod    
+    def SetAudioSection(cls,name):
+        """Set the current audio track section. The class loops all
+        the tracks within the current section until another
+        section is choosen. Raise KeyError if this audio section
+        is not known"""
+        cls.section = name
+        cls.current_music = None
+        
+        s = cls.playlist[name]
     
     @classmethod
     def Process(cls):
@@ -97,18 +125,25 @@ class BerlinerPhilharmoniker:
             cls.current_music = sf.Music()
             
         if cls.current_music.GetStatus() == sf.Sound.Stopped:
-            cls.current_index = random.randint(0,len(cls.playlist)-1) if defaults.audio_randomize_playlist is True \
-                else (cls.current_index +1) % len(cls.playlist)
-            path = cls.playlist[cls.current_index]
+            try:
+                if len(cls.playlist[cls.section]) == 0:
+                    print("Audio section {0} is empty".format(cls.section))
+                    return
+            except KeyError:
+                print("Audio section {0} does not exist".format(cls.section))
+                return
+                   
+            cls.current_index = random.randint(0,len(cls.playlist[cls.section])-1) if defaults.audio_randomize_playlist is True \
+                else (cls.current_index +1) % len(cls.playlist[cls.section])
+            path = cls.playlist[cls.section][cls.current_index]
             if path.find("/") == -1 and path.find("\\") == -1:
                 path = os.path.join(defaults.data_dir,"sounds",path)
                 
-            #print("Try")
             if cls.current_music.OpenFromFile(path) is False:
-                print("Can't load track {0} \ {1} from playlist, this is a bit sad".format(cls.current_index,path))
+                print("Can't load track {2}-{0} \ {1} from playlist, this is a bit sad".format(cls.current_index,path,cls.section))
                 return
             
-            print("Load track {0} \ {1}".format(cls.current_index,path))
+            print("Load track {2}-{0} \ {1}".format(cls.current_index,path,cls.section))
             cls.current_music.Play()
             
     

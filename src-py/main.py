@@ -144,10 +144,12 @@ class MainMenu(Drawable):
         self.ShowCredits()
 
     def _OptionsNewGame(self):
+        #BerlinerPhilharmoniker.SetAudioSection("levels")
         self._TryStartGameFromLevel(1)
         
     def _OptionsNewCampaignGame(self):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN,mode=Game.CAMPAIGN)
+        BerlinerPhilharmoniker.SetAudioSection("newgame")
 
     def _OptionsTutorial(self):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL,mode=Game.SINGLE)
@@ -619,6 +621,7 @@ def main():
                     def Draw(self):
                         BerlinerPhilharmoniker.Process()
                 Renderer.AddDrawable(DummyMusicPlayer())
+                BerlinerPhilharmoniker.SetAudioSection("menu")
         
             Renderer.AddDrawable(MainMenu())
             Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))

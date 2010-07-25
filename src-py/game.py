@@ -599,7 +599,7 @@ Hit {2} to return to the menu""").format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),defaults.game_over_fade_time,(550,225),0.0,accepted,sf.Color.Black,on_close) 
+        )),defaults.game_over_fade_time,(550,255),0.0,accepted,sf.Color.Black,on_close) 
         raise NewFrame()
         
     def LoadLevel(self,idx):
