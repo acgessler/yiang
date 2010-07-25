@@ -1,1 +1,1 @@
-from campaign import CampaignLevel; <out> = CampaignLevel(<level>,<game>,<raw>,name="Desert of Doom",minimap="map.bmp",color=(40,30,10))
+from campaign import CampaignLevel; <out> = CampaignLevel(<level>,<game>,<raw>,name="Desert of Doom",minimap="map_display.bmp",color=(40,30,10))
