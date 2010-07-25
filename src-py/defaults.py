@@ -93,7 +93,7 @@ levelup_score_base = 0.08
 organ_transplant_dollar_in = 1.0
 no_bg_music = False
 no_bg_sound = False
-audio_volume_scale = 0.10
+audio_volume_scale = 0.8
 
 # don't render background bitmaps (halos)
 # this is what the configuration GUI calls 

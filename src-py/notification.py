@@ -133,15 +133,16 @@ class SimpleNotification(Entity):
     """The SimpleNotification tile displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
-    def __init__(self, text, desc="<unnamed>", text_color=sf.Color.Red, only_once=True, width=1, height=1, line_length=50, format=True):
+    def __init__(self, text, desc="<unnamed>", text_color=sf.Color.Red, width=1, height=1, line_length=50, format=True, audio_fx=None, only_once=True):
         Entity.__init__(self)
         self.text = text
-        self.use_counter = 1 if only_once is True else 1000000000 
+        self.use_counter = 1 # if only_once is True else 1000000000 
         self.dim = (width, height)
         self.text_formatted = ""
         self.line_length = line_length
         self.text_color = sf.Color(*text_color) if isinstance(text_color, tuple) else text_color
         self.desc = desc
+        self.audio_fx = audio_fx
         
         if format is True:
             try:
@@ -185,8 +186,12 @@ class SimpleNotification(Entity):
                     print("Disable notification '{0}'".format(self.desc))
                     
             self.level.PushAutoScroll(0.0)
-            
             self.running  = True
+            
+            if self.audio_fx:
+                from audio import SoundEffectCache
+                SoundEffectCache.Get(self.audio_fx).SetVolume(4.0).Play()
+            
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over

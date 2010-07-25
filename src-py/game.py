@@ -485,12 +485,18 @@ Press {3} to {4}""".format(
         DebugTools.Trace()
         self.game_over = True
         
+        if self.level:
+            self.level.OnDisable()
+        
         Renderer.RemoveDrawable(self)
 
     def GameOver(self):
         """Fade to black and show stats, then return to the main menu"""
         DebugTools.Trace()
         self.game_over = True
+        
+        if self.level:
+            self.level.OnDisable()
         
         from highscore import HighscoreManager
         record = HighscoreManager.SetHighscore(self.score)
@@ -532,7 +538,7 @@ Hit {0} or {1} to return to the menu .. """.format(
     
     def BackToWorldMap(self):
         """Display level statistics and move the player back to the world map"""
-        
+    
         from posteffect import FadeOutOverlay, FadeInOverlay
         from notification import MessageBox
         
@@ -618,10 +624,15 @@ Hit {2} to return to the menu""").format(
             stats.strip_dirs().sort_stats('time').print_stats(20)
         else: 
             self.level = LevelLoader.LoadLevel(idx,self)
-        return False if self.level is None else True
+            
+        if self.level:
+            self.level.OnEnable()
+            return True
+            
+        return False 
     
     def PushLevel(self,idx):
-        """Load another level on top of this level"""
+        """Load another level on top of this level"""    
         if [e for e in self.level_chain if e[0] == idx]:
             # if this level is already in the chain,
             # drop all levels until we're back there.
@@ -634,19 +645,23 @@ Hit {2} to return to the menu""").format(
                     break
                  
                 print("Leaving level {0} [unwinding level chain]".format(i))
-                for entity in l.EnumAllEntities():
-                    entity.OnLeaveLevel()
+                l.OnDisable()
                     
             self.level_chain = self.level_chain[:-n]
             self.level_idx, self.level = i,l
             return
         
         if not self.level is None:
+            self.level.OnDisable()
             self.level_chain += [(self.level_idx,self.level)]
             
         self.level_idx = idx
         self.level = LevelLoader.LoadLevel(idx,self)
-        return False if self.level is None else True
+        if self.level:
+            self.level.OnEnable()
+            return True
+            
+        return False 
     
     def GetLevelChain(self):
         """ """
@@ -659,10 +674,11 @@ Hit {2} to return to the menu""").format(
             return
         
         print("Leaving level {0}".format(self.level_idx))
-        for entity in self.level.EnumAllEntities():
-            entity.OnLeaveLevel()
+        self.level.OnDisable()
             
         self.level_idx, self.level = self.level_chain.pop() if len(self.level_chain) else (-1,None)
+        if not self.level is None:
+            self.level.OnEnable()
     
     def PushSuspend(self):
         """Increase the 'suspended' counter of the game by one. The
@@ -866,9 +882,14 @@ class Entity(Drawable):
     
     def OnLeaveLevel(self):
         """Invoked when the level the entity belongs to is 
-        about to be unloaded. This means the entity will be
-        destroyed as well, but the exact time cannot be
-        determined due to the GC."""
+        left by the player. The level remains in memory
+        and may be re-entered later."""
+        pass
+    
+    def OnEnterLevel(self):
+        """Invoked whenever the player enters the level
+        the entity belongs to. OnEnterLevel() and OnLeaveLevel()
+        pairs are always matched. """
         pass
 
     def GetVerboseName(self):

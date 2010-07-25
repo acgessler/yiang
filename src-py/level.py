@@ -52,7 +52,8 @@ class Level:
         gravity=None,
         autoscroll_speed=None,
         scroll=None,
-        distortion_params =None
+        distortion_params =None,
+        audio_section=None
         ):
         """Construct a level given its textual description 
         
@@ -69,6 +70,9 @@ class Level:
                 the scrolling speed on the y axis.
             distortion_params -- Audio&video distortion density. Must be a
                  3-tuple (time_between,distortion_time,distortion_strength).
+            audio_section -- Name of the audio section to switch to. Pass 'current' to
+                leave the audio background untouched upon entering this level. Leave
+                the default value to switch to level_n, wheras n is the level index.
         """
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
@@ -82,6 +86,9 @@ class Level:
         self.name = name
         self.gravity = defaults.gravity if gravity is None else gravity
         self.SetDistortionParams((not defaults.no_distortion and distortion_params) or (30.0,5.0,10.0))
+        
+        self.audio_section = audio_section or "level_{0}".format(self.level)
+        self._SetupAudioSection()
         
         # pre-defined ('well-known') stats entries
         self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0.0],"achievements":[0]}
@@ -163,6 +170,17 @@ class Level:
             
         self.AddEntity(tile)
         return tile
+    
+    def _SetupAudioSection(self):
+        if self.audio_section == "current":
+            return
+        
+        from audio import BerlinerPhilharmoniker
+        
+        try:
+            BerlinerPhilharmoniker.SetAudioSection(self.audio_section)
+        except KeyError:
+            BerlinerPhilharmoniker.SetAudioSection("level_default")
     
     def SetDistortionParams(self,distortion_params):
         """Control the frequency, length and strength of 'high-distortion' periods.
@@ -491,6 +509,15 @@ class Level:
             self.dither_strength = 1.0
             if defaults.no_ppfx is False: 
                 self.RemovePostFX("grayscale.sfx")
+                
+    def OnEnable(self):
+        self._SetupAudioSection()
+        for entity in self.EnumAllEntities():
+            entity.OnEnterLevel()
+    
+    def OnDisable(self):
+        for entity in self.EnumAllEntities():
+            entity.OnLeaveLevel()
             
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,

@@ -53,6 +53,19 @@ class SoundEffectCache:
                 return None
             
             sound.SetVolume(defaults.audio_volume_scale*100)
+            class MusicWrapper:
+                
+                def __init__(self,music):
+                    self.music = music
+    
+                def __getattr__(self,name):
+                    return getattr(self.music,name)
+                
+                def SetVolume(self,volume):
+                    self.music.SetVolume(defaults.audio_volume_scale*100*volume)
+                    return self
+    
+            sound = MusicWrapper(sound)
         else:
             if not sound.LoadFromFile(filename):
                 print("Failure creating sound {0} [{1}]".format(name,filename))
@@ -66,6 +79,11 @@ class SoundEffectCache:
                     
                 def Play(self):
                     self.sound.Play()
+                    return self
+                    
+                def SetVolume(self,volume):
+                    self.sound.SetVolume(defaults.audio_volume_scale*100*volume)
+                    return self
             
             sound = SoundWrapper(sound)
 
@@ -79,8 +97,10 @@ class BerlinerPhilharmoniker:
     it's a bit too expensive, but it is definitely worth the
     effort."""
     playlist = {}
+    status_cache = {}
     current_index = -1
     current_music = None
+    current_music_name = ""
     section = "default"
     
     @classmethod
@@ -114,10 +134,29 @@ class BerlinerPhilharmoniker:
         the tracks within the current section until another
         section is choosen. Raise KeyError if this audio section
         is not known"""
+        if name == cls.section:
+            return # keep running section intact
+            
+        cls.status_cache.setdefault(cls.section,{})["current"] = cls.current_music
+        cls.status_cache[cls.section]["current_idx"] = cls.current_index
+            
         cls.section = name
-        cls.current_music = None
+        old = cls.current_music
+        
+        if cls.section in cls.status_cache:
+            cls.current_music = cls.status_cache[cls.section]["current"]
+            cls.current_index = cls.status_cache[cls.section]["current_idx"]
+            #if cls.current_music:
+            #    cls.current_music.Play()
+        else:
+            cls.current_music = None
+            cls.current_index = 0
+            
+        if old and cls.current_music_name != cls.playlist[name][cls.current_index]:
+            old.Stop()
         
         s = cls.playlist[name]
+        print("Set audio section: {0}".format(name))
     
     @classmethod
     def Process(cls):
@@ -136,10 +175,13 @@ class BerlinerPhilharmoniker:
             cls.current_index = random.randint(0,len(cls.playlist[cls.section])-1) if defaults.audio_randomize_playlist is True \
                 else (cls.current_index +1) % len(cls.playlist[cls.section])
             path = cls.playlist[cls.section][cls.current_index]
-            if path.find("/") == -1 and path.find("\\") == -1:
-                path = os.path.join(defaults.data_dir,"sounds",path)
+            cls.current_music_name = path
+             
+            #if path.find("/") == -1 and path.find("\\") == -1:
+            #    path = os.path.join(defaults.data_dir,"sounds",path)
                 
-            if cls.current_music.OpenFromFile(path) is False:
+            cls.current_music = SoundEffectCache.Get(path)
+            if cls.current_music is None:#cls.current_music.OpenFromFile(path) is False:
                 print("Can't load track {2}-{0} \ {1} from playlist, this is a bit sad".format(cls.current_index,path,cls.section))
                 return
             

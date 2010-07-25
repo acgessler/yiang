@@ -144,12 +144,19 @@ class MainMenu(Drawable):
         self.ShowCredits()
 
     def _OptionsNewGame(self):
-        #BerlinerPhilharmoniker.SetAudioSection("levels")
-        self._TryStartGameFromLevel(1)
+        def settune():
+            if defaults.no_bg_sound is False:
+                SoundEffectCache.Get("logo.ogg").Play()
+                
+        self._TryStartGameFromLevel(1,on_loaded=settune)
         
     def _OptionsNewCampaignGame(self):
-        self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN,mode=Game.CAMPAIGN)
-        BerlinerPhilharmoniker.SetAudioSection("newgame")
+        def settune():
+            if defaults.no_bg_sound is False:
+                SoundEffectCache.Get("logo.ogg").Play()
+            
+        self._TryStartGameFromLevel(SPECIAL_LEVEL_CAMPAIGN,mode=Game.CAMPAIGN,on_loaded=settune)
+        
 
     def _OptionsTutorial(self):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL,mode=Game.SINGLE)
@@ -205,7 +212,7 @@ class MainMenu(Drawable):
         ("Quit!", _OptionsQuit ,"",1.0)
     ]
     
-    def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME):
+    def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME,on_loaded=lambda:None):
         if old is None:
             old = self
             
@@ -216,7 +223,7 @@ class MainMenu(Drawable):
                 self.block = False
                 if key == accepted[1]:
                     self.game = None
-                    self._TryStartGameFromLevel(level,old,mode)
+                    self._TryStartGameFromLevel(level,old,mode,on_loaded)
                 
             self.block = True
             Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
@@ -236,6 +243,8 @@ Hit {1} to cancel""".format(
             self.game = Game(Renderer.app,mode=mode)
             self.game.LoadLevel(level)
             Renderer.AddDrawable(self.game,old)
+            
+            on_loaded()
             
 
     def _LoadImages(self):
