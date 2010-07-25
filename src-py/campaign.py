@@ -338,6 +338,8 @@ class CampaignTile(Tile):
         
         if self.status_msg:
             self.level.SetStatusMessage(self.status_msg)
+            
+        return Tile.Interact(self,other)
     
 
 class LevelEntrance(AnimTile):
