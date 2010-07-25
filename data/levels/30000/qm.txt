@@ -1,0 +1,6 @@
+from campaign import CampaignTile; <out> = CampaignTile(<raw>,5,3,halo_img=None,collision=Entity.ENTER,draworder=10001,permute=False,status_msg="Hit ENTER to read this message again")
+ ??? 
+?????
+ ???
+
+

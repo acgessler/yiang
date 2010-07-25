@@ -45,9 +45,11 @@
 
 # story_0
 30 22 _n0
+30 22 ~qm
 
 # story_1
 50 24 _n1
+50 24 ~qm
 
 # story_2 + flower
 56 37 _n2

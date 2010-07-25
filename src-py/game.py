@@ -463,8 +463,8 @@ TimeDelta:         {dtime:.4}
                 self.BackToWorldMap() if self.GetGameMode() == Game.CAMPAIGN else self.GameOver()
             player.Respawn(True if key == accepted[0] else False)
             
-        self._FadeOutAndShowStatusNotice(sf.String("""You committed suicide! 
-Your friendly guide was: {0}
+        self._FadeOutAndShowStatusNotice(sf.String("""You died a martyr and are now awaiting resurrection!
+  .. the godless slaughterer was {0}
 
 Press {1} to restart at the last respawning point
 Press {2} to restart the level
