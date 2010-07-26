@@ -208,50 +208,52 @@ class Game(Drawable):
 
         self.DrawSingle(shape)
         
-        text = "{0}\n{1:4.5} $".format(("Level {0}.{1} {2:.2} days".format(
-            self.rounds,
-            int(self.level_idx),
-            Game.SecondsToDays( self.GetTotalElapsedTime() )
-            ) if self.level.GetName() is None else self.level.GetName()),
-            self.GetScore()/100)
-        
-        if not hasattr(self,"cached_status_text") or self.old_status_text != text:
-            self.cached_status_text = sf.String(text,Font=self.status_bar_font,Size=defaults.letter_height_status)
-            self.old_status_text = text
-
-        self.cached_status_text.SetPosition(8,5)
-        self.cached_status_text.SetColor(sf.Color.Black)
-        self.DrawSingle(self.cached_status_text)
-
-        self.cached_status_text.SetColor(sf.Color.Yellow)
-        self.cached_status_text.SetPosition(10,5)
-        self.DrawSingle(self.cached_status_text)
-
-        if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
-            # .. and the number of remaining lifes
-            string = "\n".join(map(lambda x:x*self.lives,
-" OOO     OOO   \n\
-OOOOOO  OOOOO  \n\
- OOOOOOOOOOO   \n\
-  OOOOOOOOO    \n\
-   OOOOOOO     \n\
-    OOOOO      \n\
-     OOO       \n\
-      O        ".split("\n")))
-            self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
-            self.old_lives = self.lives
+        if self.undecorated is False:
             
-        xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
-        self.cached_lives_text.SetPosition(xstart-2,5)
-        self.cached_lives_text.SetColor(sf.Color.Black)
-        self.DrawSingle(self.cached_lives_text)
-
-        self.cached_lives_text.SetPosition(xstart+2,5)
-        self.DrawSingle(self.cached_lives_text)
-
-        self.cached_lives_text.SetPosition(xstart,6)        
-        self.cached_lives_text.SetColor(sf.Color(180,0,0))
-        self.DrawSingle(self.cached_lives_text)
+            text = "{0}\n{1:4.5} $".format(("Level {0}.{1} {2:.2} days".format(
+                self.rounds,
+                int(self.level_idx),
+                Game.SecondsToDays( self.GetTotalElapsedTime() )
+                ) if self.level.GetName() is None else self.level.GetName()),
+                self.GetScore()/100)
+            
+            if not hasattr(self,"cached_status_text") or self.old_status_text != text:
+                self.cached_status_text = sf.String(text,Font=self.status_bar_font,Size=defaults.letter_height_status)
+                self.old_status_text = text
+    
+            self.cached_status_text.SetPosition(8,5)
+            self.cached_status_text.SetColor(sf.Color.Black)
+            self.DrawSingle(self.cached_status_text)
+    
+            self.cached_status_text.SetColor(sf.Color.Yellow)
+            self.cached_status_text.SetPosition(10,5)
+            self.DrawSingle(self.cached_status_text)
+    
+            if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
+                # .. and the number of remaining lifes
+                string = "\n".join(map(lambda x:x*self.lives,
+    " OOO     OOO   \n\
+    OOOOOO  OOOOO  \n\
+     OOOOOOOOOOO   \n\
+      OOOOOOOOO    \n\
+       OOOOOOO     \n\
+        OOOOO      \n\
+         OOO       \n\
+          O        ".split("\n")))
+                self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
+                self.old_lives = self.lives
+                
+            xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
+            self.cached_lives_text.SetPosition(xstart-2,5)
+            self.cached_lives_text.SetColor(sf.Color.Black)
+            self.DrawSingle(self.cached_lives_text)
+    
+            self.cached_lives_text.SetPosition(xstart+2,5)
+            self.DrawSingle(self.cached_lives_text)
+    
+            self.cached_lives_text.SetPosition(xstart,6)        
+            self.cached_lives_text.SetColor(sf.Color(180,0,0))
+            self.DrawSingle(self.cached_lives_text)
         
         # finally, the lower part of the cinematic box
         shape = sf.Shape()

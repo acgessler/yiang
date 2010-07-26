@@ -402,6 +402,15 @@ class Level:
                     
                     yield entity
                     had.add(entity)
+                    
+    def EnumEntitiesAt(self,pos):
+        """Enum all entities touching a specific position, pos, 
+        which is specified in tile coordinates"""
+        for entity in self.EnumPossibleColliders((pos[0],pos[1],pos[0],pos[1])):
+            bb = entity.GetBoundingBox()
+            
+            if bb[0] <= pos[0] <= bb[2]+bb[0] and bb[1] <= pos[1] <= bb[3]+bb[1]:
+                yield entity
             
     def IsVisible(self,point):
         """Check if a particular point is currently within
