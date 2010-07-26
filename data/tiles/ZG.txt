@@ -1,14 +1,21 @@
-from perks import ZeroG; <out> = ZeroG(<raw>,6,2)
-0GGGGGGG0
-0   _   0
-0 /   ` 0
-0 | G - 0
-0 \___| 0
-0GGGGGGG0
+from perks import ZeroG; <out> = ZeroG(<raw>,3,5)
+=====
+NoGra
+=====
 
-G0000000G
-G  ___  G
-G /   \ G
-G | 0 | G
-G \___/ G
-G0000000G
+=====
+oGrav
+=====
+
+=====
+Gravi
+=====
+
+=====
+ravit
+=====
+
+=====
+avity
+=====
+
