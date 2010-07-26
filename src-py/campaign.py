@@ -306,6 +306,23 @@ class CampaignLevel(Level):
         # are not as tall as they could be for their font size (i.e. 'a' leaves a
         # gap underneath)
         return ( (coords[0] - self.origin[0])* 29.8/30.0, (coords[1] - self.origin[1])* 28.9/30.0)
+    
+    def _UpdateEntities(self,time,dtime):
+        # As a further optimization, we will only include visible entities
+        # in our set of active entities. The normal implementation includes
+        # near entities as well.
+        self.entities_active = set()
+        for n,window in self._EnumWindows():
+            if n:
+                continue
+            
+            for entity in window:
+                self.entities_active.add(entity)
+                entity.in_visible_set = True
+                
+        self.entities_active.update(self.window_unassigned)
+        for entity in self.EnumActiveEntities():
+            entity.Update(time,dtime)
         
         
 class CampaignPlayer(Player):
