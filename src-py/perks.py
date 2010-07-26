@@ -292,7 +292,7 @@ class ZeroG(Perk):
     """The zero gravity perk sets the gravity
     to zero and lets the player fly around like in universe."""
     
-    def __init__(self,text,height,frames,time=1.0,anim_speed=1.0):
+    def __init__(self,text,height,frames,time=0.5,anim_speed=1.0):
         Perk.__init__(self,os.path.join(defaults.data_dir,"tiles_misc","zerog.txt"),text,height,frames,anim_speed)
         self.time = time
         
@@ -306,8 +306,6 @@ class ZeroG(Perk):
             self.level.gravity = 0
             self._SetAutoExpire(player,self.time)
             return
-
-        other._SetAutoExpire(player,self.time,True)
         
     def DisablePerk(self,player):
         Perk.DisablePerk(self,player)
