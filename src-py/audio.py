@@ -126,7 +126,12 @@ class BerlinerPhilharmoniker:
                 e.append(v)
                 pieces += 1
                 
-        print("Got {0} sections with totally {1} pieces from playlist.cfg".format(len(cls.playlist),pieces))         
+        print("Got {0} sections with totally {1} pieces from playlist.cfg".format(len(cls.playlist),pieces)) 
+        
+    @staticmethod
+    def InitializeDummy():
+        """Setup a dummy implementation for use with the level editor"""
+        pass
         
     @classmethod    
     def SetAudioSection(cls,name):
@@ -134,6 +139,9 @@ class BerlinerPhilharmoniker:
         the tracks within the current section until another
         section is choosen. Raise KeyError if this audio section
         is not known"""
+        if not BerlinerPhilharmoniker.playlist:
+            return
+        
         if name == cls.section:
             return # keep running section intact
             
@@ -160,6 +168,9 @@ class BerlinerPhilharmoniker:
     
     @classmethod
     def Process(cls):
+        if not BerlinerPhilharmoniker.playlist:
+            return
+        
         if cls.current_music is None:
             cls.current_music = sf.Music()
             

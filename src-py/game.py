@@ -694,7 +694,9 @@ Hit {2} to return to the menu""").format(
         
         self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
         self.suspended.pop()
-        self.level.PopAutoScroll()
+        
+        if self.level:
+            self.level.PopAutoScroll()
         
     def FadeOutAndShowStatusNotice(self,*args,**kwargs):
         return self._FadeOutAndShowStatusNotice(*args,**kwargs)

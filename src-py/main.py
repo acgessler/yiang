@@ -653,4 +653,4 @@ Hit {1} to cancel""".format(
     Renderer.DoLoop()
     Renderer.Terminate()
     
-main()
+

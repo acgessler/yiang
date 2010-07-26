@@ -50,6 +50,11 @@ class Achievements:
         except IOError:
             print("Found no achievements file, seemingly this is the first try :-)")
             Achievements._Flush()
+            
+    @staticmethod
+    def InitializeDummy():
+        """Setup a dummy implementation for use with the level editor"""
+        Achievements.EarnAchievement = lambda x:None
     
     @staticmethod
     def EarnAchievement(name):

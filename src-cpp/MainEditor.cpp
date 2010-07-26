@@ -49,6 +49,7 @@ int PyMain(int argc, wchar_t* argv[])
 		"sys.path.append(\'../src-py\')\n"
 		"try:\n"
 		"\timport editor\n"
+		"\teditor.main()\n"
 		"except Exception as e:\n"
 		"\tprint(e)\n"
 		"\ttraceback.print_exc()\n"

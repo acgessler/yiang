@@ -42,6 +42,11 @@ class HighscoreManager:
         except IOError:
             print("Found no highscore file, seemingly this is the first try :-)")
             HighscoreManager._Flush()
+            
+    @staticmethod
+    def InitializeDummy():
+        """Setup a dummy implementation for use with the level editor"""
+        HighscoreManager.record = 1e10
     
     @staticmethod
     def SetHighscore(score):

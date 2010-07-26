@@ -66,6 +66,7 @@ int PyMain(int argc, wchar_t* argv[])
 		"sys.path.append(\'../src-py\')\n"
 		"try:\n"
 		"\timport main\n"
+		"\tmain.main()\n"
 		"except Exception as e:\n"
 		"\tprint(e)\n"
 		"\ttraceback.print_exc()\n"
@@ -89,6 +90,7 @@ int PyMain(int argc, wchar_t* argv[])
 	return ret;
 }
 
+//#undef USE_WINMAIN
 #ifdef USE_WINMAIN
 
 // --------------------------------------------------------------------------------------------
