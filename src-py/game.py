@@ -232,14 +232,14 @@ class Game(Drawable):
             if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
                 # .. and the number of remaining lifes
                 string = "\n".join(map(lambda x:x*self.lives,
-    " OOO     OOO   \n\
-    OOOOOO  OOOOO  \n\
-     OOOOOOOOOOO   \n\
-      OOOOOOOOO    \n\
-       OOOOOOO     \n\
-        OOOOO      \n\
-         OOO       \n\
-          O        ".split("\n")))
+" OOO     OOO   \n\
+OOOOOO  OOOOO  \n\
+ OOOOOOOOOOO   \n\
+  OOOOOOOOO    \n\
+   OOOOOOO     \n\
+    OOOOO      \n\
+     OOO       \n\
+      O        ".split("\n")))
                 self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
                 self.old_lives = self.lives
                 

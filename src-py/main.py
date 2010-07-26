@@ -240,7 +240,7 @@ Hit {1} to cancel""".format(
             
         else:
         
-            self.game = Game(Renderer.app,mode=mode)
+            self.game = Game(mode=mode)
             self.game.LoadLevel(level)
             Renderer.AddDrawable(self.game,old)
             
