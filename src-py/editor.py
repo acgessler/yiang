@@ -127,21 +127,32 @@ class EditorGame(Game):
                 raise NewFrame()
             
             # copy current tile
-            if "entity" in locals(): 
-                if self.in_select is False:
-                    if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
-                        self.template = dict()
-                        self.select_start = fx,fy
-                        
-                    self.in_select = True
+            if self.in_select is False:
+                if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
+                    self.template = dict()
+                    self.select_start = fx,fy
                     
-                if inp.IsKeyDown(sf.Key.LControl):
+                self.in_select = True
+                
+            if inp.IsKeyDown(sf.Key.LControl):
+                if not hasattr(self,"last_select") or abs(self.last_select[0]-fx)>1 or abs(self.last_select[1]-fy)>1:
+                    if not hasattr(self,"last_select"):
+                        self.last_select = self.select_start
+                    
                     for y in range(self.select_start[1],fy+1,1) if fy >= self.select_start[1] else range(self.select_start[1],fy-1,-1):
+                        for x in range(self.last_select[0],fx+1,1) if fx >= self.last_select[0] else range(self.last_select[0],fx-1,-1):
+                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                self.template[e] = None  
+                                
+                    for y in range(self.last_select[1],fy+1,1) if fy >= self.last_select[1] else range(self.last_select[1],fy-1,-1):
                         for x in range(self.select_start[0],fx+1,1) if fx >= self.select_start[0] else range(self.select_start[0],fx-1,-1):
                             for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                self.template[e] = None                                
+                                self.template[e] = None                               
                     
-                else:
+                    self.last_select = fx,fy
+                
+            else:
+                if "entity" in locals(): 
                     self.template[entity] = None
                     
                     
