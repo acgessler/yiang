@@ -50,6 +50,8 @@ class LevelUp(Tile):
             
             elif self.game.GetGameMode() == Game.SINGLE:
                 self.game.GameOverQuitToMenu()
+            elif self.game.GetGameMode() == Game.EDITOR:
+                pass
             else:
                 self.game.NextLevel()
 

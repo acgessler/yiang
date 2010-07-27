@@ -40,7 +40,7 @@ class EditorGame(Game):
     """Special game implementation for the editor"""
 
     def __init__(self):
-        Game.__init__(self,mode=Game.SINGLE,undecorated=True)
+        Game.__init__(self,mode=Game.EDITOR,undecorated=True)
         self.cursor_img  = sf.Image()
         self.cursor_img.LoadFromFile(os.path.join(defaults.data_dir,"textures","cursor.png"))
         
@@ -48,7 +48,9 @@ class EditorGame(Game):
         Renderer.app.ShowMouseCursor(False)
         
         self.selection = []
-        self.template = []
+        self.template = dict()
+        self.in_select = False
+        self.select_start = None
             
     def _DrawRectangle(self,bb,color):
         shape = sf.Shape()
@@ -67,6 +69,20 @@ class EditorGame(Game):
         shape.EnableOutline(True)
 
         self.DrawSingle(shape)
+        
+    def _CloneEntity(self,which):
+        assert hasattr(which,"editor_shebang")
+        
+        tempdict = dict(locals())
+        try:
+            exec(which.editor_shebang,globals(),tempdict)
+        except:
+            assert False
+            
+        t = tempdict['entity']
+        t.SetLevel(self.level)
+        t.SetColor(which.color)
+        return t
     
     def Draw(self):
         Game.Draw(self)
@@ -94,6 +110,8 @@ class EditorGame(Game):
         self.tx,self.ty = (mx/defaults.tiles_size_px[0] + offset[0],
             my/defaults.tiles_size_px[1]-self.level.vis_ofs - 0.5)
         
+        fx,fy = math.floor(self.tx),math.floor(self.ty)
+        
         # check if there's an entity right here and show its bounding box in white.
         # if there are multiple entities, take the one with the highest 
         # drawing order.
@@ -107,26 +125,58 @@ class EditorGame(Game):
                 
         except IndexError:
             # no entity below the cursor, highlight nearest point 
-            self._DrawRectangle((math.floor(self.tx),math.floor(self.ty),1.0,1.0),sf.Color(150,150,150))
+            self._DrawRectangle((fx,fy,1.0,1.0),sf.Color(150,150,150))
             
         if inp.IsMouseButtonDown(sf.Mouse.Right):
             if inp.IsMouseButtonDown(sf.Mouse.Left):
-                # Both mouse buttons pressed, delete selection
-                for elem in self.selection:
-                    self.level.RemoveEntity(elem)
+                # Both mouse buttons pressed, delete template
+                for entity,pos in self.template.items():
+                    self.level.RemoveEntity(entity)
                     
-                self.selection = []
+                self.template = dict()
                 raise NewFrame()
             
             # copy current tile
             if "entity" in locals(): 
-                self.template = list(self.selection)
-                
-        elif inp.IsMouseButtonDown(sf.Mouse.Left):
-            # Insert template at this position
-            for entity in self.template:
-                entity.SetPosition((math.floor(self.tx),math.floor(self.ty)))
-                self.level.AddEntity(entity)
+                if self.in_select is False:
+                    if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
+                        self.template = dict()
+                        self.select_start = fx,fy
+                        
+                    self.in_select = True
+                    
+                if inp.IsKeyDown(sf.Key.LControl):
+                    for y in range(self.select_start[1],fy+1):
+                        for x in range(self.select_start[0],fx+1):
+                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                self.template[e] = None                                
+                    
+                else:
+                    self.template[entity] = None
+                                
+        else:
+            self.in_select = False
+            
+        if inp.IsMouseButtonDown(sf.Mouse.Left):
+            if not hasattr(self,"pressed_l"):
+                # Insert template at this position
+                assert self.select_start
+                for entity,pos in self.template.items():
+                    cloned = self._CloneEntity(entity)
+                    cloned.SetPosition((math.floor(self.tx) + entity.pos[0]-self.select_start[0],
+                        math.floor(self.ty) + entity.pos[1]-self.select_start[1])
+                    )
+                    self.level.AddEntity(cloned)
+                    
+                self.pressed_l = True
+        else:
+            try:
+                delattr(self,"pressed_l")  
+            except AttributeError:
+                pass
+        
+        for entity,pos in self.template.items():
+            self._DrawRectangle(entity.GetBoundingBox(),sf.Color.Red)
             
         
 def main():

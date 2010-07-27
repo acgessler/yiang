@@ -64,7 +64,7 @@ class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
     
-    QUICKGAME,CAMPAIGN,SINGLE = range(3)
+    QUICKGAME,CAMPAIGN,SINGLE,EDITOR = range(4)
 
     def __init__(self, undecorated=False, mode=None):
         """ Initialize a new Game instance given the primary

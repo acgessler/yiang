@@ -328,8 +328,15 @@ class Level:
         avoid changing list sizes while iterating through them."""
         for entity in self.entities_rem:
             if hasattr(entity,"windows"):
+                
                 for window in entity.windows:
-                    window.remove(entity)
+                    try:    
+                        window.remove(entity)
+                    except ValueError:
+                        # (Hack) Happens in editor mode from time to time.
+                        # I guess it happens whenever an entity is removed
+                        # in the very same frame it is added.
+                        print("Catching ValueError during _UpdateEntityList()")
             
             try:    
                 self.entities.remove(entity)
@@ -791,7 +798,15 @@ class LevelLoader:
             print("exec() fails loading level {0}, executing line: {1} ".format(file, l))
             traceback.print_exc()
             
-        return tempdict.get("level", None)
+        lv = tempdict.get("level", None)
+        if lv and game.GetGameMode() == 3: # Game.EDITOR:
+            # in editor mode, store the level's full text in the Level instance itself
+            lv.editor_raw = lines[1].rstrip()
+            
+        return lv
+    
+    
+    
     
     
     

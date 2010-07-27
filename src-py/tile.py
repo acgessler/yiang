@@ -459,4 +459,8 @@ class TileLoader:
         tile = tempdict.get("entity",Tile())
         tile.SetGame(game)
         
+        if game.GetGameMode() == Game.EDITOR:
+            # in editor mode, store the tile's shebang line in the tile itself
+            tile.editor_shebang = lines
+        
         return tile
