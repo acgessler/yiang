@@ -28,6 +28,7 @@ server_name = "www.greentoken.de"
 homepage_url = "http://"+server_name+"/yiang"
 resolution = [1280, 850]
 fullscreen = False
+resizable = False
 letter_size = [8, 13]
 letter_height_intro = 13
 letter_height_menu = 120

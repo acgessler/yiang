@@ -136,13 +136,20 @@ class EditorGame(Game):
                     self.in_select = True
                     
                 if inp.IsKeyDown(sf.Key.LControl):
-                    for y in range(self.select_start[1],fy+1):
-                        for x in range(self.select_start[0],fx+1):
+                    for y in range(self.select_start[1],fy+1,1) if fy >= self.select_start[1] else range(self.select_start[1],fy-1,-1):
+                        for x in range(self.select_start[0],fx+1,1) if fx >= self.select_start[0] else range(self.select_start[0],fx-1,-1):
                             for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
                                 self.template[e] = None                                
                     
                 else:
                     self.template[entity] = None
+                    
+                    
+            if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
+                # draw selection rectangle
+                self._DrawRectangle((self.select_start[0],self.select_start[1],
+                    self.tx-self.select_start[0],
+                    self.ty-self.select_start[1]), sf.Color.Yellow)
                                 
         else:
             self.in_select = False
@@ -200,6 +207,10 @@ def main():
     # Read game.txt, which is the master config file
     defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
+    
+    defaults.caption = "YIANG-ED 0.1"
+    defaults.resolution[0] = 1450;
+    defaults.resizable = True
 
     print("Startup ...")
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))

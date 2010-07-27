@@ -97,6 +97,12 @@ class Drawable:
         """Remove a specific slave drawable from the object."""
         self.slaves.remove(drawable)
         Renderer.RemoveDrawable(drawable)
+        
+    def OnChangeResolution(self,newres):
+        """Called when the display resolution (the window size
+        in windowed mode) is changed. newres is the new
+        resolution, in pixels."""
+        pass
 
     def Draw(self):
         """To be implemented to perform any drawing operations
@@ -162,7 +168,7 @@ class Renderer:
             defaults.resolution = dm.Width, dm.Height
             Renderer.app = sf.RenderWindow(dm, defaults.caption, sf.Style.Fullscreen, settings)
         else:
-            tb = sf.Style.Close if defaults.show_window_caption else sf.Style._None
+            tb = (sf.Style.Resize|sf.Style.Close if defaults.resizable else sf.Style.Close) if defaults.show_window_caption else sf.Style._None
             Renderer.app = sf.RenderWindow(sf.VideoMode(
                     min(defaults.resolution[0], dm.Width),
                     min(defaults.resolution[1], dm.Height)
@@ -204,6 +210,16 @@ class Renderer:
 
                 Renderer.loop_running = False
                 return True
+            
+            elif event.Type == sf.Event.Resized:
+                #glViewport(0, 0, Event.Size.Width, Event.Size.Height);
+                view = sf.View()
+                view.SetFromRect(sf.FloatRect(0,0,event.Size.Width, event.Size.Height))
+                Renderer.app.SetView(view)
+                
+                defaults.resolution = event.Size.Width, event.Size.Height
+                for drawable in Renderer.drawables:
+                    drawable.OnChangeResolution(defaults.resolution)
 
             Renderer.events.add(event)
             event = sf.Event()

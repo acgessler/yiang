@@ -293,8 +293,8 @@ class Level:
                 if (0 < x < tiles[0] or 0 < x+dl[0] < tiles[0]) and (0 < y < tiles[1] or 0 < y+dl[1] < tiles[1]):
                     yield 0,window
                     
-                elif (cull_1[0] < x < cull_1[1] or cull_1[0] < x+dl[0] < cull_1[1]) and (cull_1[2] < y < cull_1[3] or cull_1[2] < y+dl[1] < cull_1[3]):
-                    yield 1,window
+                #elif (cull_1[0] < x < cull_1[1] or cull_1[0] < x+dl[0] < cull_1[1]) and (cull_1[2] < y < cull_1[3] or cull_1[2] < y+dl[1] < cull_1[3]):
+                #    yield 1,window
             
     def _LoadPostFX(self):
         """Load all postfx's in self.postfx and store them
