@@ -82,33 +82,19 @@ class EditorGame(Game):
         t = tempdict['entity']
         t.SetLevel(self.level)
         t.SetColor(which.color)
+        t.editor_shebang = which.editor_shebang
         return t
     
-    def Draw(self):
-        Game.Draw(self)
+    def _DrawEditor(self):
         
         inp = Renderer.app.GetInput()
-        mx,my = inp.GetMouseX(),inp.GetMouseY()
-
-        w,h =self.cursor_img.GetWidth(),self.cursor_img.GetHeight()        
-        #if not (w/2.0 < mx < defaults.resolution[0]-w/2.0) or not (h/2.0 < my < defaults.resolution[1]-h/2.0):
-        #    return
-
-        self.cursor.SetPosition(mx-w/2.0,my-h/2.0)
-        Renderer.app.Draw(self.cursor)
-
-        if not self.level:
-            return
-        
         self.level.SetDistortionParams((100,0,0))   
-        # store the mouse position for later use
-        self.mx,self.my = mx,my
         
         # get from mouse to tile coordinates
         # (XXX) put this into a nice function or so --- :-)
         offset = self.level.GetOrigin()
-        self.tx,self.ty = (mx/defaults.tiles_size_px[0] + offset[0],
-            my/defaults.tiles_size_px[1]-self.level.vis_ofs - 0.5)
+        self.tx,self.ty = (self.mx/defaults.tiles_size_px[0] + offset[0],
+            self.my/defaults.tiles_size_px[1]-self.level.vis_ofs - 0.5)
         
         fx,fy = math.floor(self.tx),math.floor(self.ty)
         
@@ -124,8 +110,12 @@ class EditorGame(Game):
             self.selection = [entity]
                 
         except IndexError:
-            # no entity below the cursor, highlight nearest point 
+            # no entity below the cursor, highlight the nearest point and its surroundings
             self._DrawRectangle((fx,fy,1.0,1.0),sf.Color(150,150,150))
+            #e = ((x,y) for y in range(-3,4) for x in range(-3,4) if x or y)
+            #for x,y in e:
+            #    c = int(50 - (x**2 + y**2)**0.5 *0.20 * 50)
+            #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
             
         if inp.IsMouseButtonDown(sf.Mouse.Right):
             if inp.IsMouseButtonDown(sf.Mouse.Left):
@@ -160,13 +150,13 @@ class EditorGame(Game):
         if inp.IsMouseButtonDown(sf.Mouse.Left):
             if not hasattr(self,"pressed_l"):
                 # Insert template at this position
-                assert self.select_start
-                for entity,pos in self.template.items():
-                    cloned = self._CloneEntity(entity)
-                    cloned.SetPosition((math.floor(self.tx) + entity.pos[0]-self.select_start[0],
-                        math.floor(self.ty) + entity.pos[1]-self.select_start[1])
-                    )
-                    self.level.AddEntity(cloned)
+                if self.select_start:
+                    for e,pos in self.template.items():
+                        cloned = self._CloneEntity(e)
+                        cloned.SetPosition((fx + e.pos[0]-self.select_start[0],
+                            fy + e.pos[1]-self.select_start[1])
+                        )
+                        self.level.AddEntity(cloned)
                     
                 self.pressed_l = True
         else:
@@ -175,9 +165,34 @@ class EditorGame(Game):
             except AttributeError:
                 pass
         
-        for entity,pos in self.template.items():
-            self._DrawRectangle(entity.GetBoundingBox(),sf.Color.Red)
+        for e,pos in self.template.items():
+            bb = e.GetBoundingBox()
+            self._DrawRectangle(bb,sf.Color.Red)
             
+            if not "entity" in locals() or not entity in self.template:
+                self._DrawRectangle((fx + e.pos[0]-self.select_start[0],
+                    fy + e.pos[1]-self.select_start[1],bb[2],bb[3]),sf.Color(40,0,0))
+            
+        #if self.select_start:
+    
+    def Draw(self):
+        Game.Draw(self)
+        
+        inp = Renderer.app.GetInput()
+        self.mx,self.my = inp.GetMouseX(),inp.GetMouseY()
+
+        # Nothing to do is no level is loaded
+        if self.level:
+            self._DrawEditor()
+
+        # ... except moving the cursor
+        w,h =self.cursor_img.GetWidth(),self.cursor_img.GetHeight()        
+        #if not (w/2.0 < mx < defaults.resolution[0]-w/2.0) or not (h/2.0 < my < defaults.resolution[1]-h/2.0):
+        #    return
+
+        self.cursor.SetPosition(self.mx-w/2.0,self.my-h/2.0)
+        Renderer.app.Draw(self.cursor)
+        
         
 def main():
     """Main entry point to the editor application"""
