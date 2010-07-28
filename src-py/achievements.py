@@ -60,9 +60,10 @@ class Achievements:
     def EarnAchievement(name):
         """Award a specific achievement to the player """
         assert name in Achievements.all
-        Achievements.have.add(name)
         
-        print("Earn achievement: {0}".format(name))
+        if not name in Achievements.have:
+            Achievements.have.add(name)
+            print("Earn achievement: {0}".format(name))
         
     @staticmethod
     def GetInfo(name):
