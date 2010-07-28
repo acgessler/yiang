@@ -166,7 +166,7 @@ class EditorGame(Game):
             self.in_select = False
             
         if inp.IsMouseButtonDown(sf.Mouse.Left):
-            if not hasattr(self,"pressed_l"):
+            if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-fx or self.last_insert_pos[1]-fy:
                 # Insert template at this position
                 if self.select_start:
                     for e,pos in self.template.items():
@@ -177,6 +177,7 @@ class EditorGame(Game):
                         self.level.AddEntity(cloned)
                     
                 self.pressed_l = True
+                self.last_insert_pos = fx,fy
         else:
             try:
                 delattr(self,"pressed_l")  
