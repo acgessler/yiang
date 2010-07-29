@@ -1,6 +1,7 @@
 BackgroundsLarge	-2000
 BackgroundsSmall	-1500
 Sun					-1000
+ZeroG				-100
 Tile				10
 AnimTile			20
 Entity				500

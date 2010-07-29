@@ -293,7 +293,7 @@ class ZeroG(Perk):
     to zero and lets the player fly around like in universe."""
     
     def __init__(self,text,height,frames,time=0.5,anim_speed=1.0):
-        Perk.__init__(self,os.path.join(defaults.data_dir,"tiles_misc","zerog.txt"),text,height,frames,anim_speed)
+        Perk.__init__(self,os.path.join(defaults.data_dir,"tiles_misc","zerog.txt"),text,height,frames,anim_speed,draworder=-100)
         self.time = time
         
     def EnablePerk(self,player):

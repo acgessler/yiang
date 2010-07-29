@@ -92,7 +92,8 @@ class Player(Entity):
         """Reset the state of the player instance, this is needed
         for proper respawning"""
         self.vel = [0, 0]
-        self.in_jump = self.block_jump = self.level.gravity > 0
+        self.in_jump = self.block_jump = not not self.level.gravity
+        self.in_djump = self.block_djump = not not self.level.gravity 
         self.block_shoot, self.moved_once, self.setup_autoscroll = False, False, False
         self.cur_tile = Player.ANIM_WALK
         self.dir = Player.RIGHT
@@ -323,12 +324,25 @@ class Player(Entity):
             if inp.IsKeyDown(KeyMapping.Get("move-up")):
                 if self.in_jump is False and self.block_jump is False:
                     self.vel[1] -= defaults.jump_vel * self.jump_scale
-                    self.in_jump = self.block_jump = True
+                    self.in_jump = self.level.gravity != 0 
+                    self.block_jump = True
 
                     self.cur_tile = Player.ANIM_JUMP
                 self.moved_once = True
+                
             else:
                 self.block_jump = False
+                
+            if inp.IsKeyDown(KeyMapping.Get("move-down")):
+                if self.in_djump is False and self.block_djump is False:
+                    self.vel[1] += defaults.jump_vel * self.jump_scale
+                    self.in_djump = self.level.gravity != 0 
+                    self.block_djump = True
+
+                    self.cur_tile = Player.ANIM_JUMP
+                    self.moved_once = True
+            else:
+                self.block_djump = False
             
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
             if defaults.debug_updown_move is True else 0)) * time]
@@ -555,7 +569,7 @@ class Player(Entity):
                     #print("floor")
         
                     self.cur_tile = Player.ANIM_WALK
-                    self.in_jump = False
+                    self.in_jump = self.in_djump = False
                     
                 elif n == 0:
                     newpos[0] = elem[0]

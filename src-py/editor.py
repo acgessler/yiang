@@ -35,6 +35,7 @@ from renderer import Renderer,Drawable,NewFrame
 from highscore import HighscoreManager
 from audio import BerlinerPhilharmoniker
 from achievements import Achievements
+#import minigui
 
 class EditorGame(Game):
     """Special game implementation for the editor"""
