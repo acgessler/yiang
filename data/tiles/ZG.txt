@@ -1,21 +1,41 @@
-from perks import ZeroG; <out> = ZeroG(<raw>,3,5)
-=====
-NoGra
-=====
+from perks import ZeroG; <out> = ZeroG(<raw>,9,4,anim_speed=5.0)
+===============
+NoGravity - NoG
+===============
+Gravity - NoGra
+===============
+avity - NoGravi
+===============
+ity - NoGravity
+===============
 
-=====
-oGrav
-=====
+===============
+ravity - NoGrav
+===============
+vity - NoGravit
+===============
+ty - NoGravity 
+===============
+ - NoGravity - 
+===============
 
-=====
-Gravi
-=====
+===============
+ity - NoGravity
+===============
+y - NoGravity -
+===============
+- NoGravity - N
+===============
+NoGravity - NoG
+===============
 
-=====
-ravit
-=====
-
-=====
-avity
-=====
+===============
+ - NoGravity - 
+===============
+ NoGravity - No
+===============
+oGravity - NoGr
+===============
+ravity - NoGrav
+===============
 
