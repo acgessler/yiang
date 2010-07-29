@@ -45,7 +45,7 @@ class Door(AnimTile):
                     if isinstance(item,Key) and item.color == self.color:
                         self.Unlock()
                         item = inv.send(item)
-                        break
+                        while inv.send(None): pass
             except StopIteration:
                 pass
         

@@ -168,7 +168,9 @@ class Player(Entity):
             
     def EnumInventoryItems(self):
         """Yields all inventory items in unspecified order.
-        use send(item) to mark a specific item for deletion"""
+        use send(item) to mark a specific item for deletion.
+        
+        DO not break loops through this generator!!"""
         erase = []
         for item in self.inventory:
             assert isinstance(item,InventoryItem)
