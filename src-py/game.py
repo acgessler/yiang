@@ -359,7 +359,7 @@ PreventFallDown:   {debug_prevent_fall_down}
 ShowBoundingBoxes: {debug_draw_bounding_boxes}
 ScrollBoth:        {debug_scroll_both}
 ScrollSpeed:       {move_map_speed}
-SpeedScale/Level:  {speed_scale_per_round}
+SpeedScale/Round:  {speed_scale_per_round}
 SpeedScale:        {speed_scale}
 LevelSize:         {level_size}
 

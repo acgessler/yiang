@@ -1,7 +1,7 @@
 <out> = Level(<level>,<game>,<raw>,color=(30,0,0),name="A Brave New World ...",vis_ofs=2)
-
-                                                                                                                                    ~DA
-                                                                  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DA~DA~DA~DA~DA~DA~DA~DA~DA~DA
+                                                                                                                                                                                 
+                                                                                                                                    ~DA                                          _i0
+                                                                  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  .  .  .  .        .  ~DA~DA~DA~DA~DA~DA~DA~DA~DA~DA
    gPL                                                            .  .  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .     .  ~DA~DA~DA~DA~DA~DA~DA~DA~DA~DA
                                                                   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .                                   _FI
                                                                   .  .  .  .  .  .  .  .  .     .  .  ~DA.  .  .  .  .  _A1_B0_B0_B0_A5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  

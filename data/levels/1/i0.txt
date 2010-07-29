@@ -1,0 +1,4 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="level_1_0",text_color=sf.Color.Black,only_once=True)
+A mysterious voice says: "I cannot teach him. The boy has no patience!", and another voice responds: "He will learn patience". A few seconds pass until you realize that this is just your imagination randomly throwing in movie quotes.
+
+
