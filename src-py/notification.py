@@ -164,7 +164,7 @@ class SimpleNotification(Entity):
             
             self.text_formatted += "\n\n"
         
-        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.1))
+        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.0))
         
     def Interact(self, other):
         inp = Renderer.app.GetInput()
