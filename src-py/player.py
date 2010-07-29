@@ -44,6 +44,12 @@ class InventoryItem:
     def GetItemName(self):
         """Return a descriptive item name to be displayed to the user"""
         return "an unnamed inventory item"
+    
+    def SameKind(self,other):
+        return not not (type(self) == type(other) and self.color == other.color)
+    
+    #def __hash__(self):
+    #    return id(self)
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -181,15 +187,19 @@ class Player(Entity):
                 erase.append(item)
                 
         for item in erase:
-            self.inventory.remove(item)
-            self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos,color=sf.Color.Red))
+            self.RemoveFromInventory(item)
+            
             
     def AddToInventory(self,item):
         """Adds an item to the player's inventory. The same
         item can be added multiple times."""
         assert isinstance(item,InventoryItem)
+        
+        cnt = len([i for i in self.inventory if i.SameKind(item)])
+        
         self.inventory.append(item)
-        self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName(),self.pos))
+        self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName() + 
+            (" [#{0} of this item]".format(cnt+1) if cnt else ""),self.pos))
         
         print("Add item to inventory: {0}".format(item))
         
@@ -212,7 +222,10 @@ class Player(Entity):
         scheme to remove entities. """
         assert isinstance(item,InventoryItem)
         self.inventory.remove(item)
-        self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName(),self.pos,color=sf.Color.Red))
+        cnt = len([i for i in self.inventory if i.SameKind(item)])
+        self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName()+
+            (" [I have {0} more of this kind]".format(cnt) if cnt else ""),
+            self.pos,color=sf.Color.Red))
             
     def SetPositionAndMoveView(self, pos, ofs=None):
         """Change the players position and adjust the viewport accordingly.
