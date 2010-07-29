@@ -121,7 +121,7 @@ profile_level_loading = True
 # every 600st frame for a level (~10s).
 # writes cProfile results to the profile directory
 # and dumps the 20 hottest locations to the console
-profile_rendering = False
+profile_rendering = True
 
 # Draw the HUD (minimap) in world maps. Disable if
 # this causes problems with your screen setup (i.e.

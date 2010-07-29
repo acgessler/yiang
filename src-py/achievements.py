@@ -64,6 +64,8 @@ class Achievements:
         if not name in Achievements.have:
             Achievements.have.add(name)
             print("Earn achievement: {0}".format(name))
+            
+            Achievements._Flush()
         
     @staticmethod
     def GetInfo(name):
