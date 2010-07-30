@@ -47,6 +47,10 @@
         </style>
         <script>
 			var gDocument = System.Gadget.document;
+			// Enable Settings dialog for the gadget. 
+			System.Gadget.settingsUI = "settings.html";
+			System.Gadget.onSettingsClosing = SettingsClosing;
+			
             function init(){
 				var bgcolor = "black";
 				var size = "small";
@@ -68,7 +72,12 @@
 				document.getElementById("gadgetContent").style.height = "180px";}}
 				oBackground.src = "images/"+size+bgcolor+".png";
 				}
-				
+			function SettingsClosing(event){
+				if (event.closeAction == event.Action.commit){
+				System.Gadget.Settings.write("settingsSelectionIndex", selUserEntry.selectedIndex);}
+				event.cancel = false;
+				}
+
 			// Show the flyout
 			function showFlyout(flyoutname){
 				System.Gadget.Flyout.file = "flyouts/"+flyoutname+".html";
