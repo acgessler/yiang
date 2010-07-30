@@ -177,6 +177,38 @@ class Game(Drawable):
     def GetLowerStatusBarHeight(self):
         """Get the height of the lower status bar, in tiles"""
         return max(1.5, (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1]))
+    
+    def _DrawHearts(self):
+        
+        if not hasattr(self,"life_bar_font"):
+            self.life_bar_font = FontCache.get(defaults.letter_height_lives,\
+                face=defaults.font_lives)
+            
+        if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
+                # .. and the number of remaining lifes
+                string = "\n".join(map(lambda x:x*self.lives,
+" OOO     OOO   \n\
+OOOOOO  OOOOO  \n\
+ OOOOOOOOOOO   \n\
+  OOOOOOOOO    \n\
+   OOOOOOO     \n\
+    OOOOO      \n\
+     OOO       \n\
+      O        ".split("\n")))
+                self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
+                self.old_lives = self.lives
+                
+        xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
+        self.cached_lives_text.SetPosition(xstart-2,5)
+        self.cached_lives_text.SetColor(sf.Color.Black)
+        self.DrawSingle(self.cached_lives_text)
+
+        self.cached_lives_text.SetPosition(xstart+2,5)
+        self.DrawSingle(self.cached_lives_text)
+
+        self.cached_lives_text.SetPosition(xstart,6)        
+        self.cached_lives_text.SetColor(sf.Color(180,0,0))
+        self.DrawSingle(self.cached_lives_text)
 
     def DrawStatusBar(self):
         """draw the status bar with the player's score, lives and total game duration"""
@@ -188,9 +220,7 @@ class Game(Drawable):
             self.status_bar_font = FontCache.get(defaults.letter_height_status,\
                 face=defaults.font_status)
 
-        if not hasattr(self,"life_bar_font"):
-            self.life_bar_font = FontCache.get(defaults.letter_height_lives,\
-                face=defaults.font_lives)
+
         
         # and finally the border
         shape = sf.Shape()
@@ -228,32 +258,8 @@ class Game(Drawable):
             self.cached_status_text.SetColor(sf.Color.Yellow)
             self.cached_status_text.SetPosition(10,5)
             self.DrawSingle(self.cached_status_text)
-    
-            if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
-                # .. and the number of remaining lifes
-                string = "\n".join(map(lambda x:x*self.lives,
-" OOO     OOO   \n\
-OOOOOO  OOOOO  \n\
- OOOOOOOOOOO   \n\
-  OOOOOOOOO    \n\
-   OOOOOOO     \n\
-    OOOOO      \n\
-     OOO       \n\
-      O        ".split("\n")))
-                self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
-                self.old_lives = self.lives
-                
-            xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
-            self.cached_lives_text.SetPosition(xstart-2,5)
-            self.cached_lives_text.SetColor(sf.Color.Black)
-            self.DrawSingle(self.cached_lives_text)
-    
-            self.cached_lives_text.SetPosition(xstart+2,5)
-            self.DrawSingle(self.cached_lives_text)
-    
-            self.cached_lives_text.SetPosition(xstart,6)        
-            self.cached_lives_text.SetColor(sf.Color(180,0,0))
-            self.DrawSingle(self.cached_lives_text)
+            
+            self._DrawHearts()
         
         # finally, the lower part of the cinematic box
         shape = sf.Shape()

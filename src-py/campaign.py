@@ -107,6 +107,8 @@ class CampaignLevel(Level):
         self._DrawEntities()
         self._UpdateEntityList()
         
+        self.game._DrawHearts()
+        
         #self.game.DrawStatusBar()
         
         # draw minimap
