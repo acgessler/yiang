@@ -1,0 +1,4 @@
+from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="level_1_1",text_color=sf.Color.Black,only_once=True)
+Here is another life for you - you might need it. Watch out for hidden secrets like this one. Usually, at least 5 of them can be found in every single level. 
+
+

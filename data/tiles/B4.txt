@@ -1,0 +1,4 @@
+from tile import Tile; <out> = Tile(<raw>)
+AAAA|
+AAAA|
+AAAA|
