@@ -14,7 +14,7 @@ from perks import Unkillable; <out> = Unkillable(<raw>,6,5,5.0,2.0)
   ||          ||
 
 ------------------
-| UNKILLABLE   3s |
+| UNKILLABLE  3s |
 ------------------
   ||          ||             
   ||          ||

@@ -378,7 +378,8 @@ class EditorGame(Game):
         w,h = self.level.GetLevelSize()
         yofs = self.level.vis_ofs
         
-        self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else (4,3)) # scale factors in both axes
+        # scale factors in both axes
+        self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else ((4,3) if w < 250 and h < 250 else (1,1))) 
         w,h = w*self.msx,(h)*self.msy
         b = bytearray(b'\x30\x30\x30\xa0') * (w*h)
         

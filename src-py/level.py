@@ -626,11 +626,12 @@ class Level:
     def SetOrigin(self, origin):
         """Change the view origin"""
         assert isinstance(origin, tuple)
-        self.origin = (max(origin[0],0), origin[1] if self.scroll[-1] & Level.SCROLL_TOP  else -defaults.status_bar_top_tiles )
+        self.origin = (min(max(origin[0],0),self.level_size[0]-defaults.tiles[0]), 
+            origin[1] if self.scroll[-1] & Level.SCROLL_TOP  else -defaults.status_bar_top_tiles )
         
     def SetOriginX(self, origin):
         """Change the view origin but leave the y axis intact"""
-        self.origin = (max(origin,0),self.origin[1])
+        self.origin = (min(max(origin,0),self.level_size[0]-defaults.tiles[0]),self.origin[1])
     
     def AddEntity(self, entity):
         """Dynamically add an entity to the list of all active
