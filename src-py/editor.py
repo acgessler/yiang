@@ -23,35 +23,67 @@ import sf
 import sys
 import os
 import math
+import traceback
 
 # Our stuff
 import defaults
 
+
+# Note: some of these imports are only needed because they might be implicitly
+# referenced by shebang lines in one of the tiles which we created
 from fonts import FontCache
 from keys import KeyMapping
-from game import Game
+from game import Game,Entity
 from log import Log
 from renderer import Renderer,Drawable,NewFrame
 from highscore import HighscoreManager
 from audio import BerlinerPhilharmoniker
 from achievements import Achievements
-#import minigui
 
-class EditorGame(Game):
-    """Special game implementation for the editor"""
+from minigui import Component, Button
 
+class EditorCursor(Drawable):
+    """Draws the cursor on top of the whole scenery"""
+    
     def __init__(self):
-        Game.__init__(self,mode=Game.EDITOR,undecorated=True)
+        Drawable.__init__(self)
+        
         self.cursor_img  = sf.Image()
         self.cursor_img.LoadFromFile(os.path.join(defaults.data_dir,"textures","cursor.png"))
         
         self.cursor = sf.Sprite(self.cursor_img)
         Renderer.app.ShowMouseCursor(False)
         
+    def GetDrawOrder(self):
+        return 100000
+    
+    def Draw(self):
+        
+        inp = Renderer.app.GetInput()
+        self.mx,self.my = inp.GetMouseX(),inp.GetMouseY()
+        
+        # move the cursor according to mouse input
+        w,h =self.cursor_img.GetWidth(),self.cursor_img.GetHeight()   
+             
+        #if not (w/2.0 < mx < defaults.resolution[0]-w/2.0) or not (h/2.0 < my < defaults.resolution[1]-h/2.0):
+        #    return
+
+        self.cursor.SetPosition(self.mx-w/2.0,self.my-h/2.0)
+        Renderer.app.Draw(self.cursor)
+
+class EditorGame(Game):
+    """Special game implementation for the editor"""
+
+    def __init__(self):
+        Game.__init__(self,mode=Game.EDITOR,undecorated=True)
+        
         self.selection = []
         self.template = dict()
         self.in_select = False
         self.select_start = None
+        
+        Renderer.AddDrawable(EditorCursor())
+        Renderer.AddDrawable(Button(text="Load",rect=[-160,10,100,25]))
             
     def _DrawRectangle(self,bb,color):
         shape = sf.Shape()
@@ -72,13 +104,17 @@ class EditorGame(Game):
         self.DrawSingle(shape)
         
     def _CloneEntity(self,which):
-        assert hasattr(which,"editor_shebang")
+        if not hasattr(which,"editor_shebang"):
+            print("Failure cloning {0} - no shebang record found".format(which))
+            return None
         
         tempdict = dict(locals())
         try:
             exec(which.editor_shebang,globals(),tempdict)
         except:
-            assert False
+            print("Failure cloning {0}, exec() fails".format(which))
+            traceback.print_exc()
+            return None
             
         t = tempdict['entity']
         t.SetLevel(self.level)
@@ -172,6 +208,8 @@ class EditorGame(Game):
                 if self.select_start:
                     for e,pos in self.template.items():
                         cloned = self._CloneEntity(e)
+                        if not cloned:
+                            continue
                         cloned.SetPosition((fx + e.pos[0]-self.select_start[0],
                             fy + e.pos[1]-self.select_start[1])
                         )
@@ -204,14 +242,6 @@ class EditorGame(Game):
         # Nothing to do is no level is loaded
         if self.level:
             self._DrawEditor()
-
-        # ... except moving the cursor
-        w,h =self.cursor_img.GetWidth(),self.cursor_img.GetHeight()        
-        #if not (w/2.0 < mx < defaults.resolution[0]-w/2.0) or not (h/2.0 < my < defaults.resolution[1]-h/2.0):
-        #    return
-
-        self.cursor.SetPosition(self.mx-w/2.0,self.my-h/2.0)
-        Renderer.app.Draw(self.cursor)
         
         
 def main():

@@ -5,5 +5,7 @@ Fade        990
 NotiBox		1100
 
 FadeMenuInAtVeryBeginning 50000  
+MiniGuiDef		51000
+EditorCursor	100000
 
 
