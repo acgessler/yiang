@@ -112,6 +112,7 @@ class Level:
         self.lvbase = os.path.join(defaults.data_dir, "levels", str(level))
         self.tlbase = os.path.join(defaults.data_dir, "tiles")
         
+        xmax = 0
         try:
             for y, line in enumerate(lines):
                 line_idx += 1
@@ -128,12 +129,14 @@ class Level:
                     
                     self._LoadSingleTile(tcode, line[x],x//3,y)
                     ecnt += 1
+                    
+                xmax = max(x,xmax)
                 
         except AssertionError as err:
             print("Level " + str(level) + " is not well-formatted (line {0})".format(line_idx))
             traceback.print_exc()
 
-        self.level_size = (x // 3 + 1, y)
+        self.level_size = (xmax // 3 + 1, y)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
         
         validator.validate_level(self.lines, level)
