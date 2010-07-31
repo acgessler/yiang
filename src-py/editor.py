@@ -39,6 +39,8 @@ from renderer import Renderer,Drawable,NewFrame
 from highscore import HighscoreManager
 from audio import BerlinerPhilharmoniker
 from achievements import Achievements
+from enemy import Enemy
+from score import ScoreTile
 
 from minigui import Component, Button, ToggleButton
 
@@ -81,6 +83,7 @@ class EditorGame(Game):
         self.template = dict()
         self.in_select = False
         self.select_start = None
+        self.dirty_area = 0.0
         
         Renderer.AddDrawable(EditorCursor())
         
@@ -92,7 +95,7 @@ class EditorGame(Game):
              ("release",(lambda src: self.Kill("(Kill button)")))
         ))
         
-        Renderer.AddDrawable((ToggleButton(text="Suspend\00Resume",on=True, rect=[-290,10,80,25]) +
+        Renderer.AddDrawable((ToggleButton(text="Suspend\x00Resume",on=True, rect=[-290,10,80,25]) +
              ("off", (lambda src: self.PushSuspend())) +
              ("on",(lambda src: self.PopSuspend())) 
         ))
@@ -225,7 +228,8 @@ class EditorGame(Game):
                         cloned.SetPosition((fx + e.pos[0]-self.select_start[0],
                             fy + e.pos[1]-self.select_start[1])
                         )
-                        self.level.AddEntity(cloned)
+                        
+                        self.AddEntity(cloned)
                     
                 self.pressed_l = True
                 self.last_insert_pos = fx,fy
@@ -242,8 +246,113 @@ class EditorGame(Game):
             if not "entity" in locals() or not entity in self.template:
                 self._DrawRectangle((fx + e.pos[0]-self.select_start[0],
                     fy + e.pos[1]-self.select_start[1],bb[2],bb[3]),sf.Color(40,0,0))
+                
+                
+        if inp.IsKeyDown(sf.Key.M):
+            self._DrawMiniMap()
             
         #if self.select_start:
+        
+        
+        
+    def AddEntity(self,entity):
+        """Wrap entity add/remove functions to synchronize with our level table"""
+        self.level.AddEntity(entity)
+        self._UpdateMiniMap(entity)
+        
+    def RemoveEntity(self,entity):
+        """Wrap entity add/remove functions to synchronize with our level table"""
+        self.level.RemoveEntity(entity)
+        self._UpdateMiniMap(entity)
+        
+    def _UpdateMiniMap(self,entity):
+        bb = entity.GetBoundingBox()
+        self.dirty_area += bb[2]*bb[3] if bb else 1.0
+        if self.dirty_area > 8.0: # choosen by trial and error
+            self._BuildMiniMap()
+            self.dirty_area = 0.0
+        
+    def _DrawMiniMap(self):
+        Renderer.app.Draw(self.minimap_sprite)
+        Renderer.app.Draw(self.minimap_shape)
+        
+    def _GetImg(self,img):
+        # Partly copy'n'paste from CampaignLevel's minimap code
+        sprite = sf.Sprite(img)
+        
+        x,y = 35,math.floor(self.GetUpperStatusBarHeight()*defaults.tiles_size_px[0]) + 20
+        
+        
+        w,h = img.GetWidth(),img.GetHeight()
+        w = defaults.resolution[0] - x*2
+        h = w*img.GetHeight()/img.GetWidth()
+        if h > defaults.resolution[1] - y*2:
+            h = defaults.resolution[1] - y*2
+            w = h*img.GetWidth()/img.GetHeight()
+        
+        # -0.5 for pixel-exact mapping, seemingly SFML is unable to do this for us
+        sprite.SetPosition(x-0.5,y-0.5)
+        sprite.Resize(w,h)
+        
+        sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
+        sprite.SetBlendMode(sf.Blend.Alpha)
+        return sprite,w,h,x,y
+        
+    def _BuildMiniMap(self):
+        # Partly copy'n'paste from CampaignLevel's minimap code
+        w,h = self.level.GetLevelSize()
+        yofs = self.level.vis_ofs
+        
+        self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else (4,3)) # scale factors in both axes
+        w,h = w*self.msx,(h+3)*self.msy
+        b = bytearray(b'\x40\x40\x40\xff') * (w*h)
+        
+        for entity in self.level.EnumAllEntities():
+            bb = entity.GetBoundingBox()
+            if bb:
+                col = entity.color
+                xs,ys = int(bb[0])*self.msx, int(bb[1] + yofs)*self.msy
+                if not ( 0 <= xs <= w and 0 <= ys <= h ):
+                    print("Pos out of range at {0}/{1} -- {2}".format(xs/self.msx,ys/self.msy,entity))
+                    continue
+                
+                # highlight enemies and score tiles
+                if isinstance(entity, Enemy):
+                    for y in range(int(bb[3]+0.5) * self.msy):
+                        for x in range(int(bb[2]+0.5) * self.msx):
+                            if x%2 and y%2:
+                                n = (w*(y+ys) + x+xs)*4
+                                b[n:n+4] = col.r,col.g,col.b,col.a
+                elif isinstance(entity, ScoreTile):
+                    for y in range(int(bb[3]+0.5) * self.msy):
+                        for x in range(int(bb[2]+0.5) * self.msx):
+                            if x%2:
+                                n = (w*(y+ys) + x+xs)*4
+                                b[n:n+4] = col.r,col.g,col.b,col.a
+                else:
+                    for y in range(int(bb[3]+0.5) * self.msy):
+                        for x in range(int(bb[2]+0.5) * self.msx):
+                            n = (w*(y+ys) + x+xs)*4
+                            b[n:n+4] = col.r,col.g,col.b,col.a
+        
+        self.minimap = sf.Image()
+        self.minimap.LoadFromPixels(w,h, bytes(b))
+        self.minimap_sprite,self.sw,self.sh,self.sx,self.sy = self._GetImg(self.minimap)
+        
+        # finally, construct the rectangle around the minimap
+        self.minimap_shape = sf.Shape()
+        bcol = sf.Color(0xcd,0x90,0x0,0xff)
+        
+        # interestingly, the 0.5px offset is not needed for
+        # lines and other geometric shapes. Awesome.
+        self.minimap_shape.AddPoint(self.sx,self.sy,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx+self.sw,self.sy,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx+self.sw,self.sy+self.sh,bcol,bcol)
+        self.minimap_shape.AddPoint(self.sx,self.sy+self.sh,bcol,bcol)
+
+        self.minimap_shape.SetOutlineWidth(3)
+        self.minimap_shape.EnableFill(False)
+        self.minimap_shape.EnableOutline(True)
     
     def Draw(self):
         Game.Draw(self)
@@ -253,6 +362,11 @@ class EditorGame(Game):
 
         # Nothing to do is no level is loaded
         if self.level:
+            if self.level != getattr(self,"prev_level",None):
+                
+                self._BuildMiniMap()
+                self.prev_level = self.level
+                
             self._DrawEditor()
         
         

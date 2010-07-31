@@ -240,10 +240,10 @@ class ToggleButton(HasAText):
         Component.STATE_DISABLED : sf.Color(40,40,40),
     }
     
-    def __init__(self,on=False,text="On\00Off",**kwargs):
+    def __init__(self,on=False,text="On\x00Off",**kwargs):
         HasAText.__init__(self,**kwargs)
         
-        self.text_choices = text.split("\00")
+        self.text_choices = text.split("\x00")
         self.text_choices = self.text_choices if len(self.text_choices)==2 else self.text_choices*2
         self.on = on
         
