@@ -41,6 +41,7 @@ from audio import BerlinerPhilharmoniker
 from achievements import Achievements
 from enemy import Enemy
 from score import ScoreTile
+from player import Player
 
 from minigui import Component, Button, ToggleButton
 
@@ -305,35 +306,60 @@ class EditorGame(Game):
         
         self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else (4,3)) # scale factors in both axes
         w,h = w*self.msx,(h+3)*self.msy
-        b = bytearray(b'\x40\x40\x40\xff') * (w*h)
+        b = bytearray(b'\x30\x30\x30\xff') * (w*h)
         
-        for entity in self.level.EnumAllEntities():
+        for entity in sorted( self.level.EnumAllEntities(), key=lambda x:x.GetDrawOrder() ):
+            
+            if isinstance(entity, Player):
+                continue
+            
             bb = entity.GetBoundingBox()
             if bb:
                 col = entity.color
+                
                 xs,ys = int(bb[0])*self.msx, int(bb[1] + yofs)*self.msy
                 if not ( 0 <= xs <= w and 0 <= ys <= h ):
                     print("Pos out of range at {0}/{1} -- {2}".format(xs/self.msx,ys/self.msy,entity))
                     continue
                 
-                # highlight enemies and score tiles
+                # highlight enemies ...
                 if isinstance(entity, Enemy):
                     for y in range(int(bb[3]+0.5) * self.msy):
                         for x in range(int(bb[2]+0.5) * self.msx):
                             if x%2 and y%2:
                                 n = (w*(y+ys) + x+xs)*4
-                                b[n:n+4] = col.r,col.g,col.b,col.a
+                                b[n:n+4] = col.r*col.a//0xff,col.g*col.a//0xff,col.b*col.a//0xff,0xff
+                                
+                # .. and score tiles
                 elif isinstance(entity, ScoreTile):
                     for y in range(int(bb[3]+0.5) * self.msy):
                         for x in range(int(bb[2]+0.5) * self.msx):
                             if x%2:
                                 n = (w*(y+ys) + x+xs)*4
-                                b[n:n+4] = col.r,col.g,col.b,col.a
-                else:
+                                b[n:n+4] = col.r*col.a//0xff,col.g*col.a//0xff,col.b*col.a//0xff,0xff
+                
+                # for invisible tiles, draw only the edges and make them opaque
+                elif col.a < 10:
+                    for y in range(int(bb[3]+0.5) * self.msy):
+                        for x in (0,int(bb[2]+0.5) * self.msx):
+                            n = (w*(y+ys) + x+xs)*4
+                            b[n:n+4] = col.r,col.g,col.b,0xff
+                    for y in (0,int(bb[3]+0.5) * self.msy):
+                        for x in range(int(bb[2]+0.5) * self.msx):
+                            n = (w*(y+ys) + x+xs)*4
+                            b[n:n+4] = col.r,col.g,col.b,0xff
+                            
+                # draw all others according to their color and bounding boxes
+                # entities with low draw order are assumed to be background 
+                # tiles which are drawn with low intensity (most background
+                # tiles are huge, and we want to avoid huge solid rectangles
+                # on the minimap which would confuse the user)
+                else:      
+                    ascale = 1.0 if entity.GetDrawOrder() > 0 else 0.1
                     for y in range(int(bb[3]+0.5) * self.msy):
                         for x in range(int(bb[2]+0.5) * self.msx):
                             n = (w*(y+ys) + x+xs)*4
-                            b[n:n+4] = col.r,col.g,col.b,col.a
+                            b[n:n+4] = int(col.r*ascale)*col.a//0xff,int(col.g*ascale)*col.a//0xff,int(col.b*ascale)*col.a//0xff,0xff
         
         self.minimap = sf.Image()
         self.minimap.LoadFromPixels(w,h, bytes(b))
@@ -395,7 +421,7 @@ def main():
     
     # Run the game as usual but push the EditorOverlay on top of it
     game = EditorGame()
-    game.LoadLevel(1)
+    game.LoadLevel(10000)
     Renderer.AddDrawable(game)
     
     Renderer.DoLoop()
