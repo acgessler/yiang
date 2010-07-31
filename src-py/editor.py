@@ -42,6 +42,7 @@ from achievements import Achievements
 from enemy import Enemy
 from score import ScoreTile
 from player import Player
+from keys import KeyMapping
 
 from minigui import Component, Button, ToggleButton
 
@@ -74,6 +75,7 @@ class EditorCursor(Drawable):
         self.cursor.SetPosition(self.mx-w/2.0,self.my-h/2.0)
         Renderer.app.Draw(self.cursor)
 
+
 class EditorGame(Game):
     """Special game implementation for the editor"""
 
@@ -88,22 +90,43 @@ class EditorGame(Game):
         
         Renderer.AddDrawable(EditorCursor())
         
+        def GrabPlayer():
+            for elem in self.level.EnumAllEntities():
+                if isinstance(elem, Player):
+                        
+                    self.template[elem] = None
+                    
+                    # Needed to emulate proper selection
+                    self.select_start = elem.pos
+                    
+                    # (Hack): the fact that this entity is no
+                    # longer in the scene ensures that this
+                    # instance will be reused, thus the current
+                    # inventory is kept.
+                    self.ControlledRemoveEntity(elem)
+                    print("Remove existing player but add it to the selection template")
+                    break
+            else:
+                print("Didn't find a player, add one first!")
+        
         # Setup basic GUI buttons
-        Renderer.AddDrawable((Button(text="Restart",rect=[-200,10,80,25]) + 
+        self.AddSlaveDrawable((Button(text="Restart",rect=[-200,10,80,25]) + 
              ("release",(lambda src: self.RestartLevel()))
         ))
-        Renderer.AddDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
+        self.AddSlaveDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
              ("release",(lambda src: self.Kill("(Kill button)")))
         ))
-        Renderer.AddDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
+        self.AddSlaveDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
              ("release",(lambda src: self.AddLife()))
         ))
-        Renderer.AddDrawable((Button(text="+1ct",rect=[-80,150,50,25]) + 
+        self.AddSlaveDrawable((Button(text="+1ct",rect=[-80,150,50,25]) + 
              ("release",(lambda src: self.Award(1.0)))
+        ))
+        self.AddSlaveDrawable((Button(text="Move PL",rect=[-80,180,50,25]) + 
+             ("release",(lambda src: GrabPlayer()))
         ))
         
         def Resume():
-                
             # Move the view origin that the player is visible
             if not self.IsGameRunning():
                 for elem in self.level.EnumAllEntities():
@@ -118,31 +141,31 @@ class EditorGame(Game):
             self.PopSuspend()
         
         self.PushSuspend()
-        Renderer.AddDrawable((ToggleButton(text="Suspend\x00Resume",on=False, rect=[-290,10,80,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Suspend\x00Resume",on=False, rect=[-290,10,80,25]) +
              ("update", (lambda src: src.__setattr__("on",self.IsGameRunning()))) +
              ("off", (lambda src: self.PushSuspend())) +
              ("on",(lambda src: Resume())) 
         ))
             
-        Renderer.AddDrawable((ToggleButton(text="Abandon God\x00Become God",on=defaults.debug_godmode, rect=[-400,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Abandon God\x00Become God",on=defaults.debug_godmode, rect=[-400,10,100,25]) +
              ("update", (lambda src: src.__setattr__("on",defaults.debug_godmode))) +
              ("off", (lambda src: defaults.__setattr__("debug_godmode",False))) +
              ("on",(lambda src: defaults.__setattr__("debug_godmode",True))) 
         ))
         
-        Renderer.AddDrawable((ToggleButton(text="Hide stats\x00Show stats",on=defaults.debug_godmode, rect=[-510,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Hide stats\x00Show stats",on=defaults.debug_godmode, rect=[-510,10,100,25]) +
              ("update", (lambda src: src.__setattr__("on",defaults.debug_draw_info))) +
              ("off", (lambda src: defaults.__setattr__("debug_draw_info",False))) +
              ("on",(lambda src: defaults.__setattr__("debug_draw_info",True))) 
         ))
         
-        Renderer.AddDrawable((ToggleButton(text="Hide BBs\x00Show BBs",on=defaults.debug_draw_bounding_boxes, rect=[-620,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Hide BBs\x00Show BBs",on=defaults.debug_draw_bounding_boxes, rect=[-620,10,100,25]) +
              ("update", (lambda src: src.__setattr__("on",defaults.debug_draw_bounding_boxes))) +
              ("off", (lambda src: defaults.__setattr__("debug_draw_bounding_boxes",False))) +
              ("on",(lambda src: defaults.__setattr__("debug_draw_bounding_boxes",True))) 
         ))
         
-        Renderer.AddDrawable((ToggleButton(text="Disable PostFX\x00Enable PostFx",on=not defaults.no_ppfx, rect=[-730,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Disable PostFX\x00Enable PostFx",on=not defaults.no_ppfx, rect=[-730,10,100,25]) +
              ("update", (lambda src: src.__setattr__("on",not defaults.no_ppfx))) +
              ("off", (lambda src: defaults.__setattr__("no_ppfx",True))) +
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
@@ -166,7 +189,14 @@ class EditorGame(Game):
 
         self.DrawSingle(shape)
         
-    def _CloneEntity(self,which):
+    def _CloneEntity(self,which,force=False):
+        
+        # Don't clone if the given template object is nowhere in 
+        # the scene, unless explicitly forbidden.
+        if not force and not which in self.level.EnumAllEntities():
+            print("Reusing existing entity {0}, no need to clone".format(which))
+            return which
+        
         if not hasattr(which,"editor_shebang"):
             print("Failure cloning {0} - no shebang record found".format(which))
             return None
@@ -379,7 +409,7 @@ class EditorGame(Game):
         yofs = self.level.vis_ofs
         
         # scale factors in both axes
-        self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else ((4,3) if w < 250 and h < 250 else (1,1))) 
+        self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else ((4,3) if w < 250 or h < 250 else (1,1))) 
         w,h = w*self.msx,(h)*self.msy
         b = bytearray(b'\x30\x30\x30\xa0') * (w*h)
         
@@ -498,6 +528,60 @@ class EditorGame(Game):
             self._BuildMiniMap()
         
         
+class EditorMenu(Drawable):
+    """Editor's level selection menu"""
+    
+    def __init__(self):
+        Drawable.__init__(self)
+        
+        
+        def AddLevelButtons():
+            x,y = 50,100
+            for i in sorted( LevelLoader.EnumLevelIndices() ):
+                nam = LevelLoader.GuessLevelName(i)
+                
+                self.AddSlaveDrawable((Button(text="{0} (#{1})".format(nam,i),rect=[x,y,300,25]) + 
+                    ("release",(lambda src,i=i: EditLevel(i)))
+                ))
+                
+                y += 30
+                if y >= defaults.resolution[1]-100:
+                    y = 100
+                    x += 310
+        
+        def NewLevel():
+            import genemptylevel
+            genemptylevel.Main()
+            
+            # first remove all buttons, then re-add them - this time
+            # including the button for the newly created level
+            for e in [elem for elem in self.slaves if isinstance(elem,Button) and elem.text.count("#")]:
+                self.RemoveSlaveDrawable(e)
+            
+            AddLevelButtons()
+         
+        self.AddSlaveDrawable((Button(text="Create new level (follow instructions in console)",rect=[50,50,450,25]) + 
+             ("release",(lambda src: NewLevel()))
+        ))
+        
+        from level import LevelLoader
+        def EditLevel(i):
+            game = EditorGame()
+            if game.LoadLevel(i):
+                Renderer.AddDrawable(game,self)
+        
+        AddLevelButtons()
+        
+    def Draw(self):
+        Renderer.SetClearColor(sf.Color(100,100,100))
+    
+        for event in Renderer.GetEvents():
+            # Escape key : exit
+            if event.Type == sf.Event.KeyPressed:
+                if event.Key.Code == KeyMapping.Get("escape"):
+                    Renderer.Quit()
+                    return
+    
 def main():
     """Main entry point to the editor application"""
 
@@ -522,9 +606,7 @@ def main():
     BerlinerPhilharmoniker.InitializeDummy()
     
     # Run the game as usual but push the EditorOverlay on top of it
-    game = EditorGame()
-    game.LoadLevel(1)
-    Renderer.AddDrawable(game)
+    Renderer.AddDrawable(EditorMenu())
     
     Renderer.DoLoop()
     Renderer.Terminate()

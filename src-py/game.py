@@ -712,7 +712,8 @@ Hit {2} to return to the menu""").format(
         game halts while the counter is not 0."""
         assert len(self.suspended) > 0
         
-        self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
+        if hasattr(self,"clock"):
+            self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
         self.suspended.pop()
         
         """

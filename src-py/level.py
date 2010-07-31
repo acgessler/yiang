@@ -339,7 +339,9 @@ class Level:
                         # (Hack) Happens in editor mode from time to time.
                         # I guess it happens whenever an entity is removed
                         # in the very same frame it is added.
-                        print("Catching ValueError during _UpdateEntityList()")
+                        print("Caught ValueError during _UpdateEntityList()")
+                        
+                delattr(entity,"windows")
             
             try:    
                 self.entities.remove(entity)
@@ -701,6 +703,47 @@ class LevelLoader:
     """Loads levels from their disk representations into memory"""
     
     cache = {}
+    name_cache = {}
+    
+    @staticmethod
+    def GuessLevelName(index):
+        """Try to guess the name of the level with index 'index'.
+        The function tries to extract the name from the level's
+        shebang line, it does not actually interpret or load it."""
+        
+        if index in LevelLoader.name_cache:
+            return LevelLoader.name_cache[index]
+            
+        # try to obtain the written name of the level by
+        # skimming through its shebang line looking
+        # for name="..."
+        file = os.path.join(defaults.data_dir, "levels", str(index)+".txt")
+        LevelLoader.name_cache[index] = name = "Level {0}".format(index)
+        try:
+            with open(file,"rt") as file:
+                import re
+                look = re.search(r"name=\"(.+?)\"",file.read(250))
+                if not look is None:
+                    LevelLoader.name_cache[index] = name = look.groups()[0]
+                    print("Guess level name for {0}: {1}".format(index,name))
+        except IOError:
+            # LevelLoader will take care of this error, we don't bother for now
+            pass
+        
+        return name
+    
+    @staticmethod
+    def EnumLevelIndices():
+        """Enumerate all known level numbers in no special order.
+        Note that the number 0 is reserved and never assigned.
+        There may be gaps within the set of assigned numbers."""
+        
+        import re
+        reg = re.compile(r"(\d+)\.txt")
+        for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
+            m = re.match(reg,file)
+            if m:
+                yield int( m.groups()[0] )
     
     @staticmethod
     def LoadLevel(level, game):

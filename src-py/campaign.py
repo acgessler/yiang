@@ -31,7 +31,7 @@ from renderer import NewFrame, Renderer
 from tile import AnimTile, Tile
 from player import Player
 from keys import KeyMapping
-from level import Level
+from level import Level,LevelLoader
 from fonts import FontCache
 
 class CampaignLevel(Level):
@@ -388,25 +388,8 @@ class LevelEntrance(AnimTile):
             self.done = done
             self.SetState(1)
             
-    def _GuessLevelName(self):
-        if hasattr(self,"cached_level_name"):
-            return self.cached_level_name
-        
-        # try to obtain the written name of the level by
-        # skimming through its shebang line looking
-        # for name="..."
-        file = os.path.join(defaults.data_dir, "levels", str(self.next_level)+".txt")
-        self.cached_level_name = "Level {0}".format(self.next_level)
-        try:
-            with open(file,"rt") as file:
-                import re
-                look = re.search(r"name=\"(.+?)\"",file.read(250))
-                if not look is None:
-                    self.cached_level_name = look.groups()[0]
-                    print("Guess level name for {0}: {1}".format(self.next_level,self.cached_level_name))
-        except IOError:
-            # LevelLoader will take care of this error, we don't bother for now
-            pass
+    def _GuessLevelName(self):    
+        return LevelLoader.GuessLevelName(self.next_level)
         
     def _RunLevel(self):
         self.now_locked = True

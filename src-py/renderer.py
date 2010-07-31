@@ -95,8 +95,13 @@ class Drawable:
         
     def RemoveSlaveDrawable(self,drawable):
         """Remove a specific slave drawable from the object."""
-        self.slaves.remove(drawable)
-        Renderer.RemoveDrawable(drawable)
+        try:
+            self.slaves.remove(drawable)
+            Renderer.RemoveDrawable(drawable)
+        except ValueError:
+            # safeguard against unsafe use of slaves
+            print("Slave drawable {0} on drawable {1} is not known as such".format(drawable,self))
+            pass
         
     def OnChangeResolution(self,newres):
         """Called when the display resolution (the window size
