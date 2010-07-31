@@ -695,9 +695,18 @@ Hit {2} to return to the menu""").format(
     def PushSuspend(self):
         """Increase the 'suspended' counter of the game by one. The
         game halts while the counter is not 0."""
-        self.suspended.append(self.clock.GetElapsedTime())
+        self.suspended.append(self.clock.GetElapsedTime() if hasattr(self,"clock") and self.clock else 0.0)
+        
+        """
         if self.level:
             self.level.PushAutoScroll(0.0)
+            self.last_suspend_pushed = True
+        else:
+            try:
+                delattr(self,"last_suspend_pushed")
+            except AttributeError:
+                pass
+        """
             
     def PopSuspend(self):
         """Decrease the 'suspended' counter of the game by one. The
@@ -707,8 +716,11 @@ Hit {2} to return to the menu""").format(
         self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
         self.suspended.pop()
         
-        if self.level:
-            self.level.PopAutoScroll()
+        """
+        if self.level and hasattr(self,"last_suspend_pushed"):
+            self.level.PopAutoScroll() 
+            delattr(self,"last_suspend_pushed")
+        """
         
     def FadeOutAndShowStatusNotice(self,*args,**kwargs):
         return self._FadeOutAndShowStatusNotice(*args,**kwargs)

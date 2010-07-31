@@ -96,9 +96,34 @@ class EditorGame(Game):
              ("release",(lambda src: self.Kill("(Kill button)")))
         ))
         
-        Renderer.AddDrawable((ToggleButton(text="Suspend\x00Resume",on=True, rect=[-290,10,80,25]) +
+        self.PushSuspend()
+        Renderer.AddDrawable((ToggleButton(text="Suspend\x00Resume",on=False, rect=[-290,10,80,25]) +
              ("off", (lambda src: self.PushSuspend())) +
              ("on",(lambda src: self.PopSuspend())) 
+        ))
+            
+        Renderer.AddDrawable((ToggleButton(text="Abandon God\x00Become God",on=defaults.debug_godmode, rect=[-400,10,100,25]) +
+             ("update", (lambda src: src.__setattr__("on",defaults.debug_godmode))) +
+             ("off", (lambda src: defaults.__setattr__("debug_godmode",False))) +
+             ("on",(lambda src: defaults.__setattr__("debug_godmode",True))) 
+        ))
+        
+        Renderer.AddDrawable((ToggleButton(text="Hide stats\x00Show stats",on=defaults.debug_godmode, rect=[-510,10,100,25]) +
+             ("update", (lambda src: src.__setattr__("on",defaults.debug_draw_info))) +
+             ("off", (lambda src: defaults.__setattr__("debug_draw_info",False))) +
+             ("on",(lambda src: defaults.__setattr__("debug_draw_info",True))) 
+        ))
+        
+        Renderer.AddDrawable((ToggleButton(text="Hide BBs\x00Show BBs",on=defaults.debug_draw_bounding_boxes, rect=[-620,10,100,25]) +
+             ("update", (lambda src: src.__setattr__("on",defaults.debug_draw_bounding_boxes))) +
+             ("off", (lambda src: defaults.__setattr__("debug_draw_bounding_boxes",False))) +
+             ("on",(lambda src: defaults.__setattr__("debug_draw_bounding_boxes",True))) 
+        ))
+        
+        Renderer.AddDrawable((ToggleButton(text="Disable PostFX\x00Enable PostFx",on=not defaults.no_ppfx, rect=[-730,10,100,25]) +
+             ("update", (lambda src: src.__setattr__("on",not defaults.no_ppfx))) +
+             ("off", (lambda src: defaults.__setattr__("no_ppfx",True))) +
+             ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
         ))
             
     def _DrawRectangle(self,bb,color):
@@ -230,7 +255,7 @@ class EditorGame(Game):
                             fy + e.pos[1]-self.select_start[1])
                         )
                         
-                        self.AddEntity(cloned)
+                        self.ControlledAddEntity(cloned)
                     
                 self.pressed_l = True
                 self.last_insert_pos = fx,fy
@@ -254,28 +279,42 @@ class EditorGame(Game):
             
         #if self.select_start:
         
-        
-        
-    def AddEntity(self,entity):
+    def ControlledAddEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
         self.level.AddEntity(entity)
+        print(entity)
         self._UpdateMiniMap(entity)
         
-    def RemoveEntity(self,entity):
+    def ControlledRemoveEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
         self.level.RemoveEntity(entity)
         self._UpdateMiniMap(entity)
+        
         
     def _UpdateMiniMap(self,entity):
         bb = entity.GetBoundingBox()
         self.dirty_area += bb[2]*bb[3] if bb else 1.0
         if self.dirty_area > 8.0: # choosen by trial and error
-            self._BuildMiniMap()
+            self._GenMiniMapImage()
             self.dirty_area = 0.0
         
     def _DrawMiniMap(self):
-        Renderer.app.Draw(self.minimap_sprite)
-        Renderer.app.Draw(self.minimap_shape)
+        self.DrawSingle(self.minimap_sprite)
+        self.DrawSingle(self.minimap_shape)
+        
+        # Adjust the origin according to the mouse position
+        if self.sx+self.sw > self.mx > self.sx and self.sy+self.sh > self.my > self.sy:
+            w,h = self.level.GetLevelVisibleSize()
+            self.level.SetOrigin(((self.mx-self.sx)/self.msxp - w*0.5,(self.my-self.sy)/self.msyp -h*0.5))
+        
+        # Draw the currently visible part of the map
+        ox,oy = self.level.GetOrigin()
+        #print(ox,oy)
+        oy += self.level.vis_ofs
+        
+        # slight adjustments for proper alignment with the outer border of the minimap
+        self.minimap_visr.SetPosition(ox*self.msxp + self.sx - 2,oy*self.msyp + self.sy + 4)
+        self.DrawSingle(self.minimap_visr)
         
     def _GetImg(self,img):
         # Partly copy'n'paste from CampaignLevel's minimap code
@@ -283,10 +322,10 @@ class EditorGame(Game):
         
         x,y = 35,math.floor(self.GetUpperStatusBarHeight()*defaults.tiles_size_px[0]) + 20
         
-        
         w,h = img.GetWidth(),img.GetHeight()
         w = defaults.resolution[0] - x*2
         h = w*img.GetHeight()/img.GetWidth()
+        
         if h > defaults.resolution[1] - y*2:
             h = defaults.resolution[1] - y*2
             w = h*img.GetWidth()/img.GetHeight()
@@ -298,15 +337,15 @@ class EditorGame(Game):
         sprite.SetColor(sf.Color(0xff,0xff,0xff,0xff))
         sprite.SetBlendMode(sf.Blend.Alpha)
         return sprite,w,h,x,y
-        
-    def _BuildMiniMap(self):
-        # Partly copy'n'paste from CampaignLevel's minimap code
+    
+    def _GenMiniMapImage(self):
+        print("Update MiniMap image")
         w,h = self.level.GetLevelSize()
         yofs = self.level.vis_ofs
         
         self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else (4,3)) # scale factors in both axes
-        w,h = w*self.msx,(h+3)*self.msy
-        b = bytearray(b'\x30\x30\x30\xff') * (w*h)
+        w,h = w*self.msx,(h)*self.msy
+        b = bytearray(b'\x30\x30\x30\xa0') * (w*h)
         
         for entity in sorted( self.level.EnumAllEntities(), key=lambda x:x.GetDrawOrder() ):
             
@@ -363,22 +402,44 @@ class EditorGame(Game):
         
         self.minimap = sf.Image()
         self.minimap.LoadFromPixels(w,h, bytes(b))
+        
+    def _BuildMiniMap(self):
+        # First, create the image and generate its contents
+        self._GenMiniMapImage()
+        
         self.minimap_sprite,self.sw,self.sh,self.sx,self.sy = self._GetImg(self.minimap)
         
-        # finally, construct the rectangle around the minimap
-        self.minimap_shape = sf.Shape()
-        bcol = sf.Color(0xcd,0x90,0x0,0xff)
+        # msxp is the scaling factor to get from tiles to destination (backbuffer) pixels 
+        self.msxp,self.msyp = (self.sw/self.minimap.GetWidth())*self.msx,(self.sh/self.minimap.GetHeight())*self.msy
         
-        # interestingly, the 0.5px offset is not needed for
-        # lines and other geometric shapes. Awesome.
-        self.minimap_shape.AddPoint(self.sx,self.sy,bcol,bcol)
-        self.minimap_shape.AddPoint(self.sx+self.sw,self.sy,bcol,bcol)
-        self.minimap_shape.AddPoint(self.sx+self.sw,self.sy+self.sh,bcol,bcol)
-        self.minimap_shape.AddPoint(self.sx,self.sy+self.sh,bcol,bcol)
-
+        # Then construct the rectangle around the minimap
+        self.minimap_shape = self._GenRectangularShape(self.sx-3,self.sy-3,self.sw,self.sh,sf.Color(0xcd,0x90,0x0,0xff))
         self.minimap_shape.SetOutlineWidth(3)
         self.minimap_shape.EnableFill(False)
         self.minimap_shape.EnableOutline(True)
+        
+        # ... and prepare the visible rectangle
+        self._PrepareMiniMapVisibleRect()
+        
+    def _PrepareMiniMapVisibleRect(self):
+        w,h = self.level.GetLevelVisibleSize()
+
+        self.minimap_visr = self._GenRectangularShape(0,0, w*self.msxp, h*self.msyp,sf.Color(0xff,0xff,0xff,0x50))
+        self.minimap_visr.EnableFill(True)
+        self.minimap_visr.EnableOutline(False)
+        
+    def _GenRectangularShape(self,sx,sy,sw,sh,bcol):
+        sx,sy,sw,sh = math.floor(sx+0.5),math.floor(sy+0.5),math.floor(sw+0.5),math.floor(sh+0.5)
+        shape = sf.Shape()
+        bcol = bcol or sf.Color(0xcd,0x90,0x0,0xff)
+        
+        # interestingly, the 0.5px offset is not needed for
+        # lines and other geometric shapes. Awesome.
+        shape.AddPoint(sx,sy,bcol,bcol)
+        shape.AddPoint(sx+sw,sy,bcol,bcol)
+        shape.AddPoint(sx+sw,sy+sh,bcol,bcol)
+        shape.AddPoint(sx,sy+sh,bcol,bcol)
+        return shape
     
     def Draw(self):
         Game.Draw(self)
@@ -394,6 +455,11 @@ class EditorGame(Game):
                 self.prev_level = self.level
                 
             self._DrawEditor()
+            
+    def OnChangeResolution(self,newres):
+        # needed because the visible part of the map has changed
+        if self.level:
+            self._BuildMiniMap()
         
         
 def main():

@@ -153,6 +153,8 @@ class Component(Drawable):
         inp = Renderer.app.GetInput()
         mx,my = inp.GetMouseX(),inp.GetMouseY()
         
+        self.Fire("update")
+        
         buttons = inp.IsMouseButtonDown(sf.Mouse.Left),inp.IsMouseButtonDown(sf.Mouse.Right)
         self.DrawMe(mx,my,(self.x+self.w>mx>self.x and self.y+self.h>my>self.y),
             buttons,self.__dict__.setdefault("prev_buttons",(False,False)))

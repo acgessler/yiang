@@ -430,6 +430,9 @@ class Level:
             
     def _DoAutoScroll(self, dtime):
         """Move the map view origin to the right according to a time function"""    
+        if len(self.game.suspended) > 0:
+            return
+            
         if self.scroll[-1] & Level.SCROLL_LEFT == 0:
             if isinstance(self.autoscroll_speed[-1],tuple):
                 self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1][0], self.origin[1] +  dtime * self.autoscroll_speed[-1][1]))
@@ -468,6 +471,9 @@ class Level:
         self.autoscroll_speed += [status]
         
     def PopAutoScroll(self):
+        if not self.autoscroll_speed:
+            print("Warn: PopAutoScroll() called, but the stack is empty")
+            return
         del self.autoscroll_speed[-1]
         
     def PushScroll(self,scroll):
@@ -486,7 +492,7 @@ class Level:
         Renderer.SetClearColor(self.color)
         havepfx = False
         for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
-            if entity.GetDrawOrder() > 10000 and havepfx is False:
+            if entity.GetDrawOrder() > 10000 and havepfx is False and not defaults.no_ppfx:
                 for name,fx,env in self.postfx_rt:
                     if not fx is None:
                         fx.Draw()
@@ -494,7 +500,7 @@ class Level:
                 
             entity.Draw()
         
-        if havepfx is False:
+        if havepfx is False and not defaults.no_ppfx:
             for name,fx,env in self.postfx_rt:
                 if not fx is None:
                     fx.Draw()
@@ -609,7 +615,7 @@ class Level:
         """Get size of the visible part of the level. This is
         usually a constant throughout the lifetime of the
         level."""
-        return (defaults.tiles[0], min(defaults.tiles[1], self.level_size[1] - self.vis_ofs ))
+        return (min( self.level_size[0], defaults.tiles[0] ), min(defaults.tiles[1], self.level_size[1] ))
     
     def GetOrigin(self):
         """Get the current origin of the game. That is the
