@@ -35,70 +35,74 @@ def Abort():
     sys.exit(-1)
     
 
+def Main():
 
-def_floor = "_A0"
-width = int(input("Enter length of level: "))
-height = int(input("Enter height of level:  (max  visible: {0})".format(defaults.max_game_tiles_y)))
-name  = int(input("Enter level number: "))
-
-fname = str(name)+".txt"
-fpath = os.path.join(defaults.data_dir,"levels",fname)
-if os.path.exists(fpath):
-    if not IsYes(input("File {0} exists, overwrite? y/N".format(fname)),False):
+    def_floor = "_A0"
+    width = int(input("Enter length of level: "))
+    height = int(input("Enter height of level:  (max  visible: {0})".format(defaults.max_game_tiles_y)))
+    name  = int(input("Enter level number: "))
+    
+    fname = str(name)+".txt"
+    fpath = os.path.join(defaults.data_dir,"levels",fname)
+    if os.path.exists(fpath):
+        if not IsYes(input("File {0} exists, overwrite? y/N".format(fname)),False):
+            Abort()
+    
+    danger      = IsYes(input("Right-pad with 'danger' barrels? Y/n"),True)
+    floor       = IsYes(input("Auto-generate floor? Y/n"),True)
+    floor_tile  = input("Floor tile: (default: {0})".format(def_floor)) if floor is True else ""
+    stipple     = IsYes(input("Stipple space with dots? Y/n"),True)
+    if not floor_tile:
+        floor_tile = def_floor
+    
+    r,g,b = (0,0,0)
+    if IsYes(input("Specify player background color Y/n"),True) is True:
+        r = max(0,min(255,int(input("PlayerBG color - R: (0-255)"))))
+        g = max(0,min(255,int(input("PlayerBG color - G: (0-255)"))))
+        b = max(0,min(255,int(input("PlayerBG color - B: (0-255)"))))
+    
+    summary = """
+    SUMMARY
+    =============================================================
+    Width:         {width}
+    Height:        {height}
+    
+    LevelIdx:      {name}
+    File:          {fpath}
+    
+    PadDanger:     {danger}
+    AddFloor:      {floor}
+    FloorTile:     {floor_tile}
+    SpaceStipple:  {stipple}
+    PlayerBgColor: {r} \ {g} \ {b}
+    =============================================================
+    
+    Continue? (Y/n)
+    """.format(**globals())
+    
+    if not IsYes(input(summary),True):
         Abort()
-
-danger      = IsYes(input("Right-pad with 'danger' barrels? Y/n"),True)
-floor       = IsYes(input("Auto-generate floor? Y/n"),True)
-floor_tile  = input("Floor tile: (default: {0})".format(def_floor)) if floor is True else ""
-stipple     = IsYes(input("Stipple space with dots? Y/n"),True)
-if not floor_tile:
-    floor_tile = def_floor
-
-r,g,b = (0,0,0)
-if IsYes(input("Specify player background color Y/n"),True) is True:
-    r = max(0,min(255,int(input("PlayerBG color - R: (0-255)"))))
-    g = max(0,min(255,int(input("PlayerBG color - G: (0-255)"))))
-    b = max(0,min(255,int(input("PlayerBG color - B: (0-255)"))))
-
-summary = """
-SUMMARY
-=============================================================
-Width:         {width}
-Height:        {height}
-
-LevelIdx:      {name}
-File:          {fpath}
-
-PadDanger:     {danger}
-AddFloor:      {floor}
-FloorTile:     {floor_tile}
-SpaceStipple:  {stipple}
-PlayerBgColor: {r} \ {g} \ {b}
-=============================================================
-
-Continue? (Y/n)
-""".format(**globals())
-
-if not IsYes(input(summary),True):
-    Abort()
-
-danger_pad = 20
-with open(fpath,"wt") as outfile:
-    outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}))\n".format(**globals()))
-    for y in range(height):
-
-        s = ""
-        if floor is True and y == height-1:
-            s += floor_tile*width
-        else:
-            s += (".  " if stipple is True else "   ") *width
+    
+    danger_pad = 20
+    with open(fpath,"wt") as outfile:
+        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}))\n".format(**globals()))
+        for y in range(height):
+    
+            s = ""
+            if floor is True and y == height-1:
+                s += floor_tile*width
+            else:
+                s += (".  " if stipple is True else "   ") *width
+                
+            if danger is True:
+                s += "rDA"*danger_pad
             
-        if danger is True:
-            s += "rDA"*danger_pad
-        
-        outfile.write(s+"\n")
-        
-print("Done!")
+            outfile.write(s+"\n")
+            
+    print("Done!")
 
             
-           
+if __name__ == "__main__":
+    Main()
+    
+    

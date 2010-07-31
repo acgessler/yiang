@@ -95,11 +95,33 @@ class EditorGame(Game):
         Renderer.AddDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
              ("release",(lambda src: self.Kill("(Kill button)")))
         ))
+        Renderer.AddDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
+             ("release",(lambda src: self.AddLife()))
+        ))
+        Renderer.AddDrawable((Button(text="+1ct",rect=[-80,150,50,25]) + 
+             ("release",(lambda src: self.Award(1.0)))
+        ))
+        
+        def Resume():
+                
+            # Move the view origin that the player is visible
+            if not self.IsGameRunning():
+                for elem in self.level.EnumAllEntities():
+                    if isinstance(elem, Player):
+                        x,y = elem.pos
+                        lx,ly = self.level.GetLevelVisibleSize()
+                        ox,oy = self.level.GetOrigin()
+                        if x < ox or x > ox+lx or y < oy or y > oy+ly:
+                            self.level.SetOrigin((x-lx/2,y-ly/2))
+                            break
+                    
+            self.PopSuspend()
         
         self.PushSuspend()
         Renderer.AddDrawable((ToggleButton(text="Suspend\x00Resume",on=False, rect=[-290,10,80,25]) +
+             ("update", (lambda src: src.__setattr__("on",self.IsGameRunning()))) +
              ("off", (lambda src: self.PushSuspend())) +
-             ("on",(lambda src: self.PopSuspend())) 
+             ("on",(lambda src: Resume())) 
         ))
             
         Renderer.AddDrawable((ToggleButton(text="Abandon God\x00Become God",on=defaults.debug_godmode, rect=[-400,10,100,25]) +
@@ -306,9 +328,22 @@ class EditorGame(Game):
         if self.sx+self.sw > self.mx > self.sx and self.sy+self.sh > self.my > self.sy:
             w,h = self.level.GetLevelVisibleSize()
             self.level.SetOrigin(((self.mx-self.sx)/self.msxp - w*0.5,(self.my-self.sy)/self.msyp -h*0.5))
+            ox,oy = self.level.GetOrigin()
+            
+            # Suspend the game if we moved the player outside the visible scene
+            for elem in self.level.EnumActiveEntities():
+                if isinstance(elem, Player):
+                    x,y = elem.pos
+                    lx,ly = self.level.GetLevelVisibleSize()
+                    if x < ox or x > ox+lx or y < oy or y > oy+ly:
+                        if self.IsGameRunning():
+                            self.PushSuspend()
+                        break
+
+        else:
+            ox,oy = self.level.GetOrigin()
         
         # Draw the currently visible part of the map
-        ox,oy = self.level.GetOrigin()
         #print(ox,oy)
         oy += self.level.vis_ofs
         
@@ -487,7 +522,7 @@ def main():
     
     # Run the game as usual but push the EditorOverlay on top of it
     game = EditorGame()
-    game.LoadLevel(10000)
+    game.LoadLevel(1)
     Renderer.AddDrawable(game)
     
     Renderer.DoLoop()

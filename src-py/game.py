@@ -281,8 +281,8 @@ OOOOOO  OOOOO  \n\
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
-        if not self.IsGameRunning():
-            return
+        #if not self.IsGameRunning():
+        #    return
         
         try:
             if event.Type == sf.Event.KeyPressed:
@@ -420,11 +420,10 @@ TimeDelta:         {dtime:.4}
         """Take a certain amount of money from the player's score. DEPRECATED, use Award()"""
         return self.Award(-points)
     
-    def AddLife(self,count=1):
-        self.lives += count
-        print("Donating {0} fresh lives to myself".format(count))
+    def AddLife(self,count=1): ## ????? seems a bit redundant ---
+        self.AddLives(count)
 
-    def GetLives(self):
+    def GetLives(self): 
         """Get the number of lives the player has. They
         die if they are killed and no more lives are available"""
         return self.lives
