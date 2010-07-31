@@ -40,7 +40,7 @@ from highscore import HighscoreManager
 from audio import BerlinerPhilharmoniker
 from achievements import Achievements
 
-from minigui import Component, Button
+from minigui import Component, Button, ToggleButton
 
 class EditorCursor(Drawable):
     """Draws the cursor on top of the whole scenery"""
@@ -83,7 +83,19 @@ class EditorGame(Game):
         self.select_start = None
         
         Renderer.AddDrawable(EditorCursor())
-        Renderer.AddDrawable(Button(text="Load",rect=[-160,10,100,25]))
+        
+        # Setup basic GUI buttons
+        Renderer.AddDrawable((Button(text="Restart",rect=[-200,10,80,25]) + 
+             ("release",(lambda src: self.RestartLevel()))
+        ))
+        Renderer.AddDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
+             ("release",(lambda src: self.Kill("(Kill button)")))
+        ))
+        
+        Renderer.AddDrawable((ToggleButton(text="Suspend\00Resume",on=True, rect=[-290,10,80,25]) +
+             ("off", (lambda src: self.PushSuspend())) +
+             ("on",(lambda src: self.PopSuspend())) 
+        ))
             
     def _DrawRectangle(self,bb,color):
         shape = sf.Shape()

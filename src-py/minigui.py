@@ -46,6 +46,7 @@ class Component(Drawable):
         Drawable.__init__(self)
         self.rect = rect or [0,0,0,0]
         self._state = Component.STATE_NORMAL
+        self.handlers = {}
         
         self.font = FontCache.get(defaults.letter_height_gui,defaults.font_gui)
         
@@ -125,18 +126,37 @@ class Component(Drawable):
         
 
 
+    # Event handling
+    def __add__(self,*args):
+        event, handler = args if len(args)==2 else args[0]
+        self.handlers.setdefault(event,[]).append(handler)
+        return self
+    
+    
+    
+    def Fire(self,name,*args,**kwargs):
+        """Fire a named events, forward arguments to handlers""" 
+        try:
+            for elem in self.handlers[name]:
+                elem(*([self]+list(args)),**kwargs)
+        except KeyError:
+            pass
+
     def _MkPos(self,*args):
         x,y = args if len(args)==2 else args[0]
         return math.floor(x+self.x),math.floor(y+self.y)
 
-    def DrawMyRect(self):
+    def _DrawMyRect(self):
         Component.DrawRect(self.rect,self.__class__.COLORS[self.state],sf.Color.Black)
         
     def Draw(self):
         inp = Renderer.app.GetInput()
         mx,my = inp.GetMouseX(),inp.GetMouseY()
         
-        self.DrawMe(mx,my,(self.x+self.w>mx>self.x and self.y+self.h>my>self.y))
+        buttons = inp.IsMouseButtonDown(sf.Mouse.Left),inp.IsMouseButtonDown(sf.Mouse.Right)
+        self.DrawMe(mx,my,(self.x+self.w>mx>self.x and self.y+self.h>my>self.y),
+            buttons,self.__dict__.setdefault("prev_buttons",(False,False)))
+        self.prev_buttons = buttons
         
     @staticmethod
     def DrawRect(bb,color,color_outline = None):
@@ -155,16 +175,9 @@ class Component(Drawable):
         shape.EnableOutline(True)
         Renderer.app.Draw(shape)
         
-
-class Button(Component):
-    """A normal button control, enough said"""
-    
-    COLORS = {
-        Component.STATE_NORMAL   : sf.Color(50,50,50),
-        Component.STATE_ACTIVE   : sf.Color(75,75,75),
-        Component.STATE_HOVER    : sf.Color(90,75,75),
-        Component.STATE_DISABLED : sf.Color(40,40,40),
-    }
+        
+class HasAText(Component):
+    """ Internal base class for all GUI components which have a textual caption somewhere """
     
     def __init__(self,text="No text specified",**kwargs):
         Component.__init__(self,**kwargs)
@@ -179,21 +192,89 @@ class Button(Component):
         self._text = text
         self._text_cached = sf.String(self._text,Font=self.font,Size=defaults.letter_height_gui)
         return self
-        
-    def DrawMe(self,mx,my,hit):
-        
-        if hit:
-            self.state = Component.STATE_HOVER
-        else:
-            self.state = Component.STATE_NORMAL
-        
-        self.DrawMyRect()
-        
+    
+    
+    def _DrawTextCentered(self):
         ts = self._text.split("\n")
-        self._text_cached.SetPosition(*self._MkPos(self.w*0.5 - len(ts[0])*defaults.letter_height_gui*0.2,
-            self.h*0.5 - len(ts)*defaults.letter_height_gui*0.5))
+        self._text_cached.SetPosition(*self._MkPos(self.w*0.5 - len(ts[0])*defaults.letter_height_gui*0.25,
+            self.h*0.5 - len(ts)*defaults.letter_height_gui*0.55))
         
         Renderer.app.Draw(self._text_cached)
+
+
+class Button(HasAText):
+    """A normal button control, enough said"""
+    
+    COLORS = {
+        Component.STATE_NORMAL   : sf.Color(50,50,50),
+        Component.STATE_ACTIVE   : sf.Color(180,75,75),
+        Component.STATE_HOVER    : sf.Color(90,75,75),
+        Component.STATE_DISABLED : sf.Color(40,40,40),
+    }
+    
+    def __init__(self,**kwargs):
+        HasAText.__init__(self,**kwargs)
+
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons):
+        if hit:
+            self.state = Component.STATE_ACTIVE if buttons[0] else Component.STATE_HOVER
+            if buttons[0] and not prev_buttons[0]:
+                self.Fire("click")
+                
+            if not buttons[0] and prev_buttons[0]:
+                self.Fire("release")
+        else:
+            self.state = Component.STATE_NORMAL
+            
+        self._DrawMyRect()
+        self._DrawTextCentered()
+        
+        
+class ToggleButton(HasAText):
+    """A persistent 2-state button, like a checkbox but easier to implement :-)"""
+    
+    COLORS = {
+        Component.STATE_NORMAL   : sf.Color(150,50,50),
+        Component.STATE_ACTIVE   : sf.Color(50,150,50),
+        Component.STATE_HOVER    : sf.Color(90,75,75),
+        Component.STATE_DISABLED : sf.Color(40,40,40),
+    }
+    
+    def __init__(self,on=False,text="On\00Off",**kwargs):
+        HasAText.__init__(self,**kwargs)
+        
+        self.text_choices = text.split("\00")
+        self.text_choices = self.text_choices if len(self.text_choices)==2 else self.text_choices*2
+        self.on = on
+        
+    @property
+    def on(self):
+        return self._on 
+    
+    @on.setter
+    def on(self,on):
+        self._on = on
+        self.text = self.text_choices[0 if on else 1]
+      
+      
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons):
+        
+        if hit:
+            if buttons[0] and not prev_buttons[0]:
+                self.Fire("click")
+                self.on = not self.on
+                
+                self.Fire("toggle",self.on)
+                self.Fire("on" if self.on else "off")
+                
+            if not buttons[0] and prev_buttons[0]:
+                self.Fire("release")
+        
+        self.state = Component.STATE_ACTIVE if self.on else Component.STATE_NORMAL
+            
+        self._DrawMyRect()
+        self._DrawTextCentered()
+        
         
         
         

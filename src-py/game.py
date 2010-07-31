@@ -326,7 +326,7 @@ OOOOOO  OOOOO  \n\
                     self.GameOver()
                     
                 elif event.Key.Code == KeyMapping.Get("level-new"):
-                    self.LoadLevel(self.level_idx)
+                    self.RestartLevel()
                 
         except NewFrame:
             print("Received NewFrame notification during event polling")
@@ -615,6 +615,10 @@ Hit {2} to return to the menu""").format(
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
         )),defaults.game_over_fade_time,(550,255),0.0,accepted,sf.Color.Black,on_close) 
         raise NewFrame()
+    
+    def RestartLevel(self):
+        """Restart the current level and discard all changes made"""
+        self.LoadLevel(self.level_idx)
         
     def LoadLevel(self,idx):
         """Load a particular level and drop the old one"""
