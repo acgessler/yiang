@@ -78,14 +78,14 @@ def Main():
     =============================================================
     
     Continue? (Y/n)
-    """.format(**globals())
+    """.format(**locals())
     
     if not IsYes(input(summary),True):
         Abort()
     
     danger_pad = 20
     with open(fpath,"wt") as outfile:
-        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}))\n".format(**globals()))
+        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}))\n".format(**locals()))
         for y in range(height):
     
             s = ""

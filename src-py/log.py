@@ -32,6 +32,9 @@ class Log(io.IOBase):
     enabled = False
     old = sys.stdout
     nostdout = os.name == "posix"
+ 
+    def __getattr__(self,name):
+       return getattr(Log.old,name)
 
     def __init__(self,file,old):
         io.IOBase.__init__(self)

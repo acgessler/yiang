@@ -414,7 +414,6 @@ class EditorGame(Game):
         b = bytearray(b'\x30\x30\x30\xa0') * (w*h)
         
         for entity in sorted( self.level.EnumAllEntities(), key=lambda x:x.GetDrawOrder() ):
-            
             if isinstance(entity, Player):
                 continue
             
