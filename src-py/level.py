@@ -167,7 +167,8 @@ class Level:
             # (HACK) avoid os.path.join() calls
             tile = TileLoader.Load(self.tlbase + "/" + tcode + ".txt", self.game)
                 
-        tile.SetColor(LevelLoader.cached_color_dict[ccode])
+        from tile import TileLoader
+        tile.SetColor(TileLoader.cached_color_dict[ccode])
         tile.SetPosition((x, y - self.vis_ofs))
         tile.SetLevel(self)
         
@@ -811,43 +812,7 @@ class LevelLoader:
         
         print("Loading level from disc: " + str(level))
 
-        # this remains as the default color table if we can't read config/color.txt
-        color_dict_default = collections.defaultdict(lambda: sf.Color.White, {
-            "r" : sf.Color.Red,
-            "g" : sf.Color.Green,
-            "b" : sf.Color.Blue,
-            "y" : sf.Color.Yellow,
-            "_" : sf.Color.White,
-        })
-
-        # the actual mapping table has been outsourced to config/colors.txt
-        if not hasattr(LevelLoader, "cached_color_dict"):
-
-            def complain_on_fail():
-                print("Encountered unknown color key")
-                return sf.Color.White
-            
-            LevelLoader.cached_color_dict = collections.defaultdict(complain_on_fail, color_dict_default)
-            try:
-                with open(os.path.join(defaults.config_dir, "colors.txt"), "rt") as scores:
-                    for n, line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
-                        code, col = [l.strip() for l in line.split("=")]
-
-                        assert len(col) in (6,8)
-                        LevelLoader.cached_color_dict[code] = sf.Color(
-                            int(col[0:2], 16), 
-                            int(col[2:4], 16), 
-                            int(col[4:6], 16), 
-                            int(col[6:8], 16) if len(col)==8 else 255 
-                        )
-
-                print("Caching colors.txt file, got {0} dict entries".format(len(LevelLoader.cached_color_dict)))
-
-            except IOError:
-                print("Failure reading colors.txt file")
-            except AssertionError:
-                print("color.txt is not well-formed: ")
-                traceback.print_exc()
+        
        
         file = LevelLoader.BuildLevelPath(level)
         lines = LevelLoader.cache.get(file, None)
@@ -856,7 +821,6 @@ class LevelLoader:
                 print("Loading level from " + file)
                 with open(file, "rt") as f:
                     lines = f.read().split("\n", 1)
-                    assert len(lines) == 2
 
                     LevelLoader.cache[file] = lines
                       
@@ -867,7 +831,7 @@ class LevelLoader:
                 print("Level file " + file + " is not well-formatted:")
                 traceback.print_exc()
 
-        if lines is None:
+        if lines is None or len(lines) != 2:
             return None
 
         replace = {

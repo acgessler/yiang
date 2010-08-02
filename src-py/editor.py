@@ -215,9 +215,11 @@ class EditorGame(Game):
                 pass
         
         
-        class Overlay_ShowContextMenu:
+        class Overlay_ShowContextMenu(Drawable):
             
             def __init__(self2):
+                Drawable.__init__(self2)
+                self.AddSlaveDrawable(self2)
                 
                 # Store the currently selected tile, it will be
                 # our future origin for all operations, even
@@ -225,12 +227,37 @@ class EditorGame(Game):
                 # is unavoidable, because we're going to present
                 # him/her a few neat new buttons)
                 self2.x,self2.y = self.fx,self.fy
+                self2.entity = getattr(self,"last_entity",None)
+                ox,oy = self.level.GetOrigin()
                 
                 xb = 40, -242, -100, -100
-                xb = [x+self.tx*defaults.tiles_size_px[0] for x in xb]
+                xb = [x+(self.tx-ox)*defaults.tiles_size_px[0] for x in xb]
                 
                 yb = 0, 0, -120, +70
-                yb = [y+(self.ty+defaults.status_bar_top_tiles)*defaults.tiles_size_px[1] for y in yb]
+                yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
+                
+                def PlacePlayerHere():
+                    for elem in self.level.EnumAllEntities():
+                        if isinstance(elem, Player):
+                            break
+                    else:
+                        print("Did not find a valid player, creating one!")
+                        elem = TileLoader.LoadFromTag("_PL",self.game)
+                        elem.SetLevel(self.level)
+                        
+                        self.ControlledAddEntity(elem)
+                    elem.SetPosition((self2.x,self2.y))
+                    
+                def DeleteThisTile():
+                    assert not self.entity is None
+                    self.ControlledRemoveEntity(self.entity)
+                                              
+                    # break the overlay chain, we need a new frame for
+                    # the pending deletion to be dispatched to all
+                    # who need to know about it. This is a bit of a
+                    # design issue, but it's rooted too deep to solve
+                    # it this nevel.
+                    raise NewFrame()
                 
                 self2.elements = [
                     (Button(text="Insert rows(s) here", rect=[xb[2],yb[2],200,25]) + 
@@ -247,11 +274,8 @@ class EditorGame(Game):
                     ),
                     
                     
-                    (Button(text="Place player here", rect=[xb[3],yb[3]+60,200,25]) + 
-                        ("release", (lambda src: EditSettings()))
-                    ),
-                    (Button(text="Delete this tile", rect=[xb[3],yb[3]+90,200,25]) + 
-                        ("release", (lambda src: EditSettings()))
+                    (Button(text="Delete this tile", rect=[xb[3],yb[3]+110,200,25]) + 
+                        ("release", (lambda src: DeleteThisTile()))
                     ),
                     
                     
@@ -269,6 +293,11 @@ class EditorGame(Game):
                     ),
                 ]
                 
+                if self2.entity:
+                    self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+80,200,25]) + 
+                        ("release", (lambda src: PlacePlayerHere()))
+                    ),
+                
                 for e in self2.elements:
                     self.AddSlaveDrawable(e)
             
@@ -279,13 +308,22 @@ class EditorGame(Game):
                 self.RemoveOverlay(self2)
                 for e in self2.elements:
                     self.RemoveSlaveDrawable(e)
+                    
+                self.RemoveSlaveDrawable(self2)
             
             def __call__(self2):
                 inp = self.inp
                 if not inp.IsKeyDown(sf.Key.I):
                     self2._RemoveMe()
                     
+                # Draw the origin tile in blue 
+                self._DrawRectangle((self2.x,self2.y,1.0,1.0),sf.Color(0,0,255))
                     
+            def GetDrawOrder(self):
+                return -100
+                    
+            def Draw(self2):
+                # Draw the grid before postprocessing and regular drawing occurs   
                 r = 9
                 e = ((x,y) for y in range(-r+1,r) for x in range(-r+1,r) if x or y)
                 for x,y in e:
@@ -294,8 +332,6 @@ class EditorGame(Game):
                         continue
                     self._DrawRectangle((self2.x+x,self2.y+y,1.0,1.0),sf.Color(c,c,c),thickness=1)
                     
-                # Draw the origin tile in blue 
-                self._DrawRectangle((self2.x,self2.y,1.0,1.0),sf.Color(0,0,255))
             
         
         class Overlay_ShowMinimap(Drawable):
@@ -359,7 +395,7 @@ class EditorGame(Game):
                     if inp.IsMouseButtonDown(sf.Mouse.Left):
                         # Both mouse buttons pressed, delete template
                         for entity,pos in self.template.items():
-                            self.level.RemoveEntity(entity)
+                            self.ControlledRemoveEntity(entity)
                             
                         self.template = dict()
                         
@@ -419,7 +455,7 @@ class EditorGame(Game):
                 # if there are multiple entities, take the one with the highest 
                 # drawing order.
                 try:
-                    self.cur_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
+                    self.cur_entity = self.last_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
                         key=lambda x:x.GetDrawOrder(),reverse=True
                     )[0]
                     bb = self.cur_entity.GetBoundingBox()

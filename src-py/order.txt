@@ -1,3 +1,5 @@
+
+EditorIGrid   -100
 Game		-10
 PerkOverlay	100
 Menu		1000
