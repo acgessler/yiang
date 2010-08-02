@@ -136,7 +136,7 @@ class Level:
             print("Level " + str(level) + " is not well-formatted (line {0})".format(line_idx))
             traceback.print_exc()
 
-        self.level_size = (xmax // 3 + 1, y)
+        self.level_size = (xmax // 3 + 1, y + 1)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
         
         validator.validate_level(self.lines, level)
@@ -712,6 +712,13 @@ class LevelLoader:
     name_cache = {}
     
     @staticmethod
+    def BuildLevelPath(index):
+        """Obtain the (relative) path to the file containing the
+        tile setup for a specific level, which is identified by
+        its number"""
+        return os.path.join(defaults.data_dir, "levels", str(index) + ".txt")
+    
+    @staticmethod
     def GuessLevelName(index):
         """Try to guess the name of the level with index 'index'.
         The function tries to extract the name from the level's
@@ -723,7 +730,7 @@ class LevelLoader:
         # try to obtain the written name of the level by
         # skimming through its shebang line looking
         # for name="..."
-        file = os.path.join(defaults.data_dir, "levels", str(index)+".txt")
+        file = LevelLoader.BuildLevelPath(index)
         LevelLoader.name_cache[index] = name = "Level {0}".format(index)
         try:
             with open(file,"rt") as file:
@@ -750,6 +757,33 @@ class LevelLoader:
             m = re.match(reg,file)
             if m:
                 yield int( m.groups()[0] )
+                                
+    @staticmethod
+    def ClearCache(clear=None):
+        """Clear all cached levels. If one of them is reloaded,
+        a guarantee is made that its contents will be fetched
+        from disk and not from an in-memory cache. Call this
+        function after external changes occured to the level
+        file. Note that the tile cache needs to be cleared
+        separately by calling TileLoader.ClearCache(). You
+        can limit the cache cleanup to a specific set of
+        levels by specifying their numbers as first
+        parameter."""
+        
+        if not clear:
+            LevelLoader.cache = {}
+            LevelLoadeer.name_cache = {}
+            return
+        
+        for n in clear:
+            p = LevelLoader.BuildLevelPath(n)
+            
+            try:
+                del LevelLoader.cache[p]
+                del LevelLoader.name_cache[n]
+            except KeyError:
+                pass
+        return
     
     @staticmethod
     def LoadLevel(level, game):
@@ -815,7 +849,7 @@ class LevelLoader:
                 print("color.txt is not well-formed: ")
                 traceback.print_exc()
        
-        file = os.path.join(defaults.data_dir, "levels", str(level) + ".txt")
+        file = LevelLoader.BuildLevelPath(level)
         lines = LevelLoader.cache.get(file, None)
         if lines is None:
             try:

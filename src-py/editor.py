@@ -88,6 +88,10 @@ class EditorGame(Game):
         self.in_select = False
         self.select_start = None
         self.dirty_area = 0.0
+        self.actions = [] # undo/redo stack
+        self.overlays = [] # each overlay is a simple callable called during rendering
+        
+        self.inp = Renderer.app.GetInput()
         
         Renderer.AddDrawable(EditorCursor())
         
@@ -120,6 +124,9 @@ class EditorGame(Game):
         self.AddSlaveDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
              ("release",(lambda src: self.AddLife()))
         ))
+        
+        
+        # Right side bar
         self.AddSlaveDrawable((Button(text="+1ct",rect=[-80,150,50,25]) + 
              ("release",(lambda src: self.Award(1.0)))
         ))
@@ -127,6 +134,7 @@ class EditorGame(Game):
              ("release",(lambda src: GrabPlayer()))
         ))
         
+        # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25]) + 
               ("release", (lambda src: Renderer.RemoveDrawable(self)))
         ))
@@ -139,6 +147,10 @@ class EditorGame(Game):
         self.AddSlaveDrawable((Button(text="Redo", rect=[260, 10, 50, 25]) + 
 		      ("release", (lambda src: self.Redo()))
         ))
+        
+        #self.AddSlaveDrawable((Button(text="+",rect=[-80,210,50,25]) + 
+        #     ("release",(lambda src: self.AddColumn( -1, 1 )))
+        #))
         
         
         def EditSettings():
@@ -194,6 +206,166 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
         ))
         
+        
+        class Overlay_ShowMinimap:
+            def __str__(self):
+                return "<ShowMinimap - renders the minimap on top of the editor>"
+            
+            def __call__(self2):
+                inp = self.inp
+                if not inp.IsKeyDown(sf.Key.M):
+                    self.RemoveOverlay(self2)
+                
+                self._DrawMiniMap()
+                    
+                    
+        class Overlay_EditorInsert:
+            def __str__(self):
+                return "<EditorInsert overlay - implements the insertion functionality>"
+            
+            def __call__(self2):
+                inp = self.inp
+                if inp.IsMouseButtonDown(sf.Mouse.Left):
+                    if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-self.fx or self.last_insert_pos[1]-self.fy:
+                        # Insert template at this position
+                        if self.select_start:
+                            for e,pos in self.template.items():
+                                cloned = self._CloneEntity(e)
+                                if not cloned:
+                                    continue
+                                cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
+                                    self.fy + e.pos[1]-self.select_start[1])
+                                )
+                                
+                                self.ControlledAddEntity(cloned)
+                            
+                        self.pressed_l = True
+                        self.last_insert_pos = self.fx,self.fy
+                else:
+                    try:
+                        delattr(self,"pressed_l")  
+                    except AttributeError:
+                        pass
+                
+            
+        class Overlay_EditorDelete:
+            def __str__(self):
+                return "<EditorDelete overlay - implements the entity deletion logic>"
+            
+            def __call__(self2):
+                inp = self.inp
+                if inp.IsMouseButtonDown(sf.Mouse.Right):
+                    if inp.IsMouseButtonDown(sf.Mouse.Left):
+                        # Both mouse buttons pressed, delete template
+                        for entity,pos in self.template.items():
+                            self.level.RemoveEntity(entity)
+                            
+                        self.template = dict()
+                        
+                        # break the overlay chain, we need a new frame for
+                        # the pending deletion to be dispatched to all
+                        # who need to know about it.
+                        raise NewFrame()
+                    
+                    
+        class Overlay_EditorSelect:
+            def __str__(self):
+                return "<EditorSelect overlay - implements the entity selection logic>"
+            
+            def __call__(self2):
+                inp = self.inp
+                if inp.IsMouseButtonDown(sf.Mouse.Right):
+                    
+                    # copy current tile
+                    if self.in_select is False:
+                        if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
+                            self.template = dict()
+                            self.select_start = self.fx,self.fy
+                            
+                        self.in_select = True
+                        
+                    if inp.IsKeyDown(sf.Key.LControl):
+                        if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
+                            if not hasattr(self,"last_select"):
+                                self.last_select = self.select_start
+                            
+                            for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
+                                for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
+                                    for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                        self.template[e] = None  
+                                        
+                            for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
+                                for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
+                                    for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                        self.template[e] = None                               
+                            
+                            self.last_select = self.fx,self.fy
+                        
+                    else:
+                        if hasattr(self,"cur_entity"): 
+                            self.template[self.cur_entity] = None
+                else:
+                    self.in_select = False
+                    
+        
+        class Overlay_EditorBasics:
+            def __str__(self):
+                return "<EditorBasics overlay - implements item highlighting and acts as overlay manager>"
+            
+            def __call__(self2):
+                inp = self.inp
+                # check if there's an entity right here and show its bounding box in white.
+                # if there are multiple entities, take the one with the highest 
+                # drawing order.
+                try:
+                    self.cur_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
+                        key=lambda x:x.GetDrawOrder(),reverse=True
+                    )[0]
+                    bb = self.cur_entity.GetBoundingBox()
+                                    
+                    self._DrawRectangle(bb,sf.Color.Green)
+                    self.selection = [self.cur_entity]
+                        
+                except IndexError:
+                    # no entity below the cursor, highlight the nearest point and its surroundings
+                    self._DrawRectangle((self.fx,self.fy,1.0,1.0),sf.Color(150,150,150))
+                    try:
+                        delattr(self,"cur_entity")
+                    except AttributeError:
+                        pass
+                    #e = ((x,y) for y in range(-3,4) for x in range(-3,4) if x or y)
+                    #for x,y in e:
+                    #    c = int(50 - (x**2 + y**2)**0.5 *0.20 * 50)
+                    #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
+                    
+                if inp.IsMouseButtonDown(sf.Mouse.Right):                
+                     if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
+                        # draw selection rectangle
+                        self._DrawRectangle((self.select_start[0],self.select_start[1],
+                            self.tx-self.select_start[0],
+                            self.ty-self.select_start[1]), sf.Color.Yellow)
+                                        
+                for e,pos in self.template.items():
+                    bb = e.GetBoundingBox()
+                    self._DrawRectangle(bb,sf.Color.Red)
+                    
+                    if not "entity" in locals() or not entity in self.template:
+                        self._DrawRectangle((self.fx + e.pos[0]-self.select_start[0],
+                            self.fy + e.pos[1]-self.select_start[1],bb[2],bb[3]),sf.Color(40,0,0))
+                        
+                # Activate the 'DrawMinimap' overlay on M
+                if inp.IsKeyDown(sf.Key.M) and not [e for e in self.overlays 
+                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowMinimap]:
+                        
+                    self.PushOverlay(Overlay_ShowMinimap())
+                    
+                
+        # note: order matters, don't change
+        self.PushOverlay(Overlay_EditorBasics())
+        self.PushOverlay(Overlay_EditorInsert())
+        self.PushOverlay(Overlay_EditorDelete())
+        self.PushOverlay(Overlay_EditorSelect())
+        
     def _SaveBackup(self):
         """Save a backup of the current level, overwriting the previous backup""" 
         import time
@@ -210,24 +382,55 @@ class EditorGame(Game):
         
         print("Saved backup file to {0}".format(path))
         
+    def PushOverlay(self,ov):
+        self.overlays.append(ov)
+        
+    def PopOverlay(self):
+        self.overlays.pop()
+        
+    def RemoveOverlay(self,ov):
+        # XXX no reentrant or threadsafe
+        self.overlays.reverse()
+        self.overlays.remove(ov)
+        self.overlays.reverse()
+        
+    def _UpdateLevelSize(self):
+        """Recompute self.level.level_size basing on the current state"""
+        pass
+        
     def Save(self):
+        self._UpdateLevelSize()
+        
         yofs = self.level.vis_ofs
         grid = [ [None for x in range(self.level.level_size[0])] for y in range(self.level.level_size[1]+yofs)]
-        for entity in self.level.EnumAllEntities():
-            if hasattr(entity,"editor_tcode"):
-                assert hasattr(entity,"editor_ccode")
-                
-                x,y = entity.pos
-                x,y = math.floor(x+0.5),math.floor(y+0.5)+yofs
-                
-                if not grid[y][x] is None:
-                    print("Warn: ignoring duplicate tile {0} at {1}/{2}, existing tile is {3}".format(entity,x,y,grid[y][x]))
-                    continue
-                
-                grid[y][x] = entity    
+        x,y = -1000,-1000
+        entity = None
+        try:
+            for entity in self.level.EnumAllEntities():
+                if hasattr(entity,"editor_tcode"):
+                    assert hasattr(entity,"editor_ccode")
+                    
+                    x,y = entity.pos
+                    x,y = math.floor(x),math.floor(y)+yofs
+                    
+                    if not grid[y][x] is None:
+                        print("Warn: ignoring duplicate tile {0} at {1}/{2}, existing tile is {3}".format(entity,x,y,grid[y][x]))
+                        continue
+                    
+                    grid[y][x] = entity    
+        except BaseException as b:
+            print("Fatal exception during saving: {0}, x: {1}, y: {2}, e: {3} [level size: {4}, yofs: {5}]".
+                  format(b,x,y,entity,self.level.level_size,yofs))
+            return
         
         # Be sure to have a full backup saved before we do anything
         self._SaveBackup()
+        
+        # Clear LevelLoader's cache for this level, this ensures
+        # that the file contents are refetched from fisk the next
+        # time they're requested.
+        from level import LevelLoader
+        LevelLoader.ClearCache([self.level_idx])
         
         try:
             # build the output text prior to clearing the file
@@ -311,113 +514,15 @@ class EditorGame(Game):
         # (XXX) put this into a nice function or so --- :-)
         offset = self.level.GetOrigin()
         self.tx,self.ty = (self.mx/defaults.tiles_size_px[0] + offset[0],
-            self.my/defaults.tiles_size_px[1]-self.level.vis_ofs - 0.5)
+            self.my/defaults.tiles_size_px[1]- defaults.status_bar_top_tiles)
         
-        fx,fy = math.floor(self.tx),math.floor(self.ty)
+        self.fx,self.fy = math.floor(self.tx),math.floor(self.ty)
         
-        # check if there's an entity right here and show its bounding box in white.
-        # if there are multiple entities, take the one with the highest 
-        # drawing order.
-        try:
-            entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),key=lambda x:x.GetDrawOrder(),reverse=True)[0]
-            bb = entity.GetBoundingBox()
+        # call all overlays in order of addition, operate
+        # on a copy to allow PushOverlay/RemoveOverlay() calls
+        # during processing the overlays.
+        [e() for e in list(self.overlays)]
             
-            
-            self._DrawRectangle(bb,sf.Color.Green)
-            self.selection = [entity]
-                
-        except IndexError:
-            # no entity below the cursor, highlight the nearest point and its surroundings
-            self._DrawRectangle((fx,fy,1.0,1.0),sf.Color(150,150,150))
-            #e = ((x,y) for y in range(-3,4) for x in range(-3,4) if x or y)
-            #for x,y in e:
-            #    c = int(50 - (x**2 + y**2)**0.5 *0.20 * 50)
-            #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
-            
-        if inp.IsMouseButtonDown(sf.Mouse.Right):
-            if inp.IsMouseButtonDown(sf.Mouse.Left):
-                # Both mouse buttons pressed, delete template
-                for entity,pos in self.template.items():
-                    self.level.RemoveEntity(entity)
-                    
-                self.template = dict()
-                raise NewFrame()
-            
-            # copy current tile
-            if self.in_select is False:
-                if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
-                    self.template = dict()
-                    self.select_start = fx,fy
-                    
-                self.in_select = True
-                
-            if inp.IsKeyDown(sf.Key.LControl):
-                if not hasattr(self,"last_select") or abs(self.last_select[0]-fx)>1 or abs(self.last_select[1]-fy)>1:
-                    if not hasattr(self,"last_select"):
-                        self.last_select = self.select_start
-                    
-                    for y in range(self.select_start[1],fy+1,1) if fy >= self.select_start[1] else range(self.select_start[1],fy-1,-1):
-                        for x in range(self.last_select[0],fx+1,1) if fx >= self.last_select[0] else range(self.last_select[0],fx-1,-1):
-                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                self.template[e] = None  
-                                
-                    for y in range(self.last_select[1],fy+1,1) if fy >= self.last_select[1] else range(self.last_select[1],fy-1,-1):
-                        for x in range(self.select_start[0],fx+1,1) if fx >= self.select_start[0] else range(self.select_start[0],fx-1,-1):
-                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                self.template[e] = None                               
-                    
-                    self.last_select = fx,fy
-                
-            else:
-                if "entity" in locals(): 
-                    self.template[entity] = None
-                    
-                    
-            if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
-                # draw selection rectangle
-                self._DrawRectangle((self.select_start[0],self.select_start[1],
-                    self.tx-self.select_start[0],
-                    self.ty-self.select_start[1]), sf.Color.Yellow)
-                                
-        else:
-            self.in_select = False
-            
-        if inp.IsMouseButtonDown(sf.Mouse.Left):
-            if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-fx or self.last_insert_pos[1]-fy:
-                # Insert template at this position
-                if self.select_start:
-                    for e,pos in self.template.items():
-                        cloned = self._CloneEntity(e)
-                        if not cloned:
-                            continue
-                        cloned.SetPosition((fx + e.pos[0]-self.select_start[0],
-                            fy + e.pos[1]-self.select_start[1])
-                        )
-                        
-                        self.ControlledAddEntity(cloned)
-                    
-                self.pressed_l = True
-                self.last_insert_pos = fx,fy
-        else:
-            try:
-                delattr(self,"pressed_l")  
-            except AttributeError:
-                pass
-        
-        for e,pos in self.template.items():
-            bb = e.GetBoundingBox()
-            self._DrawRectangle(bb,sf.Color.Red)
-            
-            if not "entity" in locals() or not entity in self.template:
-                self._DrawRectangle((fx + e.pos[0]-self.select_start[0],
-                    fy + e.pos[1]-self.select_start[1],bb[2],bb[3]),sf.Color(40,0,0))
-                
-                
-        if inp.IsKeyDown(sf.Key.M):
-            self._DrawMiniMap()
-            
-        #if self.select_start:
-        
     def ControlledAddEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
         
@@ -425,6 +530,7 @@ class EditorGame(Game):
         e = [e for e in self.level.EnumVisibleEntities() 
              if   int(e.pos[0])==int(entity.pos[0]) 
              and  int(e.pos[1])==int(entity.pos[1])
+             and  hasattr(e,"editor_ccode")
         ]
         
         if e:
@@ -623,8 +729,7 @@ class EditorGame(Game):
     def Draw(self):
         Game.Draw(self)
         
-        inp = Renderer.app.GetInput()
-        self.mx,self.my = inp.GetMouseX(),inp.GetMouseY()
+        self.mx,self.my = self.inp.GetMouseX(),self.inp.GetMouseY()
 
         # Nothing to do is no level is loaded
         if self.level:
