@@ -607,7 +607,10 @@ def main():
     #Log.Enable(defaults.enable_log)
     defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
-
+    
+    import gettext
+    gettext.install('yiang', './locale')
+        
     print("Startup ...")
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
 

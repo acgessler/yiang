@@ -43,6 +43,7 @@ from enemy import Enemy
 from score import ScoreTile
 from player import Player
 from keys import KeyMapping
+from tile import Tile,AnimTile
 
 from minigui import Component, Button, ToggleButton
 
@@ -126,6 +127,28 @@ class EditorGame(Game):
              ("release",(lambda src: GrabPlayer()))
         ))
         
+        self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25]) + 
+              ("release", (lambda src: Renderer.RemoveDrawable(self)))
+        ))
+        self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25]) + 
+		      ("release", (lambda src: self.Save()))
+        ))
+        self.AddSlaveDrawable((Button(text="Undo", rect=[200, 10, 50, 25]) + 
+		      ("release", (lambda src: self.Undo()))
+        ))
+        self.AddSlaveDrawable((Button(text="Redo", rect=[260, 10, 50, 25]) + 
+		      ("release", (lambda src: self.Redo()))
+        ))
+        
+        
+        def EditSettings():
+            pass
+        
+        self.AddSlaveDrawable((Button(text="Edit Level Settings", rect=[350, 10, 150, 25]) + 
+              ("release", (lambda src: EditSettings()))
+        ))
+
+        
         def Resume():
             # Move the view origin that the player is visible
             if not self.IsGameRunning():
@@ -170,6 +193,64 @@ class EditorGame(Game):
              ("off", (lambda src: defaults.__setattr__("no_ppfx",True))) +
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
         ))
+        
+    def _SaveBackup(self):
+        """Save a backup of the current level, overwriting the previous backup""" 
+        import time
+        path = os.path.join(defaults.data_dir,"levels", "backup", "{0}_{1}.txt".format( self.level_idx, time.ctime() ))
+        path = path.replace(":"," ")
+        path = path.replace(" ","_")
+        
+        import shutil
+        try:
+            shutil.copy2(self.level_file, path)
+        except (IOError, os.error) as why:
+            print("WARN: Failure creating backup file {0}, this is bad. ".format(path))
+            return
+        
+        print("Saved backup file to {0}".format(path))
+        
+    def Save(self):
+        yofs = self.level.vis_ofs
+        grid = [ [None for x in range(self.level.level_size[0])] for y in range(self.level.level_size[1]+yofs)]
+        for entity in self.level.EnumAllEntities():
+            if hasattr(entity,"editor_tcode"):
+                assert hasattr(entity,"editor_ccode")
+                
+                x,y = entity.pos
+                x,y = math.floor(x+0.5),math.floor(y+0.5)+yofs
+                
+                if not grid[y][x] is None:
+                    print("Warn: ignoring duplicate tile {0} at {1}/{2}, existing tile is {3}".format(entity,x,y,grid[y][x]))
+                    continue
+                
+                grid[y][x] = entity    
+        
+        # Be sure to have a full backup saved before we do anything
+        self._SaveBackup()
+        
+        try:
+            # build the output text prior to clearing the file
+            cells = "\n".join("".join([((n.editor_ccode+n.editor_tcode) 
+                  if not n is None and hasattr(n,"editor_ccode") else ".  ") for n in row
+                ])  for row in grid)
+            
+            with open(self.level_file,"wt") as out:
+                out.write(self.level.editor_shebang+"\n")
+                out.write(cells)
+                
+        except IOError:
+            print("Failure saving level file")
+            return
+            
+        print("Wrote level successfully to {0}, overwriting existing contents".
+             format(self.level_file))
+    
+    def Undo(self):
+        pass
+    
+    def Redo(self):
+        pass
             
     def _DrawRectangle(self,bb,color):
         shape = sf.Shape()
@@ -212,7 +293,13 @@ class EditorGame(Game):
         t = tempdict['entity']
         t.SetLevel(self.level)
         t.SetColor(which.color)
+        
+        # Duplicate editor-related information which is
+        # needed that our new tile can be properly
+        # saved and restored and even further duplicated.
         t.editor_shebang = which.editor_shebang
+        t.editor_tcode = which.editor_tcode
+        t.editor_ccode = which.editor_ccode 
         return t
     
     def _DrawEditor(self):
@@ -345,12 +432,13 @@ class EditorGame(Game):
         
     def _UpdateMiniMap(self,entity):
         bb = entity.GetBoundingBox()
-        self.dirty_area += bb[2]*bb[3] if bb else 1.0
-        if self.dirty_area > 8.0: # choosen by trial and error
-            self._GenMiniMapImage()
-            self.dirty_area = 0.0
+        self.dirty_area += math.ceil( bb[2] )* math.ceil(bb[3]) if bb else 1.0
         
     def _DrawMiniMap(self):
+        if self.dirty_area > 10.0: # choosen by trial and error as a good treshold value
+            self._GenMiniMapImage()
+            self.dirty_area = 0.0
+            
         self.DrawSingle(self.minimap_sprite)
         self.DrawSingle(self.minimap_shape)
         
@@ -465,7 +553,8 @@ class EditorGame(Game):
                             n = (w*(y+ys) + x+xs)*4
                             b[n:n+4] = int(col.r*ascale)*col.a//0xff,int(col.g*ascale)*col.a//0xff,int(col.b*ascale)*col.a//0xff,0xff
         
-        self.minimap = sf.Image()
+        if not hasattr(self,"minimap"):
+            self.minimap = sf.Image()
         self.minimap.LoadFromPixels(w,h, bytes(b))
         
     def _BuildMiniMap(self):
@@ -506,6 +595,17 @@ class EditorGame(Game):
         shape.AddPoint(sx,sy+sh,bcol,bcol)
         return shape
     
+    def _GetLevelInfo(self):
+        # the level *must* be in LevelLoaader's cache
+        # self.cached_level_lines = LevelLoader.cache.get(file, None)
+    
+        # Moved to TileLoader and LevelLoader, which store the
+        # needed meta-info directly in their corresponding
+        # child objects.
+        
+        self.level_file = os.path.join(defaults.data_dir, "levels", str(self.level_idx) + ".txt")
+        pass
+    
     def Draw(self):
         Game.Draw(self)
         
@@ -516,6 +616,7 @@ class EditorGame(Game):
         if self.level:
             if self.level != getattr(self,"prev_level",None):
                 
+                self._GetLevelInfo()
                 self._BuildMiniMap()
                 self.prev_level = self.level
                 
@@ -587,6 +688,9 @@ def main():
     # Read game.txt, which is the master config file
     defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
+    
+    import gettext
+    gettext.install('yiang', './locale')
     
     defaults.caption = "YIANG-ED 0.1"
     defaults.resolution[0] = 1450;

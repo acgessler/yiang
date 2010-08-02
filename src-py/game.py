@@ -470,17 +470,17 @@ TimeDelta:         {dtime:.4}
                 self.BackToWorldMap() if self.GetGameMode() == Game.CAMPAIGN else self.GameOver()
             player.Respawn(True if key == accepted[0] else False)
             
-        self._FadeOutAndShowStatusNotice(sf.String("""You died a martyr and are now awaiting resurrection!
+        self._FadeOutAndShowStatusNotice(sf.String(_("""You died a martyr and are now awaiting resurrection!
   .. the godless slaughterer was {0}
 
 Press {1} to restart at the last respawning point
 Press {2} to restart the level
-Press {3} to {4}""".format(
+Press {3} to {4}""").format(
                     killer,
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("level-new"),
                     KeyMapping.GetString("escape"),
-                    "return to the map" if self.GetGameMode() == Game.CAMPAIGN else "leave the game"
+                    _("return to the map") if self.GetGameMode() == Game.CAMPAIGN else _("leave the game")
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over

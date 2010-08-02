@@ -170,6 +170,12 @@ class Level:
         tile.SetColor(LevelLoader.cached_color_dict[ccode])
         tile.SetPosition((x, y - self.vis_ofs))
         tile.SetLevel(self)
+        
+        # (HACK) Editor mode: store color and type code in order to
+        # save the level again later this day.
+        if self.game.GetGameMode() == 3:
+            tile.editor_ccode = ccode
+            tile.editor_tcode = tcode
             
         self.AddEntity(tile)
         return tile
@@ -739,7 +745,7 @@ class LevelLoader:
         There may be gaps within the set of assigned numbers."""
         
         import re
-        reg = re.compile(r"(\d+)\.txt")
+        reg = re.compile(r"^(\d+)\.txt$")
         for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
             m = re.match(reg,file)
             if m:
@@ -851,9 +857,10 @@ class LevelLoader:
             traceback.print_exc()
             
         lv = tempdict.get("level", None)
-        if lv and game.GetGameMode() == 3: # Game.EDITOR:
+        if lv and isinstance(lv,Level) and game.GetGameMode() == 3: # Game.EDITOR:
             # in editor mode, store the level's full text in the Level instance itself
             lv.editor_raw = lines[1].rstrip()
+            lv.editor_shebang = lines[0]
             
         return lv
     
