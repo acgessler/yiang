@@ -6,6 +6,7 @@ NotiBox		1100
 
 FadeMenuInAtVeryBeginning 50000  
 MiniGuiDef		51000
+EditorMiniMap   52000
 EditorCursor	100000
 
 

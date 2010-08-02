@@ -207,7 +207,103 @@ class EditorGame(Game):
         ))
         
         
-        class Overlay_ShowMinimap:
+        class Overlay_ShowCatalogue:
+            def __str__(self):
+                return "<ShowCatalogue - show the tile catalogue on top of the editor>"
+            
+            def __call__(self2):
+                pass
+        
+        
+        class Overlay_ShowContextMenu:
+            
+            def __init__(self2):
+                
+                # Store the currently selected tile, it will be
+                # our future origin for all operations, even
+                # if the user moves the mouse further (which
+                # is unavoidable, because we're going to present
+                # him/her a few neat new buttons)
+                self2.x,self2.y = self.fx,self.fy
+                
+                xb = 40, -242, -100, -100
+                xb = [x+self.tx*defaults.tiles_size_px[0] for x in xb]
+                
+                yb = 0, 0, -120, +70
+                yb = [y+(self.ty+defaults.status_bar_top_tiles)*defaults.tiles_size_px[1] for y in yb]
+                
+                self2.elements = [
+                    (Button(text="Insert rows(s) here", rect=[xb[2],yb[2],200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    (Button(text="Delete rows(s) here", rect=[xb[2],yb[2]+30,200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    (Button(text="Insert rows(s) here", rect=[xb[3],yb[3],200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    (Button(text="Delete rows(s) here", rect=[xb[3],yb[3]+30,200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    
+                    
+                    (Button(text="Place player here", rect=[xb[3],yb[3]+60,200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    (Button(text="Delete this tile", rect=[xb[3],yb[3]+90,200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    
+                    
+                    (Button(text="Insert column(s) here", rect=[xb[0],yb[0],200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                    (Button(text="Delete column(s) here", rect=[xb[0],yb[0]+30,200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),         
+                    (Button(text="Insert column(s) here", rect=[xb[1],yb[1],200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),       
+                    (Button(text="Delete column(s) here", rect=[xb[1],yb[1]+30,200,25]) + 
+                        ("release", (lambda src: EditSettings()))
+                    ),
+                ]
+                
+                for e in self2.elements:
+                    self.AddSlaveDrawable(e)
+            
+            def __str__(self):
+                return "<ShowContectMenu - show the context menu accessible on the I key>"
+            
+            def _RemoveMe(self2):
+                self.RemoveOverlay(self2)
+                for e in self2.elements:
+                    self.RemoveSlaveDrawable(e)
+            
+            def __call__(self2):
+                inp = self.inp
+                if not inp.IsKeyDown(sf.Key.I):
+                    self2._RemoveMe()
+                    
+                    
+                r = 9
+                e = ((x,y) for y in range(-r+1,r) for x in range(-r+1,r) if x or y)
+                for x,y in e:
+                    c = int(50 - (x**2 + y**2)**0.5 * (0.5/r) * 50)
+                    if c <= 10:
+                        continue
+                    self._DrawRectangle((self2.x+x,self2.y+y,1.0,1.0),sf.Color(c,c,c),thickness=1)
+                    
+                # Draw the origin tile in blue 
+                self._DrawRectangle((self2.x,self2.y,1.0,1.0),sf.Color(0,0,255))
+            
+        
+        class Overlay_ShowMinimap(Drawable):
+            
+            def __init__(self2):
+                Drawable.__init__(self2)
+                self.AddSlaveDrawable(self2)
+            
             def __str__(self):
                 return "<ShowMinimap - renders the minimap on top of the editor>"
             
@@ -215,7 +311,12 @@ class EditorGame(Game):
                 inp = self.inp
                 if not inp.IsKeyDown(sf.Key.M):
                     self.RemoveOverlay(self2)
+                    self.RemoveSlaveDrawable(self2)
                 
+            def GetDrawOrder(self):
+                return 52000
+                
+            def Draw(self2):
                 self._DrawMiniMap()
                     
                     
@@ -359,6 +460,12 @@ class EditorGame(Game):
                         
                     self.PushOverlay(Overlay_ShowMinimap())
                     
+                # Activate the 'DrawContextMenu' overlay on I
+                if inp.IsKeyDown(sf.Key.I) and not [e for e in self.overlays 
+                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowContextMenu]:
+                        
+                    self.PushOverlay(Overlay_ShowContextMenu())
+                    
                 
         # note: order matters, don't change
         self.PushOverlay(Overlay_EditorBasics())
@@ -455,7 +562,7 @@ class EditorGame(Game):
     def Redo(self):
         pass
             
-    def _DrawRectangle(self,bb,color):
+    def _DrawRectangle(self,bb,color,thickness=2):
         shape = sf.Shape()
 
         bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
@@ -467,7 +574,7 @@ class EditorGame(Game):
         shape.AddPoint(bb[2],bb[3],color,color)
         shape.AddPoint(bb[0],bb[3],color,color)
 
-        shape.SetOutlineWidth(2)
+        shape.SetOutlineWidth(thickness)
         shape.EnableFill(False)
         shape.EnableOutline(True)
 
@@ -728,7 +835,6 @@ class EditorGame(Game):
     
     def Draw(self):
         Game.Draw(self)
-        
         self.mx,self.my = self.inp.GetMouseX(),self.inp.GetMouseY()
 
         # Nothing to do is no level is loaded
