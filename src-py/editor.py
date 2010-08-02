@@ -420,8 +420,22 @@ class EditorGame(Game):
         
     def ControlledAddEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
+        
+        # Find out if there's another entity at this position, if yes, remove it.
+        e = [e for e in self.level.EnumVisibleEntities() 
+             if   int(e.pos[0])==int(entity.pos[0]) 
+             and  int(e.pos[1])==int(entity.pos[1])
+        ]
+        
+        if e:
+            assert len(e)==1
+            e = e[0]
+            if e is entity:
+                return # should not happen, but still put a safeguard here to catch the case
+            
+            self.ControlledRemoveEntity(e)
+        
         self.level.AddEntity(entity)
-        print(entity)
         self._UpdateMiniMap(entity)
         
     def ControlledRemoveEntity(self,entity):
