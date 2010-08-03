@@ -672,7 +672,7 @@ class Level:
     def _GetEntityDefBBColor(self,entity):
         """Set the bounding box color for an entity that doesn't override
         this setting explicitly."""    
-        return sf.Color.Yellow if len(entity.windows)>1 else sf.Color.Green 
+        return sf.Color.Yellow if len(getattr(entity,"windows",[]))>1 else sf.Color.Green 
         
     def DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the level"""

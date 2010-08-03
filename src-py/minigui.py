@@ -42,11 +42,14 @@ class Component(Drawable):
     }
     
     
-    def __init__(self,rect=None):
+    def __init__(self,rect=None,bgcolor=None,fgcolor=None):
         Drawable.__init__(self)
         self.rect = rect or [0,0,0,0]
         self._state = Component.STATE_NORMAL
         self.handlers = {}
+        
+        self.bgcolor = bgcolor
+        self.fgcolor = fgcolor
         
         self.font = FontCache.get(defaults.letter_height_gui,defaults.font_gui)
         
@@ -58,7 +61,10 @@ class Component(Drawable):
     @property
     def rect(self):
         x,y,w,h = self._rect
-        return (x if x>=0 else defaults.resolution[0]+x),(y if y>=0 else defaults.resolution[1]+y),w,h
+        return (((x if x < defaults.resolution[0] else x-defaults.resolution[0])
+            if x>=0 else defaults.resolution[0]+x),
+            ((y if y < defaults.resolution[1] else y-defaults.resolution[1]) 
+                if y>=0 else defaults.resolution[1]+y),w,h)
     
     @rect.setter
     def rect(self,*args):
@@ -67,7 +73,10 @@ class Component(Drawable):
     @property
     def pos(self):
         x,y = self._rect[:2] 
-        return (x if x>=0 else defaults.resolution[0]+x),(y if y>=0 else defaults.resolution[1]+y)
+        return (((x if x < defaults.resolution[0] else x-defaults.resolution[0])
+            if x>=0 else defaults.resolution[0]+x),
+            ((y if y < defaults.resolution[1] else y-defaults.resolution[1]) 
+                if y>=0 else defaults.resolution[1]+y))
     
     @pos.setter
     def pos(self,*args):
@@ -76,7 +85,8 @@ class Component(Drawable):
     @property
     def x(self):
         x = self._rect[0]
-        return x if x>=0 else defaults.resolution[0]+x
+        return (x if x < defaults.resolution[0] else x-defaults.resolution[0]) \
+            if x>=0 else defaults.resolution[0]+x
     
     @x.setter
     def x(self,x):
@@ -85,7 +95,8 @@ class Component(Drawable):
     @property
     def y(self):
         y = self._rect[1]
-        return y if y>=0 else defaults.resolution[1]+y
+        return (y if y < defaults.resolution[1] else y-defaults.resolution[1]) \
+            if y>=0 else defaults.resolution[1]+y
     
     @y.setter
     def y(self,y):
@@ -147,7 +158,7 @@ class Component(Drawable):
         return math.floor(x+self.x),math.floor(y+self.y)
 
     def _DrawMyRect(self):
-        Component.DrawRect(self.rect,self.__class__.COLORS[self.state],sf.Color.Black)
+        Component.DrawRect(self.rect,self.bgcolor if self.bgcolor else self.__class__.COLORS[self.state],sf.Color.Black)
         
     def Draw(self):
         inp = Renderer.app.GetInput()
@@ -156,9 +167,14 @@ class Component(Drawable):
         self.Fire("update")
         
         buttons = inp.IsMouseButtonDown(sf.Mouse.Left),inp.IsMouseButtonDown(sf.Mouse.Right)
-        self.DrawMe(mx,my,(self.x+self.w>mx>self.x and self.y+self.h>my>self.y),
-            buttons,self.__dict__.setdefault("prev_buttons",(False,False)))
+        
+        hit = (self.x+self.w>mx>self.x and self.y+self.h>my>self.y)
+        self.DrawMe(mx,my,hit,buttons,
+            self.__dict__.setdefault("prev_buttons",(False,False)),
+            self.__dict__.setdefault("prev_hit",False))
+        
         self.prev_buttons = buttons
+        self.prev_hit = hit
         
     @staticmethod
     def DrawRect(bb,color,color_outline = None):
@@ -201,6 +217,7 @@ class HasAText(Component):
         self._text_cached.SetPosition(*self._MkPos(self.w*0.5 - len(ts[0])*defaults.letter_height_gui*0.25,
             self.h*0.5 - len(ts)*defaults.letter_height_gui*0.55))
         
+        self._text_cached.SetColor(self.fgcolor if self.fgcolor else sf.Color.White)
         Renderer.app.Draw(self._text_cached)
 
 
@@ -217,8 +234,11 @@ class Button(HasAText):
     def __init__(self,**kwargs):
         HasAText.__init__(self,**kwargs)
 
-    def DrawMe(self,mx,my,hit,buttons,prev_buttons):
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
         if hit:
+            if not prev_hit:
+                self.Fire("mouse_enter")
+            
             self.state = Component.STATE_ACTIVE if buttons[0] else Component.STATE_HOVER
             if buttons[0] and not prev_buttons[0]:
                 self.Fire("click")
@@ -226,11 +246,14 @@ class Button(HasAText):
             if not buttons[0] and prev_buttons[0]:
                 self.Fire("release")
         else:
+            if prev_hit:
+                self.Fire("mouse_leave")
             self.state = Component.STATE_NORMAL
+            
             
         self._DrawMyRect()
         self._DrawTextCentered()
-        
+
         
 class ToggleButton(HasAText):
     """A persistent 2-state button, like a checkbox but easier to implement :-)"""
@@ -259,7 +282,7 @@ class ToggleButton(HasAText):
         self.text = self.text_choices[0 if on else 1]
       
       
-    def DrawMe(self,mx,my,hit,buttons,prev_buttons):
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
         
         if hit:
             if buttons[0] and not prev_buttons[0]:

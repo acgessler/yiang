@@ -59,7 +59,10 @@ class Door(AnimTile):
                 self.Set(0)
                 self.unlocked = True
                 
-                delattr(self,"during_interact")
+                try:
+                    delattr(self,"during_interact")
+                except AttributeError:
+                    pass
         AnimTile.Update(self,time_elapsed,time)
     
     def Unlock(self):
@@ -71,7 +74,10 @@ class Door(AnimTile):
     def Lock(self):
         """Lock the door again"""
         self.SetState(0)
+        self.Set(0)
         self.unlocked = False
+        
+        delattr(self,"during_interact")
         print("Locking door {0}".format(self))
     
     

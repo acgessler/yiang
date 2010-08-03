@@ -24,6 +24,7 @@ import sys
 import os
 import math
 import traceback
+import itertools
 
 # Our stuff
 import defaults
@@ -213,9 +214,106 @@ class EditorGame(Game):
             
             def __call__(self2):
                 pass
+            
+            
+        class Overlay_ShowColorMenu:
+            
+            def __str__(self):
+                return "<ShowColorMenu - show the current color palette>"
+            
+            def __init__(self2):
+    
+                self2.x,self2.y = self.fx,self.fy
+                self2.entity = self.last_entity
+                ox,oy = self.level.GetOrigin()
+                
+                w,h = 64,64
+                space = 5
+                
+                #
+                xb = -w*0.5
+                xb = xb+(self.tx-ox)*defaults.tiles_size_px[0] 
+                
+                yb = -h*0.5
+                yb = yb+(self.ty-oy)*defaults.tiles_size_px[1] 
+                
+                from tile import TileLoader
+                colors = TileLoader.cached_color_dict
+                
+                self2.elements = []
+                old_color = [self2.entity.color]
+                
+                def SetColor(color,sticky=False):
+                    self2.entity.SetColor(color)
+                    
+                    if sticky:
+                        old_color[0] = color
+        
+                def AddNewColor():
+                    pass
+                    # TODO
+                    
+                def ChangeElementDrawOrder(order):
+                    for e in self2.elements:
+                        e.GetDrawOrder = lambda :order
+                
+                extra_items = 2
+                gap = 2
+                for rad in itertools.count():
+                    if (rad*2-2)**2 - (gap)**2 >= len(colors)+extra_items:
+                        break
+                
+                gaps = [n for n in range(-gap+1,gap-1)]
+                src  = (((x+0.5)*(w+space),(y+0.5)*(h+space)) for x in range(-rad+1,rad-1) for y in range(-rad+1,rad-1) 
+                        if not x in gaps or not y in gaps)
+                
+                try:
+                    for code,color in colors.items():
+                        x,y = next(src)
+                        self2.elements.append(Button(text="{0:X}\n{1:X}\n{2:X}\n{3:X}".format(color.r,color.g,color.b,color.a), 
+                            bgcolor=color, 
+                            fgcolor=sf.Color.White if color.r+color.g+color.b < 500 else sf.Color.Black,
+                            rect=[xb+x,yb+y,w,h]) + 
+                            ("release",     (lambda src,color=color: SetColor(color,True))) +
+                            ("mouse_enter", (lambda src,color=color: SetColor(color))) +
+                            ("mouse_leave", (lambda src: SetColor(old_color[0])))
+                        )
+                    x,y = next(src)
+                    self2.elements.append(Button(text="New", rect=[xb+x,yb+y,w,h]) + 
+                        ("release",     (lambda src: AddNewColor()))
+                    )
+                    x,y = next(src)
+                    self2.elements.append(ToggleButton(text="Undim\x00Dim", rect=[xb+x,yb+y,w,h]) + 
+                        ("on",     (lambda src: ChangeElementDrawOrder(self.GetDrawOrder()-1))) +
+                        ("off",    (lambda src: ChangeElementDrawOrder(Component.GetDrawOrder(self2.elements))))
+                    )
+                except StopIteration:
+                    # corner case, no more space left in the rondell
+                    pass
+                    
+                for e in self2.elements:
+                    self.AddSlaveDrawable(e)
+                
+            def _RemoveMe(self2):
+                self.RemoveOverlay(self2)
+                for e in self2.elements:
+                    self.RemoveSlaveDrawable(e)
+            
+            def __call__(self2):
+                inp = self.inp
+                if not inp.IsKeyDown(sf.Key.C):
+                    self2._RemoveMe()
+                    
+                # Draw the origin tile in blue 
+                bb = self2.entity.GetBoundingBox()
+                if bb:
+                    self._DrawRectangle(bb,sf.Color(0,0,255))
         
         
         class Overlay_ShowContextMenu(Drawable):
+            
+            def __str__(self):
+                return "<ShowContectMenu - show the context menu accessible on the I key>"
             
             def __init__(self2):
                 Drawable.__init__(self2)
@@ -261,7 +359,7 @@ class EditorGame(Game):
                 
                 self2.elements = [
                     (Button(text="Insert rows(s) here", rect=[xb[2],yb[2],200,25]) + 
-                        ("release", (lambda src: EditSettings()))
+                        ("release", (lambda src: self.ExpandRows()))
                     ),
                     (Button(text="Delete rows(s) here", rect=[xb[2],yb[2]+30,200,25]) + 
                         ("release", (lambda src: EditSettings()))
@@ -274,7 +372,7 @@ class EditorGame(Game):
                     ),
                     
                     
-                    (Button(text="Delete this tile", rect=[xb[3],yb[3]+110,200,25]) + 
+                    (Button(text="Delete this tile", rect=[xb[3],yb[3]+80,200,25]) + 
                         ("release", (lambda src: DeleteThisTile()))
                     ),
                     
@@ -293,16 +391,30 @@ class EditorGame(Game):
                     ),
                 ]
                 
+                # Add special context menu items to control certain entities, i.e. doors
                 if self2.entity:
-                    self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+80,200,25]) + 
-                        ("release", (lambda src: PlacePlayerHere()))
-                    ),
+                    from locked import Door
+                    if isinstance(self2.entity, Door):
+                        
+                        def ToggleThisDoor(door):
+                            door.Lock() if door.unlocked else door.Unlock() 
+                            
+                        def UpdateDoorCaption(gui,door):
+                            gui.text =  "Close Door" if door.unlocked else "Open Door"
+                        
+                       
+                        self2.elements.append(Button(text="", rect=[xb[3],yb[3]+110,200,25]) + 
+                            ("update",  (lambda src: UpdateDoorCaption(src,self2.entity))) +
+                            ("release", (lambda src: ToggleThisDoor(self2.entity)))
+                        )
+                        
+                    else:
+                        self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+110,200,25]) + 
+                            ("release", (lambda src: PlacePlayerHere()))
+                        )
                 
                 for e in self2.elements:
                     self.AddSlaveDrawable(e)
-            
-            def __str__(self):
-                return "<ShowContectMenu - show the context menu accessible on the I key>"
             
             def _RemoveMe(self2):
                 self.RemoveOverlay(self2)
@@ -501,6 +613,13 @@ class EditorGame(Game):
                     if not hasattr(e,"__class__") or e.__class__== Overlay_ShowContextMenu]:
                         
                     self.PushOverlay(Overlay_ShowContextMenu())
+                    
+                # Activate the 'DrawColorMenu' overlay on I
+                if inp.IsKeyDown(sf.Key.C) and not [e for e in self.overlays 
+                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowColorMenu]\
+                    and hasattr(self,"last_entity"):
+                        
+                    self.PushOverlay(Overlay_ShowColorMenu())
                     
                 
         # note: order matters, don't change
