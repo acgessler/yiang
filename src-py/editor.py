@@ -45,7 +45,7 @@ from enemy import Enemy
 from score import ScoreTile
 from player import Player
 from keys import KeyMapping
-from tile import Tile,AnimTile
+from tile import Tile,AnimTile,TileLoader
 
 from minigui import Component, Button, ToggleButton
 
@@ -642,21 +642,29 @@ class EditorGame(Game):
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
         
-    def _SaveBackup(self):
-        """Save a backup of the current level, overwriting the previous backup""" 
+    def _SaveLevelBackup(self):
+        """Save a backup of the current level. Previous backups are kept""" 
+        self._SaveBackup(self.level_file)
+        
+    def _SaveBackup(self,file):
+        """Save a backup of an arbitrary file, provided a sub-folder
+        'backup' exists""" 
+        head, tail = os.path.split(file)
+        tail, ext  = os.path.splitext(tail)
+        
         import time
-        path = os.path.join(defaults.data_dir,"levels", "backup", "{0}_{1}.txt".format( self.level_idx, time.ctime() ))
-        path = path.replace(":"," ")
+        path = os.path.join(head, "backup", "{0}_{1}.{2}.backup".format( tail, time.ctime(), ext ))
+        path = path.replace(":"," ") # make the string returned by ctime() a valid filename
         path = path.replace(" ","_")
         
         import shutil
         try:
-            shutil.copy2(self.level_file, path)
+            shutil.copy2(file, path)
         except (IOError, os.error) as why:
             print("WARN: Failure creating backup file {0}, this is bad. ".format(path))
             return
         
-        print("Saved backup file to {0}".format(path))
+        print("Saved backup for {0} to {1}".format(file,path))
         
     def PushOverlay(self,ov):
         self.overlays.append(ov)
@@ -673,6 +681,87 @@ class EditorGame(Game):
     def _UpdateLevelSize(self):
         """Recompute self.level.level_size basing on the current state"""
         pass
+    
+    @staticmethod
+    def _FindUnallocatedColorIndex():
+        """Get a fresh color index which is not yet use, raise
+        KeyError if such an index does not exist"""
+        import curses.ascii
+        
+        # Our level files are ASCII so far, but this is no
+        # fixed requirement which could not be changed, now
+        # that we have an editor to hide the storage 
+        # details.
+        
+        from tile import TileLoader
+        colors = TileLoader.cached_color_dict
+        
+        forbidden_forest = [" ", "\t", ".", "\n", "\r"]
+        for i in range(0,255):
+            s = chr(i)
+            if curses.ascii.isprint(s) and not s in forbidden_forest and not s in colors.keys():
+                return s
+        
+        raise KeyError()
+
+    @staticmethod
+    def _FindClosestColorIndex(color):
+        """Find the color index whose color's absolute value
+        is as close as possible to the given color """
+        
+        # Note: copy'n'paste from Level
+        colors = TileLoader.cached_color_dict
+        assert len(colors)
+        
+        def diff(a,b):
+            return abs(a.r-b.r) + abs(a.g-b.g) + abs(a.b-b.b) + abs(a.a-b.a) 
+        return sorted(diff(e,color) for e in colors)[0]
+    
+    @staticmethod
+    def AddGlobalColorEntity(color,desc="(created by editor)"):
+        """Register a new color globally. This cannot be undone easily,
+        so use it with care. Colors are stored globally in the
+        config/colors.txt file. The function allocates and returns
+        a fresh one-character index to the color, which can be used
+        from within level files to reference the color.
+        The index of the closest color (determined by the summed
+        absolute difference of all color channels) is returned
+        if the function is out of indices."""
+        
+        colors = TileLoader.cached_color_dict
+        
+        if color in colors:
+            return # Sanity check
+        
+        # Find an empty index to use
+        try:
+            index = self._FindUnallocatedColorIndex()
+            print("Adding new color entry with index {0}: RGBA={1:X}{2:x}{3:x}{4:x}".format(
+                index,color.r,color.g,color.b,color.a))
+            
+            # Slurp the color config file and append our new contents,
+            # make a backup as usual.
+            file = os.path.join(defaults.config_dir,"colors.txt")
+            self.SaveBackup(file)
+            new = """
+            
+            # {0}
+{1}={2:x}{3:x}{4:x}{5:x} 
+""".format(desc,index,color.r,color.g,color.b,color.a)
+
+            with open(file,"at") as out:
+                out.write(new)
+                
+            print("{0} has been updated to reflect the changes".format(file))
+            
+            # Finally, propagate the change to the global color table
+            colors[index] = color
+        except KeyError:
+            
+            index = self._FindClosestColorIndex(color) 
+            print("Out of color indices! Reusing existing index {0}".format(index))
+            
+        return index
         
     def Save(self):
         self._UpdateLevelSize()
@@ -700,7 +789,7 @@ class EditorGame(Game):
             return
         
         # Be sure to have a full backup saved before we do anything
-        self._SaveBackup()
+        self._SaveLevelBackup()
         
         # Clear LevelLoader's cache for this level, this ensures
         # that the file contents are refetched from fisk the next

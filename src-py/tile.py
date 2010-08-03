@@ -412,6 +412,11 @@ class TileLoader:
     cache = {}
     
     @staticmethod
+    def GetColor(index):
+        """Lookup a color index, return the RGBA color."""
+        return TileLoader.cached_color_dict[index]
+    
+    @staticmethod
     def LoadFromTag(tag,game):
         """Shortcut to load a tile from a 3-character tag,
         consisting of a one-char color code and a two-char
@@ -423,7 +428,7 @@ class TileLoader:
         tlbase = os.path.join(defaults.data_dir, "tiles")
         
         tile = TileLoader.Load(tlbase + "/" + tcode + ".txt", game)
-        tile.SetColor(TileLoader.cached_color_dict[ccode])
+        tile.SetColor(TileLoader.GetColor(ccode))
         
         # (HACK) Editor mode: store color and type code in order to
         # save the level again later this day.
@@ -457,6 +462,7 @@ class TileLoader:
         if not hasattr(TileLoader, "cached_color_dict"):
 
             def complain_on_fail():
+                # this is just the last fallback to avoid KeyError's
                 print("Encountered unknown color key")
                 return sf.Color.White
             

@@ -168,7 +168,7 @@ class Level:
             tile = TileLoader.Load(self.tlbase + "/" + tcode + ".txt", self.game)
                 
         from tile import TileLoader
-        tile.SetColor(TileLoader.cached_color_dict[ccode])
+        tile.SetColor(TileLoader.GetColor(ccode))
         tile.SetPosition((x, y - self.vis_ofs))
         tile.SetLevel(self)
         

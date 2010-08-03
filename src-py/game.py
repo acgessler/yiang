@@ -155,6 +155,7 @@ class Game(Drawable):
             self._DrawDebugInfo(dtime)
             
     def IsGameRunning(self):
+        """Check if the game is not currently suspended"""
         return len(self.suspended) == 0
             
     def _UndoFrameTime(self):
