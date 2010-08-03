@@ -90,6 +90,7 @@ class EditorGame(Game):
         self.select_start = None
         self.dirty_area = 0.0
         self.actions = [] # undo/redo stack
+        self.cur_action = 0 # Location in the stack
         self.overlays = [] # each overlay is a simple callable called during rendering
         
         self.inp = Renderer.app.GetInput()
@@ -244,10 +245,21 @@ class EditorGame(Game):
                 old_color = [self2.entity.color]
                 
                 def SetColor(color,sticky=False):
-                    self2.entity.SetColor(color)
                     
                     if sticky:
+                        
+                        # In order for undo/redo to work, we must ensure that
+                        # the entity is temporarily reset to its old color
+                        # before we commit the operation.
+                        
+                        self2.entity.color = old_color[0]
+                        self.ControlledSetEntityColor(self2.entity,color)
+                        
+                        # Needed or the 'mouse_leave' callback will overwrite our changes
                         old_color[0] = color
+                        return
+                    
+                    self2.entity.SetColor(color)
         
                 def AddNewColor():
                     pass
@@ -347,8 +359,8 @@ class EditorGame(Game):
                     elem.SetPosition((self2.x,self2.y))
                     
                 def DeleteThisTile():
-                    assert not self.entity is None
-                    self.ControlledRemoveEntity(self.entity)
+                    assert not self2.entity is None
+                    self.ControlledRemoveEntity(self2.entity)
                                               
                     # break the overlay chain, we need a new frame for
                     # the pending deletion to be dispatched to all
@@ -710,12 +722,6 @@ class EditorGame(Game):
             
         print("Wrote level successfully to {0}, overwriting existing contents".
              format(self.level_file))
-    
-    def Undo(self):
-        pass
-    
-    def Redo(self):
-        pass
             
     def _DrawRectangle(self,bb,color,thickness=2):
         shape = sf.Shape()
@@ -784,6 +790,56 @@ class EditorGame(Game):
         # on a copy to allow PushOverlay/RemoveOverlay() calls
         # during processing the overlays.
         [e() for e in list(self.overlays)]
+        
+    def Undo(self):
+        """Undo the last step, if possible"""
+        if self.cur_action < 1:
+            print("No more steps to undo!")
+            return
+        
+        if not "undo" in self.actions[self.cur_action-1]:
+            print("This operation cannot be undone!")
+            return
+        
+        self.cur_action -= 1
+        print("Undoing action {0}, which describes itself so: {1}".
+              format(self.cur_action,self.actions[self.cur_action]["desc"]))
+        self.actions[self.cur_action]["undo"]()
+    
+    def Redo(self):
+        """Redo the previously undone step, if possible"""
+        if self.cur_action == len(self.actions):
+            print("No more steps to redo!")
+            return
+        
+        if not "redo" in self.actions[self.cur_action]:
+            print("This operation cannot be redone!")
+            return
+        
+        print("Redoing action {0}, which describes itself so: {1}".
+              format(self.cur_action,self.actions[self.cur_action]["desc"]))
+        self.actions[self.cur_action]["redo"]()
+        
+        self.cur_action += 1
+        
+    def PushAction(self,action):
+        """Push a controlled (i.e. undoable) action onto the action stack.
+        The provided dict should define the undo and redo entries,
+        which must both be callable, but may be ommitted if they are
+        not supported."""
+        
+        assert isinstance(action,dict)
+        
+        action.setdefault("desc","(no description given)")
+        if len(self.actions) > self.cur_action:
+            del self.actions[self.cur_action:]
+            
+        assert len(self.actions) == self.cur_action
+        self.actions.append(action)
+        
+        self.cur_action += 1
+        print("Push undoable action onto action stack: {0}, stack height is now: {1}".
+              format(action["desc"],len(self.actions)))
             
     def ControlledAddEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
@@ -800,17 +856,86 @@ class EditorGame(Game):
             e = e[0]
             if e is entity:
                 return # should not happen, but still put a safeguard here to catch the case
+
             
-            self.ControlledRemoveEntity(e)
+        def RemoveEntity():
+            self.level.RemoveEntity(entity)
+            self._UpdateMiniMap(entity)
+            
+            if e: # Restore the previous entity at this position
+                self.level.AddEntity(e)
+                self._UpdateMiniMap(e)
+            
+        def AddEntity():
+            if e: # Remove the previous entity at this position
+                self.level.RemoveEntity(e)
+                self._UpdateMiniMap(e)
+                
+            self.level.AddEntity(entity)
+            self._UpdateMiniMap(entity)
+            
+        self.PushAction({"desc":"Add entity {0} [leads to removal of {1}]".format(
+                entity, e or "(None, location was previously empty)"                                                
+            ),
+            "redo" : (lambda: AddEntity()),
+            "undo" : (lambda: RemoveEntity())
+        })
         
-        self.level.AddEntity(entity)
-        self._UpdateMiniMap(entity)
+        AddEntity()
         
     def ControlledRemoveEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
-        self.level.RemoveEntity(entity)
-        self._UpdateMiniMap(entity)
         
+        def RemoveEntity():
+            self.level.RemoveEntity(entity)
+            self._UpdateMiniMap(entity)
+            
+        def AddEntity():
+            self.level.AddEntity(entity)
+            self._UpdateMiniMap(entity)
+        
+        self.PushAction({"desc":"Remove entity {0}".format(
+                entity                                                
+            ),
+            "redo" : (lambda: RemoveEntity()),
+            "undo" : (lambda: AddEntity())
+        })
+        
+        RemoveEntity()
+        
+    def ControlledSetEntityColor(self,entity,color):
+        """Use instead of a simple assignment to entity.color to create
+        an empty on the action stack"""
+        
+        def SetColor(color):
+            entity.color = color
+        
+        old_color = entity.color
+        self.PushAction({"desc":"Change color of {0} to {1}/{2}/{3}/{4}".format(
+                entity,color.r,color.g,color.b,color.a                                                        
+            ),
+            "redo" : (lambda: SetColor(color)),
+            "undo" : (lambda: SetColor(old_color))
+        })
+        
+        SetColor(color)
+        
+    def ControlledSetEntityPosition(self,entity,pos):
+        """Use instead of a simple call to Entity.SetPosition() to create
+        an empty on the action stack"""
+        
+        def SetPosition(pos):
+            entity.SetPosition(pos)
+        
+        old_color = entity.pos
+        self.PushAction({"desc":"Change position of {0} to {1}".format(
+                entity,pos                                                     
+            ),
+            "redo" : (lambda: SetPosition(pos)),
+            "undo" : (lambda: SetPosition(old_color))
+        })
+        
+        SetPosition(pos)
         
     def _UpdateMiniMap(self,entity):
         bb = entity.GetBoundingBox()
