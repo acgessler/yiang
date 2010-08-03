@@ -25,6 +25,7 @@ import os
 import math
 import traceback
 import itertools
+import collections
 
 # Our stuff
 import defaults
@@ -349,6 +350,7 @@ class EditorGame(Game):
                 def PlacePlayerHere():
                     for elem in self.level.EnumAllEntities():
                         if isinstance(elem, Player):
+                            self.ControlledSetEntityPosition(elem,(self2.x,self2.y))
                             break
                     else:
                         print("Did not find a valid player, creating one!")
@@ -356,7 +358,7 @@ class EditorGame(Game):
                         elem.SetLevel(self.level)
                         
                         self.ControlledAddEntity(elem)
-                    elem.SetPosition((self2.x,self2.y))
+                        elem.SetPosition((self2.x,self2.y))
                     
                 def DeleteThisTile():
                     assert not self2.entity is None
@@ -706,9 +708,19 @@ class EditorGame(Game):
         from level import LevelLoader
         LevelLoader.ClearCache([self.level_idx])
         
+        from tile import TileLoader
+        rcolors = dict((v,k) for k,v in TileLoader.cached_color_dict.items())
+        
+        def ccol(col):
+            try:
+                return rcolors[col]
+            except KeyError:
+                # A new color! Save it immediately before it runs away ...
+                return self.AddGlobalColorEntry(col)
+            
         try:
             # build the output text prior to clearing the file
-            cells = "\n".join("".join([((n.editor_ccode+n.editor_tcode) 
+            cells = "\n".join("".join([((ccol(n.color)+n.editor_tcode) 
                   if not n is None and hasattr(n,"editor_ccode") else ".  ") for n in row
                 ])  for row in grid)
             
