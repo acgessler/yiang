@@ -99,10 +99,11 @@ class Component(Drawable):
         self.fgcolor = fgcolor
         
         self.font = FontCache.get(defaults.letter_height_gui,defaults.font_gui)
+        self.draworder = 51000
         
     def GetDrawOrder(self):
-        # Make sure the GUI is on top fo everything else
-        return 51000
+        # Make sure the GUI is on top of everything else
+        return self.draworder
     
     
     @property

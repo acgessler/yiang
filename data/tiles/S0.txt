@@ -1,4 +1,4 @@
-from score import ScoreTile; <out> = ScoreTile(<raw>,3,5,3.0,0.01)
+from score import ScoreTile; <out> = ScoreTile(<raw>,3,5,3.0,0.1)
 /...\
 .0,1.
 \.../
