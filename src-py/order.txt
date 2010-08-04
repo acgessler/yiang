@@ -1,4 +1,5 @@
 
+
 EditorIGrid   -100
 Game		-10
 PerkOverlay	100
@@ -10,5 +11,6 @@ FadeMenuInAtVeryBeginning 50000
 MiniGuiDef		51000
 EditorMiniMap   52000
 EditorCursor	100000
+GUIManager		100005
 
 

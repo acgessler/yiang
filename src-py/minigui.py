@@ -28,6 +28,53 @@ import defaults
 from renderer import Renderer,Drawable,NewFrame
 from fonts import FontCache
 
+class GUIManager:
+    """GUIManager is responsible for holding a list of all GUI 
+    components in the scene. GUIManager.Enable() must be
+    called before any of its functions can be used. Note
+    that the rest of the GUI can be used without 
+    GUIManager. This is just an extra facility if a list
+    of all components in the scene is of interest to
+    you (and is not available elsewhere)"""
+    
+    components, components2 = set(), set()
+    drawable = None
+    
+    @staticmethod
+    def Enable():
+        """Call this before you use any of the functions
+        provided by the GUIManager"""
+        
+        class Cleaner(Drawable):
+            def GetDrawOrder(self):
+                return 100005
+                
+            def Draw(self):
+                GUIManager.components2,GUIManager.components = GUIManager.components,GUIManager.components2
+                GUIManager.components2 = set()
+        
+        GUIManager.drawable = Cleaner()
+        Renderer.AddDrawable(GUIManager.drawable)
+        
+    @staticmethod
+    def Disable(self):
+        """Disable the GUI manager's functionality
+        again."""
+        Renderer.RemoveDrawable(GUIManager.drawable)
+        GUIManager.drawable = None
+    
+    @staticmethod
+    def EnumAllComponents():
+        """Enumerate all controls in no special order"""
+        return GUIManager.components
+    
+    @staticmethod
+    def _IAmHere(entity):
+        """For internal use by GUI components"""
+        if GUIManager.drawable:
+            GUIManager.components2.add(entity)
+        
+
 class Component(Drawable):
     """Base class for the minigui system, defines common container logic. 
     All metrics in use by the GUI system are in pixels, the upper-left
@@ -161,6 +208,8 @@ class Component(Drawable):
         Component.DrawRect(self.rect,self.bgcolor if self.bgcolor else self.__class__.COLORS[self.state],sf.Color.Black)
         
     def Draw(self):
+        GUIManager._IAmHere(self)
+        
         inp = Renderer.app.GetInput()
         mx,my = inp.GetMouseX(),inp.GetMouseY()
         

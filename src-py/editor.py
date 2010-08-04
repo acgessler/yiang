@@ -47,7 +47,7 @@ from player import Player
 from keys import KeyMapping
 from tile import Tile,AnimTile,TileLoader
 
-from minigui import Component, Button, ToggleButton
+from minigui import Component, Button, ToggleButton, GUIManager
 
 def override(x):
     return x
@@ -607,21 +607,22 @@ class EditorGame(Game):
             def __call__(self2):
                 inp = self.inp
                 if inp.IsMouseButtonDown(sf.Mouse.Left):
-                    if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-self.fx or self.last_insert_pos[1]-self.fy:
-                        # Insert template at this position
-                        if self.select_start:
-                            for e,pos in self.template.items():
-                                cloned = self._CloneEntity(e)
-                                if not cloned:
-                                    continue
-                                cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
-                                    self.fy + e.pos[1]-self.select_start[1])
-                                )
+                    if not self.mousepos_covered_by_gui:
+                        if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-self.fx or self.last_insert_pos[1]-self.fy:
+                            # Insert template at this position
+                            if self.select_start:
+                                for e,pos in self.template.items():
+                                    cloned = self._CloneEntity(e)
+                                    if not cloned:
+                                        continue
+                                    cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
+                                        self.fy + e.pos[1]-self.select_start[1])
+                                    )
+                                    
+                                    self.ControlledAddEntity(cloned)
                                 
-                                self.ControlledAddEntity(cloned)
-                            
-                        self.pressed_l = True
-                        self.last_insert_pos = self.fx,self.fy
+                            self.pressed_l = True
+                            self.last_insert_pos = self.fx,self.fy
                 else:
                     try:
                         delattr(self,"pressed_l")  
@@ -637,16 +638,17 @@ class EditorGame(Game):
                 inp = self.inp
                 if inp.IsMouseButtonDown(sf.Mouse.Right):
                     if inp.IsMouseButtonDown(sf.Mouse.Left):
-                        # Both mouse buttons pressed, delete template
-                        for entity,pos in self.template.items():
-                            self.ControlledRemoveEntity(entity)
+                        if not self.mousepos_covered_by_gui:
+                            # Both mouse buttons pressed, delete template
+                            for entity,pos in self.template.items():
+                                self.ControlledRemoveEntity(entity)
+                                
+                            self.template = dict()
                             
-                        self.template = dict()
-                        
-                        # break the overlay chain, we need a new frame for
-                        # the pending deletion to be dispatched to all
-                        # who need to know about it.
-                        raise NewFrame()
+                            # break the overlay chain, we need a new frame for
+                            # the pending deletion to be dispatched to all
+                            # who need to know about it.
+                            raise NewFrame()
                     
                     
         class Overlay_EditorSelect:
@@ -656,35 +658,35 @@ class EditorGame(Game):
             def __call__(self2):
                 inp = self.inp
                 if inp.IsMouseButtonDown(sf.Mouse.Right):
-                    
-                    # copy current tile
-                    if self.in_select is False:
-                        if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
-                            self.template = dict()
-                            self.select_start = self.fx,self.fy
+                    if not self.mousepos_covered_by_gui:
+                        # copy current tile
+                        if self.in_select is False:
+                            if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
+                                self.template = dict()
+                                self.select_start = self.fx,self.fy
+                                
+                            self.in_select = True
                             
-                        self.in_select = True
-                        
-                    if inp.IsKeyDown(sf.Key.LControl):
-                        if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
-                            if not hasattr(self,"last_select"):
-                                self.last_select = self.select_start
+                        if inp.IsKeyDown(sf.Key.LControl):
+                            if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
+                                if not hasattr(self,"last_select"):
+                                    self.last_select = self.select_start
+                                
+                                for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
+                                    for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
+                                        for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                            self.template[e] = None  
+                                            
+                                for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
+                                    for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
+                                        for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                            self.template[e] = None                               
+                                
+                                self.last_select = self.fx,self.fy
                             
-                            for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
-                                for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
-                                    for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                        self.template[e] = None  
-                                        
-                            for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
-                                for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
-                                    for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                        self.template[e] = None                               
-                            
-                            self.last_select = self.fx,self.fy
-                        
-                    else:
-                        if hasattr(self,"cur_entity"): 
-                            self.template[self.cur_entity] = None
+                        else:
+                            if hasattr(self,"cur_entity"): 
+                                self.template[self.cur_entity] = None
                 else:
                     self.in_select = False
                     
@@ -714,12 +716,13 @@ class EditorGame(Game):
                         delattr(self,"cur_entity")
                     except AttributeError:
                         pass
+                    # disabled, turns out to be too expensive
                     #e = ((x,y) for y in range(-3,4) for x in range(-3,4) if x or y)
                     #for x,y in e:
                     #    c = int(50 - (x**2 + y**2)**0.5 *0.20 * 50)
                     #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
                     
-                if inp.IsMouseButtonDown(sf.Mouse.Right):                
+                if inp.IsMouseButtonDown(sf.Mouse.Right) and not self.mousepos_covered_by_gui:               
                      if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
                         # draw selection rectangle
                         self._DrawRectangle((self.select_start[0],self.select_start[1],
@@ -1433,6 +1436,14 @@ Press {2} to abort""").format(
             
         Game.Draw(self)
         self.mx,self.my = self.inp.GetMouseX(),self.inp.GetMouseY()
+        
+        for elem in GUIManager.EnumAllComponents():
+            rect = elem.rect # warn, this is a lengthy property access
+            if rect[0] <= self.mx <= rect[0]+rect[2] and rect[1] <= self.my <= rect[1]+rect[3]:
+                self.mousepos_covered_by_gui = True
+                break
+        else:
+            self.mousepos_covered_by_gui = False
 
         # Nothing to do is no level is loaded
         if self.level:
@@ -1524,6 +1535,7 @@ def main():
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
 
     Renderer.Initialize()
+    GUIManager.Enable()
     
     # Perform dummy initializations of some subsystems which are
     # needed for running a Game, but are not necessarily
