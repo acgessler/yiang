@@ -93,6 +93,7 @@ class EditorGame(Game):
         self.actions = [] # undo/redo stack
         self.cur_action = 0 # Location in the stack
         self.overlays = [] # each overlay is a simple callable called during rendering
+        self.save_counter = 0
         
         self.inp = Renderer.app.GetInput()
         
@@ -116,10 +117,35 @@ class EditorGame(Game):
                     break
             else:
                 print("Didn't find a player, add one first!")
+                
+        def AskRestartLevel():
+            if not self.UnsavedChanges():
+                self.RestartLevel()
+                return
+                
+            accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
+            def on_close(key):
+                if key == accepted[2]:
+                    self.swallow_escape = False
+                    return
+                if key == accepted[0]:
+                    self.Save()
+                self.RestartLevel()
+                
+            self.swallow_escape = True # Hack to prevent Escape from being triggered again
+            self._FadeOutAndShowStatusNotice(_("""Don't you want to save first?
+    
+    Press {0} to save first and reload then
+    Press {1} to reload immediately, without saving 
+    Press {2} to abort""").format(
+                        KeyMapping.GetString("accept"),
+                        KeyMapping.GetString("level-new"),
+                        KeyMapping.GetString("escape")),
+                defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Green,on_close)
         
         # Setup basic GUI buttons
-        self.AddSlaveDrawable((Button(text="Restart",rect=[-200,10,80,25]) + 
-             ("release",(lambda src: self.RestartLevel()))
+        self.AddSlaveDrawable((Button(text="Reload",rect=[-200,10,80,25]) + 
+             ("release",(lambda src: AskRestartLevel()))
         ))
         self.AddSlaveDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
              ("release",(lambda src: self.Kill("(Kill button)")))
@@ -139,7 +165,7 @@ class EditorGame(Game):
         
         # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25]) + 
-              ("release", (lambda src: Renderer.RemoveDrawable(self)))
+              ("release", (lambda src: self._OnEscape()))
         ))
         self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25]) + 
 		      ("release", (lambda src: self.Save()))
@@ -347,18 +373,21 @@ class EditorGame(Game):
                 yb = 0, 0, -120, +70
                 yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
                 
+                def PlaceEntity(codename):
+                    elem = TileLoader.LoadFromTag(codename,self)
+                    elem.SetLevel(self.level)
+                    
+                    self.ControlledAddEntity(elem)
+                    elem.SetPosition((self2.x,self2.y))
+                
                 def PlacePlayerHere():
                     for elem in self.level.EnumAllEntities():
                         if isinstance(elem, Player):
                             self.ControlledSetEntityPosition(elem,(self2.x,self2.y))
                             break
                     else:
-                        print("Did not find a valid player, creating one!")
-                        elem = TileLoader.LoadFromTag("_PL",self.game)
-                        elem.SetLevel(self.level)
-                        
-                        self.ControlledAddEntity(elem)
-                        elem.SetPosition((self2.x,self2.y))
+                        print("Could not find a valid player, creating one!")
+                        PlaceEntity("_PL")
                     
                 def DeleteThisTile():
                     assert not self2.entity is None
@@ -406,6 +435,7 @@ class EditorGame(Game):
                 ]
                 
                 # Add special context menu items to control certain entities, i.e. doors
+                yn = 110
                 if self2.entity:
                     from locked import Door
                     if isinstance(self2.entity, Door):
@@ -417,15 +447,27 @@ class EditorGame(Game):
                             gui.text =  "Close Door" if door.unlocked else "Open Door"
                         
                        
-                        self2.elements.append(Button(text="", rect=[xb[3],yb[3]+110,200,25]) + 
+                        self2.elements.append(Button(text="", rect=[xb[3],yb[3]+yn,200,25]) + 
                             ("update",  (lambda src: UpdateDoorCaption(src,self2.entity))) +
                             ("release", (lambda src: ToggleThisDoor(self2.entity)))
                         )
+                        yn += 30
                         
                     else:
-                        self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+110,200,25]) + 
+                        self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+yn,200,25]) + 
                             ("release", (lambda src: PlacePlayerHere()))
                         )
+                        yn += 30
+                        
+                        self2.elements.append(Button(text="Place respawn line here", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: PlaceEntity("_RE")))
+                        )
+                        yn += 30
+                        
+                        self2.elements.append(Button(text="Place respawn point here", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: PlaceEntity("_RD")))
+                        )
+                        yn += 30
                 
                 for e in self2.elements:
                     self.AddSlaveDrawable(e)
@@ -823,6 +865,11 @@ class EditorGame(Game):
             
         print("Wrote level successfully to {0}, overwriting existing contents".
              format(self.level_file))
+        
+        self.save_counter = self.cur_action
+        
+    def UnsavedChanges(self):
+        return self.save_counter != self.cur_action
             
     def _DrawRectangle(self,bb,color,thickness=2):
         shape = sf.Shape()
@@ -890,7 +937,8 @@ class EditorGame(Game):
         # call all overlays in order of addition, operate
         # on a copy to allow PushOverlay/RemoveOverlay() calls
         # during processing the overlays.
-        [e() for e in list(self.overlays)]
+        if not self.IsGameRunning():
+            [e() for e in list(self.overlays)]
         
     def Undo(self):
         """Undo the last step, if possible"""
@@ -937,6 +985,9 @@ class EditorGame(Game):
             
         assert len(self.actions) == self.cur_action
         self.actions.append(action)
+        
+        if self.save_counter > self.cur_action:
+            self.save_counter = -1
         
         self.cur_action += 1
         print("Push undoable action onto action stack: {0}, stack height is now: {1}".
@@ -1204,7 +1255,7 @@ class EditorGame(Game):
         return shape
     
     def _GetLevelInfo(self):
-        # the level *must* be in LevelLoaader's cache
+        # the level *must* be in LevelLoader's cache
         # self.cached_level_lines = LevelLoader.cache.get(file, None)
     
         # Moved to TileLoader and LevelLoader, which store the
@@ -1214,7 +1265,34 @@ class EditorGame(Game):
         self.level_file = os.path.join(defaults.data_dir, "levels", str(self.level_idx) + ".txt")
         pass
     
+    def _OnEscape(self):   
+        if not self.UnsavedChanges():
+            Game._OnEscape(self)
+            return
+            
+        accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
+        def on_close(key):
+            if key == accepted[2]:
+                self.swallow_escape = False 
+                return
+            if key == accepted[0]:
+                self.Save()
+            
+            Game._OnEscape(self)
+            
+        self.swallow_escape = True # Hack to prevent Escape from being triggered again
+        self._FadeOutAndShowStatusNotice(_("""You are about to leave. Save first?
+
+Press {0} to save first and leave then
+Press {1} to leave immediately, without saving 
+Press {2} to abort""").format(
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("level-new"),
+                    KeyMapping.GetString("escape")),
+            defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Green,on_close)
+    
     def Draw(self):
+            
         Game.Draw(self)
         self.mx,self.my = self.inp.GetMouseX(),self.inp.GetMouseY()
 

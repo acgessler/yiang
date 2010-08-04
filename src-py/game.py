@@ -99,6 +99,8 @@ class Game(Drawable):
         self.draw_counter = 0
         self.cookies = {}
         
+        self.swallow_escape = False
+        
     def GetCookie(self,name,default):
         """Get/set a cookie. Cookies are small chunks of data
         which are saved together with the game session,
@@ -128,9 +130,6 @@ class Game(Drawable):
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
             self.last_time = 0.0
-
-        for event in Renderer.GetEvents():
-            self._HandleIncomingEvent(event)
             
         self.time = self.clock.GetElapsedTime()
         self.total = self.time+self.total_accum
@@ -150,6 +149,9 @@ class Game(Drawable):
         
                 if defaults.debug_draw_bounding_boxes:
                     self.level.DrawBoundingBoxes()
+                    
+        for event in Renderer.GetEvents():
+            self._HandleIncomingEvent(event)
 
         if defaults.debug_draw_info:
             self._DrawDebugInfo(dtime)
@@ -279,6 +281,13 @@ OOOOOO  OOOOO  \n\
         shape.EnableOutline(False)
 
         self.DrawSingle(shape)
+        
+    def _OnEscape(self):
+        """Called when the ESCAPE key is hit"""
+        self.total_accum += self.time
+        delattr(self,"clock")
+        
+        Renderer.RemoveDrawable(self)
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -287,12 +296,9 @@ OOOOOO  OOOOO  \n\
         
         try:
             if event.Type == sf.Event.KeyPressed:
-                if event.Key.Code == KeyMapping.Get("escape"):
-                    self.total_accum += self.time
-                    delattr(self,"clock")
-                    
-                    Renderer.RemoveDrawable(self)
-                    raise NewFrame()
+                if event.Key.Code == KeyMapping.Get("escape") and not self.swallow_escape:
+                    self._OnEscape()
+                    #raise NewFrame()
 
                 if not defaults.debug_keys:
                     return
@@ -758,6 +764,8 @@ Hit {2} to return to the menu""").format(
             text = sf.String(text,Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
             ))
+            
+        print("Fire notification box")
             
         from notification import MessageBox
         Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper,flags))
