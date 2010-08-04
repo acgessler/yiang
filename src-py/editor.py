@@ -32,7 +32,7 @@ import defaults
 
 
 # Note: some of these imports are only needed because they might be implicitly
-# referenced by shebang lines in one of the tiles which we created
+# referenced by shebang lines in one of the tiles 
 from fonts import FontCache
 from keys import KeyMapping
 from game import Game,Entity
@@ -49,6 +49,9 @@ from tile import Tile,AnimTile,TileLoader
 
 from minigui import Component, Button, ToggleButton
 
+def override(x):
+    return x
+
 class EditorCursor(Drawable):
     """Draws the cursor on top of the whole scenery"""
     
@@ -61,9 +64,11 @@ class EditorCursor(Drawable):
         self.cursor = sf.Sprite(self.cursor_img)
         Renderer.app.ShowMouseCursor(False)
         
+    @override 
     def GetDrawOrder(self):
         return 100000
     
+    @override 
     def Draw(self):
         
         inp = Renderer.app.GetInput()
@@ -147,10 +152,11 @@ class EditorGame(Game):
         self.AddSlaveDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
              ("release",(lambda src: self.Kill("(Kill button)")))
         ))
+        
+        """
         self.AddSlaveDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
              ("release",(lambda src: self.AddLife()))
         ))
-        
         
         # Right side bar
         self.AddSlaveDrawable((Button(text="+1ct",rect=[-80,150,50,25]) + 
@@ -159,6 +165,7 @@ class EditorGame(Game):
         self.AddSlaveDrawable((Button(text="Move PL",rect=[-80,180,50,25]) + 
              ("release",(lambda src: GrabPlayer()))
         ))
+        """
         
         # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25]) + 
@@ -185,26 +192,38 @@ class EditorGame(Game):
         self.AddSlaveDrawable((Button(text="Edit Level Settings", rect=[350, 10, 150, 25]) + 
               ("release", (lambda src: EditSettings()))
         ))
-
         
         def Resume():
             # Move the view origin that the player is visible
-            if not self.IsGameRunning():
+            if self.IsEditorRunning():
                 for elem in self.level.EnumAllEntities():
                     if isinstance(elem, Player):
+                        from level import Level
+                        
                         x,y = elem.pos
                         lx,ly = self.level.GetLevelVisibleSize()
                         ox,oy = self.level.GetOrigin()
+                        
+                        # sanity border ...
+                        sanity = 8
+                        ox += sanity if self.level.scroll[-1] & Level.SCROLL_LEFT else 0
+                        oy += sanity if self.level.scroll[-1] & Level.SCROLL_TOP  else 0
+                        
+                        lx -= sanity*2 if self.level.scroll[-1] & Level.SCROLL_RIGHT  else 0
+                        ly -= sanity*2 if self.level.scroll[-1] & Level.SCROLL_BOTTOM else 0
+                        
                         if x < ox or x > ox+lx or y < oy or y > oy+ly:
+                            lx,ly = self.level.GetLevelVisibleSize()
                             self.level.SetOrigin((x-lx/2,y-ly/2))
+                            print(".. change origin to set the player free")
                             break
                     
-            self.PopSuspend()
+            self.EditorPopSuspend()
         
         self.PushSuspend()
         self.AddSlaveDrawable((ToggleButton(text="Suspend\x00Resume",on=False, rect=[-290,10,80,25]) +
-             ("update", (lambda src: src.__setattr__("on",self.IsGameRunning()))) +
-             ("off", (lambda src: self.PushSuspend())) +
+             ("update", (lambda src: src.__setattr__("on",not self.IsEditorRunning()))) +
+             ("off", (lambda src: self.EditorPushSuspend())) +
              ("on",(lambda src: Resume())) 
         ))
             
@@ -425,10 +444,6 @@ class EditorGame(Game):
                     ),
                     
                     
-                    (Button(text="Delete this tile", rect=[xb[3],yb[3]+80,200,25]) + 
-                        ("release", (lambda src: DeleteThisTile()))
-                    ),
-                    
                     
                     (Button(text="Insert column(s) here", rect=[xb[0],yb[0],200,25]) + 
                         ("release", (lambda src: EditSettings()))
@@ -445,8 +460,34 @@ class EditorGame(Game):
                 ]
                 
                 # Add special context menu items to control certain entities, i.e. doors
-                yn = 110
+                yn = 80
                 if self2.entity:
+                    self2.elements.append(Button(text="Delete this tile", rect=[xb[3],yb[3]+yn,200,25]) + 
+                        ("release", (lambda src: DeleteThisTile()))
+                    )
+                    yn += 30
+                    
+                    # PLAYERs ****************************************
+                    from player import Player
+                    if isinstance(self2.entity, Player):
+                        
+                        self2.elements.append(Button(text="Award 1ct (temporary)", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: self.Award(1.0)))
+                        )
+                        yn += 30
+                        
+                        self2.elements.append(Button(text="Award 1$  (temporary)", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: self.Award(100.0)))
+                        )
+                        yn += 30
+                        
+                    # WEAPONs ****************************************
+                    from weapon import Weapon
+                    if isinstance(self2.entity, Weapon):
+                        self2.elements.append(Button(text="Select ammo", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: SelectEntitySameColor(self2.entity,self2.entity.GetAmmoCode())))
+                        )
+                        yn += 30
                     
                     # DOORs ******************************************
                     from locked import Door
@@ -718,6 +759,44 @@ class EditorGame(Game):
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+         
+    def EditorPushSuspend(self):
+        
+        # Walk through all entities present in the captured scene
+        # and check if they changed their position or color.
+        # Restore the previous values and re-add those entities
+        # which have been entirely removed.
+        if len(self.suspended)==0 and self.level:
+            assert hasattr(self,"capture")
+            
+            entities = set(self.level.EnumAllEntities())
+            for elem,oldstate in self.capture.items():
+                if not elem in entities:
+                    self.level.AddEntity(elem)
+                    
+                # SetPosition() triggers lengthy updates, so avoid calling it for nothing
+                if elem.pos != oldstate[0]:
+                    elem.SetPosition(oldstate[0])
+                    
+                elem.color = oldstate[1]
+            delattr(self,"capture")
+                
+        Game.PushSuspend(self)
+        
+    def EditorPopSuspend(self):
+        Game.PopSuspend(self)
+        
+        # Capture all entities that are currently active
+        # in the scene (excluding those not
+        # assigned to a window)
+        if len(self.suspended)==0 and self.level:
+            self.capture = {}
+            for elem in self.level.EnumAllEntities():
+                if not hasattr(elem,"window_unassigned"):
+                    self.capture[elem] = elem.pos,elem.color
+    
+    def IsEditorRunning(self):
+        return not hasattr(self,"capture")
         
     def _LoadTileFromTag(self,codename):
         """Load a tile with a given 3-character code (color + type)
@@ -994,7 +1073,7 @@ class EditorGame(Game):
         # call all overlays in order of addition, operate
         # on a copy to allow PushOverlay/RemoveOverlay() calls
         # during processing the overlays.
-        if not self.IsGameRunning():
+        if self.IsEditorRunning():
             [e() for e in list(self.overlays)]
         
     def Undo(self):
@@ -1322,6 +1401,7 @@ class EditorGame(Game):
         self.level_file = os.path.join(defaults.data_dir, "levels", str(self.level_idx) + ".txt")
         pass
     
+    @override 
     def _OnEscape(self):   
         if not self.UnsavedChanges():
             Game._OnEscape(self)
@@ -1348,6 +1428,7 @@ Press {2} to abort""").format(
                     KeyMapping.GetString("escape")),
             defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Green,on_close)
     
+    @override 
     def Draw(self):
             
         Game.Draw(self)
@@ -1363,6 +1444,7 @@ Press {2} to abort""").format(
                 
             self._DrawEditor()
             
+    @override 
     def OnChangeResolution(self,newres):
         # needed because the visible part of the map has changed
         if self.level:
@@ -1413,6 +1495,7 @@ class EditorMenu(Drawable):
         
         AddLevelButtons()
         
+    @override 
     def Draw(self):
         Renderer.SetClearColor(sf.Color(100,100,100))
     

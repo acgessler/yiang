@@ -103,6 +103,9 @@ class Weapon(InventoryItem, Tile):
         t.SetLevel(self.level)
                 
         self.game.AddEntity(t)
+        
+    def GetAmmoCode(self):
+        return "AM"
     
     
 class Flamethrower(Weapon):
