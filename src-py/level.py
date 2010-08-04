@@ -252,6 +252,10 @@ class Level:
     def _AddEntityToWindows(self,e):
         """Determine the rectangle covered by an entity and add
         it to the appropriate windows."""
+        #if e.pos == Entity.DEFAULT_POS:
+            # Wait until the entity has been properly positioned
+            #return
+        
         bb = e.GetBoundingBox()
         if bb is None:
             self.window_unassigned.add(e)
@@ -280,7 +284,12 @@ class Level:
                     for x in range(len(this), xxx+1 ):
                         this.append([])
       
-                thiswnd = self.windows[yyy][xxx]              
+                try:
+                    thiswnd = self.windows[yyy][xxx]  
+                except IndexError:
+                    print("Ignore IndexError trying to select the window the entity belongs to")
+                    return
+                                
                 thiswnd.append(e)
                     
                 if not hasattr(e,"windows"):

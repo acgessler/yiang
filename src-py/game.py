@@ -858,18 +858,20 @@ class Entity(Drawable):
 
     BLOCK_LEFT,BLOCK_RIGHT,BLOCK_UPPER,BLOCK_LOWER,BLOCK = 0x1,0x2,0x4,0x8,0xf
     
-    # deprecated, pertain to _CollideBB
+    # deprecated, pertains to _CollideBB
     UPPER_LEFT,UPPER_RIGHT,LOWER_LEFT,LOWER_RIGHT,CONTAINS,ALL = 0x1,0x2,0x4,0x8,0x10,0xf|0x10
+    
+    
+    DEFAULT_POS = [-10000,10000]
     
     halo_cache = {None:None}
     default_halo_providers = {
             "default":gen_halo_default
     }
     
-    
     def __init__(self):
         Drawable.__init__(self)
-        self.pos = [0,0]
+        self.pos = Entity.DEFAULT_POS
         self.color = sf.Color.White
         self.game = None
 

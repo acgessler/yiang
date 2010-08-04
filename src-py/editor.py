@@ -102,11 +102,8 @@ class EditorGame(Game):
         def GrabPlayer():
             for elem in self.level.EnumAllEntities():
                 if isinstance(elem, Player):
-                        
-                    self.template[elem] = None
                     
-                    # Needed to emulate proper selection
-                    self.select_start = elem.pos
+                    self.ReplaceSelection([elem])
                     
                     # (Hack): the fact that this entity is no
                     # longer in the scene ensures that this
@@ -364,7 +361,7 @@ class EditorGame(Game):
                 # is unavoidable, because we're going to present
                 # him/her a few neat new buttons)
                 self2.x,self2.y = self.fx,self.fy
-                self2.entity = getattr(self,"last_entity",None)
+                self2.entity = getattr(self,"cur_entity",None)
                 ox,oy = self.level.GetOrigin()
                 
                 xb = 40, -242, -100, -100
@@ -374,11 +371,17 @@ class EditorGame(Game):
                 yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
                 
                 def PlaceEntity(codename):
-                    elem = TileLoader.LoadFromTag(codename,self)
-                    elem.SetLevel(self.level)
+                    elem = self._LoadTileFromTag(codename)
                     
                     self.ControlledAddEntity(elem)
                     elem.SetPosition((self2.x,self2.y))
+                    
+                def SelectEntity(codename):
+                    elem = self._LoadTileFromTag(codename) if isinstance(codename,str) else codename
+                    elem.SetPosition((self2.x,self2.y))
+                        
+                    assert isinstance(elem,Entity)
+                    self._ReplaceSelection([elem])
                 
                 def PlacePlayerHere():
                     for elem in self.level.EnumAllEntities():
@@ -399,6 +402,13 @@ class EditorGame(Game):
                     # design issue, but it's rooted too deep to solve
                     # it this nevel.
                     raise NewFrame()
+                
+                def SelectEntitySameColor(other,code):
+                    # Don't bother with color codes, simply take the old
+                    # color and let Save() do the work for us.
+                    elem = self._LoadTileFromTag("_"+code)
+                    elem.color = other.color
+                    SelectEntity(elem)
                 
                 self2.elements = [
                     (Button(text="Insert rows(s) here", rect=[xb[2],yb[2],200,25]) + 
@@ -437,6 +447,8 @@ class EditorGame(Game):
                 # Add special context menu items to control certain entities, i.e. doors
                 yn = 110
                 if self2.entity:
+                    
+                    # DOORs ******************************************
                     from locked import Door
                     if isinstance(self2.entity, Door):
                         
@@ -445,29 +457,52 @@ class EditorGame(Game):
                             
                         def UpdateDoorCaption(gui,door):
                             gui.text =  "Close Door" if door.unlocked else "Open Door"
-                        
                        
                         self2.elements.append(Button(text="", rect=[xb[3],yb[3]+yn,200,25]) + 
                             ("update",  (lambda src: UpdateDoorCaption(src,self2.entity))) +
                             ("release", (lambda src: ToggleThisDoor(self2.entity)))
                         )
                         yn += 30
-                        
-                    else:
-                        self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+yn,200,25]) + 
-                            ("release", (lambda src: PlacePlayerHere()))
+                        self2.elements.append(Button(text="Select key", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"KE")))
                         )
                         yn += 30
                         
-                        self2.elements.append(Button(text="Place respawn line here", rect=[xb[3],yb[3]+yn,200,25]) + 
-                            ("release", (lambda src: PlaceEntity("_RE")))
+                    # TELEPORTS **************************************
+                    from teleport import Sender,Receiver
+                    if isinstance(self2.entity, Sender):
+                        self2.elements.append(Button(text="Select receiver", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TB")))
+                        )
+                        yn += 30
+                        self2.elements.append(Button(text="Select receiver 90\xb0 right", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TC")))
+                        )
+                        yn += 30
+                        self2.elements.append(Button(text="Select receiver 90\xb0 left", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TD")))
                         )
                         yn += 30
                         
-                        self2.elements.append(Button(text="Place respawn point here", rect=[xb[3],yb[3]+yn,200,25]) + 
-                            ("release", (lambda src: PlaceEntity("_RD")))
+                    if isinstance(self2.entity, Receiver): # catches ReceiverRotateRight etc as well
+                        self2.elements.append(Button(text="Select sender", rect=[xb[3],yb[3]+yn,200,25]) + 
+                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TA")))
                         )
                         yn += 30
+                        
+                else:
+                    self2.elements.append(Button(text="Place player here", rect=[xb[3],yb[3]+yn,200,25]) + 
+                        ("release", (lambda src: PlacePlayerHere()))
+                    )
+                    yn += 30                   
+                    self2.elements.append(Button(text="Place respawn line here", rect=[xb[3],yb[3]+yn,200,25]) + 
+                        ("release", (lambda src: PlaceEntity("_RE")))
+                    )
+                    yn += 30                   
+                    self2.elements.append(Button(text="Place respawn point here", rect=[xb[3],yb[3]+yn,200,25]) + 
+                        ("release", (lambda src: PlaceEntity("_RD")))
+                    )
+                    yn += 30
                 
                 for e in self2.elements:
                     self.AddSlaveDrawable(e)
@@ -683,6 +718,28 @@ class EditorGame(Game):
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+        
+    def _LoadTileFromTag(self,codename):
+        """Load a tile with a given 3-character code (color + type)
+        and assign it to the current level"""
+        elem = TileLoader.LoadFromTag(codename,self)
+        elem.SetLevel(self.level)
+        elem.SetPosition((0,0))
+        
+        return elem
+        
+    def _ReplaceSelection(self,sel):
+        """Replace the current selection with the entities
+        contained in the given sequence."""
+        if not sel:
+            return
+        
+        self.template = dict()
+        for elem in sel:
+            self.template[elem] = None
+                        
+        # Needed to emulate proper selection
+        self.select_start = sel[0].pos if sel[0].pos!=Entity.DEFAULT_POS else (self.tx,self.ty)
         
     def _SaveLevelBackup(self):
         """Save a backup of the current level. Previous backups are kept""" 
