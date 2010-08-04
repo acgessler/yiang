@@ -549,6 +549,26 @@ class EditorGame(Game):
                                 ("update",  (lambda src,v=v: UpdateTextColor(src,v)))
                             )
                             yn += yguiofs
+                            
+                    # DANGERs ****************************************
+                    from danger import DangerousBarrel, FakeDangerousBarrel
+                    if isinstance(self2.entity, DangerousBarrel) or isinstance(self2.entity, FakeDangerousBarrel):
+                        
+                        values = {
+                                "'Normal' barrel"    : "DA",
+                                "Rounded barrel"     : "DS",
+                                "Fake barrel"        : "TR"
+                        }
+                        def UpdateTextColor(gui,code):
+                            gui.fgcolor= sf.Color.Yellow if code==self2.entity.editor_tcode else None
+                        
+                        for k,v in values.items():
+                            self2.elements.append(Button(text="-> {0}".format(k), rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
+                                ("release", (lambda src,v=v: ChangeTo(v)))+
+                                ("update",  (lambda src,v=v: UpdateTextColor(src,v)))
+                            )
+                            yn += yguiofs
+                        
                         
                     # WEAPONs ****************************************
                     from weapon import Weapon
