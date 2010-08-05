@@ -33,10 +33,11 @@ class ContextHandler:
         self.editor = editor
         
     def _Dispatch(self,callable,*args,**kwargs):
-        for n in range(len(self.entities)):
-            r = callable(self.entities[n],*args,**kwargs)
-            if not r is None:
-                self.entities[n] = r
+        with self.editor.BeginTransaction() as transaction:
+            for n in range(len(self.entities)):
+                r = callable(self.entities[n],*args,**kwargs)
+                if not r is None:
+                    self.entities[n] = r
                 
     def _SetupSimpleAlternatives(self,values):
         def UpdateTextColor(entity, gui,code):

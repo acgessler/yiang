@@ -215,17 +215,18 @@ class Component(Drawable):
         inp = Renderer.app.GetInput()
         mx,my = inp.GetMouseX(),inp.GetMouseY()
         
+        self.buttons = inp.IsMouseButtonDown(sf.Mouse.Left),inp.IsMouseButtonDown(sf.Mouse.Right)
+        self.hit = (self.x+self.w>mx>self.x and self.y+self.h>my>self.y)
+
         self.Fire("update")
-        
-        buttons = inp.IsMouseButtonDown(sf.Mouse.Left),inp.IsMouseButtonDown(sf.Mouse.Right)
-        
-        hit = (self.x+self.w>mx>self.x and self.y+self.h>my>self.y)
-        self.DrawMe(mx,my,hit,buttons,
+                
+        # XXX we don't need to pass them as arguments, they are members ...
+        self.DrawMe(mx,my,self.hit,self.buttons,
             self.__dict__.setdefault("prev_buttons",(False,False)),
             self.__dict__.setdefault("prev_hit",False))
         
-        self.prev_buttons = buttons
-        self.prev_hit = hit
+        self.prev_buttons = self.buttons
+        self.prev_hit = self.hit
         
     @staticmethod
     def DrawRect(bb,color,color_outline = None):
@@ -246,11 +247,14 @@ class Component(Drawable):
         
         
 class HasAText(Component):
-    """ Internal base class for all GUI components which have a textual caption somewhere """
+    """ Internal base class for all GUI components which have a textual caption somewhere.
+    The class defines also a tooltip, which is, however, not currently
+    drawn automatically. """
     
-    def __init__(self,text="No text specified",**kwargs):
+    def __init__(self,text="No text specified",tip=None,**kwargs):
         Component.__init__(self,**kwargs)
         self.text = text
+        self.tip = tip
         
     @property
     def text(self):
@@ -262,6 +266,14 @@ class HasAText(Component):
         self._text_cached = sf.String(self._text,Font=self.font,Size=defaults.letter_height_gui)
         return self
     
+    @property
+    def tip(self):
+        return self._tip
+        
+    @tip.setter
+    def tip(self,tip):
+        self._tip = tip
+        return self
     
     def _DrawTextCentered(self):
         ts = self._text.split("\n")
@@ -302,7 +314,13 @@ class Button(HasAText):
             if prev_hit:
                 self.Fire("mouse_leave")
             self.state = Component.STATE_NORMAL
-            
+         
+        # XXX Draw tooltip somewhere?   
+        #
+        #if hit:
+        #     tc = sf.String(self._text,Font=self.font,Size=defaults.letter_height_gui)
+        #     tc.SetPosition(self.x+5,self.y+self.h+10)
+        #     Renderer.app.Draw(tc)
             
         self._DrawMyRect()
         self._DrawTextCentered()

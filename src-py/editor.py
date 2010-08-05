@@ -26,6 +26,7 @@ import math
 import traceback
 import itertools
 import collections
+import operator
 
 # Our stuff
 import defaults
@@ -99,6 +100,7 @@ class EditorGame(Game):
         self.cur_action = 0 # Location in the stack
         self.overlays = [] # each overlay is a simple callable called during rendering
         self.save_counter = 0
+        self.help_string = ""
         
         self.inp = Renderer.app.GetInput()
         
@@ -229,31 +231,51 @@ class EditorGame(Game):
             self.EditorPopSuspend()
         
         self.PushSuspend()
-        self.AddSlaveDrawable((ToggleButton(text="Suspend\x00Resume",on=False, rect=[-290,10,80,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Suspend\x00Resume",
+             tip="Switch between game and editor mode. The old state is recovered when editor mode is entered again.",                               
+             on=False, rect=[-290,10,80,25]) +
+             
+             # Event handlers
              ("update", (lambda src: src.__setattr__("on",not self.IsEditorRunning()))) +
              ("off", (lambda src: self.EditorPushSuspend())) +
              ("on",(lambda src: Resume())) 
         ))
             
-        self.AddSlaveDrawable((ToggleButton(text="Abandon God\x00Become God",on=defaults.debug_godmode, rect=[-400,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Abandon God\x00Become God",
+             tip="Enable or disable god mode. Nothing can harm you while you are god.",                                 
+             on=defaults.debug_godmode, rect=[-400,10,100,25]) +
+             
+             # Event handlers
              ("update", (lambda src: src.__setattr__("on",defaults.debug_godmode))) +
              ("off", (lambda src: defaults.__setattr__("debug_godmode",False))) +
              ("on",(lambda src: defaults.__setattr__("debug_godmode",True))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Hide stats\x00Show stats",on=defaults.debug_godmode, rect=[-510,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Hide stats\x00Show stats",
+             tip="Show or hide the tile engine's internal performance counters",  
+             on=defaults.debug_godmode, rect=[-510,10,100,25]) +
+             
+             # Event handlers
              ("update", (lambda src: src.__setattr__("on",defaults.debug_draw_info))) +
              ("off", (lambda src: defaults.__setattr__("debug_draw_info",False))) +
              ("on",(lambda src: defaults.__setattr__("debug_draw_info",True))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Hide BBs\x00Show BBs",on=defaults.debug_draw_bounding_boxes, rect=[-620,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Hide BBs\x00Show BBs",
+             tip="Show or hide the bounding boxes for all entities",  
+             on=defaults.debug_draw_bounding_boxes, rect=[-620,10,100,25]) +
+             
+             # Event handlers
              ("update", (lambda src: src.__setattr__("on",defaults.debug_draw_bounding_boxes))) +
              ("off", (lambda src: defaults.__setattr__("debug_draw_bounding_boxes",False))) +
              ("on",(lambda src: defaults.__setattr__("debug_draw_bounding_boxes",True))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Disable PostFX\x00Enable PostFx",on=not defaults.no_ppfx, rect=[-730,10,100,25]) +
+        self.AddSlaveDrawable((ToggleButton(text="Disable PostFX\x00Enable PostFx",
+             tip="Enable or disable postprocessing. No postprocessing is equivalent to 'pure ascii mode'",  
+             on=not defaults.no_ppfx, rect=[-730,10,100,25]) +
+             
+             # Event handlers
              ("update", (lambda src: src.__setattr__("on",not defaults.no_ppfx))) +
              ("off", (lambda src: defaults.__setattr__("no_ppfx",True))) +
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
@@ -348,13 +370,18 @@ class EditorGame(Game):
                 try:
                     for code,color in colors.items():
                         x,y = next(src)
-                        self2.elements.append(Button(text="{0:X}\n{1:X}\n{2:X}\n{3:X}".format(color.r,color.g,color.b,color.a), 
+                        cola = "{0:X}\n{1:X}\n{2:X}\n{3:X}".format(color.r,color.g,color.b,color.a)
+                        colb = "Change color to #{0:X}{1:X}{2:X}{3:X}".format(color.r,color.g,color.b,color.a)
+                        self2.elements.append(Button(text=cola, tip=colb,
                             bgcolor=color, 
                             fgcolor=sf.Color.White if color.r+color.g+color.b < 500 else sf.Color.Black,
                             rect=[xb+x,yb+y,w,h]) + 
                             ("release",     (lambda src,color=color: SetColor(color,True))) +
                             ("mouse_enter", (lambda src,color=color: SetColor(color))) +
-                            ("mouse_leave", (lambda src: SetOldColor()))
+                            ("mouse_leave", (lambda src: SetOldColor())) 
+                    #        ("update",      (lambda src: not src.hit or self.__setattr__("help_string",
+                    #            "Change color to #{0}".format(cols)
+                    #        )))
                         )
                     x,y = next(src)
                     self2.elements.append(Button(text="New", rect=[xb+x,yb+y,w,h]) + 
@@ -363,13 +390,14 @@ class EditorGame(Game):
                     x,y = next(src)
                     self2.elements.append(ToggleButton(text="Undim\x00Dim", rect=[xb+x,yb+y,w,h]) + 
                         ("on",     (lambda src: ChangeElementDrawOrder(self.GetDrawOrder()-1))) +
-                        ("off",    (lambda src: ChangeElementDrawOrder(Component.GetDrawOrder(self2.elements))))
+                        ("off",    (lambda src: ChangeElementDrawOrder(Component.GetDrawOrder(self2.elements[0]))))
                     )
                 except StopIteration:
                     # corner case, no more space left in the rondell
                     pass
                     
                 for e in self2.elements:
+                    e.draworder = 52000
                     self.AddSlaveDrawable(e)
                 
             def _RemoveMe(self2):
@@ -378,6 +406,9 @@ class EditorGame(Game):
                     self.RemoveSlaveDrawable(e)
             
             def __call__(self2):
+                self.help_string = "Hold 'C' to keep the overlay open, change entity "+\
+                "color by left-clicking on a color"
+                
                 inp = self.inp
                 if not inp.IsKeyDown(sf.Key.C):
                     self2._RemoveMe()
@@ -562,6 +593,8 @@ class EditorGame(Game):
                 self.RemoveSlaveDrawable(self2)
             
             def __call__(self2):
+                self.help_string = "Hold 'I' to keep the overlay open"
+                
                 inp = self.inp
                 if not inp.IsKeyDown(sf.Key.I):
                     self2._RemoveMe()
@@ -597,6 +630,9 @@ class EditorGame(Game):
                 return "<ShowMinimap - renders the minimap on top of the editor>"
             
             def __call__(self2):
+                self.help_string = "Hold 'M' to keep the overlay open, move the mouse "+\
+                "over the map to move the viewport"
+                
                 inp = self.inp
                 if not inp.IsKeyDown(sf.Key.M):
                     self.RemoveOverlay(self2)
@@ -706,6 +742,9 @@ class EditorGame(Game):
                 return "<EditorBasics overlay - implements item highlighting and acts as overlay manager>"
             
             def __call__(self2):
+                
+                self.help_string = "Hit 'M' for Map, 'C' for Colors, 'I' for Context Menu, 'S' for Snackbar"
+                
                 inp = self.inp
                 # check if there's an entity right here and show its bounding box in white.
                 # if there are multiple entities, take the one with the highest 
@@ -718,6 +757,18 @@ class EditorGame(Game):
                                     
                     self._DrawRectangle(bb,sf.Color.Green)
                     self.selection = [self.cur_entity]
+                    
+                    if hasattr(self.cur_entity,"editor_tcode"):
+                        color = self.cur_entity.color
+                        self.help_string = "{0} at {x},{y} - #{r:X}{g:X}{b:X}{a:X}   ({1})".format(
+                            self.cur_entity.editor_tcode,
+                            self.cur_entity.__class__.__name__,
+                            x=self.cur_entity.pos[0],
+                            y=self.cur_entity.pos[1],
+                            r=color.r,
+                            g=color.g,
+                            b=color.b,
+                            a=color.a)
                         
                 except IndexError:
                     # no entity below the cursor, highlight the nearest point and its surroundings
@@ -1103,6 +1154,31 @@ class EditorGame(Game):
         # during processing the overlays.
         if self.IsEditorRunning():
             [e() for e in list(self.overlays)]
+            
+            # Check if the mouse is currently over a GUI
+            # element. In this case replace the help_string
+            # with the GUI element's tooltip, if there is
+            # any.
+            elems = sorted((e for e in GUIManager.EnumAllComponents() 
+                if e.hit and hasattr(e,"tip") and e.tip),
+                key=operator.attrgetter("draworder"),reverse=True)
+            
+            if elems:
+                self.help_string = elems[0].tip
+                
+            if self.help_string:
+                assert isinstance(self.help_string,str)
+                    
+                # Draw the current help string in the lower-left border
+                h = 16
+                hs = sf.String(self.help_string,Size=h,Font=FontCache.get(h,defaults.font_status))
+                hs.SetColor(sf.Color.Black)
+                hs.SetPosition(10,defaults.resolution[1]-h-15)
+                Renderer.app.Draw(hs)
+                
+                hs.SetColor(sf.Color.White)
+                hs.SetPosition(10+1,defaults.resolution[1]-h-15)
+                Renderer.app.Draw(hs)
         
     def Undo(self,recursive=False):
         """Undo the last step, if possible"""
@@ -1657,17 +1733,17 @@ class EditorMenu(Drawable):
         
         
         def AddLevelButtons():
-            x,y = 50,100
+            x,y = 50,130
             for i in sorted( LevelLoader.EnumLevelIndices() ):
                 nam = LevelLoader.GuessLevelName(i)
                 
-                self.AddSlaveDrawable((Button(text="{0} (#{1})".format(nam,i),rect=[x,y,300,25]) + 
+                self.AddSlaveDrawable((Button(text="{0} (#{1})".format(nam,i),rect=[x,y,300,25],fgcolor=sf.Color.Yellow) + 
                     ("release",(lambda src,i=i: EditLevel(i)))
                 ))
                 
                 y += 30
                 if y >= defaults.resolution[1]-100:
-                    y = 100
+                    y = 130
                     x += 310
         
         def NewLevel():
@@ -1681,7 +1757,9 @@ class EditorMenu(Drawable):
             
             AddLevelButtons()
          
-        self.AddSlaveDrawable((Button(text="Create new level (follow instructions in console)",rect=[50,50,450,25]) + 
+        self.AddSlaveDrawable((Button(text="Create new level (follow instructions in console)",
+            rect=[50,50,450,40],fgcolor=sf.Color.Green) + 
+            
              ("release",(lambda src: NewLevel()))
         ))
         
