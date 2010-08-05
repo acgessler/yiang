@@ -100,6 +100,7 @@ class Component(Drawable):
         
         self.font = FontCache.get(defaults.letter_height_gui,defaults.font_gui)
         self.draworder = 51000
+        self.disabled = False
         
     def GetDrawOrder(self):
         # Make sure the GUI is on top of everything else
@@ -278,14 +279,16 @@ class Button(HasAText):
         Component.STATE_NORMAL   : sf.Color(50,50,50),
         Component.STATE_ACTIVE   : sf.Color(180,75,75),
         Component.STATE_HOVER    : sf.Color(90,75,75),
-        Component.STATE_DISABLED : sf.Color(40,40,40),
+        Component.STATE_DISABLED : sf.Color(160,160,160),
     }
     
     def __init__(self,**kwargs):
         HasAText.__init__(self,**kwargs)
 
     def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
-        if hit:
+        if self.disabled:
+            self.state = Component.STATE_DISABLED
+        elif hit:
             if not prev_hit:
                 self.Fire("mouse_enter")
             
@@ -334,7 +337,9 @@ class ToggleButton(HasAText):
       
     def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
         
-        if hit:
+        if self.disabled:
+            self.state = Component.STATE_DISABLED
+        elif hit:
             if buttons[0] and not prev_buttons[0]:
                 self.Fire("click")
                 self.on = not self.on

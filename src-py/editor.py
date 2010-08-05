@@ -167,6 +167,12 @@ class EditorGame(Game):
         ))
         """
         
+        def UpdateUndoState(gui):
+            gui.disabled = self.cur_action==0
+            
+        def UpdateRedoState(gui):
+            gui.disabled = self.cur_action>=len(self.actions)
+        
         # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25]) + 
               ("release", (lambda src: self._OnEscape()))
@@ -175,9 +181,11 @@ class EditorGame(Game):
 		      ("release", (lambda src: self.Save()))
         ))
         self.AddSlaveDrawable((Button(text="Undo", rect=[200, 10, 50, 25]) + 
+              ("update",  (lambda src: UpdateUndoState(src))) +
 		      ("release", (lambda src: self.Undo()))
         ))
         self.AddSlaveDrawable((Button(text="Redo", rect=[260, 10, 50, 25]) + 
+              ("update",  (lambda src: UpdateRedoState(src))) +
 		      ("release", (lambda src: self.Redo()))
         ))
         
@@ -380,7 +388,16 @@ class EditorGame(Game):
                 # is unavoidable, because we're going to present
                 # him/her a few neat new buttons)
                 self2.x,self2.y = self.fx,self.fy
-                self2.entity = getattr(self,"cur_entity",None)
+                
+                if hasattr(self,"template") and self.template:
+                    self2.entities = list(self.template.keys())
+                    
+                elif hasattr(self,"cur_entity") and self.cur_entity:
+                    self2.entities = [self.cur_entity]
+        
+                else:
+                    self2.entities = []
+                
                 ox,oy = self.level.GetOrigin()
                 
                 xb = 40, -242, -100, -100
@@ -389,19 +406,6 @@ class EditorGame(Game):
                 yb = 0, 0, -120, +70
                 yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
                 
-                def PlaceEntity(codename):
-                    elem = self._LoadTileFromTag(codename)
-                    
-                    elem.SetPosition((self2.x,self2.y))
-                    self.ControlledAddEntity(elem)
-                    return elem
-                    
-                def SelectEntity(codename):
-                    elem = self._LoadTileFromTag(codename) if isinstance(codename,str) else codename
-                    elem.SetPosition((self2.x,self2.y))
-                        
-                    assert isinstance(elem,Entity)
-                    self._ReplaceSelection([elem])
                 
                 def PlacePlayerHere():
                     for elem in self.level.EnumAllEntities():
@@ -413,8 +417,8 @@ class EditorGame(Game):
                         PlaceEntity("_PL")
                     
                 def DeleteThisTile():
-                    assert not self2.entity is None
-                    self.ControlledRemoveEntity(self2.entity)
+                    for e in self2.entities:
+                        self.ControlledRemoveEntity(e)
                                               
                     # break the overlay chain, we need a new frame for
                     # the pending deletion to be dispatched to all
@@ -422,19 +426,6 @@ class EditorGame(Game):
                     # design issue, but it's rooted too deep to solve
                     # it this nevel.
                     raise NewFrame()
-                
-                def SelectEntitySameColor(other,code):
-                    # Don't bother with color codes, simply take the old
-                    # color and let Save() do the work for us.
-                    elem = self._LoadTileFromTag("_"+code)
-                    elem.color = other.color
-                    SelectEntity(elem)
-                    
-                def ChangeTo(codename):
-                    elem = PlaceEntity(codename if len(codename)==3 else "_"+codename)
-                    elem.color = self2.entity.color
-                    
-                    self2.entity = elem
                     
                     
                 yguiofs,yguisize,xguisize = 27,20,190
@@ -483,170 +474,13 @@ class EditorGame(Game):
                     ),
                 ]
                 
-                # Add special context menu items to control certain entities, i.e. doors
+                # Add special context-specific items
                 yn = 80
-                if self2.entity:
+                if len(self2.entities):
                     self2.elements.append(Button(text="Delete this tile", rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Red) + 
                         ("release", (lambda src: DeleteThisTile()))
                     )
                     yn += yguiofs
-                    
-                    # PLAYERs ****************************************
-                    from player import Player
-                    if isinstance(self2.entity, Player):
-                        
-                        self2.elements.append(Button(text="Award 1ct (temporary)", rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            ("release", (lambda src: self.Award(1.0)))
-                        )
-                        yn += yguiofs
-                        
-                        self2.elements.append(Button(text="Award 1$  (temporary)", rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            ("release", (lambda src: self.Award(100.0)))
-                        )
-                        yn += yguiofs
-                        
-                    # SCOREs ****************************************
-                    from score import ScoreTile
-                    if isinstance(self2.entity, ScoreTile):
-                        
-                        values = {
-                            0.1    :"S0",
-                            0.05   :"S1",
-                            0.2    :"S2",
-                            0.5    :"S3",
-                            1.00   :"S4"
-                        }
-                        
-                        def UpdateTextColor(gui,points):
-                            gui.fgcolor= sf.Color.Yellow if points==self2.entity.points else None
-                        
-                        for k,v in values.items():
-                            # if k==self2.entity.points:
-                            #     continue
-                            
-                            self2.elements.append(Button(text="-> {0} ct".format(k), rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                                ("release", (lambda src,v=v: ChangeTo(v)))+
-                                ("update",  (lambda src,k=k: UpdateTextColor(src,k)))
-                            )
-                            yn += yguiofs
-                            
-                    # WEAPONs ****************************************
-                    from enemy import SmallTraverser
-                    if isinstance(self2.entity, SmallTraverser):
-                        
-                        values = {
-                            "Horizontal moves"           : "E0",
-                            "Vertical moves"             : "E2",
-                            "Horizontal moves, quick"    : "E1"
-                        }
-                        
-                        def UpdateTextColor(gui,code):
-                            gui.fgcolor= sf.Color.Yellow if code==self2.entity.editor_tcode else None
-                        
-                        for k,v in values.items():
-                            self2.elements.append(Button(text="-> {0}".format(k), rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                                ("release", (lambda src,v=v: ChangeTo(v)))+
-                                ("update",  (lambda src,v=v: UpdateTextColor(src,v)))
-                            )
-                            yn += yguiofs
-                            
-                    # DANGERs ****************************************
-                    from danger import DangerousBarrel, FakeDangerousBarrel
-                    if isinstance(self2.entity, DangerousBarrel) or isinstance(self2.entity, FakeDangerousBarrel):
-                        
-                        values = {
-                                "'Normal' barrel"    : "DA",
-                                "Rounded barrel"     : "DS",
-                                "Fake barrel"        : "TR"
-                        }
-                        def UpdateTextColor(gui,code):
-                            gui.fgcolor= sf.Color.Yellow if code==self2.entity.editor_tcode else None
-                        
-                        for k,v in values.items():
-                            self2.elements.append(Button(text="-> {0}".format(k), rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                                ("release", (lambda src,v=v: ChangeTo(v)))+
-                                ("update",  (lambda src,v=v: UpdateTextColor(src,v)))
-                            )
-                            yn += yguiofs
-                        
-                        
-                    # WEAPONs ****************************************
-                    from weapon import Weapon
-                    if isinstance(self2.entity, Weapon):
-                        self2.elements.append(Button(text="Select ammo", rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            ("release", (lambda src: SelectEntitySameColor(self2.entity,self2.entity.GetAmmoCode())))
-                        )
-                        yn += yguiofs
-                    
-                    # DOORs ******************************************
-                    from locked import Door
-                    if isinstance(self2.entity, Door):
-                        
-                        def ToggleThisDoor(door):
-                            door.Lock() if door.unlocked else door.Unlock() 
-                            
-                        def UpdateDoorCaption(gui,door):
-                            gui.text =  "Close Door" if door.unlocked else "Open Door"
-                       
-                        self2.elements.append(Button(text="", 
-                            rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            
-                            ("update",  (lambda src: UpdateDoorCaption(src,self2.entity))) +
-                            ("release", (lambda src: ToggleThisDoor(self2.entity)))
-                        )
-                        yn += yguiofs
-                        self2.elements.append(Button(text="Select key", 
-                            rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            
-                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"KE")))
-                        )
-                        yn += yguiofs
-                        
-                    # TELEPORTS **************************************
-                    from teleport import Sender,Receiver
-                    if isinstance(self2.entity, Sender):
-                        self2.elements.append(Button(text="Select receiver", 
-                            rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            
-                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TB")))
-                        )
-                        yn += yguiofs
-                        
-                        self2.elements.append(Button(text="Select receiver 90\xb0 cw.", 
-                            rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            
-                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TC")))
-                        )
-                        yn += yguiofs
-                        
-                        self2.elements.append(Button(text="Select receiver 90\xb0 ccw.", 
-                            rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            
-                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TD")))
-                        )
-                        yn += yguiofs
-                        
-                    if isinstance(self2.entity, Receiver): # catches ReceiverRotateRight etc as well
-                        self2.elements.append(Button(text="Select sender", rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                            ("release", (lambda src: SelectEntitySameColor(self2.entity,"TA")))
-                        )
-                        yn += yguiofs
-                        
-                        values = {
-                            "Normal"                : "TB",
-                            "Rotate 90\xb0 cw."     : "TC",
-                            "Rotate 90\xb0 ccw."    : "TD"
-                        }
-                        
-                        def UpdateTextColor(gui,code):
-                            gui.fgcolor= sf.Color.Yellow if code==self2.entity.editor_tcode else None
-                        
-                        for k,v in values.items():
-                            self2.elements.append(Button(text="-> {0}".format(k), rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
-                                ("release", (lambda src,v=v: ChangeTo(v)))+
-                                ("update",  (lambda src,v=v: UpdateTextColor(src,v)))
-                            )
-                            yn += yguiofs
                         
                 else:
                     self2.elements.append(Button(text="Place player here", 
@@ -659,16 +493,33 @@ class EditorGame(Game):
                     self2.elements.append(Button(text="Place respawn line here", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
                         
-                        ("release", (lambda src: PlaceEntity("_RE")))
+                        ("release", (lambda src: self._PlaceEntity("_RE",(self2.x,self2.y))))
                     )
                     yn += yguiofs 
                                       
                     self2.elements.append(Button(text="Place respawn point here", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
                         
-                        ("release", (lambda src: PlaceEntity("_RD")))
+                        ("release", (lambda src: self._PlaceEntity("_RD",(self2.x,self2.y))))
                     )
                     yn += yguiofs
+                    
+                # Load more context-specific actions from the editoractions registry
+                import editoractions
+                handlers = editoractions.GetHandlers()
+                
+                for h in handlers:
+                    
+                    match = [e for c in h.GetClasses() for e in self2.entities if isinstance(e, c)]
+                    if match:
+                        hh = h(self)
+                        hh(match)
+                        
+                        for elem in hh.elements:
+                            elem.rect=[xb[3],yb[3]+yn,xguisize,yguisize]
+                            
+                            self2.elements.append(elem)
+                            yn += yguiofs
                 
                 rx,ry = defaults.resolution
                 for e in self2.elements:
@@ -900,6 +751,21 @@ class EditorGame(Game):
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+        
+    def _PlaceEntity(self,codename,pos):
+        elem = self._LoadTileFromTag(codename)
+        
+        elem.SetPosition(pos)
+        self.ControlledAddEntity(elem)
+        return elem
+        
+    def _SelectEntity(self,codename,pos):
+        elem = self._LoadTileFromTag(codename) if isinstance(codename,str) else codename
+        elem.SetPosition(pos)
+            
+        assert isinstance(elem,Entity)
+        self._ReplaceSelection([elem])
+        return elem
          
     def EditorPushSuspend(self):
         
@@ -1298,10 +1164,13 @@ class EditorGame(Game):
     def ShrinkLevel(self,axis,pos,add):
         """Delete 'del' rows or columns starting at position
         'pos'. 'axis' is 0 to erase columns on the x-axis,
-        and 1 to add rows on the y-axis."""
+        and 1 to add rows on the y-axis. Returns a list of all
+        deleted entities."""
         
         lx,ly = self.level.level_size
         sanity = self.level.vis_ofs*2
+        
+        ret = []
         
         # Build a bounding box covering the region to be erased
         bb = (pos,-sanity,add,ly+sanity*2) if axis==0 else (-sanity,pos,lx+sanity*2,add)
@@ -1309,6 +1178,7 @@ class EditorGame(Game):
             px,py = elem.pos
             if bb[0]<px<bb[0]+bb[2] and bb[1]<py<bb[1]+bb[3]:
                 self.level.RemoveEntity(elem)
+                ret.append(elem)
         
         # Build a bounding box covering the region to be moved to the left
         bb = (pos+add,-sanity,lx-pos-add,ly+sanity*2) if axis==0 else (-sanity,pos+add,lx+sanity*2,ly-pos-add)
@@ -1327,6 +1197,8 @@ class EditorGame(Game):
         self.level.level_size = lx,ly
         self.dirty_area += 100 # ensure that the minimap is updated soon
         self._PrepareMiniMapVisibleRect()
+        
+        return ret
         
     def ControlledExpandLevel(self,axis,pos,add):
         """Same as ExpandLevel(), except it records the
@@ -1350,11 +1222,15 @@ class EditorGame(Game):
         """Same as ExpandLevel(), except it records the
         operation on the action stack."""
         
-        def ExpandLevel():
-            self.ExpandLevel(axis,pos,add)
-            
         def ShrinkLevel():
-            self.ShrinkLevel(axis,pos,add)
+            return self.ShrinkLevel(axis,pos,add)
+            
+        recover = ShrinkLevel()
+        
+        def ExpandLevel():   
+            self.ExpandLevel(axis,pos,add)
+            for elem in recover:
+                self.level.AddEntity(elem)
         
         self.PushAction({"desc":"Shrink level by {0} {1} on axis {2}, starting at offset {3}".format(
                 add, "rows" if axis==1 else "columns", axis, pos                                             
@@ -1362,7 +1238,7 @@ class EditorGame(Game):
             "redo" : (lambda: ShrinkLevel()),
             "undo" : (lambda: ExpandLevel())
         })
-        ShrinkLevel()
+        
         
     def ControlledAddEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
