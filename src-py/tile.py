@@ -82,8 +82,8 @@ class Tile(Entity):
         return "<Tile, pos: {0}|{1}, text:\n{2}>".format(\
             self.pos[0],self.pos[1],self.text)
         
-    def __repr__(self):
-        return self.editor_shebang if hasattr(self,"editor_shebang") else self.__str__()
+    #def __repr__(self):
+    #    return self.editor_shebang if hasattr(self,"editor_shebang") else self.__str__()
         
         
     def _GuessRealBB(self,text):

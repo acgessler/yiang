@@ -148,14 +148,16 @@ class EditorGame(Game):
                 defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Green,on_close)
         
         # Setup basic GUI buttons
-        self.AddSlaveDrawable((Button(text="Reload",rect=[-200,10,80,25]) + 
+        self.AddSlaveDrawable((Button(text="Reload",rect=[-200,10,80,25],
+             tip="Reload the level from disk, bypassing the level cache") +  
              ("release",(lambda src: AskRestartLevel()))
         ))
+        
+        """
         self.AddSlaveDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
              ("release",(lambda src: self.Kill("(Kill button)")))
         ))
         
-        """
         self.AddSlaveDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
              ("release",(lambda src: self.AddLife()))
         ))
@@ -176,17 +178,21 @@ class EditorGame(Game):
             gui.disabled = self.cur_action>=len(self.actions)
         
         # Upper left / general editor functionality
-        self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25]) + 
+        self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25],
+              tip="Leave the level editor and return to the main menu") + 
               ("release", (lambda src: self._OnEscape()))
         ))
-        self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25]) + 
+        self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25],
+              tip="Save to disk (regular save, no further optimizations)") + 
 		      ("release", (lambda src: self.Save()))
         ))
-        self.AddSlaveDrawable((Button(text="Undo", rect=[200, 10, 50, 25]) + 
+        self.AddSlaveDrawable((Button(text="Undo", rect=[200, 10, 50, 25],
+              tip="Revert the last action, if possible") + 
               ("update",  (lambda src: UpdateUndoState(src))) +
 		      ("release", (lambda src: self.Undo()))
         ))
-        self.AddSlaveDrawable((Button(text="Redo", rect=[260, 10, 50, 25]) + 
+        self.AddSlaveDrawable((Button(text="Redo", rect=[260, 10, 50, 25],
+              tip="Repeat a recently reverted action, if possible") + 
               ("update",  (lambda src: UpdateRedoState(src))) +
 		      ("release", (lambda src: self.Redo()))
         ))
@@ -199,7 +205,9 @@ class EditorGame(Game):
         def EditSettings():
             pass
         
-        self.AddSlaveDrawable((Button(text="Edit Level Settings", rect=[350, 10, 150, 25]) + 
+        self.AddSlaveDrawable((Button(text="Edit Level Settings", 
+            tip="Change level name, speed, movement, post processing ... etc.",                          
+            rect=[350, 10, 150, 25]) + 
               ("release", (lambda src: EditSettings()))
         ))
         
@@ -282,12 +290,132 @@ class EditorGame(Game):
         ))
         
         
-        class Overlay_ShowCatalogue:
+        class Overlay_ShowCatalogue(Drawable):
+            
+            cached_setup = None
+            
+            @staticmethod
+            def _CacheSetup():
+                cache = Overlay_ShowCatalogue.cached_setup = {}
+                
+                # First read the official catalogue
+                file = os.path.join(defaults.config_dir,"catalogue.txt")
+                with open(file,"rt") as inf:
+                    for line in inf:
+                        tabs = [ e.strip() for e in line.split("\t") if len(e) > 0 ]
+                        if len(tabs) < 2:
+                            continue
+                        
+                        cache[tabs[0]] = [e for e in tabs[1:] if len(e)==2]
+                        
+                def islower(a):
+                    return a in "abcdefghijklmnopqrstuvwqyz"
+                        
+                # .. then get a list of all tile files and group those
+                # which aren't mentioned in the catalogue in a special
+                # group
+                path = os.path.join(defaults.data_dir,"tiles")
+                for file in os.listdir(path):
+                    file,ext = os.path.splitext(file)
+                    if ext.lower() != ".txt" or len(file) != 2 or islower(file[0]) or islower(file[1]):
+                        continue
+                    
+                    if file in itertools.chain.from_iterable(cache.values()):
+                        continue
+                    
+                    cache.setdefault("Uncategorized",[]).append(file)
+                print("Caching list and grouping of all available tiles")
+            
             def __str__(self):
                 return "<ShowCatalogue - show the tile catalogue on top of the editor>"
             
+            def __init__(self2):
+                Drawable.__init__(self2)
+                self2.x,self2.y = self.fx,self.fy
+                self2.elements = []
+                
+                self.AddSlaveDrawable(self2)
+                
+                if Overlay_ShowCatalogue.cached_setup is None:
+                    Overlay_ShowCatalogue._CacheSetup()
+                    
+                cache = Overlay_ShowCatalogue.cached_setup
+                
+                w,h = 180,22
+                xs,ys = 100,120
+                pos = ((x,y) for y in range(ys,defaults.resolution[1]-ys-h,35) 
+                    for x in range(xs,defaults.resolution[0]-xs-w,200)
+                )
+                
+                cur = []
+                
+                def SetTiles(v):
+                    xx,yy = x,y
+                    
+                    for elem in cur:
+                        self.RemoveEntity(elem)
+                    
+                    ox,oy = self.level.GetOrigin()
+                    rx,ry = defaults.tiles_size_px
+                        
+                    del cur[:]
+                    for elem in v:
+                        t = self._LoadTileFromTag("_"+elem)
+                        t.GetDrawOrder = lambda: 52000
+    
+                        bb = t.GetBoundingBox()
+                        if xx+bb[2]*rx>=defaults.resolution[0]:
+                            xx = xs
+                            yy += bb[3]*ry + 50
+                                            
+                        t.SetPosition((xx/rx+ox,yy/ry+oy + defaults.status_bar_top_tiles))
+                        self.AddEntity(t)
+                        
+                        xx += bb[2]*rx + 50
+                        cur.append(t)
+    
+                for k,v in cache.items():
+                    x,y = next(pos)
+                    self2.elements.append(Button(text=k,rect=[x,y,w,h]) + 
+                        ("release", (lambda src,v=v: SetTiles(v)))
+                    )
+                while x!=xs:
+                    x,y = next(pos)
+                
+                for e in self2.elements:
+                    e.draworder = 52000
+                    self.AddSlaveDrawable(e)
+                    
+            def GetDrawOrder(self):
+                return 51500
+            
+            def _RemoveMe(self2):
+                self.RemoveOverlay(self2)
+                for e in self2.elements:
+                    self.RemoveSlaveDrawable(e)
+                    
+                self.RemoveSlaveDrawable(self2)
+                    
             def __call__(self2):
-                pass
+                inp = self.inp
+                if not inp.IsKeyDown(sf.Key.S):
+                    self2._RemoveMe()
+                    
+            def Draw(self2):
+                shape = sf.Shape()
+
+                bb = (0,0,defaults.resolution[0],defaults.resolution[1])
+                color = sf.Color(0,0,0,150)
+                
+                shape.AddPoint(bb[0],bb[1],color,color)
+                shape.AddPoint(bb[2],bb[1],color,color)
+                shape.AddPoint(bb[2],bb[3],color,color)
+                shape.AddPoint(bb[0],bb[3],color,color)
+        
+                shape.EnableFill(True)
+                shape.EnableOutline(False)
+        
+                self.DrawSingle(shape)
             
             
         class Overlay_ShowColorMenu:
@@ -296,7 +424,6 @@ class EditorGame(Game):
                 return "<ShowColorMenu - show the current color palette>"
             
             def __init__(self2):
-    
                 self2.x,self2.y = self.fx,self.fy
                 
                 if hasattr(self,"template") and self.template:
@@ -324,38 +451,7 @@ class EditorGame(Game):
                 colors = TileLoader.cached_color_dict
                 
                 self2.elements = []
-                old_color = dict((e,e.color) for e in self2.entities)
-                
-                def SetColor(color,sticky=False):
-                    if not sticky:
-                        for entity in self2.entities:
-                            entity.SetColor(color)
-                        return
-                    
-                    with self.BeginTransaction() as transaction:
-                        for entity in self2.entities:
-                                
-                            # In order for undo/redo to work, we must ensure that
-                            # the entity is temporarily reset to its old color
-                            # before we commit the operation.
-                            
-                            entity.color = old_color[entity]
-                            self.ControlledSetEntityColor(entity,color)
-                            
-                            # Needed or the 'mouse_leave' callback will overwrite our changes
-                            old_color[entity] = color
-                            
-                def SetOldColor():
-                    for entity in self2.entities:
-                        entity.SetColor(old_color[entity])
-        
-                def AddNewColor():
-                    pass
-                    # TODO
-                    
-                def ChangeElementDrawOrder(order):
-                    for e in self2.elements:
-                        e.GetDrawOrder = lambda :order
+                self2.old_color = dict((e,e.color) for e in self2.entities)
                 
                 extra_items = 2
                 gap = 2
@@ -376,21 +472,21 @@ class EditorGame(Game):
                             bgcolor=color, 
                             fgcolor=sf.Color.White if color.r+color.g+color.b < 500 else sf.Color.Black,
                             rect=[xb+x,yb+y,w,h]) + 
-                            ("release",     (lambda src,color=color: SetColor(color,True))) +
-                            ("mouse_enter", (lambda src,color=color: SetColor(color))) +
-                            ("mouse_leave", (lambda src: SetOldColor())) 
+                            ("release",     (lambda src,color=color: self2._SetColor(color,True))) +
+                            ("mouse_enter", (lambda src,color=color: self2._SetColor(color))) +
+                            ("mouse_leave", (lambda src: self2._SetOldColor())) 
                     #        ("update",      (lambda src: not src.hit or self.__setattr__("help_string",
                     #            "Change color to #{0}".format(cols)
                     #        )))
                         )
                     x,y = next(src)
                     self2.elements.append(Button(text="New", rect=[xb+x,yb+y,w,h]) + 
-                        ("release",     (lambda src: AddNewColor()))
+                        ("release",     (lambda src: self2._AddNewColor()))
                     )
                     x,y = next(src)
                     self2.elements.append(ToggleButton(text="Undim\x00Dim", rect=[xb+x,yb+y,w,h]) + 
-                        ("on",     (lambda src: ChangeElementDrawOrder(self.GetDrawOrder()-1))) +
-                        ("off",    (lambda src: ChangeElementDrawOrder(Component.GetDrawOrder(self2.elements[0]))))
+                        ("on",     (lambda src: self2._ChangeElementDrawOrder(self.GetDrawOrder()-1))) +
+                        ("off",    (lambda src: self2._ChangeElementDrawOrder(Component.GetDrawOrder(self2.elements[0]))))
                     )
                 except StopIteration:
                     # corner case, no more space left in the rondell
@@ -399,8 +495,42 @@ class EditorGame(Game):
                 for e in self2.elements:
                     e.draworder = 52000
                     self.AddSlaveDrawable(e)
+                    
+            def _SetColor(self2,color,sticky=False):
+                if not sticky:
+                    for entity in self2.entities:
+                        entity.SetColor(color)
+                    return
+                
+                with self.BeginTransaction() as transaction:
+                    for entity in self2.entities:
+                            
+                        # In order for undo/redo to work, we must ensure that
+                        # the entity is temporarily reset to its old color
+                        # before we commit the operation.
+                        
+                        entity.color = self2.old_color[entity]
+                        self.ControlledSetEntityColor(entity,color)
+                        
+                        # Needed or the 'mouse_leave' callback will overwrite our changes
+                        self2.old_color[entity] = color
+                        
+            def _SetOldColor(self2):
+                for entity in self2.entities:
+                    entity.SetColor(self2.old_color[entity])
+                    
+            def _AddNewColor(self2):
+                    pass
+                    # TODO
+                    
+            def _ChangeElementDrawOrder(self2,order):
+                for e in self2.elements:
+                    e.GetDrawOrder = lambda :order
                 
             def _RemoveMe(self2):
+                
+                self2._SetOldColor()
+                
                 self.RemoveOverlay(self2)
                 for e in self2.elements:
                     self.RemoveSlaveDrawable(e)
@@ -809,6 +939,12 @@ class EditorGame(Game):
                     if not hasattr(e,"__class__") or e.__class__== Overlay_ShowContextMenu]:
                         
                     self.PushOverlay(Overlay_ShowContextMenu())
+                    
+                # Activate the 'DrawCatalogueMenu' overlay on S
+                if inp.IsKeyDown(sf.Key.S) and not [e for e in self.overlays 
+                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowCatalogue]:
+                        
+                    self.PushOverlay(Overlay_ShowCatalogue())
                     
                 # Activate the 'DrawColorMenu' overlay on I
                 if inp.IsKeyDown(sf.Key.C) and not [e for e in self.overlays 
@@ -1267,6 +1403,10 @@ class EditorGame(Game):
         
         BeginTransaction() is a context manager."""
         
+        if len(self.actions) > self.cur_action:
+            del self.actions[self.cur_action:]
+        assert len(self.actions) == self.cur_action
+        
         self.actions.append(None)
         self.cur_action += 1
         print("Push transaction sentinel onto action stack (BEGIN)")
@@ -1294,6 +1434,9 @@ class EditorGame(Game):
         'pos'. 'axis' is 0 to add columns on the x-axis,
         and 1 to add rows on the y-axis."""
         
+        if not add: 
+            return
+        
         lx,ly = self.level.level_size
         sanity = self.level.vis_ofs*2
         
@@ -1319,6 +1462,9 @@ class EditorGame(Game):
         'pos'. 'axis' is 0 to erase columns on the x-axis,
         and 1 to add rows on the y-axis. Returns a list of all
         deleted entities."""
+        
+        if not add: 
+            return
         
         lx,ly = self.level.level_size
         sanity = self.level.vis_ofs*2
@@ -1357,6 +1503,9 @@ class EditorGame(Game):
         """Same as ExpandLevel(), except it records the
         operation on the action stack."""
         
+        if not add: # swallow redundant ops
+            return
+        
         def ExpandLevel():
             self.ExpandLevel(axis,pos,add)
             
@@ -1374,6 +1523,9 @@ class EditorGame(Game):
     def ControlledShrinkLevel(self,axis,pos,add):
         """Same as ShrinkLevel(), except it records the
         operation on the action stack."""
+        
+        if not add: # swallow redundant ops
+            return
         
         def ShrinkLevel():
             return self.ShrinkLevel(axis,pos,add)
@@ -1396,38 +1548,38 @@ class EditorGame(Game):
     def ControlledAddEntity(self,entity):
         """Wrap entity add/remove functions to synchronize with our level table"""
         
-        # Find out if there's another entity at this position, if yes, remove it.
-        e = [e for e in self.level.EnumVisibleEntities() 
+        # Find out if there are other entities at this position, if yes, remove them.
+        others = [e for e in self.level.EnumVisibleEntities() 
              if   int(e.pos[0])==int(entity.pos[0]) 
              and  int(e.pos[1])==int(entity.pos[1])
              and  hasattr(e,"editor_ccode")
         ]
         
-        if e:
-            assert len(e)==1
-            e = e[0]
-            if e is entity:
-                return # should not happen, but still put a safeguard here to catch the case
-
+        if others and entity in others:
+            del others[other.index(entity)]
+            
+        # Actually, len(others) should always be 1.
+        # I don't want to assert() it, however, because this is
+        # one of the places which helps to hold this constraint.
             
         def RemoveEntity():
             self.level.RemoveEntity(entity)
             self._UpdateMiniMap(entity)
             
-            if e: # Restore the previous entity at this position
-                self.level.AddEntity(e)
-                self._UpdateMiniMap(e)
+            for elem in others: # Restore the previous entity at this position
+                self.level.AddEntity(elem)
+                self._UpdateMiniMap(elem)
             
         def AddEntity():
-            if e: # Remove the previous entity at this position
-                self.level.RemoveEntity(e)
-                self._UpdateMiniMap(e)
+            for elem in others: # Remove the previous entity at this position
+                self.level.RemoveEntity(elem)
+                self._UpdateMiniMap(elem)
                 
             self.level.AddEntity(entity)
             self._UpdateMiniMap(entity)
             
         self.PushAction({"desc":"Add entity {0} [leads to removal of {1}]".format(
-                entity, e or "(None, location was previously empty)"                                                
+                entity, ",".join(str(e) for e in others)                                               
             ),
             "redo" : (lambda: AddEntity()),
             "undo" : (lambda: RemoveEntity())
@@ -1459,6 +1611,9 @@ class EditorGame(Game):
         """Use instead of a simple assignment to entity.color to create
         an empty on the action stack"""
         
+        if entity.color == color: # swallow redundant ops
+            return
+        
         def SetColor(color):
             entity.color = color
         
@@ -1475,6 +1630,9 @@ class EditorGame(Game):
     def ControlledSetEntityPosition(self,entity,pos):
         """Use instead of a simple call to Entity.SetPosition() to create
         an empty on the action stack"""
+        
+        if entity.pos == pos: # swallow redundant ops
+            return
         
         def SetPosition(pos):
             entity.SetPosition(pos)
