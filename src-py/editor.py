@@ -276,7 +276,16 @@ class EditorGame(Game):
             def __init__(self2):
     
                 self2.x,self2.y = self.fx,self.fy
-                self2.entity = self.last_entity
+                
+                if hasattr(self,"template") and self.template:
+                    self2.entities = list(self.template.keys())
+                    
+                elif hasattr(self,"cur_entity") and self.cur_entity:
+                    self2.entities = [self.cur_entity]
+        
+                else:
+                    self2.entities = []
+                    
                 ox,oy = self.level.GetOrigin()
                 
                 w,h = 64,64
@@ -293,24 +302,30 @@ class EditorGame(Game):
                 colors = TileLoader.cached_color_dict
                 
                 self2.elements = []
-                old_color = [self2.entity.color]
+                old_color = dict((e,e.color) for e in self2.entities)
                 
                 def SetColor(color,sticky=False):
-                    
-                    if sticky:
-                        
-                        # In order for undo/redo to work, we must ensure that
-                        # the entity is temporarily reset to its old color
-                        # before we commit the operation.
-                        
-                        self2.entity.color = old_color[0]
-                        self.ControlledSetEntityColor(self2.entity,color)
-                        
-                        # Needed or the 'mouse_leave' callback will overwrite our changes
-                        old_color[0] = color
+                    if not sticky:
+                        for entity in self2.entities:
+                            entity.SetColor(color)
                         return
                     
-                    self2.entity.SetColor(color)
+                    with self.BeginTransaction() as transaction:
+                        for entity in self2.entities:
+                                
+                            # In order for undo/redo to work, we must ensure that
+                            # the entity is temporarily reset to its old color
+                            # before we commit the operation.
+                            
+                            entity.color = old_color[entity]
+                            self.ControlledSetEntityColor(entity,color)
+                            
+                            # Needed or the 'mouse_leave' callback will overwrite our changes
+                            old_color[entity] = color
+                            
+                def SetOldColor():
+                    for entity in self2.entities:
+                        entity.SetColor(old_color[entity])
         
                 def AddNewColor():
                     pass
@@ -339,7 +354,7 @@ class EditorGame(Game):
                             rect=[xb+x,yb+y,w,h]) + 
                             ("release",     (lambda src,color=color: SetColor(color,True))) +
                             ("mouse_enter", (lambda src,color=color: SetColor(color))) +
-                            ("mouse_leave", (lambda src: SetColor(old_color[0])))
+                            ("mouse_leave", (lambda src: SetOldColor()))
                         )
                     x,y = next(src)
                     self2.elements.append(Button(text="New", rect=[xb+x,yb+y,w,h]) + 
@@ -368,9 +383,10 @@ class EditorGame(Game):
                     self2._RemoveMe()
                     
                 # Draw the origin tile in blue 
-                bb = self2.entity.GetBoundingBox()
-                if bb:
-                    self._DrawRectangle(bb,sf.Color(0,0,255))
+                for e in self2.entities:
+                    bb = e.GetBoundingBox()
+                    if bb:
+                        self._DrawRectangle(bb,sf.Color(0,0,255))
         
         
         class Overlay_ShowContextMenu(Drawable):
@@ -417,8 +433,9 @@ class EditorGame(Game):
                         PlaceEntity("_PL")
                     
                 def DeleteThisTile():
-                    for e in self2.entities:
-                        self.ControlledRemoveEntity(e)
+                    with self.BeginTransaction() as transaction:
+                        for e in self2.entities:
+                            self.ControlledRemoveEntity(e)
                                               
                     # break the overlay chain, we need a new frame for
                     # the pending deletion to be dispatched to all
@@ -477,7 +494,7 @@ class EditorGame(Game):
                 # Add special context-specific items
                 yn = 80
                 if len(self2.entities):
-                    self2.elements.append(Button(text="Delete this tile", rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Red) + 
+                    self2.elements.append(Button(text="Delete this tile(s)", rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Red) + 
                         ("release", (lambda src: DeleteThisTile()))
                     )
                     yn += yguiofs
@@ -550,7 +567,10 @@ class EditorGame(Game):
                     self2._RemoveMe()
                     
                 # Draw the origin tile in blue 
-                self._DrawRectangle((self2.x,self2.y,1.0,1.0),sf.Color(0,0,255))
+                for e in self2.entities:
+                    bb = e.GetBoundingBox()
+                    if bb:
+                        self._DrawRectangle(bb,sf.Color(0,0,255))
                     
             def GetDrawOrder(self):
                 return -100
@@ -600,15 +620,16 @@ class EditorGame(Game):
                         if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-self.fx or self.last_insert_pos[1]-self.fy:
                             # Insert template at this position
                             if self.select_start:
-                                for e,pos in self.template.items():
-                                    cloned = self._CloneEntity(e)
-                                    if not cloned:
-                                        continue
-                                    cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
-                                        self.fy + e.pos[1]-self.select_start[1])
-                                    )
-                                    
-                                    self.ControlledAddEntity(cloned)
+                                with self.BeginTransaction() as transaction:
+                                    for e,pos in self.template.items():
+                                        cloned = self._CloneEntity(e)
+                                        if not cloned:
+                                            continue
+                                        cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
+                                            self.fy + e.pos[1]-self.select_start[1])
+                                        )
+                                        
+                                        self.ControlledAddEntity(cloned)
                                 
                             self.pressed_l = True
                             self.last_insert_pos = self.fx,self.fy
@@ -1083,10 +1104,21 @@ class EditorGame(Game):
         if self.IsEditorRunning():
             [e() for e in list(self.overlays)]
         
-    def Undo(self):
+    def Undo(self,recursive=False):
         """Undo the last step, if possible"""
         if self.cur_action < 1:
             print("No more steps to undo!")
+            return
+        
+        if self.actions[self.cur_action-1] is None:
+            # transaction sentinel
+            self.cur_action -= 1
+            if recursive:
+                print("Reach end of transaction")
+                return
+                
+            print("Reach begin of transaction")
+            self.Undo(True)
             return
         
         if not "undo" in self.actions[self.cur_action-1]:
@@ -1097,11 +1129,25 @@ class EditorGame(Game):
         print("Undoing action {0}, which describes itself so: {1}".
               format(self.cur_action,self.actions[self.cur_action]["desc"]))
         self.actions[self.cur_action]["undo"]()
+        
+        if recursive:
+            self.Undo(True)
     
-    def Redo(self):
+    def Redo(self,recursive=False):
         """Redo the previously undone step, if possible"""
         if self.cur_action == len(self.actions):
             print("No more steps to redo!")
+            return
+        
+        if self.actions[self.cur_action] is None:
+            # transaction sentinel
+            self.cur_action += 1
+            if recursive:
+                print("Reach end of transaction")
+                return
+                
+            print("Reach begin of transaction")
+            self.Redo(True)
             return
         
         if not "redo" in self.actions[self.cur_action]:
@@ -1113,6 +1159,8 @@ class EditorGame(Game):
         self.actions[self.cur_action]["redo"]()
         
         self.cur_action += 1
+        if recursive:
+            self.Redo(True)
         
     def PushAction(self,action):
         """Push a controlled (i.e. undoable) action onto the action stack.
@@ -1135,6 +1183,35 @@ class EditorGame(Game):
         self.cur_action += 1
         print("Push undoable action onto action stack: {0}, stack height is now: {1}".
               format(action["desc"],len(self.actions)))
+        
+    def BeginTransaction(self):
+        """Begin a transaction on the action stack. Transactions are
+        atomic, they are always reverted in whole, or not. Call
+        EndTransaction() to end the transaction.
+        
+        BeginTransaction() is a context manager."""
+        
+        self.actions.append(None)
+        self.cur_action += 1
+        print("Push transaction sentinel onto action stack (BEGIN)")
+        
+        outer = self
+        class Context:
+            
+            def __enter__(self):
+                return self
+            
+            def __exit__(self,exc_type, exc_val, exc_tb):
+                outer.EndTransaction()
+                return False
+        return Context()
+        
+    def EndTransaction(self):
+        """Counterpart to BeginTransaction()"""
+        
+        self.actions.append(None)
+        self.cur_action += 1
+        print("Push transaction sentinel onto action stack (END)")
         
     def ExpandLevel(self,axis,pos,add):
         """Insert 'add' rows or columns starting at position
@@ -1219,7 +1296,7 @@ class EditorGame(Game):
         ExpandLevel()
         
     def ControlledShrinkLevel(self,axis,pos,add):
-        """Same as ExpandLevel(), except it records the
+        """Same as ShrinkLevel(), except it records the
         operation on the action stack."""
         
         def ShrinkLevel():
