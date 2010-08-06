@@ -903,7 +903,10 @@ class EditorGame(Game):
                                 if hasattr(self,"cur_entity"): 
                                     self.template[self.cur_entity] = None
                                     
-                            self.last_color = next(self.template.keys().__iter__()).color            
+                            try:
+                                self.last_color = next(self.template.keys().__iter__()).color       
+                            except StopIteration:
+                                pass     
                     else:
                         self.in_select = False
                     
@@ -998,9 +1001,23 @@ class EditorGame(Game):
                         
                     self.PushOverlay(Overlay_ShowColorMenu())
                     
-                #if inp.IsKeyDown(sf.Key.Right):
+                rx,ry = defaults.resolution
+                ox,oy = self.level.GetOrigin()
+                
+                xt,yt = 100,100
+                sx,sy = 15,10
+                
+                if self.mx > rx-xt:
+                    ox += sx*self.time_delta
+                elif self.mx < xt:
+                    ox -= sx*self.time_delta
                     
+                if self.my > ry-yt:
+                    oy += sy*self.time_delta                  
+                elif self.my < yt:
+                    oy -= sy*self.time_delta
                     
+                self.level.SetOrigin((ox,oy))
                 
         # note: order matters, don't change
         self.PushOverlay(Overlay_EditorBasics())
@@ -1270,11 +1287,22 @@ class EditorGame(Game):
                 rcolors[0] = gen_rcolors()
                 return index
             
+        def fullrstrip(inp,set):
+            while True:
+                for e in set:
+                    if len(inp) >= len(e) and inp[-len(e):] == e:
+                        inp = inp[:-len(e)]
+                        break
+                else:
+                    break
+            return inp
+            
         try:
             # build the output text prior to clearing the file
-            cells = "\n".join("".join([((ccol(n.color)+n.editor_tcode) 
+            clear = [".  "," "]
+            cells = fullrstrip("\n".join(fullrstrip("".join([((ccol(n.color)+n.editor_tcode) 
                   if not n is None and hasattr(n,"editor_tcode") else ".  ") for n in row
-                ])  for row in grid)
+                ]),clear)  for row in grid),clear)
             
             with open(self.level_file,"wt") as out:
                 out.write(self.level.editor_shebang+"\n")

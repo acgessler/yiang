@@ -134,7 +134,7 @@ class Game(Drawable):
         self.time = self.clock.GetElapsedTime()
         self.total = self.time+self.total_accum
 
-        dtime = (self.time - self.last_time)*self.speed_scale
+        self.time_delta = dtime = (self.time - self.last_time)*self.speed_scale
         self.last_time = self.time
         
         if dtime < defaults.delta_t_treshold: # swallow huge deltas
