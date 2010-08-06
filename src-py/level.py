@@ -299,21 +299,39 @@ class Level:
                     
     def _EnumWindows(self):
         """Enumerate all windows in the scene as a 2-tuple (cull-level, window). 
-        cull-level is either 0 (visible), 1 (close) or 2 (away)"""
+        cull-level is either 0 (visible),  1 (intersecting), 2 (close) """
         dl,tiles = defaults.level_window_size_abs,defaults.tiles
         cull_1 = (-tiles[0]*0.25,tiles[0]*1.25,-tiles[1]*0.25,tiles[1]*1.25)
         
+        if self.scroll[-1] & (Level.SCROLL_TOP | Level.SCROLL_BOTTOM) == 0:
+            dl = (dl[0],1.5)
+        
+        hady = False
         for y,ww in enumerate( self.windows ):
             y = y*dl[1] - self.origin[1]
             
+            hadx = False
             for x,window in enumerate( ww ):
                 x = x*dl[0] - self.origin[0]
                 
-                if (0 < x < tiles[0] or 0 < x+dl[0] < tiles[0]) and (0 < y < tiles[1] or 0 < y+dl[1] < tiles[1]):
+                if (0 < x and x+dl[0] < tiles[0]) and (0 < y and y+dl[1] < tiles[1]):
                     yield 0,window
+                    hadx = hady = True
+                
+                elif (0 < x < tiles[0] or 0 < x+dl[0] < tiles[0]) and (0 < y < tiles[1] or 0 < y+dl[1] < tiles[1]):
+                    yield 1,window
+                    hadx = hady = True
                     
                 elif (cull_1[0] < x < cull_1[1] or cull_1[0] < x+dl[0] < cull_1[1]) and (cull_1[2] < y < cull_1[3] or cull_1[2] < y+dl[1] < cull_1[3]):
-                    yield 1,window
+                    yield 2,window
+                    hadx = hady = True
+                    
+                elif hadx:
+                    break
+            
+            #else:
+            #    if hady:
+            #        break
             
     def _LoadPostFX(self):
         """Load all postfx's in self.postfx and store them
@@ -525,13 +543,28 @@ class Level:
                 
     def _UpdateEntities(self,time,dtime):
         self.entities_active = set()
+        ox,oy = self.origin
+        tx,ty = defaults.tiles
+        
         for n,window in self._EnumWindows():
-            if n == 2:
+            if n > 2:
                 continue
             
             for entity in window:
                 self.entities_active.add(entity)
-                entity.in_visible_set = n == 0
+                
+                if n == 0 or n == 1:
+                    entity.in_visible_set = True
+                    entity.is_intersecting = False
+                elif n == 1:
+                    bb = entity.GetBoundingBox()
+                    if bb:
+                        bb = (bb[0]-ox,bb[1]-oy,bb[2],bb[3])
+                        if (0 <= bb[0] <= tx or bb[0]+bb[2] <= tx) and (0 <= bb[1] <= ty or bb[1]+bb[3] <= ty):
+                            entity.in_visible_set = True
+                            entity.is_intersecting = True
+                else:
+                    entity.in_visible_set = False
                 
         self.entities_active.update(self.window_unassigned)
         for entity in self.EnumActiveEntities():
@@ -681,7 +714,9 @@ class Level:
     def _GetEntityDefBBColor(self,entity):
         """Set the bounding box color for an entity that doesn't override
         this setting explicitly."""    
-        return sf.Color.Yellow if len(getattr(entity,"windows",[]))>1 else sf.Color.Green 
+        return sf.Color.Red if getattr(entity,"is_intersecting",False) else (
+             sf.Color.Yellow if len(getattr(entity,"windows",[]))>1 else sf.Color.Green 
+        )
         
     def DrawBoundingBoxes(self):
         """Draw visible bounding boxes around all entities in the level"""

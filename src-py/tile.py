@@ -40,6 +40,7 @@ class Tile(Entity):
     Extends Entity with more specialized behaviour."""
     
     AUTO=-1
+    AUTO_QUICK=-2
     
     # These caches are a quick attempt to optimize performance.
     # Obvisouly, since these dicts are indexed by full-length
@@ -75,6 +76,9 @@ class Tile(Entity):
         # rectangle for all glyph bounding rectangles.
         if width==Tile.AUTO or height==Tile.AUTO:
             self.dim,self.ofs = self._GuessRealBB(self.text)
+            
+        elif width==Tile.AUTO_QUICK or height==Tile.AUTO_QUICK:
+            self.dim,self.ofs = self._GuessRealBB_Quick(self.text)
             
         self._Recache()
 
@@ -198,6 +202,17 @@ class Tile(Entity):
         
         Tile.global_dim_cache[text] = dim,ofs
         return dim,ofs
+    
+    def _GuessRealBB_Quick(self,text):
+        """Return adjusted (width,height) (xofs,yofs) tuples
+        basing on the current values and 'text' """
+        gen = text.split("\n")
+        x,y = 0,len(gen)
+        
+        for line in gen:
+            x = max(len(line),x)
+            
+        return (x,y),(0,0)
 
     def Interact(self,other):
         return self.collision
@@ -267,7 +282,7 @@ class Tile(Entity):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
         lv = self.game.GetLevel()
-        for offsetit, elem in self.cached: 
+        for offsetit, elem in reversed(self.cached): 
             
             elem.SetColor(self.color)
             if offsetit is True:

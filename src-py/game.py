@@ -874,6 +874,7 @@ class Entity(Drawable):
         self.pos = Entity.DEFAULT_POS
         self.color = sf.Color.White
         self.game = None
+        self.in_visible_set = False
 
     def Update(self,time_elapsed,time_delta):
         """To be implemented"""
@@ -883,6 +884,8 @@ class Entity(Drawable):
         """Binds the Entity to a Game instance. This is called
         automatically for all entities loaded as part of a level"""
         self.game = game
+        if game.level:
+            self.level = game.level
         
     def SetLevel(self,level):
         """Binds the Entity to a Level instance. This is called

@@ -33,7 +33,7 @@ effect
 
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(tin);
-	vec4 another = framebuffer(tin+vec2(-0.010,-0.004));
+	//vec4 another = framebuffer(tin+vec2(-0.010,-0.004));
 	//vec4 anotheb = framebuffer(tin+vec2(-0.010,-0.004)* (cur-0.5)*vec2(-2.5f,3.0f));
 	//vec4 evenmor = framebuffer(tin+vec2(-0.015,-0.006) * (cur-0.5)*vec2(-2.5f,3.0f));
 #ifdef ENABLE_DITHER
@@ -41,15 +41,15 @@ effect
 #endif
 
 	float scale =  clamp((length(tin-cur))*1.25,0.0,1.0);
-	vec4 color = (pixel*1.0f+(another*0.25)/*+(evenmor*0.10)+(anotheb*0.15)*/);
+	vec4 color = (pixel*1.0f/*+(another*0.25)*//*+(evenmor*0.10)+(anotheb*0.15)*/);
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
 #ifdef ENABLE_DITHER
-	_out.rgb += (dither.rgb-0.5f)*0.0160*dither_strength;
+	_out.rgb += (dither.rgb-0.5f)*0.0100*dither_strength;
 #endif
 
-	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.35f);
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.7f);
 #ifndef NO_MIRROR
 	_out.rgb *= overall_scale;
 #endif

@@ -308,12 +308,21 @@ class EditorGame(Game):
                         
                         cache[tabs[0]] = [e for e in tabs[1:] if len(e)==2]
                         
-                def islower(a):
-                    return a in "abcdefghijklmnopqrstuvwqyz"
+                try:
+                    import curses.ascii
+                except ImportError:
+                    # I'm not always shipping with curses
+                    class curses:        
+                        class ascii:
+                    
+                            @staticmethod
+                            def islower(a):
+                                return a in "abcdefghijklmnopqrstuvwqyz"
                         
                 # .. then get a list of all tile files and group those
                 # which aren't mentioned in the catalogue in a special
                 # group
+                islower = curses.ascii.islower
                 path = os.path.join(defaults.data_dir,"tiles")
                 for file in os.listdir(path):
                     file,ext = os.path.splitext(file)
@@ -347,18 +356,16 @@ class EditorGame(Game):
                     for x in range(xs,defaults.resolution[0]-xs-w,200)
                 )
                 
-                cur = []
+                self.cur = []
                 
                 def SetTiles(v):
-                    xx,yy = x,y
-                    
-                    for elem in cur:
-                        self.RemoveEntity(elem)
                     
                     ox,oy = self.level.GetOrigin()
                     rx,ry = defaults.tiles_size_px
+                    
+                    xx,yy = x,y+defaults.status_bar_top_tiles*ry
                         
-                    del cur[:]
+                    del self.cur[:]
                     for elem in v:
                         t = self._LoadTileFromTag("_"+elem)
                         t.GetDrawOrder = lambda: 52000
@@ -368,11 +375,10 @@ class EditorGame(Game):
                             xx = xs
                             yy += bb[3]*ry + 50
                                             
-                        t.SetPosition((xx/rx+ox,yy/ry+oy + defaults.status_bar_top_tiles))
-                        self.AddEntity(t)
+                        t.SetPosition((xx/rx+ox,yy/ry+oy ))
                         
+                        self.cur.append((t,(xx,yy)))
                         xx += bb[2]*rx + 50
-                        cur.append(t)
     
                 for k,v in cache.items():
                     x,y = next(pos)
@@ -393,6 +399,9 @@ class EditorGame(Game):
                 self.RemoveOverlay(self2)
                 for e in self2.elements:
                     self.RemoveSlaveDrawable(e)
+                    
+                #for elem in self.cur:
+                #    self.RemoveEntity(elem)
                     
                 self.RemoveSlaveDrawable(self2)
                     
@@ -416,7 +425,26 @@ class EditorGame(Game):
                 shape.EnableOutline(False)
         
                 self.DrawSingle(shape)
-            
+                
+                mx,my = self.mx,self.my
+                tx,ty = defaults.tiles_size_px
+                
+                for elem,pos in self.cur:
+                    elem.Update(1.0,0.05)
+                    elem.Draw()
+                    
+                    bb = elem.GetBoundingBox()
+                    if bb:
+                        if pos[0] <= mx <= pos[0]+bb[2]*tx and pos[1] <= my <= pos[1]+bb[3]*ty:
+                            
+                            col = sf.Color.Green
+                            if self.inp.IsMouseButtonDown(sf.Mouse.Left):
+                                entity = self._SelectEntity("_"+elem.editor_tcode,None)
+                                entity.color = getattr(self,"last_color",sf.Color.White)
+                                col = sf.Color.Yellow
+                                
+                            self._DrawRectangle(bb, col)
+                            self.help_string = "Select tile {0}".format(elem.editor_tcode)
             
         class Overlay_ShowColorMenu:
             
@@ -514,6 +542,8 @@ class EditorGame(Game):
                         
                         # Needed or the 'mouse_leave' callback will overwrite our changes
                         self2.old_color[entity] = color
+                        
+                    self.last_color = color
                         
             def _SetOldColor(self2):
                 for entity in self2.entities:
@@ -781,29 +811,35 @@ class EditorGame(Game):
             
             def __call__(self2):
                 inp = self.inp
-                if inp.IsMouseButtonDown(sf.Mouse.Left):
-                    if not self.mousepos_covered_by_gui:
-                        if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-self.fx or self.last_insert_pos[1]-self.fy:
-                            # Insert template at this position
-                            if self.select_start:
-                                with self.BeginTransaction() as transaction:
-                                    for e,pos in self.template.items():
-                                        cloned = self._CloneEntity(e)
-                                        if not cloned:
-                                            continue
-                                        cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
-                                            self.fy + e.pos[1]-self.select_start[1])
-                                        )
-                                        
-                                        self.ControlledAddEntity(cloned)
-                                
-                            self.pressed_l = True
-                            self.last_insert_pos = self.fx,self.fy
-                else:
-                    try:
-                        delattr(self,"pressed_l")  
-                    except AttributeError:
-                        pass
+                if not self.IsOverlayActive(Overlay_ShowCatalogue):
+                    if inp.IsMouseButtonDown(sf.Mouse.Left):
+                        if not self.mousepos_covered_by_gui:
+                            if not hasattr(self,"pressed_l") or self.last_insert_pos[0]-self.fx or self.last_insert_pos[1]-self.fy:
+                                # Insert template at this position
+                                if self.select_start:
+                                    with self.BeginTransaction() as transaction:
+                                        for e,pos in self.template.items():
+                                            cloned = self._CloneEntity(e)
+                                            if not cloned:
+                                                continue
+                                            
+                                            if len(self.template)==1:
+                                                cloned.SetPosition((self.fx,self.fy))
+                                                
+                                            else:
+                                                cloned.SetPosition((self.fx + e.pos[0]-self.select_start[0],
+                                                    self.fy + e.pos[1]-self.select_start[1])
+                                                )
+                                            
+                                            self.ControlledAddEntity(cloned)
+                                    
+                                self.pressed_l = True
+                                self.last_insert_pos = self.fx,self.fy
+                    else:
+                        try:
+                            delattr(self,"pressed_l")  
+                        except AttributeError:
+                            pass
                 
             
         class Overlay_EditorDelete:
@@ -812,19 +848,20 @@ class EditorGame(Game):
             
             def __call__(self2):
                 inp = self.inp
-                if inp.IsMouseButtonDown(sf.Mouse.Right):
-                    if inp.IsMouseButtonDown(sf.Mouse.Left):
-                        if not self.mousepos_covered_by_gui:
-                            # Both mouse buttons pressed, delete template
-                            for entity,pos in self.template.items():
-                                self.ControlledRemoveEntity(entity)
+                if not self.IsOverlayActive(Overlay_ShowCatalogue):
+                    if inp.IsMouseButtonDown(sf.Mouse.Right):
+                        if inp.IsMouseButtonDown(sf.Mouse.Left):
+                            if not self.mousepos_covered_by_gui:
+                                # Both mouse buttons pressed, delete template
+                                for entity,pos in self.template.items():
+                                    self.ControlledRemoveEntity(entity)
+                                    
+                                self.template = dict()
                                 
-                            self.template = dict()
-                            
-                            # break the overlay chain, we need a new frame for
-                            # the pending deletion to be dispatched to all
-                            # who need to know about it.
-                            raise NewFrame()
+                                # break the overlay chain, we need a new frame for
+                                # the pending deletion to be dispatched to all
+                                # who need to know about it.
+                                raise NewFrame()
                     
                     
         class Overlay_EditorSelect:
@@ -833,38 +870,42 @@ class EditorGame(Game):
             
             def __call__(self2):
                 inp = self.inp
-                if inp.IsMouseButtonDown(sf.Mouse.Right):
-                    if not self.mousepos_covered_by_gui:
-                        # copy current tile
-                        if self.in_select is False:
-                            if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
-                                self.template = dict()
-                                self.select_start = self.fx,self.fy
+                if  not self.IsOverlayActive(Overlay_ShowCatalogue):
+                    if inp.IsMouseButtonDown(sf.Mouse.Right):
+                        if not self.mousepos_covered_by_gui:
+                            # copy current tile
+                            if self.in_select is False:
+                                if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
+                                    self.template = dict()
+                                    self.select_start = self.fx,self.fy
+                                    
+                                self.in_select = True
                                 
-                            self.in_select = True
-                            
-                        if inp.IsKeyDown(sf.Key.LControl):
-                            if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
-                                if not hasattr(self,"last_select"):
-                                    self.last_select = self.select_start
+                            if inp.IsKeyDown(sf.Key.LControl):
+                                if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
+                                    if not hasattr(self,"last_select"):
+                                        self.last_select = self.select_start
+                                    
+                                    for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
+                                        for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
+                                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                                self.template[e] = None  
+                                                
+                                    for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
+                                        for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
+                                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                                self.template[e] = None 
+                                                                  
+                                    
+                                    self.last_select = self.fx,self.fy
                                 
-                                for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
-                                    for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
-                                        for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                            self.template[e] = None  
-                                            
-                                for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
-                                    for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
-                                        for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                            self.template[e] = None                               
-                                
-                                self.last_select = self.fx,self.fy
-                            
-                        else:
-                            if hasattr(self,"cur_entity"): 
-                                self.template[self.cur_entity] = None
-                else:
-                    self.in_select = False
+                            else:
+                                if hasattr(self,"cur_entity"): 
+                                    self.template[self.cur_entity] = None
+                                    
+                            self.last_color = next(self.template.keys().__iter__()).color            
+                    else:
+                        self.in_select = False
                     
         
         class Overlay_EditorBasics:
@@ -879,54 +920,58 @@ class EditorGame(Game):
                 # check if there's an entity right here and show its bounding box in white.
                 # if there are multiple entities, take the one with the highest 
                 # drawing order.
-                try:
-                    self.cur_entity = self.last_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
-                        key=lambda x:x.GetDrawOrder(),reverse=True
-                    )[0]
-                    bb = self.cur_entity.GetBoundingBox()
-                                    
-                    self._DrawRectangle(bb,sf.Color.Green)
-                    self.selection = [self.cur_entity]
-                    
-                    if hasattr(self.cur_entity,"editor_tcode"):
-                        color = self.cur_entity.color
-                        self.help_string = "{0} at {x},{y} - #{r:X}{g:X}{b:X}{a:X}   ({1})".format(
-                            self.cur_entity.editor_tcode,
-                            self.cur_entity.__class__.__name__,
-                            x=self.cur_entity.pos[0],
-                            y=self.cur_entity.pos[1],
-                            r=color.r,
-                            g=color.g,
-                            b=color.b,
-                            a=color.a)
-                        
-                except IndexError:
-                    # no entity below the cursor, highlight the nearest point and its surroundings
-                    self._DrawRectangle((self.fx,self.fy,1.0,1.0),sf.Color(150,150,150))
+                if not self.IsOverlayActive(Overlay_ShowCatalogue):
                     try:
-                        delattr(self,"cur_entity")
-                    except AttributeError:
-                        pass
-                    # disabled, turns out to be too expensive
-                    #e = ((x,y) for y in range(-3,4) for x in range(-3,4) if x or y)
-                    #for x,y in e:
-                    #    c = int(50 - (x**2 + y**2)**0.5 *0.20 * 50)
-                    #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
-                    
-                if inp.IsMouseButtonDown(sf.Mouse.Right) and not self.mousepos_covered_by_gui:               
-                     if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
-                        # draw selection rectangle
-                        self._DrawRectangle((self.select_start[0],self.select_start[1],
-                            self.tx-self.select_start[0],
-                            self.ty-self.select_start[1]), sf.Color.Yellow)
+                        self.cur_entity = self.last_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
+                            key=lambda x:x.GetDrawOrder(),reverse=True
+                        )[0]
+                        bb = self.cur_entity.GetBoundingBox()
                                         
-                for e,pos in self.template.items():
-                    bb = e.GetBoundingBox()
-                    self._DrawRectangle(bb,sf.Color.Red)
+                        self._DrawRectangle(bb,sf.Color.Green)
+                        self.selection = [self.cur_entity]
+                        
+                        # Don't replace the help message for huge background tiles
+                        if bb[2] * bb[3] < 500:
+                            if hasattr(self.cur_entity,"editor_tcode"):
+                                color = self.cur_entity.color
+                                self.help_string = "{0} at {x},{y} - #{r:X}{g:X}{b:X}{a:X}   ({1})".format(
+                                    self.cur_entity.editor_tcode,
+                                    self.cur_entity.__class__.__name__,
+                                    x=self.cur_entity.pos[0],
+                                    y=self.cur_entity.pos[1],
+                                    r=color.r,
+                                    g=color.g,
+                                    b=color.b,
+                                    a=color.a)
+                            
+                    except IndexError:
+                        # no entity below the cursor, highlight the nearest point and its surroundings
+                        self._DrawRectangle((self.fx,self.fy,1.0,1.0),sf.Color(150,150,150))
+                        try:
+                            delattr(self,"cur_entity")
+                        except AttributeError:
+                            pass
+                        # disabled, turns out to be too expensive
+                        #e = ((x,y) for y in range(-3,4) for x in range(-3,4) if x or y)
+                        #for x,y in e:
+                        #    c = int(50 - (x**2 + y**2)**0.5 *0.20 * 50)
+                        #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
                     
-                    if not "entity" in locals() or not entity in self.template:
-                        self._DrawRectangle((self.fx + e.pos[0]-self.select_start[0],
-                            self.fy + e.pos[1]-self.select_start[1],bb[2],bb[3]),sf.Color(40,0,0))
+                    if inp.IsMouseButtonDown(sf.Mouse.Right) and not self.mousepos_covered_by_gui:               
+                         if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
+                            # draw selection rectangle
+                            self._DrawRectangle((self.select_start[0],self.select_start[1],
+                                self.tx-self.select_start[0],
+                                self.ty-self.select_start[1]), sf.Color.Yellow)
+                                            
+                    for e,pos in self.template.items():
+                        bb = e.GetBoundingBox()
+                        self._DrawRectangle(bb,sf.Color.Red)
+                        
+                        if not getattr(self,"cur_entity",None) in self.template:
+                            self._DrawRectangle((self.fx + (e.pos[0]-self.select_start[0]) * int(len(self.template)!=1),
+                                self.fy + (e.pos[1]-self.select_start[1])* int(len(self.template)!=1),
+                                bb[2],bb[3]),sf.Color(40,0,0))
                         
                 # Activate the 'DrawMinimap' overlay on M
                 if inp.IsKeyDown(sf.Key.M) and not [e for e in self.overlays 
@@ -953,12 +998,18 @@ class EditorGame(Game):
                         
                     self.PushOverlay(Overlay_ShowColorMenu())
                     
+                #if inp.IsKeyDown(sf.Key.Right):
+                    
+                    
                 
         # note: order matters, don't change
         self.PushOverlay(Overlay_EditorBasics())
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+      
+    def IsOverlayActive(self,cl):
+        return not not [e for e in self.overlays if not hasattr(e,"__class__") or e.__class__== cl]
         
     def _PlaceEntity(self,codename,pos):
         elem = self._LoadTileFromTag(codename)
@@ -969,7 +1020,7 @@ class EditorGame(Game):
         
     def _SelectEntity(self,codename,pos):
         elem = self._LoadTileFromTag(codename) if isinstance(codename,str) else codename
-        elem.SetPosition(pos)
+        elem.SetPosition(pos or (self.tx,self.ty))
             
         assert isinstance(elem,Entity)
         self._ReplaceSelection([elem])
@@ -1037,9 +1088,10 @@ class EditorGame(Game):
         
     def _SaveLevelBackup(self):
         """Save a backup of the current level. Previous backups are kept""" 
-        self._SaveBackup(self.level_file)
+        EditorGame._SaveBackup(self.level_file)
         
-    def _SaveBackup(self,file):
+    @staticmethod
+    def _SaveBackup(file):
         """Save a backup of an arbitrary file, provided a sub-folder
         'backup' exists""" 
         head, tail = os.path.split(file)
@@ -1079,7 +1131,17 @@ class EditorGame(Game):
     def _FindUnallocatedColorIndex():
         """Get a fresh color index which is not yet use, raise
         KeyError if such an index does not exist"""
-        import curses.ascii
+        
+        try:
+            import curses.ascii
+        except ImportError:
+            # I'm not always shipping with curses
+            class curses:        
+                class ascii:
+                    
+                    @staticmethod
+                    def isprint(t):
+                        return t in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+=-\"'~`,<>L()[]{}#$%^"
         
         # Our level files are ASCII so far, but this is no
         # fixed requirement which could not be changed, now
@@ -1111,7 +1173,7 @@ class EditorGame(Game):
         return sorted(diff(e,color) for e in colors)[0]
     
     @staticmethod
-    def AddGlobalColorEntity(color,desc="(created by editor)"):
+    def AddGlobalColorEntry(color,desc="(created by editor)"):
         """Register a new color globally. This cannot be undone easily,
         so use it with care. Colors are stored globally in the
         config/colors.txt file. The function allocates and returns
@@ -1128,17 +1190,17 @@ class EditorGame(Game):
         
         # Find an empty index to use
         try:
-            index = self._FindUnallocatedColorIndex()
+            index = EditorGame._FindUnallocatedColorIndex()
             print("Adding new color entry with index {0}: RGBA={1:X}{2:x}{3:x}{4:x}".format(
                 index,color.r,color.g,color.b,color.a))
             
             # Slurp the color config file and append our new contents,
             # make a backup as usual.
             file = os.path.join(defaults.config_dir,"colors.txt")
-            self.SaveBackup(file)
+            EditorGame._SaveBackup(file)
             new = """
             
-            # {0}
+# {0}
 {1}={2:x}{3:x}{4:x}{5:x} 
 """.format(desc,index,color.r,color.g,color.b,color.a)
 
@@ -1151,7 +1213,7 @@ class EditorGame(Game):
             colors[index] = color
         except KeyError:
             
-            index = self._FindClosestColorIndex(color) 
+            index = EditorGame._FindClosestColorIndex(color) 
             print("Out of color indices! Reusing existing index {0}".format(index))
             
         return index
@@ -1185,25 +1247,33 @@ class EditorGame(Game):
         self._SaveLevelBackup()
         
         # Clear LevelLoader's cache for this level, this ensures
-        # that the file contents are refetched from fisk the next
+        # that the file contents are refetched from disk the next
         # time they're requested.
         from level import LevelLoader
         LevelLoader.ClearCache([self.level_idx])
         
+        # Fix: sf.Color is unsafe to use in dict's because its
+        # internal operators aren't implemented properly
         from tile import TileLoader
-        rcolors = dict((v,k) for k,v in TileLoader.cached_color_dict.items())
+        
+        def gen_rcolors():
+            return dict(( (v.r,v.g,v.b,v.a) ,k) for k,v in TileLoader.cached_color_dict.items())
+         
+        rcolors = [gen_rcolors()]
         
         def ccol(col):
             try:
-                return rcolors[col]
+                return rcolors[0][(col.r,col.g,col.b,col.a)]
             except KeyError:
                 # A new color! Save it immediately before it runs away ...
-                return self.AddGlobalColorEntry(col)
+                index = self.AddGlobalColorEntry(col)
+                rcolors[0] = gen_rcolors()
+                return index
             
         try:
             # build the output text prior to clearing the file
             cells = "\n".join("".join([((ccol(n.color)+n.editor_tcode) 
-                  if not n is None and hasattr(n,"editor_ccode") else ".  ") for n in row
+                  if not n is None and hasattr(n,"editor_tcode") else ".  ") for n in row
                 ])  for row in grid)
             
             with open(self.level_file,"wt") as out:
@@ -1665,6 +1735,9 @@ class EditorGame(Game):
             self.level.SetOrigin(((self.mx-self.sx)/self.msxp - w*0.5,(self.my-self.sy)/self.msyp -h*0.5))
             ox,oy = self.level.GetOrigin()
             
+            # No longer needed because the editor is now suspended while the game is running
+            """
+            
             # Suspend the game if we moved the player outside the visible scene
             for elem in self.level.EnumActiveEntities():
                 if isinstance(elem, Player):
@@ -1674,6 +1747,7 @@ class EditorGame(Game):
                         if self.IsGameRunning():
                             self.PushSuspend()
                         break
+            """
 
         else:
             ox,oy = self.level.GetOrigin()
@@ -1728,6 +1802,10 @@ class EditorGame(Game):
             
             bb = entity.GetBoundingBox()
             if bb:
+                
+                if bb[2]*bb[3] > 200:
+                    continue
+                
                 col = entity.color
                 
                 xs,ys = int(bb[0])*self.msx, int(bb[1] + yofs)*self.msy
