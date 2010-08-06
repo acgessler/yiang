@@ -1,4 +1,4 @@
-Enemies	E0	E1	E2	E3	E4	E5	MI	BO
+Enemies	E0	E1	E2	E3	E4	E5	E6	E7	MI	BO
 Weapons	W0	AM
 Score	S0	S1	S2	S3	S4	S5
 Danger	DA	TR	DS

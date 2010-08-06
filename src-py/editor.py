@@ -351,7 +351,7 @@ class EditorGame(Game):
                 cache = Overlay_ShowCatalogue.cached_setup
                 
                 w,h = 180,22
-                xs,ys = 100,120
+                xs,ys = 100,95
                 pos = ((x,y) for y in range(ys,defaults.resolution[1]-ys-h,35) 
                     for x in range(xs,defaults.resolution[0]-xs-w,200)
                 )
@@ -376,6 +376,7 @@ class EditorGame(Game):
                             yy += bb[3]*ry + 50
                                             
                         t.SetPosition((xx/rx+ox,yy/ry+oy ))
+                        t.SetColor(getattr(self,"last_color",sf.Color.White))
                         
                         self.cur.append((t,(xx,yy)))
                         xx += bb[2]*rx + 50
@@ -383,7 +384,7 @@ class EditorGame(Game):
                 for k,v in cache.items():
                     x,y = next(pos)
                     self2.elements.append(Button(text=k,rect=[x,y,w,h]) + 
-                        ("release", (lambda src,v=v: SetTiles(v)))
+                        ("release", (lambda src,v=v,k=k:  self.__setattr__("prev_catalogue_page",k) or SetTiles(v)))
                     )
                 while x!=xs:
                     x,y = next(pos)
@@ -391,6 +392,11 @@ class EditorGame(Game):
                 for e in self2.elements:
                     e.draworder = 52000
                     self.AddSlaveDrawable(e)
+                    
+                try:
+                    SetTiles( cache[getattr(self,"prev_catalogue_page","Bricks")] )
+                except KeyError:
+                    pass
                     
             def GetDrawOrder(self):
                 return 51500
@@ -430,21 +436,27 @@ class EditorGame(Game):
                 tx,ty = defaults.tiles_size_px
                 
                 for elem,pos in self.cur:
-                    elem.Update(1.0,0.05)
-                    elem.Draw()
+                    # Allow entities to provide special drawing routines
+                    # for use in the catalogue if this is needed.
+                    getattr(elem,"Update_EditorCatalogue",elem.Update)(self.time,self.time_delta)
+                    getattr(elem,"Draw_EditorCatalogue",elem.Draw)()
                     
-                    bb = elem.GetBoundingBox()
+                    # Don't take the regular bounding box -- take the basic shape of the
+                    # entity instead of the tight collision hull, if possible.
+                    bb = getattr(elem,"GetBoundingBox_EditorCatalogue",elem.GetBoundingBox)()
+                        
                     if bb:
                         if pos[0] <= mx <= pos[0]+bb[2]*tx and pos[1] <= my <= pos[1]+bb[3]*ty:
                             
                             col = sf.Color.Green
                             if self.inp.IsMouseButtonDown(sf.Mouse.Left):
                                 entity = self._SelectEntity("_"+elem.editor_tcode,None)
-                                entity.color = getattr(self,"last_color",sf.Color.White)
+                                entity.color = elem.color
                                 col = sf.Color.Yellow
                                 
-                            self._DrawRectangle(bb, col)
+                            self._DrawRectangle(bb, col, 4)
                             self.help_string = "Select tile {0}".format(elem.editor_tcode)
+            
             
         class Overlay_ShowColorMenu:
             
@@ -606,12 +618,16 @@ class EditorGame(Game):
                     self2.entities = []
                 
                 ox,oy = self.level.GetOrigin()
+                yguiofs,yguisize,xguisize = 27,20,190
                 
                 xb = 40, -242, -100, -100
                 xb = [x+(self.tx-ox)*defaults.tiles_size_px[0] for x in xb]
                 
                 yb = 0, 0, -120, +70
                 yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
+                
+                if self.mx > defaults.resolution[0]-xguisize*2.0:
+                    xb = [x-xguisize*1.0 for x in xb]
                 
                 
                 def PlacePlayerHere():
@@ -634,9 +650,6 @@ class EditorGame(Game):
                     # design issue, but it's rooted too deep to solve
                     # it this nevel.
                     raise NewFrame()
-                    
-                    
-                yguiofs,yguisize,xguisize = 27,20,190
                 
                 self2.elements = [
                     (Button(text="Insert rows(s) here", 
@@ -915,6 +928,25 @@ class EditorGame(Game):
             def __str__(self):
                 return "<EditorBasics overlay - implements item highlighting and acts as overlay manager>"
             
+            def _ShiftOriginIfMouseClose(self2):
+                rx,ry = defaults.resolution
+                ox,oy = self.level.GetOrigin()
+                
+                xt,yt = 100,100
+                sx,sy = 15,10
+                
+                if self.mx > rx-xt:
+                    ox += sx*self.time_delta
+                elif self.mx < xt:
+                    ox -= sx*self.time_delta
+                    
+                if self.my > ry-yt:
+                    oy += sy*self.time_delta                  
+                elif self.my < yt:
+                    oy -= sy*self.time_delta
+                    
+                self.level.SetOrigin((ox,oy))
+            
             def __call__(self2):
                 
                 self.help_string = "Hit 'M' for Map, 'C' for Colors, 'I' for Context Menu, 'S' for Snackbar"
@@ -924,6 +956,8 @@ class EditorGame(Game):
                 # if there are multiple entities, take the one with the highest 
                 # drawing order.
                 if not self.IsOverlayActive(Overlay_ShowCatalogue):
+                    self2._ShiftOriginIfMouseClose()
+                
                     try:
                         self.cur_entity = self.last_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
                             key=lambda x:x.GetDrawOrder(),reverse=True
@@ -1001,23 +1035,6 @@ class EditorGame(Game):
                         
                     self.PushOverlay(Overlay_ShowColorMenu())
                     
-                rx,ry = defaults.resolution
-                ox,oy = self.level.GetOrigin()
-                
-                xt,yt = 100,100
-                sx,sy = 15,10
-                
-                if self.mx > rx-xt:
-                    ox += sx*self.time_delta
-                elif self.mx < xt:
-                    ox -= sx*self.time_delta
-                    
-                if self.my > ry-yt:
-                    oy += sy*self.time_delta                  
-                elif self.my < yt:
-                    oy -= sy*self.time_delta
-                    
-                self.level.SetOrigin((ox,oy))
                 
         # note: order matters, don't change
         self.PushOverlay(Overlay_EditorBasics())

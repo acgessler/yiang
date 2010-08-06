@@ -231,7 +231,7 @@ class NaughtyPongPong(Enemy):
 class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated
     tile which rotates around its center in a certain distance."""
-    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 6.0, radius = 4.5):
+    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5):
         AnimTile.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
         
         self.rotate_speed_base = rotate_speed_base
@@ -243,23 +243,36 @@ class RotatingInferno(Enemy):
     def GetVerboseName(self):
         return "Rotating Inferno"
     
+    def SetPosition(self,pos):
+        self.real_pos = (pos[0]+self.ofs_vec[0],pos[1]+self.ofs_vec[1])
+        Enemy.SetPosition(self,pos)
+    
     def Update(self, time_elapsed, time):
         Enemy.Update(self,time_elapsed, time)
         if not self.game.IsGameRunning():
             return 
         
-        angle = (math.pi*2.0*time) / self.rotate_speed_base
+        angle = (math.pi*2.0*time) * self.rotate_speed_base
         a,b = math.cos(angle), math.sin(angle)
         
         self.ofs_vec = [self.ofs_vec[0]*a-self.ofs_vec[1]*b,self.ofs_vec[0]*b+self.ofs_vec[1]*a]
+        self.SetPosition(self.pos)
+        
+    def GetBoundingBox_EditorCatalogue(self): # Special logic for use within the editor
+        return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
         
     def GetBoundingBox(self):
-        return (self.pos[0]+self.ofs_vec[0],self.pos[1]+self.ofs_vec[1],self.dim[0],self.dim[1])
+        return (self.real_pos[0],self.real_pos[1],self.dim[0],self.dim[1])
     
-    def Draw(self):
+    def Draw_EditorCatalogue(self): # Special logic for use within the editor
         lv = self.game.GetLevel()
         for offsetit, elem in self.cached: 
-            lv.DrawSingle(elem,(self.pos[0]+self.ofs_vec[0],self.pos[1]+self.ofs_vec[1]))
+            lv.DrawSingle(elem,self.pos)
+            
+    def Draw(self): 
+        lv = self.game.GetLevel()
+        for offsetit, elem in self.cached: 
+            lv.DrawSingle(elem,self.real_pos)
 
         
         

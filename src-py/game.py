@@ -1012,8 +1012,29 @@ class Entity(Drawable):
         return Entity.halo_cache[halo_img]
         
 
-
-
+class EntityWithEditorImage(Entity):
+    """A normal entity except it displays a splash bitmap instead
+    of the actual entity when it is being used in editor mode"""
+    def __init__(self,editor_stub_img="noise.png"):
+        Entity.__init__(self)
+        self.editor_stub_img = editor_stub_img
+        
+    def Update(self, time_elapsed, time):
+        
+        if self.game.GetGameMode() == Game.EDITOR:
+            if not hasattr(self,"respawn_img"):
+                self.respawn_img = sf.Image()
+                self.respawn_img.LoadFromFile(os.path.join(defaults.data_dir,"textures",self.editor_stub_img))
+                
+                tx,ty = defaults.tiles_size_px
+                bb = self.GetBoundingBox() or (None,None,1,1)
+                
+                self.respawn_sprite = sf.Sprite(self.respawn_img)
+                self.respawn_sprite.Resize(tx*bb[2],ty*bb[3])
+                
+    def Draw(self):
+        if hasattr(self,"respawn_sprite"):
+            self.game.GetLevel().DrawSingle( self.respawn_sprite, self.pos )
         
     
 

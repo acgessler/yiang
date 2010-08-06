@@ -239,6 +239,9 @@ class Tile(Entity):
             
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
     
+    def GetBoundingBox_EditorCatalogue(self): # Special logic for use within the editor
+        return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
+    
     def _GetHaloImage(self):
         return Entity._GetHaloImage(self,self.halo_img)
 

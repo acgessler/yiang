@@ -29,7 +29,7 @@ import sf
 # My own stuff
 import defaults
 import mathutil
-from game import Entity, Game
+from game import Entity, Game, EntityWithEditorImage
 from renderer import NewFrame, Drawable, Renderer
 from tile import Tile
 from keys import KeyMapping
@@ -671,12 +671,17 @@ class Player(Entity):
         raise NewFrame()
 
 
-class RespawnPoint(Entity):
+class RespawnPoint(EntityWithEditorImage):
     """A respawning point represents a possible position where
     the player can respawn if he or she dies"""
-
+    
+    def __init__(self,editor_stub="respawn_stub2.png"):
+        EntityWithEditorImage.__init__(self,editor_stub)
+        self.editor_stub_img = editor_stub
 
     def Update(self, time_elapsed, time):
+        EntityWithEditorImage.Update(self,time_elapsed, time)
+        
         if hasattr(self, "didit"):
             return
 
@@ -687,23 +692,20 @@ class RespawnPoint(Entity):
         self.didit = True
 
     def GetBoundingBox(self):
-        return (self.pos[0], self.pos[1], 0.5, 0.5)
+        return (self.pos[0], self.pos[1], 1.0, 2.0)
 
     def Interact(self, other):
         return Entity.ENTER
+
     
-    
-class DisabledRespawnPoint(Entity):
+class DisabledRespawnPoint(RespawnPoint):
     """A disabled respawning point needs to be touched
     once by the player in order to serve as respawn
     point candidate."""
 
-
-    def Update(self, time_elapsed, time):
-        pass
-
-    def GetBoundingBox(self):
-        return (self.pos[0], self.pos[1], 0.5, 0.5)
+    def __init__(self):
+        RespawnPoint.__init__(self,"respawn_stub.png")
+        self.didit = True 
 
     def Interact(self, other):
         if isinstance(other,Player):
@@ -713,6 +715,7 @@ class DisabledRespawnPoint(Entity):
                     entity._AddRespawnPoint(self.pos)
                 
         return Entity.ENTER
+
 
 
 class KillAnimStub(Tile):

@@ -25,7 +25,7 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity,Game
+from game import Entity,Game, EntityWithEditorImage
 from tile import AnimTile,Tile,TileLoader
 from player import Player
 from renderer import Renderer,Drawable
@@ -39,3 +39,24 @@ class Iceblock(Tile):
         
     def GetFriction(self):
         return self.friction
+    
+    
+class InvisibleTile(EntityWithEditorImage,Tile):
+    """Invisible tile with editor support"""
+    
+    def __init__(self,*args,editor_image="invisible_stub.png",**kwargs):
+        Tile.__init__(self,*args,**kwargs)
+        EntityWithEditorImage.__init__(self,editor_image)
+        
+    def Update(self,t,dt):
+        Tile.Update(self,t,dt)
+        EntityWithEditorImage.Update(self,t,dt)
+        
+    def Draw(self):
+        Tile.Draw(self)
+        EntityWithEditorImage.Draw(self)
+        
+        
+        
+        
+    
