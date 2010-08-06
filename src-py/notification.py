@@ -22,7 +22,7 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity, NewFrame
+from game import Entity, NewFrame, EntityWithEditorImage
 from player import Player
 from keys import KeyMapping
 from fonts import FontCache
@@ -129,12 +129,12 @@ class MessageBox(Drawable):
         Renderer.app.Draw(text)
         
 
-class SimpleNotification(Entity):
+class SimpleNotification(EntityWithEditorImage):
     """The SimpleNotification tile displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
-    def __init__(self, text, desc="<unnamed>", text_color=sf.Color.Red, width=1, height=1, line_length=50, format=True, audio_fx=None, only_once=True):
-        Entity.__init__(self)
+    def __init__(self, text, desc="<unnamed>", editor_image="notification_stub.png",text_color=sf.Color.Red, width=1, height=1, line_length=50, format=True, audio_fx=None, only_once=True):
+        EntityWithEditorImage.__init__(self,editor_image)
         self.text = text
         self.use_counter = 1 # if only_once is True else 1000000000 
         self.dim = (width, height)
