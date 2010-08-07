@@ -115,6 +115,9 @@ class EditorGame(Game):
         self.save_counter = 0
         self.help_string = ""
         
+        # This will almost certainly make sure that we'll never die!
+        self.lives = 10000000
+        
         self.inp = Renderer.app.GetInput()
         
         Renderer.AddDrawable(EditorCursor())
@@ -814,6 +817,41 @@ class EditorGame(Game):
                     else:
                         print("Could not find a valid player, creating one!")
                         PlaceEntity("_PL")
+                        
+                def TestFromHere(respawn_protect=True):
+                    self2._RemoveMe()
+                    self.EditorPopSuspend()
+                    
+                    from player import RespawnPoint, DisabledRespawnPoint
+                    
+                    # Enable as many respawn points as possible to ease debugging
+                    disabled,respawn = [],[]
+                    for elem in self.level.EnumAllEntities():
+                        if isinstance(elem, Player):
+                            elem.SetPosition((self2.x,self2.y))
+                            break
+                        
+                        if isinstance(elem, DisabledRespawnPoint):
+                            disabled.append(elem)
+                            
+                        elif isinstance(elem, RespawnPoint):
+                            respawn.append(elem)
+                            
+                    else:
+                        print("Could not find a valid player, creating one!")
+                        elem = PlaceEntity("_PL")
+                        
+                    assert elem
+                    for e in respawn:
+                        elem._AddRespawnPoint(e.pos)
+                        
+                    for e in (a for a in sorted(disabled,key=lambda x:(elem.pos[0]-x.pos[0])**2+(elem.pos[1]-x.pos[1])**2,
+                        reverse=True) if a.pos[0]<elem.pos[0]):
+                        
+                        elem._AddOrderedRespawnPoint(e.pos)
+                        
+                    if respawn_protect:
+                        elem.Protect(2.0)
                     
                 def DeleteThisTile():
                     with self.BeginTransaction() as transaction:
@@ -843,7 +881,19 @@ class EditorGame(Game):
                         
                         ("release", (lambda src: PlacePlayerHere()))
                     )
-                    yn += yguiofs     
+                    yn += yguiofs    
+                    self2.elements.append(Button(text="Test from here", 
+                        rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
+                        
+                        ("release", (lambda src: TestFromHere(True)))
+                    )
+                    yn += yguiofs    
+                    self2.elements.append(Button(text=" \"\" (no respawn protection)", 
+                        rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
+                        
+                        ("release", (lambda src: TestFromHere(False)))
+                    )
+                    yn += yguiofs  
                     self2.elements.append(Button(text="Place respawn line here", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
                         
@@ -869,7 +919,7 @@ class EditorGame(Game):
                         hh = h(self)
                         hh(match)
                         
-                        if hh.elements and count > 1:
+                        if hh.elements:
                             def UpdateSelection(h): # migrated from a lambda
                                  self2.__dict__.setdefault("active_entities",[]).__iadd__([
                                     e for e in self2.entities if [
@@ -892,7 +942,7 @@ class EditorGame(Game):
                                     c for c in h.GetClasses() if isinstance(e, c)]
                                 ])
                                 
-                            if len(self2.entities) > 1:
+                            if len(self2.entities) > 1 and count > 1:
                                 self2.elements.append(Button(text="Select exclusively",fgcolor=sf.Color.Green, 
                                     rect=[xb[3]+xguisize+10,yb[3]+yn,xguisize,yguisize]) + 
                                     
@@ -1360,9 +1410,13 @@ class EditorGame(Game):
         
     def RemoveOverlay(self,ov):
         # XXX no reentrant or threadsafe
-        self.overlays.reverse()
-        self.overlays.remove(ov)
-        self.overlays.reverse()
+        try:
+            self.overlays.reverse()
+            self.overlays.remove(ov)
+            self.overlays.reverse()
+        except ValueError:
+            # happens if the overlay was not active at all, ignore silently
+            pass
         
     def _UpdateLevelSize(self):
         """Recompute self.level.level_size basing on the current state"""

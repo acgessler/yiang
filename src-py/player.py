@@ -629,9 +629,9 @@ class Player(Entity):
     def _AddOrderedRespawnPoint(self, pos):
         """Add a possible respawn position to the player entity,
         that is a respawn point the player jumps to, without regard
-        to the position of death. If multiple ordered respawn
-        points are registered, the last is taken."""
-        if (pos[0] != self.ordered_respawn_positions[-1][0] and pos[1] != self.ordered_respawn_positions[-1][1]):
+        to the position of his death. If multiple ordered respawn
+        points are registered, the most recent is taken."""
+        if not self.ordered_respawn_positions or (pos[0] != self.ordered_respawn_positions[-1][0] and pos[1] != self.ordered_respawn_positions[-1][1]):
             self.ordered_respawn_positions.append(pos)
             print("Set ordered respawn point {0}|{1}".format(pos[0], pos[1]))
 

@@ -1,3 +1,3 @@
 from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_0",text_color=sf.Color(180,0,0),audio_fx="_story_0.ogg")
-Also sprach der Weise:
-Gehe zu den Ungläubigen, und bringe ihnen GLAUBEN UND FRIEDEN mit dem Schwert. Zerstöre all ihre Zeichen, Buchstaben, Ligaturen und Akzente denn sie sind böse und primitiv. ER ist mir erschienen und hat mir den Weg aufgezeigt.
+Thus spoke the priest:
+Visit all the non-believers and bring them FAITH AND PEACE with your sword. Destroy all their signs, letters, ligatures and accents for they are evil and primitive. He appeared to me and showed me the way, and I ask you to follow me.

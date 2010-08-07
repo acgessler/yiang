@@ -1,2 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_2",text_color=sf.Color(0,150,0),audio_fx="_story_2.ogg")
-Eine zufällig anwesende Blume fragt sich gerade wie er wohl heißt - dieser aufrechte Mann, der in diesen Gefilden für seinen Glauben sterben wird. Dann beschliesst sie, dass es nicht notwendig ist ihn vor dem Highscore-Screen danach zu fragen und tankt weiter Sonnenlicht und Wasser.
+A flower on the path asks himselfs what his name might be - this strong man, which will die in these lands for nothing than his faith. Then, our plant makes the decision that it's not necessary to ask him before the highscore screen and continues to collect sun light and water. No need to interfere with the tall people!
