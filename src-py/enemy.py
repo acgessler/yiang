@@ -27,7 +27,7 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity, Game
+from game import Entity, Game, EntityWithEditorImage
 from tile import Tile, AnimTile
 from weapon import Shot
 from score import ScoreTileAnimStub
@@ -74,7 +74,7 @@ class Enemy(AnimTile):
             self._Die()
             
         return Entity.KILL
-
+    
 
 class SmallTraverser(Enemy):
     """The simplest class of entities, it moves in a certain
@@ -154,6 +154,22 @@ class SmallTraverser(Enemy):
         # XXX the sound effect seems to shoort for SFMl to handle it.
         #from audio import SoundEffectCache
         #SoundEffectCache.Get("click8a.wav").Play()
+        
+        
+class SmallTraverserBlocker(EntityWithEditorImage):
+    """An invisible tile with a single purpose: block
+    only SmallTraverser's, but not the player or 
+    somebody else. """
+    
+    def __init__(self,file="stblock_stub.png"):
+        EntityWithEditorImage.__init__(self,file)
+        self.dim = (1,1)
+        
+    def Interact(self,other):
+        return Entity.BLOCK if isinstance(other, SmallTraverser) else Entity.ENTER
+    
+    def GetBoundingBox(self):
+        return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
         
         
 class NaughtyPongPong(Enemy):

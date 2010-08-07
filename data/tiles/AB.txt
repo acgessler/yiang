@@ -1,0 +1,3 @@
+<out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO)
+ ___ 
+{___}

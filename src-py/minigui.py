@@ -216,7 +216,7 @@ class Component(Drawable):
         mx,my = inp.GetMouseX(),inp.GetMouseY()
         
         self.buttons = inp.IsMouseButtonDown(sf.Mouse.Left),inp.IsMouseButtonDown(sf.Mouse.Right)
-        self.hit = (self.x+self.w>mx>self.x and self.y+self.h>my>self.y)
+        self.hit = (self.x+self.w>=mx>=self.x and self.y+self.h>=my>=self.y)
 
         self.Fire("update")
                 
@@ -288,10 +288,10 @@ class Button(HasAText):
     """A normal button control, enough said"""
     
     COLORS = {
-        Component.STATE_NORMAL   : sf.Color(50,50,50),
-        Component.STATE_ACTIVE   : sf.Color(180,75,75),
-        Component.STATE_HOVER    : sf.Color(90,75,75),
-        Component.STATE_DISABLED : sf.Color(160,160,160),
+        Component.STATE_NORMAL   : sf.Color(50,50,50,220),
+        Component.STATE_ACTIVE   : sf.Color(180,75,75,255),
+        Component.STATE_HOVER    : sf.Color(90,75,75,255),
+        Component.STATE_DISABLED : sf.Color(160,160,160,120),
     }
     
     def __init__(self,**kwargs):

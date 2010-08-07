@@ -50,8 +50,21 @@ from tile import Tile,AnimTile,TileLoader
 
 from minigui import Component, Button, ToggleButton, GUIManager
 
+# Sentinel decorator to indicate that a particular function overrides
+# a equally named function in a baseclass
 def override(x):
     return x
+
+# Basic editor key setup, currently not customizable via normal keybindings
+editor_keys = {
+    "context"       : (sf.Key.V,"V"),
+    "expand"        : (sf.Key.E,"E"),
+    "colors"        : (sf.Key.C,"C"),
+    "map"           : (sf.Key.M,"M"),
+    "catalogue"     : (sf.Key.S,"S"),
+    "select-rect"   : (sf.Key.LControl,"Ctrl"),
+    "select-hold"   : (sf.Key.LShift,"Shift"),
+}
 
 class EditorCursor(Drawable):
     """Draws the cursor on top of the whole scenery"""
@@ -176,6 +189,13 @@ class EditorGame(Game):
             
         def UpdateRedoState(gui):
             gui.disabled = self.cur_action>=len(self.actions)
+            
+        def UpdateSaveState(gui):
+            # The user is allowed to save whenever he wants,
+            # even when we think it's not necessary. We
+            # might be wrong, and if we are not it 
+            # won't harm anybody.
+            gui.fgcolor = sf.Color.Red if self.UnsavedChanges() else sf.Color.Green
         
         # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25],
@@ -184,6 +204,7 @@ class EditorGame(Game):
         ))
         self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25],
               tip="Save to disk (regular save, no further optimizations)") + 
+              ("update",  (lambda src: UpdateSaveState(src))) +
 		      ("release", (lambda src: self.Save()))
         ))
         self.AddSlaveDrawable((Button(text="Undo", rect=[200, 10, 50, 25],
@@ -368,9 +389,18 @@ class EditorGame(Game):
                     del self.cur[:]
                     for elem in v:
                         t = self._LoadTileFromTag("_"+elem)
-                        t.GetDrawOrder = lambda: 52000
+                        if not t:
+                            continue
     
                         bb = t.GetBoundingBox()
+                        if not bb:
+                            continue
+                        
+                        # We draw manually, but this is to inform the tile that
+                        # this tile definitely wants to be drawn after
+                        # postprocessing occurs.
+                        t.GetDrawOrder = lambda: 52000
+                            
                         if xx+bb[2]*rx>=defaults.resolution[0]:
                             xx = xs
                             yy += bb[3]*ry + 50
@@ -420,7 +450,7 @@ class EditorGame(Game):
                 shape = sf.Shape()
 
                 bb = (0,0,defaults.resolution[0],defaults.resolution[1])
-                color = sf.Color(0,0,0,150)
+                color = sf.Color(0,0,0,220)
                 
                 shape.AddPoint(bb[0],bb[1],color,color)
                 shape.AddPoint(bb[2],bb[1],color,color)
@@ -582,7 +612,7 @@ class EditorGame(Game):
                 "color by left-clicking on a color"
                 
                 inp = self.inp
-                if not inp.IsKeyDown(sf.Key.C):
+                if not inp.IsKeyDown(editor_keys["colors"][0]):
                     self2._RemoveMe()
                     
                 # Draw the origin tile in blue 
@@ -590,12 +620,159 @@ class EditorGame(Game):
                     bb = e.GetBoundingBox()
                     if bb:
                         self._DrawRectangle(bb,sf.Color(0,0,255))
+                        
+                        
+        class Overlay_ShowExpandMenu(Drawable):
+            
+            def __str__(self):
+                return "<ShowContextMenu - show the context menu>"
+            
+            def __init__(self2):
+                Drawable.__init__(self2)
+                self2.x,self2.y = self.fx,self.fy
+                self2.olds = self2.x,self2.y
+                
+                ox,oy = self.level.GetOrigin()
+                yguiofs,yguisize,xguisize = 22,22,150
+                
+                xb = 40, -242, -100, -75
+                xb = [x+(self.tx-ox)*defaults.tiles_size_px[0] for x in xb]
+                
+                yb = 0, 0, -90, +70
+                yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
+                
+                def SetMode(dir,mode):
+                    self2.direction = dir
+                    self2.mode = mode
+                    
+                def SetModeFreeGUI(dir,mode):
+                    SetMode(dir,mode)
+                    self2._DisableGUI()
+                    
+                SetMode(0,0)
+                
+                self2.elements = [
+                    (Button(text="Insert rows(s)", 
+                        rect=[xb[2],yb[2],xguisize,yguisize],fgcolor=sf.Color.Green) + 
+                        ("release", (lambda src: SetModeFreeGUI(2,0)))
+                    ),
+                    
+                    (Button(text="Delete rows(s)", 
+                        rect=[xb[2],yb[2]+yguiofs,xguisize,yguisize],fgcolor=sf.Color.Red) +                         
+                        ("release", (lambda src: SetModeFreeGUI(2,1)))
+                    ),
+                    
+                    (Button(text="Insert column(s)", 
+                        rect=[xb[0],yb[0],xguisize,yguisize],fgcolor=sf.Color.Green) +                         
+                        ("release", (lambda src: SetModeFreeGUI(1,0)))
+                    ),
+                    
+                    (Button(text="Delete column(s)", 
+                        rect=[xb[0],yb[0]+yguiofs,xguisize,yguisize],fgcolor=sf.Color.Red) +                         
+                        ("release", (lambda src: SetModeFreeGUI(1,1)))
+                    ),            
+                ]
         
+                rx, ry = defaults.resolution
+                for e in self2.elements:
+                    # Always place the GUI elements at a place where no clipping is needed
+                    if e.x+e.w > rx:
+                        e.x = 5+e.x-self2.x
+                        
+                    if e.y+e.h > ry:
+                        e.y = 5+e.y-self2.y
+                    
+                    e.draworder = 52000
+                    self.AddSlaveDrawable(e)
+                    
+            def _RemoveMe(self2):
+                self2._CommitTransaction()
+                self2._DisableGUI()
+                
+                self.RemoveOverlay(self2)    
+                self.RemoveSlaveDrawable(self2)
+                
+            def _DisableGUI(self2):
+                for e in self2.elements:
+                    self.RemoveSlaveDrawable(e)
+                
+            def _CommitTransaction(self2):
+                s = self2.x,self2.y
+                
+                if self2.mode==0:
+                     # In order to commit the action we first need to revert it
+                    diff = getattr(self2,"last_diff",0)
+                    if not diff or diff < 0:
+                        return
+                
+                    self.ShrinkLevel(self2.direction-1, s[self2.direction-1], diff)
+                    self.ControlledExpandLevel(self2.direction-1, s[self2.direction-1], diff)
+                    
+                elif self2.mode==1:
+                    u = s[self2.direction-1] 
+                    t = math.ceil( self._MouseToTileCoords(self.mx,self.my)[self2.direction-1] )
+                    diff = t-u
+                    
+                    if diff > 0:
+                        self.ControlledShrinkLevel(self2.direction-1, u, diff)
+            
+            def __call__(self2):
+                self.help_string = "Hold '{0}' to keep the overlay open".format(editor_keys["expand"][1])
+                
+                inp = self.inp
+                if not inp.IsKeyDown(editor_keys["expand"][0]):
+                    self2._RemoveMe()
+                    
+                if self2.direction:
+                    rx,ry = defaults.resolution
+                    cola = sf.Color(0,255,0,100) if self2.mode==0 else sf.Color(255,0,0,100)
+                    colb = sf.Color(0,255,0,255) if self2.mode==0 else sf.Color(255,0,0,255)
+                    
+                    mx,my = self.mx,self.my
+                    
+                    s = self2.x,self2.y
+                    t = [math.ceil(x) for x in self._MouseToTileCoords(mx,my)]
+                    
+                    m = self._TileToMouseCoords(t)
+                    n = self._TileToMouseCoords(s)
+                    bb = (n[0],0,m[0],ry) if self2.direction==1 else (0,n[1],rx,m[1])
+                    
+                    if self2.mode==0:
+                        diff = t[self2.direction-1]-s[self2.direction-1] 
+                        if diff < 0:
+                            # XXX implement this case properly
+                            return
+                        
+                        rdiff = diff - getattr(self2,"last_diff",0)
+                        
+                        if rdiff:
+                            (self.ExpandLevel if rdiff > 0 else self.ShrinkLevel) (
+                                self2.direction-1, 
+                                s[self2.direction-1], 
+                                abs(rdiff)
+                            )
+                            
+                        self2.last_diff = diff
+                            
+                    elif self2.mode==1:
+                        # XXX add some kind of instant preview?
+                        pass
+                    
+                    shape = sf.Shape()
+                    shape.AddPoint(bb[0],bb[1],cola,colb)
+                    shape.AddPoint(bb[2],bb[1],cola,colb)
+                    shape.AddPoint(bb[2],bb[3],cola,colb)
+                    shape.AddPoint(bb[0],bb[3],cola,colb)
+            
+                    shape.EnableFill(True)
+                    shape.EnableOutline(True)
+            
+                    self.DrawSingle(shape)
         
         class Overlay_ShowContextMenu(Drawable):
             
             def __str__(self):
-                return "<ShowContectMenu - show the context menu accessible on the I key>"
+                return "<ShowContextMenu - show the context menu>"
             
             def __init__(self2):
                 Drawable.__init__(self2)
@@ -618,17 +795,16 @@ class EditorGame(Game):
                     self2.entities = []
                 
                 ox,oy = self.level.GetOrigin()
-                yguiofs,yguisize,xguisize = 27,20,190
+                yguiofs,yguisize,xguisize = 22,22,190
                 
-                xb = 40, -242, -100, -100
+                xb = 40, -242, -100, 50
                 xb = [x+(self.tx-ox)*defaults.tiles_size_px[0] for x in xb]
                 
-                yb = 0, 0, -120, +70
+                yb = 0, 0, -60, +20
                 yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
                 
                 if self.mx > defaults.resolution[0]-xguisize*2.0:
                     xb = [x-xguisize*1.0 for x in xb]
-                
                 
                 def PlacePlayerHere():
                     for elem in self.level.EnumAllEntities():
@@ -651,57 +827,15 @@ class EditorGame(Game):
                     # it this nevel.
                     raise NewFrame()
                 
-                self2.elements = [
-                    (Button(text="Insert rows(s) here", 
-                        rect=[xb[2],yb[2],xguisize,yguisize],fgcolor=sf.Color.Green) + 
-                        ("release", (lambda src: self.ControlledExpandLevel(1,self2.x,1)))
-                    ),
-                    
-                    (Button(text="Delete rows(s) here", 
-                        rect=[xb[2],yb[2]+yguiofs,xguisize,yguisize],fgcolor=sf.Color.Red) +                         
-                        ("release", (lambda src: self.ControlledShrinkLevel(1,self2.x,1)))
-                    ),
-                    
-                    (Button(text="Insert rows(s) here", 
-                        rect=[xb[3],yb[3],xguisize,yguisize],fgcolor=sf.Color.Green) +                        
-                        ("release", (lambda src: self.ControlledExpandLevel(1,self2.x-1,1)))
-                    ),
-                    
-                    (Button(text="Delete rows(s) here", 
-                        rect=[xb[3],yb[3]+yguiofs,xguisize,yguisize],fgcolor=sf.Color.Red) +                       
-                        ("release", (lambda src: self.ControlledShrinkLevel(1,self2.x-1,1)))
-                    ),
-                    
-                    
-                    
-                    (Button(text="Insert column(s) here", 
-                        rect=[xb[0],yb[0],xguisize,yguisize],fgcolor=sf.Color.Green) +                         
-                        ("release", (lambda src: self.ControlledExpandLevel(0,self2.x,1)))
-                    ),
-                    
-                    (Button(text="Delete column(s) here", 
-                        rect=[xb[0],yb[0]+yguiofs,xguisize,yguisize],fgcolor=sf.Color.Red) +                         
-                        ("release", (lambda src: self.ControlledShrinkLevel(0,self2.x,1)))
-                    ),         
-                    
-                    (Button(text="Insert column(s) here", 
-                        rect=[xb[1],yb[1],xguisize,yguisize],fgcolor=sf.Color.Green) +                         
-                        ("release", (lambda src: self.ControlledExpandLevel(0,self2.x,1)))
-                    ),       
-                    
-                    (Button(text="Delete column(s) here", 
-                        rect=[xb[1],yb[1]+yguiofs,xguisize,yguisize],fgcolor=sf.Color.Red) +                        
-                        ("release", (lambda src: self.ControlledShrinkLevel(0,self2.x,1)))
-                    ),
-                ]
+                self2.elements = []
                 
                 # Add special context-specific items
-                yn = 80
+                yn = 10
                 if len(self2.entities):
                     self2.elements.append(Button(text="Delete this tile(s)", rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Red) + 
                         ("release", (lambda src: DeleteThisTile()))
                     )
-                    yn += yguiofs
+                    yn += yguiofs*2
                         
                 else:
                     self2.elements.append(Button(text="Place player here", 
@@ -709,26 +843,25 @@ class EditorGame(Game):
                         
                         ("release", (lambda src: PlacePlayerHere()))
                     )
-                    yn += yguiofs   
-                                    
+                    yn += yguiofs     
                     self2.elements.append(Button(text="Place respawn line here", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
                         
                         ("release", (lambda src: self._PlaceEntity("_RE",(self2.x,self2.y))))
                     )
-                    yn += yguiofs 
-                                      
+                    yn += yguiofs                                       
                     self2.elements.append(Button(text="Place respawn point here", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize]) + 
                         
                         ("release", (lambda src: self._PlaceEntity("_RD",(self2.x,self2.y))))
                     )
-                    yn += yguiofs
+                    yn += yguiofs*2
                     
                 # Load more context-specific actions from the editoractions registry
                 import editoractions
                 handlers = editoractions.GetHandlers()
                 
+                count = len([h for h in handlers if [c for c in h.GetClasses() for e in self2.entities if isinstance(e, c)]])
                 for h in handlers:
                     
                     match = [e for c in h.GetClasses() for e in self2.entities if isinstance(e, c)]
@@ -736,14 +869,57 @@ class EditorGame(Game):
                         hh = h(self)
                         hh(match)
                         
-                        for elem in hh.elements:
-                            elem.rect=[xb[3],yb[3]+yn,xguisize,yguisize]
-                            
-                            self2.elements.append(elem)
-                            yn += yguiofs
+                        if hh.elements and count > 1:
+                            def UpdateSelection(h): # migrated from a lambda
+                                 self2.__dict__.setdefault("active_entities",[]).__iadd__([
+                                    e for e in self2.entities if [
+                                        c for c in h.GetClasses() if isinstance(e, c)
+                                    ]
+                                ]) 
+                                 
+                            def SetSelection(sel):
+                                self2.entities[:] = sel
+                                if hasattr(self,"template") and self.template:
+                                    self.template = dict((t,self.template[t]) for t in sel)
+                                 
+                            def SelectOnlyUs(h):
+                                SetSelection([e for e in self2.entities if [
+                                    c for c in h.GetClasses() if isinstance(e, c)]
+                                ])
+                                
+                            def RemoveUsFromSelection(h):
+                                SetSelection([e for e in self2.entities if not [
+                                    c for c in h.GetClasses() if isinstance(e, c)]
+                                ])
+                                
+                            if len(self2.entities) > 1:
+                                self2.elements.append(Button(text="Select exclusively",fgcolor=sf.Color.Green, 
+                                    rect=[xb[3]+xguisize+10,yb[3]+yn,xguisize,yguisize]) + 
+                                    
+                                    ("release", (lambda src,h=h: SelectOnlyUs(h))) +
+                                    ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
+                                )
+                                
+                                self2.elements.append(Button(text="Remove from selection", fgcolor=sf.Color.Red, 
+                                    rect=[xb[3]+xguisize+10,yb[3]+yn+yguiofs,xguisize,yguisize]) + 
+                                    
+                                    ("release", (lambda src,h=h: RemoveUsFromSelection(h))) +
+                                    ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
+                                )
+                    
+                            for elem in hh.elements: 
+                                elem += ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
+                                
+                                elem.rect=[xb[3],yb[3]+yn,xguisize,yguisize]
+                                
+                                self2.elements.append(elem)
+                                yn += yguiofs
+                            yn += yguiofs # extra space
                 
                 rx,ry = defaults.resolution
                 for e in self2.elements:
+                    
+                    e.y -= yn*0.5
                     
                     # Always place the GUI elements at a place where no clipping is needed
                     if e.x+e.w > rx:
@@ -766,33 +942,38 @@ class EditorGame(Game):
                 self.RemoveSlaveDrawable(self2)
             
             def __call__(self2):
-                self.help_string = "Hold 'I' to keep the overlay open"
+                self.help_string = "Hold '{0}' to keep the overlay open".format(editor_keys["context"][1])
                 
                 inp = self.inp
-                if not inp.IsKeyDown(sf.Key.I):
+                if not inp.IsKeyDown(editor_keys["context"][0]):
                     self2._RemoveMe()
                     
                 # Draw the origin tile in blue 
-                for e in self2.entities:
+                for e in getattr( self2, "active_entities", self2.entities ):
                     bb = e.GetBoundingBox()
                     if bb:
                         self._DrawRectangle(bb,sf.Color(0,0,255))
+                        
+                try:
+                    delattr(self2,"active_entities")
+                except AttributeError:
+                    pass
                     
             def GetDrawOrder(self):
                 return -100
                     
             def Draw(self2):
-                # Draw the grid before postprocessing and regular drawing occurs   
-                r = 9
+                # Draw the grid before postprocessing and regular drawing occurs 
+                strength = 10
+                r = 8
                 e = ((x,y) for y in range(-r+1,r) for x in range(-r+1,r) if x or y)
                 for x,y in e:
-                    c = int(50 - (x**2 + y**2)**0.5 * (0.5/r) * 50)
-                    if c <= 10:
+                    c = max(0, int(strength - (x**2 + y**2)**0.5 * (1.0/r) * strength))
+                    if c <= strength*0.2:
                         continue
-                    self._DrawRectangle((self2.x+x,self2.y+y,1.0,1.0),sf.Color(c,c,c),thickness=1)
+                    self._DrawRectangle((self2.x+x,self2.y+y,1.0,1.0),sf.Color(0xff,0xff,0xff,c),thickness=1)
                     
-            
-        
+                    
         class Overlay_ShowMinimap(Drawable):
             
             def __init__(self2):
@@ -807,7 +988,7 @@ class EditorGame(Game):
                 "over the map to move the viewport"
                 
                 inp = self.inp
-                if not inp.IsKeyDown(sf.Key.M):
+                if not inp.IsKeyDown(editor_keys["map"][0]):
                     self.RemoveOverlay(self2)
                     self.RemoveSlaveDrawable(self2)
                 
@@ -883,45 +1064,47 @@ class EditorGame(Game):
             
             def __call__(self2):
                 inp = self.inp
-                if  not self.IsOverlayActive(Overlay_ShowCatalogue):
-                    if inp.IsMouseButtonDown(sf.Mouse.Right):
-                        if not self.mousepos_covered_by_gui:
-                            # copy current tile
-                            if self.in_select is False:
-                                if self.select_start is None or not inp.IsKeyDown(sf.Key.LShift):
-                                    self.template = dict()
-                                    self.select_start = self.fx,self.fy
-                                    
-                                self.in_select = True
+                if  not self.IsOverlayActive(Overlay_ShowCatalogue) and inp.IsMouseButtonDown(sf.Mouse.Right):
+                    if not self.mousepos_covered_by_gui:
+                        # copy current tile
+                        if self.in_select is False:
+                            if self.select_start is None or not inp.IsKeyDown(editor_keys["select-hold"][0]):
+                                self.template = dict()
+                                self.select_start = self.fx,self.fy
                                 
-                            if inp.IsKeyDown(sf.Key.LControl):
-                                if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
-                                    if not hasattr(self,"last_select"):
-                                        self.last_select = self.select_start
-                                    
-                                    for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
-                                        for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
-                                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                                self.template[e] = None  
-                                                
-                                    for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
-                                        for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
-                                            for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                                self.template[e] = None 
-                                                                  
-                                    
-                                    self.last_select = self.fx,self.fy
+                            self.in_select = True
+                            
+                        if inp.IsKeyDown(editor_keys["select-rect"][0]):
+                            
+                            # XXX bad runtime performance, scales terribly
+                            
+                            if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
+                                if not hasattr(self,"last_select"):
+                                    self.last_select = self.select_start
                                 
-                            else:
-                                if hasattr(self,"cur_entity"): 
-                                    self.template[self.cur_entity] = None
-                                    
-                            try:
-                                self.last_color = next(self.template.keys().__iter__()).color       
-                            except StopIteration:
-                                pass     
-                    else:
-                        self.in_select = False
+                                for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
+                                    for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
+                                        for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                            self.template[e] = None  
+                                            
+                                for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
+                                    for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
+                                        for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
+                                            self.template[e] = None 
+                                                              
+                                
+                                self.last_select = self.fx,self.fy
+                            
+                        else:
+                            if hasattr(self,"cur_entity"): 
+                                self.template[self.cur_entity] = None
+                                
+                        try:
+                            self.last_color = next(self.template.keys().__iter__()).color       
+                        except StopIteration:
+                            pass     
+                else:
+                    self.in_select = False
                     
         
         class Overlay_EditorBasics:
@@ -948,8 +1131,12 @@ class EditorGame(Game):
                 self.level.SetOrigin((ox,oy))
             
             def __call__(self2):
-                
-                self.help_string = "Hit 'M' for Map, 'C' for Colors, 'I' for Context Menu, 'S' for Snackbar"
+                self.help_string = "Hit '{0}' for Map, '{1}' for Colors, '{2}' for Context Menu, '{3}' for Snackbar".\
+                    format(editor_keys["map"][1],
+                           editor_keys["colors"][1],
+                           editor_keys["context"][1],
+                           editor_keys["catalogue"][1]
+                    )
                 
                 inp = self.inp
                 # check if there's an entity right here and show its bounding box in white.
@@ -995,55 +1182,75 @@ class EditorGame(Game):
                         #    self._DrawRectangle((fx+x,fy+y,1.0,1.0),sf.Color(c,c,c))
                     
                     if inp.IsMouseButtonDown(sf.Mouse.Right) and not self.mousepos_covered_by_gui:               
-                         if inp.IsKeyDown(sf.Key.LControl) and self.select_start:
+                         if inp.IsKeyDown(editor_keys["select-rect"][0]) and self.select_start:
                             # draw selection rectangle
                             self._DrawRectangle((self.select_start[0],self.select_start[1],
                                 self.tx-self.select_start[0],
                                 self.ty-self.select_start[1]), sf.Color.Yellow)
+                            
+                    if not self.IsOverlayActive(Overlay_ShowContextMenu):
                                             
-                    for e,pos in self.template.items():
-                        bb = e.GetBoundingBox()
-                        self._DrawRectangle(bb,sf.Color.Red)
-                        
-                        if not getattr(self,"cur_entity",None) in self.template:
-                            self._DrawRectangle((self.fx + (e.pos[0]-self.select_start[0]) * int(len(self.template)!=1),
-                                self.fy + (e.pos[1]-self.select_start[1])* int(len(self.template)!=1),
-                                bb[2],bb[3]),sf.Color(40,0,0))
+                        # Don't draw the current selection shadow while the user is 
+                        # still selecting, it looks ugly
+                        for e,pos in self.template.items():
+                            bb = e.GetBoundingBox()
+                            self._DrawRectangle(bb,sf.Color.Red)
+                            
+                            ifnot = [Overlay_ShowContextMenu,
+                                     Overlay_ShowMinimap,
+                                     Overlay_ShowColorMenu,
+                                     Overlay_ShowExpandMenu
+                            ]
+                            
+                            if not inp.IsKeyDown(editor_keys["select-rect"][0]) \
+                                and not inp.IsKeyDown(editor_keys["select-hold"][0]) \
+                                and not self.in_select:
+                            
+                                if not getattr(self,"cur_entity",None) in self.template:
+                                    if not self.IsOverlayActive(ifnot):
+                                        self._DrawRectangle((self.fx + (e.pos[0]-self.select_start[0]) * int(len(self.template)!=1),
+                                            self.fy + (e.pos[1]-self.select_start[1])* int(len(self.template)!=1),
+                                            bb[2],bb[3]),sf.Color(40,0,0))
                         
                 # Activate the 'DrawMinimap' overlay on M
-                if inp.IsKeyDown(sf.Key.M) and not [e for e in self.overlays 
-                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowMinimap]:
-                        
+                if inp.IsKeyDown(editor_keys["map"][0]) \
+                    and not self.IsOverlayActive(Overlay_ShowMinimap):       
+                                    
                     self.PushOverlay(Overlay_ShowMinimap())
                     
-                # Activate the 'DrawContextMenu' overlay on I
-                if inp.IsKeyDown(sf.Key.I) and not [e for e in self.overlays 
-                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowContextMenu]:
-                        
+                # Activate the 'DrawContextMenu' overlay on V
+                if inp.IsKeyDown(editor_keys["context"][0]) \
+                    and not self.IsOverlayActive(Overlay_ShowContextMenu):   
+                                       
                     self.PushOverlay(Overlay_ShowContextMenu())
                     
                 # Activate the 'DrawCatalogueMenu' overlay on S
-                if inp.IsKeyDown(sf.Key.S) and not [e for e in self.overlays 
-                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowCatalogue]:
-                        
+                if inp.IsKeyDown(editor_keys["catalogue"][0]) \
+                    and not self.IsOverlayActive(Overlay_ShowCatalogue):
+                    
                     self.PushOverlay(Overlay_ShowCatalogue())
                     
-                # Activate the 'DrawColorMenu' overlay on I
-                if inp.IsKeyDown(sf.Key.C) and not [e for e in self.overlays 
-                    if not hasattr(e,"__class__") or e.__class__== Overlay_ShowColorMenu]\
-                    and hasattr(self,"last_entity"):
+                # Activate the 'DrawColorMenu' overlay on C
+                if inp.IsKeyDown(editor_keys["colors"][0]) \
+                    and not self.IsOverlayActive(Overlay_ShowColorMenu) and hasattr(self,"last_entity"):
                         
-                    self.PushOverlay(Overlay_ShowColorMenu())
+                    self.PushOverlay(Overlay_ShowColorMenu())   
                     
+                # Activate the 'DrawColorMenu' overlay on C
+                if inp.IsKeyDown(editor_keys["expand"][0]) \
+                    and not self.IsOverlayActive(Overlay_ShowExpandMenu):
+                        
+                    self.PushOverlay(Overlay_ShowExpandMenu())                        
                 
         # note: order matters, don't change
         self.PushOverlay(Overlay_EditorBasics())
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+        
       
-    def IsOverlayActive(self,cl):
-        return not not [e for e in self.overlays if not hasattr(e,"__class__") or e.__class__== cl]
+    def IsOverlayActive(self,*args):
+        return not not [e for e in self.overlays if hasattr(e,"__class__") and e.__class__ in args]
         
     def _PlaceEntity(self,codename,pos):
         elem = self._LoadTileFromTag(codename)
@@ -1337,7 +1544,7 @@ class EditorGame(Game):
     def UnsavedChanges(self):
         return self.save_counter != self.cur_action
             
-    def _DrawRectangle(self,bb,color,thickness=2):
+    def _DrawRectangle(self,bb,color,thickness=3):
         shape = sf.Shape()
 
         bb = [bb[0],bb[1],bb[0]+bb[2],bb[1]+bb[3]]
@@ -1387,17 +1594,34 @@ class EditorGame(Game):
         t.editor_ccode = which.editor_ccode 
         return t
     
+    def _MouseToTileCoords(self,*args):
+        """Convert mouse coordinates (pixels) to the internal
+        tile coordinate system.""" 
+        
+        offset = self.level.GetOrigin()
+        mx,my = args if len(args)==2 else args[0]
+        
+        return (mx/defaults.tiles_size_px[0] + offset[0], 
+            my/defaults.tiles_size_px[1]
+            - defaults.status_bar_top_tiles)
+        
+        
+    def _TileToMouseCoords(self,*args):
+        offset = self.level.GetOrigin()
+        mx,my = args if len(args)==2 else args[0]
+        
+        return ((mx-offset[0])*defaults.tiles_size_px[0],(my + 
+            defaults.status_bar_top_tiles)*
+            defaults.tiles_size_px[1])
+    
+    
     def _DrawEditor(self):
         
         inp = Renderer.app.GetInput()
         self.level.SetDistortionParams((100,0,0))   
         
         # get from mouse to tile coordinates
-        # (XXX) put this into a nice function or so --- :-)
-        offset = self.level.GetOrigin()
-        self.tx,self.ty = (self.mx/defaults.tiles_size_px[0] + offset[0],
-            self.my/defaults.tiles_size_px[1]- defaults.status_bar_top_tiles)
-        
+        self.tx,self.ty = self._MouseToTileCoords(self.mx,self.my)
         self.fx,self.fy = math.floor(self.tx),math.floor(self.ty)
         
         # call all overlays in order of addition, operate
@@ -1552,6 +1776,13 @@ class EditorGame(Game):
         if not add: 
             return
         
+        # counterintuitively, negative numbers won't
+        # delete rows or columns. This is for ease of
+        # use.
+        if add < 0:
+            pos += add
+            add = -add
+        
         lx,ly = self.level.level_size
         sanity = self.level.vis_ofs*2
         
@@ -1559,7 +1790,7 @@ class EditorGame(Game):
         bb = (pos,-sanity,lx-pos,ly+sanity*2) if axis==0 else (-sanity,pos,lx+sanity*2,ly-pos)
         for elem in self.level.EnumPossibleColliders(bb):
             px,py = elem.pos
-            if bb[0]<px<bb[0]+bb[2] and bb[1]<py<bb[1]+bb[3]:
+            if bb[0]<=px<bb[0]+bb[2] and bb[1]<=py<bb[1]+bb[3]:
                         
                 px += add if axis == 0 else 0
                 py += add if axis == 1 else 0
@@ -1570,7 +1801,7 @@ class EditorGame(Game):
         
         self.level.level_size = lx,ly
         self.dirty_area += 100 # ensure that the minimap is updated soon
-        self._PrepareMiniMapVisibleRect()
+        self.minimap_rebuild_from_scratch = True
         
     def ShrinkLevel(self,axis,pos,add):
         """Delete 'del' rows or columns starting at position
@@ -1581,6 +1812,13 @@ class EditorGame(Game):
         if not add: 
             return
         
+        # counterintuitively, negative numbers won't
+        # add rows or columns. This is for ease of
+        # use.
+        if add < 0:
+            pos += add
+            add = -add
+        
         lx,ly = self.level.level_size
         sanity = self.level.vis_ofs*2
         
@@ -1590,7 +1828,7 @@ class EditorGame(Game):
         bb = (pos,-sanity,add,ly+sanity*2) if axis==0 else (-sanity,pos,lx+sanity*2,add)
         for elem in self.level.EnumPossibleColliders(bb):
             px,py = elem.pos
-            if bb[0]<px<bb[0]+bb[2] and bb[1]<py<bb[1]+bb[3]:
+            if bb[0]<=px<bb[0]+bb[2] and bb[1]<=py<bb[1]+bb[3]:
                 self.level.RemoveEntity(elem)
                 ret.append(elem)
         
@@ -1598,7 +1836,7 @@ class EditorGame(Game):
         bb = (pos+add,-sanity,lx-pos-add,ly+sanity*2) if axis==0 else (-sanity,pos+add,lx+sanity*2,ly-pos-add)
         for elem in self.level.EnumPossibleColliders(bb):
             px,py = elem.pos
-            if bb[0]<px<bb[0]+bb[2] and bb[1]<py<bb[1]+bb[3]:
+            if bb[0]<=px<bb[0]+bb[2] and bb[1]<=py<bb[1]+bb[3]:
                 adjust = px>=lx-1 and axis==0 or py>=ly-1 and axis==1
                 
                 px -= add if axis == 0 else 0
@@ -1610,7 +1848,7 @@ class EditorGame(Game):
                 
         self.level.level_size = lx,ly
         self.dirty_area += 100 # ensure that the minimap is updated soon
-        self._PrepareMiniMapVisibleRect()
+        self.minimap_rebuild_from_scratch = True
         
         return ret
         
@@ -1768,7 +2006,13 @@ class EditorGame(Game):
         
     def _DrawMiniMap(self):
         if self.dirty_area > 10.0: # choosen by trial and error as a good treshold value
-            self._GenMiniMapImage()
+            
+            try:
+                delattr(self,"minimap_rebuild_from_scratch")
+                self._BuildMiniMap()
+                
+            except AttributeError:   
+                self._GenMiniMapImage()
             self.dirty_area = 0.0
             
         self.DrawSingle(self.minimap_sprite)
@@ -1799,10 +2043,11 @@ class EditorGame(Game):
         
         # Draw the currently visible part of the map
         #print(ox,oy)
-        oy += self.level.vis_ofs
+        oy += self.level.vis_ofs + defaults.status_bar_top_tiles
+        #oy += defaults.status_bar_top_tiles
         
         # slight adjustments for proper alignment with the outer border of the minimap
-        self.minimap_visr.SetPosition(ox*self.msxp + self.sx - 2,oy*self.msyp + self.sy + 4)
+        self.minimap_visr.SetPosition(ox*self.msxp + self.sx - 2,oy*self.msyp + self.sy)
         self.DrawSingle(self.minimap_visr)
         
     def _GetImg(self,img):
@@ -1919,6 +2164,8 @@ class EditorGame(Game):
         
     def _PrepareMiniMapVisibleRect(self):
         w,h = self.level.GetLevelVisibleSize()
+        
+        h -= self.level.vis_ofs # XXX what the hell? why do we need this?
 
         self.minimap_visr = self._GenRectangularShape(0,0, w*self.msxp, h*self.msyp,sf.Color(0xff,0xff,0xff,0x50))
         self.minimap_visr.EnableFill(True)
@@ -2003,7 +2250,9 @@ Press {2} to abort""").format(
     def OnChangeResolution(self,newres):
         # needed because the visible part of the map has changed
         if self.level:
-            self._BuildMiniMap()
+            self.minimap_rebuild_from_scratch = True
+            
+            #self._BuildMiniMap()
         
         
 class EditorMenu(Drawable):

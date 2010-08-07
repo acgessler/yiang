@@ -1,0 +1,7 @@
+from enemy import SmallTraverserBlocker; <out> = SmallTraverserBlocker()
+
+
+
+
+
+
