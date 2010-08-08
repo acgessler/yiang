@@ -641,29 +641,33 @@ class Player(Entity):
         assert hasattr(self, "respawn_positions")
         assert len(self.respawn_positions)
 
-        # XXX ordered and normal respawn point can be mixed, although this is a corner-case
-        # and not really useful at all.
+        # favour the last ordered respawn point if there is one.
+        # The two kinds of respawn points are handled totally independently.
         min_distance = float(defaults.min_respawn_distance)
-        for rpos in sorted(self.respawn_positions if enable_respawn_points is True else (),key=operator.itemgetter(0),reverse=True):
-            if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
-                continue # this is to protect the player from being
-                # respawned in kill zones.
-                
-            # favour the last ordered respawn point if there is one
-            if len(self.ordered_respawn_positions):
-                self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
-                self.ordered_respawn_positions.pop()
-            
+        
+        if len(self.ordered_respawn_positions) and enable_respawn_points is True:
+            for rpos in reversed(self.ordered_respawn_positions):
+                if mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
+                    self.SetPositionAndMoveView(rpos)
+                    self.ordered_respawn_positions.pop()
+                    break
             else:
-                self.SetPositionAndMoveView(rpos)
-            break
-            
-        else:
-            if len(self.ordered_respawn_positions):
                 self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
                 self.ordered_respawn_positions.pop()
+            
+        else:    
+                
+            for rpos in sorted(self.respawn_positions if enable_respawn_points is True else (),key=operator.itemgetter(0),reverse=True):
+                if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
+                    continue # this is to protect the player from being
+                    # respawned in kill zones.
+                
+                self.SetPositionAndMoveView(rpos)
+                break
+                
             else:
                 self.SetPositionAndMoveView(self.respawn_positions[0])
+            
 
         # Reset our status
         self._Reset()
@@ -712,7 +716,7 @@ class DisabledRespawnPoint(RespawnPoint):
 
             for entity in self.game._EnumEntities():
                 if hasattr(entity, "_AddRespawnPoint"):
-                    entity._AddRespawnPoint(self.pos)
+                    entity._AddOrderedRespawnPoint(self.pos)
                 
         return Entity.ENTER
 

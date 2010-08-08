@@ -133,7 +133,7 @@ class SimpleNotification(EntityWithEditorImage):
     """The SimpleNotification tile displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
-    def __init__(self, text, desc="<unnamed>", editor_image="notification_stub.png",text_color=sf.Color.Red, width=1, height=1, line_length=50, format=True, audio_fx=None, only_once=True):
+    def __init__(self, text, desc=None, editor_image="notification_stub.png",text_color=sf.Color.Red, width=1, height=1, line_length=50, format=True, audio_fx=None, only_once=True):
         EntityWithEditorImage.__init__(self,editor_image)
         self.text = text
         self.use_counter = 1 # if only_once is True else 1000000000 
@@ -143,6 +143,10 @@ class SimpleNotification(EntityWithEditorImage):
         self.text_color = sf.Color(*text_color) if isinstance(text_color, tuple) else text_color
         self.desc = desc
         self.audio_fx = audio_fx
+        
+        if not self.desc:
+            import uuid
+            self.desc = str(uuid.uuid1())
         
         if format is True:
             try:
@@ -170,7 +174,9 @@ class SimpleNotification(EntityWithEditorImage):
         inp = Renderer.app.GetInput()
         # note: the notification can always be activated by pressing interact,
         # regardless of the use counter.
-        if isinstance(other, Player) and (self.use_counter > 0 or inp.IsKeyDown(KeyMapping.Get("interact"))) and not hasattr(self, "running"):
+        if isinstance(other, Player) and (self.game.__dict__.setdefault( "story_use_counter", {} )\
+                .setdefault(self.desc,self.use_counter) > 0
+                 or inp.IsKeyDown(KeyMapping.Get("interact"))) and not hasattr(self, "running"):
             
             print("Show notification '{0}', regular use counter: {1}".format(self.desc, self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
@@ -178,10 +184,10 @@ class SimpleNotification(EntityWithEditorImage):
             # closure to be called when the player has made his decision
             def on_close(key):
                 delattr(self, "running")
-                self.use_counter -= 1
+                self.game.story_use_counter[self.desc] -= 1
                 self.level.PopAutoScroll()
                 
-                if self.use_counter == 0:
+                if self.game.story_use_counter[self.desc] == 0:
                     #self.game.RemoveEntity(self)
                     print("Disable notification '{0}'".format(self.desc))
                     

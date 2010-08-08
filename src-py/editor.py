@@ -199,6 +199,10 @@ class EditorGame(Game):
             # might be wrong, and if we are not it 
             # won't harm anybody.
             gui.fgcolor = sf.Color.Red if self.UnsavedChanges() else sf.Color.Green
+            
+            # One may, however, not save while the game is running because
+            # we can't guarantee having a consistent game state then.
+            gui.disabled = not self.IsEditorRunning() 
         
         # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25],
@@ -374,8 +378,8 @@ class EditorGame(Game):
                     
                 cache = Overlay_ShowCatalogue.cached_setup
                 
-                w,h = 180,22
-                xs,ys = 100,95
+                w,h = 180,26
+                xs,ys = 150,65
                 pos = ((x,y) for y in range(ys,defaults.resolution[1]-ys-h,35) 
                     for x in range(xs,defaults.resolution[0]-xs-w,200)
                 )
@@ -404,7 +408,7 @@ class EditorGame(Game):
                         # postprocessing occurs.
                         t.GetDrawOrder = lambda: 52000
                             
-                        if xx+bb[2]*rx>=defaults.resolution[0]:
+                        if xx+bb[2]*rx>=defaults.resolution[0]-xs:
                             xx = xs
                             yy += bb[3]*ry + 50
                                             
@@ -453,7 +457,7 @@ class EditorGame(Game):
                 shape = sf.Shape()
 
                 bb = (0,0,defaults.resolution[0],defaults.resolution[1])
-                color = sf.Color(0,0,0,220)
+                color = sf.Color(0,0,0,165)
                 
                 shape.AddPoint(bb[0],bb[1],color,color)
                 shape.AddPoint(bb[2],bb[1],color,color)
@@ -641,7 +645,7 @@ class EditorGame(Game):
                 xb = 40, -242, -100, -75
                 xb = [x+(self.tx-ox)*defaults.tiles_size_px[0] for x in xb]
                 
-                yb = 0, 0, -90, +70
+                yb = 0, 0, +50, +70
                 yb = [y+(self.ty-oy)*defaults.tiles_size_px[1] for y in yb]
                 
                 def SetMode(dir,mode):
@@ -818,7 +822,7 @@ class EditorGame(Game):
                         print("Could not find a valid player, creating one!")
                         PlaceEntity("_PL")
                         
-                def TestFromHere(respawn_protect=True):
+                def TestFromHere(respawn_protect=True,force_respawn_from_here=False):
                     self2._RemoveMe()
                     self.EditorPopSuspend()
                     
@@ -852,6 +856,18 @@ class EditorGame(Game):
                         
                     if respawn_protect:
                         elem.Protect(2.0)
+                        
+                    # Override the default respawn logic to feed in the current
+                    # location as default respawn point
+                    def ReplaceRespawn(*args,**kwargs):
+                        if force_respawn_from_here:
+                            elem._AddOrderedRespawnPoint((self2.x,self2.y))
+                        
+                        from player import Player
+                        Player.Respawn(elem,*args,**kwargs)
+                    
+                    elem.Respawn = ReplaceRespawn
+                        
                     
                 def DeleteThisTile():
                     with self.BeginTransaction() as transaction:
@@ -882,16 +898,22 @@ class EditorGame(Game):
                         ("release", (lambda src: PlacePlayerHere()))
                     )
                     yn += yguiofs    
-                    self2.elements.append(Button(text="Test from here", 
+                    self2.elements.append(Button(text="Run from here", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
                         
                         ("release", (lambda src: TestFromHere(True)))
                     )
                     yn += yguiofs    
-                    self2.elements.append(Button(text=" \"\" (no respawn protection)", 
+                    self2.elements.append(Button(text="Run (no respawn protection)", 
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
                         
                         ("release", (lambda src: TestFromHere(False)))
+                    )
+                    yn += yguiofs  
+                    self2.elements.append(Button(text="Run (force respawn here)", 
+                        rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
+                        
+                        ("release", (lambda src: TestFromHere(False,True)))
                     )
                     yn += yguiofs  
                     self2.elements.append(Button(text="Place respawn line here", 
@@ -1668,6 +1690,30 @@ class EditorGame(Game):
             defaults.status_bar_top_tiles)*
             defaults.tiles_size_px[1])
     
+    def _DoInGameHelpers(self):
+        self.help_string = "Left-click somewhere to move the player. Right-click to interact with the entity under the cursor"
+        
+        if self.mousepos_covered_by_gui:
+            return
+        
+        if self.inp.IsMouseButtonDown(sf.Mouse.Left):
+            try:
+                self._GetAPlayer().SetPosition((self.tx,self.ty))
+            except:
+                pass
+            
+        if self.inp.IsMouseButtonDown(sf.Mouse.Right):
+            player = self._GetAPlayer()
+            if not player:
+                return
+            try:
+                cur_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
+                    key=lambda x:x.GetDrawOrder(),reverse=True
+                )[0]
+                
+                cur_entity.Interact(player)
+            except IndexError:
+                pass
     
     def _DrawEditor(self):
         
@@ -1695,19 +1741,23 @@ class EditorGame(Game):
             if elems:
                 self.help_string = elems[0].tip
                 
-            if self.help_string:
-                assert isinstance(self.help_string,str)
-                    
-                # Draw the current help string in the lower-left border
-                h = 16
-                hs = sf.String(self.help_string,Size=h,Font=FontCache.get(h,defaults.font_status))
-                hs.SetColor(sf.Color.Black)
-                hs.SetPosition(10,defaults.resolution[1]-h-15)
-                Renderer.app.Draw(hs)
+        else:
+            
+            self._DoInGameHelpers()
                 
-                hs.SetColor(sf.Color.White)
-                hs.SetPosition(10+1,defaults.resolution[1]-h-15)
-                Renderer.app.Draw(hs)
+        if self.help_string:
+            assert isinstance(self.help_string,str)
+                
+            # Draw the current help string in the lower-left border
+            h = 16
+            hs = sf.String(self.help_string,Size=h,Font=FontCache.get(h,defaults.font_status))
+            hs.SetColor(sf.Color.Black)
+            hs.SetPosition(10,defaults.resolution[1]-h-15)
+            Renderer.app.Draw(hs)
+            
+            hs.SetColor(sf.Color.White)
+            hs.SetPosition(10+1,defaults.resolution[1]-h-15)
+            Renderer.app.Draw(hs)
         
     def Undo(self,recursive=False):
         """Undo the last step, if possible"""
