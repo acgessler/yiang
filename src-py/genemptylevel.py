@@ -23,7 +23,6 @@ import sys
 
 # Our stuff
 import defaults
-defaults.update_derived()
 
 
 
@@ -36,6 +35,8 @@ def Abort():
     
 
 def Main():
+    
+    defaults.update_derived()
 
     def_floor = "_A0"
     width = int(input("Enter length of level: "))
@@ -60,6 +61,8 @@ def Main():
         r = max(0,min(255,int(input("PlayerBG color - R: (0-255)"))))
         g = max(0,min(255,int(input("PlayerBG color - G: (0-255)"))))
         b = max(0,min(255,int(input("PlayerBG color - B: (0-255)"))))
+        
+    name_human = input("Human-readable name of the level? ") or None
     
     summary = """
     SUMMARY
@@ -75,6 +78,7 @@ def Main():
     FloorTile:     {floor_tile}
     SpaceStipple:  {stipple}
     PlayerBgColor: {r} \ {g} \ {b}
+    Name:          {name_human}
     =============================================================
     
     Continue? (Y/n)
@@ -82,10 +86,13 @@ def Main():
     
     if not IsYes(input(summary),True):
         Abort()
+        
+    if name_human:
+        name_human = name_human.replace('"',"'") # rough escaping
     
     danger_pad = 20
     with open(fpath,"wt") as outfile:
-        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}))\n".format(**locals()))
+        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}),name=\"{name_human}\")\n".format(**locals()))
         for y in range(height):
     
             s = ""

@@ -1538,8 +1538,10 @@ class EditorGame(Game):
     def Save(self):
         self._UpdateLevelSize()
         
+        lx,ly = self.level.GetLevelSize()
+        
         yofs = self.level.vis_ofs
-        grid = [ [None for x in range(self.level.level_size[0])] for y in range(self.level.level_size[1]+yofs)]
+        grid = [ [None for x in range(lx)] for y in range(ly+yofs)]
         x,y = -1000,-1000
         entity = None
         try:
@@ -1887,7 +1889,19 @@ class EditorGame(Game):
             pos += add
             add = -add
         
-        lx,ly = self.level.level_size
+        l = self.level.GetLevelSize()
+        if pos >= l[axis]:
+            add += l[axis]-pos+1
+            pos = l[axis]-1
+            
+        elif pos < 0:
+            add = add+pos
+            pos = 0
+            
+            if add < 0:
+                return
+        
+        lx,ly = l
         sanity = self.level.vis_ofs*2
         
         # Build a bounding box covering the region to be moved to the right
@@ -1903,7 +1917,7 @@ class EditorGame(Game):
         lx += add if axis==0 else 0
         ly += add if axis==1 else 0
         
-        self.level.level_size = lx,ly
+        self.level.SetLevelSize(lx,ly)
         self.dirty_area += 100 # ensure that the minimap is updated soon
         self.minimap_rebuild_from_scratch = True
         
@@ -1922,8 +1936,18 @@ class EditorGame(Game):
         if add < 0:
             pos += add
             add = -add
+            
+        l = self.level.GetLevelSize()
+        if pos >= l[axis]:
+            return
+            
+        elif pos < 0:
+            add = pos+add
+            pos = 0
+            if add < 0:
+                return
         
-        lx,ly = self.level.level_size
+        lx,ly = l
         sanity = self.level.vis_ofs*2
         
         ret = []
@@ -1950,7 +1974,7 @@ class EditorGame(Game):
         lx -= add if axis==0 else 0
         ly -= add if axis==1 else 0
                 
-        self.level.level_size = lx,ly
+        self.level.SetLevelSize(lx,ly)
         self.dirty_area += 100 # ensure that the minimap is updated soon
         self.minimap_rebuild_from_scratch = True
         
@@ -2381,8 +2405,18 @@ class EditorMenu(Drawable):
                     x += 310
         
         def NewLevel():
+            
+            # (HACK) -- calling defaults.update_derived() (which is done at
+            # the very beginning of the genemptylevel script) seems to
+            # distort our scale settings. Save the state earlier and
+            # restore it later.
+            
+            old = dict(defaults.__dict__)
+            
             import genemptylevel
             genemptylevel.Main()
+            
+            defaults.__dict__.update(old)
             
             # first remove all buttons, then re-add them - this time
             # including the button for the newly created level

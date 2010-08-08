@@ -276,12 +276,12 @@ class Level:
         for xxx in range(xx,xe+1):
             for yyy in range(yy,ye+1):
                 
-                for y in range(len(self.windows),yyy+1):
+                for y in range(len(self.windows),yyy+2):
                     self.windows.append([])
                     
                 for y in range(yyy+1):
                     this = self.windows[y]
-                    for x in range(len(this), xxx+1 ):
+                    for x in range(len(this), xxx+2 ):
                         this.append([])
       
                 try:
@@ -386,6 +386,13 @@ class Level:
                 self.window_unassigned.remove(entity)
             
         for entity in self.entities_add:
+            pos = entity.pos
+            
+            lx,ly = self.level_size
+            print(pos,lx,ly,self.origin)
+            if pos[0] >= lx or pos[1] >= ly:
+                self.SetLevelSize((max(pos[0]+1,lx),max(pos[1]+1,ly)))
+            
             self.entities.add(entity)
             self._AddEntityToWindows(entity)
             
@@ -662,6 +669,32 @@ class Level:
         value is a 2-tuple."""
         return self.level_size
     
+    def SetLevelSize(self,*args):
+        """Change the size of the level. This is intended for use
+        by the editor. It may not be used safely while the game
+        is running."""
+        ox,oy = self.level_size
+        
+        lx,ly = [max(1,x) for x in (args if len(args)==2 else args[0])]
+        self.level_size = lx,ly
+        
+        if lx > ox or ly > oy:
+            print("Increase level size to {0}/{1}".format(lx,ly))
+        
+            # Adjust windows accordingly (currently, we will only expand, not
+            # shrink our underlying grid of windows)
+            nx,ny = [int(x+0.5) for x in (self.level_size[0] / defaults.level_window_size_abs[0],
+                self.level_size[1] / defaults.level_window_size_abs[1]
+            )]
+                
+            for y in range(len(self.windows),ny):
+                self.windows.append([])
+                
+            for y in range(0,ny):
+                last = self.windows[-1]
+                for x in range(len(last),nx):
+                    last.append([])
+    
     def GetLevelVisibleSize(self):
         """Get size of the visible part of the level. This is
         usually a constant throughout the lifetime of the
@@ -677,7 +710,7 @@ class Level:
     def SetOrigin(self, origin):
         """Change the view origin"""
         assert isinstance(origin, tuple)
-        self.origin = (min(max(origin[0],0),self.level_size[0]-defaults.tiles[0]), 
+        self.origin = (min(max(origin[0],0),abs(self.level_size[0]-defaults.tiles[0])), 
             origin[1] if self.scroll[-1] & Level.SCROLL_TOP  else -defaults.status_bar_top_tiles )
         
     def SetOriginX(self, origin):
