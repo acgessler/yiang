@@ -840,8 +840,12 @@ class EditorGame(Game):
                         print("Could not find a valid player, creating one!")
                         PlaceEntity("_PL")
                         
-                def TestFromHere(respawn_protect=True,force_respawn_from_here=False):
+                def TestFromHere(respawn_protect=True,force_respawn_from_here=False,replace_editor_overlays=False):
                     self2._RemoveMe()
+                    
+                    if replace_editor_overlays:
+                        self.mode = Game.EDITOR_HIDDEN
+                        
                     self.EditorPopSuspend()
                     
                     from player import RespawnPoint, DisabledRespawnPoint
@@ -935,6 +939,12 @@ class EditorGame(Game):
                         rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
                         
                         ("release", (lambda src: TestFromHere(False,True)))
+                    )
+                    yn += yguiofs  
+                    self2.elements.append(Button(text="Run (hide editor overlays)", 
+                        rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Yellow) + 
+                        
+                        ("release", (lambda src: TestFromHere(False,True,True)))
                     )
                     yn += yguiofs  
                     self2.elements.append(Button(text="Place respawn line here", 
@@ -1426,6 +1436,10 @@ class EditorGame(Game):
                 
         Game.PushSuspend(self)
         
+        # need to revert this because sometimes it may have been
+        # changed to EDITOR_HIDDEN
+        self.mode = Game.EDITOR
+        
     def EditorPopSuspend(self):
         Game.PopSuspend(self)
         
@@ -1809,7 +1823,10 @@ class EditorGame(Game):
                 
         else:
             
-            self._DoInGameHelpers()
+            if self.mode == Game.EDITOR_HIDDEN:
+                self.help_string = None
+            else:
+                self._DoInGameHelpers()
                 
         if self.help_string:
             assert isinstance(self.help_string,str)

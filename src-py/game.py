@@ -64,7 +64,7 @@ class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
     
-    QUICKGAME,CAMPAIGN,SINGLE,EDITOR = range(4)
+    QUICKGAME,CAMPAIGN,SINGLE,EDITOR,EDITOR_HIDDEN = range(5)
 
     def __init__(self, undecorated=False, mode=None):
         """ Initialize a new Game instance given the primary
@@ -1033,7 +1033,8 @@ class EntityWithEditorImage(Entity):
                 self.respawn_sprite.Resize(tx*bb[2],ty*bb[3])
                 
     def Draw(self):
-        if hasattr(self,"respawn_sprite"):
+        
+        if self.game.GetGameMode() == Game.EDITOR:
             self.game.GetLevel().DrawSingle( self.respawn_sprite, self.pos )
         
     

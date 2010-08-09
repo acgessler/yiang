@@ -1,0 +1,7 @@
+from player import DropProtection; <out> = DropProtection()
+
+
+
+
+
+

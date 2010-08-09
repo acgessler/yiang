@@ -1,12 +1,12 @@
 Enemies	E0	E1	E2	E3	E4	E5	E6	E7	MI	BO
 Weapons	W0	AM
 Score	S0	S1	S2	S3	S4	S5
-Danger	DA	TR	DS
-Interactive	DO	KE	TA	TB	TC	TD	BU	CC	FI
-Bricks	A0	A1	A2	A3	A4	A5	A6	A8	A9	AA	AB	AC	AD	B0	B1	B4	B5	B6
-Ice	B3	B2	B7	B8	B9	C0	C1	
+Danger	DA	TR	DS	C5
+Interactive	DO	KE	TA	TB	TC	TD	BU	CC	FI	C8	C9
+Bricks	A0	A1	A2	A3	A4	A5	A6	A8	A9	C4	C6	C7	AA	AB	AC	AD	B0	B1	B4		B5	B6
+Ice	B3	B2	B7	B8	B9	C0	C1	C2	C3	
 Perks	GO	SS	MJ	SM	ZG
 Signs	H1	H3	H4	H5	H2	
 Backgrounds	H0	SU
-Tricky	IN	I0
+Tricky	IN	I0	CA
 Player	PL	RD	RE

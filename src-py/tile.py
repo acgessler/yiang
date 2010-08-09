@@ -308,7 +308,9 @@ class AnimTile(Tile):
     played automatically or manually."""
 
     
-    def __init__(self,text,height,frames,speed,states=1,width=0,draworder=20,randomize=False,*args, **kwargs):
+    def __init__(self,text,height,frames,speed,states=1,width=Tile.AUTO,draworder=20,
+        randomize=False,noloop=False, 
+        *args, **kwargs):
         """ Read an animated tile from a text block. Such a textual
         description contains the ASCII images for all frames,
         separated by an empty line for clarity. There can be multiple
@@ -344,13 +346,14 @@ class AnimTile(Tile):
             for frame in range(frames):
                 #assert n+height<=len(lines)
                 self.texts[state].append("\n".join(l.rstrip() for l in lines[n:n+height]))
-                self.cached_sizes[state].append( self._GuessRealBB(self.texts[state][-1]))
+                self.cached_sizes[state].append( (self._GuessRealBB if width == Tile.AUTO else self._GuessRealBB_Quick) (self.texts[state][-1]))
                 n += height+1
             n += 1
 
         self.SetSpeed(speed)
         self.animidx = -1
         self.animofs = 0
+        self.noloop = noloop
 
         # constraints checking
         for i in range(1,len(self.texts)):
@@ -374,6 +377,8 @@ class AnimTile(Tile):
 
     def SetState(self,state):
         self.state = state % len(self.texts)
+        self.animofs = self.animidx = 0
+        self.reset_anim = True
 
     def GetState(self):
         return self.state
@@ -384,12 +389,14 @@ class AnimTile(Tile):
 
     def Get(self):
         """Get the current frame index"""
-        return self.animidx
+        return  int(min(self.GetNumFrames()-1,self.animidx) \
+            if self.noloop else self.animidx % self.GetNumFrames()
+        )
 
     def Set(self,idx):
         """Set the current animation frame """
-        self.animofs = idx-self.animidx
         self.animidx = idx
+        self.reset_anim = True
 
         if self.speed==-1:
             self._UpdateAnim()
@@ -408,17 +415,23 @@ class AnimTile(Tile):
         if self.speed == -1:
             return
             
-        animidx = time_elapsed // self.speed + self.animofs
-        if self.animidx == animidx:
-            return
-
-        self.animidx = animidx
-        self._UpdateAnim()
+        try:
+            delattr(self,"reset_anim")
+            self._UpdateAnim()
+        except AttributeError:
+            animidx = time_elapsed // self.speed + self.animofs
+            if self.animidx == animidx:
+                return
+    
+            self.animidx = animidx
+            self._UpdateAnim()
 
     def _UpdateAnim(self):
-        idx = int(self.animidx) % self.GetNumFrames()
+        idx = self.Get()
+            
         self.text = self.texts[self.state][idx]
         self._Recache()
+        self.level._MarkEntityAsMoved(self)
         
         self.dim,self.ofs = self.cached_sizes[self.state][idx]
         

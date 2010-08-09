@@ -136,17 +136,22 @@ class Player(Entity):
                 Drawable.__init__(self)
                 self.time = time
                 self.timer = sf.Clock()
+                
+            def _RemoveMe(self):
+                outer.unkillable -= 1
+                try:
+                    delattr( outer, "flash_halo" )
+                    outer.protectors.remove(self)
+                except (AttributeError,ValueError):
+                    pass
+                
+                print("End respawn protection on {0}".format(outer))                  
+                Renderer.RemoveDrawable(self)
             
             def Draw(self):
                 if self.timer.GetElapsedTime()>self.time:
-                    outer.unkillable -= 1
-                    try:
-                        delattr( outer, "flash_halo" )
-                    except AttributeError:
-                        pass
+                    self._RemoveMe()
                     
-                    print("End respawn protection on {0}".format(outer))
-                    Renderer.RemoveDrawable(self)
         
         print("Set respawn protection on {0}".format(self))
         self.unkillable += 1
@@ -156,8 +161,14 @@ class Player(Entity):
             self.flash_halo = sf.Sprite(img)
             self.flash_halo.Resize(self.pwidth * defaults.tiles_size_px[0],self.pheight * defaults.tiles_size_px[1])
             self.flash_halo.SetColor(sf.Color(255,255,0,160))
-            
-        Renderer.AddDrawable(Proxy())
+           
+        p = Proxy() 
+        self.__dict__.setdefault("protectors",[]).append(p)
+        Renderer.AddDrawable(p)
+        
+    def DropProtection(self):
+        for e in list(getattr(self,"protectors",[])):
+            e._RemoveMe()
         
     def SetGame(self, game):
         self.game = game
@@ -789,6 +800,20 @@ class InventoryChangeAnimStub(Tile):
         return None
 
         
+class DropProtection(EntityWithEditorImage):
+    """Special, invisible entity to reset the player's
+    respawn protection to zero, if any."""
+    
+    def __init__(self,editor_stub="noprotect_stub.png"):
+        EntityWithEditorImage.__init__(self,editor_stub)
+
+    def GetBoundingBox(self):
+        return (self.pos[0], self.pos[1], 1.0, 1.0)
+
+    def Interact(self, other):
+        if isinstance(other,Player):
+            other.DropProtection()
+        return Entity.ENTER
         
         
         

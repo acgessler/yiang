@@ -28,11 +28,13 @@ import defaults
 from game import Entity, Game
 from tile import AnimTile, Tile
 from player import Player, InventoryItem
+from renderer import Renderer
+from keys import KeyMapping
 
 class Door(AnimTile):
     """A door blocks the player unless he presents a key of the same color"""
     def __init__(self, text, height, frames, speed = 1.0, halo_img = None):
-        AnimTile.__init__(self, text, height, frames, states=3, speed=speed, halo_img=halo_img)
+        AnimTile.__init__(self, text, height, frames, states=4, speed=speed, halo_img=halo_img)
         self.unlocked = False
 
     def Interact(self, other):
@@ -54,35 +56,102 @@ class Door(AnimTile):
     def Update(self, time_elapsed, time):
         if hasattr( self, "during_interact" ):
             if self.Get() == self.GetNumFrames()-1:
-                print("Unlocking door {0}".format(self))
-                self.SetState(2)
+                self.unlocked = self.target_state
+                self.SetState(2 if self.unlocked else 0)
                 self.Set(0)
-                self.unlocked = True
                 
                 try:
                     delattr(self,"during_interact")
                 except AttributeError:
                     pass
         AnimTile.Update(self,time_elapsed,time)
+        
+    def IsWorking(self):
+        return hasattr( self, "during_interact" )
     
     def Unlock(self):
         """Unlock the door, does not alter the players inventory"""
         self.SetState(1)
         self.Set(0)
+        
+        self.target_state = True
         self.during_interact = True
+        print("Unlocking door {0}".format(self))
         
     def Lock(self):
         """Lock the door again"""
-        self.SetState(0)
+        self.SetState(3)
         self.Set(0)
-        self.unlocked = False
         
-        try:
-            delattr(self,"during_interact")
-        except AttributeError:
-            pass
+        self.target_state= False
+        self.during_interact = True
         print("Locking door {0}".format(self))
+        
+        
+class Bridge(Door):
+    """A bridge is exactly the opposite of a door (really!):
+    it blocks when it is opened."""
     
+    def __init__(self, text, height, frames, speed = 1.0, halo_img = None):
+        Door.__init__(self,text,height,frames,speed,halo_img)
+    
+    def Interact(self, other):
+        return Entity.BLOCK
+    
+    
+class BridgeControl(AnimTile):
+    """A BridgeControl opens or closes the door which is next
+    to it. """
+    
+    def __init__(self, text, height, frames, speed = 1.0, halo_img = None, initial_state=False):
+        AnimTile.__init__(self, text, height, frames, states=2, speed=speed, halo_img=halo_img)
+        self.initial_state = initial_state
+    
+    def Update(self,time,dtime):
+        AnimTile.Update(self,time,dtime)
+        if not hasattr(self,"did_init"):
+            
+            self.did_init = True
+            self._UpdateBridge()
+    
+    def Interact(self, other):
+        if isinstance(other,Player):
+            if Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
+                if not hasattr(self,"running"):
+                    self.running = True
+                    if not getattr(self,"last_bridge",None) or not self.last_bridge.IsWorking():
+                        self._Toggle()
+            else:
+                try:
+                    delattr(self,"running")
+                except AttributeError:
+                    pass
+            
+        return Entity.ENTER
+    
+    def _GetBridge(self):
+        import mathutil
+        p = [e for e in self.level.EnumAllEntities() if isinstance(e, Bridge) and e.color == self.color]
+        if not p:
+            print("Failure finding possible target for bridge controller: {0}".format(self))
+            return None
+        
+        p = sorted(p,key=lambda e:(e.pos[0]-self.pos[0])**2 + (e.pos[1]-self.pos[1])**2)[0]
+        return p
+    
+    def _Toggle(self):
+        self.initial_state = not self.initial_state
+        self._UpdateBridge()
+        
+    def _UpdateBridge(self):
+        self.last_bridge = self._GetBridge()
+        if not self.last_bridge:
+            return
+        
+        print("Update bridge state: {0}".format(self.last_bridge))
+        self.last_bridge.Unlock() if self.initial_state is True else self.last_bridge.Lock()
+        self.SetState(1 if self.initial_state is True else 0)
+        
     
 class Key(Tile,InventoryItem):
     """A door blocks the player unless he presents a key of the same color"""
