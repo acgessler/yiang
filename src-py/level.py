@@ -389,7 +389,7 @@ class Level:
             pos = entity.pos
             
             lx,ly = self.level_size
-            print(pos,lx,ly,self.origin)
+            #print(pos,lx,ly,self.origin)
             if pos[0] >= lx or pos[1] >= ly:
                 self.SetLevelSize((max(pos[0]+1,lx),max(pos[1]+1,ly)))
             
@@ -463,6 +463,16 @@ class Level:
             bb = entity.GetBoundingBox()
             
             if bb[0] <= pos[0] <= bb[2]+bb[0] and bb[1] <= pos[1] <= bb[3]+bb[1]:
+                yield entity
+                
+    def EnumEntitiesAtGrid(self,pos):
+        """Enum all entities touching a specific position, pos, 
+        which is specified in tile coordinates"""
+        pos = [int(x) for x in pos]
+        for entity in self.EnumPossibleColliders((pos[0],pos[1],pos[0],pos[1])):
+            
+            pob = [int(x) for x in entity.pos]
+            if pob == pos:
                 yield entity
             
     def IsVisible(self,point):

@@ -513,6 +513,7 @@ class EditorGame(Game):
                     self2.entities = []
                     
                 ox,oy = self.level.GetOrigin()
+                rx,ry = defaults.resolution
                 
                 w,h = 64,64
                 space = 5
@@ -536,13 +537,30 @@ class EditorGame(Game):
                     if (rad*2-2)**2 - (gap)**2 >= len(colors)+extra_items:
                         break
                 
-                gaps = [n for n in range(-gap+1,gap-1)]
-                src  = (((x+0.5)*(w+space),(y+0.5)*(h+space)) for x in range(-rad+1,rad-1) for y in range(-rad+1,rad-1) 
-                        if not x in gaps or not y in gaps)
+                def mkgen(rad,gap):
+                    gaps = [n for n in range(-gap+1,gap-1)]
+                    return (((x+0.5)*(w+space),(y+0.5)*(h+space)) 
+                        for x in range(-rad+1,rad-1) 
+                            for y in range(-rad+1,rad-1) 
+                                if not x in gaps or not y in gaps)
+                    
+                src = [mkgen(rad,gap)]
+                
+                def align():
+                    try:
+                        x,y = next(src[0])
+                        while yb+y < 50 or yb+y > ry-50 or xb+x < 50 or xb+x > rx-50:
+                            x,y = next(src[0])
+                    except StopIteration:
+                        src[0] = mkgen(rad+1, rad) # if we're out of space, why not get more space?
+                        return align()
+                        
+                    return x,y
                 
                 try:
                     for code,color in colors.items():
-                        x,y = next(src)
+                        x,y = align()
+                             
                         cola = "{0:X}\n{1:X}\n{2:X}\n{3:X}".format(color.r,color.g,color.b,color.a)
                         colb = "Change color to #{0:X}{1:X}{2:X}{3:X}".format(color.r,color.g,color.b,color.a)
                         self2.elements.append(Button(text=cola, tip=colb,
@@ -556,11 +574,11 @@ class EditorGame(Game):
                     #            "Change color to #{0}".format(cols)
                     #        )))
                         )
-                    x,y = next(src)
+                    x,y = align()
                     self2.elements.append(Button(text="New", rect=[xb+x,yb+y,w,h]) + 
                         ("release",     (lambda src: self2._AddNewColor()))
                     )
-                    x,y = next(src)
+                    x,y = align()
                     self2.elements.append(ToggleButton(text="Undim\x00Dim", rect=[xb+x,yb+y,w,h]) + 
                         ("on",     (lambda src: self2._ChangeElementDrawOrder(self.GetDrawOrder()-1))) +
                         ("off",    (lambda src: self2._ChangeElementDrawOrder(Component.GetDrawOrder(self2.elements[0]))))
@@ -882,6 +900,7 @@ class EditorGame(Game):
                     raise NewFrame()
                 
                 self2.elements = []
+                self2.must_keep_elements = []
                 
                 # Add special context-specific items
                 yn = 10
@@ -889,6 +908,8 @@ class EditorGame(Game):
                     self2.elements.append(Button(text="Delete this tile(s)", rect=[xb[3],yb[3]+yn,xguisize,yguisize],fgcolor=sf.Color.Red) + 
                         ("release", (lambda src: DeleteThisTile()))
                     )
+                    
+                    self2.must_keep_elements.append(self2.elements[-1])
                     yn += yguiofs*2
                         
                 else:
@@ -948,36 +969,69 @@ class EditorGame(Game):
                                         c for c in h.GetClasses() if isinstance(e, c)
                                     ]
                                 ]) 
-                                 
+            
                             def SetSelection(sel):
                                 self2.entities[:] = sel
                                 if hasattr(self,"template") and self.template:
                                     self.template = dict((t,self.template[t]) for t in sel)
-                                 
-                            def SelectOnlyUs(h):
+                                    #for k,v in self2.entities_to_elements.items():
+                                    #    if not k in self.template:
+                                    #        for vv in v:
+                                    #            self.RemoveSlaveDrawable(vv)
+                                    #            try:
+                                    #                self2.elements.remove(vv)
+                                    #            except ValueError:
+                                    #                pass
+                                                
+                                    if not self.template:
+                                        self2._RemoveMe()
+                                        self.block_context_menu = True
+                                                                          
+                            def SelectOnlyUs(h,add):
                                 SetSelection([e for e in self2.entities if [
                                     c for c in h.GetClasses() if isinstance(e, c)]
                                 ])
                                 
-                            def RemoveUsFromSelection(h):
+                                rem = []
+                                for elem in self2.elements:
+                                    if not elem in add and not elem in self2.must_keep_elements:
+                                        self.RemoveSlaveDrawable(elem)
+                                        rem.append(elem)
+                                for r in rem:
+                                    self2.elements.remove(r)
+                                
+                            def RemoveUsFromSelection(h,remove):
                                 SetSelection([e for e in self2.entities if not [
                                     c for c in h.GetClasses() if isinstance(e, c)]
                                 ])
                                 
-                            if len(self2.entities) > 1 and count > 1:
-                                self2.elements.append(Button(text="Select exclusively",fgcolor=sf.Color.Green, 
-                                    rect=[xb[3]+xguisize+10,yb[3]+yn,xguisize,yguisize]) + 
-                                    
-                                    ("release", (lambda src,h=h: SelectOnlyUs(h))) +
-                                    ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
-                                )
+                                rem = []
+                                for elem in self2.elements:
+                                    if elem in remove:
+                                        self.RemoveSlaveDrawable(elem)
+                                        rem.append(elem)
+                                for r in rem:
+                                    self2.elements.remove(r)
                                 
-                                self2.elements.append(Button(text="Remove from selection", fgcolor=sf.Color.Red, 
-                                    rect=[xb[3]+xguisize+10,yb[3]+yn+yguiofs,xguisize,yguisize]) + 
+                            if len(self2.entities) > 1 and count > 1:
+                                def __(): # need a fresh slot for 'us' each time, so closurify this
+                                    us = []
+                                    self2.elements.append(Button(text="Select exclusively",fgcolor=sf.Color.Green, 
+                                        rect=[xb[3]+xguisize+10,yb[3]+yn,xguisize,yguisize]) + 
+                                        
+                                        ("release", (lambda src,h=h,hh=hh: SelectOnlyUs(h,hh.elements+us))) +
+                                        ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
+                                    )
+                                    us.append(self2.elements[-1])
+                                    self2.elements.append(Button(text="Remove from selection", fgcolor=sf.Color.Red, 
+                                        rect=[xb[3]+xguisize+10,yb[3]+yn+yguiofs,xguisize,yguisize]) + 
+                                        
+                                        ("release", (lambda src,h=h,hh=hh: RemoveUsFromSelection(h,hh.elements+us))) +
+                                        ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
+                                    )
+                                    us.append(self2.elements[-1])
                                     
-                                    ("release", (lambda src,h=h: RemoveUsFromSelection(h))) +
-                                    ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
-                                )
+                                __()
                     
                             for elem in hh.elements: 
                                 elem += ("update", (lambda src,h=h: src.hit and UpdateSelection(h)))
@@ -985,6 +1039,10 @@ class EditorGame(Game):
                                 elem.rect=[xb[3],yb[3]+yn,xguisize,yguisize]
                                 
                                 self2.elements.append(elem)
+                                
+                                #for entity in hh.entities:
+                                #    self2.entities_to_elements.setdefault(entity,[]).append( elem )
+                                
                                 yn += yguiofs
                             yn += yguiofs # extra space
                 
@@ -1294,7 +1352,13 @@ class EditorGame(Game):
                 if inp.IsKeyDown(editor_keys["context"][0]) \
                     and not self.IsOverlayActive(Overlay_ShowContextMenu):   
                                        
-                    self.PushOverlay(Overlay_ShowContextMenu())
+                    if not getattr(self,"block_context_menu",False):
+                        self.PushOverlay(Overlay_ShowContextMenu())
+                else:
+                    try:
+                        delattr(self,"block_context_menu")
+                    except AttributeError:
+                        pass
                     
                 # Activate the 'DrawCatalogueMenu' overlay on S
                 if inp.IsKeyDown(editor_keys["catalogue"][0]) \
@@ -2030,7 +2094,7 @@ class EditorGame(Game):
         """Wrap entity add/remove functions to synchronize with our level table"""
         
         # Find out if there are other entities at this position, if yes, remove them.
-        others = [e for e in self.level.EnumVisibleEntities() 
+        others = [e for e in self.level.EnumEntitiesAtGrid(entity.pos)
              if   int(e.pos[0])==int(entity.pos[0]) 
              and  int(e.pos[1])==int(entity.pos[1])
              and  hasattr(e,"editor_ccode")

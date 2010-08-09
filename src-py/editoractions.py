@@ -62,6 +62,14 @@ class ContextHandler:
         elem = self.editor._PlaceEntity(codename if len(codename)==3 else "_"+codename,entity.pos)
         elem.color = entity.color
         
+        # Update the current selection accordingly
+        if hasattr(self.editor,"template"):
+            try:
+                del self.editor.template[entity]
+                self.editor.template[elem] = None
+            except KeyError:
+                pass
+        
         return elem
     
 
