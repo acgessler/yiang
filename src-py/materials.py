@@ -57,7 +57,16 @@ class InvisibleTile(EntityWithEditorImage,Tile):
         EntityWithEditorImage.Draw(self)
         
         
+class OneSidedWall(Tile):
+    """OneSidedWall allows the player to pass in only one direction"""
+    
+    def __init__(self,*args,block=Entity.BLOCK_LEFT,**kwargs):
+        Tile.__init__(self,*args,**kwargs)
+        self.block = block
         
+    def Interact(self,other):
+        return self.block
+            
         
         
     

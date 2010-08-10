@@ -1,0 +1,7 @@
+from materials import OneSidedWall; <out> = OneSidedWall(<raw>,5,6,block=Entity.BLOCK_RIGHT|Entity.BLOCK_TOP|Entity.BLOCK_BOTTOM)
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
