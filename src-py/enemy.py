@@ -31,7 +31,7 @@ from game import Entity, Game, EntityWithEditorImage
 from tile import Tile, AnimTile
 from weapon import Shot
 from score import ScoreTileAnimStub
-from player import KillAnimStub
+from player import KillAnimStub,Player
 
 class Enemy(AnimTile):
     """Sentinel base class for all entities"""
@@ -44,6 +44,7 @@ class Enemy(AnimTile):
     
     def _Die(self):
         """Invoked when the enemy is slayed"""
+        print("Kill entity: {0}".format(self.__class__.__name__))
         self.game.RemoveEntity(self)
         self.game.AddEntity(ScoreTileAnimStub("Slayer's Penalty: {0:4.4} ct".format(self.game.Award(self._GetScoreAmount())),self.pos,1.0))
         self._SpreadSplatter()
@@ -104,48 +105,61 @@ class SmallTraverser(Enemy):
         if not self.game.IsGameRunning():
             return 
             
-        rect = self.GetBoundingBox()
-        res = 0
-
-        # check for collisions on both sides, turn around if we have one.
-        for collider in self.game.GetLevel().EnumPossibleColliders(rect):
-            # traversers of the same color collide with each other, others don't.
-            if isinstance(collider, SmallTraverser) and not collider.color == self.color:
+        ab = self.GetBoundingBoxAbs()
+            
+        # left, top, right, bottom
+        intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
+        colliders = []
+        fric = 1e10
+        for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+            if collider is self:
                 continue
             
-            mycorner = collider.GetBoundingBox()
-            if mycorner is None:
-                continue
+            if isinstance(collider,SmallTraverser):
+                break
             
-            tj = self._BBCollide_XYWH(rect, mycorner)
-            if tj > 0 and collider.Interact(self) != Entity.ENTER:
-                collider.AddToActiveBBs()
-                res |= tj
-
-        if res > 0:
-            self.AddToActiveBBs()
+            cd = collider.GetBoundingBoxAbs()
+            if cd is None:
+                continue
+             
             if self.direction == Entity.DIR_HOR:
-                x = self.game.GetLevelSize()[0]
-                if self.vel < 0 and (self.pos[0] < 0 or res & (Entity.UPPER_LEFT | Entity.LOWER_LEFT) == (Entity.UPPER_LEFT | Entity.LOWER_LEFT)) or\
-                   self.vel > 0 and (self.pos[0] > x or res & (Entity.UPPER_RIGHT | Entity.LOWER_RIGHT) == (Entity.UPPER_RIGHT | Entity.LOWER_RIGHT)):
-                   
-                    self._Return()
-                
-                
-            elif self.direction == Entity.DIR_VER:
-                y = self.game.GetLevelSize()[1]
-                if self.vel < 0 and (self.pos[1] < 0 or res & (Entity.UPPER_LEFT | Entity.UPPER_RIGHT) == (Entity.UPPER_LEFT | Entity.UPPER_RIGHT)) or\
-                   self.vel > 0 and (self.pos[1] > y or res & (Entity.LOWER_LEFT | Entity.LOWER_RIGHT) == (Entity.LOWER_LEFT | Entity.LOWER_RIGHT)):
-                   
-                    self._Return()
-                
+                # is our left border intersecting?
+                if self._HitsMyLeft(ab,cd):                      
+                    res = collider.Interact(self)
+                    if res == Entity.BLOCK:
+                        self.vel = abs(self.vel)
+                        break
+                    
+                # is our right border intersecting?
+                elif self._HitsMyRight(ab,cd):                      
+                    res = collider.Interact(self)
+                    if res == Entity.BLOCK:
+                        self.vel = -abs(self.vel)
+                        break
             else:
-                assert False
+                 if self._HitsMyBottom(ab,cd):
+                    res = collider.Interact(self)
+                    if res == Entity.BLOCK:
+                        self.vel = -abs(self.vel)
+                        break
+                                               
+                 # is our top border intersecting?
+                 elif self._HitsMyTop(ab,cd):
+                    res = collider.Interact(self)
+                    if res == Entity.BLOCK:
+                       self.vel = abs(self.vel)
+                       break        
 
+        lx,ly = self.level.GetLevelSize()
         if self.direction == Entity.DIR_HOR:
             pos = (self.pos[0] + self.vel * time, self.pos[1])
+            if pos[0] < 0 or pos[0] > lx:
+                self._Return()
         else:
             pos = (self.pos[0], self.pos[1] + self.vel * time)
+            if pos[1] < 0 or pos[1] > ly:
+                self._Return()
+                
         self.SetPosition(pos)
         self.SetState(1 if self.vel > 0 else 0)
         
@@ -214,35 +228,39 @@ class NaughtyPongPong(Enemy):
         # check for possible colliders on the bottom to determine when we
         # are touching the ground
         
-        ab = self.GetBoundingBox()
-        ab = (ab[0], ab[1], ab[2] + ab[0], ab[3] + ab[1])     
+        ab = self.GetBoundingBoxAbs()  
         for collider in self.game.GetLevel().EnumPossibleColliders(ab):
             if collider is self:
                 continue
             
-            cd = collider.GetBoundingBox()
+            cd = collider.GetBoundingBoxAbs()
             if cd is None:
                 continue
             
-            cd = (cd[0], cd[1], cd[2] + cd[0], cd[3] + cd[1]) 
-            
             # lower border    
-            if cd[1] <= ab[3] <= cd[3]:
-                if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2] and min( ab[2], cd[2]) - max(ab[0], cd[0]) >= 0.1:
-                    self.vel = min(0,self.vel)
-                    collider.AddToActiveBBs()     
-                    
-                    self.relaunch_time = sf.Clock()    
-                    break
+            if self._HitsMyBottom(ab, cd):
+                self.vel = min(0,self.vel)
+                collider.AddToActiveBBs()     
+                
+                self.relaunch_time = sf.Clock()    
+                break
                     
             # top border
-            if cd[1] <= ab[1] <= cd[3]:
-                if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2] and  min( ab[2], cd[2]) - max(ab[0], cd[0]) >= 0.1:
-                    self.vel = max(0,self.vel)
-                    #if isinstance(collider,Player):
-                    #    self._Die()
-                        
-                    break
+            if self._HitsMyTop(ab, cd):
+                self.vel = max(0,self.vel)
+                break
+                
+    def Interact(self, other):
+        if isinstance(other,Player):
+            ab = self.GetBoundingBoxAbs()
+            cd = other.GetBoundingBoxAbs()    
+            
+            if self._HitsMyTop(ab,cd) or self._HitsMyBottom(cd,ab):
+                self._Die()
+                return Entity.ENTER
+            
+        return Entity.KILL
+    
         
 class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated

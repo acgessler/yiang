@@ -65,6 +65,11 @@ class Drawable:
         Of course, drawable's which are ALWAYS visible
         should return None."""
         return None
+    
+    def GetBoundingBoxAbs(self):
+        """Get a xy,xy bounding box."""
+        r = self.GetBoundingBox()
+        return r and (r[0],r[1],r[0]+r[2],r[1]+r[3])
 
     def OnRemoveFromRenderer(self):
         """Called by Renderer when the Drawable has actually

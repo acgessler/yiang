@@ -491,6 +491,8 @@ class Player(Entity):
         floor_touch = False
         ab = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
         
+        #np,nv,f = Entity._HandleCollisions(self,ab)
+        
         # left, top, right, bottom
         intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
         colliders = []
@@ -628,6 +630,9 @@ class Player(Entity):
         return newpos, newvel
     
     def SetExtraVelocity(self,vel):
+        """Set extra velocity which is added to the physics simulation
+        as is. Can be called at any time, but processing occurs
+        during the next frame."""
         x,y = getattr(self,"extra_vel",(0,0))
         self.extra_vel = (x+vel[0],y+vel[1])
 

@@ -1,4 +1,4 @@
-from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,8)
+from enemy import SmallTraverser; <out> = SmallTraverser(<raw>,3,8,move_speed=5)
 << >>
 << >>
 <<H>>

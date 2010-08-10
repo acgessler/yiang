@@ -938,6 +938,22 @@ class Entity(Drawable):
         used in death reports, i.e. 'you got killed by {an unknown entity}',
         'an unknown entity' being the verbose name"""
         return "unknown"
+    
+    def _HitsMyTop(self,ab,cd):
+        return cd[1] <= ab[1] <= cd[3] and (ab[0] <= cd[0] <= ab[2] 
+            or cd[0] <= ab[0] <= cd[2] and  min( ab[2], cd[2]) - max(ab[0], cd[0]) >= 0.1)
+        
+    def _HitsMyBottom(self,ab,cd):
+        return cd[1] <= ab[3] <= cd[3] and (ab[0] <= cd[0] <= ab[2] 
+            or cd[0] <= ab[0] <= cd[2] and min( ab[2], cd[2]) - max(ab[0], cd[0]) >= 0.1)
+        
+    def _HitsMyRight(self,ab,cd):
+        return cd[2] >= ab[2] >= cd[0] and (ab[1] <= cd[1] <= ab[3] 
+            or cd[1] <= ab[1] <= cd[3])
+        
+    def _HitsMyLeft(self,ab,cd):
+        return cd[2] >= ab[0] >= cd[0] and (ab[1] <= cd[1] <= ab[3] 
+            or cd[1] <= ab[1] <= cd[3])
 
     def _BBCollide(self,rect,mycorner):
         """Collide the first axis-aligned BB (x,y,x2,y2) with the
