@@ -382,6 +382,11 @@ class Player(Entity):
         pos, self.vel = self._HandleCollisions(newpos, newvel, time)
         self.SetPosition(pos)
         
+        if hasattr(self,"extra_vel"):
+            # Apply extra velocity
+            self.vel = [self.extra_vel[0]+self.vel[0],self.extra_vel[1]+self.vel[1]]
+            delattr(self,"extra_vel")
+        
         if inp.IsKeyDown(KeyMapping.Get("shoot")):
             self._Shoot()
         else:
@@ -621,6 +626,10 @@ class Player(Entity):
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel
+    
+    def SetExtraVelocity(self,vel):
+        x,y = getattr(self,"extra_vel",(0,0))
+        self.extra_vel = (x+vel[0],y+vel[1])
 
     def GetBoundingBox(self):
         # Adjust the size of the bb slightly to increase the likelihood
@@ -814,6 +823,15 @@ class DropProtection(EntityWithEditorImage):
         if isinstance(other,Player):
             other.DropProtection()
         return Entity.ENTER
+        
+
+        
+    
+    
+    
+    
+    
+    
         
         
         

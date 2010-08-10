@@ -131,6 +131,8 @@ class BridgeControl(AnimTile):
     
     def _GetBridge(self):
         import mathutil
+        
+        # XXX what about a .. EnumAllEntitiesHint()?
         p = [e for e in self.level.EnumAllEntities() if isinstance(e, Bridge) and e.color == self.color]
         if not p:
             print("Failure finding possible target for bridge controller: {0}".format(self))
@@ -144,13 +146,14 @@ class BridgeControl(AnimTile):
         self._UpdateBridge()
         
     def _UpdateBridge(self):
+        self.SetState(1 if self.initial_state is True else 0)
         self.last_bridge = self._GetBridge()
         if not self.last_bridge:
             return
         
         print("Update bridge state: {0}".format(self.last_bridge))
         self.last_bridge.Unlock() if self.initial_state is True else self.last_bridge.Lock()
-        self.SetState(1 if self.initial_state is True else 0)
+        
         
     
 class Key(Tile,InventoryItem):

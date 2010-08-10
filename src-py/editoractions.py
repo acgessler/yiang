@@ -179,7 +179,7 @@ class ContextHandler_Weapon(ContextHandler):
         )
         
         
-from locked import Door
+from locked import Door,Bridge
 class ContextHandler_Door(ContextHandler):
     """Context menu handler for doors"""
     
@@ -202,9 +202,18 @@ class ContextHandler_Door(ContextHandler):
         )
      
         if len([ e for e in entities if e.color==entities[0].color ]) == len(self.entities):
-            self.elements.append(Button(text="Select corr. key") + 
-                ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"KE")))
-            )
+            if [e for e in entities if isinstance(e,Bridge)]:
+                self.elements.append(Button(text="Select switch [off]") + 
+                    ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"C9")))
+                )
+                self.elements.append(Button(text="Select switch [on]") + 
+                    ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"CB")))
+                )
+            else:
+                
+                self.elements.append(Button(text="Select key") + 
+                    ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"KE")))
+                )
         
         
 from locked import Key
@@ -221,6 +230,30 @@ class ContextHandler_Key(ContextHandler):
         if len([ e for e in entities if e.color==entities[0].color ]) == len(self.entities):
             self.elements.append(Button(text="Select corr. door") + 
                 ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"DO")))
+            )
+            
+            
+from locked import BridgeControl
+class ContextHandler_BridgeControl(ContextHandler):
+    """Context menu handler for bridge switches"""
+    
+    @staticmethod
+    def GetClasses():
+        return (BridgeControl,)
+    
+    def __call__(self, entities):
+        self.entities = entities
+        
+        values = {
+            "Default: on"           : "CB",
+            "Default: off"          : "C9"
+        }
+        
+        self._SetupSimpleAlternatives(values)
+        
+        if len([ e for e in entities if e.color==entities[0].color ]) == len(self.entities):
+            self.elements.append(Button(text="Select corr. bridge") + 
+                ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"C8")))
             )
             
             
@@ -284,7 +317,8 @@ def GetHandlers():
         ContextHandler_Door,
         ContextHandler_Key,
         ContextHandler_Sender,
-        ContextHandler_Receiver
+        ContextHandler_Receiver,
+        ContextHandler_BridgeControl
     ]
 
 

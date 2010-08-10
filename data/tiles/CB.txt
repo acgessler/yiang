@@ -1,0 +1,25 @@
+from locked import BridgeControl; <out> = BridgeControl(<raw>,3,3,initial_state=True)
+   Ou (OFF)
+ _//_
+|____|
+
+   uO (OFF)
+ _//_
+|____|
+
+   OO (OFF)
+ _//_
+|____|
+
+
+ Ou   (ON)
+ _\\_
+|____|
+
+ uO   (ON)
+ _\\_
+|____|
+
+ OO   (ON)
+ _\\_
+|____|

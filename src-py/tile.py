@@ -67,8 +67,6 @@ class Tile(Entity):
         self.collision = collision
         self.text = text
             
-        self.dim = (width*scale/defaults.tiles_size[0],height*scale/defaults.tiles_size[1])
-        self.ofs = (width_ofs,height_ofs)
         self.draworder = draworder
         self.halo_img = halo_img
         
@@ -80,6 +78,10 @@ class Tile(Entity):
         elif width==Tile.AUTO_QUICK or height==Tile.AUTO_QUICK:
             self.dim,self.ofs = self._GuessRealBB_Quick(self.text)
             
+        else:
+            self.dim = self._LetterToTileCoords(width,height)
+            self.ofs = (width_ofs,height_ofs)
+            
         self._Recache()
 
     def __str__(self):
@@ -89,6 +91,10 @@ class Tile(Entity):
     #def __repr__(self):
     #    return self.editor_shebang if hasattr(self,"editor_shebang") else self.__str__()
         
+    def _LetterToTileCoords(self,*args):
+        width,height = args if len(args)==2 else args[0]
+        return width*self.scale/defaults.tiles_size[0],\
+            height*self.scale/defaults.tiles_size[1]
         
     def _GuessRealBB(self,text):
         """Return adjusted (width,height) (xofs,yofs) tuples
@@ -346,7 +352,10 @@ class AnimTile(Tile):
             for frame in range(frames):
                 #assert n+height<=len(lines)
                 self.texts[state].append("\n".join(l.rstrip() for l in lines[n:n+height]))
-                self.cached_sizes[state].append( (self._GuessRealBB if width == Tile.AUTO else self._GuessRealBB_Quick) (self.texts[state][-1]))
+                self.cached_sizes[state].append( (self._LetterToTileCoords(width,height), (0.0,0.0) ) if width > 0 else
+                     (self._GuessRealBB if width == Tile.AUTO else self._GuessRealBB_Quick) 
+                        (self.texts[state][-1]
+                ))
                 n += height+1
             n += 1
 

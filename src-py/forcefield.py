@@ -17,47 +17,35 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# Python Core
-import random
-
 # PySFML
 import sf
 
 # My own stuff
 import defaults
-from game import Entity,Game, EntityWithEditorImage
-from tile import AnimTile,Tile,TileLoader
+from tile import AnimTile,Tile,Entity
 from player import Player
-from renderer import Renderer,Drawable
 
-class Iceblock(Tile):
-    """Iceblock is a normal tile with low friction"""
+class ForceField(AnimTile):
+    """Accelerate the player in a specific direction"""
     
-    def __init__(self,*args,friction=0.0,**kwargs):
-        Tile.__init__(self,*args,**kwargs)
-        self.friction = friction
-        
-    def GetFriction(self):
-        return self.friction
-    
-    
-class InvisibleTile(EntityWithEditorImage,Tile):
-    """Invisible tile with editor support"""
-    
-    def __init__(self,*args,editor_image="invisible_stub.png",**kwargs):
-        Tile.__init__(self,*args,**kwargs)
-        EntityWithEditorImage.__init__(self,editor_image)
+    def __init__(self,*args,vel=[0.0,-10.0],halo_img=None, **kwargs):
+        AnimTile.__init__(self,*args,halo_img=halo_img,**kwargs)
+        self.players = {}
+        self.vel = vel
         
     def Update(self,t,dt):
-        Tile.Update(self,t,dt)
-        EntityWithEditorImage.Update(self,t,dt)
+        AnimTile.Update(self,t,dt)
         
-    def Draw(self):
-        Tile.Draw(self)
-        EntityWithEditorImage.Draw(self)
+        if hasattr(self,"players"):
+            for e in self.players:
+                e.SetExtraVelocity((self.vel[0]*dt,self.vel[1]*dt))
+            
+            delattr(self,"players")
+
+    def Interact(self, other):
+        if isinstance(other,Player):
+            
+            self.__dict__.setdefault("players",[]).append(other)
         
+        return Entity.ENTER
         
-        
-        
-        
-    

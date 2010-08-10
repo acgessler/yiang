@@ -820,7 +820,7 @@ class EditorGame(Game):
                     self2.entities = []
                 
                 ox,oy = self.level.GetOrigin()
-                yguiofs,yguisize,xguisize = 22,22,190
+                yguiofs,yguisize,xguisize = 23,22,190
                 
                 xb = 40, -242, -100, 50
                 xb = [x+(self.tx-ox)*defaults.tiles_size_px[0] for x in xb]
@@ -1271,11 +1271,12 @@ class EditorGame(Game):
                 self.level.SetOrigin((ox,oy))
             
             def __call__(self2):
-                self.help_string = "Hit '{0}' for Map, '{1}' for Colors, '{2}' for Context Menu, '{3}' for Snackbar".\
+                self.help_string = "Hit '{0}' for Map, '{1}' for Colors, '{2}' for Context Menu, '{3}' for Snackbar, {4} to add/remove rows or columns".\
                     format(editor_keys["map"][1],
                            editor_keys["colors"][1],
                            editor_keys["context"][1],
-                           editor_keys["catalogue"][1]
+                           editor_keys["catalogue"][1],
+                           editor_keys["expand"][1]
                     )
                 
                 inp = self.inp
