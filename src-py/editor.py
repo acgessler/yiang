@@ -63,6 +63,7 @@ editor_keys = {
     "catalogue"     : (sf.Key.S,"S"),
     "select-rect"   : (sf.Key.LControl,"Ctrl"),
     "select-hold"   : (sf.Key.LShift,"Shift"),
+    "select-remove" : (sf.Key.LAlt,"Alt"),
 }
 
 # Regular expression to |parse| level arguments given a shebang line
@@ -1317,9 +1318,20 @@ class EditorGame(Game):
                                 
                             self.in_select = True
                             
+                        delete = inp.IsKeyDown(editor_keys["select-remove"][0])
+                        def Push(e):
+                            if delete:
+                                try:
+                                    del self.template[e]
+                                except KeyError:
+                                    pass
+                            else:
+                                self.template[e] = None  
+                        
                         if inp.IsKeyDown(editor_keys["select-rect"][0]):
                             
                             # XXX bad runtime performance, scales terribly
+                            
                             
                             if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
                                 if not hasattr(self,"last_select"):
@@ -1328,19 +1340,18 @@ class EditorGame(Game):
                                 for y in range(self.select_start[1],self.fy+1,1) if self.fy >= self.select_start[1] else range(self.select_start[1],self.fy-1,-1):
                                     for x in range(self.last_select[0],self.fx+1,1) if self.fx >= self.last_select[0] else range(self.last_select[0],self.fx-1,-1):
                                         for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                            self.template[e] = None  
+                                            Push(e)
                                             
                                 for y in range(self.last_select[1],self.fy+1,1) if self.fy >= self.last_select[1] else range(self.last_select[1],self.fy-1,-1):
                                     for x in range(self.select_start[0],self.fx+1,1) if self.fx >= self.select_start[0] else range(self.select_start[0],self.fx-1,-1):
                                         for e in self.level.EnumEntitiesAt((x+0.5,y+0.5)):
-                                            self.template[e] = None 
-                                                              
-                                
+                                            Push(e)
+                                                                                            
                                 self.last_select = self.fx,self.fy
                             
                         else:
                             if hasattr(self,"cur_entity"): 
-                                self.template[self.cur_entity] = None
+                                Push(self.cur_entity)
                                 
                         try:
                             self.last_color = next(self.template.keys().__iter__()).color       
@@ -1348,6 +1359,13 @@ class EditorGame(Game):
                             pass     
                 else:
                     self.in_select = False
+                    
+                if self.in_select:
+                    self.help_string = _("'{0}' for rectangle selection, '{1}' to hold selection, '{2}' to remove elements").\
+                        format(editor_keys["select-rect"][1],
+                               editor_keys["select-hold"][1],
+                               editor_keys["select-remove"][1]
+                    )
                     
         
         class Overlay_EditorBasics:
