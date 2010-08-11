@@ -313,8 +313,8 @@ class Player(Entity):
         if self.game.IsGameRunning() is False:
             return
         
-        if self.game.mode == Game.BACKGROUND:
-            return
+        # if self.game.mode == Game.BACKGROUND:
+        #    return
         
         # Check if one of our perks has expired
         for perk in list(self.perks):

@@ -296,6 +296,23 @@ Hit {1} to cancel""".format(
 
                 if event.Type == sf.Event.Resized:
                     assert False
+                    
+        shape = sf.Shape()
+
+        rx,ry = defaults.resolution
+        bb = (-10,160,350,ry-60)
+        cola, colb = sf.Color(40,40,40,165), sf.Color(120,120,120,165)
+        
+        shape.AddPoint(bb[0],bb[1],cola,colb)
+        shape.AddPoint(bb[2],bb[1],cola,colb)
+        shape.AddPoint(bb[2],bb[3],cola,colb)
+        shape.AddPoint(bb[0],bb[3],cola,colb)
+
+        shape.EnableFill(True)
+        shape.EnableOutline(True)
+        shape.SetOutlineWidth(4)
+
+        Renderer.app.Draw(shape) 
 
         #self.DrawBackground()
         for entry in itertools.chain(self.menu_text):
@@ -316,7 +333,7 @@ Hit {1} to cancel""".format(
         self.cur_option = i % len(MainMenu.options)
         print("Select menu option {0}".format(self.cur_option))
 
-        y = 120
+        y = 180
         #for i in range(self.cur_option):
         #    y -= defaults.letter_height_menu*MainMenu.options[i][3]*defaults.scale[1]
         
@@ -327,7 +344,7 @@ Hit {1} to cancel""".format(
                 MainMenu.options[i][0],
                 defaults.font_menu,
                 hscaled,
-                20,
+                40,
                 y,
                 (sf.Color(100,100,100) if self.cur_option == OPTION_RESUME and self.game is None else sf.Color.Red) 
                     if self.cur_option==i else sf.Color.White )

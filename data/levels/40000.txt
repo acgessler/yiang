@@ -1,0 +1,19 @@
+<out> = Level(<level>,<game>,<raw>,color=(20, 20, 20),autoscroll_speed=(0.0, 0),scroll=0,distortion_params=False,postfx=[("ingame1.sfx",()),("menu2.sfx",())])
+rA9rA9rA9.  .  .  .  rA9rA9rA9rA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9rA9rA9rA9.  .  rA9rA9rA9rA9rA9.  rI0.  rI0.  rI0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  aB3
+.  .  .  yD3.  .  .  .  .  .  yD4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE4.  .  .  .  .  gS1.  aB3
+.  gS5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  aDA.  .  .  .  .  gS1.  aB3
+.  .  .  rA9.  .  rE4.  .  .  rA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  aDA.  .  .  .  .  .  .  aB3
+_A0_A0_A0_A2.  .  _A1_A0_A0_A0_A2.  rE2.  .  .  .  .  aC2aC3.  .  .  .  .  .  .  .  .  .  .  .  .  .  aC2aB2_C8.  .  .  .  .  .  .  aB3
+.  .  .  _A9aCE.  _A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  aB3
+.  gS0.  _A9.  .  _A9_A9_C4_A9_A9.  gS0.  rE2.  .  .  .  .  .  .  .  .  .  .  rH4.  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  aB3
+.  gS0.  _A9.  .  _A9_C4_C4_C4_A9.  gS0gS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  aDAaDA.  .  _A9.  .  .  .  .  .  aB3
+.  gS0.  _A9aCE.  _A9_A9_C4_A9_A9.  gS0gS0gS0.  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  aC2aB2aB2aB2aC3.  _A9.  .  .  .  .  .  aB3
+.  gS0.  _A9.  .  _A9_A9_C4_A9_A9.  gS0gS0gS0gS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  _A9.  .  .  .  .  .  aB3
+.  .  .  _A9.  .  _A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_CB.  .  _A9.  .  .  .  .  .  aB3
+.  .  .  rA9aCE.  rA9rABrABrABrA9.  rI0.  rI0.  rI0.  .  .  .  .  aC2aB2aB2aB2aB2aB2aC3.  .  .  .  _A9_A9_A9_A9_A9.  dBU.  .  .  .  aB3
+.  rE2.  _C4.  .  _C4.  .  .  yD3.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  aB3
+.  .  .  _C4.  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  aB3
+.  .  .  rA9.  .  rA9.  .  .  rA9.  .  .  .  .  rE0.  .  .  .  .  cE5.  .  .  _C4.  .  .  .  .  rE0_A9.  .  .  .  .  .  .  .  .  .  aB3
+aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3
+aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3
