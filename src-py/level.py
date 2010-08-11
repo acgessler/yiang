@@ -53,7 +53,8 @@ class Level:
         autoscroll_speed=None,
         scroll=None,
         distortion_params =None,
-        audio_section=None
+        audio_section=None,
+        skip_validation=False
         ):
         """Construct a level given its textual description 
         
@@ -72,7 +73,10 @@ class Level:
                  3-tuple (time_between,distortion_time,distortion_strength).
             audio_section -- Name of the audio section to switch to. Pass 'current' to
                 leave the audio background untouched upon entering this level. Leave
-                the default value to switch to level_n, wheras n is the level index.
+                the default value to switch to level_n, whereas n is the level index.
+            skip_validation -- don't bother validating the entire validity.
+                Use for performance reasons or if the builtin validation 
+                logic reports false positives.
         """
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
@@ -117,11 +121,13 @@ class Level:
             for y, line in enumerate(lines):
                 line_idx += 1
                 line = line.rstrip(" \n\t.")
-                if len(line) == 0:
+                
+                ll = len(line) # precomputed for performance reasons
+                if ll == 0:
                     continue
 
-                assert len(line) % 3 == 0
-                for x in range(0, len(line), 3):
+                assert ll % 3 == 0
+                for x in range(0, ll, 3):
                     tcode = line[x + 1] + line[x + 2]
 
                     if tcode[0] in spaces:
@@ -139,7 +145,8 @@ class Level:
         self.level_size = (xmax // 3 + 1, y + 1)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
         
-        validator.validate_level(self.lines, level)
+        if not skip_validation:
+            validator.validate_level(self.lines, level)
         
         self._ComputeOrigin()
         self._GenerateWindows()
@@ -300,8 +307,8 @@ class Level:
     def _EnumWindows(self):
         """Enumerate all windows in the scene as a 2-tuple (cull-level, window). 
         cull-level is either 0 (visible),  1 (intersecting), 2 (close) """
-        dl,tiles = defaults.level_window_size_abs,defaults.tiles
-        cull_1 = (-tiles[0]*0.25,tiles[0]*1.25,-tiles[1]*0.25,tiles[1]*1.25)
+        dl,tiles,so = defaults.level_window_size_abs,defaults.tiles,defaults.swapout_distance_rel 
+        cull_1 = (-tiles[0]*so[0],tiles[0]*(so[0]+1.0),-tiles[1]*so[1],tiles[1]*(so[1]+1.0))
         
         if self.scroll[-1] & (Level.SCROLL_TOP | Level.SCROLL_BOTTOM) == 0:
             dl = (dl[0],1.5)
@@ -486,11 +493,13 @@ class Level:
         if len(self.game.suspended) > 0:
             return
             
-        if self.scroll[-1] & Level.SCROLL_LEFT == 0:
-            if isinstance(self.autoscroll_speed[-1],tuple):
-                self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1][0], self.origin[1] +  dtime * self.autoscroll_speed[-1][1]))
-            else:
-                self.SetOrigin((self.origin[0] + dtime * self.autoscroll_speed[-1], self.origin[1]))
+        s = self.autoscroll_speed[-1]
+        if isinstance(s,tuple):
+            self.SetOrigin((self.origin[0] + dtime * s[0], self.origin[1] +  dtime * s[1]))
+                
+        else:
+            if self.scroll[-1] & Level.SCROLL_LEFT == 0:
+                self.SetOrigin((self.origin[0] + dtime * s, self.origin[1]))
         
     def Scroll(self,pos):
         """ Update the view according to the player's position 'pos' 
@@ -570,7 +579,7 @@ class Level:
             for entity in window:
                 self.entities_active.add(entity)
                 
-                if n == 0 or n == 1:
+                if n == 0:
                     entity.in_visible_set = True
                     entity.is_intersecting = False
                 elif n == 1:
@@ -823,7 +832,7 @@ class LevelLoader:
         try:
             with open(file,"rt") as file:
                 import re
-                look = re.search(r"name=\"(.+?)\"",file.read(250))
+                look = re.search(r"name=[\"'](.+?)[\"']",file.read(250))
                 if not look is None:
                     LevelLoader.name_cache[index] = name = look.groups()[0]
                     print("Guess level name for {0}: {1}".format(index,name))
@@ -837,14 +846,17 @@ class LevelLoader:
     def EnumLevelIndices():
         """Enumerate all known level numbers in no special order.
         Note that the number 0 is reserved and never assigned.
-        There may be gaps within the set of assigned numbers."""
+        There may be gaps within the set of assigned numbers.
+        The functin yields 2-tuples: (index,ro) here ro is
+        a boolean flag that specifies whether the level can
+        be written to."""
         
         import re
         reg = re.compile(r"^(\d+)\.txt$")
         for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
             m = re.match(reg,file)
             if m:
-                yield int( m.groups()[0] )
+                yield int( m.groups()[0] ), False
                                 
     @staticmethod
     def ClearCache(clear=None):

@@ -305,6 +305,24 @@ class ContextHandler_Receiver(ContextHandler):
                 ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"TA")))
             )
 
+from materials import OneSidedWall
+#from forcefield import ForceField
+class ContextHandler_OneSidedWall(ContextHandler):
+    """Context menu handler for D2,.. bricks"""
+    
+    @staticmethod
+    def GetClasses():
+        return (OneSidedWall,) 
+    
+    
+    def __call__(self, entities):
+        self.entities = entities
+        values = {
+            "Block Left"                  : "D3",
+            "Block Right"                 : "D4"
+        }
+        
+        self._SetupSimpleAlternatives(values)
 
 def GetHandlers():
     """Return a list of all known handler classes"""
@@ -318,7 +336,8 @@ def GetHandlers():
         ContextHandler_Key,
         ContextHandler_Sender,
         ContextHandler_Receiver,
-        ContextHandler_BridgeControl
+        ContextHandler_BridgeControl,
+        ContextHandler_OneSidedWall
     ]
 
 

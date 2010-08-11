@@ -181,10 +181,15 @@ class SimpleNotification(EntityWithEditorImage):
             print("Show notification '{0}', regular use counter: {1}".format(self.desc, self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
+            # Fix: need to decrement the use counter immediately, or the player 
+            # would be able to touch two adjacent bricks carrying the same
+            # notification in a single frame, thus firing the popup
+            # twice.
+            self.game.story_use_counter[self.desc] -= 1
+            
             # closure to be called when the player has made his decision
             def on_close(key):
                 delattr(self, "running")
-                self.game.story_use_counter[self.desc] -= 1
                 self.level.PopAutoScroll()
                 
                 if self.game.story_use_counter[self.desc] == 0:

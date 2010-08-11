@@ -89,7 +89,7 @@ class Component(Drawable):
     }
     
     
-    def __init__(self,rect=None,bgcolor=None,fgcolor=None):
+    def __init__(self,rect=None,bgcolor=None,fgcolor=None,font_height=None,font_face=None,disabled=False):
         Drawable.__init__(self)
         self.rect = rect or [0,0,0,0]
         self._state = Component.STATE_NORMAL
@@ -97,10 +97,13 @@ class Component(Drawable):
         
         self.bgcolor = bgcolor
         self.fgcolor = fgcolor
+        self.disabled = disabled
         
-        self.font = FontCache.get(defaults.letter_height_gui,defaults.font_gui)
+        self.font_height = font_height or defaults.letter_height_gui
+        self.font_face = font_face or defaults.font_gui
+        
+        self.font = FontCache.get(self.font_height,self.font_face)
         self.draworder = 51000
-        self.disabled = False
         
     def GetDrawOrder(self):
         # Make sure the GUI is on top of everything else
@@ -263,7 +266,7 @@ class HasAText(Component):
     @text.setter
     def text(self,text):
         self._text = text
-        self._text_cached = sf.String(self._text,Font=self.font,Size=defaults.letter_height_gui)
+        self._text_cached = sf.String(self._text,Font=self.font,Size=self.font_height)
         return self
     
     @property
@@ -277,8 +280,8 @@ class HasAText(Component):
     
     def _DrawTextCentered(self):
         ts = self._text.split("\n")
-        self._text_cached.SetPosition(*self._MkPos(self.w*0.5 - len(ts[0])*defaults.letter_height_gui*0.25,
-            self.h*0.5 - len(ts)*defaults.letter_height_gui*0.55))
+        self._text_cached.SetPosition(*self._MkPos(self.w*0.5 - len(ts[0])*self.font_height*0.25,
+            self.h*0.5 - len(ts)*self.font_height*0.55))
         
         self._text_cached.SetColor(self.fgcolor if self.fgcolor else sf.Color.White)
         Renderer.app.Draw(self._text_cached)
@@ -374,12 +377,14 @@ class ToggleButton(HasAText):
         self._DrawTextCentered()
         
         
+class Label(HasAText):
+    """A simple text label. Features only the 'update' event"""
         
+    def __init__(self,**kwargs):
+        HasAText.__init__(self,**kwargs)
         
-        
-        
-        
-        
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
+        self._DrawTextCentered()
     
         
         

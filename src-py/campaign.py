@@ -38,7 +38,13 @@ class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
     world's map to be rendered fluently."""
     
-    def __init__(self, level, game, lines, name="Map of the World", minimap="map.bmp", overlays=["extra_items.txt"], color=(15,30,15)):
+    def __init__(self, level, game, lines, 
+        name="Map of the World", 
+        minimap="map.bmp", 
+        overlays=["extra_items.txt"], 
+        color=(15,30,15),
+        skip_validation=True
+    ):
         Level.__init__(self,level,game, lines, 
             color=color,
             postfx=[("ingame2.sfx",())],
@@ -46,7 +52,8 @@ class CampaignLevel(Level):
             gravity=0.0,
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL,
-            distortion_params=(30.0,5.0,1.5))
+            distortion_params=(30.0,5.0,1.5),
+            skip_validation=skip_validation)
         
         self.status_message = ""
         self.SetStatusMessage("")

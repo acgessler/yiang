@@ -1,5 +1,5 @@
-<out> = Level(<level>,<game>,<raw>,color=(30,0,0),name="A Brave New World ...",vis_ofs=2)
-_B4~DA_B5~DAgS2.  .  .  .  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  ~DA
+<out> = Level(<level>,<game>,<raw>,color=(30, 0, 0),vis_ofs=2,autoscroll_speed=(0.25, 0),name='A Brave New World ...',scroll=2,)
+_B4~DA_B5~DAgS2.  .  ~DA.  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  ~DA
 _B4.  _B5_B4.  ~TB.  ~DA.  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  .  .  .  _i0_i0
 _B4.  _B5_B4.  _i1.  ~DA.  .  rI0.  .  ~DA.  .  .  .  .  .  .  .  .  .  ~DA.  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DA~DA~DA~DA~DA~DA~DA~DA~DA~DA
 _B4gPL_B5_B4.  gS5.  ~DA.  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  ~DA.  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  .  .  ~TA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DS~DA~DA~DA~DA~DA~DA~DA~DA~DA~DA

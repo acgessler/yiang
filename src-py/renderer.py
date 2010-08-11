@@ -304,7 +304,8 @@ class Renderer:
                     profiles += 1
                     import cProfile
             
-                    fname = filename=os.path.join(defaults.profile_dir,"render_{0}.cprof".format(profiles))
+                    fname = filename=os.path.join(defaults.profile_dir,
+                        "render_{0}.cprof".format(profiles))
                     
                     def Do10Frames():
                         for i in range(10):
@@ -312,11 +313,14 @@ class Renderer:
                                 break
                             Renderer._DoSingleFrame()
                         
-                    cProfile.runctx("Do10Frames()", globals(), locals(), fname)
+                    try:
+                        cProfile.runctx("Do10Frames()", globals(), locals(), fname)
+                        import pstats
+                        stats = pstats.Stats(fname)
+                        stats.strip_dirs().sort_stats('time').print_stats(20)
+                    except OSError: # folder doesn't exist
+                        print("Cannot profile, create 'profile' directory first")
             
-                    import pstats
-                    stats = pstats.Stats(fname)
-                    stats.strip_dirs().sort_stats('time').print_stats(20)
                 else:
                     Renderer._DoSingleFrame()
                     cnt += 1

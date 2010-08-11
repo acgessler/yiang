@@ -182,12 +182,23 @@ class Game(Drawable):
         return max(1.5, (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1]))
     
     def _DrawHearts(self):
-        
-        if not hasattr(self,"life_bar_font"):
-            self.life_bar_font = FontCache.get(defaults.letter_height_lives,\
-                face=defaults.font_lives)
             
+        treshold = defaults.lifebar_numeric_treshold
         if not hasattr(self,"cached_lives_text") or self.old_lives != self.lives:
+            if self.lives > treshold:
+                if not hasattr(self,"life_bar_font_numeric"):
+                    self.life_bar_font_numeric = FontCache.get(defaults.letter_height_lives_numeric,\
+                        face=defaults.font_lives)
+            
+                # Too many lifes, draw a single number instead
+                self.cached_lives_text = sf.String(str(self.lives),Font=self.life_bar_font_numeric,
+                        Size=defaults.letter_height_lives_numeric)
+            
+            else:
+                if not hasattr(self,"life_bar_font"):
+                    self.life_bar_font = FontCache.get(defaults.letter_height_lives,\
+                        face=defaults.font_lives)
+            
                 # .. and the number of remaining lifes
                 string = "\n".join(map(lambda x:x*self.lives,
 " OOO     OOO   \n\
@@ -199,9 +210,14 @@ OOOOOO  OOOOO  \n\
      OOO       \n\
       O        ".split("\n")))
                 self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
-                self.old_lives = self.lives
+            self.old_lives = self.lives
                 
-        xstart = defaults.resolution[0]-self.lives*defaults.letter_height_lives*10
+        xstart = defaults.resolution[0]- (
+            math.log10(self.lives)*defaults.letter_height_lives_numeric 
+            if self.lives > treshold 
+            else self.lives*defaults.letter_height_lives*10  
+        )
+        
         self.cached_lives_text.SetPosition(xstart-2,5)
         self.cached_lives_text.SetColor(sf.Color.Black)
         self.DrawSingle(self.cached_lives_text)
@@ -516,7 +532,7 @@ Press {3} to {4}""").format(
         record = HighscoreManager.SetHighscore(self.score)
         
         print("Game over, score is {0} and time is {1}".format(self.score,
-            self.clock.GetElapsedTime()))
+            getattr(self,"clock",sf.Clock()).GetElapsedTime()))
 
         if not hasattr(self,"score_map"):
             self.score_map = collections.defaultdict(lambda : "poor, I am laughing at you",{})
@@ -634,13 +650,22 @@ Hit {2} to return to the menu""").format(
         if defaults.profile_level_loading is True:
             import cProfile
             
-            fname = filename=os.path.join(defaults.profile_dir,"load_level.cprof")
-            cProfile.runctx("self.level = LevelLoader.LoadLevel(idx,self)", globals(), locals(), fname)
-    
-            import pstats
-            stats = pstats.Stats(fname)
-            stats.strip_dirs().sort_stats('time').print_stats(20)
-        else: 
+            fname = filename=os.path.join(defaults.profile_dir,
+                "load_level_{0}.cprof".format(idx))
+            
+            try:
+                cProfile.runctx("self.level = LevelLoader.LoadLevel(idx,self)", 
+                    globals(), locals(), fname
+                )
+        
+                import pstats
+                stats = pstats.Stats(fname)
+                stats.strip_dirs().sort_stats('time').print_stats(20)
+            except OSError: # folder doesn't exist
+                print("Cannot profile, create 'profile' directory first")
+                defaults.profile_level_loading = False
+        
+        if defaults.profile_level_loading is False:
             self.level = LevelLoader.LoadLevel(idx,self)
             
         if self.level:

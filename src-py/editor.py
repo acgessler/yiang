@@ -31,7 +31,6 @@ import operator
 # Our stuff
 import defaults
 
-
 # Note: some of these imports are only needed because they might be implicitly
 # referenced by shebang lines in one of the tiles 
 from fonts import FontCache
@@ -48,7 +47,7 @@ from player import Player
 from keys import KeyMapping
 from tile import Tile,AnimTile,TileLoader
 
-from minigui import Component, Button, ToggleButton, GUIManager
+from minigui import Component, Button, ToggleButton, Label, GUIManager
 
 # Sentinel decorator to indicate that a particular function overrides
 # a equally named function in a baseclass
@@ -66,6 +65,18 @@ editor_keys = {
     "select-hold"   : (sf.Key.LShift,"Shift"),
 }
 
+# Regular expression to |parse| level arguments given a shebang line
+look_for_levelarg = r"""
+ {0}\s*=                                # arg name
+        \s* (                           # space in between
+                ( \[ [^\[\]]+? \] )     # list
+            |      
+                ( \( [^()]+? \) )       # tuple
+            |
+                (.+?)                   # literal arguments              
+        ) \s* ((,.*\))| \) )            # closing parentheses          
+"""
+                    
 class EditorCursor(Drawable):
     """Draws the cursor on top of the whole scenery"""
     
@@ -114,6 +125,7 @@ class EditorGame(Game):
         self.overlays = [] # each overlay is a simple callable called during rendering
         self.save_counter = 0
         self.help_string = ""
+        self.settings ={}
         
         # This will almost certainly make sure that we'll never die!
         self.lives = 10000000
@@ -163,35 +175,24 @@ class EditorGame(Game):
                         KeyMapping.GetString("escape")),
                 defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Green,on_close)
         
+        def UpdateReloadGUIState(gui):
+            gui.disabled = not self.IsEditorRunning() 
+            
         # Setup basic GUI buttons
         self.AddSlaveDrawable((Button(text="Reload",rect=[-200,10,80,25],
              tip="Reload the level from disk, bypassing the level cache") +  
-             ("release",(lambda src: AskRestartLevel()))
+             
+             ("release", (lambda src: AskRestartLevel())) +
+             ("update",  (lambda src: UpdateReloadGUIState(src)))
         ))
-        
-        """
-        self.AddSlaveDrawable((Button(text="Kill",rect=[-110,10,80,25]) + 
-             ("release",(lambda src: self.Kill("(Kill button)")))
-        ))
-        
-        self.AddSlaveDrawable((Button(text="+Life",rect=[-80,120,50,25]) + 
-             ("release",(lambda src: self.AddLife()))
-        ))
-        
-        # Right side bar
-        self.AddSlaveDrawable((Button(text="+1ct",rect=[-80,150,50,25]) + 
-             ("release",(lambda src: self.Award(1.0)))
-        ))
-        self.AddSlaveDrawable((Button(text="Move PL",rect=[-80,180,50,25]) + 
-             ("release",(lambda src: GrabPlayer()))
-        ))
-        """
         
         def UpdateUndoState(gui):
-            gui.disabled = self.cur_action==0
+            gui.disabled = self.cur_action==0 \
+                or not self.IsEditorRunning() 
             
         def UpdateRedoState(gui):
-            gui.disabled = self.cur_action>=len(self.actions)
+            gui.disabled = self.cur_action>=len(self.actions) \
+                or not self.IsEditorRunning() 
             
         def UpdateSaveState(gui):
             # The user is allowed to save whenever he wants,
@@ -224,19 +225,22 @@ class EditorGame(Game):
               ("update",  (lambda src: UpdateRedoState(src))) +
 		      ("release", (lambda src: self.Redo()))
         ))
-        
-        #self.AddSlaveDrawable((Button(text="+",rect=[-80,210,50,25]) + 
-        #     ("release",(lambda src: self.AddColumn( -1, 1 )))
-        #))
-        
-        
+    
+        def UpdateSettingsGUIState(gui):
+            # One may, however, not edit the settings while the game is 
+            # running because we can't guarantee having a consistent 
+            # game state then.
+            gui.disabled = not self.IsEditorRunning() 
+            
         def EditSettings():
-            pass
+            if not self.IsOverlayActive(Overlay_ShowLevelSettings):            
+                self.PushOverlay(Overlay_ShowLevelSettings())    
         
         self.AddSlaveDrawable((Button(text="Edit Level Settings", 
             tip="Change level name, speed, movement, post processing ... etc.",                          
             rect=[350, 10, 150, 25]) + 
-              ("release", (lambda src: EditSettings()))
+              ("release", (lambda src: EditSettings())) +
+              ("update",  (lambda src: UpdateSettingsGUIState(src)))
         ))
         
         def Resume():
@@ -317,6 +321,118 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
         ))
         
+        
+        class Overlay_ShowLevelSettings(Drawable):
+            
+            def __init__(self2):
+                Drawable.__init__(self2)
+                self.AddSlaveDrawable(self2)
+                
+                self2.elements = []
+                self2.settings = self.settings
+                
+                w,h = 180,26
+                rx,ry = defaults.resolution
+                self2.elements.append(Button(text=_("Ok"),rect=[rx-w*2-60,ry-50,w,h],fgcolor=sf.Color.Green) + 
+                    ("release", (lambda src: (self2._Save() or True) and self2._RemoveMe()))
+                  )
+                self2.elements.append(Button(text=_("Cancel"),rect=[rx-w-40,ry-50,w,h],fgcolor=sf.Color.Red) + 
+                    ("release", (lambda src: self2._RemoveMe()))
+                  )
+                
+                # Scrolling controls
+                s = self2.settings.setdefault("scroll",self.level.scroll[0]) 
+                def SetScrollState(state,onoff):
+                    if onoff:
+                        self2.settings["scroll"] |= state
+                    else:
+                        self2.settings["scroll"] &= ~state
+                
+                xs,ys = rx*0.5,300
+                w,h = 100,26
+                
+                from level import Level
+                self2.elements.append(ToggleButton(text=_("Scroll left"),rect=[xs-w,ys,w,h],
+                    on=s&Level.SCROLL_LEFT) + 
+                    
+                    ("on",  (lambda src: SetScrollState(Level.SCROLL_LEFT,True)) ) +
+                    ("off", (lambda src: SetScrollState(Level.SCROLL_LEFT,False)) )
+                  )
+                self2.elements.append(ToggleButton(text=_("Scroll right"),rect=[xs+w,ys,w,h],
+                    on=s&Level.SCROLL_RIGHT) + 
+                    
+                    ("on",  (lambda src: SetScrollState(Level.SCROLL_RIGHT,True)) ) +
+                    ("off", (lambda src: SetScrollState(Level.SCROLL_RIGHT,False)) )
+                  )
+                self2.elements.append(ToggleButton(text=_("Scroll top"),rect=[xs,ys-h,w,h],
+                    on=s&Level.SCROLL_TOP) + 
+                    
+                    ("on",  (lambda src: SetScrollState(Level.SCROLL_TOP,True)) ) +
+                    ("off", (lambda src: SetScrollState(Level.SCROLL_TOP,False)) )
+                  )
+                self2.elements.append(ToggleButton(text=_("Scroll bottom"),rect=[xs,ys+h,w,h],
+                    on=s&Level.SCROLL_BOTTOM) + 
+                    
+                    ("on",  (lambda src: SetScrollState(Level.SCROLL_BOTTOM,True)) ) +
+                    ("off", (lambda src: SetScrollState(Level.SCROLL_BOTTOM,False)) )
+                  )
+                
+                modi = [
+                    ( 0.0,                          "Auto: none"        ),
+                    ( defaults.move_map_speed_slow, "Auto: slow"        ),
+                    ( defaults.move_map_speed,      "Auto: normal"      ),
+                    ( defaults.move_map_speed_fast, "Auto: fast"        ),
+                ]
+                s = self.level.autoscroll_speed[0]
+                s = self2.settings.setdefault("autoscroll_speed",s if isinstance(s,tuple) else (s,0)) 
+              
+                all = [[],[]]
+                for m, (dx,dy) in enumerate([(-2.5,0),(0,-4),(2.5,0),(0,5)]):
+                    mm = m if m<2 else m-2
+                    
+                    def SetAutoScrollState(src,m,speed):
+                        l = list(self2.settings["autoscroll_speed"])
+                        l[m] = speed
+                        self2.settings["autoscroll_speed"] = tuple(l)
+                        [setattr( e, "on",False) for e in all[m] if not e is src]
+                
+                    for n,(speed,desc) in enumerate(modi):
+                        if n == 0 and m>2:
+                            continue
+                        n = n-len(modi)//2
+                        speed = -speed if m<2 else speed
+                        
+                        self2.elements.append(ToggleButton(text=desc,rect=[xs+w*dx,ys+h*dy+n*h,w,h],
+                            on=self2.settings["autoscroll_speed"][mm]== speed) + 
+                            ("on",  (lambda src,mm=mm,speed=speed: SetAutoScrollState(src,mm,speed)))
+                          )
+                        
+                        all[mm].append(self2.elements[-1])
+                
+                
+                for e in self2.elements:
+                    e.draworder = 52000
+                    self.AddSlaveDrawable(e)
+                
+            def _Save(self2):
+                self.ControlledChangeSettings(self2.settings)
+        
+            def _RemoveMe(self2):
+                self.RemoveOverlay(self2)
+                for e in self2.elements:
+                    self.RemoveSlaveDrawable(e)
+                    
+                self.RemoveSlaveDrawable(self2)
+                    
+            def __call__(self2):
+                inp = self.inp
+                #if not inp.IsKeyDown(sf.Key.Es):
+                #   self2._RemoveMe()
+                    
+            def Draw(self2):
+                shape = sf.Shape()
+                self.ClearScreen(sf.Color(0,0,0,165))
+                
         
         class Overlay_ShowCatalogue(Drawable):
             
@@ -454,20 +570,7 @@ class EditorGame(Game):
                     self2._RemoveMe()
                     
             def Draw(self2):
-                shape = sf.Shape()
-
-                bb = (0,0,defaults.resolution[0],defaults.resolution[1])
-                color = sf.Color(0,0,0,165)
-                
-                shape.AddPoint(bb[0],bb[1],color,color)
-                shape.AddPoint(bb[2],bb[1],color,color)
-                shape.AddPoint(bb[2],bb[3],color,color)
-                shape.AddPoint(bb[0],bb[3],color,color)
-        
-                shape.EnableFill(True)
-                shape.EnableOutline(False)
-        
-                self.DrawSingle(shape)
+                self.ClearScreen(sf.Color(0,0,0,165))
                 
                 mx,my = self.mx,self.my
                 tx,ty = defaults.tiles_size_px
@@ -1283,7 +1386,7 @@ class EditorGame(Game):
                 # check if there's an entity right here and show its bounding box in white.
                 # if there are multiple entities, take the one with the highest 
                 # drawing order.
-                if not self.IsOverlayActive(Overlay_ShowCatalogue):
+                if not self.IsOverlayActive(Overlay_ShowCatalogue,Overlay_ShowLevelSettings):
                     self2._ShiftOriginIfMouseClose()
                 
                     try:
@@ -1394,7 +1497,23 @@ class EditorGame(Game):
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+      
+    def ClearScreen(self,color = None):
+        """Draw a screen-filling overlay on top of everything"""
+        shape = sf.Shape()
+
+        bb = (0,0,defaults.resolution[0],defaults.resolution[1])
+        color = color or sf.Color(0,0,0,165)
         
+        shape.AddPoint(bb[0],bb[1],color,color)
+        shape.AddPoint(bb[2],bb[1],color,color)
+        shape.AddPoint(bb[2],bb[3],color,color)
+        shape.AddPoint(bb[0],bb[3],color,color)
+
+        shape.EnableFill(True)
+        shape.EnableOutline(False)
+
+        self.DrawSingle(shape)  
       
     def IsOverlayActive(self,*args):
         return not not [e for e in self.overlays if hasattr(e,"__class__") and e.__class__ in args]
@@ -1613,9 +1732,19 @@ class EditorGame(Game):
             print("Out of color indices! Reusing existing index {0}".format(index))
             
         return index
+    
+    def _BuildUpdatedShebang(self):
+        """Build and return an updated shebang line basing on 
+        the updated level settings."""
+
+        # again, a bit hacky
+        shebang = self.level.editor_shebang
+        return shebang.split("(",1)[0] + "(" + "<level>,<game>,<raw>," + "".join("{k}={v!r},".format(**locals()) 
+            for k,v in self.settings.items()) + ")"
         
     def Save(self):
         self._UpdateLevelSize()
+        shebang = self._BuildUpdatedShebang()
         
         lx,ly = self.level.GetLevelSize()
         
@@ -1632,7 +1761,9 @@ class EditorGame(Game):
                     x,y = math.floor(x),math.floor(y)+yofs
                     
                     if not grid[y][x] is None:
-                        print("Warn: ignoring duplicate tile {0} at {1}/{2}, existing tile is {3}".format(entity,x,y,grid[y][x]))
+                        print("Warn: ignoring duplicate tile {0} at {1}/{2}, existing tile is {3}".
+                              format(entity,x,y,grid[y][x])
+                        )
                         continue
                     
                     grid[y][x] = entity    
@@ -1686,7 +1817,7 @@ class EditorGame(Game):
                 ]),clear)  for row in grid),clear)
             
             with open(self.level_file,"wt") as out:
-                out.write(self.level.editor_shebang+"\n")
+                out.write(shebang+"\n")
                 out.write(cells)
                 
         except IOError:
@@ -2210,6 +2341,44 @@ class EditorGame(Game):
         
         SetPosition(pos)
         
+    def ChangeSettings(self,settings):
+        """Set changed level setting and commit them to the
+        current game as well"""
+        self.settings.update(settings)
+        
+        if not self.level:
+            return
+        
+        # Go through all known settings and apply them to the
+        # current level. Actually the generalized settings
+        # management should have directly been implemented
+        # into Level ... so it looks a bit hacky.
+        print(self.settings)
+        from level import Level
+        self.level.scroll = [(self.settings.get("scroll",Level.SCROLL_RIGHT))]*len(self.level.autoscroll_speed)
+        self.level.autoscroll_speed = [tuple(self.settings.get("autoscroll_speed",
+            (0,0)))]*len(self.level.autoscroll_speed)
+        
+        print(self.level.scroll,self.level.autoscroll_speed)
+        
+    def ControlledChangeSettings(self,new):
+        """Push a set of changed settings onto the action stack"""
+        old_settings = dict(self.settings)
+        
+        def Do():
+            self.ChangeSettings(new)
+            
+        def Undo():
+            self.ChangeSettings(old_settings)
+            
+        self.PushAction({"desc":"Change level settings: {0}".format(
+                new
+            ),
+            "redo" : (lambda: Do()),
+            "undo" : (lambda: Undo())
+        })
+        Do()
+        
     def _UpdateMiniMap(self,entity):
         bb = entity.GetBoundingBox()
         self.dirty_area += math.ceil( bb[2] )* math.ceil(bb[3]) if bb else 1.0
@@ -2403,7 +2572,39 @@ class EditorGame(Game):
         # child objects.
         
         self.level_file = os.path.join(defaults.data_dir, "levels", str(self.level_idx) + ".txt")
-        pass
+        
+        # parse the shebang line for keyword arguments
+        shebang = self.level.editor_shebang
+        
+        import re
+        import inspect
+        from level import Level
+        
+        init = Level.__init__
+        assert inspect.isfunction(init)
+        
+        # FullArgSpec(args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations)
+        spec = inspect.getfullargspec(init)
+        args = spec.args
+        
+        self.settings = {}
+        for arg in args:
+            
+            # not a catch-all regex ... but ... ehm ...
+            # actually, re is not the right tool for the purpose
+            # but it should work in most cases.
+            match = re.search( look_for_levelarg
+                .format(re.escape( arg )), shebang, re.VERBOSE | re.DOTALL )
+            if match:
+                match = match.groups()[0]
+                try:
+                    self.settings[arg] = eval( match )
+                except:
+                    import traceback
+                    traceback.print_exc()
+                    print("Encountered syntax error trying to parse in level's kwargs")
+                    
+        print("Settings obtained for this level: {0}".format(self.settings))
     
     @override 
     def _OnEscape(self):   
@@ -2470,24 +2671,29 @@ class EditorMenu(Drawable):
     
     def __init__(self):
         Drawable.__init__(self)
-        
-        
+            
+        xs,ys = 50,150
         def AddLevelButtons():
-            x,y = 50,130
-            for i in sorted( LevelLoader.EnumLevelIndices() ):
+            x,y = xs ,ys
+            w,h = 200,18
+            for i,readonly in sorted( LevelLoader.EnumLevelIndices(), key=operator.itemgetter(0) ):
                 nam = LevelLoader.GuessLevelName(i)
                 
-                self.AddSlaveDrawable((Button(text="{0} (#{1})".format(nam,i),rect=[x,y,300,25],fgcolor=sf.Color.Yellow) + 
+                self.AddSlaveDrawable((Button(text="{2}{0} (#{1})".
+                    format(nam,i,"*" if readonly else ""),
+                    font_height=11,
+                    rect=[x,y,w,h],
+                    fgcolor=sf.Color.Yellow if readonly else sf.Color.Green
+                ) + 
                     ("release",(lambda src,i=i: EditLevel(i)))
                 ))
                 
-                y += 30
-                if y >= defaults.resolution[1]-100:
-                    y = 130
-                    x += 310
+                y += h+1
+                if y >= defaults.resolution[1]-50:
+                    y = ys
+                    x += w+1
         
         def NewLevel():
-            
             # (HACK) -- calling defaults.update_derived() (which is done at
             # the very beginning of the genemptylevel script) seems to
             # distort our scale settings. Save the state earlier and
@@ -2507,8 +2713,33 @@ class EditorMenu(Drawable):
             
             AddLevelButtons()
          
+        x,y = 50,20
+        w,h = 300,20
+        
+        self.AddSlaveDrawable((Button(text="Package levels and data",
+            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=True) + 
+            
+             ("release",(lambda src: NewLevel()))
+        ))
+        
+        y += h+1
+        self.AddSlaveDrawable((Button(text="Validate all levels",
+            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=True) + 
+            
+             ("release",(lambda src: NewLevel()))
+        ))
+        
+        y += h+1
+        self.AddSlaveDrawable((Button(text="Check Mercurial repository",
+            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=True) + 
+            
+             ("release",(lambda src: NewLevel()))
+        ))
+        
+        x += w+10
+        y = 20
         self.AddSlaveDrawable((Button(text="Create new level (follow instructions in console)",
-            rect=[50,50,450,40],fgcolor=sf.Color.Green) + 
+            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11) + 
             
              ("release",(lambda src: NewLevel()))
         ))
@@ -2521,9 +2752,12 @@ class EditorMenu(Drawable):
         
         AddLevelButtons()
         
+        self.AddSlaveDrawable((Label(text=_("Choose a level to edit. Yellow entries are read-only and cannot be edited."),
+            rect=[xs-50,ys-40,550,50],font_height=12)))
+        
     @override 
     def Draw(self):
-        Renderer.SetClearColor(sf.Color(100,100,100))
+        Renderer.SetClearColor(sf.Color(90,90,90))
     
         for event in Renderer.GetEvents():
             # Escape key : exit
