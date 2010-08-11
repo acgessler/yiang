@@ -89,7 +89,8 @@ class Game(Drawable):
         self.total = 0.0
         self.total_accum = 0.0
         self.score = 0.0
-        self.lives = defaults.lives
+        self.lives = 100000 if self.mode in (Game.EDITOR,Game.EDITOR_HIDDEN,Game.BACKGROUND) else defaults.lives 
+            
         self.game_over = False
         self.speed_scale = 1.0
         self.rounds = 1
@@ -365,7 +366,11 @@ OOOOOO  OOOOO  \n\
         if not hasattr(self,"debug_info_font"):
             self.debug_info_font = FontCache.get(defaults.letter_height_debug_info,face=defaults.font_debug_info)
             
-        entity_count,entities_active,entities_visible,entities_nowindow = self.level.GetEntityStats()
+        if self.level:
+            entity_count,entities_active,entities_visible,entities_nowindow = self.level.GetEntityStats()
+        else:
+            entity_count,entities_active,entities_visible,entities_nowindow = -1,-1,-1,-1
+            
         drawables_global = len(Renderer.GetDrawables())
         fps = 1.0/dtime
 
@@ -645,10 +650,13 @@ Hit {2} to return to the menu""").format(
         """Restart the current level and discard all changes made"""
         self.LoadLevel(self.level_idx)
         
-    def LoadLevel(self,idx):
+    def LoadLevel(self,idx,no_loadscreen=False):
         """Load a particular level and drop the old one"""
         self.DropLevel()
         self.level_idx = idx
+        
+        # Carefully reset everything while loading isn't finished
+        self.level = None
         
         if defaults.profile_level_loading is True:
             import cProfile
@@ -657,7 +665,7 @@ Hit {2} to return to the menu""").format(
                 "load_level_{0}.cprof".format(idx))
             
             try:
-                cProfile.runctx("self.level = LevelLoader.LoadLevel(idx,self)", 
+                cProfile.runctx("self.level = LevelLoader.LoadLevel(idx,self,no_loadscreen)", 
                     globals(), locals(), fname
                 )
         
@@ -669,7 +677,7 @@ Hit {2} to return to the menu""").format(
                 defaults.profile_level_loading = False
         
         if defaults.profile_level_loading is False:
-            self.level = LevelLoader.LoadLevel(idx,self)
+            self.level = LevelLoader.LoadLevel(idx,self,no_loadscreen)
             
         if self.level:
             self.level.OnEnable()
@@ -779,6 +787,11 @@ Hit {2} to return to the menu""").format(
         list element. The on_close callback is called with the 
         result value as first parameter, if a suitable function
         is provided."""
+        
+        if self.mode == Game.BACKGROUND:
+            print("Supressing notification boxes while in background mode")
+            on_close(sf.Key.Return)
+            return
         
         # Once this was a powerful god-function, now it is just a
         # pointless wrapper to halt the game while the

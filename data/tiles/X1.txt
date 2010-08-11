@@ -1,0 +1,1 @@
+from loadscreen import EntitySpawner; <out> = EntitySpawner()

@@ -163,6 +163,10 @@ class Level:
         if self.game.GetGameMode() == Game.CAMPAIGN:
             from posteffect import FadeInOverlay
             Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
+            
+    def AddTileFromCode(self,code,x,y):
+        assert len(code)==3
+        return self._LoadSingleTile(code[1:], code[0], x, y)
         
     def _LoadSingleTile(self,tcode,ccode,x,y):
         from tile import TileLoader
@@ -895,7 +899,7 @@ class LevelLoader:
         return
     
     @staticmethod
-    def LoadLevel(level, game):
+    def LoadLevel(level, game, no_loadscreen=False):
         """Load a particular level, return a valid Level instance on success,
         otherwise None.
         
@@ -919,8 +923,10 @@ class LevelLoader:
         """
         
         print("Loading level from disc: " + str(level))
-
         
+        if not no_loadscreen:
+            from loadscreen import LoadScreen
+            return LoadScreen.Load(LevelLoader.LoadLevel,level,game,no_loadscreen=True)
        
         file = LevelLoader.BuildLevelPath(level)
         lines = LevelLoader.cache.get(file, None)

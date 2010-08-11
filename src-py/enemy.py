@@ -129,6 +129,8 @@ class SmallTraverser(Enemy):
                     if res == Entity.BLOCK:
                         self.vel = abs(self.vel)
                         break
+                    elif res == Entity.KILL:
+                        self._Die()
                     
                 # is our right border intersecting?
                 elif self._HitsMyRight(ab,cd):                      
@@ -136,19 +138,25 @@ class SmallTraverser(Enemy):
                     if res == Entity.BLOCK:
                         self.vel = -abs(self.vel)
                         break
+                    elif res == Entity.KILL:
+                        self._Die()
             else:
                  if self._HitsMyBottom(ab,cd):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                         self.vel = -abs(self.vel)
                         break
+                    elif res == Entity.KILL:
+                        self._Die()
                                                
                  # is our top border intersecting?
                  elif self._HitsMyTop(ab,cd):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                        self.vel = abs(self.vel)
-                       break        
+                       break   
+                    elif res == Entity.KILL:
+                       self._Die()     
 
         lx,ly = self.level.GetLevelSize()
         if self.direction == Entity.DIR_HOR:

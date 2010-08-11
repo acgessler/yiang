@@ -66,6 +66,7 @@ game_over_fade_time = 2.0
 enter_level_fade_time = 1.0
 enter_worldmap_fade_time = 1.0
 messagebox_fade_time = 2.0
+loading_time = 15.0
 
 framerate_limit = 60
 min_respawn_distance = 2.0

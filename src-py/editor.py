@@ -2730,6 +2730,13 @@ class EditorMenu(Drawable):
                 self.RemoveSlaveDrawable(e)
             
             AddLevelButtons()
+            
+            
+        from level import LevelLoader
+        def EditLevel(i):
+            game = EditorGame()
+            if game.LoadLevel(i,no_loadscreen=True):
+                Renderer.AddDrawable(game,self)
          
         x,y = 50,20
         w,h = 300,20
@@ -2761,12 +2768,6 @@ class EditorMenu(Drawable):
             
              ("release",(lambda src: NewLevel()))
         ))
-        
-        from level import LevelLoader
-        def EditLevel(i):
-            game = EditorGame()
-            if game.LoadLevel(i):
-                Renderer.AddDrawable(game,self)
         
         AddLevelButtons()
         

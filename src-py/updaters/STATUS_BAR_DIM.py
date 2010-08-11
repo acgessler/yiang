@@ -6,7 +6,7 @@ def GetUpdater():
         def __call__(self,pfx, type, name):
             assert type == "vec2"
             
-            if hasattr(self,"game") is False:
+            if hasattr(self,"game") is False or not self.game.level:
                 return
 
             pfx.SetParameter(name,self.game.GetUpperStatusBarHeight()/defaults.tiles[1],

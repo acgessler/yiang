@@ -22,7 +22,7 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity, NewFrame, EntityWithEditorImage
+from game import Entity, NewFrame, EntityWithEditorImage, Game
 from player import Player
 from keys import KeyMapping
 from fonts import FontCache
@@ -62,7 +62,6 @@ class MessageBox(Drawable):
             self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
                 
     def Draw(self):
-        
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
             
@@ -176,7 +175,9 @@ class SimpleNotification(EntityWithEditorImage):
         # regardless of the use counter.
         if isinstance(other, Player) and (self.game.__dict__.setdefault( "story_use_counter", {} )\
                 .setdefault(self.desc,self.use_counter) > 0
-                 or inp.IsKeyDown(KeyMapping.Get("interact"))) and not hasattr(self, "running"):
+                 or inp.IsKeyDown(KeyMapping.Get("interact")))\
+            and not hasattr(self, "running")\
+            and not self.game.GetGameMode() == Game.BACKGROUND:
             
             print("Show notification '{0}', regular use counter: {1}".format(self.desc, self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))

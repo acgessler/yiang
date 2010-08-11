@@ -281,6 +281,10 @@ class Renderer:
 
         # toggle front and backbuffer
         Renderer.app.Display()
+        
+    @staticmethod
+    def IsMainloopRunning():
+        return Renderer.loop_running and Renderer.app.IsOpened() 
 
     @staticmethod
     def DoLoop():

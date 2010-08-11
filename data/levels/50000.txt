@@ -1,0 +1,14 @@
+<out> = Level(<level>,<game>,<raw>,color=(30, 30, 30),autoscroll_speed=(0.0, 0),name='KillTheChicken',scroll=0,)
+                              _IN
+.  .  .  .  .  .  .  .  .  .  _X1.  .  .  .  .  .  .  .  _X0
+.  .  .  .  .  .  .  .  .  .  .  .  .  _AB_AB_AB_AB
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_B6_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  _A0_A0
+.  .  .  .  .  .  .  .  _C8.  .  .  .  .  .  _A0_A0_A0_B6.  rPL.  .  .  _A0_B6
+.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  _B6.  .  _A9.  .  .  .  .  .  _B6_B6
+.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  _B6.  .  _A9.  .  .  .  .  .  _B6
+.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  _B6_B6.  _A9.  .  .  _CB.  _B6_B6
+.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  rDArDA_B6_B6_B6_A9_B6_B6_A9rDArDA
+.  .  .  .  .  .  .  .  _A9.  .  .  .  .  rDArDArDArDArDArDA.  rDArDA.  rDArDArDA
+.  .  .  .  .  .  .  .  _A9rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA

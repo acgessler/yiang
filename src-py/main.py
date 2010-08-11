@@ -136,7 +136,7 @@ class MainMenu(Drawable):
         self.SetMenuOption(self.cur_option,first=True)
 
         self.bggame = Game(mode=Game.BACKGROUND,undecorated=True)
-        if self.bggame.LoadLevel(SPECIAL_LEVEL_MENU):
+        if self.bggame.LoadLevel(SPECIAL_LEVEL_MENU,no_loadscreen=True):
             self.AddSlaveDrawable(self.bggame)
 
     def _OptionsQuit(self):
@@ -244,8 +244,9 @@ Hit {1} to cancel""".format(
         else:
         
             self.game = Game(mode=mode)
-            self.game.LoadLevel(level)
             Renderer.AddDrawable(self.game,old)
+             
+            self.game.LoadLevel(level)
             
             on_loaded()
             
@@ -351,8 +352,8 @@ Hit {1} to cancel""".format(
 
             y += hscaled*1.5
             
-        if first is False:
-            Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
+        #if first is False:
+        #    Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
         
 
     def RecacheDangerSigns(self):
@@ -659,11 +660,12 @@ def main():
             Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
             return 
         sys.exit(0)
-                
-    Renderer.AddDrawable( MessageBox(sf.String("""This game is dangerous and will damage your mind. 
-Do not continue unless you know what you're doing.
-
-
+               
+    Renderer.SetClearColor(sf.Color(100,0,0)) 
+    Renderer.AddDrawable( MessageBox(sf.String("""
+If you have a choice between A and B, make sure 
+you make the right decision. Usually, that's C.
+    
 Hit {0} to continue
 Hit {1} to cancel""".format(
                     KeyMapping.GetString("accept"),
@@ -671,7 +673,7 @@ Hit {1} to cancel""".format(
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), defaults.game_over_fade_time, (550, 130), 0.0, accepted, sf.Color.Green, on_close))
+            )), defaults.game_over_fade_time, (550, 150), 0.0, accepted, sf.Color(150,0,0), on_close))
     
     Renderer.DoLoop()
     Renderer.Terminate()
