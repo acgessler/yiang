@@ -245,9 +245,8 @@ Hit {1} to cancel""".format(
         
             self.game = Game(mode=mode)
             Renderer.AddDrawable(self.game,old)
-             
-            self.game.LoadLevel(level)
             
+            self.game.LoadLevel(level)
             on_loaded()
             
 

@@ -461,10 +461,14 @@ class Player(Entity):
         print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
             name = "splatter1.txt"
-            for i in range(defaults.death_sprites):
+            remaining = max(0 if self.game.GetFrameRateUnsmoothed() <= defaults.max_framerate_for_sprites else
+                defaults.max_useless_sprites - self.game.useless_sprites, 
+                defaults.min_death_sprites_player
+            )
+            for i in range(min(remaining, defaults.death_sprites_player)):
                 from tile import TileLoader
                 
-                # add human body parts plus generic splatter
+                # add human body parts plus pieces of generic splatter
                 if i == defaults.death_sprites-2:
                     name = "splatter_player_special.txt"
                 elif i == defaults.death_sprites-1:
@@ -472,9 +476,7 @@ class Player(Entity):
                     
                 t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
                 
-                t.SetSpeed(random.uniform(-1.0, 1.0))
-                t.SetDirection((random.random(), random.random()))
-                t.SetTTL(random.random()*18.0)
+                t.RandomizeSplatter()
                 t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
                 
                 self.game.AddEntity(t)
@@ -520,7 +522,7 @@ class Player(Entity):
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:
                             self._Kill(collider.GetVerboseName())
-                        return newpos, newvel
+                            return newpos, newvel
             
                     elif res & Entity.BLOCK_RIGHT:
                         intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
@@ -537,7 +539,7 @@ class Player(Entity):
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:
                             self._Kill(collider.GetVerboseName())
-                        return newpos, newvel
+                            return newpos, newvel
             
                     elif res & Entity.BLOCK_LEFT:
                     
@@ -555,7 +557,7 @@ class Player(Entity):
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:
                             self._Kill(collider.GetVerboseName())
-                        return newpos, newvel
+                            return newpos, newvel
             
                     elif res & Entity.BLOCK_TOP:
                
@@ -575,7 +577,7 @@ class Player(Entity):
                         print("hit deadly entity, need to commit suicide")
                         if defaults.debug_godmode is False and self.unkillable == 0:
                             self._Kill(collider.GetVerboseName())
-                        return newpos, newvel
+                            return newpos, newvel
             
                     elif res & Entity.BLOCK_BOTTOM:
         
@@ -762,6 +764,10 @@ class KillAnimStub(Tile):
         self.dirvec = [1.0,1.0]
         self.SetColor(sf.Color(150,0,0,255))
         
+    def SetGame(self,game):
+        Tile.SetGame(self,game)
+        self.game.useless_sprites += 1
+        
     def _GetHaloImage(self):
         return Entity._GetHaloImage(self,random.choice(
             ("halo_blood.png","halo_blood2.png","halo_blood3.png","halo_blood4.png","halo_blood5.png")
@@ -778,6 +784,12 @@ class KillAnimStub(Tile):
 
     def GetBoundingBox(self):
         return None
+    
+    def RandomizeSplatter(self):
+        """Setup random direction, speed and ttl"""
+        self.SetSpeed(random.uniform(-1.0, 1.0))
+        self.SetDirection((random.uniform(-1.0, 1.0),random.uniform(-1.0, 1.0)))
+        self.SetTTL(random.random()*18.0)
 
     def Update(self, time_elapsed, time_delta):
         self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, self.pos[1] + self.dirvec[1] * time_delta * self.speed))
@@ -787,7 +799,8 @@ class KillAnimStub(Tile):
             return
 
         if time_elapsed - self.time_start > self.ttl:
-            self.game.RemoveEntity(self) 
+            self.game.RemoveEntity(self)
+            self.game.useless_sprites -= 1
         
     def Draw(self):
         Tile.Draw(self)

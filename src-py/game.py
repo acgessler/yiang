@@ -100,6 +100,8 @@ class Game(Drawable):
         self.draw_counter = 0
         self.cookies = {}
         
+        self.useless_sprites=1
+        
         self.swallow_escape = False
         
     def GetCookie(self,name,default):
@@ -358,6 +360,10 @@ OOOOOO  OOOOO  \n\
         except NewFrame:
             print("Received NewFrame notification during event polling")
             raise
+        
+    def GetFrameRateUnsmoothed(self):
+        """Get the non-interpolated fps of this frame"""
+        return 1.0/self.time_delta
 
     def _DrawDebugInfo(self,dtime):
         """Dump debug information (i.e. entity stats) to the upper right
@@ -753,7 +759,8 @@ Hit {2} to return to the menu""").format(
     def PopSuspend(self):
         """Decrease the 'suspended' counter of the game by one. The
         game halts while the counter is not 0."""
-        assert len(self.suspended) > 0
+        if not self.suspended:
+            return
         
         if hasattr(self,"clock"):
             self.total -= self.clock.GetElapsedTime () - self.suspended[-1]
@@ -895,7 +902,7 @@ class Entity(Drawable):
     logical frame."""
 
     ENTER,KILL = 0x100,0x200
-    DIR_HOR,DIR_VER=range(2)
+    DIR_HOR,DIR_VER=range(2) # don't change!
 
     BLOCK_LEFT,BLOCK_RIGHT,BLOCK_TOP,BLOCK_BOTTOM,BLOCK = 0x1,0x2,0x4,0x8,0xf
     

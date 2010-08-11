@@ -35,6 +35,8 @@ from player import KillAnimStub,Player
 
 class Enemy(AnimTile):
     """Sentinel base class for all entities"""
+    
+    firstnames,lastnames=None,None
 
     def GetVerboseName(self):
         return "an unknown enemy"
@@ -46,10 +48,27 @@ class Enemy(AnimTile):
         """Invoked when the enemy is slayed"""
         print("Kill entity: {0}".format(self.__class__.__name__))
         self.game.RemoveEntity(self)
-        self.game.AddEntity(ScoreTileAnimStub("Slayer's Penalty: {0:4.4} ct".format(self.game.Award(self._GetScoreAmount())),self.pos,1.0))
+        self.game.AddEntity(ScoreTileAnimStub("{1} {0:4.4} ct".
+            format(self.game.Award(self._GetScoreAmount()),
+                self._GetRandomName()),self.pos,1.0
+            )
+        )
         self._SpreadSplatter()
         
         self.level.CountStats("s_kills",1)
+        
+    def _GetRandomName(self):
+        Enemy.firstnames = Enemy.firstnames or [ e.strip() for e in open(
+            os.path.join(defaults.data_dir,"messages","firstnames.txt"),
+            "rt").readlines() ]
+            
+        Enemy.lastnames = Enemy.lastnames or [ e.strip() for e in open(
+            os.path.join(defaults.data_dir,"messages","lastnames.txt"),
+            "rt").readlines() ]
+            
+        return "{0} {1}".format( random.choice(Enemy.firstnames),
+            random.choice(Enemy.lastnames)
+        )
         
     def _GetScoreAmount(self):
         """Get the score the player receives for slaying this enemy"""
@@ -57,20 +76,25 @@ class Enemy(AnimTile):
         
     def _SpreadSplatter(self):
         name = "splatter1.txt"
-        for i in range(defaults.death_sprites):
+        remaining = max(0 if self.game.GetFrameRateUnsmoothed() <= defaults.max_framerate_for_sprites else
+            defaults.max_useless_sprites - self.game.useless_sprites , 
+            defaults.min_death_sprites
+        )
+        for i in range(min(remaining, defaults.death_sprites)):
             from tile import TileLoader
                 
             t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
-            
-            t.SetSpeed(random.uniform(-1.0, 1.0))
-            t.SetDirection((random.random(), random.random()))
-            t.SetTTL(random.random()*18.0)
+            t.RandomizeSplatter()
             t.SetPosition(self.pos)
             
             self.game.AddEntity(t)
     
     def Interact(self, other):
-        """The default behaviour for enemies is to be killable by a shot with any gun"""
+        """The default behaviour for enemies is to be killable by a shot with any gun.
+        Also, enemies usually don't kill each other """
+        if isinstance(other,Enemy):
+            return Entity.BLOCK
+        
         if isinstance(other,Shot):
             self._Die()
             
@@ -115,8 +139,8 @@ class SmallTraverser(Enemy):
             if collider is self:
                 continue
             
-            if isinstance(collider,SmallTraverser):
-                break
+            if isinstance(collider,Enemy):
+                continue
             
             cd = collider.GetBoundingBoxAbs()
             if cd is None:

@@ -1767,7 +1767,7 @@ class EditorGame(Game):
         lx,ly = self.level.GetLevelSize()
         
         yofs = self.level.vis_ofs
-        grid = [ [None for x in range(lx)] for y in range(ly+yofs)]
+        grid = [ [None for x in range(int(lx))] for y in range(int(ly+yofs) )]
         x,y = -1000,-1000
         entity = None
         try:

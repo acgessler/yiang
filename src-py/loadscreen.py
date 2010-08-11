@@ -30,7 +30,7 @@ from game import Entity,Game
 
 # range of levels usable as background for the loadscreen
 SPECIAL_LEVEL_LOADING_START = 50000
-SPECIAL_LEVEL_LOADING_END = 50001
+SPECIAL_LEVEL_LOADING_END = -1
 
 class CountingTile(Tile):
     
@@ -65,7 +65,6 @@ class EntitySpawner(Entity):
 class LoadScreen:
     """Displays the 'be patient or kill a chicken' loading screen"""
     
-    instance = None
     loadlevel = None
     progress_tile = None
     
@@ -75,7 +74,21 @@ class LoadScreen:
         
         LoadScreen.progress_tile = None
         
-        LoadScreen.loadlevel = g = LoadScreen.instance = Game(mode=Game.BACKGROUND,undecorated=True)
+        global SPECIAL_LEVEL_LOADING_END
+        if SPECIAL_LEVEL_LOADING_END < SPECIAL_LEVEL_LOADING_START:
+            from level import LevelLoader
+            
+            m = None
+            for n,readonly in sorted(LevelLoader.EnumLevelIndices()):
+                if n < SPECIAL_LEVEL_LOADING_START:
+                    continue
+                if m and n-m != 1:
+                    break
+                m = n
+                
+            SPECIAL_LEVEL_LOADING_END = n+1
+        
+        g = Game(mode=Game.BACKGROUND,undecorated=True)
         if not g.LoadLevel(random.randint(SPECIAL_LEVEL_LOADING_START,SPECIAL_LEVEL_LOADING_END-1),
             no_loadscreen=True):
             return
@@ -85,14 +98,16 @@ class LoadScreen:
             return
             
         LoadScreen.progress_tile, = e
-
+        LoadScreen.loadlevel = g
         
     @staticmethod
     def UpdateProgressBar(progress):
         e = LoadScreen.progress_tile
         if not e:
             return
-        e.text = e.orig_text.format("."*int((progress*10)))
+        
+        l = 25
+        e.text = e.orig_text.format("[" + ("#"*int(progress*l) + "."*int((1.0-progress)*l))+"]")
         e._Recache()
         
     @staticmethod
@@ -111,22 +126,27 @@ class LoadScreen:
             b = time.time()
 
             time.sleep(max(0, defaults.loading_time - (b-a)))
-            Renderer.RemoveDrawable(LoadScreen.loadlevel)
             
-        Renderer.AddDrawable(LoadScreen.loadlevel)
+        if LoadScreen.loadlevel:
+            Renderer.AddDrawable(LoadScreen.loadlevel)
         
         LoadScreen.stop = False
         t = Thread(target=DoLoading)
         t.daemon = True
         t.start()
         
-        while t.is_alive() and Renderer.IsMainloopRunning():
-            
-            Renderer._DoSingleFrame()
-            
-            c = time.time()
-            LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
-            
+        inp = Renderer.app.GetInput()    
+        try:
+            while t.is_alive() and Renderer.IsMainloopRunning() and not inp.IsKeyDown(sf.Key.Escape):
+                Renderer._DoSingleFrame()
+                
+                c = time.time()
+                LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
+        
+        finally:
+            if LoadScreen.loadlevel:
+                Renderer.RemoveDrawable(LoadScreen.loadlevel)
+                
         return ret[0]
         
 

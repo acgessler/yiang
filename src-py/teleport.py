@@ -28,6 +28,7 @@ from player import Player
 from level import Level
 from renderer import NewFrame, Renderer
 from posteffect import FadeInOverlay,FadeOutOverlay
+from enemy import SmallTraverser
 
 # Python stuff
 import operator
@@ -41,7 +42,7 @@ class Sender(AnimTile):
         AnimTile.__init__(self,text,height,frames,speed)
 
     def Interact(self,other):
-        if isinstance(other, Player):
+        if isinstance(other, Player) or isinstance(other, SmallTraverser):
             lv = self.game.GetLevel()
             assert not lv is None
             
@@ -59,14 +60,29 @@ class Sender(AnimTile):
                 
             else:
                 target = sorted(candidates,key=operator.itemgetter(0))[0][1]
-                self.TeleportPlayer(target,other)
+                
+                if isinstance(other, Player):
+                    self.TeleportPlayer(target,other)
+                else:
+                    self.TeleportSmallTraverser(target,other)
+                    
                 raise NewFrame()
         
         return Entity.ENTER
     
+    def TeleportSmallTraverser(self,target,st):
+        """Teleport 'st' to 'target', which must be a Receiver brick"""
+        assert isinstance(target,Receiver)
+        assert isinstance(st,SmallTraverser)
+        
+        print("Teleport SmallTraverser to {0} at position {1}".format(target,target.pos))
+        target.OnDoTeleportSmallTraverser(self,st)
+        
+    
     def TeleportPlayer(self,target,player):
         """Teleport 'player' to 'target', which must be a Receiver brick"""
         assert isinstance(target,Receiver)
+        assert isinstance(player,Player)
         
         # Don't fade out entirely if the target of the teleport
         # is within the current view.
@@ -82,7 +98,7 @@ class Sender(AnimTile):
             Renderer.AddDrawable(FadeInOverlay(fade_time=fade_time*0.4,fade_start=fade_end,on_close=unsuspender))
             self.game.PopSuspend()
             
-            print("Teleport to {0} at position {1}".format(target,target.pos))
+            print("Teleport Player to {0} at position {1}".format(target,target.pos))
             target.OnDoTeleport(self,player)
             player.Protect(defaults.teleport_protection_time)
             
@@ -106,6 +122,9 @@ class Receiver(AnimTile):
     
     def OnDoTeleport(self,source,player):
         player.SetPositionAndMoveView(self.pos,defaults.teleport_origin_distance)
+        
+    def OnDoTeleportSmallTraverser(self,source,st):
+        st.SetPosition(self.pos)
 
     def GetVerboseName(self):
         return "a receiver teleport brick"
@@ -121,6 +140,17 @@ class ReceiverRotateRight(Receiver):
     def OnDoTeleport(self,source,player):
         Receiver.OnDoTeleport(self,source,player)
         player.vel = [player.vel[1]*2.0, -player.vel[0]]
+        
+    def OnDoTeleportSmallTraverser(self,source,st):
+        st.SetPosition(self.pos)
+        
+        if st.direction == Entity.DIR_HOR:
+            st.vel = abs(st.vel)
+            
+        else:
+            st.vel = -st.vel
+        
+        st.direction = 1-st.direction
 
     def GetVerboseName(self):
         return "a receiver right-rotating teleport brick"
@@ -136,6 +166,17 @@ class ReceiverRotateLeft(Receiver):
     def OnDoTeleport(self,source,player):
         Receiver.OnDoTeleport(self,source,player)
         player.vel = [-player.vel[1]*2.0, player.vel[0]]
+        
+    def OnDoTeleportSmallTraverser(self,source,st):
+        st.SetPosition(self.pos)
+        
+        if st.direction == Entity.DIR_VER:
+            st.vel = abs(st.vel)
+            
+        else:
+            st.vel = -st.vel
+        
+        st.direction = 1-st.direction
 
     def GetVerboseName(self):
         return "a receiver left-rotating teleport brick"
