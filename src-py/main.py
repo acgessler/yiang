@@ -48,6 +48,7 @@ OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(8)
 SPECIAL_LEVEL_TUTORIAL = 10000
 SPECIAL_LEVEL_INTRO = 20000
 SPECIAL_LEVEL_CAMPAIGN = 30000
+SPECIAL_LEVEL_MENU = 40000
 
 def get_level_count():
     """Get the number of levels in the data/levels folder."""
@@ -134,7 +135,9 @@ class MainMenu(Drawable):
         print("Entering main menu")
         self.SetMenuOption(self.cur_option,first=True)
 
-        Renderer.SetClearColor(sf.Color.White)
+        self.bggame = Game(mode=Game.BACKGROUND,undecorated=True)
+        if self.bggame.LoadLevel(SPECIAL_LEVEL_MENU):
+            self.AddSlaveDrawable(self.bggame)
 
     def _OptionsQuit(self):
         Renderer.Quit()
@@ -269,7 +272,7 @@ Hit {1} to cancel""".format(
         if not self.game is None and self.game.IsGameOver():
             self.game = None
         
-        Renderer.SetClearColor(sf.Color.White)
+        Renderer.SetClearColor(sf.Color.Black)
         if self.block is False:
             for event in Renderer.GetEvents():
                 # Escape key : exit
@@ -294,7 +297,7 @@ Hit {1} to cancel""".format(
                 if event.Type == sf.Event.Resized:
                     assert False
 
-        self.DrawBackground()
+        #self.DrawBackground()
         for entry in itertools.chain(self.menu_text):
             Renderer.app.Draw(entry)
             
@@ -314,8 +317,8 @@ Hit {1} to cancel""".format(
         print("Select menu option {0}".format(self.cur_option))
 
         y = 120
-        for i in range(self.cur_option):
-            y -= defaults.letter_height_menu*MainMenu.options[i][3]*defaults.scale[1]
+        #for i in range(self.cur_option):
+        #    y -= defaults.letter_height_menu*MainMenu.options[i][3]*defaults.scale[1]
         
         
         for i in range(len(MainMenu.options)):
@@ -324,7 +327,7 @@ Hit {1} to cancel""".format(
                 MainMenu.options[i][0],
                 defaults.font_menu,
                 hscaled,
-                100,
+                20,
                 y,
                 (sf.Color(100,100,100) if self.cur_option == OPTION_RESUME and self.game is None else sf.Color.Red) 
                     if self.cur_option==i else sf.Color.White )

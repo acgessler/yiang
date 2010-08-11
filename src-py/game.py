@@ -64,7 +64,7 @@ class Game(Drawable):
     """Encapsulates the whole game state, including map tiles,
     enemy and player entities, i.e. ..."""
     
-    QUICKGAME,CAMPAIGN,SINGLE,EDITOR,EDITOR_HIDDEN = range(5)
+    QUICKGAME,CAMPAIGN,SINGLE,EDITOR,EDITOR_HIDDEN,BACKGROUND = range(6)
 
     def __init__(self, undecorated=False, mode=None):
         """ Initialize a new Game instance given the primary
@@ -309,6 +309,9 @@ OOOOOO  OOOOO  \n\
         """Standard window behaviour and debug keys"""
         #if not self.IsGameRunning():
         #    return
+        
+        if self.mode == Game.BACKGROUND:
+            return
         
         try:
             if event.Type == sf.Event.KeyPressed:

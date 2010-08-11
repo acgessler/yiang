@@ -89,7 +89,10 @@ class Level:
         self.vis_ofs = vis_ofs
         self.name = name
         self.gravity = defaults.gravity if gravity is None else gravity
-        self.SetDistortionParams((not defaults.no_distortion and distortion_params) or (30.0,5.0,10.0))
+        self.SetDistortionParams((0,0,0) if distortion_params is False else
+             ((not defaults.no_distortion and distortion_params) 
+             or (30.0,5.0,10.0)
+        ))
         
         self.audio_section = audio_section or "level_{0}".format(self.level)
         self._SetupAudioSection()
@@ -203,8 +206,11 @@ class Level:
         """Control the frequency, length and strength of 'high-distortion' periods.
         distortio_params is a 3-tuple of exactly these parameters."""
         self.distortion_params = distortion_params
-        self.distortion_sine_treshold = math.sin(math.pi* (0.5 - self.distortion_params[1]/self.distortion_params[0]) )
         self.dither_strength = 1.0 # accessed by updaters/DITHER_STRENGTH
+        if not distortion_params[2]:
+            return
+        
+        self.distortion_sine_treshold = math.sin(math.pi* (0.5 - self.distortion_params[1]/self.distortion_params[0]) )
     
     def CountStats(self,name,add):
         """Change a specific entry in the stats dictionary.
@@ -599,6 +605,9 @@ class Level:
     def _UpdateDistortion(self,time,dtime):
         # distortion_params is (time_between,distortion_time,scale).
         # Use the sine function to get a smooth transition.
+        if not self.distortion_params[2]:
+            return
+        
         sint = math.sin(time * math.pi * 0.5  / self.distortion_params[0])
         if sint > self.distortion_sine_treshold:
             d = (sint - self.distortion_sine_treshold) / (1.0 - self.distortion_sine_treshold)
