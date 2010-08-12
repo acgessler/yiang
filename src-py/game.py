@@ -212,7 +212,8 @@ OOOOOO  OOOOO  \n\
     OOOOO      \n\
      OOO       \n\
       O        ".split("\n")))
-                self.cached_lives_text = sf.String(string,Font=self.life_bar_font,Size=defaults.letter_height_lives)
+                self.cached_lives_text = sf.String(string,Font=self.life_bar_font,
+                    Size=defaults.letter_height_lives)
             self.old_lives = self.lives
                 
         xstart = defaults.resolution[0]- (
@@ -270,7 +271,9 @@ OOOOOO  OOOOO  \n\
                 self.GetScore()/100)
             
             if not hasattr(self,"cached_status_text") or self.old_status_text != text:
-                self.cached_status_text = sf.String(text,Font=self.status_bar_font,Size=defaults.letter_height_status)
+                self.cached_status_text = sf.String(text,Font=self.status_bar_font,
+                    Size=defaults.letter_height_status
+                )
                 self.old_status_text = text
     
             self.cached_status_text.SetPosition(8,5)

@@ -58,8 +58,20 @@ class EntitySpawner(Entity):
                 from enemy import SmallTraverser
                 
                 assert isinstance(e, SmallTraverser)
-                e.vel = 10.0
+                e.vel = random.random()*15 + 1.0
+                
             
+from level import Level
+class LoadScreenLevel(Level):
+        
+    def __init__(self, level, game, raw, name="GenericLoadScreenLevel",color=(30,30,30)):
+        Level.__init__(self, level, game, raw,
+            color=color,
+            name=name,
+            scroll=0,
+            distortion_params=False
+        )
+        
         
 class LoadScreen:
     """Displays the 'be patient or kill a chicken' loading screen"""
@@ -105,9 +117,27 @@ class LoadScreen:
         if not e:
             return
         
-        l = 35
+        l = 36
         e.text = e.orig_text.format("[" + ("#"*int(progress*l) + "."*int((1.0-progress)*l))+"]")
         e._Recache()
+        
+    @staticmethod
+    def EndProgressBar():
+        import random
+        ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed]
+        e = LoadScreen.progress_tile
+        if not e:
+            return ret
+        
+        e.text = """
+Finally, everything is ready. 
+This makes me SO happy {0} 
+... Press any key to continue ... """.format(random.choice(
+        (":-)",";-0",";-)",";-*","8)",":)",";)")
+        ))
+        e._Recache()
+        LoadScreen.progress_tile = None
+        return ret
         
     @staticmethod
     def Load(loadProc,*args,**kwargs):
@@ -136,11 +166,15 @@ class LoadScreen:
         
         inp = Renderer.app.GetInput()    
         try:
-            while t.is_alive() and Renderer.IsMainloopRunning() and not inp.IsKeyDown(sf.Key.Escape):
+            while Renderer.IsMainloopRunning() and not inp.IsKeyDown(sf.Key.Escape):
                 Renderer._DoSingleFrame()
                 
-                c = time.time()
-                LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
+                if t.is_alive():
+                    c = time.time()
+                    LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
+                else:
+                    if LoadScreen.EndProgressBar():
+                        break
         
         finally:
             if LoadScreen.loadlevel:

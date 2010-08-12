@@ -73,7 +73,11 @@ class MarkupHandler_RotatingInferno(MarkupHandler):
         ))
     
     
+    
 class Connector(MarkupHandler):
+    """Shared logic to automatically connect related,
+    but different entities with lines, teleporters
+     being an example."""
     
     def __init__(self,color,*args,**kwargs):
         MarkupHandler.__init__(self, *args, **kwargs)

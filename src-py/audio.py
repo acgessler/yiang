@@ -20,6 +20,7 @@
 # Python core
 import os
 import random
+import threading
 
 # PySFML
 import sf
@@ -32,64 +33,66 @@ class SoundEffectCache:
     """Tiny utility to cache all sound effects which we use."""
     cached = {}
     music_ext = [".ogg"]
+    lock = threading.Lock()
 
     @staticmethod
     def Get(name):
         assert name
+        with SoundEffectCache.lock:
 
-        sound = SoundEffectCache.cached.get(name,None) 
-        if not sound is None:
+            sound = SoundEffectCache.cached.get(name,None) 
+            if not sound is None:
+                return sound
+            
+            print("Loading sound {0}".format(name))
+    
+            music = os.path.splitext(name)[-1] in SoundEffectCache.music_ext    
+            sound = music and sf.Music() or sf.SoundBuffer()
+            
+            filename = os.path.join(defaults.data_dir,"sounds", name+(".wav" if name.find(".") == -1 else ""))
+            if music is True:
+                if not sound.OpenFromFile(filename):
+                    print("Failure creating music {0} [{1}]".format(name,filename))
+                    return None
+                
+                sound.SetVolume(defaults.audio_volume_scale*100)
+                class MusicWrapper:
+                    
+                    def __init__(self,music):
+                        self.music = music
+        
+                    def __getattr__(self,name):
+                        return getattr(self.music,name)
+                    
+                    def SetVolume(self,volume):
+                        self.music.SetVolume(defaults.audio_volume_scale*100*volume)
+                        return self
+        
+                sound = MusicWrapper(sound)
+            else:
+                if not sound.LoadFromFile(filename):
+                    print("Failure creating sound {0} [{1}]".format(name,filename))
+                    return None
+                
+                class SoundWrapper:
+                    def __init__(self,buffer):
+                        self.sound = sf.Sound()
+                        self.sound.SetBuffer(buffer)
+                        self.sound.SetVolume(defaults.audio_volume_scale*100)
+                        
+                    def Play(self):
+                        self.sound.Play()
+                        return self
+                        
+                    def SetVolume(self,volume):
+                        self.sound.SetVolume(defaults.audio_volume_scale*100*volume)
+                        return self
+                
+                sound = SoundWrapper(sound)
+    
+            print("Caching sound {0} [{1},music: {2}]".format(name,filename,music))
+            SoundEffectCache.cached[name] = sound
             return sound
-        
-        print("Loading sound {0}".format(name))
-
-        music = os.path.splitext(name)[-1] in SoundEffectCache.music_ext    
-        sound = music and sf.Music() or sf.SoundBuffer()
-        
-        filename = os.path.join(defaults.data_dir,"sounds", name+(".wav" if name.find(".") == -1 else ""))
-        if music is True:
-            if not sound.OpenFromFile(filename):
-                print("Failure creating music {0} [{1}]".format(name,filename))
-                return None
-            
-            sound.SetVolume(defaults.audio_volume_scale*100)
-            class MusicWrapper:
-                
-                def __init__(self,music):
-                    self.music = music
-    
-                def __getattr__(self,name):
-                    return getattr(self.music,name)
-                
-                def SetVolume(self,volume):
-                    self.music.SetVolume(defaults.audio_volume_scale*100*volume)
-                    return self
-    
-            sound = MusicWrapper(sound)
-        else:
-            if not sound.LoadFromFile(filename):
-                print("Failure creating sound {0} [{1}]".format(name,filename))
-                return None
-            
-            class SoundWrapper:
-                def __init__(self,buffer):
-                    self.sound = sf.Sound()
-                    self.sound.SetBuffer(buffer)
-                    self.sound.SetVolume(defaults.audio_volume_scale*100)
-                    
-                def Play(self):
-                    self.sound.Play()
-                    return self
-                    
-                def SetVolume(self,volume):
-                    self.sound.SetVolume(defaults.audio_volume_scale*100*volume)
-                    return self
-            
-            sound = SoundWrapper(sound)
-
-        print("Caching sound {0} [{1},music: {2}]".format(name,filename,music))
-        SoundEffectCache.cached[name] = sound
-        return sound
 
 
 class BerlinerPhilharmoniker:
@@ -102,6 +105,7 @@ class BerlinerPhilharmoniker:
     current_music = None
     current_music_name = ""
     section = "default"
+    lock = threading.Lock()
     
     @classmethod
     def Initialize(cls):
@@ -139,65 +143,73 @@ class BerlinerPhilharmoniker:
         the tracks within the current section until another
         section is choosen. Raise KeyError if this audio section
         is not known"""
-        if not BerlinerPhilharmoniker.playlist:
-            return
-        
-        if name == cls.section:
-            return # keep running section intact
+        with BerlinerPhilharmoniker.lock:
+            if not BerlinerPhilharmoniker.playlist:
+                return
             
-        cls.status_cache.setdefault(cls.section,{})["current"] = cls.current_music
-        cls.status_cache[cls.section]["current_idx"] = cls.current_index
+            if name == cls.section:
+                return # keep running section intact
+                
+            cls.status_cache.setdefault(cls.section,{})["current"] = cls.current_music
+            cls.status_cache[cls.section]["current_idx"] = cls.current_index
+                
+            cls.section = name
+            old = cls.current_music
             
-        cls.section = name
-        old = cls.current_music
-        
-        if cls.section in cls.status_cache:
-            cls.current_music = cls.status_cache[cls.section]["current"]
-            cls.current_index = cls.status_cache[cls.section]["current_idx"]
-            #if cls.current_music:
-            #    cls.current_music.Play()
-        else:
-            cls.current_music = None
-            cls.current_index = 0
+            if cls.section in cls.status_cache:
+                cls.current_music = cls.status_cache[cls.section]["current"]
+                cls.current_index = cls.status_cache[cls.section]["current_idx"]
+                #if cls.current_music:
+                #    cls.current_music.Play()
+            else:
+                cls.current_music = None
+                cls.current_index = 0
+                
+            if old and cls.current_music_name != cls.playlist[name][cls.current_index]:
+                old.Stop()
             
-        if old and cls.current_music_name != cls.playlist[name][cls.current_index]:
-            old.Stop()
-        
-        s = cls.playlist[name]
-        print("Set audio section: {0}".format(name))
+            s = cls.playlist[name]
+            print("Set audio section: {0}".format(name))
     
     @classmethod
     def Process(cls):
-        if not BerlinerPhilharmoniker.playlist:
-            return
         
-        if cls.current_music is None:
-            cls.current_music = sf.Music()
-            
-        if cls.current_music.GetStatus() == sf.Sound.Stopped:
-            try:
-                if len(cls.playlist[cls.section]) == 0:
-                    print("Audio section {0} is empty".format(cls.section))
-                    return
-            except KeyError:
-                print("Audio section {0} does not exist".format(cls.section))
+        with BerlinerPhilharmoniker.lock:
+            if not BerlinerPhilharmoniker.playlist:
                 return
-                   
-            cls.current_index = random.randint(0,len(cls.playlist[cls.section])-1) if defaults.audio_randomize_playlist is True \
-                else (cls.current_index +1) % len(cls.playlist[cls.section])
-            path = cls.playlist[cls.section][cls.current_index]
-            cls.current_music_name = path
-             
-            #if path.find("/") == -1 and path.find("\\") == -1:
-            #    path = os.path.join(defaults.data_dir,"sounds",path)
+            
+            if cls.current_music is None:
+                cls.current_music = sf.Music()
                 
-            cls.current_music = SoundEffectCache.Get(path)
-            if cls.current_music is None:#cls.current_music.OpenFromFile(path) is False:
-                print("Can't load track {2}-{0} \ {1} from playlist, this is a bit sad".format(cls.current_index,path,cls.section))
-                return
-            
-            print("Load track {2}-{0} \ {1}".format(cls.current_index,path,cls.section))
-            cls.current_music.Play()
+            if cls.current_music.GetStatus() == sf.Sound.Stopped:
+                try:
+                    if len(cls.playlist[cls.section]) == 0:
+                        print("Audio section {0} is empty".format(cls.section))
+                        return
+                except KeyError:
+                    print("Audio section {0} does not exist".format(cls.section))
+                    return
+                       
+                cls.current_index = random.randint(0,len(cls.playlist[cls.section])-1) \
+                    if defaults.audio_randomize_playlist is True \
+                    else (cls.current_index +1) % len(cls.playlist[cls.section])
+                path = cls.playlist[cls.section][cls.current_index]
+                cls.current_music_name = path
+                 
+                #if path.find("/") == -1 and path.find("\\") == -1:
+                #    path = os.path.join(defaults.data_dir,"sounds",path)
+                    
+                cls.current_music = SoundEffectCache.Get(path)
+                if cls.current_music is None:#cls.current_music.OpenFromFile(path) is False:
+                    print("Can't load track {2}-{0} \ {1} from playlist, this is a bit sad".format(
+                        cls.current_index,path,cls.section
+                    ))
+                    return
+                
+                print("Load track {2}-{0} \ {1}".format(cls.current_index,
+                    path,cls.section)
+                )
+                cls.current_music.Play()
             
     
         
