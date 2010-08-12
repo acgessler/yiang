@@ -26,7 +26,9 @@ def GetUpdater():
             # why not simply make the postfx belief he's at the center?
             # Usually, this will make sure that this part of the screen
             # appears visible and undistorted.
-            if  x < -0.1 or x > 1.1 or y < -0.1 or y > 1.1 or (self.game.GetGameMode()==3 and not self.game.IsGameRunning()):
+            if  x < -0.1 or x > 1.1 or y < -0.1 or y > 1.1 \
+                or (self.game.GetGameMode()==3 and not self.game.IsGameRunning()) \
+                or self.game.GetGameMode()==5:
                 x = y = 0.5
                 
             pfx.SetParameter(name,x,y)

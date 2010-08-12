@@ -156,9 +156,6 @@ class Level:
         self._UpdateEntityList()
         self._ComputeOrigin()
         
-        from audio import BerlinerPhilharmoniker
-        BerlinerPhilharmoniker.SetAudioSection("level_default")
-        
         from game import Game
         if self.game.GetGameMode() == Game.CAMPAIGN:
             from posteffect import FadeInOverlay

@@ -322,6 +322,24 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
         ))
         
+        def AddMarkup():
+            if not hasattr(self,'osm'):
+                self.osm = Overlay_SceneMarkup()
+            if not self.IsOverlayActive(self.osm):
+                self.PushOverlay(self.osm)
+            
+        def RemoveMarkup():
+            if hasattr(self,"osm"):
+                self.RemoveOverlay(self.osm)
+        
+        self.AddSlaveDrawable((ToggleButton(text="Disable Markup\x00Enable Markup",
+             tip="Enable or disable scene markups. Scene markups highlight entity paths and item relationships",  
+             on=True, rect=[-850,10,110,25]) +
+             
+             # Event handlers
+             ("off", (lambda src: RemoveMarkup())) +
+             ("on",(lambda src: AddMarkup())) 
+        ))
         
         class Overlay_ShowLevelSettings(Drawable):
             
@@ -398,7 +416,7 @@ class EditorGame(Game):
                         [setattr( e, "on",False) for e in all[m] if not e is src]
                 
                     for n,(speed,desc) in enumerate(modi):
-                        if n == 0 and m>2:
+                        if n == 0 and m>=2:
                             continue
                         n = n-len(modi)//2
                         speed = -speed if m<2 else speed
@@ -1367,6 +1385,34 @@ class EditorGame(Game):
                                editor_keys["select-remove"][1]
                     )
                     
+                    
+        class Overlay_SceneMarkup:
+            
+            def __init__(self2):
+                self2.active_during_game = True
+                
+                try:
+                    import editormarkup
+                    self2.markup = editormarkup.GetHandlers()
+                except ImportError:
+                    print("Failure loading editormarkup module")
+                    self2.markup = []
+            
+            def __str__(self2):
+                return "<SceneMarkup overlay - show relationships between entities in the scene"
+        
+            def __call__(self2):
+                
+                for entity in self.level.EnumVisibleEntities():
+                    if not hasattr(entity,"muhandler"):
+                        try:
+                            entity.muhandler = [e for e in self2.markup if entity.__class__ in e.GetClasses()][0](self,entity)
+                        except IndexError:
+                            entity.muhandler = None
+                            
+                    if entity.muhandler:
+                        entity.muhandler()
+        
         
         class Overlay_EditorBasics:
             def __str__(self):
@@ -1515,6 +1561,8 @@ class EditorGame(Game):
         self.PushOverlay(Overlay_EditorInsert())
         self.PushOverlay(Overlay_EditorDelete())
         self.PushOverlay(Overlay_EditorSelect())
+        
+        AddMarkup()
       
     def ClearScreen(self,color = None):
         """Draw a screen-filling overlay on top of everything"""
@@ -1534,7 +1582,8 @@ class EditorGame(Game):
         self.DrawSingle(shape)  
       
     def IsOverlayActive(self,*args):
-        return not not [e for e in self.overlays if hasattr(e,"__class__") and e.__class__ in args]
+        return not not [e for e in self.overlays if hasattr(e,"__class__") and e.__class__ in args\
+            or e in args]
         
     def _PlaceEntity(self,codename,pos):
         elem = self._LoadTileFromTag(codename)
@@ -1921,6 +1970,8 @@ class EditorGame(Game):
             defaults.tiles_size_px[1])
     
     def _DoInGameHelpers(self):
+        # XXX make this a overlay to keep all |bricks| that make up
+        # the editor experience in a common shape.
         self.help_string = "Left-click somewhere to move the player. Right-click to interact with the entity under the cursor"
         
         if self.mousepos_covered_by_gui:
@@ -1976,6 +2027,7 @@ class EditorGame(Game):
             if self.mode == Game.EDITOR_HIDDEN:
                 self.help_string = None
             else:
+                [e() for e in list(self.overlays) if hasattr(e,"active_during_game")]
                 self._DoInGameHelpers()
                 
         if self.help_string:

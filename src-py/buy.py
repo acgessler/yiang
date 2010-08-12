@@ -51,7 +51,9 @@ class Machine(AnimTile):
             print("Failure reading {0}".format(path))
             
     def Interact(self,other):
-        if isinstance(other,Player) and not hasattr(self, "running") and self.use_counter > 0 and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
+        if isinstance(other,Player) and not hasattr(self, "running") and self.use_counter > 0 \
+            and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
+            
             self._RunMachine()
         
         return Entity.ENTER

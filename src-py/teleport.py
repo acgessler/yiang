@@ -65,8 +65,10 @@ class Sender(AnimTile):
                     self.TeleportPlayer(target,other)
                 else:
                     self.TeleportSmallTraverser(target,other)
-                    
-                raise NewFrame()
+                
+                # don't know why this was once needed - it just
+                # causes unneeded flickering.
+                #raise NewFrame()
         
         return Entity.ENTER
     
@@ -95,7 +97,8 @@ class Sender(AnimTile):
                 #self.game.PopSuspend()
             
             Renderer.RemoveDrawable(x)
-            Renderer.AddDrawable(FadeInOverlay(fade_time=fade_time*0.4,fade_start=fade_end,on_close=unsuspender))
+            Renderer.AddDrawable(FadeInOverlay(fade_time=fade_time*0.4,
+                fade_start=fade_end,on_close=unsuspender))
             self.game.PopSuspend()
             
             print("Teleport Player to {0} at position {1}".format(target,target.pos))

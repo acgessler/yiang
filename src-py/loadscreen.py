@@ -41,25 +41,24 @@ class CountingTile(Tile):
         
 class EntitySpawner(Entity):
     
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, dt=1.0, **kwargs):
         Entity.__init__( self,*args,**kwargs)
-        self.locked = False
+        self.clock  = sf.Clock()
+        self.dt = dt
         
     def Update(self,time,dtime):
         import random
         
         inp = Renderer.app.GetInput()
         if inp.IsKeyDown(sf.Key.E):
-            if not self.locked:
-                self.locked= True
+            if self.clock.GetElapsedTime() > self.dt:
+                self.clock  = sf.Clock()
                 
                 e = self.level.AddTileFromCode("{0}E2".format(random.choice("rgby_pG~")),*self.pos)
                 from enemy import SmallTraverser
                 
                 assert isinstance(e, SmallTraverser)
                 e.vel = 10.0
-        else:
-            self.locked= False
             
         
 class LoadScreen:
@@ -106,7 +105,7 @@ class LoadScreen:
         if not e:
             return
         
-        l = 25
+        l = 35
         e.text = e.orig_text.format("[" + ("#"*int(progress*l) + "."*int((1.0-progress)*l))+"]")
         e._Recache()
         

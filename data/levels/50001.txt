@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(30, 30, 30),autoscroll_speed=(0.0, 0),name='KillTheChicken',scroll=0,)
+<out> = Level(<level>,<game>,<raw>,color=(30, 30, 30),autoscroll_speed=(0.0, 0),name='KillTheChicken',scroll=0,distortion_params=False)
 .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TB
 .  .  .  .  .  .  .  .  .  .  _X1.  .  .  .  .  .  .  .  _X0
 .  .  .  .  .  .  .  .  .  .  .  .  .  _AB_AB_AB_AB

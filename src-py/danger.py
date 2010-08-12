@@ -41,7 +41,7 @@ class DangerousBarrel(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
-        return Entity.KILL
+        return Entity.KILL if other.color != self.color else Entity.BLOCK
 
     def GetVerboseName(self):
         return "a deathly barrel (it's hilarious!)"

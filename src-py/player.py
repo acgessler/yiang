@@ -465,13 +465,14 @@ class Player(Entity):
                 defaults.max_useless_sprites - self.game.useless_sprites, 
                 defaults.min_death_sprites_player
             )
-            for i in range(min(remaining, defaults.death_sprites_player)):
+            remaining = min(remaining, defaults.death_sprites_player)
+            for i in range(remaining):
                 from tile import TileLoader
                 
                 # add human body parts plus pieces of generic splatter
-                if i == defaults.death_sprites-2:
+                if i == remaining-2:
                     name = "splatter_player_special.txt"
-                elif i == defaults.death_sprites-1:
+                elif i == remaining-1:
                     name = "splatter_player_special2.txt"
                     
                 t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
