@@ -48,6 +48,12 @@ class Shot(Tile):
     def SetOnHit(self,oh):
         self.onhit = oh
         
+    def GetBoundingBox(self):
+        return None
+    
+    def GetBoundingBoxAbs(self):
+        return None
+        
     def Update(self,time_elapsed,time):
         self.pos = (self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed)
         lvdim = self.level.GetLevelSize()
@@ -55,7 +61,7 @@ class Shot(Tile):
             self.game.RemoveEntity(self)
             return
         
-        rect = self.GetBoundingBox()
+        rect = Tile.GetBoundingBox(self)
     
         # check for any collisions
         for collider in self.game.GetLevel().EnumPossibleColliders(rect):

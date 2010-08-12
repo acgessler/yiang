@@ -21,6 +21,7 @@
 import sys
 import io
 import os
+import threading
 
 # My own stuff
 import defaults
@@ -43,7 +44,7 @@ class Log(io.IOBase):
         self.old = old
         self.prev_arg = ""
 
-    def write(self,*args,**kwargs):
+    def write(self,what):
         # fixme: find out what's wrong here -- it does not filter the log messages
         """ 
         if len(args) == 1:
@@ -60,10 +61,12 @@ class Log(io.IOBase):
             self.write("(last message was probably repeated several times)")
         """
                
-        self.file.write(*args,**kwargs)
+        if len(what)>5:
+            what = "t{0}: {1}".format(threading.current_thread().ident,what)
+        self.file.write(what)
 
         if not self.old is None and not Log.nostdout:
-            self.old.write(*args,**kwargs)
+            self.old.write(what)
 
         self.file.flush()
 
