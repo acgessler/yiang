@@ -48,9 +48,9 @@ class Enemy(AnimTile):
         """Invoked when the enemy is slayed"""
         print("Kill entity: {0}".format(self.__class__.__name__))
         self.game.RemoveEntity(self)
-        self.game.AddEntity(ScoreTileAnimStub("{1} {0:4.4} ct".
-            format(self.game.Award(self._GetScoreAmount()),
-                self._GetRandomName()),self.pos,1.0
+        self.game.AddEntity(ScoreTileAnimStub(("{0}" if self.game.GetGameMode()==Game.BACKGROUND else "{0} {1:4.4} ct").
+            format(self._GetRandomName(),self.game.Award(self._GetScoreAmount())),
+                self.pos,1.0
             )
         )
         self._SpreadSplatter()

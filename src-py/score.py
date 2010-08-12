@@ -71,6 +71,9 @@ class ScoreTileAnimStub(Tile):
 
     def GetBoundingBox(self):
         return None
+    
+    def GetBoundingBoxAbs(self):
+        return None
 
     def Update(self,time_elapsed,time_delta):
         self.SetPosition((self.pos[0],self.pos[1]-time_delta*self.speed))

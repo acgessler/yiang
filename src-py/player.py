@@ -786,6 +786,9 @@ class KillAnimStub(Tile):
     def GetBoundingBox(self):
         return None
     
+    def GetBoundingBoxAbs(self):
+        return None
+    
     def RandomizeSplatter(self):
         """Setup random direction, speed and ttl"""
         self.SetSpeed(random.uniform(-1.0, 1.0))
@@ -819,6 +822,9 @@ class InventoryChangeAnimStub(Tile):
         self.SetColor(color)
 
     def GetBoundingBox(self):
+        return None
+    
+    def GetBoundingBoxAbs(self):
         return None
 
     def Update(self,time_elapsed,time_delta):
