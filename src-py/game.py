@@ -945,6 +945,15 @@ class Entity(Drawable):
         
         if not self.game is None and not self.game.GetLevel() is None:
             self.game.GetLevel()._MarkEntityAsMoved(self)
+            
+        self._UpdateBB()
+        
+    def _UpdateBB(self):
+        """Called whenever the bounding box of the entity 
+        might have changed. Entity does not further utilize
+        this information, but deriving classes might do this.
+        """
+        pass
 
     def SetColor(self,color):
         self.color = color

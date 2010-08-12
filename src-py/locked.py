@@ -130,15 +130,11 @@ class BridgeControl(AnimTile):
         return Entity.ENTER
     
     def _GetBridge(self):
-        import mathutil
-        
-        # XXX what about a .. EnumAllEntitiesHint()?
-        p = [e for e in self.level.EnumAllEntities() if isinstance(e, Bridge) and e.color == self.color]
+        p = self.level.FindClosestOfSameColor(self.pos,Bridge,self.color)
         if not p:
             print("Failure finding possible target for bridge controller: {0}".format(self))
             return None
         
-        p = sorted(p,key=lambda e:(e.pos[0]-self.pos[0])**2 + (e.pos[1]-self.pos[1])**2)[0]
         return p
     
     def _Toggle(self):

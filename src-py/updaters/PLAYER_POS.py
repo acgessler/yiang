@@ -1,7 +1,27 @@
+#!echo "This file is not executable"
+# -*- coding: UTF_8 -*-
+
+#/////////////////////////////////////////////////////////////////////////////////
+# Yet Another Jump'n'Run Game, unfair this time.
+# (c) 2010 Alexander Christoph Gessler
+#
+# HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ///////////////////////////////////////////////////////////////////////////////////
+
+import sf
 
 import defaults
 from player import Player
-
+from game import Game
 
 def GetUpdater():
     class Updater:
@@ -11,11 +31,20 @@ def GetUpdater():
             if hasattr(self,"game") is False or not self.game.GetLevel():
                 return
             
-            candidates = (entity for entity in self.game.GetLevel().EnumActiveEntities() if isinstance(entity,Player))
+            if not hasattr(self,"player") or self.clock.GetElapsedTime() > 1.0:
+                self.clock = sf.Clock()
+                candidates = (entity for entity in self.game.GetLevel().EnumActiveEntities() \
+                    if isinstance(entity,Player))
+                
+                try:
+                    self.player = sorted(candidates,
+                        key=lambda x:x.pos[0],reverse=True
+                    )[0]
+                except IndexError:
+                    self.player = None
             
-            try:
-                player = sorted(candidates,key=lambda x:x.pos[0],reverse=True)[0]
-            except IndexError:
+            player = self.player
+            if not player:
                 return
             
             origin = self.game.GetLevel().GetOrigin()
@@ -27,8 +56,8 @@ def GetUpdater():
             # Usually, this will make sure that this part of the screen
             # appears visible and undistorted.
             if  x < -0.1 or x > 1.1 or y < -0.1 or y > 1.1 \
-                or (self.game.GetGameMode()==3 and not self.game.IsGameRunning()) \
-                or self.game.GetGameMode()==5:
+                or (self.game.GetGameMode()==Game.EDITOR and not self.game.IsGameRunning()) \
+                or self.game.GetGameMode()==Game.BACKGROUND:
                 x = y = 0.5
                 
             pfx.SetParameter(name,x,y)

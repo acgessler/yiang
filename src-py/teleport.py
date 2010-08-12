@@ -48,19 +48,11 @@ class Sender(AnimTile):
             
             mypos = self.pos
             
-            candidates = []
-            for entity in lv.EnumAllEntities():
-                if isinstance(entity,Receiver) and entity.color == self.color:
-                    
-                    pos = entity.pos
-                    candidates.append(((pos[0]-mypos[0])**2 + (pos[1]-mypos[1])**2,entity))
-                    
-            if len(candidates)==0:
+            target = self.level.FindClosestOfSameColor(self.pos,Receiver,self.color)
+            if not target:
                 print("Failed to find teleport target, my color is {0}".format(self.color))
                 
             else:
-                target = sorted(candidates,key=operator.itemgetter(0))[0][1]
-                
                 if isinstance(other, Player):
                     self.TeleportPlayer(target,other)
                 else:

@@ -135,18 +135,16 @@ class SmallTraverser(Enemy):
         intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
         colliders = []
         fric = 1e10
-        for collider in self.game.GetLevel().EnumPossibleColliders(ab):
-            if collider is self:
-                continue
-            
-            if isinstance(collider,Enemy):
-                continue
-            
-            cd = collider.GetBoundingBoxAbs()
-            if cd is None:
-                continue
-             
-            if self.direction == Entity.DIR_HOR:
+        
+        if self.direction == Entity.DIR_HOR:
+            for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+                if isinstance(collider,Enemy):
+                    continue
+                
+                cd = collider.GetBoundingBoxAbs()
+                if cd is None:
+                    continue
+                 
                 # is our left border intersecting?
                 if self._HitsMyLeft(ab,cd):                      
                     res = collider.Interact(self)
@@ -164,8 +162,17 @@ class SmallTraverser(Enemy):
                         break
                     elif res == Entity.KILL:
                         self._Die()
-            else:
-                 if self._HitsMyBottom(ab,cd):
+        else:
+            for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+                if isinstance(collider,Enemy):
+                    continue
+                
+                cd = collider.GetBoundingBoxAbs()
+                if cd is None:
+                    continue
+                
+                
+                if self._HitsMyBottom(ab,cd):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                         self.vel = -abs(self.vel)
@@ -173,8 +180,8 @@ class SmallTraverser(Enemy):
                     elif res == Entity.KILL:
                         self._Die()
                                                
-                 # is our top border intersecting?
-                 elif self._HitsMyTop(ab,cd):
+                # is our top border intersecting?
+                elif self._HitsMyTop(ab,cd):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                        self.vel = abs(self.vel)

@@ -28,6 +28,7 @@ import collections
 import os
 import itertools
 import math
+import operator
 
 # My own stuff
 import defaults
@@ -260,8 +261,8 @@ class Level:
         """Get the range of windows a BB is spanned over"""
         return (int(bb[0] / defaults.level_window_size_abs[0]), 
             int(bb[1] / defaults.level_window_size_abs[1]),
-            int((bb[0]+bb[2]) / defaults.level_window_size_abs[0]), 
-            int((bb[1]+bb[3]) / defaults.level_window_size_abs[1]))
+            int((bb[2]) / defaults.level_window_size_abs[0]), 
+            int((bb[3]) / defaults.level_window_size_abs[1]))
                     
     def _AddEntityToWindows(self,e):
         """Determine the rectangle covered by an entity and add
@@ -270,7 +271,7 @@ class Level:
             # Wait until the entity has been properly positioned
             #return
         
-        bb = e.GetBoundingBox()
+        bb = e.GetBoundingBoxAbs()
         if bb is None:
             self.window_unassigned.add(e)
             
@@ -450,7 +451,7 @@ class Level:
         return [e for e in self.entities_active if e.in_visible_set is True]
     
     def EnumPossibleColliders(self,bb):
-        """Given a bounding box (x,y,w,h), enumerate all entities
+        """Given a bounding box (x,y,x2,y2), enumerate all entities
         within the same window that could possibly collide."""
         had = set()
         xx,yy,xe,ye = self._BBToWindowRange(bb)
@@ -488,6 +489,30 @@ class Level:
             pob = [int(x) for x in entity.pos]
             if pob == pos:
                 yield entity
+                
+    def FindClosestOf(self,pos,type):
+        """Find the closest entity of a particular class type."""
+        candidates = []
+        
+        # XXX this can be easily optimized
+        for entity in self.EnumAllEntities():
+            if isinstance(entity,type):
+                mypos = entity.pos
+                candidates.append(((pos[0]-mypos[0])**2 + (pos[1]-mypos[1])**2,entity))
+        return None if not candidates else sorted(candidates,key=operator.itemgetter(0))[0][1]
+             
+    def FindClosestOfSameColor(self,pos,type,color):
+        """Find the closest entity of a particular class type,
+        an additional requirement is that theh entities' color must 
+        match a given color."""
+        candidates = []
+        
+        # XXX this can be easily optimized
+        for entity in self.EnumAllEntities():
+            if isinstance(entity,type) and entity.color == color:
+                mypos = entity.pos
+                candidates.append(((pos[0]-mypos[0])**2 + (pos[1]-mypos[1])**2,entity))
+        return None if not candidates else sorted(candidates,key=operator.itemgetter(0))[0][1]       
             
     def IsVisible(self,point):
         """Check if a particular point is currently within
