@@ -19,6 +19,7 @@
 
 import defaults
 import sf
+import threading
 
 class FontCache:
     """Tiny utility to cache all fonts we're using to avoid creating redundant instances.
@@ -26,25 +27,29 @@ class FontCache:
     overhead, also fonts are easier to track."""
 
     cached = {}
+    lock = threading.Lock()
 
     @staticmethod
     def get(height,face=""):
-        if not face:
-            face = defaults.font_monospace
-
-        font = FontCache.cached.get((face,height),None) 
-        if not font is None:
-            return font
         
-        print("Loading font {0} / {1}".format(face,height))
-
-        font = sf.Font()
-        if not font.LoadFromFile(face,int(height)) is True:
-            print("Failure creating font {0},{1}".format(face,height))
-            # XXX substitute default font?
-
-        FontCache.cached[(face,height)] = font
-        return font
+        with FontCache.lock:
+        
+            if not face:
+                face = defaults.font_monospace
+    
+            font = FontCache.cached.get((face,height),None) 
+            if not font is None:
+                return font
+            
+            print("Loading font {0} / {1}".format(face,height))
+    
+            font = sf.Font()
+            if not font.LoadFromFile(face,int(height)) is True:
+                print("Failure creating font {0},{1}".format(face,height))
+                # XXX substitute default font?
+    
+            FontCache.cached[(face,height)] = font
+            return font
 
     
 

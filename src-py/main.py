@@ -107,6 +107,8 @@ def sf_string(text,font_name,size,x,y,color):
     return tex
 
 
+SI_CHOOSE_LEVEL,SI_NONE,SI_HIGHSCORE,SI_CREDITS,SI_ACHIEVEMENTS=range(5)
+
 class MainMenu(Drawable):
     """This class is responsible for displaying the main menu
     and to initiate games according to the user's decisions"""
@@ -127,10 +129,21 @@ class MainMenu(Drawable):
         self.ttl = 0
         
         self.block = False
+        self.subindex = SI_NONE
 
         self.clock = sf.Clock()
-        self.images = []
-        self._LoadImages()
+        self.images = [ ]
+        
+        img = sf.Image()
+        img.LoadFromFile(os.path.join(defaults.data_dir,"textures",
+            "title_small.png"))
+        
+        sp = sf.Sprite(img)
+        
+        x,y =  int(img.GetWidth()*defaults.scale[0]/2),int(img.GetHeight()*defaults.scale[0]/2)
+        sp.SetPosition((defaults.resolution[0]-x)/2,10)
+        sp.Resize(x,y)
+        self.images.append(sp)
 
         print("Entering main menu")
         self.SetMenuOption(self.cur_option,first=True)
@@ -143,8 +156,7 @@ class MainMenu(Drawable):
         Renderer.Quit()
 
     def _OptionsCredits(self):
-        print("Credits!")
-        self.ShowCredits()
+        self.subindex = SI_CREDITS
 
     def _OptionsNewGame(self):
         def settune():
@@ -165,10 +177,10 @@ class MainMenu(Drawable):
         self._TryStartGameFromLevel(SPECIAL_LEVEL_TUTORIAL,mode=Game.SINGLE)
 
     def _OptionsNewGameChoose(self):
-        self.ChooseLevel()
+        self.subindex = SI_CHOOSE_LEVEL
         
     def _OptionsShowAchievements(self):
-        self.ShowAchievements()
+        self.subindex = SI_ACHIEVEMENTS
         
     def _OptionsViewHighscore(self):
         import webbrowser
@@ -200,19 +212,19 @@ class MainMenu(Drawable):
             
 
     options = [
-        ("Resume Game", _OptionsResumeGame, "You will die soon",0.4),
-        ("Campaign", _OptionsNewCampaignGame, "You will die",1.0),
-        ("Load", _OptionsLoadGame, "You will die soon",0.7),
-        ("Save", _OptionsSaveGame, "You will die soon",0.5),
-        ("Quick Game", _OptionsNewGame, "You will die",1.0),
-        ("Start Tutorial", _OptionsTutorial, "You will die",0.5),
-        ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.35),
-        ("Achievements", _OptionsShowAchievements, "Updates!",0.7),
+        ("Resume Game", _OptionsResumeGame, "You will die soon",0.4,False),
+        ("Campaign", _OptionsNewCampaignGame, "You will die",1.0,False),
+        ("Load", _OptionsLoadGame, "You will die soon",0.7,False),
+        ("Save", _OptionsSaveGame, "You will die soon",0.5,False),
+        ("Quick Game", _OptionsNewGame, "You will die",1.0,False),
+        ("Start Tutorial", _OptionsTutorial, "You will die",0.5,False),
+        ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.35,False),
+        ("Achievements", _OptionsShowAchievements, "Updates!",0.7,False),
      #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
-        ("Credits", _OptionsCredits, "CREDITS",0.4),
-        ("Online Highscore", _OptionsViewHighscore, "Updates!",0.35),
-        ("Check for Updates", _OptionsNotImplemented, "Updates!",0.35),
-        ("Quit!", _OptionsQuit ,"",1.0)
+        ("Credits", _OptionsCredits, "CREDITS",0.4,False),
+        ("Online Highscore", _OptionsViewHighscore, "Updates!",0.35,False),
+        ("Check for Updates", _OptionsNotImplemented, "Updates!",0.35,False),
+        ("Quit!", _OptionsQuit ,"",1.0,False)
     ]
     
     def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME,on_loaded=lambda:None):
@@ -223,12 +235,10 @@ class MainMenu(Drawable):
             
             accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
             def on_close(key):
-                self.block = False
                 if key == accepted[1]:
                     self.game = None
                     self._TryStartGameFromLevel(level,old,mode,on_loaded)
                 
-            self.block = True
             Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
 If you start a new game, all your progress will be lost.
 
@@ -250,15 +260,6 @@ Hit {1} to cancel""".format(
             on_loaded()
             
 
-    def _LoadImages(self):
-        # actually this is not used atm
-        if defaults.enable_menu_image_bg is True:
-            img = sf.Image()
-            if not img.LoadFromFile(os.path.join(defaults.data_dir, "splash", "menu1.png")):
-                print("failure loading menu bg")
-
-            self.images.append(img)
-
     def GetDrawOrder(self):
         """Drawable's are drawn with ascending draw order"""
         return 1000
@@ -268,16 +269,47 @@ Hit {1} to cancel""".format(
         return self.game
     
     def Draw(self):
-        
         if not self.game is None and self.game.IsGameOver():
             self.game = None
         
         Renderer.SetClearColor(sf.Color.Black)
+
+        rx,ry = defaults.resolution
+        bb = (-10,160,350*defaults.scale[1],ry-60)    
+
+        if not hasattr(self,"m_clock"):
+            self.m_clock = sf.Clock()
+                  
+        self._DrawRectangle(bb,scale=min(1.0, self.m_clock.GetElapsedTime()))
+        
+        self.base_x,self.base_y = bb[2],bb[1]
+
+        #self.DrawBackground()
+        for entry in itertools.chain(self.menu_text):
+            Renderer.app.Draw(entry)
+            
+        a,b = sf_string_with_shadow(
+                "Best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100),
+                defaults.font_menu,
+                int(20*defaults.scale[1]),
+                int(defaults.resolution[0]-225*defaults.scale[1]),
+                10,
+                sf.Color.Green)
+        Renderer.app.Draw(a); 
+        Renderer.app.Draw(b)
+        
+        if self.subindex == SI_CHOOSE_LEVEL:
+            self.ChooseLevel()
+        elif self.subindex == SI_ACHIEVEMENTS:
+            self.ShowAchievements()
+        elif self.subindex == SI_CREDITS:
+            self.ShowCredits()
+            
         if self.block is False:
-            for event in Renderer.GetEvents():
+            for event in Renderer.SwallowEvents():
                 # Escape key : exit
                 if event.Type == sf.Event.KeyPressed:
-                    if event.Key.Code == KeyMapping.Get("escape") and self.swallow_escape is False:
+                    if event.Key.Code == KeyMapping.Get("escape"):
                         Renderer.Quit()
                         return
 
@@ -291,17 +323,15 @@ Hit {1} to cancel""".format(
                     elif event.Key.Code == KeyMapping.Get("menu-up"):
                         self.SetMenuOption(self.cur_option-1)
 
-                elif event.Type == sf.Event.KeyReleased and event.Key.Code == KeyMapping.Get("escape"):
-                    self.swallow_escape = False
-
                 if event.Type == sf.Event.Resized:
                     assert False
                     
+        for image in self.images:
+            Renderer.app.Draw(image)
+        
+    def _DrawRectangle(self,bb,cola=None,colb=None,scale=1.0):
         shape = sf.Shape()
-
-        rx,ry = defaults.resolution
-        bb = (-10,160,350,ry-60)
-        cola, colb = sf.Color(40,40,40,165), sf.Color(120,120,120,165)
+        cola, colb = cola or sf.Color(40,40,40,int(165*scale)), colb or sf.Color(120,120,120,int(165*scale))
         
         shape.AddPoint(bb[0],bb[1],cola,colb)
         shape.AddPoint(bb[2],bb[1],cola,colb)
@@ -311,21 +341,8 @@ Hit {1} to cancel""".format(
         shape.EnableFill(True)
         shape.EnableOutline(True)
         shape.SetOutlineWidth(4)
-
+        
         Renderer.app.Draw(shape) 
-
-        #self.DrawBackground()
-        for entry in itertools.chain(self.menu_text):
-            Renderer.app.Draw(entry)
-            
-        a,b = sf_string_with_shadow(
-                "Best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100),
-                defaults.font_menu,
-                int(20*defaults.scale[1]),
-                defaults.resolution[0]-325*defaults.scale[1],
-                10,
-                sf.Color.Green)
-        Renderer.app.Draw(a); Renderer.app.Draw(b)
 
     def SetMenuOption(self,i,first=False):
         """Choose the currently selected main menu option, entries
@@ -334,9 +351,6 @@ Hit {1} to cancel""".format(
         print("Select menu option {0}".format(self.cur_option))
 
         y = 180
-        #for i in range(self.cur_option):
-        #    y -= defaults.letter_height_menu*MainMenu.options[i][3]*defaults.scale[1]
-        
         
         for i in range(len(MainMenu.options)):
             hscaled = int(MainMenu.options[i][3]*defaults.letter_height_menu*defaults.scale[1])
@@ -351,9 +365,8 @@ Hit {1} to cancel""".format(
 
             y += hscaled*1.5
             
-        #if first is False:
-        #    Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
-        
+        if MainMenu.options[self.cur_option][-1]:
+            MainMenu.options[self.cur_option][1] (self)
 
     def RecacheDangerSigns(self):
         """Regenerate the dangerous, red flashing matrix-like ghost texts"""
@@ -396,229 +409,216 @@ Hit {1} to cancel""".format(
             
             for te in self.cached_danger_signs:
                 Renderer.app.Draw(te)
-
-        #self.effect.SetParameter("strength", (math.sin( self.clock.GetElapsedTime()/20.0 ) +1)*0.5);
         
         if not self.effect is None:
             self.effect.Draw()
-
-        for image in self.images:
-            sprite = sf.Sprite(image)
-            sprite.SetPosition(0,0)
-            sprite.Resize(defaults.resolution[0],defaults.resolution[1])
-            sprite.SetBlendMode(sf.Blend.Alpha)
-            
-            Renderer.app.Draw(sprite)
 
     def ChooseLevel(self):
         """Switch to the choose level menu option and return the selected
         level. 0 is returned if the user cancels the operation"""
 
+        base_height = 42
+        base_offset = (self.base_x+50,self.base_y)
+        rx,ry = defaults.resolution
+
+        height = int(base_height*defaults.scale[1])
+        width_spacing, height_spacing = int(height*1.55),int(height*1.2)
+
+        num   = get_level_count()+1
+        xnum  = int((rx-base_offset[0]-50)//width_spacing)
+        rows  = math.ceil( num/xnum )
+        self.level = getattr(self,"level", 1)
+        bb = (base_offset[0],base_offset[1],rx-40,ry-60)  
         
-        class LevelChooser(Drawable):
+        def GetBack():
+            self.subindex = SI_NONE
+            delattr(self,"cl_clock")
+            
+        if not hasattr(self,"cl_clock"):
+            self.cl_clock = sf.Clock()
+                  
+        self._DrawRectangle(bb,scale=min(1.0, self.cl_clock.GetElapsedTime()*3.0))
 
-            def __init__(self,outer):
-                Drawable.__init__(self)
-                
-                self.base_height = 90
-                self.base_offset = (35,35)
+        for event in Renderer.SwallowEvents():
+            if event.Type == sf.Event.KeyPressed:
+            
+                if event.Key.Code == KeyMapping.Get("escape"):
+                    GetBack()
+                    return
 
-                self.height = int(self.base_height*defaults.scale[1])
-                self.width_spacing, self.height_spacing = int(self.height*1.55),int(self.height*1.2)
+                elif event.Key.Code == KeyMapping.Get("menu-right"):
+                    self.level = (self.level+1)%(num)
 
-                self.outer = outer
-                self.num   = get_level_count()+1
-                self.xnum  = (defaults.resolution[0]-self.base_offset[0]*2)//self.width_spacing
-                self.rows  = math.ceil( self.num/self.xnum )
-                self.level = 1
+                elif event.Key.Code == KeyMapping.Get("menu-left"):
+                    self.level = (self.level-1)%(num)
 
-            def _BackToMenu(self):
-                Renderer.RemoveDrawable(self)
-                
-            def Draw(self):
-                for event in Renderer.GetEvents():
-                    if event.Type == sf.Event.KeyPressed:
-                        Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
+                elif event.Key.Code == KeyMapping.Get("menu-down"):
+                    self.level = (self.level+xnum)%(num)
+
+                elif event.Key.Code == KeyMapping.Get("menu-up"):
+                    self.level = (self.level-xnum)%(num)
+
+                elif event.Key.Code == KeyMapping.Get("accept"):
                     
-                        if event.Key.Code == KeyMapping.Get("escape"):
-                            return self._BackToMenu()
+                    GetBack()
+                    self._TryStartGameFromLevel(self.level) 
+                   
+        for y in range(rows):
+            for x in range(min(num-1 - y*xnum,xnum)):
+                i = y*xnum +x+1 
+                #print(i)
 
-                        elif event.Key.Code == KeyMapping.Get("menu-right"):
-                            self.level = (self.level+1)%(self.num)
-
-                        elif event.Key.Code == KeyMapping.Get("menu-left"):
-                            self.level = (self.level-1)%(self.num)
-
-                        elif event.Key.Code == KeyMapping.Get("menu-down"):
-                            self.level = (self.level+self.xnum)%(self.num)
-
-                            # improve the usability of the 'return to menu' field
-                            #if (self.level // self.xnum) == self.rows-1:
-                            #    self.level = self.num
-
-                        elif event.Key.Code == KeyMapping.Get("menu-up"):
-                            self.level = (self.level-self.xnum)%(self.num)
-
-                        elif event.Key.Code == KeyMapping.Get("accept"):
-                            if self.level == self.num:
-                                return self._BackToMenu()
-                            
-                            Renderer.RemoveDrawable(self,False)
-                            self.outer._TryStartGameFromLevel(self.level) 
-                           
-                                
-                self.outer.DrawBackground()
-
-                #print(rows,xnum)
-                for y in range(self.rows):
-                    for x in range(min(self.num-1 - y*self.xnum,self.xnum)):
-                        i = y*self.xnum +x+1
-                        #print(i)
-
-                        sf_draw_string_with_shadow(
-                            str(i).zfill(2) ,
-                            defaults.font_menu,
-                            self.height,
-                            self.base_offset[0]+ (x*self.width_spacing),
-                            self.base_offset[1]+y*self.height_spacing,
-                            sf.Color.Red if self.level == i else sf.Color.White )
-                        
-    
-        Renderer.AddDrawable(LevelChooser(self),self)
+                sf_draw_string_with_shadow(
+                    str(i).zfill(2) ,
+                    defaults.font_menu,
+                    height,
+                    base_offset[0]+(x*width_spacing) + 20,
+                    base_offset[1]+y*height_spacing + 20,
+                    sf.Color.Red if self.level == i else sf.Color.White )
+                
+        sf_draw_string_with_shadow(
+            "Press {0} to return".format(KeyMapping.GetString("escape")),
+            defaults.font_menu,
+            height,
+            base_offset[0]+20,
+            ry - 140*defaults.scale[1],
+            sf.Color.White )
         
         
     def ShowAchievements(self):
         """Show a list of all achievements, highlight those earned by the player"""
 
+       
+        base_height = 24
+        base_offset = (self.base_x+50,self.base_y)
+        rx,ry = defaults.resolution
+
+        height = int(base_height*defaults.scale[1])
+        num = len(Achievements.all)
+        self.achievement = getattr(self,"achievement", 1)
+        width_spacing, height_spacing = 290*defaults.scale[1],int(height*1.2)
+        maxdesclenperline = (rx - width_spacing - base_offset[0])/(height*0.7)
         
-        class AchievementList(Drawable):
-
-            def __init__(self,outer):
-                Drawable.__init__(self)
+        bb = (base_offset[0],base_offset[1],rx-40,ry-60)        
+        
+        def GetBack():
+            self.subindex = SI_NONE
+            delattr(self,"sa_clock")
+            
+        if not hasattr(self,"sa_clock"):
+            self.sa_clock = sf.Clock()
+                  
+        self._DrawRectangle(bb,scale=min(1.0, self.sa_clock.GetElapsedTime()*3.0))
+        
+        for event in Renderer.SwallowEvents():
+            if event.Type == sf.Event.KeyPressed:
                 
-                self.base_height = 32
-                self.base_offset = (70,80)
+                if event.Key.Code == KeyMapping.Get("escape"):
+                    GetBack()
+                    return
 
-                self.height = int(self.base_height*defaults.scale[1])
-                self.outer = outer
-                self.num = len(Achievements.all)
-                self.level = 0
-                self.width_spacing, self.height_spacing = 500*defaults.scale[1],int(self.height*1.2)
-                self.maxdesclenperline = (defaults.resolution[0] - self.width_spacing)/self.height
-                
-                
-            def _BackToMenu(self):
-                Renderer.RemoveDrawable(self)
-                
-            def Draw(self):
-                for event in Renderer.GetEvents():
-                    if event.Type == sf.Event.KeyPressed:
-                        Renderer.AddDrawable(FadeInOverlay(fade_time=3.2,fade_start=0.7,draworder=self.GetDrawOrder()+1))
-                    
-                        if event.Key.Code == KeyMapping.Get("escape"):
-                            return self._BackToMenu()
+                elif event.Key.Code == KeyMapping.Get("menu-down"):
+                    self.achievement = (self.achievement+1)%(num)
 
-                        elif event.Key.Code == KeyMapping.Get("menu-down"):
-                            self.level = (self.level+1)%(self.num)
+                elif event.Key.Code == KeyMapping.Get("menu-up"):
+                    self.achievement = (self.achievement-1)%(num)
 
-                        elif event.Key.Code == KeyMapping.Get("menu-up"):
-                            self.level = (self.level-1)%(self.num)
-
-                        elif event.Key.Code == KeyMapping.Get("accept"):
-                            if self.level == self.num:
-                                return self._BackToMenu()
-                                
-                self.outer.DrawBackground()
-                for y, ach in zip( range(self.num), sorted( Achievements.all, key=lambda x: Achievements.GetInfo(x)["order"]) ):
-                    info = Achievements.GetInfo(ach)
-
-                    sf_draw_string_with_shadow(
-                       info["name"] or "<missing>",
-                        defaults.font_menu,
-                        self.height,
-                        self.base_offset[0]+50,
-                        self.base_offset[1]+y*self.height_spacing,
-                        sf.Color.Red if self.level == y else sf.Color.White )
-                    
-                    if self.level == y:
-                        sf_draw_string_with_shadow(
-                           info["icon"],
-                            defaults.font_monospace,
-                            self.height,
-                            self.base_offset[0]+self.width_spacing,
-                            self.base_offset[1],
-                            sf.Color.Yellow )
-                   
-                        out = ""
-                        for paragraph in  info["desc"].split("\n"):
-                            cnt = 0
-                            for word in paragraph.split(" "):
-                                if cnt + len(word) > self.maxdesclenperline:
-                                    out += "\n"
-                                    cnt = 0
-                                out += word + " "
-                                cnt += len(word)
-                            out += "\n\n"
+                else : # event.Key.Code == KeyMapping.Get("accept"):
+                    GetBack()
+                    return
                         
-                        sf_draw_string_with_shadow(
-                            out,
-                            defaults.font_menu,
-                            self.height,
-                            self.base_offset[0]+self.width_spacing,
-                            self.base_offset[1]+300*defaults.scale[1],
-                            sf.Color(200,200,200) )
+        for y, ach in zip( range(num), sorted( Achievements.all, key=lambda x: Achievements.GetInfo(x)["order"]) ):
+            info = Achievements.GetInfo(ach)
+
+            sf_draw_string_with_shadow(
+               info["name"] or "<missing>",
+                defaults.font_menu,
+                height,
+                base_offset[0]+20,
+                base_offset[1]+y*height_spacing+20,
+                sf.Color.Red if self.achievement == y else sf.Color.White )
+            
+            if self.achievement == y:
+                sf_draw_string_with_shadow(
+                   info["icon"],
+                    defaults.font_monospace,
+                    height,
+                    base_offset[0]+width_spacing+20,
+                    base_offset[1]+20,
+                    sf.Color.Yellow )
+           
+                out = ""
+                for paragraph in  info["desc"].split("\n"):
+                    cnt = 0
+                    for word in paragraph.split(" "):
+                        if cnt + len(word) > maxdesclenperline:
+                            out += "\n"
+                            cnt = 0
+                        out += word + " "
+                        cnt += len(word)
+                    out += "\n\n"
+                
+                sf_draw_string_with_shadow(
+                    out,
+                    defaults.font_menu,
+                    height,
+                    base_offset[0]+width_spacing+20,
+                    base_offset[1]+200*defaults.scale[1]+20,
+                    sf.Color(200,200,200) )
                     
-
-        Renderer.AddDrawable(AchievementList(self),self)
-
 
     def ShowCredits(self):
         """Show the game's credits"""
 
-        class Credits(Drawable):
+        if not hasattr(self,"cred"):
+            try:
+                with open(os.path.join("..","CREDITS"),"rt",errors="ignore") as file:
+                    self.cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
+                    #self.cred.insert(0,"(Press any key to continue)")
+            except IOError:
+                print("Failure loading credits file")
+                return
 
-            def __init__(self,outer):
-                Drawable.__init__(self)
-                self.outer = outer
-                try:
-                    with open(os.path.join("..","CREDITS"),"rt",errors="ignore") as file:
-                        self.cred = list(filter(lambda x:not len(x.strip()) or x[0] != "#", file.readlines()))
-                        #self.cred.insert(0,"(Press any key to continue)")
-                except IOError:
-                    print("Failure loading credits file")
-                    return
+        height = int(defaults.letter_height_credits*defaults.scale[1]*0.9)
+        height_spacing = int(5*defaults.scale[1])
 
-                self.height,self.height_spacing = int(defaults.letter_height_credits*defaults.scale[1]),int(5*defaults.scale[1])
 
-            def _BackToMenu(self):
-                Renderer.RemoveDrawable(self)
-                Renderer.AddDrawable(self.outer)
-                
-            def Draw(self):
-                for event in Renderer.GetEvents():
-                    if event.Type == sf.Event.KeyPressed:
-                        return self._BackToMenu()
-                        
-                self.outer.DrawBackground()
+        base_offset = (self.base_x+50,self.base_y)
+        rx,ry = defaults.resolution
+        
+        bb = (base_offset[0],base_offset[1],rx-40,ry-60)        
+        def GetBack():
+            self.subindex = SI_NONE
+            delattr(self,"sc_clock")
+            
+        if not hasattr(self,"sc_clock"):
+            self.sc_clock = sf.Clock()
+            
+        self._DrawRectangle(bb,scale=min(1.0, self.sc_clock.GetElapsedTime()*3.0))
+        for event in Renderer.GetEvents():
+            if event.Type == sf.Event.KeyPressed:
+                GetBack()
+                return
 
-                x,y = 100,50
-                for line in self.cred:
-                    sf_draw_string_with_shadow(
-                        line+("\n" if line[0] == "=" else ""),
-                        defaults.font_menu,
-                        self.height,
-                        x,
-                        y,
-                        sf.Color.Red if line[0] == "=" else sf.Color.White)
+        x,y = base_offset
+        for line in self.cred:
+            
+            if y > ry-100 or line[0] == "=" and y > ry-200:
+                x+= (rx-100-base_offset[0])/2.0
+                y = base_offset[1]+50
+            
+            sf_draw_string_with_shadow(
+                line+("\n" if line[0] == "=" else ""),
+                defaults.font_menu,
+                height,
+                x+40*defaults.scale[0],
+                y+20,
+                sf.Color.Red if line[0] == "=" else sf.Color.White)
 
-                    y += self.height+self.height_spacing
-                    if y > defaults.resolution[1]-100:
-                        x+= (defaults.resolution[0]-200)/2 
-                        y = 130
+            y += height+height_spacing
+            
                     
-                    #Renderer.app.Draw(tex)
-                
-        Renderer.AddDrawable(Credits(self),self)
+
 
 def main():
     """Main entry point to the application"""
@@ -656,7 +656,7 @@ def main():
                 BerlinerPhilharmoniker.SetAudioSection("menu")
         
             Renderer.AddDrawable(MainMenu())
-            Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
+            #Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
             return 
         sys.exit(0)
                

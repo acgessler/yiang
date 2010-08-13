@@ -120,6 +120,13 @@ class Drawable:
         something that can be drawn, shouldn't it?)"""
         pass
     
+    def ProcessEvents(self):
+        """Called once per frame like Draw(), but in reverse order (
+        descending draw order). Use this to process and swallow
+        any incoming events."""
+        pass
+    
+    
 class DebugTools:
     """Implements some state dumpers, tracing tools, etc."""
     
@@ -145,6 +152,7 @@ class NewFrame(Exception):
     def __init__(self):
         print("Raising NewFrame sentinel signal")
         DebugTools.Trace()
+
 
 class Renderer:
     """Static class, responsible for maintaining a list of Drawables()
@@ -234,12 +242,17 @@ class Renderer:
             Renderer.events.add(event)
             event = sf.Event()
 
-        # The background color is not a Drawable because it is *always* first, and active
+        # The background clear call is not implemented as a
+        # Drawable because it is *always* first and *always* active
         Renderer.app.Clear(Renderer.clear_color)
 
         drawable = None
+        sorted_drawables = sorted(Renderer.drawables, key=lambda x: x.GetDrawOrder())
         try:
-            for drawable in sorted(Renderer.drawables, key=lambda x: x.GetDrawOrder()):
+            for drawable in reversed( sorted_drawables ):
+                drawable.ProcessEvents()
+                
+            for drawable in sorted_drawables:
                 drawable.Draw()
         except NewFrame:
             pass
@@ -338,6 +351,12 @@ class Renderer:
     @staticmethod
     def GetEvents():
         return Renderer.events
+    
+    @staticmethod
+    def SwallowEvents():
+        a = Renderer.events
+        Renderer.events = []
+        return a
 
     @staticmethod
     def AddDrawable(drawable, substitutes=None):

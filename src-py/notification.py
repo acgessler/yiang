@@ -60,6 +60,12 @@ class MessageBox(Drawable):
         
         if self.flags & MessageBox.NO_FADE_IN == 0:
             self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
+            
+    def ProcessEvents(self):
+        for event in Renderer.SwallowEvents():
+            if event.Type == sf.Event.KeyPressed and event.Key.Code in self.break_codes:
+                self.result.append(event.Key.Code)
+                self._RemoveMe()
                 
     def Draw(self):
         if not hasattr(self,"clock"):
@@ -72,13 +78,10 @@ class MessageBox(Drawable):
         if self.auto_time > 0.0 and curtime > self.auto_time:
             self.result.append(False)
             self._RemoveMe()
-                
-        for event in Renderer.GetEvents():
-            if event.Type == sf.Event.KeyPressed and event.Key.Code in self.break_codes:
-                self.result.append(event.Key.Code)
-                self._RemoveMe()
                     
-        MessageBox._DrawStatusNotice(self.text, self.size, self.text_color, min(1.0, curtime * 5 / self.fade_time))
+        MessageBox._DrawStatusNotice(self.text, self.size, self.text_color, 
+            min(1.0, curtime * 5 / self.fade_time
+        ))
         return True
             
     def _RemoveMe(self):
@@ -89,7 +92,9 @@ class MessageBox(Drawable):
       
         if self.flags & MessageBox.NO_FADE_OUT == 0:
             from posteffect import FadeInOverlay
-            Renderer.AddDrawable(FadeInOverlay(self.fade_time * 0.5, defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()))
+            Renderer.AddDrawable(FadeInOverlay(self.fade_time * 0.5, 
+                defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()
+            ))
                 
         self.on_close(self.result[-1])
         raise NewFrame()
@@ -132,7 +137,15 @@ class SimpleNotification(EntityWithEditorImage):
     """The SimpleNotification tile displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
-    def __init__(self, text, desc=None, editor_image="notification_stub.png",text_color=sf.Color.Red, width=1, height=1, line_length=50, format=True, audio_fx=None, only_once=True):
+    def __init__(self, text, desc=None, editor_image="notification_stub.png",
+        text_color=sf.Color.Red, 
+        width=1, 
+        height=1, 
+        line_length=50, 
+        format=True, 
+        audio_fx=None, 
+        only_once=True
+    ):
         EntityWithEditorImage.__init__(self,editor_image)
         self.text = text
         self.use_counter = 1 # if only_once is True else 1000000000 
@@ -167,7 +180,9 @@ class SimpleNotification(EntityWithEditorImage):
             
             self.text_formatted += "\n\n"
         
-        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.0))
+        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), 
+            int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.0)
+        )
         
     def Interact(self, other):
         inp = Renderer.app.GetInput()

@@ -241,7 +241,7 @@ class Tile(Entity):
         return self.cached_bb 
     
     def GetBoundingBoxAbs(self):
-        return self.cached_bb_abs
+        return self.cached_bb_abs if self.GetBoundingBox() else None
     
     def _UpdateBB(self):
         if hasattr(self,"shrink_percentage"):

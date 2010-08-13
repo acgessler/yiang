@@ -69,7 +69,7 @@ class LoadScreenLevel(Level):
             color=color,
             name=name,
             scroll=0,
-            autoscroll_speed=0,
+            autoscroll_speed=(0.0,0.0),
             distortion_params=False
         )
         
