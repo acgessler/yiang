@@ -21,6 +21,7 @@
 import sf
 import os
 import sys
+import threading
 
 # My stuff
 import defaults
@@ -72,6 +73,7 @@ class PostFX:
 class PostFXCache:
     """Tiny utility to cache all postprocessing effect instances"""
     cached = {}
+    lock = threading.Lock()
     shared_env = None
 
     @staticmethod
@@ -82,88 +84,90 @@ class PostFXCache:
         name value). Shaders are cached internally."""
         assert name
         
-        if PostFXCache.shared_env is None:
-            PostFXCache._SetupSharedEnv()
-
-        env = env+PostFXCache.shared_env
-        pfx = PostFXCache.cached.get((name,env),None) 
-        if not pfx is None:
-            return pfx
-
-        pfx = PostFX(name,env)
-        print("Loading postfx {0} / environment: {1}".format(name,env))
+        with PostFXCache.lock:
         
-        try:
-            try:
-                p = open(name,"rt")
-                dir = "."
-            except IOError:
-                dir = os.path.join(defaults.data_dir,"effects")
-                p = open(os.path.join(dir,name),"rt")
-            
-            try:
-                string = Preprocessor.Preprocess( p.readlines(), env, [dir]  )
-            except CppError as err:
-                print("Failure preprocessing postfx {0},{1}: {2}".format(name,env,err))
-                return None                
-        
-            if not pfx.Get().LoadFromMemory("\n".join(string)) is True:
-                print("Failure creating postfx {0},{1}.\nCode after preprocessing: {2})".format(name,env,string))
-                return None
-            
-            # XXX improve this, myabe query SFML directly
-            data_types = ["texture","vec2","vec3","vec4","float","bool","double"]   
-            for line in string:
-                words = line.split(None,3)
-                if not words:
-                    continue
-                
-                if words[0] == "effect":
-                    break
-                
-                if words[0] in data_types:
-                    pfx.vars.add(words[1])
-                    
-                    # handle texture loading manually, SFML doesn't do it.
-                    if len(words)>3 and words[2]=="=":
-                        words[3] = words[3].strip()
-                        if len(words[3]) and words[3][0] == "{" and words[3][-1] == "}":
-                            kwd = words[3][1:-1]
-                            
-                            class closure_maker:
-                                def __init__(self,inner=PostFXCache._GetParameterUpdater(kwd),type=words[0],name=words[1]):
-                                    self.inner = inner
-                                    self.type = type
-                                    self.name = name
-                                    
-                                def __getattr__(self,name):
-                                    return getattr( self.inner, name )
-                                
-                                def __call__(self):
-                                    return self.inner(pfx,self.type,self.name)
-                            
-                            pfx.updater.append(closure_maker())
-                        elif words[0]=="texture":
-                            # XXX unify this special case, too.
-                            
-                            tex = words[3].strip()
-                            print("Loading implicit texture {0} (shader var: {1})".format(tex, words[1]))
-                        
-                            img = sf.Image()
-                            if img.LoadFromFile(tex) is True:
-                                pfx.SetTexture(words[1],img)
-                                def tex_updater(pfx=pfx,type=words[0],name=words[1],tex=img):
-                                    pfx.SetTexture(name,tex)
-                                
-                                pfx.updater.append(tex_updater)  
-                            else:
-                                print(".. failure, ignoring this parameter")  
-
-            PostFXCache.cached[(name,env)] = pfx
+            if PostFXCache.shared_env is None:
+                PostFXCache._SetupSharedEnv()
     
-        except IOError:
-            print("Cannot access postfx file: {0}".format(name))
-            return None
+            env = env+PostFXCache.shared_env
+            pfx = PostFXCache.cached.get((name,env),None) 
+            if not pfx is None:
+                return pfx
+    
+            pfx = PostFX(name,env)
+            print("Loading postfx {0} / environment: {1}".format(name,env))
+            
+            try:
+                try:
+                    p = open(name,"rt")
+                    dir = "."
+                except IOError:
+                    dir = os.path.join(defaults.data_dir,"effects")
+                    p = open(os.path.join(dir,name),"rt")
+                
+                try:
+                    string = Preprocessor.Preprocess( p.readlines(), env, [dir]  )
+                except CppError as err:
+                    print("Failure preprocessing postfx {0},{1}: {2}".format(name,env,err))
+                    return None                
+            
+                if not pfx.Get().LoadFromMemory("\n".join(string)) is True:
+                    print("Failure creating postfx {0},{1}.\nCode after preprocessing: {2})".format(name,env,string))
+                    return None
+                
+                # XXX improve this, myabe query SFML directly
+                data_types = ["texture","vec2","vec3","vec4","float","bool","double"]   
+                for line in string:
+                    words = line.split(None,3)
+                    if not words:
+                        continue
+                    
+                    if words[0] == "effect":
+                        break
+                    
+                    if words[0] in data_types:
+                        pfx.vars.add(words[1])
+                        
+                        # handle texture loading manually, SFML doesn't do it.
+                        if len(words)>3 and words[2]=="=":
+                            words[3] = words[3].strip()
+                            if len(words[3]) and words[3][0] == "{" and words[3][-1] == "}":
+                                kwd = words[3][1:-1]
+                                
+                                class closure_maker:
+                                    def __init__(self,inner=PostFXCache._GetParameterUpdater(kwd),type=words[0],name=words[1]):
+                                        self.inner = inner
+                                        self.type = type
+                                        self.name = name
+                                        
+                                    def __getattr__(self,name):
+                                        return getattr( self.inner, name )
+                                    
+                                    def __call__(self):
+                                        return self.inner(pfx,self.type,self.name)
+                                
+                                pfx.updater.append(closure_maker())
+                            elif words[0]=="texture":
+                                # XXX unify this special case, too.
+                                
+                                tex = words[3].strip()
+                                print("Loading implicit texture {0} (shader var: {1})".format(tex, words[1]))
+                            
+                                img = sf.Image()
+                                if img.LoadFromFile(tex) is True:
+                                    pfx.SetTexture(words[1],img)
+                                    def tex_updater(pfx=pfx,type=words[0],name=words[1],tex=img):
+                                        pfx.SetTexture(name,tex)
+                                    
+                                    pfx.updater.append(tex_updater)  
+                                else:
+                                    print(".. failure, ignoring this parameter")  
+    
+                PostFXCache.cached[(name,env)] = pfx
+        
+            except IOError:
+                print("Cannot access postfx file: {0}".format(name))
+                return None
         
         return pfx
     

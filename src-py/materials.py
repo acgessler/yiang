@@ -68,5 +68,40 @@ class OneSidedWall(Tile):
         return self.block
             
         
+class BackgroundLight(Tile):
+    """Show only a halo background, no real tile contents.
+    This is no real illumination, but it serves well as cheap fake light."""
+    
+    def __init__(self,*args,darken=0.8, **kwargs):
+        self.darken = darken
+        Tile.__init__(self,"", *args,collision=Entity.ENTER,**kwargs)
         
+    # def _GetHaloImage(self):
+    #    img = Entity._GetHaloImage(self,self.halo_img)
+    #    if not img:
+    #        return None
+    #    
+    #    s = sf.Sprite(img)
+    #    s.SetColor(sf.Color(0,0,0, 0xff))
+    #    s.Resize(self.dim[0] * defaults.tiles_size_px[0],
+    #        self.dim[1] * defaults.tiles_size_px[1]
+    #    )
+    #    return s
+    
+    def Draw(self):
+        lv = self.game.GetLevel()
+        offset,elem = self.cached[1]
+            
+        d = self.darken
+        c = self.color
+        elem.SetColor(sf.Color( int(c.r*d), int(c.g*d), int(c.b*d) ,0xff ))
+        lv.DrawSingle(elem,self.pos)
+    
+    
+    
+    
+    
+    
+    
+    
     

@@ -27,6 +27,7 @@ import os
 import random
 import math
 import traceback
+import threading
 
 # My own stuff
 import mathutil
@@ -37,6 +38,7 @@ from keys import KeyMapping
 from renderer import Drawable,Renderer,DebugTools,NewFrame
 from level import Level,LevelLoader
 from posteffect import PostFXCache, PostFXOverlay, FadeOutOverlay, FadeInOverlay
+
 
 class ReturnToMenuDueToFailure(Exception):
     """Sentinel exception to return control to the main
@@ -915,6 +917,7 @@ class Entity(Drawable):
     
     DEFAULT_POS = [-10000,10000]
     
+    lock = threading.Lock()
     halo_cache = {None:None}
     default_halo_providers = {
             "default":gen_halo_default
@@ -1072,18 +1075,19 @@ class Entity(Drawable):
         if defaults.no_halos is True:
             return None
             
-        if not halo_img in Entity.halo_cache:
-            if halo_img in Entity.default_halo_providers:
-                img = Entity.default_halo_providers[halo_img]()
-            else:
-                img = sf.Image()
-                if not img.LoadFromFile(halo_img):
-                    file = os.path.join(defaults.data_dir,"textures",halo_img)
-                    if not img.LoadFromFile(file):
-                        print("Failure loading halo from {0}".format(file))
-                
-            Entity.halo_cache[halo_img] = img
-            return img
+        with Entity.lock:
+            if not halo_img in Entity.halo_cache:
+                if halo_img in Entity.default_halo_providers:
+                    img = Entity.default_halo_providers[halo_img]()
+                else:
+                    img = sf.Image()
+                    if not img.LoadFromFile(halo_img):
+                        file = os.path.join(defaults.data_dir,"textures",halo_img)
+                        if not img.LoadFromFile(file):
+                            print("Failure loading halo from {0}".format(file))
+                    
+                Entity.halo_cache[halo_img] = img
+                return img
             
         return Entity.halo_cache[halo_img]
         

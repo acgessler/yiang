@@ -271,8 +271,15 @@ class Tile(Entity):
         
         img = self._GetHaloImage()
         if not img is None:
-            self.cached.append((False,sf.Sprite(img)))
-            self.cached[-1][1].Resize(self.dim[0] * defaults.tiles_size_px[0],self.dim[1] * defaults.tiles_size_px[1])
+            if isinstance(img,sf.Image):
+                self.cached.append((False,sf.Sprite(img)))
+                self.cached[-1][1].Resize(self.dim[0] * defaults.tiles_size_px[0],
+                    self.dim[1] * defaults.tiles_size_px[1]
+                )
+            elif isinstance(img,sf.Sprite):
+                self.cached.append((False,img))
+            else:
+                assert False
             
     def _EnumCached(self):
         return [e[1] for e in self.cached]

@@ -1,14 +1,14 @@
-<out> = Level(<level>,<game>,<raw>)
-bPL
-
-
-
-
-
+<out> = Level(<level>,<game>,<raw>,)
+_PL.  .  .  .  BDJ.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDFBDFBDF.  .  .  .  .  BDF.  .  .  .  .  .  .  .  .  BDFBDF
+.  .  BDF.  .  .  .  .  BDJBDF.  .  .  .  .  BDF.  .  BDJ.  .  BDJBDFBDF.  BDFBDJBDF
+.  .  .  .  .  BDF.  .  .  .  .  .  .  .  .  BDFBDFBDFBDFBDFBDF.  BDJBDF.  .  .  .  BDFBDF
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDF.  BDF
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDFBDFBDFBDF.  BDFBDF.  BDF
+.  .  .  .  BDF
 
 rDA
-               gBU
+.  .  .  .  .  BBU
 
-                                                   _FI
-                       
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDFBDFBFI.  .  BDF.  .  .  .  BDF.  .  .  .  .  BDF.  .  .  .  .  BDF
+
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0.  .  .  .  .  BDFBDFBDFBDFBDFBDFBDFBDFBDFBDF.  BDFBDF.  BDF

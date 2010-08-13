@@ -136,6 +136,7 @@ class LaserWeapon(Weapon):
     def Shoot(self,dir,color,on_hit=lambda x: True):
         pass
     
+    
 class Ammo(AnimTile):
     """Ammo is ammo"""
     

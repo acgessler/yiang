@@ -1,0 +1,1 @@
+from materials import BackgroundLight; <out> = BackgroundLight(10,6,halo_img="halo_background1.png",darken=0.3)
