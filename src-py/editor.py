@@ -1471,8 +1471,9 @@ class EditorGame(Game):
                 
                 inp = self.inp
                 # check if there's an entity right here and show its bounding box in white.
-                # if there are multiple entities, take the one with the highest 
-                # drawing order.
+                # if there are multiple entities, take the smallest. Therefore,
+                # it should always be possible to select every entity in the scene
+                # with the mouse.
                 if not self.IsOverlayActive(Overlay_ShowCatalogue,Overlay_ShowLevelSettings):
                     self2._ShiftOriginIfMouseClose()
                 
