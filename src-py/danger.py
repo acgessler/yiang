@@ -103,7 +103,7 @@ class FakeDangerousBarrel(AnimTile):
             self.game.RemoveEntity(self)
 
         if isinstance(other,Enemy):
-            return Entity.BLOCK
+            return Entity.BLOCK if other.color != self.color else Entity.ENTER
             
         return Entity.ENTER
 

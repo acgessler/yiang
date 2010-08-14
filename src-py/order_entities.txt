@@ -1,3 +1,4 @@
+BackgroundLight		-10000
 BackgroundsLarge	-2000
 BackgroundsSmall	-1500
 Sun					-1000

@@ -54,6 +54,14 @@ from minigui import Component, Button, ToggleButton, Label, GUIManager
 def override(x):
     return x
 
+
+# Minimum draworder a entity needs to have to appear in a certain
+# editor context.
+DO_TRESHOLD_MINIMAP = -1000
+DO_TRESHOLD_FOREGROUND = 0
+
+LAYER_NORMAL,LAYER_BACKGROUND=range(2)
+
 # Basic editor key setup, currently not customizable via normal keybindings
 editor_keys = {
     "context"       : (sf.Key.V,"V"),
@@ -127,6 +135,7 @@ class EditorGame(Game):
         self.save_counter = 0
         self.help_string = ""
         self.settings ={}
+        self.layer = LAYER_NORMAL
         
         # This will almost certainly make sure that we'll never die!
         self.lives = 10000000
@@ -180,7 +189,7 @@ class EditorGame(Game):
             gui.disabled = not self.IsEditorRunning() 
             
         # Setup basic GUI buttons
-        self.AddSlaveDrawable((Button(text="Reload",rect=[-200,10,80,25],
+        self.AddSlaveDrawable((Button(text="Reload",rect=[30,36,60,25],
              tip="Reload the level from disk, bypassing the level cache") +  
              
              ("release", (lambda src: AskRestartLevel())) +
@@ -271,6 +280,7 @@ class EditorGame(Game):
                     
             self.EditorPopSuspend()
         
+        
         self.PushSuspend()
         self.AddSlaveDrawable((ToggleButton(text="Suspend\x00Resume",
              tip="Switch between game and editor mode. The old state is recovered when editor mode is entered again.",                               
@@ -320,6 +330,16 @@ class EditorGame(Game):
              ("update", (lambda src: src.__setattr__("on",not defaults.no_ppfx))) +
              ("off", (lambda src: defaults.__setattr__("no_ppfx",True))) +
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
+        ))
+        
+        self.AddSlaveDrawable((ToggleButton(text="Switch to BG\x00Switch to FG",
+             tip="Switch between editing layers",  
+             on=self.layer!=LAYER_BACKGROUND, rect=[-170,10,150,25]) +
+             
+             # Event handlers
+            # ("update", (lambda src: src.__setattr__("on",self.layer!=LAYER_BACKGROUND))) +
+             ("off", (lambda src: self.__setattr__("layer",LAYER_BACKGROUND))) +
+             ("on",(lambda src: self.__setattr__("layer",LAYER_NORMAL))) 
         ))
         
         def AddMarkup():
@@ -1344,7 +1364,10 @@ class EditorGame(Game):
                                 except KeyError:
                                     pass
                             else:
-                                self.template[e] = None  
+                                if self.layer == LAYER_NORMAL and e.GetDrawOrder() > DO_TRESHOLD_FOREGROUND \
+                                or self.layer == LAYER_BACKGROUND and e.GetDrawOrder() <= DO_TRESHOLD_FOREGROUND:
+                                    
+                                    self.template[e] = None  
                         
                         if inp.IsKeyDown(editor_keys["select-rect"][0]):
                             
@@ -1455,9 +1478,13 @@ class EditorGame(Game):
                 
                     try:
                         self.cur_entity = self.last_entity = sorted(self.level.EnumEntitiesAt((self.tx,self.ty)),
-                            key=lambda x:x.GetDrawOrder(),reverse=True
+                            key=lambda x:x.dim[0]*x.dim[1]
                         )[0]
                         bb = self.cur_entity.GetBoundingBox()
+                        
+                        if self.layer == LAYER_NORMAL and self.cur_entity.GetDrawOrder() <= DO_TRESHOLD_FOREGROUND \
+                            or self.layer == LAYER_BACKGROUND and self.cur_entity.GetDrawOrder() > DO_TRESHOLD_FOREGROUND:
+                            raise IndexError()
                                         
                         self._DrawRectangle(bb,sf.Color.Green)
                         self.selection = [self.cur_entity]
@@ -2584,8 +2611,8 @@ class EditorGame(Game):
                 # tiles which are drawn with low intensity (most background
                 # tiles are huge, and we want to avoid huge solid rectangles
                 # on the minimap which would confuse the user)
-                else:      
-                    ascale = 1.0 if entity.GetDrawOrder() > 0 else 0.1
+                elif entity.GetDrawOrder() > DO_TRESHOLD_MINIMAP: 
+                    ascale = 1.0 if entity.GetDrawOrder() > DO_TRESHOLD_FOREGROUND else 0.1
                     for y in range(int(bb[3]+0.5) * self.msy):
                         for x in range(int(bb[2]+0.5) * self.msx):
                             n = (w*(y+ys) + x+xs)*4

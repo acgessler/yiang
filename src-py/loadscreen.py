@@ -27,6 +27,7 @@ from renderer import Drawable,Renderer
 from level import Level
 from tile import Tile
 from game import Entity,Game
+from keys import KeyMapping
 
 # range of levels usable as background for the loadscreen
 SPECIAL_LEVEL_LOADING_START = 50000
@@ -167,7 +168,11 @@ This makes me SO happy {0}
         
         inp = Renderer.app.GetInput()    
         try:
-            while Renderer.IsMainloopRunning() and not inp.IsKeyDown(sf.Key.Escape):
+            while Renderer.IsMainloopRunning():
+                if [e for e in Renderer.SwallowEvents() if e.Type == sf.Event.KeyPressed 
+                    and e.Key.Code == KeyMapping.Get("escape")]:
+                   break
+                        
                 Renderer._DoSingleFrame()
                 
                 if t.is_alive():

@@ -916,6 +916,7 @@ class Entity(Drawable):
     
     
     DEFAULT_POS = [-10000,10000]
+    DEFAULT_DIM = [1,1]
     
     lock = threading.Lock()
     halo_cache = {None:None}
@@ -926,6 +927,7 @@ class Entity(Drawable):
     def __init__(self):
         Drawable.__init__(self)
         self.pos = Entity.DEFAULT_POS
+        self.dim = Entity.DEFAULT_DIM
         self.color = sf.Color.White
         self.game = None
         self.in_visible_set = False
