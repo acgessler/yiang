@@ -558,6 +558,15 @@ class EditorGame(Game):
                         if not bb:
                             continue
                         
+                        if bb[2]>3 or bb[3]>3: # scale the entity accordingly
+                            scale = min(3/bb[3], 3/bb[2])
+                            o,t.rsize = t.rsize, max(5, t.rsize * scale)
+                            scale = t.rsize/o
+                            t.orig_dim ,t.dim = t.dim, (t.dim[0]*scale,t.dim[1]*scale)
+                            t._Recache()
+                            
+                            bb = t.GetBoundingBox()
+                        
                         # We draw manually, but this is to inform the tile that
                         # this tile definitely wants to be drawn after
                         # postprocessing occurs.
@@ -584,6 +593,8 @@ class EditorGame(Game):
                 for e in self2.elements:
                     e.draworder = 52000
                     self.AddSlaveDrawable(e)
+                    
+                self.oy = y
                     
                 try:
                     SetTiles( cache[getattr(self,"prev_catalogue_page","Bricks")] )
@@ -634,7 +645,19 @@ class EditorGame(Game):
                                 col = sf.Color.Yellow
                                 
                             self._DrawRectangle(bb, col, 4)
-                            self.help_string = "Select tile {0}".format(elem.editor_tcode)
+                            hstring = "Select tile {0} [{1} x {2}, {3}]".format(
+                                elem.editor_tcode,
+                                int( (getattr( elem, "orig_dim",None) or elem.dim) [0] ),
+                                int( (getattr( elem, "orig_dim",None) or elem.dim) [1] ),
+                                "Preview scaled" if hasattr(elem,"orig_dim") else "Preview in original size"
+                            )
+                            
+                            h  = 16
+                            hs = sf.String(hstring, Size=h, Font=FontCache.get(h,defaults.font_status) )
+                            hs.SetColor(sf.Color.White)
+                            hs.SetPosition(150,self.oy)
+                            Renderer.app.Draw(hs)
+
             
             
         class Overlay_ShowColorMenu:
