@@ -20,8 +20,12 @@
 # PySFML
 import sf
 
+# Python
+import random
+
 # Our stuff
 import defaults
+import editor
 
 class MarkupHandler:
     """Base class for all markup handlers"""
@@ -50,6 +54,28 @@ class MarkupHandler_SmallTraverser(MarkupHandler):
         pass
     
     
+from materials import BackgroundLight
+class MarkupHandler_BackgroundLight(MarkupHandler):
+        
+    @staticmethod
+    def GetClasses():
+        return (BackgroundLight,)
+
+    def __call__(self):
+        if self.editor.layer != editor.LAYER_BACKGROUND:
+            return
+    
+        cpos = self.CenterInMouseCoords()
+        dist = self.entity.dim[0]*0.5*defaults.tiles_size_px[0]
+    
+        col = self.__dict__.setdefault("cached_color",sf.Color(random.randint(0,0xff),
+            random.randint(0,0xff),random.randint( 0,0xff ),0xa0
+        ))
+        self.editor.DrawSingle(sf.Shape.Circle(cpos[0],cpos[1],
+            dist,sf.Color(0,0,0,0), 2 ,col
+        ))
+        
+    
 from enemy import RotatingInferno
 class MarkupHandler_RotatingInferno(MarkupHandler):
         
@@ -58,6 +84,9 @@ class MarkupHandler_RotatingInferno(MarkupHandler):
         return (RotatingInferno,)
 
     def __call__(self):
+        if self.editor.layer != editor.LAYER_NORMAL:
+            return
+        
         dim = self.entity.dim[0]*0.5,self.entity.dim[1]*0.5
         rpos = self.editor._TileToMouseCoords(self.entity.real_pos[0]+dim[0],self.entity.real_pos[1]+dim[1])
         cpos = self.CenterInMouseCoords()
@@ -114,6 +143,11 @@ class MarkupHandler_BridgeControl(Connector):
     @staticmethod
     def GetClasses():
         return (BridgeControl,Bridge,)
+    
+    def __call__(self):
+        if self.editor.layer != editor.LAYER_NORMAL:
+            return
+        Connector.__call__(self)
         
 
 from teleport import Sender, Receiver
@@ -129,7 +163,10 @@ class MarkupHandler_Teleport(Connector):
         return (Sender, Receiver,)
     
     
-    
+    def __call__(self):
+        if self.editor.layer != editor.LAYER_NORMAL:
+            return
+        Connector.__call__(self)
     
     
 def GetHandlers():
@@ -139,6 +176,7 @@ def GetHandlers():
         MarkupHandler_RotatingInferno,
         MarkupHandler_BridgeControl,
         MarkupHandler_Teleport,
+        MarkupHandler_BackgroundLight
     ]
     
         

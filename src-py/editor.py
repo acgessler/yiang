@@ -1103,7 +1103,12 @@ class EditorGame(Game):
                     yn += yguiofs*2
                     
                 # Load more context-specific actions from the editoractions registry
-                import editoractions
+                try:
+                    import editoractions
+                except ImportError:
+                    print("Failure importing editoractions module")
+                    traceback.print_exc()
+                
                 handlers = editoractions.GetHandlers()
                 
                 count = len([h for h in handlers if [c for c in h.GetClasses() for e in self2.entities if isinstance(e, c)]])
@@ -1419,6 +1424,7 @@ class EditorGame(Game):
                     self2.markup = editormarkup.GetHandlers()
                 except ImportError:
                     print("Failure loading editormarkup module")
+                    traceback.print_exc()
                     self2.markup = []
             
             def __str__(self2):
