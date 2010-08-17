@@ -73,7 +73,7 @@ class BackgroundLight(Tile):
     This is no real illumination, but it serves well as cheap fake light."""
     
     def __init__(self,*args,darken=0.8, **kwargs):
-        self.darken = darken*0.6
+        self.darken =  max(0.15, darken*0.6)
         Tile.__init__(self,"", *args,draworder=-10000, collision=Entity.ENTER,**kwargs)
         
     # def _GetHaloImage(self):

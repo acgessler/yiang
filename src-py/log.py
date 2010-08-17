@@ -63,7 +63,9 @@ class Log(io.IOBase):
                
         if len(what)>5:
             what = "t{0}: {1}".format(threading.current_thread().ident,what)
-        self.file.write(what)
+            
+        if not self.file is None:
+            self.file.write(what)
 
         if not self.old is None and not Log.nostdout:
             self.old.write(what)

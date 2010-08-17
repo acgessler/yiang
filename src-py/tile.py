@@ -465,6 +465,7 @@ class TileLoader:
     unformatted ASCII text files"""
 
     cache = {}
+    has_cookies = set()
     
     @staticmethod
     def GetColor(index):
@@ -512,6 +513,8 @@ class TileLoader:
             "y" : sf.Color.Yellow,
             "_" : sf.Color.White,
         })
+        
+        file = file.replace("/","\\")
 
         # the actual mapping table has been outsourced to config/colors.txt
         if not hasattr(TileLoader, "cached_color_dict"):
@@ -545,6 +548,27 @@ class TileLoader:
 
         lines = TileLoader.cache.get(file,None)
         if lines is None:
+            # Check if a pre-compiled cache exists in this directory
+            dir, name = os.path.split(file)
+            if not dir in TileLoader.has_cookies:
+                cache = os.path.join(dir,"cooked","tiles.dat")
+                import marshal
+                try:
+                    with open(cache,"rb") as inf:
+                        cached = marshal.load(inf)
+                        
+                    print("Read cooked tiles: {0}, {1} entries".format(cache,len(cached)))
+                        
+                    TileLoader.cache.update(cached)
+                    print(list(cached.keys()))
+                    lines = cached.get(file,None)
+                    
+                    TileLoader.has_cookies.add(dir)
+                except:
+                    print("Failure reading cooked tiles: {0}".format(cache))
+                    traceback.print_exc()
+            
+        if lines is None:
             try:
                 print("Loading tile from "+file)
                 with open(file,"rt") as f:
@@ -552,7 +576,9 @@ class TileLoader:
                       
             except IOError:
                 print("Could not open "+file+" for reading")
-                lines = ["<out> = Tile(<raw>,Tile.AUTO,Tile.AUTO,collision=Entity.ENTER)","(Missing tile: {0})".format(file)]
+                lines = ["<out> = Tile(<raw>,Tile.AUTO,Tile.AUTO,collision=Entity.ENTER)",
+                    "(Missing tile: {0})".format(file)
+                ]
 
             except AssertionError as err:
                 print("File "+file+" is not well-formatted:")
@@ -561,7 +587,8 @@ class TileLoader:
             assert len(lines)==2
             replace = {
                     "<out>"  : "entity",
-                    "<raw>"  : 'r"""'+lines[1].rstrip().replace('\"\"\"','\"\"\" + \'\"\"\"\' + \"\"\"') +' """',
+                    "<raw>"  : 'r"""'+lines[1].rstrip().replace('\"\"\"',
+                        '\"\"\" + \'\"\"\"\' + \"\"\"') +' """',
                     "<game>" : "game"
             }
 
