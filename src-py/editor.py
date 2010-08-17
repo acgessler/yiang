@@ -1030,7 +1030,7 @@ class EditorGame(Game):
                             
                     else:
                         print("Could not find a valid player, creating one!")
-                        elem = PlaceEntity("_PL")
+                        elem = self._PlaceEntity("_PL")
                         
                     assert elem
                     for e in respawn:
