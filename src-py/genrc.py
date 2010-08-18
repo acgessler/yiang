@@ -25,6 +25,7 @@ import operator
 import makepyc
 makepyc.run()
 
+ignore = ["genrc.pyc","cleanpyc.pyc","makepyc.pyc","buildbot.pyc"]
 dirs = ["./",os.path.join(".","updaters")]
 outrc = os.path.join("..","vc9","yiang.rc")
 outh = os.path.join("..","vc9","yiang.h")
@@ -34,8 +35,8 @@ files = {}
 for dir in dirs:
     print("Enter directory {0}".format(dir))
     for file in os.listdir(dir):
-        if os.path.splitext(file)[-1].lower() == ".pyc":
-            path = os.path.join(dir,file)
+        path = os.path.join(dir,file)
+        if os.path.splitext(file)[-1].lower() == ".pyc" and not (file in ignore or path in ignore):
             print("Slurp {0}".format(path))
             with open(path,"rb") as inp:
                 files[path[2:].replace("/","\\").replace("\\","\\\\")] = inp.read()

@@ -1,0 +1,10 @@
+
+
+build src-py
+build vc9
+build bin-x86-windows
+build data
+build config
+
+push archive_files CREDITS
+

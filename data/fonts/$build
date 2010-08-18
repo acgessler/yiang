@@ -1,0 +1,7 @@
+
+group wc *.ttf
+	if (is_in_working_copy hg ~)
+		push archive_files ~
+
+push legal_info (expand legal.txt)
+

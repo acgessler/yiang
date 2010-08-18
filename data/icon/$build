@@ -1,0 +1,7 @@
+
+group wc *.ico
+	push archive_files ~
+	
+group wc *.txt
+	push archive_files ~
+ 

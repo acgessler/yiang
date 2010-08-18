@@ -19,12 +19,26 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 import sys
-from abbrev import *
 import operator
+import traceback
+
+from abbrev import *
 
 caches = dd(lambda:[], {})
-seps = {'==':True, '<=':True, '>=':True, '!=':True, '<':True,
-    '>':True, '\n':False, '\t':False, ' ':False}
+seps = {
+    '=='    :True, 
+    '<='    :True, 
+    '>='    :True, 
+    '!='    :True, 
+    '<'     :True,
+    '>'     :True, 
+    '\n'    :False, 
+    '\t'    :False, 
+    ' '     :False, 
+    '('     :True,
+    ')'     :True,
+    '`'     :True
+}
 
 # -----------------------------------------------------------------------------------
 class ourdd(dict):
@@ -115,6 +129,75 @@ def tokenize(lines):
         s = tokenize_line(line)
         if len(s):
             yield s
+            
+# -----------------------------------------------------------------------------------
+def exec_single_statement(scope, item, out_item_idx, lines, n):
+
+    call = item[0]
+            
+    idle = 0
+    fa = [scope]
+    gen = enumerate( item[1:] )
+    try:
+        while True:
+            nn,arg = next( gen )
+            if arg == "(":
+                out = [0]
+                idle += exec_single_statement(scope, item[nn+2:], out, lines, n)
+                gen = enumerate( item[out[0]+nn+3:] )
+                
+                s = lookup_nofault(scope, "_")
+                fa.append(s if s else "null")
+                continue
+                
+            elif arg == ")":
+                out_item_idx[0] = nn
+                break
+            
+            if arg == "`":
+                combined = []
+                nn,arg = next( gen )
+                while arg != "`":
+                    combined.append(arg)
+                    nn,arg = next( gen )
+                    
+                arg = " ".join(combined)
+                s = None
+            else:
+                s = lookup_nofault(scope, arg)
+            fa.append(s if not s is None else arg)
+    except StopIteration:
+        pass
+
+    bfnc = 'block_' + call
+    if bfnc in globals():
+        try:
+            #print(lines[n+1:])
+            idle = execute(scope, globals()[bfnc], fa, lines[n + 1:]) + 1
+        except Error as ours:
+            raise
+        except BaseException as err:
+            traceback.print_exc()
+            error(scope, "'%s' received a wrong number/type of arguments" % call)
+
+        return idle
+
+    bfnc = 'func_' + call
+    if bfnc in globals():
+        try:
+            #print(bfnc)
+            scope[-1]["_"] = globals()[bfnc](*fa)
+        except Error as ours:
+            raise
+        except BaseException as err:
+            traceback.print_exc()
+            error(scope, "'%s' received a wrong number/type of arguments" % call)
+                
+        return idle
+
+    error(scope, 'Unknown callable: %s' % call)
+    return idle
+    
         
 # -----------------------------------------------------------------------------------
 def execute(scope, group, args, lines):
@@ -127,46 +210,18 @@ def execute(scope, group, args, lines):
             if idle > 0:
                 idle -= 1
                 continue
-            
+        
             call = item[0]
             if call == 'end':
                 break
-
+            
             if call[:1] == '#':
                 continue
-
-            fa = [scope]
-            for arg in item[1:]:
-                s = lookup_nofault(scope, arg)
-                fa.append(s if not s is None else arg)
-
-            bfnc = 'block_' + call
-            if bfnc in globals():
-                try:
-                    #print(lines[n+1:])
-                    idle = execute(scope, globals()[bfnc], fa, lines[n + 1:]) + 1
-                except Error as ours:
-                    raise
-                except BaseException as err:
-                    print(err)
-                    error(scope, "'%s' received a wrong number/type of arguments" % call)
-
-                continue
-
-            bfnc = 'func_' + call
-            if bfnc in globals():
-                try:
-                    #print(bfnc)
-                    globals()[bfnc](*fa)
-                except Error as ours:
-                    raise
-                except BaseException as err:
-                    print(err)
-                    error(scope, "'%s' received a wrong number/type of arguments" % call)
-                        
-                continue
-
-            error(scope, 'Unknown callable: %s' % call)
+            
+            out = [0]
+            idle += exec_single_statement(scope,item, out, lines, n)
+            
+            #assert out[0] == len(item)-1
 
         scope.pop()
     return n
@@ -195,28 +250,39 @@ def lookup(scope, name):
 
 # -----------------------------------------------------------------------------------
 def block_group(scope, kind, expr):
-    pd = scope[-1]['dir']
+    pd = lookup(scope, "dir")
     
     #scope,kind,expr = args
     if kind == "wc" or kind == "wildcard":
-        expr = expr.replace('*', '[a-zA-Z0-9_]+')
+        expr = expr.replace('*', r'[a-zA-Z0-9_-]+')
+        kind = "re"
     elif kind == 'type':
         if expr == 'dir':
-            for t in old(pd):
-                if opid(opj(pd, t)):
-                    yield {'~':opj(pd, t)}
+            group_filter = (lambda t: opid(opj(pd, t)))
+            
         elif expr == 'file':
-            for t in old(pd):
-                if opif(opj(pd, t)):
-                    yield {'~':opj(pd, t)}
-        return
+            group_filter = (lambda t: opif(opj(pd, t)))
+            
+        else:
+            error(scope, 'Invalid typecode in group `type` statement: %s' % expr)
         
     elif kind != "re" and kind != "regex":
         error(scope, 'Invalid kind in group statement: %s' % kind)
+    else:
+        kind = "re"
 
-    import re
-    for t in old(scope[-1]['dir']):
-        if re.match(expr, t):
+    if not "group_filter" in locals():
+        import re  
+        group_filter = (lambda x,e=re.compile(expr): re.match(e,x))
+      
+    scope[-1]['group_filter'] = group_filter
+    for t in old(pd):
+        for s in scope[-1::-1]:
+            f = s.get("group_filter",None)
+            if f:
+                if not f(t):
+                    break
+        else:   
             yield {'~':opj(pd, t)}
 
 # -----------------------------------------------------------------------------------
@@ -281,6 +347,26 @@ def block_elseif(scope, expr0, op, expr1):
             yield {}
         
     scope[-1]['_doelse'] = False
+    
+# -----------------------------------------------------------------------------------
+def func_expand(scope, file):
+    dir = lookup(scope, "dir")
+    return file if file[:len(dir)]==dir else os.path.join(dir, file)
+
+# -----------------------------------------------------------------------------------
+def func_is_in_hg(scope, file):
+    print("not currently implemented: is_in_hg")
+    return True
+    
+# -----------------------------------------------------------------------------------
+def func_is_in_working_copy(scope, type, file):
+    
+    if type == "hg":
+        return func_is_in_hg(scope, file)
+    else:
+        print("{0} is not currently supported".format(type))
+        
+    return False
 
 # -----------------------------------------------------------------------------------
 def func_build(scope, file):
@@ -347,8 +433,10 @@ def func_push(scope, cache, *args):
     if not len(args):
         error('Not enough arguments to push')
     
-    print('PUSH %s to %s' % (args[-1], cache))
-    caches[cache].append(args)
+    for elem in args:
+        if not elem in caches[cache]:
+            print('PUSH %s to %s' % (elem, cache))
+            caches[cache].append(elem)
 
 # -----------------------------------------------------------------------------------
 def main():

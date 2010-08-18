@@ -796,13 +796,15 @@ class KillAnimStub(Tile):
         self.SetTTL(random.random()*18.0)
 
     def Update(self, time_elapsed, time_delta):
-        self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, self.pos[1] + self.dirvec[1] * time_delta * self.speed))
+        self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, 
+            self.pos[1] + self.dirvec[1] * time_delta * self.speed))
 
         if not hasattr(self, "time_start"):
             self.time_start = time_elapsed
             return
 
-        if time_elapsed - self.time_start > self.ttl:
+        ox,oy = self.level.GetOrigin()
+        if time_elapsed - self.time_start > self.ttl or not (ox <= self.pos[0] <= ox+defaults.tiles[0]):
             self.game.RemoveEntity(self)
             self.game.useless_sprites -= 1
         

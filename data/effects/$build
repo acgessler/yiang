@@ -1,0 +1,4 @@
+
+group wc *.sfx
+	push archive_files ~
+

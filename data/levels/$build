@@ -1,0 +1,9 @@
+
+group re [0-9]+.txt
+	group type file
+		push archive_files ~
+	
+group re [0-9]+ 
+	#	group type `dir`
+	#	build ~
+
