@@ -1,9 +1,9 @@
-#!echo /usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: UTF_8 -*-
 
 #/////////////////////////////////////////////////////////////////////////////////
-# Yet Another Jump'n'Run Game, unfair this time.
-# (c) 2010 Alexander Christoph Gessler
+# Useful abbreviations to reduce typing work writing typical python mini-scripts.
+# (c) Alexander Gessler, 2010
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -17,10 +17,35 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# re module
+import re
+rec = re.compile
 
-def run():
-    import compileall
-    compileall.compile_dir(".")
+# os module
+import os
+opj = os.path.join
+ope = os.path.exists
+opse = os.path.splitext
+ops = os.path.split
+oprp = os.path.realpath
+opap = os.path.abspath
+opid = os.path.isdir
+opif = os.path.isfile
+opil = os.path.islink
+opia = os.path.isabs
+opgs = os.path.getsize
+old = os.listdir
 
-if __name__ == "__main__":
-    run()
+# itertools module
+import itertools
+itch = itertools.chain
+itc = itertools.combinations
+itp = itertools.permutations
+itcp = itertools.product
+
+# collections module
+import collections
+dd = collections.defaultdict
+
+# vim: ai ts=4 sts=4 et sw=4
+

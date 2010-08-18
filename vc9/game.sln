@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game.vcproj", "{CBCE0DF1-FDF8-415C-BF88-76A086DDD057}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game_conapp", "game_conapp.vcproj", "{CBCE0DF1-FDF8-415C-BF88-76A086DDD058}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "editor", "editor.vcproj", "{C497D1AE-D39A-4970-8694-41EB74069398}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pysfml", "pysfml.vcproj", "{BF2854E3-0D8E-402B-9D5E-A4C294F99160}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "yiang", "yiang.vcproj", "{57DF66A9-8488-4A61-82DD-D897949E6A21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +36,12 @@ Global
 		{BF2854E3-0D8E-402B-9D5E-A4C294F99160}.Release_Console|Win32.Build.0 = Release|Win32
 		{BF2854E3-0D8E-402B-9D5E-A4C294F99160}.Release|Win32.ActiveCfg = Release|Win32
 		{BF2854E3-0D8E-402B-9D5E-A4C294F99160}.Release|Win32.Build.0 = Release|Win32
+		{57DF66A9-8488-4A61-82DD-D897949E6A21}.Debug|Win32.ActiveCfg = Debug|Win32
+		{57DF66A9-8488-4A61-82DD-D897949E6A21}.Debug|Win32.Build.0 = Debug|Win32
+		{57DF66A9-8488-4A61-82DD-D897949E6A21}.Release_Console|Win32.ActiveCfg = Release|Win32
+		{57DF66A9-8488-4A61-82DD-D897949E6A21}.Release_Console|Win32.Build.0 = Release|Win32
+		{57DF66A9-8488-4A61-82DD-D897949E6A21}.Release|Win32.ActiveCfg = Release|Win32
+		{57DF66A9-8488-4A61-82DD-D897949E6A21}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

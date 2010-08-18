@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="game"
-	ProjectGUID="{CBCE0DF1-FDF8-415C-BF88-76A086DDD057}"
+	Name="game_conapp"
+	ProjectGUID="{CBCE0DF1-FDF8-415C-BF88-76A086DDD058}"
 	RootNamespace="game"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
@@ -120,7 +120,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_WINMAIN"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;USE_C_MAIN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -139,11 +139,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\game.exe"
+				OutputFile="$(OutDir)\game_conapp.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\contrib\python\lib\x86;&quot;..\contrib\SFML-1.6\lib\vc2008&quot;;..\vc9\Release"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				RandomizedBaseAddress="1"

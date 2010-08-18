@@ -560,7 +560,6 @@ class TileLoader:
                     print("Read cooked tiles: {0}, {1} entries".format(cache,len(cached)))
                         
                     TileLoader.cache.update(cached)
-                    print(list(cached.keys()))
                     lines = cached.get(file,None)
                     
                     TileLoader.has_cookies.add(dir)

@@ -34,6 +34,9 @@
 #include <Python.h>
 #pragma comment (lib, "Python31.lib")
 #pragma comment (lib, "pysfml.lib")
+#pragma comment (lib, "yiang.lib")
+
+#include "PyCache.h"
 
 #else
 
@@ -73,9 +76,22 @@ int PyMain(int argc, wchar_t* argv[])
 	;
 #ifdef _MSC_VER
 	PyImport_AppendInittab("sf", & PyInit_sf);
+	PyImport_AppendInittab("qfimport", & PyInit_qfimport);
 #endif
 
-	Py_Initialize();   
+	Py_Initialize();  
+
+#ifdef _MSC_VER
+
+	if (!std::ifstream("../src-py/main.py")) {
+		PySys_WriteStdout("Enable import hook to read embedded scripts\n");
+		SetupImportHook();
+	}
+	else {
+		PySys_WriteStdout("Fetching scripts from source folder\n");
+	}
+
+#endif
 
 	PySys_SetArgv(argc, argv);
 
@@ -91,7 +107,7 @@ int PyMain(int argc, wchar_t* argv[])
 }
 
 //#undef USE_WINMAIN
-#ifdef USE_WINMAIN
+#ifndef USE_C_MAIN
 
 // --------------------------------------------------------------------------------------------
 int WINAPI WinMain(
