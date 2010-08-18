@@ -1,0 +1,4 @@
+
+group wc *
+	push archive_files ~
+

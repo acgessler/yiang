@@ -254,7 +254,10 @@ def block_group(scope, kind, expr):
     
     #scope,kind,expr = args
     if kind == "wc" or kind == "wildcard":
-        expr = expr.replace('*', r'[a-zA-Z0-9_-]+')
+        if expr == "*":
+            group_filter = (lambda x: True)
+        else:
+            expr = expr.replace('*', r'[a-zA-Z0-9_-]+')
         kind = "re"
     elif kind == 'type':
         if expr == 'dir':
