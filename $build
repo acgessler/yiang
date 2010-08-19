@@ -1,4 +1,5 @@
 
+print Preparing to build YIANG
 
 build src-py
 build vc9
@@ -7,4 +8,9 @@ build data
 build config
 
 push archive_files CREDITS
+
+print First pass successful, launching filebot 
+run src-py/filebot main caches
+
+
 

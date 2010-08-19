@@ -1,4 +1,205 @@
-47096 RCDATA // tutorial.pyc
+11052 RCDATA // filebot.pyc
+        {
+            0x0a0d0c4fL,
+0x4c6d2de5L,
+0x00000063L,
+0x00000000L,
+0x00000000L,
+0x00000600L,
+0x00004000L,
+0x00467300L,
+0x00640000L,
+0x00016400L,
+0x5a00006cL,
+0x00640000L,
+0x00016400L,
+0x5a00016cL,
+0x00650001L,
+0x00026a00L,
+0x6400036aL,
+0x03640002L,
+0x00046400L,
+0x5a000383L,
+0x05640004L,
+0x00008400L,
+0x6400055aL,
+0x00840006L,
+0x00065a00L,
+0x53000164L,
+0x00000728L,
+0x00006900L,
+0x754e0000L,
+0x00000002L,
+0x05752e2eL,
+0x66000000L,
+0x6c616e69L,
+0x00000475L,
+0x6f6f7200L,
+0x00016374L,
+0x00000000L,
+0x00030000L,
+0x00060000L,
+0x00430000L,
+0x5c730000L,
+0x78000000L,
+0x007c0055L,
+0x4d5d4400L,
+0x00017d00L,
+0x6a000074L,
+0x026a0001L,
+0x00037400L,
+0x6a00017cL,
+0x01640004L,
+0x00026400L,
+0x83000283L,
+0x027d0002L,
+0x00057400L,
+0x7c00066aL,
+0x027c0001L,
+0x00028300L,
+0x00077401L,
+0x6a000364L,
+0x017c0008L,
+0x00027c00L,
+0x83000283L,
+0x71010001L,
+0x64570007L,
+0x28530000L,
+0x00000004L,
+0x0003754eL,
+0x2e2e0000L,
+0x0000755cL,
+0x0f750000L,
+0x43000000L,
+0x2079706fL,
+0x207d307bL,
+0x7b206f74L,
+0x09287d31L,
+0x75000000L,
+0x00000002L,
+0x0475736fL,
+0x70000000L,
+0x75687461L,
+0x00000004L,
+0x6e696f6aL,
+0x00000675L,
+0x72617400L,
+0x75746567L,
+0x00000007L,
+0x6c706572L,
+0x75656361L,
+0x00000006L,
+0x74756873L,
+0x05756c69L,
+0x63000000L,
+0x3279706fL,
+0x00000575L,
+0x69727000L,
+0x0675746eL,
+0x66000000L,
+0x616d726fL,
+0x00032874L,
+0x05750000L,
+0x66000000L,
+0x73656c69L,
+0x00000475L,
+0x6c696600L,
+0x00037565L,
+0x73640000L,
+0x00002874L,
+0x00280000L,
+0x75000000L,
+0x0000000cL,
+0x69665c2eL,
+0x6f62656cL,
+0x79702e74L,
+0x00000a75L,
+0x706f6300L,
+0x69665f79L,
+0x1d73656cL,
+0x73000000L,
+0x0000000aL,
+0x00070100L,
+0x01210106L,
+0x01630110L,
+0x00000000L,
+0x01000000L,
+0x03000000L,
+0x43000000L,
+0x73000000L,
+0x00000021L,
+0x7c000164L,
+0x066b0000L,
+0x001d7200L,
+0x7c000074L,
+0x01640000L,
+0x01831900L,
+0x006e0100L,
+0x00006400L,
+0x00022853L,
+0x754e0000L,
+0x00000005L,
+0x656c6966L,
+0x00012873L,
+0x0a750000L,
+0x63000000L,
+0x5f79706fL,
+0x656c6966L,
+0x00012873L,
+0x06750000L,
+0x63000000L,
+0x65686361L,
+0x00002873L,
+0x00280000L,
+0x75000000L,
+0x0000000cL,
+0x69665c2eL,
+0x6f62656cL,
+0x79702e74L,
+0x00000475L,
+0x69616d00L,
+0x0000246eL,
+0x00047300L,
+0x02000000L,
+0x0728010cL,
+0x75000000L,
+0x00000002L,
+0x0675736fL,
+0x73000000L,
+0x69747568L,
+0x0004756cL,
+0x61700000L,
+0x04756874L,
+0x6a000000L,
+0x756e696fL,
+0x00000006L,
+0x67726174L,
+0x0a757465L,
+0x63000000L,
+0x5f79706fL,
+0x656c6966L,
+0x00047573L,
+0x616d0000L,
+0x00286e69L,
+0x28000000L,
+0x00000000L,
+0x00000028L,
+0x000c7500L,
+0x5c2e0000L,
+0x656c6966L,
+0x2e746f62L,
+0x08757970L,
+0x3c000000L,
+0x75646f6dL,
+0x163e656cL,
+0x73000000L,
+0x00000008L,
+0x030c010cL,
+0x07090318L,
+        }
+        
+        
+58943 RCDATA // tutorial.pyc
         {
             0x0a0d0c4fL,
 0x4c50459fL,
@@ -351,7 +552,7 @@
         }
         
         
-45279 RCDATA // genemptylevel.pyc
+37324 RCDATA // genemptylevel.pyc
         {
             0x0a0d0c4fL,
 0x4c5e8773L,
@@ -1181,7 +1382,7 @@
         }
         
         
-37170 RCDATA // sf.pyc
+13858 RCDATA // sf.pyc
         {
             0x0a0d0c4fL,
 0x4c2119c7L,
@@ -1221,7 +1422,7 @@
         }
         
         
-10287 RCDATA // background.pyc
+19858 RCDATA // background.pyc
         {
             0x0a0d0c4fL,
 0x4c26874cL,
@@ -1637,7 +1838,7 @@
         }
         
         
-49726 RCDATA // compiletiles.pyc
+762 RCDATA // compiletiles.pyc
         {
             0x0a0d0c4fL,
 0x4c6aa80cL,
@@ -2126,7 +2327,7 @@
         }
         
         
-34161 RCDATA // minigui.pyc
+42431 RCDATA // minigui.pyc
         {
             0x0a0d0c4fL,
 0x4c626c34L,
@@ -6097,7 +6298,7 @@
         }
         
         
-24725 RCDATA // weapon.pyc
+37362 RCDATA // weapon.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -7951,7 +8152,7 @@
         }
         
         
-33170 RCDATA // locked.pyc
+56551 RCDATA // locked.pyc
         {
             0x0a0d0c4fL,
 0x4c63fb5aL,
@@ -9952,7 +10153,7 @@
         }
         
         
-52913 RCDATA // linecnt.pyc
+14921 RCDATA // linecnt.pyc
         {
             0x0a0d0c4fL,
 0x4c17d741L,
@@ -10238,7 +10439,7 @@
         }
         
         
-30027 RCDATA // notification.pyc
+30460 RCDATA // notification.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -12544,7 +12745,7 @@
         }
         
         
-64772 RCDATA // materials.pyc
+61515 RCDATA // materials.pyc
         {
             0x0a0d0c4fL,
 0x4c6a71eeL,
@@ -13592,7 +13793,7 @@
         }
         
         
-48734 RCDATA // updaters\\PLAYER_POS.pyc
+48866 RCDATA // updaters\\PLAYER_POS.pyc
         {
             0x0a0d0c4fL,
 0x4c640be8L,
@@ -14182,7 +14383,7 @@
         }
         
         
-39194 RCDATA // player.pyc
+6183 RCDATA // player.pyc
         {
             0x0a0d0c4fL,
 0x4c6c42adL,
@@ -22688,7 +22889,7 @@
         }
         
         
-7871 RCDATA // updaters\\FRAMEBUFFER.pyc
+61991 RCDATA // updaters\\FRAMEBUFFER.pyc
         {
             0x0a0d0c4fL,
 0x4c640b9bL,
@@ -22873,7 +23074,7 @@
         }
         
         
-40805 RCDATA // cpptools.pyc
+9529 RCDATA // cpptools.pyc
         {
             0x0a0d0c4fL,
 0x4c39dc16L,
@@ -24754,7 +24955,7 @@
         }
         
         
-48718 RCDATA // editoractions.pyc
+2587 RCDATA // editoractions.pyc
         {
             0x0a0d0c4fL,
 0x4c6161deL,
@@ -29689,7 +29890,7 @@
         }
         
         
-18692 RCDATA // buy.pyc
+24537 RCDATA // buy.pyc
         {
             0x0a0d0c4fL,
 0x4c63a859L,
@@ -31072,7 +31273,7 @@
         }
         
         
-1451 RCDATA // score.pyc
+2813 RCDATA // score.pyc
         {
             0x0a0d0c4fL,
 0x4c641a38L,
@@ -32019,7 +32220,7 @@
         }
         
         
-35742 RCDATA // abbrev.pyc
+47077 RCDATA // abbrev.pyc
         {
             0x0a0d0c4fL,
 0x4be044edL,
@@ -32234,7 +32435,7 @@
         }
         
         
-35768 RCDATA // updaters\\__init__.pyc
+52475 RCDATA // updaters\\__init__.pyc
         {
             0x0a0d0c4fL,
 0x4c17d556L,
@@ -32268,7 +32469,7 @@
         }
         
         
-24401 RCDATA // defaults.pyc
+42762 RCDATA // defaults.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -33917,7 +34118,7 @@
         }
         
         
-48848 RCDATA // perks.pyc
+51885 RCDATA // perks.pyc
         {
             0x0a0d0c4fL,
 0x4c515199L,
@@ -37738,7 +37939,7 @@
         }
         
         
-40360 RCDATA // editor.pyc
+26507 RCDATA // editor.pyc
         {
             0x0a0d0c4fL,
 0x4c6b0eefL,
@@ -68355,7 +68556,7 @@
         }
         
         
-58352 RCDATA // audio.pyc
+28449 RCDATA // audio.pyc
         {
             0x0a0d0c4fL,
 0x4c6438a3L,
@@ -70236,7 +70437,7 @@
         }
         
         
-2110 RCDATA // campaign.pyc
+23264 RCDATA // campaign.pyc
         {
             0x0a0d0c4fL,
 0x4c6258f9L,
@@ -75034,7 +75235,7 @@
         }
         
         
-9298 RCDATA // game.pyc
+7996 RCDATA // game.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -86536,7 +86737,7 @@
         }
         
         
-16611 RCDATA // updaters\\RANDOM.pyc
+42309 RCDATA // updaters\\RANDOM.pyc
         {
             0x0a0d0c4fL,
 0x4c640ba8L,
@@ -86782,7 +86983,7 @@
         }
         
         
-30664 RCDATA // genworldmaps.pyc
+60453 RCDATA // genworldmaps.pyc
         {
             0x0a0d0c4fL,
 0x4c49f592L,
@@ -87990,7 +88191,7 @@
         }
         
         
-3498 RCDATA // editormarkup.pyc
+39180 RCDATA // editormarkup.pyc
         {
             0x0a0d0c4fL,
 0x4c667737L,
@@ -90047,7 +90248,7 @@
         }
         
         
-8418 RCDATA // forcefield.pyc
+56474 RCDATA // forcefield.pyc
         {
             0x0a0d0c4fL,
 0x4c610810L,
@@ -90457,7 +90658,7 @@
         }
         
         
-39105 RCDATA // main.pyc
+18556 RCDATA // main.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -97067,7 +97268,7 @@
         }
         
         
-61993 RCDATA // teleport.pyc
+46702 RCDATA // teleport.pyc
         {
             0x0a0d0c4fL,
 0x4c63faedL,
@@ -99163,7 +99364,7 @@
         }
         
         
-61978 RCDATA // posteffect.pyc
+53956 RCDATA // posteffect.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -102505,7 +102706,7 @@
         }
         
         
-33691 RCDATA // renderer.pyc
+31008 RCDATA // renderer.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -106489,7 +106690,7 @@
         }
         
         
-6733 RCDATA // log.pyc
+58132 RCDATA // log.pyc
         {
             0x0a0d0c4fL,
 0x4c6aa7a7L,
@@ -107091,7 +107292,7 @@
         }
         
         
-61365 RCDATA // highscore.pyc
+54041 RCDATA // highscore.pyc
         {
             0x0a0d0c4fL,
 0x4c4deb11L,
@@ -107725,7 +107926,7 @@
         }
         
         
-48250 RCDATA // tile.pyc
+63310 RCDATA // tile.pyc
         {
             0x0a0d0c4fL,
 0x4c6bed72L,
@@ -113133,7 +113334,7 @@
         }
         
         
-57258 RCDATA // colorchanger.pyc
+11962 RCDATA // colorchanger.pyc
         {
             0x0a0d0c4fL,
 0x4c48b411L,
@@ -113438,7 +113639,7 @@
         }
         
         
-40611 RCDATA // level.pyc
+20486 RCDATA // level.pyc
         {
             0x0a0d0c4fL,
 0x4c640956L,
@@ -123569,7 +123770,7 @@
         }
         
         
-40351 RCDATA // achievements.pyc
+19152 RCDATA // achievements.pyc
         {
             0x0a0d0c4fL,
 0x4c5045efL,
@@ -124661,7 +124862,7 @@
         }
         
         
-50545 RCDATA // fonts.pyc
+48776 RCDATA // fonts.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -124999,7 +125200,7 @@
         }
         
         
-16007 RCDATA // bitmaploader.pyc
+35621 RCDATA // bitmaploader.pyc
         {
             0x0a0d0c4fL,
 0x4c48b411L,
@@ -127880,7 +128081,7 @@
         }
         
         
-3589 RCDATA // loadscreen.pyc
+8350 RCDATA // loadscreen.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -129682,7 +129883,7 @@
         }
         
         
-7501 RCDATA // keys.pyc
+57388 RCDATA // keys.pyc
         {
             0x0a0d0c4fL,
 0x4c48b411L,
@@ -130336,7 +130537,7 @@
         }
         
         
-19568 RCDATA // levelup.pyc
+62334 RCDATA // levelup.pyc
         {
             0x0a0d0c4fL,
 0x4c601ae6L,
@@ -130785,7 +130986,7 @@
         }
         
         
-13389 RCDATA // updaters\\STATUS_BAR_DIM.pyc
+24439 RCDATA // updaters\\STATUS_BAR_DIM.pyc
         {
             0x0a0d0c4fL,
 0x4c640badL,
@@ -131092,7 +131293,7 @@
         }
         
         
-6154 RCDATA // mathutil.pyc
+14983 RCDATA // mathutil.pyc
         {
             0x0a0d0c4fL,
 0x4c1ea3c0L,
@@ -132294,7 +132495,7 @@
         }
         
         
-56674 RCDATA // updaters\\DITHER_STRENGTH.pyc
+47257 RCDATA // updaters\\DITHER_STRENGTH.pyc
         {
             0x0a0d0c4fL,
 0x4c640ba4L,
@@ -132576,7 +132777,7 @@
         }
         
         
-20900 RCDATA // enemy.pyc
+50276 RCDATA // enemy.pyc
         {
             0x0a0d0c4fL,
 0x4c64408eL,
@@ -136605,7 +136806,7 @@
         }
         
         
-30080 RCDATA // danger.pyc
+20570 RCDATA // danger.pyc
         {
             0x0a0d0c4fL,
 0x4c66449aL,
@@ -137780,7 +137981,7 @@
         }
         
         
-26722 RCDATA // validator.pyc
+7430 RCDATA // validator.pyc
         {
             0x0a0d0c4fL,
 0x4c191cddL,

@@ -122,8 +122,40 @@ def tokenize(lines):
             
         return line if not gotone else (res + [line] if len(line) else res)
 
+    inbracket = False
     for line in lines:
+        
+        if inbracket:
+            idx = line.find("{")
+            if idx != -1:
+                nested += 1
+            
+            idx = line.find("}")
+            if idx != -1:
+                nested -= 1
+                
+                if nested==0:
+                    inbracket = False
+                    bracket += line[:idx+1]
+                    line = line[idx+1:]
+                    
+                    if bracket:
+                        yield orig + [bracket] + tokenize_line(line)
+                        continue
+                    
+            if inbracket:
+                bracket += line+"\n"
+                continue
+        
         if line[:1]=='#':
+            continue
+        
+        idx = line.find("{")
+        if idx != -1:
+            inbracket = True
+            bracket = line[idx:]+"\n"
+            orig = tokenize_line(line[:idx])
+            nested = 1
             continue
 
         s = tokenize_line(line)
@@ -250,7 +282,7 @@ def lookup(scope, name):
 
 # -----------------------------------------------------------------------------------
 def block_group(scope, kind, expr):
-    pd = lookup(scope, "dir")
+    pd = lookup(scope, "_dir")
     
     #scope,kind,expr = args
     if kind == "wc" or kind == "wildcard":
@@ -278,15 +310,21 @@ def block_group(scope, kind, expr):
         import re  
         group_filter = (lambda x,e=re.compile(expr): re.match(e,x))
       
-    scope[-1]['group_filter'] = group_filter
+    scope[-1]['_group_filter'] = group_filter
     for t in old(pd):
+        fail = False
         for s in scope[-1::-1]:
-            f = s.get("group_filter",None)
+            f = s.get("_group_filter",None)
             if f:
                 if not f(t):
+                    fail = True
                     break
-        else:   
-            yield {'~':opj(pd, t)}
+                
+            if "_dir" in s:
+                break
+                
+        if not fail: 
+            yield {'~':opj(pd, t),"~~":t}
 
 # -----------------------------------------------------------------------------------
 def block_if(scope, *args):
@@ -353,8 +391,8 @@ def block_elseif(scope, expr0, op, expr1):
     
 # -----------------------------------------------------------------------------------
 def func_expand(scope, file):
-    dir = lookup(scope, "dir")
-    return file if file[:len(dir)]==dir else os.path.join(dir, file)
+    _dir = lookup(scope, "_dir")
+    return file if file[:len(_dir)]==_dir else os.path.join(_dir, file)
 
 # -----------------------------------------------------------------------------------
 def func_is_in_hg(scope, file):
@@ -372,19 +410,27 @@ def func_is_in_working_copy(scope, type, file):
     return False
 
 # -----------------------------------------------------------------------------------
-def func_build(scope, file):
+def func_build(scope, file, *args):
     if file.find('\\') != -1 or file.find('/') != -1:
         nxt = file
     else:
-        nxt = opj(lookup(scope, 'dir'), file)
-    try:
-        lines = open(opj(nxt, '$build'), 'rt').readlines()
-    except:
-        warn(scope, 'Failure building %s, $build file not found' % nxt)
-        return
+        nxt = opj(lookup(scope, '_dir'), file)
+    if len(args) >= 1:
+        if (args[0][0] != "{" or args[0][-1] != "}"):
+            warn(scope, 'Failure building %s, given build script is not valid' % nxt)
+            return
+        
+        lines = args[0][1:-1].split("\n")
+    else:
+        try:
+            lines = open(opj(nxt, '$build'), 'rt').readlines()
+        except:
+            warn(scope, 'Failure building %s, $build file not found' % nxt)
+            return
 
-    print('BUILD %s/@build' % nxt)
-    execute(scope, single_yield, [{'dir':nxt, '_name':file}], list(tokenize(lines)))
+    print('BUILD %s/$build' % nxt)
+    #print(nxt,file)
+    execute(scope+[{}], single_yield, [{'_dir':nxt, '_name':file}], list(tokenize(lines)))
 
 
 # -----------------------------------------------------------------------------------
@@ -393,11 +439,11 @@ def func_run(scope, *args):
     func = args[1] if len(args) > 1 else None
     print('RUN %s.%s()' % (file, func))
     
-    myd = lookup(scope, 'dir')
+    myd,myf = os.path.split(os.path.join( lookup(scope, '_dir'), file ))
     sys.path.insert(0, myd)
 
     try:
-        mod = __import__(file)
+        mod = __import__(myf)
     except ImportError as imp:
         warn(scope, 'Failure importing %s' % file)
         del sys.path[0]
@@ -444,7 +490,7 @@ def func_push(scope, cache, *args):
 # -----------------------------------------------------------------------------------
 def main():
     try:
-        execute([ourdd({'caches':caches})], single_yield, [{'dir':'.'}], [['build', '..']])
+        execute([ourdd({'caches':caches})], single_yield, [{'_dir':'.'}], [['build', '..']])
     except Error as err:
         print('[bot] Exiting with errors')
         return

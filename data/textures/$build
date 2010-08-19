@@ -1,0 +1,3 @@
+
+group wc *.png
+	push files ~

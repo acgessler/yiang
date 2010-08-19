@@ -1,14 +1,4 @@
 
-build achievements
-build effects
-build fonts
-build gadget
-build icon
-build levels
-build messages
-build prefabs
-build sounds
-build textures
-build tiles
-build tiles_misc
+group type dir
+	build ~~
 
