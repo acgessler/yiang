@@ -21,6 +21,7 @@
 
 import os
 import shutil
+import traceback
 
 # Target directory to cpy all the files to.
 target = os.path.join("..","final","root")
@@ -29,14 +30,39 @@ target = os.path.join("..","final","root")
 def copy_files(files):
     for file in files:
         dst = os.path.join( target, file.replace("..\\","") )
-        shutil.copy2(file, dst)
-        print("Copy {0} to {1}".format(file,dst))
+        try:
+            os.makedirs(os.path.split(dst)[0])
+        except OSError:
+            pass # exists already
+        try:
+            shutil.copy(file, dst)
+            print("Copy {0} to {1}".format(file,dst))
+        except:
+            print("Failure copying {0} to {1}".format(file,dst))
+            #traceback.print_exc()
+
+
+def archive_files(files):
+    from archiver import Writer
+    
+    af = os.path.join(target,"cooked.dat")
+    with Writer(af) as archive:
+        for file in files:
+            try:
+                archive.AddFile(file)
+            except:
+                print("Failure adding {0} to archive {1}".format(file,af))
+                #traceback.print_exc()
+        af.Finalize()
 
 
 def main(caches):
     
     if "files" in caches:
         copy_files(caches["files"])
+        
+    if "archive_files" in caches:
+        archive_files(caches["archive_files"])
          
 
 
