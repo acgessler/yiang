@@ -36,7 +36,7 @@ def copy_files(files):
             pass # exists already
         try:
             shutil.copy(file, dst)
-            print("Copy {0} to {1}".format(file,dst))
+            print("COPY {0} to {1}".format(file,dst))
         except:
             print("Failure copying {0} to {1}".format(file,dst))
             #traceback.print_exc()
@@ -50,10 +50,11 @@ def archive_files(files):
         for file in files:
             try:
                 archive.AddFile(file)
+                print("ADD {0} to {1}".format(file,af))
             except:
                 print("Failure adding {0} to archive {1}".format(file,af))
                 #traceback.print_exc()
-        af.Finalize()
+        
 
 
 def main(caches):
