@@ -25,7 +25,7 @@ import operator
 import makepyc
 makepyc.run()
 
-ignore = ["genrc.pyc","cleanpyc.pyc","makepyc.pyc","buildbot.pyc"]
+ignore = ["genrc.pyc","cleanpyc.pyc","makepyc.pyc","buildbot.pyc","filebot.pyc"]
 dirs = ["./",os.path.join(".","updaters")]
 outrc = os.path.join("..","vc9","yiang.rc")
 outh = os.path.join("..","vc9","yiang.h")
