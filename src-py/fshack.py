@@ -18,6 +18,7 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 # Our stuff
+import defaults
 from archiver import Reader
 
 # Python core
@@ -25,21 +26,66 @@ import os
 import builtins
 
 archives = []
-old_open = builtins.open
+old_open = None
+old_old = None
 
-def Enable(archives):
+def Enable(archives_in = [os.path.join("..","cooked.dat")]):
+    
+    global old_open
+    global archives
+    
+    if old_open:
+        return
+    
+    for archive in archives_in:
+        try:
+            archives.append( Reader(archive) )
+        except IOError:
+            pass
+    
+    if not archives:
+        print("No archives found, filesystem remains unchanged")
+        return
+    
+    
+    print("Hacking up filesystem builtins to redirect all IO")
+    
+    # Hack open()
     def myopen(file,mode="r",**kwargs):
         for e in archives:
             try:
-                return e.GetFile(file)
+                return e.GetFile(file,mode)
             
             except IOError:
                 continue
-        else:
-            return old_open(file, mode,**kwargs)
+        
+        return old_open(file, mode,**kwargs)
+    old_open,builtins.open = builtins.open,myopen
+    
+    
+    # Hack os.listdir()
+    def myold(dir): 
+        fine = False
+        for e in archives:
+            
+            for n in e.ListDir(dir):
+                yield n
+                fine = True
+                
+        if not fine:
+            for e in old_old(dir):
+                yield e
+                
+    old_old,os.listdir = os.listdir,myold
 
 def Restore():
-    pass
+    global old_open
+    if not old_open:
+        return
+    
+    builtins.open = open
+    
+    old_open = None
 
 
 

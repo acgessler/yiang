@@ -494,7 +494,7 @@ Hit {1} to cancel""".format(
         rx,ry = defaults.resolution
 
         height = int(base_height*defaults.scale[1])
-        num = len(Achievements.all)
+        num = max(1, len(Achievements.all)) # prevent 1/0
         self.achievement = getattr(self,"achievement", 1)
         width_spacing, height_spacing = 290*defaults.scale[1],int(height*1.2)
         maxdesclenperline = (rx - width_spacing - base_offset[0])/(height*0.7)
@@ -628,6 +628,9 @@ def main():
     defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
     
+    import fshack
+    fshack.Enable()
+    
     import gettext
     gettext.install('yiang', './locale')
         
@@ -640,7 +643,10 @@ def main():
     BerlinerPhilharmoniker.Initialize()
     
     if defaults.no_bg_sound is False:
-        SoundEffectCache.Get("logo.ogg").Play()
+        try:
+            SoundEffectCache.Get("logo.ogg").Play()
+        except AttributeError:
+            pass
         
     if defaults.no_halos is True:
         defaults.death_sprites = min( 20, defaults.death_sprites )

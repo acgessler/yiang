@@ -2901,6 +2901,9 @@ def main():
     defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
     Log.Enable(defaults.enable_log)
     
+    import fshack
+    fshack.Enable()
+    
     import gettext
     gettext.install('yiang', './locale')
     

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="yiang"
 	ProjectGUID="{57DF66A9-8488-4A61-82DD-D897949E6A21}"
 	RootNamespace="yiang"
@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) ..\bin-x86-windows"
+				CommandLine="copy $(TargetPath) ..\bin-x86-windows&#x0D;&#x0A;copy $(TargetPath) ..\final\root\bin-x86-windows"
 			/>
 		</Configuration>
 	</Configurations>

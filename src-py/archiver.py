@@ -19,6 +19,9 @@
 
 
 import os
+import io
+
+verbose = True
 
 class Writer:
     
@@ -113,6 +116,27 @@ class Reader:
         self.file.seek(ofs+self.base_ofs)
         return self.file.read(size)
         
+    def GetFile(self,filename,mode):
+        data = self.Read(filename)
+        
+        if verbose:
+            print("Get {0},{1}".format(filename,mode))
+            
+        return io.BytesIO(data) if not "t" in mode else \
+            io.StringIO(data.decode("utf-8","ignore"), \
+            None)
+    
+    def ListDir(self,dir):
+        if dir[-1] != "\\":
+            dir = dir + "\\"
+            
+        elems = [e[0][len(dir):] for e in self.files if e[0][:len(dir)]==dir]
+        if not elems:
+            return
+        
+        if verbose:
+            print("List {0} -> {1}".format(dir,elems))
+        return elems
         
         
         
