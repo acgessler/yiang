@@ -763,7 +763,7 @@ class KillAnimStub(Tile):
         self.ttl = 0
         
         self.dirvec = [1.0,1.0]
-        self.SetColor(sf.Color(150,0,0,255))
+        self.SetColor(sf.Color(random.randint(100,150),0,0,255))
         
     def SetGame(self,game):
         Tile.SetGame(self,game)
