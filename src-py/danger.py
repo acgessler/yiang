@@ -80,7 +80,7 @@ class Mine(AnimTile):
                     if self.DistanceInnerRadius(self.__other):
                         self.game.Kill(self.GetVerboseName(),self.__other)
                 self.SetState(0)
-                self.mine_activated = False
+                self.level.RemoveEntity(self)
     
     def GetVerboseName(self):
         return "an exploded mine (BOOooOOM!)"
@@ -89,11 +89,7 @@ class Mine(AnimTile):
         midpoint1 = (self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.dim[1]*0.5)
         midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
         distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
-        if distance >= (self.radius**2):
-            return False
-        else:
-            return True
-        
+        return False if distance >= (self.radius**2) else True
     
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but
