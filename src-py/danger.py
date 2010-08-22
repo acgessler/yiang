@@ -49,9 +49,10 @@ class DangerousBarrel(AnimTile):
 class Mine(AnimTile):
     """This entity is an animated mine which kills
     the player after the animation of the explosion ended"""
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=3,hideontouch=False):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None)
         self.mine_activated = False
+        self.radius = radius
         self.hideontouch = hideontouch
         if randomize is True:
             self.GotoRandom()
@@ -60,7 +61,7 @@ class Mine(AnimTile):
 
     def Interact(self,other):
         if self.mine_activated:
-            return
+            return Entity.ENTER
         else:
             self.Set(0)
             self.SetState(1)
@@ -68,7 +69,7 @@ class Mine(AnimTile):
             self.DeathTimerEnd = (self.GetNumFrames()-1)*self.speed
             self.__other = other
             self.mine_activated = True
-            return
+            return Entity.ENTER
         
     def Update(self,time_elapsed,time_delta):
         AnimTile.Update(self,time_elapsed,time_delta)
@@ -76,12 +77,23 @@ class Mine(AnimTile):
             if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
                 self.Set(self.GetNumFrames())
                 if not defaults.debug_godmode:
-                    self.game.Kill("an exploded mine (BOOooOOM!)",self.__other)
+                    if self.DistanceInnerRadius(self.__other):
+                        self.game.Kill(self.GetVerboseName(),self.__other)
                 self.SetState(0)
                 self.mine_activated = False
-
+    
     def GetVerboseName(self):
         return "an exploded mine (BOOooOOM!)"
+
+    def DistanceInnerRadius(self,other):
+        midpoint1 = (self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.dim[1]*0.5)
+        midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
+        distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
+        if distance >= (self.radius**2):
+            return False
+        else:
+            return True
+        
     
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but
