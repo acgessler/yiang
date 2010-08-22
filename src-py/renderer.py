@@ -27,6 +27,12 @@ import sf
 import defaults
 import mathutil
 
+if defaults.no_threading:
+    import dummy_threading as threading
+else:
+    import threading 
+    
+
 class Drawable:
     """Master class for all kinds of drawable objects, i.e. tiles,
     overlays, menues, .... Drawable defines some basic traits

@@ -20,52 +20,47 @@
 import defaults
 import sf
 
-
 if defaults.no_threading:
     import dummy_threading as threading
 else:
     import threading 
-    
 
-class FontCache:
-    """Tiny utility to cache all fonts we're using to avoid creating redundant instances.
-    I assume SFML caches internally as well, but this way we can safe some additional
-    overhead, also fonts are easier to track."""
+class TextureCache:
+    """Centralized texture cache. Provides support for loading textures
+    and works well with fs redirection internally."""
 
     cached = {}
     lock = threading.Lock()
 
     @staticmethod
-    def get(height,face=""):
+    def Get(name=""):
         
-        with FontCache.lock:
+        with TextureCache.lock:
         
-            if not face:
-                face = defaults.font_monospace
+            assert name
     
-            font = FontCache.cached.get((face,height),None) 
-            if not font is None:
-                return font
+            tex = TextureCache.cached.get(name,None) 
+            if not tex is None:
+                return tex
             
-            print("Loading font {0} / {1}".format(face,height))
+            print("Loading texture {0}".format(name))
     
-            font = sf.Font()
+            tex = sf.Image()
             
             try:
-                file = open(face,"rb").read()
+                file = open(name,"rb").read()
                 
-                if not font.LoadFromMemory(file,int(height)) is True:
-                    print("Failure creating font {0},{1} -> creation fails".format(face,height))
-                    # XXX substitute default font?
+                if not tex.LoadFromMemory(file) is True:
+                    print("Failure creating texture {0} -> creation fails".format(name))
+                    # XXX substitute default tex?
                 
             except IOError:
-                print("Failure creating font {0},{1} -> can't open file".format(face,height))
-                font = None
+                print("Failure creating tex {0} -> can't open file".format(face))
+                tex = None
            
-    
-            FontCache.cached[(face,height)] = font
-            return font
-
-    
+            TextureCache.cached[name] = tex
+            return tex
+        
+        
 
     

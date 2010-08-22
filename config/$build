@@ -1,9 +1,9 @@
 
 push archive_files (expand colors.txt)
 
-group wc *.txt
-	if ~~ != colors.txt
+group unpushed
+	group wc *.txt
 		push files ~
 
-group wc *.cfg
-	push files ~
+	group wc *.cfg
+		push files ~

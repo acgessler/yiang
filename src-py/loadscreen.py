@@ -29,6 +29,7 @@ from tile import Tile
 from game import Entity,Game
 from keys import KeyMapping
 
+
 # range of levels usable as background for the loadscreen
 SPECIAL_LEVEL_LOADING_START = 50000
 SPECIAL_LEVEL_LOADING_END = -1
@@ -143,8 +144,10 @@ This makes me SO happy {0}
         
     @staticmethod
     def Load(loadProc,*args,**kwargs):
-        from threading import Thread
+        if defaults.no_threading:
+            return loadProc(*args,**kwargs)
         
+        from threading import Thread
         LoadScreen.LoadLoadLevel()
         
         import time 

@@ -459,6 +459,14 @@ class AnimTile(Tile):
         self.dim,self.ofs = self.cached_sizes[self.state][idx]
         self._UpdateBB()
         
+        
+# LevelLoader maintains a global cache, so we need to protect 
+# it to avoid concurrency problems.
+if defaults.no_threading:
+    import dummy_threading as threading
+else:
+    import threading 
+    
 
 class TileLoader:
     """Utility class to load static or animated sets of tiles from

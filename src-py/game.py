@@ -1082,11 +1082,14 @@ class Entity(Drawable):
                 if halo_img in Entity.default_halo_providers:
                     img = Entity.default_halo_providers[halo_img]()
                 else:
-                    img = sf.Image()
-                    if not img.LoadFromFile(halo_img):
-                        file = os.path.join(defaults.data_dir,"textures",halo_img)
-                        if not img.LoadFromFile(file):
-                            print("Failure loading halo from {0}".format(file))
+                    from textures import TextureCache
+                    
+                    file = os.path.join(defaults.data_dir,"textures",halo_img)
+                    img = TextureCache.Get(file)
+                    if not img:
+                        img = TextureCache.Get(halo_img)
+                        if not img:
+                            print("Failure loading halo from both {0} and {1}, giving up".format(file,halo_img))
                     
                 Entity.halo_cache[halo_img] = img
                 return img
@@ -1105,8 +1108,8 @@ class EntityWithEditorImage(Entity):
         
         if self.game.GetGameMode() == Game.EDITOR:
             if not hasattr(self,"respawn_img"):
-                self.respawn_img = sf.Image()
-                self.respawn_img.LoadFromFile(os.path.join(defaults.data_dir,"textures",self.editor_stub_img))
+                from textures import TextureCache
+                self.respawn_img = TextureCache.Get(os.path.join(defaults.data_dir,"textures",self.editor_stub_img))
                 
                 tx,ty = defaults.tiles_size_px
                 bb = self.GetBoundingBox() or (None,None,1,1)

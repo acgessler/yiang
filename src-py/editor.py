@@ -34,6 +34,7 @@ import defaults
 # Note: some of these imports are only needed because they might be implicitly
 # referenced by shebang lines in one of the tiles 
 from fonts import FontCache
+from textures import TextureCache
 from keys import KeyMapping
 from game import Game,Entity
 from log import Log
@@ -92,8 +93,7 @@ class EditorCursor(Drawable):
     def __init__(self):
         Drawable.__init__(self)
         
-        self.cursor_img  = sf.Image()
-        self.cursor_img.LoadFromFile(os.path.join(defaults.data_dir,"textures","cursor.png"))
+        self.cursor_img  = TextureCache.Get(os.path.join(defaults.data_dir,"textures","cursor.png"))
         
         self.cursor = sf.Sprite(self.cursor_img)
         Renderer.app.ShowMouseCursor(False)

@@ -21,11 +21,23 @@
 
 import os
 import shutil
-import traceback
 
 # Target directory to cpy all the files to.
 target = os.path.join("..","final","root")
+verbose = False
 
+if verbose:
+    import traceback
+    
+    
+def clean():
+    for f in os.walk(target,topdown=False):
+        for ff in f[2]:
+            os.remove(os.path.join(f[0],ff))
+        
+        for ff in f[1]:    
+            os.rmdir(os.path.join(f[0],ff))
+    print("Cleanup complete")
 
 def copy_files(files):
     for file in files:
@@ -39,7 +51,9 @@ def copy_files(files):
             print("COPY {0} to {1}".format(file,dst))
         except:
             print("Failure copying {0} to {1}".format(file,dst))
-            #traceback.print_exc()
+            
+            if verbose:
+                traceback.print_exc()
 
 
 def archive_files(files):
@@ -53,11 +67,15 @@ def archive_files(files):
                 print("ADD {0} to {1}".format(file,af))
             except:
                 print("Failure adding {0} to archive {1}".format(file,af))
-                #traceback.print_exc()
+                
+                if verbose:
+                    traceback.print_exc()
         
 
 
 def main(caches):
+    
+    clean()
     
     if "files" in caches:
         copy_files(caches["files"])

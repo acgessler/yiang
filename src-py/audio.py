@@ -43,16 +43,34 @@ class SoundEffectCache:
             sound = SoundEffectCache.cached.get(name,None) 
             if not sound is None:
                 return sound
-            
-            print("Loading sound {0}".format(name))
     
             music = os.path.splitext(name)[-1] in SoundEffectCache.music_ext    
-            sound = music and sf.Music() or sf.SoundBuffer()
+            sound =  music and sf.Music() or sf.SoundBuffer()
             
+            # XXX do we really need the distinction between Music and Sounds?
+            # Music just adds streaming, which should mean 0 overhead for
+            # small files.
             filename = os.path.join(defaults.data_dir,"sounds", name+(".wav" if name.find(".") == -1 else ""))
             if music is True:
+                # stb_vorbis_open_memory() fails for no special reason, so we
+                # need to put all audio files in a public data directory
+                # and let stb_vorbis do the loading. This has the advantage 
+                # that we won't need to implement streaming by ourselves.
+                """
+                try:
+                    file = open(filename,"rb").read()
+                    
+                    if not sound.OpenFromFile(filename):
+                        print("Failure creating music {0} [{1}] -> can't decode file".format(name,filename))
+                        return None
+                    
+                except IOError:
+                    print("Failure creating music {0} [{1}] -> can't open file".format(name,filename))
+                    return None
+                """
+                
                 if not sound.OpenFromFile(filename):
-                    print("Failure creating music {0} [{1}]".format(name,filename))
+                    print("Failure creating music {0} [{1}] -> can't decode file".format(name,filename))
                     return None
                 
                 sound.SetVolume(defaults.audio_volume_scale*100)
@@ -70,8 +88,14 @@ class SoundEffectCache:
         
                 sound = MusicWrapper(sound)
             else:
-                if not sound.LoadFromFile(filename):
-                    print("Failure creating sound {0} [{1}]".format(name,filename))
+                try:
+                    file = open(filename,"rb").read()
+                    if not sound.LoadFromMemory(file):
+                        print("Failure creating sound {0} [{1}] -> can't decode file".format(name,filename))
+                        return None
+                    
+                except IOError:
+                    print("Failure creating sound {0} [{1}] -> can't open file".format(name,filename))
                     return None
                 
                 class SoundWrapper:

@@ -1,6 +1,7 @@
 
 print Preparing to build YIANG
 
+
 build src-py
 build vc9
 build bin-x86-windows

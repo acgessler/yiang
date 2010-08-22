@@ -836,6 +836,13 @@ class Level:
             except AttributeError:
                 pass
     
+# LevelLoader maintains a global cache, so we need to protect 
+# it to avoid concurrency problems.
+if defaults.no_threading:
+    import dummy_threading as threading
+else:
+    import threading 
+    
     
 class LevelLoader:
     """Loads levels from their disk representations into memory"""
@@ -946,7 +953,7 @@ class LevelLoader:
         
         print("Loading level from disc: " + str(level))
         
-        if not no_loadscreen:
+        if not no_loadscreen and not defaults.no_threading:
             from loadscreen import LoadScreen
             return LoadScreen.Load(LevelLoader.LoadLevel,level,game,no_loadscreen=True)
        

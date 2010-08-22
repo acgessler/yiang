@@ -107,6 +107,9 @@ no_bg_music = False
 no_bg_sound = False
 audio_volume_scale = 0.8
 
+# Disable threading. This implies disabling loading screens.
+no_threading = False
+
 # don't render background bitmaps (halos)
 # this is what the configuration GUI calls 
 # 'optimize for low-end systems'

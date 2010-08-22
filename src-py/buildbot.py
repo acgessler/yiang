@@ -281,11 +281,23 @@ def lookup(scope, name):
     return res
 
 # -----------------------------------------------------------------------------------
-def block_group(scope, kind, expr):
+def get_base_scope(scope):
+    return next(iter(s for s in scope[-1::-1] if "_dir" in s))
+
+# -----------------------------------------------------------------------------------
+def block_group(scope, kind, *args):
     pd = lookup(scope, "_dir")
     
+    expr = args[0] if len(args) else None
+    if kind == "unpushed" or kind == "up":
+        s = get_base_scope(scope) 
+        def group_filter(fname):
+            f = s.get("_pushed",None)
+
+            return False if f and fname in f else True
+        
     #scope,kind,expr = args
-    if kind == "wc" or kind == "wildcard":
+    elif kind == "wc" or kind == "wildcard":
         if expr == "*":
             group_filter = (lambda x: True)
         else:
@@ -482,10 +494,13 @@ def func_push(scope, cache, *args):
     if not len(args):
         error('Not enough arguments to push')
     
+    s = get_base_scope(scope) 
     for elem in args:
         if not elem in caches[cache]:
             print('PUSH %s to %s' % (elem, cache))
             caches[cache].append(elem)
+            
+            s.setdefault("_pushed",set()).add(elem)
 
 # -----------------------------------------------------------------------------------
 def main():
