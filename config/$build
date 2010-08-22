@@ -1,5 +1,6 @@
 
 push archive_files (expand colors.txt)
+push archive_files (expand scores.txt)
 
 group unpushed
 	group wc *.txt

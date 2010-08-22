@@ -301,7 +301,8 @@ def block_group(scope, kind, *args):
         if expr == "*":
             group_filter = (lambda x: True)
         else:
-            expr = expr.replace('*', r'[a-zA-Z0-9_-]+')
+            import re
+            expr = expr.replace(".","\\.").replace('*', r'[a-zA-Z0-9_-]+')
         kind = "re"
     elif kind == 'type':
         if expr == 'dir':
@@ -322,7 +323,7 @@ def block_group(scope, kind, *args):
         import re  
         group_filter = (lambda x,e=re.compile(expr): re.match(e,x))
       
-    scope[-1]['_group_filter'] = lambda x: not not (x != "$build" and group_filter)
+    scope[-1]['_group_filter'] = lambda x: not not (x != "$build" and group_filter(x))
     for t in old(pd):
         fail = False
         for s in scope[-1::-1]:
@@ -337,6 +338,10 @@ def block_group(scope, kind, *args):
                 
         if not fail: 
             yield {'~':opj(pd, t),"~~":t}
+            
+    # XXX nested group statements are far from being optimal or right --
+    # each group() call re-evaluates all preceeding ones, leading to terrible
+    # runtime complexity. Need to check if it works at all.
 
 # -----------------------------------------------------------------------------------
 def block_if(scope, *args):
@@ -427,6 +432,11 @@ def func_build(scope, file, *args):
         nxt = file
     else:
         nxt = opj(lookup(scope, '_dir'), file)
+        
+    bc = lookup(scope,"_build_set")
+    if nxt in bc:
+        return
+        
     if len(args) >= 1:
         if (args[0][0] != "{" or args[0][-1] != "}"):
             warn(scope, 'Failure building %s, given build script is not valid' % nxt)
@@ -442,6 +452,8 @@ def func_build(scope, file, *args):
 
     print('BUILD %s/$build' % nxt)
     #print(nxt,file)
+    
+    bc.add(nxt)
     execute(scope+[{}], single_yield, [{'_dir':nxt, '_name':file}], list(tokenize(lines)))
 
 
@@ -506,7 +518,7 @@ def func_push(scope, cache, *args):
 # -----------------------------------------------------------------------------------
 def main():
     try:
-        execute([ourdd({'caches':caches})], single_yield, [{'_dir':'.'}], [['build', '..']])
+        execute([ourdd({'caches':caches,"_build_set":set()})], single_yield, [{'_dir':'.'}], [['build', '..']])
     except Error as err:
         print('[bot] Exiting with errors')
         return

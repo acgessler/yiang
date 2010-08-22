@@ -4,10 +4,9 @@ group re [0-9]+.txt
 		push archive_files ~
 	
 group re [0-9]+ 
-	group type dir
-		build ~ {
-			build cooked {
-				push archive_files (expand tiles.dat)
-			}
+	build ~ {
+		build cooked {
+			push archive_files (expand tiles.dat)
 		}
+	}
 

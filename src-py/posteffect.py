@@ -153,8 +153,9 @@ class PostFXCache:
                                 tex = words[3].strip()
                                 print("Loading implicit texture {0} (shader var: {1})".format(tex, words[1]))
                             
-                                img = sf.Image()
-                                if img.LoadFromFile(tex) is True:
+                                from textures import TextureCache
+                                img = TextureCache.Get(tex)
+                                if img:
                                     pfx.SetTexture(words[1],img)
                                     def tex_updater(pfx=pfx,type=words[0],name=words[1],tex=img):
                                         pfx.SetTexture(name,tex)
