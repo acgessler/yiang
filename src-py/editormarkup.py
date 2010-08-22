@@ -102,6 +102,24 @@ class MarkupHandler_RotatingInferno(MarkupHandler):
         ))
     
     
+from danger import Mine
+class MarkupHandler_Mine(MarkupHandler):
+        
+    @staticmethod
+    def GetClasses():
+        return (Mine,)
+
+    def __call__(self):
+        if self.editor.layer != editor.LAYER_NORMAL:
+            return
+        
+        cola = sf.Color(0xff,0x0,0x00,0x0a)
+        colb = sf.Color(0xff,0x0,0x00,0x60)
+        cpos = self.CenterInMouseCoords()
+        self.editor.DrawSingle(sf.Shape.Circle(cpos[0],cpos[1],
+            self.entity.radius*defaults.tiles_size_px[0],cola, 2 ,colb
+        ))
+    
     
 class Connector(MarkupHandler):
     """Shared logic to automatically connect related,
@@ -176,7 +194,8 @@ def GetHandlers():
         MarkupHandler_RotatingInferno,
         MarkupHandler_BridgeControl,
         MarkupHandler_Teleport,
-        MarkupHandler_BackgroundLight
+        MarkupHandler_BackgroundLight,
+        MarkupHandler_Mine,
     ]
     
         

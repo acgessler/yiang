@@ -140,7 +140,7 @@ def tokenize(lines):
                     line = line[idx+1:]
                     
                     if bracket:
-                        yield orig + [bracket] + tokenize_line(line)
+                        yield orig + [bracket] + [n for n in tokenize_line(line)]
                         continue
                     
             if inbracket:
@@ -292,9 +292,9 @@ def block_group(scope, kind, *args):
     if kind == "unpushed" or kind == "up":
         s = get_base_scope(scope) 
         def group_filter(fname):
-            f = s.get("_pushed",None)
+            f = s.get("_pushed")
 
-            return False if f and fname in f else True
+            return False if f and opj(pd, fname) in f else True
         
     #scope,kind,expr = args
     elif kind == "wc" or kind == "wildcard":
@@ -322,7 +322,7 @@ def block_group(scope, kind, *args):
         import re  
         group_filter = (lambda x,e=re.compile(expr): re.match(e,x))
       
-    scope[-1]['_group_filter'] = group_filter
+    scope[-1]['_group_filter'] = lambda x: not not (x != "$build" and group_filter)
     for t in old(pd):
         fail = False
         for s in scope[-1::-1]:
@@ -501,6 +501,7 @@ def func_push(scope, cache, *args):
             caches[cache].append(elem)
             
             s.setdefault("_pushed",set()).add(elem)
+            
 
 # -----------------------------------------------------------------------------------
 def main():

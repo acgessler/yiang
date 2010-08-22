@@ -559,6 +559,8 @@ class TileLoader:
             # Check if a pre-compiled cache exists in this directory
             dir, name = os.path.split(file)
             if not dir in TileLoader.has_cookies:
+                TileLoader.has_cookies.add(dir)
+                
                 cache = os.path.join(dir,"cooked","tiles.dat")
                 import marshal
                 try:
@@ -570,7 +572,6 @@ class TileLoader:
                     TileLoader.cache.update(cached)
                     lines = cached.get(file,None)
                     
-                    TileLoader.has_cookies.add(dir)
                 except:
                     print("Failure reading cooked tiles: {0}".format(cache))
                     traceback.print_exc()
