@@ -55,7 +55,7 @@ class TextureCache:
                     # XXX substitute default tex?
                 
             except IOError:
-                print("Failure creating tex {0} -> can't open file".format(face))
+                print("Failure creating tex {0} -> can't open file".format(name))
                 tex = None
            
             TextureCache.cached[name] = tex

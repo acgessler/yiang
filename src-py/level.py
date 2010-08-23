@@ -171,13 +171,13 @@ class Level:
         # read from the private attachment tiles of the level if the tile
         # code starts with a lower-case character
         if 122 >= ord( tcode[0] ) >= 97: #   in "abcdefghijklmnopqrstuvwxyz":
-            tile = TileLoader.Load(self.lvbase + "/" + tcode + ".txt", self.game)
+            tile = TileLoader.Load(self.lvbase + "\\" + tcode + ".txt", self.game)
         else:
             tile = None
             
         if tile is None:
             # (HACK) avoid os.path.join() calls
-            tile = TileLoader.Load(self.tlbase + "/" + tcode + ".txt", self.game)
+            tile = TileLoader.Load(self.tlbase + "\\" + tcode + ".txt", self.game)
                 
         from tile import TileLoader
         tile.SetColor(TileLoader.GetColor(ccode))
@@ -604,6 +604,8 @@ class Level:
         ox,oy = self.origin
         tx,ty = defaults.tiles
         
+        idx = Renderer.GetFrameIndex()
+        
         for n,window in self._EnumWindows():
             if n > 2:
                 continue
@@ -614,14 +616,15 @@ class Level:
                 if n == 0:
                     entity.in_visible_set = True
                     entity.is_intersecting = False
+                    entity.update_idx = idx
                 elif n == 1:
                     bb = entity.GetBoundingBox()
                     if bb:
-                        bb = (bb[0]-ox,bb[1]-oy,bb[2],bb[3])
+                        bb = (bb[0]-ox -1.0,bb[1]-oy,bb[2],bb[3])
                         if (0 <= bb[0] <= tx or bb[0]+bb[2] <= tx) and (0 <= bb[1] <= ty or bb[1]+bb[3] <= ty):
                             entity.in_visible_set = True
                             entity.is_intersecting = True
-                else:
+                elif getattr(entity,"update_idx",idx) < idx:
                     entity.in_visible_set = False
                 
         self.entities_active.update(self.window_unassigned)

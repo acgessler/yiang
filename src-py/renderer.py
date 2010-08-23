@@ -171,6 +171,7 @@ class Renderer:
     clear_color = sf.Color.White
     event = None
     loop_running = False
+    fidx = -1
 
     @staticmethod
     def Initialize():
@@ -347,12 +348,17 @@ class Renderer:
                 else:
                     Renderer._DoSingleFrame()
                     cnt += 1
+                    Renderer.fidx += 1
 
         except _QuitNow:
             pass
 
         Renderer.loop_running = False
         return False
+    
+    @staticmethod
+    def GetFrameIndex():
+        return Renderer.fidx
 
     @staticmethod
     def GetEvents():

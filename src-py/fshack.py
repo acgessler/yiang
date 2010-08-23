@@ -28,6 +28,10 @@ import builtins
 archives = []
 old_open = None
 old_old = None
+old_isfile = None
+old_isdir = None
+
+exclusive = False
 
 def Enable(archives_in = [os.path.join("..","cooked.dat")]):
     
@@ -58,6 +62,9 @@ def Enable(archives_in = [os.path.join("..","cooked.dat")]):
             
             except IOError:
                 continue
+            
+        if exclusive:
+            raise IOError("*exclusive fshack*")
         
         return old_open(file, mode,**kwargs)
     old_open,builtins.open = builtins.open,myopen
@@ -72,11 +79,40 @@ def Enable(archives_in = [os.path.join("..","cooked.dat")]):
                 yield n
                 fine = True
                 
-        if not fine:
+        if not fine and not exclusive:
             for e in old_old(dir):
                 yield e
                 
+                
     old_old,os.listdir = os.listdir,myold
+    
+    
+    # Hack os.isfile()
+    def myisfile(dir): 
+        fine = False
+        for e in archives:
+            
+            if e.Contains(dir):
+                return True
+            
+        return False if exclusive else old_isfile(dir)
+                
+    old_isfile,os.path.isfile = os.path.isfile,myisfile
+    
+    
+    # Hack os.isdir()
+    def myisdir(dir): 
+        fine = False
+        for e in archives:
+            
+            if e.ContainsDir(dir):
+                return True
+            
+        return False if exclusive else old_isdir(dir)
+                
+    old_isdir,os.path.isdir = os.path.isdir,myisdir
+    
+    os.sep = "\\"
 
 def Restore():
     global old_open

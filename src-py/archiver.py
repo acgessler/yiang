@@ -23,7 +23,20 @@ import io
 
 verbose = True
 
-class Writer:
+class Base:
+
+    def _Normalize(self,path):
+        return path.replace("/","\\")
+    
+    def _NormalizeDir(self,dir):
+        if dir[-1] != "\\":
+            dir = dir + "\\"
+            
+        return self._Normalize(dir)
+      
+    
+
+class Writer(Base):
     
     """Implements the archive logic to pack all the files prior to
     deployment."""
@@ -48,7 +61,7 @@ class Writer:
         with open(filename2,"rt") as dummy:
             if filename[:2] == ".\\":
                 filename = filename[2:]
-            self.files.append([filename,os.stat(filename2).st_size ])
+            self.files.append([self._Normalize(filename),os.stat(filename2).st_size ])
     
     def Finalize(self):
         if self.final:
@@ -77,7 +90,7 @@ class Writer:
             self.file,len(self.files),cnt))
         
         
-class Reader:
+class Reader(Base):
     
     """Used at runtime to access cooked files"""
     
@@ -107,6 +120,7 @@ class Reader:
         return False
         
     def Read(self,filename):
+        filename = self._Normalize(filename)
         try:
             filename,size,ofs = [e for e in self.files if e[0]==filename][0]
             
@@ -125,11 +139,17 @@ class Reader:
         return io.BytesIO(data) if not "t" in mode else \
             io.StringIO(data.decode("utf-8","ignore"), \
             None)
+            
+    def Contains(self,filename):
+        filename = self._Normalize(filename)
+        return not not [e for e in self.files if e[0]==filename]
+    
+    def ContainsDir(self,dir):
+        dir = self._NormalizeDir(dir)
+        return not not [e for e in self.files if e[0][:len(dir)]==dir]
     
     def ListDir(self,dir):
-        if dir[-1] != "\\":
-            dir = dir + "\\"
-            
+        dir = self._NormalizeDir(dir)      
         elems = [e[0][len(dir):] for e in self.files if e[0][:len(dir)]==dir]
         if not elems:
             return

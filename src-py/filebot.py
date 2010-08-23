@@ -31,13 +31,16 @@ if verbose:
     
     
 def clean():
-    for f in os.walk(target,topdown=False):
-        for ff in f[2]:
-            os.remove(os.path.join(f[0],ff))
-        
-        for ff in f[1]:    
-            os.rmdir(os.path.join(f[0],ff))
-    print("Cleanup complete")
+    try:
+        for f in os.walk(target,topdown=False):
+            for ff in f[2]:
+                os.remove(os.path.join(f[0],ff))
+            
+            for ff in f[1]:    
+                os.rmdir(os.path.join(f[0],ff))
+        print("Cleanup complete")
+    except:
+        print("Errors during cleanup")
 
 def copy_files(files):
     for file in files:

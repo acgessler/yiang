@@ -8,7 +8,7 @@ build bin-x86-windows
 build data
 build config
 
-push archive_files CREDITS
+push archive_files (expand CREDITS)
 
 print First pass successful, launching filebot 
 run src-py/filebot main caches
