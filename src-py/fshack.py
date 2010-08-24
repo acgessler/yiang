@@ -30,6 +30,7 @@ old_open = None
 old_old = None
 old_isfile = None
 old_isdir = None
+old_exists = None
 
 exclusive = False
 
@@ -56,15 +57,17 @@ def Enable(archives_in = [os.path.join("..","cooked.dat")]):
     
     # Hack open()
     def myopen(file,mode="r",**kwargs):
-        for e in archives:
-            try:
-                return e.GetFile(file,mode)
-            
-            except IOError:
-                continue
-            
-        if exclusive:
-            raise IOError("*exclusive fshack*")
+        
+        if "r" in mode:
+            for e in archives:
+                try:
+                    return e.GetFile(file,mode)
+                
+                except IOError:
+                    continue
+                
+            if exclusive:
+                raise IOError("*exclusive fshack*")
         
         return old_open(file, mode,**kwargs)
     old_open,builtins.open = builtins.open,myopen
@@ -75,43 +78,47 @@ def Enable(archives_in = [os.path.join("..","cooked.dat")]):
         fine = False
         for e in archives:
             
-            for n in e.ListDir(dir):
-                yield n
-                fine = True
+            s = [n for n in e.ListDir(dir)]
+            if s:
+                return s
                 
-        if not fine and not exclusive:
-            for e in old_old(dir):
-                yield e
+        if not exclusive:
+            return old_old(dir)
+        return []
                 
                 
     old_old,os.listdir = os.listdir,myold
     
     
-    # Hack os.isfile()
+    # Hack os.path.isfile()
     def myisfile(dir): 
-        fine = False
-        for e in archives:
-            
-            if e.Contains(dir):
-                return True
-            
-        return False if exclusive else old_isfile(dir)
+        return not not ([e for e in archives if e.Contains(dir)] or\
+            (False if exclusive else old_isfile(dir)))
                 
     old_isfile,os.path.isfile = os.path.isfile,myisfile
     
     
-    # Hack os.isdir()
+    # Hack os.path.isdir()
     def myisdir(dir): 
-        fine = False
-        for e in archives:
-            
-            if e.ContainsDir(dir):
-                return True
-            
-        return False if exclusive else old_isdir(dir)
+        return not not ([e for e in archives if e.ContainsDir(dir)] or\
+            (False if exclusive else old_isdir(dir)))
                 
     old_isdir,os.path.isdir = os.path.isdir,myisdir
     
+    
+    # Hack os.path.exists()
+    def myexists(dir): 
+        return not not ( [e for e in archives if e.Contains(dir)] or\
+            (False if exclusive else old_exists(dir)))
+                
+    old_exists,os.path.exists = os.path.exists,myexists
+    
+    
+    # Add os.path.is_custom_fs()
+    def icfs(dir):
+        return not not [e for e in archives if e.Contains(dir)]
+        
+    os.path.is_archived =  icfs
     os.sep = "\\"
 
 def Restore():
@@ -120,6 +127,11 @@ def Restore():
         return
     
     builtins.open = open
+    os.listdir = old_old
+    os.path.isdir = old_isdir
+    os.path.isfile = old_isfile
+    os.path.exists = old_exists
+    delattr(os.path,"is_archived")
     
     old_open = None
 

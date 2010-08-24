@@ -51,7 +51,7 @@ SPECIAL_LEVEL_CAMPAIGN = 30000
 SPECIAL_LEVEL_MENU = 40000
 
 def get_level_count():
-    """Get the number of levels in the data/levels folder."""
+    """Get the number of ordered, regular levels in the data/levels folder."""
     global level_count
     if "level_count" in globals():
         return level_count

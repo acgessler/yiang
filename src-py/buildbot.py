@@ -176,9 +176,10 @@ def exec_single_statement(scope, item, out_item_idx, lines, n):
             if arg == "(":
                 out = [0]
                 idle += exec_single_statement(scope, item[nn+2:], out, lines, n)
-                gen = enumerate( item[out[0]+nn+3:] )
+                gen = enumerate( item[out[0]+nn+4:] )
                 
                 s = lookup_nofault(scope, "_")
+                
                 fa.append(s if s else "null")
                 continue
                 
@@ -195,9 +196,13 @@ def exec_single_statement(scope, item, out_item_idx, lines, n):
                     
                 arg = " ".join(combined)
                 s = None
-            else:
+            elif arg[0:1] != "{":
                 s = lookup_nofault(scope, arg)
+            else:
+                s = arg
+                
             fa.append(s if not s is None else arg)
+            
     except StopIteration:
         pass
 
@@ -439,7 +444,7 @@ def func_build(scope, file, *args):
         
     if len(args) >= 1:
         if (args[0][0] != "{" or args[0][-1] != "}"):
-            warn(scope, 'Failure building %s, given build script is not valid' % nxt)
+            warn(scope, 'Failure building %s, given build script is not valid: %s' % (nxt,args[0]))
             return
         
         lines = args[0][1:-1].split("\n")
@@ -514,6 +519,10 @@ def func_push(scope, cache, *args):
             
             s.setdefault("_pushed",set()).add(elem)
             
+# -----------------------------------------------------------------------------------
+def func_splice(scope, string, *args):
+    args = [int(a) for a in args]
+    return string[args[0] if len(args)>0 else 0 : args[1] if len(args)>1 else len(string) : args[2] if len(args)>2 else 1]
 
 # -----------------------------------------------------------------------------------
 def main():

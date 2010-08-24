@@ -894,14 +894,15 @@ class LevelLoader:
         There may be gaps within the set of assigned numbers.
         The functin yields 2-tuples: (index,ro) here ro is
         a boolean flag that specifies whether the level can
-        be written to."""
+        be written to, True indicates read-only access."""
         
         import re
         reg = re.compile(r"^(\d+)\.txt$")
-        for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
+        dir = os.path.join(defaults.data_dir,"levels")
+        for file in os.listdir(dir):
             m = re.match(reg,file)
             if m:
-                yield int( m.groups()[0] ), False
+                yield int( m.groups()[0] ), (getattr(os.path,"is_archived",lambda x: False)(os.path.join(dir, file)))
                                 
     @staticmethod
     def ClearCache(clear=None):

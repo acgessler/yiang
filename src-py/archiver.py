@@ -26,7 +26,7 @@ verbose = True
 class Base:
 
     def _Normalize(self,path):
-        return path.replace("/","\\")
+        return path.replace("/","\\").replace("\\\\","\\").strip()
     
     def _NormalizeDir(self,dir):
         if dir[-1] != "\\":

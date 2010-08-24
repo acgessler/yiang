@@ -121,7 +121,7 @@ class EditorCursor(Drawable):
 class EditorGame(Game):
     """Special game implementation for the editor"""
 
-    def __init__(self):
+    def __init__(self,readonly=False):
         Game.__init__(self,mode=Game.EDITOR,undecorated=True)
         
         self.selection = []
@@ -136,6 +136,7 @@ class EditorGame(Game):
         self.help_string = ""
         self.settings ={}
         self.layer = LAYER_NORMAL
+        self.readonly = readonly
         
         # This will almost certainly make sure that we'll never die!
         self.lives = 10000000
@@ -213,7 +214,7 @@ class EditorGame(Game):
             
             # One may, however, not save while the game is running because
             # we can't guarantee having a consistent game state then.
-            gui.disabled = not self.IsEditorRunning() 
+            gui.disabled = not self.IsEditorRunning() or self.readonly
         
         # Upper left / general editor functionality
         self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25],
@@ -620,7 +621,7 @@ class EditorGame(Game):
                     self2._RemoveMe()
                     
             def Draw(self2):
-                self.ClearScreen(sf.Color(0,0,0,165))
+                self.ClearScreen(sf.Color(0,0,0,200))
                 
                 mx,my = self.mx,self.my
                 tx,ty = defaults.tiles_size_px
@@ -1867,6 +1868,18 @@ class EditorGame(Game):
             for k,v in self.settings.items()) + ")"
         
     def Save(self):
+        
+        if self.readonly:
+            print("Failed to save this level because it is marked READONLY")
+            return
+        
+        # Create the ../data/levels folder if necessary (this is
+        # needed in packaged releases
+        try:
+            os.mkdir(os.path.join(defaults.data_dir,"levels"))
+        except OSError:
+            pass 
+        
         self._UpdateLevelSize()
         shebang = self._BuildUpdatedShebang()
         
@@ -2812,15 +2825,15 @@ class EditorMenu(Drawable):
                     rect=[x,y,w,h],
                     fgcolor=sf.Color.Yellow if readonly else sf.Color.Green
                 ) + 
-                    ("release",(lambda src,i=i: EditLevel(i)))
+                    ("release",(lambda src,i=i,readonly=readonly: EditLevel(i,readonly)))
                 ))
                 
                 y += h+1
                 if y >= defaults.resolution[1]-50:
                     y = ys
                     x += w+1
-        
-        def NewLevel():
+                    
+        def Run(what):
             # (HACK) -- calling defaults.update_derived() (which is done at
             # the very beginning of the genemptylevel script) seems to
             # distort our scale settings. Save the state earlier and
@@ -2828,10 +2841,34 @@ class EditorMenu(Drawable):
             
             old = dict(defaults.__dict__)
             
-            import genemptylevel
-            genemptylevel.Main()
+            try:
             
+                mod = __import__(what)
+            except ImportError:
+                from notification import MessageBox
+                Renderer.AddDrawable( MessageBox(sf.String("""
+                    Failure importing module {0} - this functionality is
+                    either broken or not available in this version""".format(what),
+                        Size=defaults.letter_height_game_over,
+                        Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+                    ))
+                ))
+                return
+            
+            cwd = os.getcwd()
+            os.chdir(os.path.join( "..", "src-py" ))
+            
+            if hasattr(mod,"Main"):
+                mod.Main()
+            elif hasattr(mod,"main"):
+                mod.main()
+                
+            os.chdir(cwd)
             defaults.__dict__.update(old)
+            
+        
+        def NewLevel():
+            Run("genemptylevel")
             
             # first remove all buttons, then re-add them - this time
             # including the button for the newly created level
@@ -2842,8 +2879,8 @@ class EditorMenu(Drawable):
             
             
         from level import LevelLoader
-        def EditLevel(i):
-            game = EditorGame()
+        def EditLevel(i,ronly):
+            game = EditorGame(readonly=ronly)
             if game.LoadLevel(i,no_loadscreen=True):
                 Renderer.AddDrawable(game,self)
          
@@ -2851,16 +2888,16 @@ class EditorMenu(Drawable):
         w,h = 300,20
         
         self.AddSlaveDrawable((Button(text="Package levels and data",
-            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=True) + 
+            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=hasattr(os.path,"is_archived")) + 
             
-             ("release",(lambda src: NewLevel()))
+             ("release",(lambda src: Run("buildbot")))
         ))
         
         y += h+1
-        self.AddSlaveDrawable((Button(text="Validate all levels",
-            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=True) + 
+        self.AddSlaveDrawable((Button(text="Re-compile tiles",
+            rect=[x,y,w,h],fgcolor=sf.Color.White,font_height=11,disabled=hasattr(os.path,"is_archived")) + 
             
-             ("release",(lambda src: NewLevel()))
+             ("release",(lambda src: Run("compiletiles")))
         ))
         
         y += h+1
@@ -2880,7 +2917,7 @@ class EditorMenu(Drawable):
         
         AddLevelButtons()
         
-        self.AddSlaveDrawable((Label(text=_("Choose a level to edit. Yellow entries are read-only and cannot be edited."),
+        self.AddSlaveDrawable((Label(text=_("Choose a level to edit. Yellow entries are read-only and cannot be saved."),
             rect=[xs-50,ys-40,550,50],font_height=12)))
         
     @override 

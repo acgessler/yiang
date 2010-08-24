@@ -1,14 +1,26 @@
 
 print Preparing to build YIANG
 
-
+print Rebuild embeddable rc for MSVC
 build src-py
+
+print currently skipped - compile yiang.dll
 build vc9
+
+print Collect binaries
 build bin-x86-windows
+
+print Collect data
 build data
+
+print App configuration
 build config
 
+# push CREDITS to both so there is still a text file
+# with the authors, even if the app doesn't run 
+# on the machine :-)
 push archive_files (expand CREDITS)
+push files (expand CREDITS)
 
 print First pass successful, launching filebot 
 run src-py/filebot main caches

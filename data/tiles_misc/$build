@@ -1,4 +1,10 @@
+
+
+group wc *.txt
+	push archive_files ~
+
 build cooked {
 	push archive_files (expand tiles.dat)
 }
+
 

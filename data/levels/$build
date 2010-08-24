@@ -4,7 +4,7 @@ group re [0-9]+.txt
 		push archive_files ~
 	
 group re [0-9]+ 
-	build ~ {
+	build (splice ~ 0 -4) {
 		build cooked {
 			push archive_files (expand tiles.dat)
 		}
