@@ -487,6 +487,12 @@ TimeDelta:         {dtime:.4}
         
         # we can safely assume that there MUST be a player.
         assert False
+        
+    def MaxUselessSprites(self):
+        """Maximum number of effect sprites that can now be spawned
+        without affecting the framerate"""
+        return 0 if self.GetFrameRateUnsmoothed() <= defaults.max_framerate_for_sprites else\
+            defaults.max_useless_sprites - self.useless_sprites
     
     def Kill(self,killer="an unknown enemy ",player=None):
         """Kill the player immediately, respawn if they have

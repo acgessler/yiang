@@ -643,16 +643,16 @@ class Level:
             #print(d)
             self.dither_strength = 1.0 + d * self.distortion_params[2]
             
-            if defaults.no_ppfx is False: 
-                if 0.98 > d > 0.5: # and int(d*20) % 4 != 0:
-                    if not "grayscale.sfx" in [ n for n,p,e in self.postfx_rt ]:
-                        self.AddPostFX("grayscale.sfx", ())
-                else:
-                    self.RemovePostFX("grayscale.sfx")
+            #if defaults.no_ppfx is False: 
+            #    if 0.98 > d > 0.5: # and int(d*20) % 4 != 0:
+            #        if not "grayscale.sfx" in [ n for n,p,e in self.postfx_rt ]:
+            #            self.AddPostFX("grayscale.sfx", ())
+            #    else:
+            #        self.RemovePostFX("grayscale.sfx")
         else:
             self.dither_strength = 1.0
-            if defaults.no_ppfx is False: 
-                self.RemovePostFX("grayscale.sfx")
+            #if defaults.no_ppfx is False: 
+            #    self.RemovePostFX("grayscale.sfx")
                 
     def OnEnable(self):
         self._SetupAudioSection()

@@ -71,6 +71,8 @@ death_sprites = 130
 min_death_sprites = 5
 death_sprites_player = 330
 min_death_sprites_player = 10
+pain_sprites_player = 10
+min_pain_sprites_player = 2
 max_useless_sprites = 2000
 max_framerate_for_sprites = 30
 
@@ -154,6 +156,9 @@ delta_t_treshold = 0.2
 
 # Disable periods if very high distortion (their freuqncy is level-dependent)
 no_distortion = False
+
+# Minimum velocity for 'pain, pain, cry' messages to  appear
+pain_treshold = 15
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps

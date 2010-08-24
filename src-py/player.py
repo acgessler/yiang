@@ -461,14 +461,12 @@ class Player(Entity):
         print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
             name = "splatter1.txt"
-            remaining = max(0 if self.game.GetFrameRateUnsmoothed() <= defaults.max_framerate_for_sprites else
-                defaults.max_useless_sprites - self.game.useless_sprites, 
+            remaining = min( max(self.game.MaxUselessSprites(), 
                 defaults.min_death_sprites_player
-            )
-            remaining = min(remaining, defaults.death_sprites_player)
+            ),defaults.death_sprites_player)
+            
+            from tile import TileLoader
             for i in range(remaining):
-                from tile import TileLoader
-                
                 # add human body parts plus pieces of generic splatter
                 if i == remaining-2:
                     name = "splatter_player_special.txt"
@@ -588,6 +586,7 @@ class Player(Entity):
                         
                         colliders.append(collider)
                     
+        pain = 0
         if colliders: #sum(e[1] for e in intersect) != 0:
             #print(intersect)
             cnt += len(colliders)
@@ -600,6 +599,9 @@ class Player(Entity):
             
                 if n == 3:
                     newpos[1] = elem[0]
+                    pain +=  newvel[1]
+                    painpos = ((ab[0]+ab[2])*0.5,ab[3])
+                    
                     newvel[1] = min(0, newvel[1])
                                 
                     f = fric*time # XXX too lazy to think of a pure arithmetic solution
@@ -612,18 +614,32 @@ class Player(Entity):
                     
                 elif n == 0:
                     newpos[0] = elem[0]
+                    pain += -newvel[0]
+                    painpos = (ab[0],(ab[3]+ab[1])*0.5)
+                    
                     newvel[0] = max(0, newvel[0])
                     #print("left")
                     
                 elif n == 2:
                     newpos[0] = elem[0]
+                    pain += newvel[0]
+                    painpos = (ab[2],(ab[3]+ab[1])*0.5)
+                    
                     newvel[0] = min(0, newvel[0])
                     #print("right")
                     
                 elif n == 1:
                     newpos[1] = elem[0]
+                    pain += -newvel[1]
+                    painpos = ((ab[0]+ab[2])*0.5,ab[1])
+                    
                     newvel[1] = max(0, newvel[1])  
-                    #print("top")                 
+                    #print("top")   
+                    
+        if pain > defaults.pain_treshold:
+            print("Very hard landing, spawning cries")  
+            self._ExperiencePain(self.vel,pain/defaults.pain_treshold,painpos) 
+                     
              
         if floor_touch is False:
             # simulate air friction while we *are* in air. increase the effect
@@ -634,6 +650,23 @@ class Player(Entity):
 
         #print("Active colliders: {0}".format(cnt))
         return newpos, newvel
+    
+    def _ExperiencePain(self,vel,pain,pos):
+        name = "splatter2.txt"
+        remaining = min( max(self.game.MaxUselessSprites(), 
+            defaults.min_pain_sprites_player
+        ),int(defaults.pain_sprites_player*pain))
+        
+        from tile import TileLoader
+        for i in range(remaining):
+            t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
+            
+            t.RandomizeSplatter()
+            t.SetDirection((-vel[0]*random.uniform(0.5,1.5) + (random.uniform(-0.5,0.5)*vel[1]),
+                            -vel[1]*random.uniform(0.5,1.5) + (random.uniform(-0.5,0.5)*vel[0])))
+            
+            t.SetPosition(pos)
+            self.game.AddEntity(t)
     
     def SetExtraVelocity(self,vel):
         """Set extra velocity which is added to the physics simulation

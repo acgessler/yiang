@@ -222,7 +222,7 @@ class EditorGame(Game):
               ("release", (lambda src: self._OnEscape()))
         ))
         self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25],
-              tip="Save to disk (regular save, no further optimizations)") + 
+              tip= "You cannot save, this level is readonly" if self.readonly else "Save to disk (regular save, no further optimizations)") + 
               ("update",  (lambda src: UpdateSaveState(src))) +
 		      ("release", (lambda src: self.Save()))
         ))
