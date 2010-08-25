@@ -88,7 +88,7 @@ class KeyMapping:
     @classmethod
     def Get(cls,name):
         """Query the SFML key constant for a specific action"""
-        return sf.Key.__dict__[ cls.mapping[name] ]
+        return getattr( sf.Key, cls.mapping[name])
 
     @classmethod
     def GetString(cls,name):

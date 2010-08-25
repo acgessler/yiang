@@ -48,7 +48,7 @@ from player import Player
 from keys import KeyMapping
 from tile import Tile,AnimTile,TileLoader
 
-from minigui import Component, Button, ToggleButton, Label, GUIManager
+from minigui import Component, Button, ToggleButton, Label, GUIManager, EditControl
 
 # Sentinel decorator to indicate that a particular function overrides
 # a equally named function in a baseclass
@@ -378,6 +378,11 @@ class EditorGame(Game):
                   )
                 self2.elements.append(Button(text=_("Cancel"),rect=[rx-w-40,ry-50,w,h],fgcolor=sf.Color.Red) + 
                     ("release", (lambda src: self2._RemoveMe()))
+                  )
+                
+                self2.elements.append(Label(text=_("Level name (not too long, please)"),rect=[100,100,w,h],align=Component.LEFT))
+                self2.elements.append(EditControl(text=self2.settings["name"],rect=[100,130,300,30]) + 
+                    ("text_change", (lambda src: self2.settings.__setitem__("name",src.text)))
                   )
                 
                 # Scrolling controls
@@ -1485,7 +1490,7 @@ class EditorGame(Game):
                     
                 if self.my > ry-yt:
                     oy += sy*self.time_delta                  
-                elif self.my < yt:
+                elif defaults.status_bar_top_tiles*defaults.tiles_size_px[1] < self.my < yt:
                     oy -= sy*self.time_delta
                     
                 self.level.SetOrigin((ox,oy))

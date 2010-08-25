@@ -81,6 +81,7 @@ class Component(Drawable):
     window corner being the coordinate space origin."""
     
     STATE_NORMAL,STATE_ACTIVE,STATE_HOVER,STATE_DISABLED=range(4)
+    LEFT,RIGHT,CENTER=range(3)
     COLORS = {
         STATE_NORMAL   : sf.Color(100,100,100),
         STATE_ACTIVE   : sf.Color(150,150,150),
@@ -254,10 +255,11 @@ class HasAText(Component):
     The class defines also a tooltip, which is, however, not currently
     drawn automatically. """
     
-    def __init__(self,text="No text specified",tip=None,**kwargs):
+    def __init__(self,text="No text specified",tip=None,align=Component.CENTER,**kwargs):
         Component.__init__(self,**kwargs)
         self.text = text
         self.tip = tip
+        self.align = align
         
     @property
     def text(self):
@@ -280,9 +282,16 @@ class HasAText(Component):
     
     def _DrawTextCentered(self):
         ts = self._text.split("\n")
-        self._text_cached.SetPosition(*self._MkPos(self.w*0.5 - len(ts[0])*self.font_height*0.25,
-            self.h*0.5 - len(ts)*self.font_height*0.55))
         
+        if self.align == Component.CENTER:
+            pos = self._MkPos(self.w*0.5 - len(ts[0])*self.font_height*0.25,
+                self.h*0.5 - len(ts)*self.font_height*0.55)
+        elif self.align == Component.LEFT:
+            pos = self._MkPos((5, self.h*0.5 - len(ts)*self.font_height*0.55))
+        else:
+            assert False # not implemented
+        
+        self._text_cached.SetPosition(*pos)
         self._text_cached.SetColor(self.fgcolor if self.fgcolor else sf.Color.White)
         Renderer.app.Draw(self._text_cached)
 
@@ -387,5 +396,100 @@ class Label(HasAText):
         self._DrawTextCentered()
     
         
+class EditControl(HasAText):
+    """A one-line edit control"""
+    
+    COLORS = {
+        Component.STATE_NORMAL   : sf.Color(110,110,110,220),
+        Component.STATE_ACTIVE    : sf.Color(150,120,120,255),
+        Component.STATE_DISABLED : sf.Color(160,160,160,120),
+    }
+    
+    # Normal characters and digits are added automatically.
+    # Of course, this doesn't play well with other keyboard
+    # layouts than the english one. But hey, it's called
+    # MINIGUI.py.
+    INPUTMAP = {
+        sf.Key.Tab : "\t",
+        sf.Key.Return: "\n",
+        sf.Key.Period: ".",
+        sf.Key.Slash: "/",
+        sf.Key.BackSlash: "\\",
+        sf.Key.SemiColon: ";",
+        sf.Key.Comma: ","
+    }
+    populated = False
+    
+    @staticmethod
+    def _Populate():
+        imap = EditControl.INPUTMAP
+        for k,v in sf.Key.__dict__.items():
+            if len(k) == 1:
+                imap[v] = k
+            elif k[:6] == "Numpad":
+                imap[v] = k[6]
+            elif k[:3] == "Num":
+                imap[v] = k[3]
+                
+        print("Got inputmap for EditControl: {0}".format( imap ))
+        EditControl.populated = True
+    
+    
+    def __init__(self,align=Component.LEFT,**kwargs):
+        HasAText.__init__(self,align=align,**kwargs)
+        self.focus = False
+        
+        if not EditControl.populated:
+            EditControl._Populate()
+
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
+        if self.disabled:
+            self.state = Component.STATE_DISABLED
+        elif hit:
+            if not prev_hit:
+                self.Fire("mouse_enter")
+            
+            if buttons[0] and not prev_buttons[0]:
+                self.focus = True
+        
+        else:
+            if prev_hit:
+                self.Fire("mouse_leave")
+            
+            if buttons[0] and not prev_buttons[0]:
+                self.focus = False
+                
+        self.state = Component.STATE_ACTIVE if self.focus else Component.STATE_NORMAL
+            
+        self._DrawMyRect()
+        self._DrawTextCentered()
+        
+    def ProcessEvents(self):
+        if not self.focus:
+            return
+        
+        inp = Renderer.app.GetInput()
+        shift = not not inp.IsKeyDown(sf.Key.LShift)
+        
+        prev = self.text
+        imap = EditControl.INPUTMAP
+        for event in [e for e in Renderer.SwallowEvents() if e.Type == sf.Event.KeyPressed]:
+            code = event.Key.Code  
+            
+            if code == sf.Key.Back:
+                self.text = self.text[:-1]
+                continue
+            
+            if code in imap:
+                char = imap[code]
+                if char in "ABCDEFGHIJKLMNOPQRSTUVWQXYZ":
+                    if not shift:
+                        char = chr( ord(char) ^ 32 )
+                
+                self.text = self.text + char
+        
+        
+        if prev != self.text:
+            self.Fire("text_change")
         
         
