@@ -157,9 +157,13 @@ This makes me SO happy {0}
         def DoLoading():    
             
             ret[0] = loadProc(*args,**kwargs)
-            b = time.time()
-
-            time.sleep(max(0, defaults.loading_time - (b-a)))
+            
+            while True:
+                b = time.time()
+                if inp.IsKeyDown(sf.Key.S) or b-a > defaults.loading_time:
+                    break
+                    
+                time.sleep( min(1.0, max(0, defaults.loading_time - (b-a))))
             
         if LoadScreen.loadlevel:
             Renderer.AddDrawable(LoadScreen.loadlevel)
