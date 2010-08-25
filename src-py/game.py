@@ -356,11 +356,14 @@ OOOOOO  OOOOO  \n\
                 elif event.Key.Code == KeyMapping.Get("debug-kill"):
                     self.Kill("(yourself, you pressed the KILL button!)")
                     
-                elif event.Key.Code == KeyMapping.Get("debug-gameover"):
-                    self.GameOver()
+                
+                elif not self.mode in (Game.EDITOR,Game.EDITOR_HIDDEN):
                     
-                elif event.Key.Code == KeyMapping.Get("level-new"):
-                    self.RestartLevel()
+                    if event.Key.Code == KeyMapping.Get("debug-gameover"):
+                        self.GameOver()
+                        
+                    elif event.Key.Code == KeyMapping.Get("level-new"):
+                        self.RestartLevel()
                 
         except NewFrame:
             print("Received NewFrame notification during event polling")

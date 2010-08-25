@@ -2244,6 +2244,7 @@ class EditorGame(Game):
         
         l = self.level.GetLevelSize()
         if pos >= l[axis]:
+            print("Extend level automatically")
             add += l[axis]-pos+1
             pos = l[axis]-1
             
@@ -2258,10 +2259,10 @@ class EditorGame(Game):
         sanity = self.level.vis_ofs*2
         
         # Build a bounding box covering the region to be moved to the right
-        bb = (pos,-sanity,lx-pos,ly+sanity*2) if axis==0 else (-sanity,pos,lx+sanity*2,ly-pos)
+        bb = (pos,-sanity,lx,ly+sanity) if axis==0 else (-sanity,pos,lx+sanity,ly)
         for elem in self.level.EnumPossibleColliders(bb):
             px,py = elem.pos
-            if bb[0]<=px<bb[0]+bb[2] and bb[1]<=py<bb[1]+bb[3]:
+            if bb[0]<=px<bb[2] and bb[1]<=py<bb[3]:
                         
                 px += add if axis == 0 else 0
                 py += add if axis == 1 else 0
@@ -2306,18 +2307,18 @@ class EditorGame(Game):
         ret = []
         
         # Build a bounding box covering the region to be erased
-        bb = (pos,-sanity,add,ly+sanity*2) if axis==0 else (-sanity,pos,lx+sanity*2,add)
+        bb = (pos,-sanity,pos+add,ly+sanity) if axis==0 else (-sanity,pos,lx+sanity,pos+add)
         for elem in self.level.EnumPossibleColliders(bb):
             px,py = elem.pos
-            if bb[0]<=px<bb[0]+bb[2] and bb[1]<=py<bb[1]+bb[3]:
+            if bb[0]<=px<bb[2] and bb[1]<=py<bb[3]:
                 self.level.RemoveEntity(elem)
                 ret.append(elem)
         
         # Build a bounding box covering the region to be moved to the left
-        bb = (pos+add,-sanity,lx-pos-add,ly+sanity*2) if axis==0 else (-sanity,pos+add,lx+sanity*2,ly-pos-add)
+        bb = (pos+add,-sanity,lx,ly+sanity) if axis==0 else (-sanity,pos+add,lx+sanity,ly)
         for elem in self.level.EnumPossibleColliders(bb):
             px,py = elem.pos
-            if bb[0]<=px<bb[0]+bb[2] and bb[1]<=py<bb[1]+bb[3]:
+            if bb[0]<=px<bb[2] and bb[1]<=py<bb[3]:
                 adjust = px>=lx-1 and axis==0 or py>=ly-1 and axis==1
                 
                 px -= add if axis == 0 else 0
