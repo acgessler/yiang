@@ -39,6 +39,7 @@ class GUIManager:
     
     components, components2 = set(), set()
     drawable = None
+    global_focus = None
     
     @staticmethod
     def Enable():
@@ -455,6 +456,10 @@ class EditControl(HasAText):
             
             if buttons[0] and not prev_buttons[0]:
                 self.focus = True
+                if GUIManager.global_focus:
+                    GUIManager.global_focus.focus = False
+                    
+                GUIManager.global_focus = self
         
         else:
             if prev_hit:
@@ -462,6 +467,9 @@ class EditControl(HasAText):
             
             if buttons[0] and not prev_buttons[0]:
                 self.focus = False
+                
+                if GUIManager.global_focus is self:
+                    GUIManager.global_focus = None
                 
         self.state = Component.STATE_ACTIVE if self.focus else Component.STATE_NORMAL
             

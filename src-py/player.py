@@ -684,19 +684,19 @@ class Player(Entity):
         return (self.pos[0] + self.pofsx + pcb[0] / 2, self.pos[1] + pcb[1], \
             self.pwidth - pcb[0], self.pheight - pcb[1])
 
-    def _AddRespawnPoint(self, pos):
+    def _AddRespawnPoint(self, pos, color=None):
         """Add a possible respawn position to the player entity."""
         assert hasattr(self, "respawn_positions")
-        self.respawn_positions.append(pos)
+        self.respawn_positions.append((pos,color or self.color))
         print("Set respawn point {0}|{1}".format(pos[0], pos[1]))
         
-    def _AddOrderedRespawnPoint(self, pos):
+    def _AddOrderedRespawnPoint(self, pos, color=None):
         """Add a possible respawn position to the player entity,
         that is a respawn point the player jumps to, without regard
         to the position of his death. If multiple ordered respawn
         points are registered, the most recent is taken."""
-        if not self.ordered_respawn_positions or (pos[0] != self.ordered_respawn_positions[-1][0] and pos[1] != self.ordered_respawn_positions[-1][1]):
-            self.ordered_respawn_positions.append(pos)
+        if not self.ordered_respawn_positions or (pos[0] != self.ordered_respawn_positions[-1][0][0] and pos[1] != self.ordered_respawn_positions[-1][0][1]):
+            self.ordered_respawn_positions.append((pos,color or self.color))
             print("Set ordered respawn point {0}|{1}".format(pos[0], pos[1]))
 
     def Respawn(self, enable_respawn_points):
@@ -710,28 +710,30 @@ class Player(Entity):
         min_distance = float(defaults.min_respawn_distance)
         
         if len(self.ordered_respawn_positions) and enable_respawn_points is True:
-            for rpos in reversed(self.ordered_respawn_positions):
+            for rpos,color in reversed(self.ordered_respawn_positions):
                 if mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
-                    self.SetPositionAndMoveView(rpos)
+                    npos,ncol = rpos,color
                     self.ordered_respawn_positions.pop()
                     break
             else:
-                self.SetPositionAndMoveView(self.ordered_respawn_positions[-1])
+                npos,ncol = self.ordered_respawn_positions[-1]
                 self.ordered_respawn_positions.pop()
             
         else:    
                 
-            for rpos in sorted(self.respawn_positions if enable_respawn_points is True else (),key=operator.itemgetter(0),reverse=True):
+            for rpos,color in sorted(self.respawn_positions if enable_respawn_points is True else (),key=operator.itemgetter(0,0),reverse=True):
                 if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
                     continue # this is to protect the player from being
                     # respawned in kill zones.
                 
-                self.SetPositionAndMoveView(rpos)
+                npos,ncol = rpos,color
                 break
                 
             else:
-                self.SetPositionAndMoveView(self.respawn_positions[0])
+                npos,ncol = self.respawn_positions[0]
             
+        self.SetPositionAndMoveView(npos)
+        self.SetColor(ncol)
 
         # Reset our status
         self._Reset()
