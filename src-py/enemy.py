@@ -354,7 +354,7 @@ class SmallBob(Enemy):
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
     def __init__(self, text, height, frames, speed=1.0, move_speed_base = 2.0, shrinkbb=0.8):
-        AnimTile.__init__(self, text, height, frames, speed, 2)
+        AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
         self.hits = 4
 
@@ -377,6 +377,7 @@ class SmallBob(Enemy):
         return Entity.KILL
 
     def Update(self, time_elapsed, time):
+        AnimTile.Update(self, time_elapsed, time)
         if not self.game.IsGameRunning():
             return 
             
