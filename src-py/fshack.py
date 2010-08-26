@@ -78,10 +78,15 @@ def Enable(archives_in = [os.path.join("..","cooked.dat")]):
         fine = False
         s = []
         for e in archives:
-            s = [n for n in e.ListDir(dir)]
+            s += [n for n in e.ListDir(dir)]
                 
         if not exclusive:
-            s += old_old(dir)
+            try:
+                s += [e for e in old_old(dir) if not e in s]
+            except OSError:
+                if not s:
+                    raise
+                
         return s
                 
                 

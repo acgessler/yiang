@@ -92,15 +92,16 @@ class LoadScreen:
         if SPECIAL_LEVEL_LOADING_END < SPECIAL_LEVEL_LOADING_START:
             from level import LevelLoader
             
-            m = None
+            m = SPECIAL_LEVEL_LOADING_START-1
             for n,readonly in sorted(LevelLoader.EnumLevelIndices()):
                 if n < SPECIAL_LEVEL_LOADING_START:
                     continue
-                if m and n-m != 1:
+                if n-m != 1:
                     break
                 m = n
                 
-            SPECIAL_LEVEL_LOADING_END = n+1
+            SPECIAL_LEVEL_LOADING_END = m+1
+            print("Number of loading levels: {0}".format(SPECIAL_LEVEL_LOADING_END-SPECIAL_LEVEL_LOADING_START))
         
         g = Game(mode=Game.BACKGROUND,undecorated=True)
         if not g.LoadLevel(random.randint(SPECIAL_LEVEL_LOADING_START,SPECIAL_LEVEL_LOADING_END-1),
