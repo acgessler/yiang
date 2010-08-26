@@ -405,6 +405,8 @@ class EditControl(HasAText):
         Component.STATE_DISABLED : sf.Color(160,160,160,120),
     }
     
+    NUMERIC,CHARACTER,SPECIAL,ALPHANUMERIC,ALL = 0x1,0x2,0x4,0x3,0xf
+    
     # Normal characters and digits are added automatically.
     # Of course, this doesn't play well with other keyboard
     # layouts than the english one. But hey, it's called
@@ -416,7 +418,8 @@ class EditControl(HasAText):
         sf.Key.Slash: "/",
         sf.Key.BackSlash: "\\",
         sf.Key.SemiColon: ";",
-        sf.Key.Comma: ","
+        sf.Key.Comma: ",",
+        sf.Key.Space: " "
     }
     populated = False
     
@@ -435,9 +438,10 @@ class EditControl(HasAText):
         EditControl.populated = True
     
     
-    def __init__(self,align=Component.LEFT,**kwargs):
+    def __init__(self,align=Component.LEFT,allowed=None, focus=False, **kwargs):
         HasAText.__init__(self,align=align,**kwargs)
-        self.focus = False
+        self.focus = focus
+        self.allowed = allowed or EditControl.ALL
         
         if not EditControl.populated:
             EditControl._Populate()
@@ -471,25 +475,38 @@ class EditControl(HasAText):
         inp = Renderer.app.GetInput()
         shift = not not inp.IsKeyDown(sf.Key.LShift)
         
-        prev = self.text
         imap = EditControl.INPUTMAP
+        new_text = self.text
+        
         for event in [e for e in Renderer.SwallowEvents() if e.Type == sf.Event.KeyPressed]:
             code = event.Key.Code  
             
             if code == sf.Key.Back:
-                self.text = self.text[:-1]
-                continue
-            
-            if code in imap:
+                new_text = new_text[:-1]
+                
+            elif code in imap:
                 char = imap[code]
                 if char in "ABCDEFGHIJKLMNOPQRSTUVWQXYZ":
                     if not shift:
                         char = chr( ord(char) ^ 32 )
                 
-                self.text = self.text + char
+                    if self.allowed & EditControl.CHARACTER == 0:
+                        continue
+                    
+                elif char in "0123456789":
+                    if self.allowed & EditControl.NUMERIC == 0:
+                        continue
+                    
+                elif self.allowed & EditControl.SPECIAL == 0:
+                    continue
+                
+                new_text = new_text + char
+                
+        for elem in self.handlers.get("pre_text_change",[]):
+            new_text = elem(self,new_text)
         
-        
-        if prev != self.text:
+        if new_text != self.text:
+            self.text = new_text
             self.Fire("text_change")
         
         

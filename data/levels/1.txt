@@ -1,4 +1,6 @@
-<out> = Level(<level>,<game>,<raw>,color=(30, 0, 0),vis_ofs=2,autoscroll_speed=(0.25, 0),name='A Brave New World',scroll=2,)
+<out> = Level(<level>,<game>,<raw>,color=(30, 20, 20),vis_ofs=4,autoscroll_speed=(0.25, 0),name='A Brave New World',scroll=2,)
+
+
 _B4~DA_B5~DAgS2.  .  cDA.  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDJ
 _B4.  _B5_B4.  ~TB.  cDA.  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  _i0_i0
 _B4.  _B5_B4.  _i1.  cDA.  .  rI0.  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDAcDAcDAcDAcDAcDAcDAcDA

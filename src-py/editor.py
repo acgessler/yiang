@@ -381,8 +381,50 @@ class EditorGame(Game):
                   )
                 
                 self2.elements.append(Label(text=_("Level name (not too long, please)"),rect=[100,100,w,h],align=Component.LEFT))
-                self2.elements.append(EditControl(text=self2.settings["name"],rect=[100,130,300,30]) + 
+                self2.elements.append(EditControl(text=self2.settings.get( "name", "" ),rect=[100,130,300,30]) + 
                     ("text_change", (lambda src: self2.settings.__setitem__("name",src.text)))
+                  )
+                
+                defbg = (0,0,0)
+                self2.settings["color"] = list(self2.settings.get("color",defbg))
+                
+                def safe_int(s):
+                    # Skip leading 0s to keep int() from misinterpreting it as an octal number
+                    s = s.lstrip(" \n\t0").rstrip()
+                    if not s:
+                        return 0
+                    
+                    return int(s)
+                    
+                def mkrgb(s):
+                    return str(max(0, min(0xff,safe_int(s))))
+                
+                self2.elements.append(Label(text=_("Background color, RED"),rect=[100,180,w,h],align=Component.LEFT))
+                self2.elements.append(EditControl(text=str( self2.settings["color"][0] ),
+                    rect=[100,210,w,30], allowed=EditControl.NUMERIC) + 
+                    ("text_change", (lambda src: self2.settings["color"].__setitem__(0,safe_int(src.text)))) +
+                    ("pre_text_change", (lambda src,text: mkrgb(text) )) 
+                  )
+                
+                self2.elements.append(Label(text=_("Background color, GREEN"),rect=[100,250,w,h],align=Component.LEFT))
+                self2.elements.append(EditControl(text=str( self2.settings["color"][1] ),
+                    rect=[100,280,w,30], allowed=EditControl.NUMERIC) + 
+                    ("text_change", (lambda src: self2.settings["color"].__setitem__(1,safe_int(src.text)))) +
+                    ("pre_text_change", (lambda src,text: mkrgb(text) )) 
+                  )
+                
+                self2.elements.append(Label(text=_("Background color, BLUE"),rect=[100,320,w,h],align=Component.LEFT))
+                self2.elements.append(EditControl(text=str( self2.settings["color"][2] ),
+                    rect=[100,350,w,30], allowed=EditControl.NUMERIC) + 
+                    ("text_change", (lambda src: self2.settings["color"].__setitem__(2,safe_int(src.text)))) +
+                    ("pre_text_change", (lambda src,text: mkrgb(text) )) 
+                  )
+                
+                self2.settings.setdefault("vis_ofs",0)
+                self2.elements.append(Label(text=_("Visible offset above upper status bar"),rect=[100,450,w,h],align=Component.LEFT))
+                self2.elements.append(EditControl(text=str( self2.settings["vis_ofs"] ),
+                    rect=[100,480,w,30], allowed=EditControl.NUMERIC) + 
+                    ("text_change", (lambda src: self2.settings.__setitem__("vis_ofs",safe_int(src.text))))
                   )
                 
                 # Scrolling controls
@@ -460,6 +502,10 @@ class EditorGame(Game):
                     self.AddSlaveDrawable(e)
                 
             def _Save(self2):
+                
+                if "color" in self2.settings:
+                    self2.settings["color"] = tuple(self2.settings["color"])
+                
                 self.ControlledChangeSettings(self2.settings)
         
             def _RemoveMe(self2):
@@ -1341,7 +1387,8 @@ class EditorGame(Game):
                                                     self.fy + e.pos[1]-self.select_start[1])
                                                 )
                                             
-                                            self.ControlledAddEntity(cloned)
+                                            if cloned.pos[1] >= -self.level.vis_ofs:
+                                                self.ControlledAddEntity(cloned)
                                     
                                 self.pressed_l = True
                                 self.last_insert_pos = self.fx,self.fy
@@ -1901,6 +1948,12 @@ class EditorGame(Game):
                     
                     x,y = entity.pos
                     x,y = math.floor(x),math.floor(y)+yofs
+                    
+                    if y < 0:
+                        print("Warn: ignoring out-of-y-range tile {0} at {1}/{2}, vis_ofs {3}".
+                              format(entity,x,y,yofs)
+                        )
+                        continue
                     
                     if not grid[y][x] is None:
                         print("Warn: ignoring duplicate tile {0} at {1}/{2}, existing tile is {3}".
@@ -2490,6 +2543,8 @@ class EditorGame(Game):
     def ChangeSettings(self,settings):
         """Set changed level setting and commit them to the
         current game as well"""
+        
+        prev_vis_ofs = self.settings.get("vis_ofs",0)
         self.settings.update(settings)
         
         if not self.level:
@@ -2498,14 +2553,24 @@ class EditorGame(Game):
         # Go through all known settings and apply them to the
         # current level. Actually the generalized settings
         # management should have directly been implemented
-        # into Level ... so it looks a bit hacky.
+        # into the Level class ... so it looks a bit hacky.
+        # Was it really so difficult to foresee that I would
+        # write an editor once?
         print(self.settings)
         from level import Level
         self.level.scroll = [(self.settings.get("scroll",Level.SCROLL_RIGHT))]*len(self.level.autoscroll_speed)
         self.level.autoscroll_speed = [tuple(self.settings.get("autoscroll_speed",
             (0,0)))]*len(self.level.autoscroll_speed)
+            
+        self.level.color = sf.Color(*self.settings.get("color",(0,0,0)))
         
-        print(self.level.scroll,self.level.autoscroll_speed)
+        # vis_ofs may only have positives values
+        vis_ofs = self.settings.get("vis_ofs",0)
+        if vis_ofs < 0:
+            self.settings["vis_ofs"] = vis_ofs = 0
+        
+        self.level.vis_ofs = vis_ofs
+            
         
     def ControlledChangeSettings(self,new):
         """Push a set of changed settings onto the action stack"""
