@@ -2754,8 +2754,6 @@ class EditorGame(Game):
         
     def _PrepareMiniMapVisibleRect(self):
         w,h = self.level.GetLevelVisibleSize()
-        
-        h -= self.level.vis_ofs # XXX what the hell? why do we need this?
 
         self.minimap_visr = self._GenRectangularShape(0,0, w*self.msxp, h*self.msyp,sf.Color(0xff,0xff,0xff,0x50))
         self.minimap_visr.EnableFill(True)
