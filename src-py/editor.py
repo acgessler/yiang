@@ -1629,6 +1629,9 @@ class EditorGame(Game):
                                         self._DrawRectangle((self.fx + (e.pos[0]-self.select_start[0]) * int(len(self.template)!=1),
                                             self.fy + (e.pos[1]-self.select_start[1])* int(len(self.template)!=1),
                                             bb[2],bb[3]),sf.Color(40,0,0))
+                                        
+                if GUIManager.global_focus:
+                    return
                         
                 # Activate the 'DrawMinimap' overlay on M
                 if inp.IsKeyDown(editor_keys["map"][0]) \
