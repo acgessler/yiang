@@ -2166,7 +2166,7 @@ class EditorGame(Game):
                 
             # Draw the current help string in the lower-left border
             h = 16
-            hs = sf.String(self.help_string,Size=h,Font=FontCache.get(h,defaults.font_status))
+            hs = sf.String("({0})    ".format(self.level.name)+self.help_string,Size=h,Font=FontCache.get(h,defaults.font_status))
             hs.SetColor(sf.Color.Black)
             hs.SetPosition(10,defaults.resolution[1]-h-15)
             Renderer.app.Draw(hs)
@@ -2566,6 +2566,7 @@ class EditorGame(Game):
             (0,0)))]*len(self.level.autoscroll_speed)
             
         self.level.color = sf.Color(*self.settings.get("color",(0,0,0)))
+        self.level.name = self.settings.get("name","Level {0}".format(self.level.level))
         
         # vis_ofs may only have positives values
         vis_ofs = self.settings.get("vis_ofs",0)
