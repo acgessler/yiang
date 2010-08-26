@@ -29,7 +29,7 @@ from player import Player
 class Sun(Tile):
     """The sun is a nice sun, for it always sticks to the player position"""
 
-    def __init__(self, text, width, height, posy= -0.3):
+    def __init__(self, text, width, height, posy=-0.3):
         Tile.__init__(self, text, width, height, halo_img="halo_sun.png")
 
         self.posy = posy
@@ -41,14 +41,19 @@ class Sun(Tile):
         return -1000
 
     def Update(self, time_elapsed, time):
-        for entity in self.game._EnumEntities():
-            if isinstance(entity, Player):
-                pos = entity.pos
-                break
-        else:
+        Tile.Update(self,time_elapsed,time)
+        if self.game.GetGameMode() in (Game.EDITOR,Game.EDITOR_HIDDEN):
             return
         
-        self.pos = [self.game.GetLevel().GetOrigin()[0] + 1.0, self.posy]
-        self.SetPosition(self.pos)
+        if not getattr(self,"player",None):
+            for entity in self.game._EnumEntities():
+                if isinstance(entity, Player):
+                    self.player = entity
+                    break
+            else:
+                return
+        
+        pos = [self.player.pos[0], self.posy]
+        self.SetPosition(pos)
             
         

@@ -1,7 +1,11 @@
 
-group re [0-9]+.txt
-	group type file
-		push archive_files ~
+
+push files (expand 60000.txt)
+
+group unpushed
+	group re [0-9]+.txt
+		group type file
+			push archive_files ~
 	
 group re [0-9]+ 
 	build (splice ~ 0 -4) {

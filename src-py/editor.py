@@ -2929,7 +2929,11 @@ class EditorMenu(Drawable):
                 return
             
             cwd = os.getcwd()
-            os.chdir(os.path.join( "..", "src-py" ))
+            
+            try:
+                os.chdir(os.path.join( "..", "src-py" ))
+            except OSError:
+                pass # fails if we're packaged.
             
             if hasattr(mod,"Main"):
                 mod.Main()

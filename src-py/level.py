@@ -401,12 +401,13 @@ class Level:
                 self.window_unassigned.remove(entity)
             
         from game import Game
+        from player import Player
         for entity in self.entities_add:
             pos = entity.pos
             
             lx,ly = self.level_size
             #print(pos,lx,ly,self.origin)
-            if pos[0] >= lx or pos[1] >= ly and self.game.mode == Game.EDITOR:
+            if (pos[0] >= lx or pos[1] >= ly) and self.game.mode == Game.EDITOR and not isinstance(entity,Player):
                 self.SetLevelSize((max(pos[0]+1,lx),max(pos[1]+1,ly)))
             
             self.entities.add(entity)

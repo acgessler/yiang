@@ -76,15 +76,13 @@ def Enable(archives_in = [os.path.join("..","cooked.dat")]):
     # Hack os.listdir()
     def myold(dir): 
         fine = False
+        s = []
         for e in archives:
-            
             s = [n for n in e.ListDir(dir)]
-            if s:
-                return s
                 
         if not exclusive:
-            return old_old(dir)
-        return []
+            s += old_old(dir)
+        return s
                 
                 
     old_old,os.listdir = os.listdir,myold
