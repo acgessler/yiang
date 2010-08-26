@@ -2,7 +2,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=Unicode" />
         <title>Highscore Flyout | YIANG</title>
-        <style type="text/css">
+        <style type="text/css" id="style">
         body
         {
             margin: 0px;
@@ -27,8 +27,7 @@
             text-align: center;
             overflow: hidden;
 			position:absolute;
-			left:2px;top:2px;
-			
+			left:2px;top:2px;			
         }
 		.Header
 		{
@@ -44,16 +43,273 @@
 		.Version
 		{
 		}
+		#hsTable
+		{
+		font-size: 12px;
+		}
+		.hsNumber
+		{
+		}
+		.hsPlayer
+		{/*font-size: 24px;*/
+		}
+		.hsCountry
+		{color:green;border-style:none;
+		}
+		.hsScore
+		{
+		font-size: 24px;
+		}
         </style>
+		<script src="../js/jquery-1.4.2.js" type="text/javascript"></script>
         <script>
+			var iso_country_list = {
+"AF" : "Afghanistan",
+"AL" : "Albania",
+"DZ" : "Algeria",
+"AS" : "American Samoa",
+"AD" : "Andorra",
+"AO" : "Angola",
+"AI" : "Anguilla",
+"AQ" : "Antarctica",
+"AG" : "Antigua and Barbuda",
+"AR" : "Argentina",
+"AM" : "Armenia",
+"AW" : "Aruba",
+"AU" : "Australia",
+"AT" : "Austria",
+"AZ" : "Azerbaijan",
+"BS" : "Bahamas",
+"BH" : "Bahrain",
+"BD" : "Bangladesh",
+"BB" : "Barbados",
+"BY" : "Belarus",
+"BE" : "Belgium",
+"BZ" : "Belize",
+"BJ" : "Benin",
+"BM" : "Bermuda",
+"BT" : "Bhutan",
+"BO" : "Bolivia",
+"BA" : "Bosnia and Herzegovina",
+"BW" : "Botswana",
+"BV" : "Bouvet Island",
+"BR" : "Brazil",
+"IO" : "British Indian Ocean Territory",
+"BN" : "Brunei Darussalam",
+"BG" : "Bulgaria",
+"BF" : "Burkina Faso",
+"BI" : "Burundi",
+"KH" : "Cambodia",
+"CM" : "Cameroon",
+"CA" : "Canada",
+"CV" : "Cape Verde",
+"KY" : "Cayman Islands",
+"CF" : "Central African Republic",
+"TD" : "Chad",
+"CL" : "Chile",
+"CN" : "China",
+"CX" : "Christmas Island",
+"CO" : "Colombia",
+"KM" : "Comoros",
+"CG" : "Congo",
+"CK" : "Cook Islands",
+"CR" : "Costa Rica",
+"HR" : "Croatia",
+"CU" : "Cuba",
+"CY" : "Cyprus",
+"CZ" : "Czech Republic",
+"DK" : "Denmark",
+"DJ" : "Djibouti",
+"DM" : "Dominica",
+"DO" : "Dominican Republic",
+"EC" : "Ecuador",
+"EG" : "Egypt",
+"SV" : "El Salvador",
+"GQ" : "Equatorial Guinea",
+"ER" : "Eritrea",
+"EE" : "Estonia",
+"ET" : "Ethiopia",
+"FO" : "Faroe Islands",
+"FJ" : "Fiji",
+"FI" : "Finland",
+"FR" : "France",
+"GF" : "French Guiana",
+"PF" : "French Polynesia",
+"TF" : "French Southern Territories",
+"GA" : "Gabon",
+"GM" : "Gambia",
+"GE" : "Georgia",
+"DE" : "Germany",
+"GH" : "Ghana",
+"GI" : "Gibraltar",
+"GR" : "Greece",
+"GL" : "Greenland",
+"GD" : "Grenada",
+"GP" : "Guadeloupe",
+"GU" : "Guam",
+"GT" : "Guatemala",
+"GN" : "Guinea",
+"GY" : "Guyana",
+"HT" : "Haiti",
+"HM" : "Heard Island and Mcdonald Islands",
+"HN" : "Honduras",
+"HK" : "Hong Kong",
+"HU" : "Hungary",
+"IS" : "Iceland",
+"IN" : "India",
+"ID" : "Indonesia",
+"IQ" : "Iraq",
+"IE" : "Ireland",
+"IL" : "Israel",
+"IT" : "Italy",
+"JM" : "Jamaica",
+"JP" : "Japan",
+"JO" : "Jordan",
+"KZ" : "Kazakhstan",
+"KE" : "Kenya",
+"KI" : "Kiribati",
+"KW" : "Kuwait",
+"KG" : "Kyrgyzstan",
+"LV" : "Latvia",
+"LB" : "Lebanon",
+"LS" : "Lesotho",
+"LR" : "Liberia",
+"LY" : "Libyan Arab Jamahiriya",
+"LI" : "Liechtenstein",
+"LT" : "Lithuania",
+"LU" : "Luxembourg",
+"MO" : "Macao",
+"MG" : "Madagascar",
+"MW" : "Malawi",
+"MY" : "Malaysia",
+"MV" : "Maldives",
+"ML" : "Mali",
+"MT" : "Malta",
+"MH" : "Marshall Islands",
+"MQ" : "Martinique",
+"MR" : "Mauritania",
+"MU" : "Mauritius",
+"YT" : "Mayotte",
+"MX" : "Mexico",
+"MC" : "Monaco",
+"MN" : "Mongolia",
+"MS" : "Montserrat",
+"MA" : "Morocco",
+"MZ" : "Mozambique",
+"MM" : "Myanmar",
+"NA" : "Namibia",
+"NR" : "Nauru",
+"NP" : "Nepal",
+"NL" : "Netherlands",
+"AN" : "Netherlands Antilles",
+"NC" : "New Caledonia",
+"NZ" : "New Zealand",
+"NI" : "Nicaragua",
+"NE" : "Niger",
+"NG" : "Nigeria",
+"NU" : "Niue",
+"NF" : "Norfolk Island",
+"MP" : "Northern Mariana Islands",
+"NO" : "Norway",
+"OM" : "Oman",
+"PK" : "Pakistan",
+"PW" : "Palau",
+"PA" : "Panama",
+"PG" : "Papua New Guinea",
+"PY" : "Paraguay",
+"PE" : "Peru",
+"PH" : "Philippines",
+"PN" : "Pitcairn",
+"PL" : "Poland",
+"PT" : "Portugal",
+"PR" : "Puerto Rico",
+"QA" : "Qatar",
+"RE" : "Reunion",
+"RO" : "Romania",
+"RU" : "Russian Federation",
+"RW" : "Rwanda",
+"SH" : "Saint Helena",
+"KN" : "Saint Kitts and Nevis",
+"LC" : "Saint Lucia",
+"PM" : "Saint Pierre and Miquelon",
+"VC" : "Saint Vincent and the Grenadines",
+"WS" : "Samoa",
+"SM" : "San Marino",
+"ST" : "Sao Tome and Principe",
+"SA" : "Saudi Arabia",
+"SN" : "Senegal",
+"CS" : "Serbia and Montenegro",
+"SC" : "Seychelles",
+"SL" : "Sierra Leone",
+"SG" : "Singapore",
+"SK" : "Slovakia",
+"SI" : "Slovenia",
+"SB" : "Solomon Islands",
+"SO" : "Somalia",
+"ZA" : "South Africa",
+"GS" : "South Georgia and the South Sandwich Islands",
+"ES" : "Spain",
+"LK" : "Sri Lanka",
+"SD" : "Sudan",
+"SR" : "Suriname",
+"SJ" : "Svalbard and Jan Mayen",
+"SZ" : "Swaziland",
+"SE" : "Sweden",
+"CH" : "Switzerland",
+"SY" : "Syrian Arab Republic",
+"TJ" : "Tajikistan",
+"TH" : "Thailand",
+"TG" : "Togo",
+"TK" : "Tokelau",
+"TO" : "Tonga",
+"TT" : "Trinidad and Tobago",
+"TN" : "Tunisia",
+"TR" : "Turkey",
+"TM" : "Turkmenistan",
+"TC" : "Turks and Caicos Islands",
+"TV" : "Tuvalu",
+"UG" : "Uganda",
+"UA" : "Ukraine",
+"AE" : "United Arab Emirates",
+"GB" : "United Kingdom",
+"US" : "United States",
+"UM" : "United States Minor Outlying Islands",
+"UY" : "Uruguay",
+"UZ" : "Uzbekistan",
+"VU" : "Vanuatu",
+"VE" : "Venezuela",
+"VN" : "Viet Nam",
+"WF" : "Wallis and Futuna",
+"EH" : "Western Sahara",
+"YE" : "Yemen",
+"ZM" : "Zambia",
+"ZW" : "Zimbabwe"}
+
+			var debug = true;
+			function alert(msg)
+			{
+				if (debug)
+					{
+						System.Debug.outputString(msg);
+					}
+			}
+
 			var gDocument = System.Gadget.document;
             function init(){
 				var bgcolor = "black";
 				var size = "big";
+				alert('initialized')
 				//bgcolor = gDocument.Settings.read('bgcolor');
 				setBackground(size,bgcolor);
+				loadPage();
+				//init the hover effects
+				$("#left").hover(function(){$("#left").attr("src","../images/left.hover.png");},function(){$("#left").attr("src","../images/left.png");});	
+				$("#right").hover(function(){$("#right").attr("src","../images/right.hover.png");},function(){$("#right").attr("src","../images/right.png");});
+				//init the pressed effects
+				$("#left").mousedown(function(){$("#left").attr("src","../images/left.pressed.png");});$("#left").mouseup(function(){$("#left").attr("src","../images/left.png");});
+				$("#right").mousedown(function(){$("#right").attr("src","../images/right.pressed.png");});$("#right").mouseup(function(){$("#right").attr("src","../images/right.png");});
                 }
-				
+			
 			function setBackground(size,bgcolor){
 				var oBackground = document.getElementById("imgBackground");
 				if (size == "small") {
@@ -78,15 +334,37 @@
 			// Hide the flyout
 			function hideFlyout(){
 				System.Gadget.Flyout.show = false;}
-			
+				
+			function loadPage(max_items) {
+				max_items = max_items || 3;
+				alert('AJAX go!');
+				$(document).ajaxError(function(event, request, settings){
+					alert('failed to load: '+settings.url)
+					$("#hsTable").empty();
+					$("#hsTable").append("Error requesting page " + settings.url);
+				});
+ 
+				// obtain the highscore list in JSON format using another AJAX request 
+				$.getJSON("http://www.greentoken.de/yiang/php/highscore.php",function(hs) {
+					alert('AJAX done!');
+					$("#hsTable").empty();
+					for (var e in hs.items) {
+						if (e>max_items){break;}
+						var entry = hs.items[e];
+						$("#hsTable").append('<div><span class="hsNumber">'+entry.rank+'.</span> <span class="hsPlayer">'+entry.player+'</span> <span class="hsCountry" title="'+iso_country_list[entry.country]+'">['+entry.country+'] <a class="hsCountry" href="http://www.wikipedia.org/wiki/'+iso_country_list[entry.country]+'"><img class="hsCountry" src="../images/flags/'+entry.country+'.png"></a></span><br><span class="hsScore" title="'+entry.date+'">'+entry.score+'</span></div>');
+					
+					}
+				$("img.hsCountry").css('border-style','none');
+				//$(".hsPlayer").hover(function(){$(".hsPlayer").animate({'font-size':'24px'},'fast');},function(){$(".hsPlayer").animate({'font-size':'18px'},'fast');});
+				});
+			}
         </script>
     </head>
-    <body onload="init();" bgcolor="white" border="2">
+    <body onload="init();">
         <g:background id="imgBackground">
             <div id="gadgetContent">
-				<div class="Header"><a class="Header" href="http://www.greentoken.de/yiang">the YIANG</a> | Gadget</div>
-				<div class="Highscore"><b>Highscore:</b></a><br>{Name1}<br>{Highscore1}<br>{Name2}<br>{Highscore2}<br>{Name3}<br>{Highscore3}</div>
-				<div class="Version"><b>current Version:</b><br>{Version}</div>
+				<div class="Header"><a class="Header" href="http://www.greentoken.de/yiang">the YIANG</a> | Highscore Viewer</div>
+				<div class="Highscore"><b>Highscore:</b><div id="control"><a onClick=""><img id="left" title="Previous" src="../images/left.png" height="18px"></a><a onClick=""><img id="right" title="Next" src="../images/right.png" height="18px"></a></div><div id="hsTable"><br>Loading...<br></div></div>
 			</div>
 		</g:background>
     </body>

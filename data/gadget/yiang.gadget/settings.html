@@ -1,0 +1,86 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=Unicode" />
+        <title>Main Gadget | YIANG</title>
+        <style type="text/css">
+        body
+        {	
+			width:200px;
+			height:150px;
+            margin: 10px;
+            font-family: verdana;
+            font-size: 15px;
+			overflow: hidden;
+			text-align:center;
+        }
+		a
+		{
+		text-decoration:None;
+		color:black;
+		}
+		.black{background-color:black;color:white;width:80px;text-align:left;
+		}
+		.blue{background-color:blue;color:white;width:80px;text-align:left;
+		}
+		.green{background-color:green;color:white;width:80px;text-align:left;
+		}
+        </style>
+        <script>
+			//var gDocument = System.Gadget.document;
+			System.Gadget.onSettingsClosing = SettingsClosing;
+			
+            function init(){
+				var colornr = System.Gadget.Settings.read('color'); // 0,1,2
+				var opinion = System.Gadget.Settings.read('opinion') // true /false
+				document.all.color[colornr].checked = true
+				document.all.opinion.checked = opinion
+                }
+				
+			function setBackground(size,bgcolor){
+				var oBackground = document.getElementById("imgBackground");
+				if (size == "small") {
+				document.body.style.width = "160px";
+				document.body.style.height = "150px";
+				document.getElementById("gadgetContent").style.width = "146px";
+				document.getElementById("gadgetContent").style.height = "134px";
+				}else{if (size=="big"){
+				document.body.style.width = "250px";
+				document.body.style.height = "200px";
+				document.getElementById("gadgetContent").style.width = "230px";
+				document.getElementById("gadgetContent").style.height = "180px";}}
+				oBackground.src = "images/"+size+bgcolor+".png";
+				}
+			function SettingsClosing(event){
+				var colornr;
+				if (event.closeAction == event.Action.commit){
+				for (var i = 0;i<=2;i++){
+					if (document.all.color[i].checked == true){
+						colornr = i;break;}}
+				var opinion = document.all.opinion.checked
+				System.Gadget.Settings.write("color", colornr);
+				System.Gadget.Settings.write("opinion", opinion);}
+				event.cancel = false;
+				}
+
+			// Show the flyout
+			function showFlyout(flyoutname){
+				System.Gadget.Flyout.file = "flyouts/"+flyoutname+".html";
+				System.Gadget.Flyout.show = true;}
+			
+			
+			// Hide the flyout
+			function hideFlyout(){
+				System.Gadget.Flyout.show = false;}
+			
+        </script>
+    </head>
+    <body onload="init()">
+            <div id="colorSelector">
+				<b>Color:</b><br>
+				<div class="black"><input type="radio" name="color" value="black"> Black  </div><div class="blue"><input type="radio" name="color" value="blue"> Blue  </div><div class="green"><input type="radio" name="color" value="green"> Green  </div><br>
+			</div>
+			<div id="stuff">
+			Do you like<a class="Header" href="http://www.greentoken.de/yiang"> the YIANG</a>?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="like" name="opinion">
+			</div>
+    </body>
+</html>
