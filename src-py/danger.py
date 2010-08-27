@@ -46,6 +46,7 @@ class DangerousBarrel(AnimTile):
     def GetVerboseName(self):
         return "a deathly barrel (it's hilarious!)"
 
+
 class Mine(AnimTile):
     """This entity is an animated mine which kills
     the player after the animation of the explosion ended"""
@@ -90,6 +91,7 @@ class Mine(AnimTile):
         midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
         distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
         return False if distance >= (self.radius**2) else True
+    
     
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but

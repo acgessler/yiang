@@ -41,6 +41,16 @@ class MarkupHandler:
         dim = entity.dim[0]*0.5,entity.dim[1]*0.5
         
         return self.editor._TileToMouseCoords(entity.pos[0]+dim[0],entity.pos[1]+dim[1])
+    
+    
+    def ExtendsInMouseCoords(self,entity=None):
+        entity = entity or self.entity
+        
+        # Don't use GetBoundingBox(), it may be overridden to do any bogus it likes to.
+        dim = entity.dim
+        return self.editor._TileToMouseCoords(*entity.pos) + self.editor._TileToMouseCoords(
+            entity.pos[0]+dim[0],entity.pos[1]+dim[1]
+        )
         
         
 from enemy import SmallTraverser
@@ -119,6 +129,27 @@ class MarkupHandler_Mine(MarkupHandler):
         self.editor.DrawSingle(sf.Shape.Circle(cpos[0],cpos[1],
             self.entity.radius*defaults.tiles_size_px[0],cola, 2 ,colb
         ))
+        
+        
+from danger import FakeDangerousBarrel
+class MarkupHandler_FakeDangerousBarrel(MarkupHandler):
+        
+    @staticmethod
+    def GetClasses():
+        return (FakeDangerousBarrel,)
+
+    def __call__(self):
+        if self.editor.layer != editor.LAYER_NORMAL:
+            return
+        
+        colb = sf.Color(0xff,0xff,0xff,0xff)
+        cpos = self.CenterInMouseCoords()
+        
+        x,y,xx,yy = self.ExtendsInMouseCoords()
+        xx,yy = xx-1,yy-1
+        self.editor.DrawSingle(sf.Shape.Rectangle(x,y,xx,yy,sf.Color(0,0,0,0), 1 ,colb ))
+        self.editor.DrawSingle(sf.Shape.Line(x,y,xx,yy,1 ,colb ))
+        self.editor.DrawSingle(sf.Shape.Line(xx,y, x,yy, 1 ,colb ))
     
     
 class Connector(MarkupHandler):
@@ -196,6 +227,7 @@ def GetHandlers():
         MarkupHandler_Teleport,
         MarkupHandler_BackgroundLight,
         MarkupHandler_Mine,
+        MarkupHandler_FakeDangerousBarrel,
     ]
     
         

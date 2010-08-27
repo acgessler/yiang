@@ -55,7 +55,7 @@ class LevelUp(Tile):
             else:
                 self.game.NextLevel()
 
-            raise NewFrame()
+            #raise NewFrame()
             
         return Entity.ENTER
 
