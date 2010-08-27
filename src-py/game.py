@@ -184,7 +184,9 @@ class Game(Drawable):
     
     def GetLowerStatusBarHeight(self):
         """Get the height of the lower status bar, in tiles"""
-        return max(1.5, (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 - self.level.GetLevelVisibleSize()[1]))
+        return max(1.5, (defaults.tiles[1] - defaults.status_bar_top_tiles - 1.0 -
+            (self.level.GetLevelVisibleSize()[1] if self.level else 0)
+        ))
     
     def _DrawHearts(self):
             
