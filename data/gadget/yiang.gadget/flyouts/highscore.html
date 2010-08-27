@@ -38,7 +38,7 @@
 		.Highscore
 		{
 		font-size: 18px;
-		text-decoration:none;
+		text-decoration:none;padding:0px;margin:0px;
 		}
 		.Version
 		{
@@ -60,6 +60,8 @@
 		{
 		font-size: 24px;
 		}
+		/*select{font-size: 8px;}
+		#control{padding:2px;margin:0px;}*/
         </style>
 		<script src="../js/jquery-1.4.2.js" type="text/javascript"></script>
         <script>
@@ -335,9 +337,26 @@
 			function hideFlyout(){
 				System.Gadget.Flyout.show = false;}
 				
-			function loadPage(max_items) {
+			function nextPage(){
+				}
+			
+			function previousPage(){
+				}
+			
+			function newPage(direction){
+				if (direction == 'left'){
+					document.getElementById('page').selectedIndex -= 1;}
+				else if (direction == 'right'){
+					document.getElementById('page').selectedIndex += 1;}
+				if (document.getElementById('page').selectedIndex == -1){
+					document.getElementById('page').selectedIndex = 0;}
+				loadPage();}
+
+				
+			function loadPage(max_items,page) {
 				max_items = max_items || 3;
-				alert('AJAX go!');
+				page = page || document.getElementById('page').selectedIndex;
+				alert('AJAX go!Page: '+page+'Max items: '+max_items);
 				$(document).ajaxError(function(event, request, settings){
 					alert('failed to load: '+settings.url)
 					$("#hsTable").empty();
@@ -345,14 +364,16 @@
 				});
  
 				// obtain the highscore list in JSON format using another AJAX request 
-				$.getJSON("http://www.greentoken.de/yiang/php/highscore.php",function(hs) {
-					alert('AJAX done!');
+				$.getJSON("http://www.greentoken.de/yiang/php/highscore.php?itemcnt="+max_items+"&page="+page,function(hs) {
 					$("#hsTable").empty();
 					for (var e in hs.items) {
 						if (e>max_items){break;}
 						var entry = hs.items[e];
 						$("#hsTable").append('<div><span class="hsNumber">'+entry.rank+'.</span> <span class="hsPlayer">'+entry.player+'</span> <span class="hsCountry" title="'+iso_country_list[entry.country]+'">['+entry.country+'] <a class="hsCountry" href="http://www.wikipedia.org/wiki/'+iso_country_list[entry.country]+'"><img class="hsCountry" src="../images/flags/'+entry.country+'.png"></a></span><br><span class="hsScore" title="'+entry.date+'">'+entry.score+'</span></div>');
-					
+					$('select').empty();
+					for(var i = 0;i<hs.pages;i++){
+						$('select').append('<option>'+(i+1)+'</option>');}
+					document.getElementById('page').selectedIndex = hs.thispage;
 					}
 				$("img.hsCountry").css('border-style','none');
 				//$(".hsPlayer").hover(function(){$(".hsPlayer").animate({'font-size':'24px'},'fast');},function(){$(".hsPlayer").animate({'font-size':'18px'},'fast');});
@@ -364,7 +385,7 @@
         <g:background id="imgBackground">
             <div id="gadgetContent">
 				<div class="Header"><a class="Header" href="http://www.greentoken.de/yiang">the YIANG</a> | Highscore Viewer</div>
-				<div class="Highscore"><b>Highscore:</b><div id="control"><a onClick=""><img id="left" title="Previous" src="../images/left.png" height="18px"></a><a onClick=""><img id="right" title="Next" src="../images/right.png" height="18px"></a></div><div id="hsTable"><br>Loading...<br></div></div>
+				<div class="Highscore"><span id="control"><a onClick="newPage('left')"><img id="left" title="Previous" src="../images/left.png" height="18px"></a>  <select id="page" name="page" onchange="newPage()" size="1"><option>1</option></select>  <a onClick="newPage('right')"><img id="right" title="Next" src="../images/right.png" height="18px"></a></span><div id="hsTable"><br>Loading...<br></div></div>
 			</div>
 		</g:background>
     </body>
