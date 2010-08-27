@@ -47,6 +47,7 @@ from score import ScoreTile
 from player import Player
 from keys import KeyMapping
 from tile import Tile,AnimTile,TileLoader
+from level import Level
 
 from minigui import Component, Button, ToggleButton, Label, GUIManager, EditControl
 
@@ -2097,7 +2098,7 @@ class EditorGame(Game):
         mx,my = args if len(args)==2 else args[0]
         
         return ((mx-offset[0])*defaults.tiles_size_px[0],(my + 
-            defaults.status_bar_top_tiles)*
+            defaults.status_bar_top_tiles + (top_scroll_distance if self.level.scroll[0] & Level.SCROLL_TOP else 0 ))*
             defaults.tiles_size_px[1])
     
     def _DoInGameHelpers(self):
@@ -2446,9 +2447,7 @@ class EditorGame(Game):
         
         # Find out if there are other entities at this position, if yes, remove them.
         others = [e for e in self.level.EnumEntitiesAtGrid(entity.pos)
-             if   int(e.pos[0])==int(entity.pos[0]) 
-             and  int(e.pos[1])==int(entity.pos[1])
-             and  hasattr(e,"editor_ccode")
+             if   hasattr(e,"editor_ccode")
         ]
         
         if others and entity in others:

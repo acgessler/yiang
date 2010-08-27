@@ -1,0 +1,29 @@
+<out> = Level(<level>,<game>,<raw>,color=(0, 0, 30),vis_ofs=5,autoscroll_speed=(0.1, 0),name='Too hot',scroll=2,)
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bD9.  .  .  .  .  bD9
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  bD9.  .  .  .  .  .  .  .  bD9.  .  .  .  .  bD9.  .  .  bD9.  .  .  .  .  .  bD9
+bD9.  .  .  .  .  bD9.  bD9.  .  .  .  .  bD9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS1yS1yS1yS1_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BC5BC5.  BC5.  yKEyD9.  .  .  .  .  .  .  .  yS1yS1yS1yS1bD9.  .  BC5.  BC5.  .  .  .  .  .  .  .  .  .  yD9.  .  .  yB5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BC5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS1yS1yS1.  BC5.  BC5BD0BD0BD0BD0BD0.  .  .  .  yD1yD1yD1yD1yD1yB5
+.  .  .  .  .  _PL.  .  .  .  .  .  .  yD9.  .  .  .  .  .  yD9.  .  .  .  yC8.  .  .  .  .  .  .  .  .  yS1yS1yS1yS1yS1.  BC5.  .  .  .  .  .  .  .  .  .  .  .  .  .  yB5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yC4.  .  .  .  .  .  .  .  .  .  .  .  yS1BC5yS1BC5.  .  .  .  .  .  .  .  .  .  .  .  .  .  yB5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yD9
+.  .  .  .  yD9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yC9.  .  .  bD9.  .  .  .  .  bD9.  .  .  BC5yS1yS1.  bD9.  .  .  .  .  .  .  .  .  .  .  .  yB5
+.  .  .  yD9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yD9.  yC4.  .  yC8.  .  .  .  .  .  .  .  .  .  BC5.  BC5yS1.  .  .  .  .  .  .  .  .  yD9.  .  .  yB5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yD9
+yD9.  .  .  yA1yA5yA5yA5yA5yA5yA5yA5yA2.  .  .  .  yBU.  .  .  .  .  .  .  yC4.  .  yC4.  .  .  .  .  .  .  .  .  .  BC5.  BC5yS1yS1.  .  .  .  .  .  .  .  .  .  .  .  yB5
+.  .  .  .  yC5yC5yC5yC5yC5yC5yC5yC5yC5.  .  .  .  .  .  .  .  .  .  .  .  yC4.  .  yC9.  .  .  .  .  .  .  oC9.  .  BC5.  BC5.  yS1yS1.  .  .  .  oCB.  .  .  .  .  .  yB5
+.  .  .  .  yC5yC5yC5yC5oD9yC5yC5yC5yC5.  .  .  .  .  .  .  .  .  .  .  .  yC4.  .  yC4.  .  yC8.  .  .  .  oC4.  .  BC5.  BC5.  yS1yS1.  .  yD9.  oC4.  .  .  .  .  .  yB5
+.  .  .  .  yC5yC5yC5yC5yC5yC5yC5yC5yC5.  oD9.  .  .  .  .  yD9.  .  .  .  yC4.  .  yC4.  .  yC4.  .  .  .  oC4.  .  BC5.  BC5.  .  yS1yS1.  .  .  oC4.  .  .  .  .  .  yB5
+.  yS0yS0.  yC5yC5yC5yC5yC5yC5yC5yC5yC5.  .  .  yA5yA5yA5yA5yA5yA5yA5yA2.  yC4yD9.  yC4.  .  yC9.  .  .  .  oC4.  .  BC5.  BC5.  .  yS1yS1.  .  .  oC4.  .  yD9.  .  .  yB5
+.  yS0yS0.  yC5yC5yC5yC5yC5oD9yC5yC5yC5.  .  .  yC5yC5yC5yC5yC5yC5yC5yC5.  yC4.  .  yC4yC8.  yC4.  .  .  .  oC4.  .  .  .  .  .  .  .  yS1yS1.  .  oC4.  .  .  .  .  .  yB5.  .  .  yS0.  .  .  .  .  .  .  .  yS0
+.  yS0yS0.  yC5yC5yC5yC5yC5yC5yC5yC5yC5.  .  .  yC5yC5yC5yC5yC5yC5yC5yC5oD9yC4.  .  yC4.  oD9yC4.  .  .  .  oC4.  .  .  .  .  .  .  oD9yS1yS1.  .  oC4.  .  yMI.  .  .  yB5.  .  yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1
+oD9yS0yS0.  yC5yC5yC5yC5yC5yC5yC5yC5yC5.  .  .  yC5yC5yC5yC5yC5yC5yC5yC5.  yC4.  .  yC4.  .  yC4yC9.  .  .  oC4.  oD9.  .  .  .  .  .  yS1yS1.  .  oC4.  oD9.  .  .  .  yB5.  .  yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1yS1
+yA1yA5yA5yA5yC5yC5yC5yC5yC5yC5yC5yC5yC5.  yS0.  yC5yC5yC5yC5yC5yC5yC5yC5.  yC4yA1.  yA5.  yA5yA5yA5oC8oD9.  oC4.  .  .  .  .  .  .  oC8yS1yS1.  .  oC4.  .  yAByAByAByAByB5
+yA1yA1yA5yA5yC5yC5yC5yC5yC5yC5yC5yC5yC5.  yS0.  yC5yC5yC5yC5yC5yC5yC5yC5.  yC4yC5.  yC5.  yC5yC5yC5oC4.  .  oC4.  yS0.  yS0.  yS0.  oC4yS1yS1.  .  oC4.  .  .  .  .  .  yDO.  yMI.  .  yMI.  .  yMI.  .  yMI.  .  yMI.  .  yMI.  .  .  .  .  yFI
+yA1yA1yA5yA5yC5yC5yC5yC5yC5yC5yC5yC5yC5yCE.  .  yC5yC5yC5yC5yC5yC5yC5yC5.  yC4yC5.  yC5.  yC5yC5yC5oC4.  .  oC4.  .  .  .  .  .  .  oC4yS1yS1.  .  oC4
+yA1yA1yA5yA5yC5yC5yC5yC5yC5yC5yC5yC5yC5.  .  .  yC5yC5yC5yC5yC5yC5yC5yC5.  yC4yC5.  yC5.  yC5yC5yC5oC4.  .  oC4yCE.  .  yCE.  yCE.  oC4yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yC5.  yC5.  yC5yC5yC5.  .  .  .  .  .  .  .  .  .  .  .  yS1.  .  .  oC4.  .  .  .  .  .  _B5.  .  .  .  .  .  .  .  .  .  .  .  .  .  yC5.  .  .  .  .  .  .  yC5
+
+
+
+

@@ -720,8 +720,6 @@ class Player(Entity):
                 self.ordered_respawn_positions.pop()
             
         else:    
-                
-            print(self.respawn_positions)
             for rpos,color in sorted( (self.respawn_positions if enable_respawn_points is True else ()) ,key=lambda x:x[0][0],reverse=True):
                 if rpos[0] > self.pos[0] or mathutil.Length((rpos[0] - self.pos[0], rpos[1] - self.pos[1])) < min_distance:
                     continue # this is to protect the player from being
