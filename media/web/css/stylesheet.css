@@ -161,6 +161,18 @@ img.preview_img {
 	border: #858585 1px solid;
 }
 
+a.choosep {
+	
+}
+
+.highscore {
+	color: #a0a0a0;
+}
+
+#highscore_pageselect {
+	font-family: "Courier New", monospace;
+    font-size: 13px;
+}
 
 
 

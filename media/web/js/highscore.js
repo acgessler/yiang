@@ -7,25 +7,83 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 
-function loadPage(index) {
+function loadPage(index,itemcnt) {
 	index = index  || 0;
+	itemcnt = itemcnt || 30;
 
 	 $(document).ajaxError(function(event, request, settings){
    		alert("<li>Error requesting page " + settings.url + "</li>");
  	});
  
 	// obtain the highscore list in JSON format using another AJAX request 
-	$.getJSON("./php/highscore.php",function(data) {
+	$.getJSON("./php/highscore.php?itemcnt=" + itemcnt + "&page="+index,function(data) {
 		
-		$("#highscore_pageselect").html("<b>"+data.pages+"</b>");
+		var cnt = data.pages, pselect = "<b>";
+		
+		function add(n) {
+			pselect += (n==index ? "<b>"+n+"<b>" : "<a class=\"choosep\" id=\""+n+"\">" + n + "</a>" )+"&nbsp;";			
+		};	
+		var min = Math.min, max = Math.max;
+		
+		var pad = 1, end = 3;
+		if (index > end) {
+			for (a=0; a < min(end,cnt); ++a) {
+				add(a);
+			}
+			pselect += "...&nbsp;"
+		}
+		
+		for (a = max(index - pad, 0); a <= min(cnt,index + pad); ++a) {
+			add(a);
+		}
+		
+		if (cnt-end > index + pad) {
+			pselect += "...&nbsp;"
+			for (a = max(cnt - end, 0); a < cnt; ++a) {
+				add(a);
+			}
+		}
+		
+		pselect += "</>"
+		$("#highscore_pageselect").html(pselect);
+		$(".choosep").click(function() {
+			$("#hs tr").not("#hs_head").remove();
+			loadPage( parseInt( $(this).attr("id") ) );
+		})
 		
 		for (var e in data.items) {
 			var entry = data.items[e];
-			$("#hs").append("<tr><td>"+entry.rank
-				+"</td><td>"+entry.player
-				+"</td><td>"+entry.country
-				+"</td><td>"+entry.score+"</td></tr>"
-			);
+			var open = null, close = null;
+			
+			switch (entry.rank) {
+				case 0: 
+					open = '<font color="#cdcd00"><b><u>';
+					close = "</u></b></font>";
+					break;
+				case 1: 
+					open = '<font color="#cdcdcd"><b>';
+					break;
+				case 2: 
+					open = '<font color="#cd6020"><b>';
+					break;
+				default:
+					close = "";
+			}
+			
+			if (close === null) {
+				close = "</b></font>";
+			}
+			if (open === null) {
+				open = "";
+			}
+			
+			var app = "<tr><td>"+open+entry.rank+close
+				+"</td><td>"+open+entry.player+close
+				+"</td><td>"+open+entry.country+close
+				+"</td><td>"+open+entry.score+close+
+			"</td></tr>";
+				
+			$("#hs").append(app);
 		}
 	});
 }

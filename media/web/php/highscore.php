@@ -40,7 +40,7 @@ items      is the result set, or an empty set of the requested page does not exi
   country    is an iso country code
   date       is an iso date plus time
   rank       is zero-based
-  player     is maximally 32 characters long, alphanumerics plus innocuous special characters
+  player     is maximally 32 characters long, nonempty, alphanumerics plus innocuous special characters
 
 
 Errors
