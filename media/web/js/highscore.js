@@ -21,7 +21,7 @@ function loadPage(index,itemcnt) {
 		var cnt = data.pages, pselect = "<b>";
 		
 		function add(n) {
-			pselect += (n==index ? "<b>"+n+"<b>" : "<a class=\"choosep\" id=\""+n+"\">" + n + "</a>" )+"&nbsp;";			
+			pselect += (n==index ? "<b>"+(n+1)+"<b>" : "<a class=\"choosep\" id=\""+n+"\">" + (n+1) + "</a>" )+"&nbsp;";			
 		};	
 		var min = Math.min, max = Math.max;
 		
@@ -33,7 +33,7 @@ function loadPage(index,itemcnt) {
 			pselect += "...&nbsp;"
 		}
 		
-		for (a = max(index - pad, 0); a <= min(cnt,index + pad); ++a) {
+		for (a = max(index - pad, 0); a < min(cnt,index + pad); ++a) {
 			add(a);
 		}
 		
@@ -80,7 +80,7 @@ function loadPage(index,itemcnt) {
 			var app = "<tr><td>"+open+entry.rank+close
 				+"</td><td>"+open+entry.player+close
 				+"</td><td>"+open+entry.country+close
-				+"</td><td>"+open+entry.score+close+
+				+"</td><td>"+open+entry.score/100000+close+
 			"</td></tr>";
 				
 			$("#hs").append(app);
