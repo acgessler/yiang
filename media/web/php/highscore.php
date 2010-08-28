@@ -37,7 +37,7 @@ if ($page === null) {
 // Debugging, comment later
 $myFile = "log1.txt";
 $fh = fopen($myFile, 'a') or die("can't open file");
-fwrite($fh, "GET page=$page itemcnt=$itemcnt");
+fwrite($fh, "GET page=$page itemcnt=$itemcnt\n");
 fclose($fh);
 
 
