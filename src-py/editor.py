@@ -2056,7 +2056,7 @@ class EditorGame(Game):
         if not force and not which in self.level.EnumAllEntities():
             print("Reusing existing entity {0}, no need to clone".format(which))
             return which
-        
+            
         if not hasattr(which,"editor_shebang"):
             print("Failure cloning {0} - no shebang record found".format(which))
             return None
