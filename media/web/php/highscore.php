@@ -2,18 +2,52 @@
 
 <?php
 
-/* API:
+/* 
+
+--------------------------------------------------------------------------------
+API:
+--------------------------------------------------------------------------------
+
+Parameters (HTTP GET)
+==========
 
 itemcnt=n
 
-Specify number of items per page. Must be a valid positive integer.
+  Specify number of items per page. Must be a valid positive integer.
 
 
 page=n
 
-Specify zero-based page index. Must be a valid and positive integer. 
-Empty or non-existent pages yield an empty result set, too.
+  Specify zero-based page index. Must be a valid and positive integer. 
+  Empty or non-existent pages yield an empty result set, too.
 
+
+
+Return (JSON)
+======
+
+... sample:
+{ "pages":5000, "thispage":0, "items": [
+  { "rank": 0, "player": "U1fq-ppZeiE", "score": 99985222, "country": "GB", "date": "1861-03-10 15:09:14" },
+  { "rank": 1, "player": "ymZrAcGf", "score": 99985128, "country": "AU", "date": "1939-12-11 02:06:56" }
+]}
+
+thispage   echoes the given or assumed value for `page`
+pages      is the number of highscore pages for this itemcnt
+items      is the result set, or an empty set of the requested page does not exist
+
+  score      is specified in 1/100000 USD
+  country    is an iso country code
+  date       is an iso date plus time
+  rank       is zero-based
+  player     is maximally 32 characters long, alphanumerics plus innocuous special characters
+
+
+Errors
+======
+
+In case of failure, normal PHP errors are printed out. In such cases JSON 
+parsing is doomed to fail too, so this is the best sign.
 
 
 */
