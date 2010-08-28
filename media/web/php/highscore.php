@@ -21,6 +21,11 @@ page=n
   Specify zero-based page index. Must be a valid and positive integer. 
   Empty or non-existent pages yield an empty result set, too.
 
+byname=<name>
+
+  If present, specifies the user-name to look for and returns the
+  site which it can be found on. The page parameters is ignored then.
+  If the user is not found in the database,
 
 
 Return (JSON)
@@ -54,6 +59,12 @@ parsing is doomed to fail too, so this is the best sign.
 include 'config.php';
 include 'opendb.php';
 
+
+function dbfail($occasion) {
+	die("Failure to query database: #$occasion");
+}
+
+
 $itemcnt = $_GET["itemcnt"];
 if (!$itemcnt ) {
 	$itemcnt = 20;	
@@ -63,6 +74,8 @@ if ($itemcnt > 1000) {
 	die("itemcnt over 1000 not supported");
 }
 
+$byname = $_GET["byname"];
+
 $page = $_GET["page"];
 if ($page === null) {
 	$page = 0;
@@ -71,17 +84,33 @@ if ($page === null) {
 // Debugging, comment later
 $myFile = "log1.txt";
 $fh = fopen($myFile, 'a') or die("can't open file");
-fwrite($fh, "GET page=$page itemcnt=$itemcnt\n");
+fwrite($fh, "GET page=$page itemcnt=$itemcnt byname=$byname\n");
 fclose($fh);
 
 
 $query = "SELECT COUNT(*) FROM entries;"; 
-$result = mysql_query($query) or die ("Querying the database fails #1");
+$result = mysql_query($query) or dbfail(1);
 $pages = (int) ( mysql_result($result, 0) / $itemcnt );
+
+if ($byname) {
+	$byname = mysql_real_escape_string( $byname );
+	$query = "SELECT player,score FROM entries WHERE player='$byname'";
+	$result = mysql_query($query) or dbfail(3);
+	
+	$row = mysql_fetch_array($result,MYSQL_ASSOC);
+	if (!$row) {
+		echo "{}";
+		return;
+	}
+
+	$query = "SELECT count(*) FROM entries WHERE score > {$row['score']}";
+	$result = mysql_query($query) or dbfail(6);
+	$page = (int) ( mysql_result($result, 0) / $itemcnt );
+}
 
 $minrank = $itemcnt*$page;
 $query = "SELECT player,score,country,date FROM entries ORDER BY score DESC LIMIT $itemcnt OFFSET $minrank;";
-$result = mysql_query($query) or die ("Querying the database fails #2");
+$result = mysql_query($query) or dbfail(2);
 
 $json = "{ \"pages\":$pages, \"thispage\":$page, \"items\": [\n";
 $have = 0;

@@ -17,7 +17,6 @@ function loadPage(index,itemcnt) {
  
 	// obtain the highscore list in JSON format using another AJAX request 
 	$.getJSON("./php/highscore.php?itemcnt=" + itemcnt + "&page="+index,function(data) {
-		
 		var cnt = data.pages, pselect = "<b>";
 		
 		function add(n) {
@@ -26,14 +25,14 @@ function loadPage(index,itemcnt) {
 		var min = Math.min, max = Math.max;
 		
 		var pad = 1, end = 3;
-		if (index > end) {
-			for (a=0; a < min(end,cnt); ++a) {
-				add(a);
-			}
-			pselect += "...&nbsp;"
+		for (a=0; a < min(end,cnt,index-pad); ++a) {
+			add(a);
 		}
 		
-		for (a = max(index - pad, 0); a < min(cnt,index + pad); ++a) {
+		if (index > end) {
+			pselect += "...&nbsp;"
+		}
+		for (a = max(index - pad, 0); a < min(cnt,index + pad+1); ++a) {
 			add(a);
 		}
 		
