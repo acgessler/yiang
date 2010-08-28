@@ -6,21 +6,34 @@
 // NO redistribution, reuse or change without written permission.
 ///////////////////////////////////////////////////////////////////////////////////
 
+String.prototype.trim = function () {
+    return this.replace(/^\s*/, "").replace(/\s*$/, "");
+}
 
-function loadPage(index,itemcnt) {
+function cleanupPage() {
+	// wipe the entire highscore table 
+	$("#hs tr").not("#hs_head").remove();
+}
+
+function loadPage(index,itemcnt,byname,previous) {
 	index = index  || 0;
 	itemcnt = itemcnt || 30;
-
-	 $(document).ajaxError(function(event, request, settings){
-   		alert("<li>Error requesting page " + settings.url + "</li>");
- 	});
  
 	// obtain the highscore list in JSON format using another AJAX request 
-	$.getJSON("./php/highscore.php?itemcnt=" + itemcnt + "&page="+index,function(data) {
+	$.getJSON("./php/highscore.php?itemcnt=" + itemcnt + "&page="+index+(byname ? ("&byname="+byname) : "" ),function(data) {		
 		var cnt = data.pages, pselect = "<b>";
 		
+		if (byname) {
+			if ($.isEmptyObject(data)) {
+				return;
+			}
+			else {
+				index = data.thispage;
+			}
+		}
+		
 		function add(n) {
-			pselect += (n==index ? "<b>"+(n+1)+"<b>" : "<a class=\"choosep\" id=\""+n+"\">" + (n+1) + "</a>" )+"&nbsp;";			
+			pselect += (n==index ? "<i>"+(n+1)+"</i>" : "<a class=\"choosep\" id=\""+n+"\">" + (n+1) + "</a>" )+"&nbsp;";			
 		};	
 		var min = Math.min, max = Math.max;
 		
@@ -43,12 +56,23 @@ function loadPage(index,itemcnt) {
 			}
 		}
 		
-		pselect += "</>"
+		pselect += "</b>"
 		$("#highscore_pageselect").html(pselect);
-		$(".choosep").click(function() {
-			$("#hs tr").not("#hs_head").remove();
-			loadPage( parseInt( $(this).attr("id") ) );
-		})
+		
+		$("#search").keydown(function(e){
+	         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+	             e.preventDefault();
+	             
+	             cleanupPage();
+	             loadPage(index, itemcnt, $(this).val().trim());
+	   
+	         }
+	     });
+		 
+		 $(".choosep").click(function(){
+	         cleanupPage();
+	         loadPage(parseInt($(this).attr("id")));
+	     });
 		
 		for (var e in data.items) {
 			var entry = data.items[e];
@@ -67,6 +91,11 @@ function loadPage(index,itemcnt) {
 					break;
 				default:
 					close = "";
+			}
+			
+			if (entry.player === byname) {
+				open = '<font color="#ff0000"><b><u>';
+				close = null;
 			}
 			
 			if (close === null) {
@@ -91,5 +120,9 @@ function loadPage(index,itemcnt) {
 $(document).ready(function(){
 	//main(); // in main.js, fires the visual fx logic
 	
+	$(document).ajaxError(function(event, request, settings){
+   		alert("<li>Error requesting page " + settings.url + "</li>");
+ 	});
+	 
 	loadPage();
 })

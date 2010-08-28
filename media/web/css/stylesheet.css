@@ -171,8 +171,15 @@ a.choosep {
 
 #highscore_pageselect {
 	font-family: "Courier New", monospace;
-    font-size: 13px;
+    font-size: 15px;
 }
+
+
+hr {
+	background-color: #202020;
+	color: #404040;
+}
+
 
 
 
