@@ -25,7 +25,8 @@ byname=<name>
 
   If present, specifies the user-name to look for and returns the
   site which it can be found on. The page parameters is ignored then.
-  If the user is not found in the database,
+  If the user is not found in the database, an empty json object
+  is returned.
 
 
 Return (JSON)
