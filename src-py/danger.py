@@ -31,8 +31,8 @@ class DangerousBarrel(AnimTile):
     """This entity is an animated barrel which kills
     the player immediately when he touches it"""
 
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False):
-        AnimTile.__init__(self,text,height,frames,speed)
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,hideontouch=False,**kwargs):
+        AnimTile.__init__(self,text,height,frames,speed,**kwargs)
 
         self.hideontouch = hideontouch
         if randomize is True:
@@ -50,8 +50,8 @@ class DangerousBarrel(AnimTile):
 class Mine(AnimTile):
     """This entity is an animated mine which kills
     the player after the animation of the explosion ended"""
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=3,hideontouch=False):
-        AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None)
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=3,hideontouch=False,**kwargs):
+        AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None,**kwargs)
         self.mine_activated = False
         self.radius = radius
         self.hideontouch = hideontouch
@@ -99,8 +99,8 @@ class FakeDangerousBarrel(AnimTile):
     erases itself and can thus be used for secret
     doors ... stuff like that. """
 
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.75):
-        AnimTile.__init__(self,text,height,frames,speed)
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.75,**kwargs):
+        AnimTile.__init__(self,text,height,frames,speed,**kwargs)
 
         if randomize is True:
             self.GotoRandom()

@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO,collision=Entity.ENTER)
+<out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO,collision=Entity.ENTER,double=True)
  
 [   ]
 [   ]

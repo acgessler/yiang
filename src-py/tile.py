@@ -49,7 +49,17 @@ class Tile(Entity):
     global_dim_cache = {} # stores (dim,ofs) tuples
     global_str_cache = {} # stores sf.String's indexed by (str,rsize) pairs
            
-    def __init__(self,text="<no text specified>",width=None,height=None,collision=Entity.BLOCK,draworder=10,rsize=None,halo_img="default",width_ofs=0,height_ofs=0):
+    def __init__(self,
+        text="<no text specified>",
+        width=None,
+        height=None,
+        collision=Entity.BLOCK,
+        draworder=10,
+        rsize=None,
+        halo_img="default",
+        width_ofs=0,
+        height_ofs=0,
+        double=False):
         
         # Note: the 'constants' from defaults may change during startup, but 
         # this file may get parsed BEFORE this happens, so we can't
@@ -66,6 +76,7 @@ class Tile(Entity):
         self.rsize = rsize
         self.collision = collision
         self.text = text
+        self.double = double
             
         self.draworder = draworder
         self.halo_img = halo_img
@@ -260,11 +271,20 @@ class Tile(Entity):
 
     def _Recache(self):
         """Cache the tile string from self.text with font size self.rsize"""
+        double = self.double
+        rsize = self.rsize#self.rsize*0.5 if double else self.rsize
+            
         res = Tile.global_str_cache.get((self.rsize,self.text))
         if res is None:
-            font = FontCache.get(self.rsize)
-            res = sf.String(self.text,Font=font,Size=self.rsize)
+            font = FontCache.get(rsize)
             
+            if double:
+                text = "\n".join(m+"\n"+m for m in ["".join(m+m for m in n) for n in self.text.split("\n")] )
+                res = sf.String(text,Font=font,Size=rsize*0.5)
+            else:
+                text = self.text
+                res = sf.String(text,Font=font,Size=rsize)
+                
             Tile.global_str_cache[(self.rsize,self.text)] = res
         
         self.cached = [(True,res)]
@@ -328,8 +348,13 @@ class AnimTile(Tile):
     played automatically or manually."""
 
     
-    def __init__(self,text,height,frames,speed,states=1,width=Tile.AUTO,draworder=20,
-        randomize=False,noloop=False, 
+    def __init__(self,text,height,frames,speed,
+        states=1,
+        width=Tile.AUTO,
+        draworder=20,
+        randomize=False,
+        noloop=False, 
+        double=False,
         *args, **kwargs):
         """ Read an animated tile from a text block. Such a textual
         description contains the ASCII images for all frames,
@@ -351,7 +376,7 @@ class AnimTile(Tile):
                 AssertionError
         """
 
-        Tile.__init__(self,draworder=draworder,*args, **kwargs)
+        Tile.__init__(self,draworder=draworder,double=double, *args, **kwargs)
         
         assert states > 0 and frames > 0
         

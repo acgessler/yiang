@@ -59,13 +59,13 @@ function loadPage(index,itemcnt,byname,previous) {
 		pselect += "</b>"
 		$("#highscore_pageselect").html(pselect);
 		
+
 		$("#search").keydown(function(e){
 	         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-	             e.preventDefault();
-	             
-	             cleanupPage();
-	             loadPage(index, itemcnt, $(this).val().trim());
-	   
+                 e.preventDefault();
+                 
+                 cleanupPage();
+                 loadPage(index, itemcnt, $(this).val().trim());
 	         }
 	     });
 		 
