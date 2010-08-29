@@ -245,7 +245,9 @@ class EditorGame(Game):
             gui.disabled = not self.IsEditorRunning() 
             
         def EditSettings():
-            if not self.IsOverlayActive(Overlay_ShowLevelSettings):            
+            if self.IsOverlayActive(Overlay_ShowLevelSettings):
+                [e for e in self.overlays if e.__class__ == Overlay_ShowLevelSettings][0]._RemoveMe()
+            else:            
                 self.PushOverlay(Overlay_ShowLevelSettings())    
         
         self.AddSlaveDrawable((Button(text="Edit Level Settings", 
@@ -374,7 +376,7 @@ class EditorGame(Game):
                 
                 w,h = 180,26
                 rx,ry = defaults.resolution
-                self2.elements.append(Button(text=_("Ok"),rect=[rx-w*2-60,ry-50,w,h],fgcolor=sf.Color.Green) + 
+                self2.elements.append(Button(text=_("Apply"),rect=[rx-w*2-60,ry-50,w,h],fgcolor=sf.Color.Green) + 
                     ("release", (lambda src: (self2._Save() or True) and self2._RemoveMe()))
                   )
                 self2.elements.append(Button(text=_("Cancel"),rect=[rx-w-40,ry-50,w,h],fgcolor=sf.Color.Red) + 
@@ -2189,7 +2191,9 @@ class EditorGame(Game):
                 
             # Draw the current help string in the lower-left border
             h = 16
-            hs = sf.String("({0})    ".format(self.level.name)+self.help_string,Size=h,Font=FontCache.get(h,defaults.font_status))
+            hs = sf.String("(Level {0}: '{1}')    ".format(self.level.level,self.level.name)+self.help_string,
+                Size=h,Font=FontCache.get(h,defaults.font_status)
+            )
             hs.SetColor(sf.Color.Black)
             hs.SetPosition(10,defaults.resolution[1]-h-15)
             Renderer.app.Draw(hs)

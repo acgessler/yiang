@@ -93,7 +93,7 @@ class Level:
         self.level = level
         self.color = sf.Color(*color) if isinstance(color, tuple) else color
         self.vis_ofs = vis_ofs
-        self.name = name or "Level " +str(self.level)
+        self.name = name #or "Level " +str(self.level)
         self.gravity = defaults.gravity if gravity is None else gravity
         self.SetDistortionParams((0,0,0) if distortion_params is False else
              ((not defaults.no_distortion and distortion_params) 
