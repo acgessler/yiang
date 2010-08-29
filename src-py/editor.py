@@ -2120,7 +2120,7 @@ class EditorGame(Game):
         mx,my = args if len(args)==2 else args[0]
         
         return ((mx-offset[0])*defaults.tiles_size_px[0],(my + 
-            defaults.status_bar_top_tiles + (top_scroll_distance if self.level.scroll[0] & Level.SCROLL_TOP else 0 ))*
+            defaults.status_bar_top_tiles + (defaults.top_scroll_distance if self.level.scroll[0] & Level.SCROLL_TOP else 0 ))*
             defaults.tiles_size_px[1])
     
     def _DoInGameHelpers(self):
