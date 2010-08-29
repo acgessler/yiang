@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(15, 0, 15),vis_ofs=0,autoscroll_speed=(0.25, 0),scroll=2,)
+<out> = Level(<level>,<game>,<raw>,color=(15, 0, 15),vis_ofs=0,autoscroll_speed=(0.25, 0),name='Meeting some friends',scroll=2,)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  gE2_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
 .  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
