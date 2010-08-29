@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),vis_ofs=0,autoscroll_speed=(0.25, 0),scroll=2,name='Pumpkin City',)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Pumpkin City',color=(0, 0, 0),vis_ofs=0,scroll=2,lower_offset=-0.5,)
 .  rA8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9gA9gA9gA9gA9
 .  rA8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA9bA9bA9bA9bA9
 .  rA8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9gA9gA9gA9gA9

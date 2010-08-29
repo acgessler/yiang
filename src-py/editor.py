@@ -396,9 +396,22 @@ class EditorGame(Game):
                         return 0
                     
                     return int(s)
+                
+                def safe_float(s):
+                    s = s.lstrip(" \n\t0").rstrip()
+                    if not s:
+                        return 0.0
+                    
+                    try:
+                        return float(s)
+                    except:
+                        return 0.0
                     
                 def mkrgb(s):
                     return str(max(0, min(0xff,safe_int(s))))
+                
+                def mknum(s):
+                    return str(safe_float(s))
                 
                 self2.elements.append(Label(text=_("Background color, RED"),rect=[100,180,w,h],align=Component.LEFT))
                 self2.elements.append(EditControl(text=str( self2.settings["color"][0] ),
@@ -425,7 +438,16 @@ class EditorGame(Game):
                 self2.elements.append(Label(text=_("Visible offset above upper status bar"),rect=[100,450,w,h],align=Component.LEFT))
                 self2.elements.append(EditControl(text=str( self2.settings["vis_ofs"] ),
                     rect=[100,480,w,30], allowed=EditControl.NUMERIC) + 
-                    ("text_change", (lambda src: self2.settings.__setitem__("vis_ofs",safe_int(src.text))))
+                    ("text_change", (lambda src: self2.settings.__setitem__("vis_ofs",safe_int(src.text)))) #+
+                   # ("pre_text_change", (lambda src,text: mknum(text) )) 
+                  )
+                
+                self2.settings.setdefault("lower_offset",0.0)
+                self2.elements.append(Label(text=_("Visible offset above lower status bar"),rect=[100,520,w,h],align=Component.LEFT))
+                self2.elements.append(EditControl(text=str( self2.settings["lower_offset"] ),
+                    rect=[100,550,w,30], allowed=EditControl.NUMERIC|EditControl.SPECIAL) + 
+                    ("text_change", (lambda src: self2.settings.__setitem__("lower_offset",safe_float(src.text)))) #+
+                   # ("pre_text_change", (lambda src,text: mknum(text) )) 
                   )
                 
                 # Scrolling controls
@@ -2545,8 +2567,6 @@ class EditorGame(Game):
     def ChangeSettings(self,settings):
         """Set changed level setting and commit them to the
         current game as well"""
-        
-        prev_vis_ofs = self.settings.get("vis_ofs",0)
         self.settings.update(settings)
         
         if not self.level:
@@ -2567,13 +2587,12 @@ class EditorGame(Game):
         self.level.color = sf.Color(*self.settings.get("color",(0,0,0)))
         self.level.name = self.settings.get("name","Level {0}".format(self.level.level))
         
-        # vis_ofs may only have positives values
+        # vis_ofs may only have positive, integral values
         vis_ofs = self.settings.get("vis_ofs",0)
         if vis_ofs < 0:
             self.settings["vis_ofs"] = vis_ofs = 0
-        
         self.level.vis_ofs = vis_ofs
-            
+        self.level.lower_offset = self.settings.get("lower_offset",0)
         
     def ControlledChangeSettings(self,new):
         """Push a set of changed settings onto the action stack"""

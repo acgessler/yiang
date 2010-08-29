@@ -26,7 +26,7 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity
+from game import Entity, Game
 from renderer import NewFrame, Renderer
 from tile import AnimTile, Tile
 from player import Player
@@ -399,8 +399,10 @@ class LevelEntrance(AnimTile):
         return LevelLoader.GuessLevelName(self.next_level)
         
     def _RunLevel(self):
-        self.now_locked = True
+        if self.game.GetGameMode() in (Game.EDITOR,Game.EDITOR_HIDDEN):
+            pass
         
+        self.now_locked = True
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("escape"))
         def on_close(key):
             if key == accepted[0]:

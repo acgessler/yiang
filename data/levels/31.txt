@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 30),vis_ofs=5,autoscroll_speed=(0.1, 0),name='Too hot',scroll=2,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.1, 0),name='Too hot',color=(0, 0, 30),vis_ofs=5,scroll=2,lower_offset=0.5,)
 
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bD9.  .  .  .  .  bD9

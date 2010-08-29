@@ -420,7 +420,8 @@ class EditControl(HasAText):
         sf.Key.BackSlash: "\\",
         sf.Key.SemiColon: ";",
         sf.Key.Comma: ",",
-        sf.Key.Space: " "
+        sf.Key.Space: " ",
+        sf.Key.Dash: "-"
     }
     populated = False
     

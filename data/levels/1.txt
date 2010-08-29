@@ -1,4 +1,5 @@
-<out> = Level(<level>,<game>,<raw>,color=(30, 20, 20),vis_ofs=4,autoscroll_speed=(0.25, 0),name='A Brave New World',scroll=2,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='A Brave New World',color=(30, 20, 20),vis_ofs=5,scroll=2,lower_offset=0.8,)
+
 
 
 _B4~DA_B5~DAgS2.  .  cDA.  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDJ
@@ -22,4 +23,7 @@ _B4.  _B5_B0_B0_B4.  _B5_B0.  .  .  .  .  .  .  .  .  dDJgS1.  gS1.  .  .  .  . 
 .  .  .  .  _A1.  .  .  .  _A1_B0_B0_B0_B0_A5.  .  .  .  .  gS1.  cDScDAcDAcDAcDAcDAcDAcDAcDAcDS.  .  .  .  .  .  .  _A9_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_A9
 _A0_A0_A0_A0_A0_A0_A0_A0_A0_B0_B0_B0_B0_B0_B0_A0_A0_A0_A0_A0_A0_A0cDAcDAcDAcDAcDAcDAcDAcDAcDAcDS.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2
+
+
+
 

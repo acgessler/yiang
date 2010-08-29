@@ -55,7 +55,8 @@ class Level:
         scroll=None,
         distortion_params =None,
         audio_section=None,
-        skip_validation=False
+        skip_validation=False,
+        lower_offset=0
         ):
         """Construct a level given its textual description 
         
@@ -78,12 +79,16 @@ class Level:
             skip_validation -- don't bother validating the entire validity.
                 Use for performance reasons or if the builtin validation 
                 logic reports false positives.
+            lower_offset - Offset between the lowest tile in the level and the
+                begin of the lower status bar, if enabled. Positive values
+                move the status bar down.
         """
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
         
         self.entities, self.entities_add, self.entities_rem, self.entities_mov = set(), set(), set(), set()
         self.origin = [0, 0]
+        self.lower_offset = lower_offset
         self.game = game
         self.level = level
         self.color = sf.Color(*color) if isinstance(color, tuple) else color
@@ -758,7 +763,8 @@ class Level:
         """Get size of the visible part of the level. This is
         usually a constant throughout the lifetime of the
         level."""
-        return (min( self.level_size[0], defaults.tiles[0] ), min(defaults.tiles[1], self.level_size[1]-self.vis_ofs-1 ))
+        return (min( self.level_size[0], defaults.tiles[0] ), min(defaults.tiles[1], 
+            self.level_size[1]-self.vis_ofs-1-self.lower_offset ))
     
     def GetOrigin(self):
         """Get the current origin of the game. That is the
@@ -961,7 +967,9 @@ class LevelLoader:
         
         if not no_loadscreen and not defaults.no_threading:
             from loadscreen import LoadScreen
-            return LoadScreen.Load(LevelLoader.LoadLevel,level,game,no_loadscreen=True)
+            lv = LoadScreen.Load(LevelLoader.LoadLevel,level,game,no_loadscreen=True)
+            lv.used_loadscreen = True
+            return lv
        
         file = LevelLoader.BuildLevelPath(level)
         lines = LevelLoader.cache.get(file, None)
