@@ -523,7 +523,7 @@ class Player(Entity):
                             self._Kill(collider.GetVerboseName())
                             return newpos, newvel
             
-                    elif res & Entity.BLOCK_RIGHT:
+                    elif res & Entity.BLOCK_RIGHT and newvel[0] < 0:
                         intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
                         intersect[0][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])     
                         
@@ -540,7 +540,7 @@ class Player(Entity):
                             self._Kill(collider.GetVerboseName())
                             return newpos, newvel
             
-                    elif res & Entity.BLOCK_LEFT:
+                    elif res & Entity.BLOCK_LEFT and newvel[0] > 0:
                     
                         intersect[2][0] = max(intersect[2][0],cd[0] - self.pwidth - self.pofsx)
                         intersect[2][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])    
@@ -558,7 +558,7 @@ class Player(Entity):
                             self._Kill(collider.GetVerboseName())
                             return newpos, newvel
             
-                    elif res & Entity.BLOCK_TOP:
+                    elif res & Entity.BLOCK_TOP and newvel[1] > 0:
                
                         intersect[3][0] = max(intersect[3][0], cd[1] - self.pheight)
                         intersect[3][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
@@ -578,7 +578,7 @@ class Player(Entity):
                             self._Kill(collider.GetVerboseName())
                             return newpos, newvel
             
-                    elif res & Entity.BLOCK_BOTTOM:
+                    elif res & Entity.BLOCK_BOTTOM and newvel[1] < 0:
         
                         # XXX one day, I need to cleanup these messy size calculations in Player
                         intersect[1][0] = min(intersect[1][0], cd[3])
