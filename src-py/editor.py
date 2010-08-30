@@ -460,7 +460,7 @@ class EditorGame(Game):
                     else:
                         self2.settings["scroll"] &= ~state
                 
-                xs,ys = rx*0.5,300
+                xs,ys = rx*0.4,300
                 w,h = 100,26
                 
                 from level import Level
@@ -1551,6 +1551,8 @@ class EditorGame(Game):
             def _ShiftOriginIfMouseClose(self2):
                 rx,ry = defaults.resolution
                 ox,oy = self.level.GetOrigin()
+                lx,ly = self.level.GetLevelSize()
+                dx,dy = defaults.tiles
                 
                 xt,yt = 100,100
                 sx,sy = 15,10
@@ -1564,6 +1566,11 @@ class EditorGame(Game):
                     oy += sy*self.time_delta                  
                 elif defaults.status_bar_top_tiles*defaults.tiles_size_px[1] < self.my < yt:
                     oy -= sy*self.time_delta
+                    
+                if ox+dx > lx:
+                    self.level.SetLevelSize((ox+dx,ly))
+                if oy+dy > ly and self.level.scroll[0] & (Level.SCROLL_TOP|Level.SCROLL_BOTTOM):
+                    self.level.SetLevelSize((lx,oy+dy))
                     
                 self.level.SetOrigin((ox,oy))
             
@@ -2054,6 +2061,17 @@ class EditorGame(Game):
         
     def UnsavedChanges(self):
         return self.save_counter != self.cur_action
+            
+    def Kill(self,killer="an unknown enemy ",player=None):
+        if not self.IsGameRunning():
+            return 
+        
+        if player is None:
+            player = self._GetAPlayer()
+        player.Respawn(True)
+        
+        # XXX - why do we need this?
+        raise NewFrame()
             
     def _DrawRectangle(self,bb,color,thickness=3):
         shape = sf.Shape()
@@ -2695,7 +2713,7 @@ class EditorGame(Game):
         
         # scale factors in both axes
         self.msx,self.msy = (12,9) if w < 100 else ((8,6) if w < 200 else ((4,3) if w < 250 or h < 250 else (1,1))) 
-        w,h = w*self.msx,(h)*self.msy
+        w,h = int(w*self.msx),int(h*self.msy)
         b = bytearray(b'\x30\x30\x30\xa0') * (w*h)
         
         # msxp is the scaling factor to get from tiles to destination (backbuffer) pixels 

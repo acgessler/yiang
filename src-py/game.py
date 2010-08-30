@@ -670,7 +670,7 @@ Hit {2} to return to the menu""").format(
     
     def RestartLevel(self):
         """Restart the current level and discard all changes made"""
-        self.LoadLevel(self.level_idx,no_loadscreen=(not hasattr(self.level,"used_loadscreen") if self.level else False))
+        self.LoadLevel(self.level_idx,no_loadscreen=((not hasattr(self.level,"used_loadscreen")) if self.level else False))
         
     def LoadLevel(self,idx,no_loadscreen=False):
         """Load a particular level and drop the old one"""

@@ -91,7 +91,7 @@ class Level:
         self.lower_offset = lower_offset
         self.game = game
         self.level = level
-        self.color = sf.Color(*color) if isinstance(color, tuple) else color
+        self.color = sf.Color(*color) if color.__class__ in (list,tuple) else color
         self.vis_ofs = vis_ofs
         self.name = name #or "Level " +str(self.level)
         self.gravity = defaults.gravity if gravity is None else gravity
@@ -764,7 +764,8 @@ class Level:
         usually a constant throughout the lifetime of the
         level."""
         return (min( self.level_size[0], defaults.tiles[0] ), min(defaults.tiles[1], 
-            self.level_size[1]-self.vis_ofs-1-self.lower_offset ))
+            self.level_size[1]-self.vis_ofs-1-self.lower_offset 
+        ))
     
     def GetOrigin(self):
         """Get the current origin of the game. That is the

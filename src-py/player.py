@@ -737,7 +737,6 @@ class Player(Entity):
         # Reset our status
         self._Reset()
         self.Protect(defaults.respawn_protection_time)
-        #raise NewFrame()
 
 
 class RespawnPoint(EntityWithEditorImage):

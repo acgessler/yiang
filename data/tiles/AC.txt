@@ -1,3 +1,4 @@
-<out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO)
+<out> = Tile(<raw>,width=Tile.AUTO,height=Tile.AUTO,collision=Entity.BLOCK_TOP)
 _____
+=====
 
