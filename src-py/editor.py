@@ -2614,7 +2614,9 @@ class EditorGame(Game):
         if vis_ofs < 0:
             self.settings["vis_ofs"] = vis_ofs = 0
         self.level.vis_ofs = vis_ofs
-        self.level.lower_offset = self.settings.get("lower_offset",0)
+        
+        # XXX why -visofs? T smell an ugly workaround ..
+        self.level.lower_offset = self.settings.get("lower_offset",0) - vis_ofs
         
     def ControlledChangeSettings(self,new):
         """Push a set of changed settings onto the action stack"""
