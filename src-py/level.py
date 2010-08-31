@@ -635,7 +635,7 @@ class Level:
                     entity.in_visible_set = False
                 
         self.entities_active.update(self.window_unassigned)
-        for entity in self.EnumActiveEntities():
+        for entity in sorted(self.EnumActiveEntities(),key=lambda x:x.GetDrawOrder(),reverse=True):
             entity.Update(time,dtime)
             
     def _UpdateDistortion(self,time,dtime):

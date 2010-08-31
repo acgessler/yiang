@@ -262,7 +262,8 @@ class NaughtyPongPong(Enemy):
         self.acc = self.level.gravity*10
         vec = (self.vel + self.acc * time) * time
 
-        self.pos[1] += vec
+        pos = self.pos
+        self.SetPosition( (pos[0], pos[1] + vec ) )
         
         # check for possible colliders on the bottom to determine when we
         # are touching the ground
@@ -285,7 +286,7 @@ class NaughtyPongPong(Enemy):
                 break
                     
             # top border
-            if self._HitsMyTop(ab, cd):
+            elif self._HitsMyTop(ab, cd):
                 self.vel = max(0,self.vel)
                 break
                 
@@ -294,7 +295,7 @@ class NaughtyPongPong(Enemy):
             ab = self.GetBoundingBoxAbs()
             cd = other.GetBoundingBoxAbs()    
             
-            if self._HitsMyTop(ab,cd) or self._HitsMyBottom(cd,ab):
+            if self._HitsMyTop(ab,cd):
                 self._Die()
                 return Entity.ENTER
             

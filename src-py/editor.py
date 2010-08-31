@@ -1477,9 +1477,13 @@ class EditorGame(Game):
                         
                         if inp.IsKeyDown(editor_keys["select-rect"][0]):
                             
+                            if not hasattr(self2,"was_rect_select"):
+                                self.template = dict()
+                                self.select_start = self.fx,self.fy
+                                self2.was_rect_select = True
+                                
+                                
                             # XXX bad runtime performance, scales terribly
-                            
-                            
                             if not hasattr(self,"last_select") or abs(self.last_select[0]-self.fx)>1 or abs(self.last_select[1]-self.fy)>1:
                                 if not hasattr(self,"last_select"):
                                     self.last_select = self.select_start
@@ -1499,6 +1503,11 @@ class EditorGame(Game):
                         else:
                             if hasattr(self,"cur_entity"): 
                                 Push(self.cur_entity)
+                                
+                            try:
+                                delattr(self,"was_rect_select")
+                            except AttributeError:
+                                pass
                                 
                         try:
                             self.last_color = next(self.template.keys().__iter__()).color       
@@ -2071,7 +2080,7 @@ class EditorGame(Game):
         player.Respawn(True)
         
         # XXX - why do we need this?
-        raise NewFrame()
+        #raise NewFrame()
             
     def _DrawRectangle(self,bb,color,thickness=3):
         shape = sf.Shape()
@@ -2131,16 +2140,14 @@ class EditorGame(Game):
         mx,my = args if len(args)==2 else args[0]
         
         return (mx/defaults.tiles_size_px[0] + offset[0], 
-            my/defaults.tiles_size_px[1]
-            - defaults.status_bar_top_tiles)
+            my/defaults.tiles_size_px[1]+ offset[1])
         
         
     def _TileToMouseCoords(self,*args):
         offset = self.level.GetOrigin()
         mx,my = args if len(args)==2 else args[0]
         
-        return ((mx-offset[0])*defaults.tiles_size_px[0],(my + 
-            defaults.status_bar_top_tiles + (defaults.top_scroll_distance if self.level.scroll[0] & Level.SCROLL_TOP else 0 ))*
+        return ((mx-offset[0])*defaults.tiles_size_px[0],(my-offset[1])*
             defaults.tiles_size_px[1])
     
     def _DoInGameHelpers(self):
