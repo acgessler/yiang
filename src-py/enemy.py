@@ -191,12 +191,14 @@ class SmallTraverser(Enemy):
 
         lx,ly = self.level.GetLevelSize()
         if self.direction == Entity.DIR_HOR:
-            pos = (self.pos[0] + self.vel * time, self.pos[1])
+            pos = [self.pos[0] + self.vel * time, self.pos[1]]
             if pos[0] < 0 or pos[0] > lx:
+                pos[0] = max(0, min(pos[0],lx))
                 self._Return()
         else:
-            pos = (self.pos[0], self.pos[1] + self.vel * time)
+            pos = [self.pos[0], self.pos[1] + self.vel * time]
             if pos[1] < 0 or pos[1] > ly:
+                pos[1] = max(0, min(pos[1],ly))
                 self._Return()
                 
         self.SetPosition(pos)
@@ -354,7 +356,7 @@ class SmallBob(Enemy):
     """This guy is not actually friendly, but he's much less a danger
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
-    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.0, shrinkbb=0.8,trigger_distance=15):
+    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.5, shrinkbb=0.8,trigger_distance=22):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
         self.hits = 4
@@ -440,7 +442,12 @@ class SmallBob(Enemy):
         #if not floor and self.last == self.vel:
         #    self.vel = -self.vel
                     
-        pos = (self.pos[0] + self.vel * time * self.move_speed * (5 if self.triggered else 1), self.pos[1])
+        pos = [self.pos[0] + self.vel * time * self.move_speed * (5 if self.triggered else 1), self.pos[1]]
+        lx,ly = self.level.GetLevelSize()
+        if pos[0] > lx or pos[0] < 0:
+            self.vel = -self.vel
+            pos[0] = max(0, min(pos[0],lx))
+        
         self.SetPosition(pos)
             
 class Robot(SmallTraverser):
