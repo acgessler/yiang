@@ -367,12 +367,26 @@ class EditorGame(Game):
         
         class Overlay_ShowLevelSettings(Drawable):
             
+            effect_names = None
+            
+            @classmethod
+            def _CacheEffectNames(cls):
+                if cls.effect_names:
+                    return
+                
+                cls.effect_names = [e.strip() for e in open(os.path.join(defaults.config_dir,
+                    "effects.txt"),"rt").read().split("\n") if e.strip()
+                ]
+            
             def __init__(self2):
                 Drawable.__init__(self2)
                 self.AddSlaveDrawable(self2)
                 
+                Overlay_ShowLevelSettings._CacheEffectNames()
+                
                 self2.elements = []
                 self2.settings = self.settings
+                self2.enable_bg = True
                 
                 w,h = 180,26
                 rx,ry = defaults.resolution
@@ -520,7 +534,88 @@ class EditorGame(Game):
                           )
                         
                         all[mm].append(self2.elements[-1])
+                        
                 
+                # Now for all the effects 
+                xs,ys = rx-450,150
+                w,h = 180,27       
+                effects = Overlay_ShowLevelSettings.effect_names
+                self2.settings.setdefault("postfx",[("ingame1.sfx",())])
+                pfx = self.settings["postfx"]
+                
+                effects = sorted(effects,key=lambda x: ("a"+x if (x in (e[0] for e in pfx)) else "z" ))
+                rows = []
+                
+                def UpdateActiveEffects():
+                    pass
+                
+                def EnableBG(d):
+                    self2.enable_bg = d
+                    if not d:
+                        try:
+                            delattr(self2,"clock")
+                        except AttributeError:
+                            pass
+                    
+                def AddEffect(effect):
+                    if not [e[0] for e in pfx if e[0] == effect]:
+                        pfx.append( ( e, () ))
+                    UpdateActiveEffects()
+                        
+                def RemoveEffect(effect):
+                    for n,e in enumerate(pfx):
+                        if e[0] == effect:
+                            del pfx[n]
+                            break
+                    UpdateActiveEffects()
+                        
+                def UpEffect(effect):
+                    try:
+                        n = effects.index(effect)
+                    except ValueError:
+                        return
+                    if n  == 0:
+                        return
+                    
+                    for me,he in zip (rows[n],rows[n-1]):
+                        he.rect, me.rect = me.rect,he.rect    
+                    effects[n],effects[n-1] = effects[n-1],effects[n]
+                    rows[n],rows[n-1] = rows[n-1],rows[n]
+                    UpdateActiveEffects()
+                
+                def DownEffect(effect):
+                    try:
+                        n = effects.index(effect)
+                    except ValueError:
+                        return
+                    if n == len(effects)-1:
+                        return
+                    
+                    for me,he in zip (rows[n],rows[n+1]):
+                        he.rect, me.rect = me.rect,he.rect    
+                    effects[n],effects[n+1] = effects[n+1],effects[n]
+                    rows[n],rows[n+1] = rows[n+1],rows[n]
+                    UpdateActiveEffects()
+                
+                self2.elements.append(Label(text=_("Postprocessing effects"),rect=[xs,ys,w,h],align=Component.LEFT))
+                ys += 30
+                
+                for effect in effects:
+                    self2.elements.append(ToggleButton(text=effect,rect=[xs,ys,w,h],
+                        on=(effect in (e[0] for e in pfx))) + 
+                        ("on",  (lambda src,effect=effect: AddEffect(effect))) +
+                        ("off",  (lambda src,effect=effect: RemoveEffect(effect))) +
+                        ("mouse_enter",  (lambda src: EnableBG(False))) + 
+                        ("mouse_leave",  (lambda src: EnableBG(True))) 
+                    )
+                    self2.elements.append(Button(text="Up",rect=[xs+w+3,ys,30,h]) +
+                        ("click", (lambda src,effect=effect: UpEffect(effect)))
+                    )
+                    self2.elements.append(Button(text="Dn",rect=[xs+w+36,ys,30,h]) +
+                        ("click", (lambda src,effect=effect: DownEffect(effect)))
+                    )
+                    rows.append( self2.elements[-3:] )
+                    ys += 35
                 
                 for e in self2.elements:
                     e.draworder = 52000
@@ -546,8 +641,13 @@ class EditorGame(Game):
                 #   self2._RemoveMe()
                     
             def Draw(self2):
-                shape = sf.Shape()
-                self.ClearScreen(sf.Color(0,0,0,165))
+                if not hasattr(self2,"clock"):
+                    self2.clock = sf.Clock()
+                
+                if self2.enable_bg:
+                    self.ClearScreen(sf.Color(0,0,0,int(165*min(1.0, self2.clock.GetElapsedTime()))))
+                
+
                 
         
         class Overlay_ShowCatalogue(Drawable):
@@ -623,7 +723,7 @@ class EditorGame(Game):
                     ox,oy = self.level.GetOrigin()
                     rx,ry = defaults.tiles_size_px
                     
-                    xx,yy = x,y+defaults.status_bar_top_tiles*ry
+                    xx,yy = x,y+50
                         
                     del self.cur[:]
                     for elem in v:
@@ -651,13 +751,13 @@ class EditorGame(Game):
                             
                         if xx+bb[2]*rx>=defaults.resolution[0]-xs:
                             xx = xs
-                            yy += bb[3]*ry + 50
+                            yy += bb[3]*ry + 30
                                             
                         t.SetPosition((xx/rx+ox,yy/ry+oy ))
                         t.SetColor(getattr(self,"last_color",sf.Color.White))
                         
                         self.cur.append((t,(xx,yy)))
-                        xx += bb[2]*rx + 50
+                        xx += bb[2]*rx + 30
     
                 for k,v in cache.items():
                     x,y = next(pos)
@@ -697,7 +797,11 @@ class EditorGame(Game):
                     self2._RemoveMe()
                     
             def Draw(self2):
-                self.ClearScreen(sf.Color(0,0,0,200))
+                
+                if not hasattr(self2,"clock"):
+                    self2.clock = sf.Clock()
+                
+                self.ClearScreen(sf.Color(0,0,0,int(200*min(1.0, self2.clock.GetElapsedTime()))))
                 
                 mx,my = self.mx,self.my
                 tx,ty = defaults.tiles_size_px

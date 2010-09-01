@@ -371,6 +371,9 @@ class ToggleButton(HasAText):
         if self.disabled:
             self.state = Component.STATE_DISABLED
         elif hit:
+            if not prev_hit:
+                self.Fire("mouse_enter")
+                
             if buttons[0] and not prev_buttons[0]:
                 self.Fire("click")
                 self.on = not self.on
@@ -380,6 +383,9 @@ class ToggleButton(HasAText):
                 
             if not buttons[0] and prev_buttons[0]:
                 self.Fire("release")
+        else:
+            if prev_hit:
+                self.Fire("mouse_leave")
         
         self.state = Component.STATE_ACTIVE if self.on else Component.STATE_NORMAL
             

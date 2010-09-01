@@ -110,7 +110,7 @@ class SmallTraverser(Enemy):
         AnimTile.__init__(self, text, height, frames, speed, 2)
 
         self.verbose = verbose
-        self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
+        self.vel = (move_speed * random.uniform(0.8,1.2) * random.choice((-1, 1))) if randomdir is True else 1
         self.direction = direction
 
         self._ShrinkBB(shrinkbb)
@@ -354,10 +354,14 @@ class SmallBob(Enemy):
     """This guy is not actually friendly, but he's much less a danger
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
-    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 2.0, shrinkbb=0.8):
+    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.0, shrinkbb=0.8,trigger_distance=15):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
         self.hits = 4
+        self.vel = self.last = random.choice((-1, 1)) 
+        self.move_speed = move_speed_base*random.uniform(0.8,1.2)
+        self.trigger_distance = trigger_distance**2
+        self.triggered = False
 
     def GetVerboseName(self):
         return "Small Bob"
@@ -382,12 +386,62 @@ class SmallBob(Enemy):
         if not self.game.IsGameRunning():
             return 
             
-        rect = self.GetBoundingBox()
+        ab = self.GetBoundingBoxAbs()
+        ab2 = list(ab)
+        ab2[1] -= 1
+        ab2[3] += 1
         res = 0
-            
-        AnimTile.Update(self, time_elapsed, time)
         self.SetState(0)
         
+        player,pos = self.game._GetAPlayer(),self.pos
+        self.triggered = False
+        if player:
+            ppos = player.pos[0]+player.dim[0]*0.5,player.pos[1]+player.dim[1]*0.5
+            
+            if self.triggered and self.trigger_watch.GetElapsedTime()<10.0:
+                pass
+                
+            elif (ppos[0]-pos[0])**2+(ppos[1]-pos[1])**2 < self.trigger_distance and ab[3] > ppos[1] > ab[1]:
+                
+                self.triggered = True
+                self.trigger_watch = sf.Clock()
+    
+                print("Trigger return event due to nearing player")
+                if self.last == self.vel:
+                    self.vel = -1 if pos[0] > ppos[0] else 1
+            else:
+                self.triggered = False
+        
+        floor = False
+        for collider in self.game.GetLevel().EnumPossibleColliders(ab2):
+            if isinstance(collider,Enemy):
+                continue
+            
+            cd = collider.GetBoundingBoxAbs()
+            if cd is None:
+                continue
+             
+            # is our left border intersecting?
+            a = self._HitsMyLeft(ab,cd) 
+            b = self._HitsMyRight(ab,cd)
+            if a and not b or b and not a:                      
+                res = collider.Interact(self)
+                if res == Entity.BLOCK:
+                    collider.AddToActiveBBs()            
+                    self.vel = -1 if b else 1
+                    break
+                elif res == Entity.KILL:
+                    self._Die()
+                    
+            if self._HitsMyTop(ab2,cd):
+                collider.AddToActiveBBs()            
+                floor = True
+                
+        #if not floor and self.last == self.vel:
+        #    self.vel = -self.vel
+                    
+        pos = (self.pos[0] + self.vel * time * self.move_speed * (5 if self.triggered else 1), self.pos[1])
+        self.SetPosition(pos)
             
 class Robot(SmallTraverser):
     pass
