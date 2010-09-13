@@ -54,7 +54,6 @@ class Enemy(AnimTile):
             )
         )
         self._SpreadSplatter()
-        
         self.level.CountStats("s_kills",1)
         
     def _GetRandomName(self):
@@ -356,14 +355,17 @@ class SmallBob(Enemy):
     """This guy is not actually friendly, but he's much less a danger
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
-    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.5, shrinkbb=0.8,trigger_distance=22):
+    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.5, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.5, accel_time=3.0):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
         self.hits = 4
         self.vel = self.last = random.choice((-1, 1)) 
         self.move_speed = move_speed_base*random.uniform(0.8,1.2)
         self.trigger_distance = trigger_distance**2
-        self.triggered = False
+        self.triggered = self.cool_down = False
+        self.slow_start = 0.0
+        self.trigger_speed_scale = trigger_speed_scale
+        self.accel_time = accel_time
 
     def GetVerboseName(self):
         return "Small Bob"
@@ -396,15 +398,14 @@ class SmallBob(Enemy):
         self.SetState(0)
         
         player,pos = self.game._GetAPlayer(),self.pos
-        self.triggered = False
         if player:
             ppos = player.pos[0]+player.dim[0]*0.5,player.pos[1]+player.dim[1]*0.5
-            
-            if self.triggered and self.trigger_watch.GetElapsedTime()<10.0:
+            if self.triggered and self.trigger_watch.GetElapsedTime()<3.0:
                 pass
                 
-            elif (ppos[0]-pos[0])**2+(ppos[1]-pos[1])**2 < self.trigger_distance and ab[3] > ppos[1] > ab[1]:
+            elif (ppos[0]-pos[0])**2+(ppos[1]-pos[1])**2 < self.trigger_distance and ab[3] > player.pos[1]+player.dim[1] > ab[1]-0.2:
                 
+                self.cool_down = False
                 self.triggered = True
                 self.trigger_watch = sf.Clock()
     
@@ -412,6 +413,9 @@ class SmallBob(Enemy):
                 if self.last == self.vel:
                     self.vel = -1 if pos[0] > ppos[0] else 1
             else:
+                if self.triggered:
+                    self.cool_down = True
+                    
                 self.triggered = False
         
         floor = False
@@ -442,7 +446,12 @@ class SmallBob(Enemy):
         #if not floor and self.last == self.vel:
         #    self.vel = -self.vel
                     
-        pos = [self.pos[0] + self.vel * time * self.move_speed * (5 if self.triggered else 1), self.pos[1]]
+        pos = [self.pos[0] + self.vel * time * self.move_speed * (self.slow_start+1.0 if self.triggered else 1), self.pos[1]]
+        self.slow_start = min(self.trigger_speed_scale-1, self.slow_start + self.trigger_speed_scale* (1.0/self.accel_time) * time * (-1 if self.cool_down else 1))
+        if self.slow_start < 0:
+            self.cool_down = False
+            self.slow_start = 0
+            
         lx,ly = self.level.GetLevelSize()
         if pos[0] > lx or pos[0] < 0:
             self.vel = -self.vel

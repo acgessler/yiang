@@ -48,29 +48,31 @@ class Shot(Tile):
     def SetOnHit(self,oh):
         self.onhit = oh
         
-    def GetBoundingBox(self):
-        return None
+    #def GetBoundingBox(self):
+    #    return None
     
-    def GetBoundingBoxAbs(self):
-        return None
+    #def GetBoundingBoxAbs(self):
+    #    return None
         
     def Update(self,time_elapsed,time):
-        self.pos = (self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed)
+        self.SetPosition((self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed))
         lvdim = self.level.GetLevelSize()
         if self.pos[0] < 0 or self.pos[0] > lvdim[0] or self.pos[1] < 0 or self.pos[1] > lvdim[1]:
             self.game.RemoveEntity(self)
             return
         
-        rect = Tile.GetBoundingBox(self)
+        ab = Tile.GetBoundingBoxAbs(self)
     
         # check for any collisions
-        for collider in self.game.GetLevel().EnumPossibleColliders(rect):
-            mycorner = collider.GetBoundingBox()
-            if mycorner is None:
+        for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+            cd = collider.GetBoundingBox()
+            if cd is None:
                 continue
             
-            tj = self._BBCollide_XYWH(rect, mycorner)
-            if tj > 0 and self.onhit(collider) is True and collider.Interact(self) != Entity.ENTER:
+            # XXX won't work for non horizontal movements
+            if (self.dir[0] < 0 and self._HitsMyLeft(ab,cd) or self.dir[0] > 0 and self._HitsMyRight(ab,cd)) \
+                and self.onhit(collider) is True and collider.Interact(self) != Entity.ENTER:
+                
                 self.game.RemoveEntity(self)
                 
         Tile.Update(self,time_elapsed,time)
