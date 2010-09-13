@@ -1,16 +1,19 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 15, 15),autoscroll_speed=(0.4, -0.0),vis_ofs=0,scroll=2,name='Take the longer way',)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name='Take the longer way',color=(0, 15, 15),postfx=[('ingame1.sfx', ())],vis_ofs=3,scroll=3,lower_offset=0.0,)
+
+
+_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3
 gPL
 
 
+.  .  .  .  .  .  _A0.  .  .  .  .  rE8.  .  .  .  .  .  .  .  .  .  .  .  rE8
+.  .  .  .  .  .  _A0.  gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS0gS0gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1.  _A0
+.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_CD
 
 
-
-
-
-_H1
-
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rRE
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE0bE0
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI.  _E0gE0
-gS1gS1gS1gS1gS1gS1gS1gS1gS1gDAgS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gE0gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1yE0gS1gS1gS1gS1
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+_H1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _CD
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE0bE0.  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI.  _E0gE0.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0
+gS1gS1gS1gS1gS1gS1gS1gS1gS1gDAgS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gE0gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1yE0gS1gS1gS1gS1_A0_A0_A0_A0_A0_A0_A0_A0
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0

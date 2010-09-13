@@ -48,11 +48,11 @@ class Shot(Tile):
     def SetOnHit(self,oh):
         self.onhit = oh
         
-    #def GetBoundingBox(self):
-    #    return None
+    def GetBoundingBox(self):
+        return None
     
-    #def GetBoundingBoxAbs(self):
-    #    return None
+    def GetBoundingBoxAbs(self):
+        return None
         
     def Update(self,time_elapsed,time):
         self.SetPosition((self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed))
@@ -100,10 +100,10 @@ class Weapon(InventoryItem, Tile):
         
         return Entity.ENTER
     
-    def Shoot(self,pos, dir,color,on_hit=lambda x: True):
+    def Shoot(self,pos, dir,color,speed=None, on_hit=lambda x: True):
         t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",self.shot_tile),self.game)
                 
-        t.SetSpeed(self.speed)
+        t.SetSpeed(speed or self.speed)
         t.SetDirection(dir)
         t.SetPosition(pos)
         t.SetOnHit(on_hit)

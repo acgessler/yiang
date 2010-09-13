@@ -64,11 +64,14 @@ class Log(io.IOBase):
         if len(what)>5:
             what = "t{0}: {1}".format(threading.current_thread().ident,what)
             
-        if not self.file is None:
-            self.file.write(what)
-
-        if not self.old is None and not Log.nostdout:
-            self.old.write(what)
+        try:
+            if not self.file is None:
+                self.file.write(what)
+    
+            if not self.old is None and not Log.nostdout:
+                self.old.write(what)
+        except:
+            pass # swallow write exceptions, we don't want to die here ..
 
         self.file.flush()
 

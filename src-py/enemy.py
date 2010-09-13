@@ -105,8 +105,8 @@ class SmallTraverser(Enemy):
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose="a Harmful Traverser Unit (HTU)",shrinkbb=0.65):
-        AnimTile.__init__(self, text, height, frames, speed, 2)
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose="a Harmful Traverser Unit (HTU)",shrinkbb=0.65,halo_img="default"):
+        AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=halo_img)
 
         self.verbose = verbose
         self.vel = (move_speed * random.uniform(0.8,1.2) * random.choice((-1, 1))) if randomdir is True else 1
@@ -458,9 +458,52 @@ class SmallBob(Enemy):
             pos[0] = max(0, min(pos[0],lx))
         
         self.SetPosition(pos)
+        
             
-class Robot(SmallTraverser):
-    pass
+from weapon import Weapon
+class SmallRobot(SmallTraverser):
+    
+    def __init__(self, *args, speed=0.5, cooldown_time=6, shot_delta=0.25, shots=3, shot_ofs_y=0.55, **kwargs):
+        SmallTraverser.__init__(self, *args, verbose="a Nifty Robot Intruder", halo_img=None, **kwargs)
+        self.weapon = Weapon()
+        self.cooldown_time = cooldown_time
+        self.shots = shots
+        self.shot_delta = shot_delta
+        self.shot_ofs_y = shot_ofs_y
+        self.last_shot = -1
+        
+    def SetGame(self,game):
+        self.game = game
+        self.weapon.SetGame(game)
+        
+    def SetLevel(self,level):
+        self.level = level
+        self.weapon.SetLevel(level)
+        
+    def _Die(self):
+        # We CANNOT die.
+        return
+    
+    def Update(self, time_elapsed, time):
+        SmallTraverser.Update(self, time_elapsed, time)
+        if not self.game.IsGameRunning():
+            return 
+        
+        if not hasattr(self,"shot_timer") or self.shot_timer.GetElapsedTime() > self.cooldown_time:
+            self.shot_timer = sf.Clock()
+            
+        id = int( self.shot_timer.GetElapsedTime()/self.shot_delta )
+        if id == 0 and self.last_shot == self.shots-1:
+            self.last_shot = -1
+            
+        if id < self.shots and id > self.last_shot:
+            self.weapon.Shoot((self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.shot_ofs_y),
+                (self.vel/abs(self.vel),0),
+                self.color,
+                on_hit=lambda x:isinstance(x,Player))
+            self.last_shot = id
+        
+        
 
 
 
