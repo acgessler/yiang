@@ -25,6 +25,7 @@ import defaults
 from tile import AnimTile,Tile
 from player import Player,Entity
 
+
 class ScoreTile(AnimTile):
     """The player receives a certain extra score upon
     entering this tile"""
@@ -42,6 +43,7 @@ class ScoreTile(AnimTile):
             
         return Entity.ENTER
 
+
 class LifeTile(AnimTile):
     """The player receives an extra life upon
     entering a LifeTile"""
@@ -58,6 +60,7 @@ class LifeTile(AnimTile):
             self.game.AddEntity(ScoreTileAnimStub("+ 1 Life",self.pos,1.0))
             
         return Entity.ENTER
+
 
 class ScoreTileAnimStub(Tile):
     """Implements the text string that is spawned whenever

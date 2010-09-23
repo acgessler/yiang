@@ -651,6 +651,7 @@ def main():
     if defaults.no_halos is True:
         defaults.death_sprites = min( 20, defaults.death_sprites )
     
+    """
     accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):
         if key == accepted[1]:
@@ -667,18 +668,26 @@ def main():
         sys.exit(0)
                
     Renderer.SetClearColor(sf.Color(100,0,0)) 
-    Renderer.AddDrawable( MessageBox(sf.String("""
-If you have a choice between A and B, make sure 
-you make the right decision. Usually, that's C.
+    Renderer.AddDrawable( MessageBox(sf.String(
+Do not continue if you can't read.
     
 Hit {0} to continue
-Hit {1} to cancel""".format(
+Hit {1} to cancel.format(
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("escape")
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
             )), defaults.game_over_fade_time, (550, 150), 0.0, accepted, sf.Color(150,0,0), on_close))
+    """
+    if defaults.no_bg_music is False:
+        class DummyMusicPlayer(Drawable):
+            def Draw(self):
+                BerlinerPhilharmoniker.Process()
+        Renderer.AddDrawable(DummyMusicPlayer())
+        BerlinerPhilharmoniker.SetAudioSection("menu")
+
+    Renderer.AddDrawable(MainMenu())
     
     Renderer.DoLoop()
     Renderer.Terminate()

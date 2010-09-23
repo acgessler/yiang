@@ -228,6 +228,10 @@ class Renderer:
         Renderer.draw_counter, Renderer.inrange = 0, 0
         Renderer.events = set()
         
+        if defaults.slowdown_level > 0:
+            import time
+            time.sleep((0.01,0.025,0.05)[defaults.slowdown_level-1])
+        
         while Renderer.app.GetEvent(event):
             #Close window : exit
             if event.Type == sf.Event.Closed:

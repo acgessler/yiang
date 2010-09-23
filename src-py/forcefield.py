@@ -38,7 +38,9 @@ class ForceField(AnimTile):
         
         if hasattr(self,"players"):
             for e in self.players:
-                e.SetExtraVelocity((self.vel[0]*dt,self.vel[1]*dt))
+                # XXX after changing player physics, these values now need to be adjusted
+                s = 0.5
+                e.SetExtraVelocity((self.vel[0]*dt*s,self.vel[1]*dt*s))
             
             delattr(self,"players")
 

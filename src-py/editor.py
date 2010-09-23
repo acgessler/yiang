@@ -291,7 +291,7 @@ class EditorGame(Game):
              on=False, rect=[-290,10,80,25]) +
              
              # Event handlers
-             ("update", (lambda src: src.__setattr__("on",not self.IsEditorRunning()))) +
+             ("update", (lambda src: src.__setattr__("disabled",hasattr(self, "has_notification_box")) or src.__setattr__("on",not self.IsEditorRunning()))) +
              ("off", (lambda src: self.EditorPushSuspend())) +
              ("on",(lambda src: Resume())) 
         ))
@@ -2175,13 +2175,13 @@ class EditorGame(Game):
     def UnsavedChanges(self):
         return self.save_counter != self.cur_action
             
-    def Kill(self,killer="an unknown enemy ",player=None):
-        if not self.IsGameRunning():
-            return 
-        
-        if player is None:
-            player = self._GetAPlayer()
-        player.Respawn(True)
+    #def Kill(self,killer="an unknown enemy ",player=None):
+    #    if not self.IsGameRunning():
+    #        return 
+    #    
+    #    if player is None:
+    #        player = self._GetAPlayer()
+    #    player.Respawn(True)
         
         # XXX - why do we need this?
         #raise NewFrame()

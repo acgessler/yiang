@@ -387,7 +387,8 @@ class ToggleButton(HasAText):
             if prev_hit:
                 self.Fire("mouse_leave")
         
-        self.state = Component.STATE_ACTIVE if self.on else Component.STATE_NORMAL
+        if not self.disabled:
+            self.state = Component.STATE_ACTIVE if self.on else Component.STATE_NORMAL
             
         self._DrawMyRect()
         self._DrawTextCentered()

@@ -708,7 +708,10 @@ Hit {2} to return to the menu""").format(
         return False 
     
     def PushLevel(self,idx):
-        """Load another level on top of this level"""    
+        """Load another level on top of this level"""  
+        if idx == self.level_idx:
+            return
+          
         if [e for e in self.level_chain if e[0] == idx]:
             # if this level is already in the chain,
             # drop all levels until we're back there.
@@ -730,6 +733,7 @@ Hit {2} to return to the menu""").format(
         if not self.level is None:
             self.level.OnDisable()
             self.level_chain += [(self.level_idx,self.level)]
+            self.level = None # makes sure that the previous level won't interfere with the loadscreen
             
         self.level_idx = idx
         self.level = LevelLoader.LoadLevel(idx,self)
@@ -821,6 +825,7 @@ Hit {2} to return to the menu""").format(
         # status notice is visible.
         def on_close_wrapper(result):
             self.PopSuspend()
+            delattr(self, "has_notification_box")
             
             on_close(result)
             
@@ -830,6 +835,7 @@ Hit {2} to return to the menu""").format(
             ))
             
         print("Fire notification box")
+        self.has_notification_box = True
             
         from notification import MessageBox
         Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper,flags))

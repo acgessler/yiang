@@ -64,9 +64,13 @@ class Player(Entity):
     def __init__(self, text, width, height, ofsx, move_freely=False, draworder=1000):
         Entity.__init__(self)
 
-        self.pwidth = width / defaults.tiles_size[0]
-        self.pheight = height / defaults.tiles_size[1]
-        self.pofsx = ofsx / defaults.tiles_size[0]
+        pcb = (defaults.player_caution_border[0] / defaults.tiles_size_px[0], 
+            defaults.player_caution_border[1] / defaults.tiles_size_px[1])
+        
+        self.pwidth = width / defaults.tiles_size[0]  - pcb[0]
+        self.pheight = height / defaults.tiles_size[1] - pcb[1]*0.5
+        self.pofsx = ofsx / defaults.tiles_size[0] + pcb[0]*0.5
+        self.pofsy = pcb[1]*0.5
         
         # XXX get rid of pwith and pheight
         self.dim = self.pwidth,self.pheight
@@ -89,6 +93,9 @@ class Player(Entity):
             self.tiles[-1].SetPosition((0, 0))
 
         assert len(self.tiles) == (Player.MAX_ANIMS*2)
+        
+    def __str__(self):
+        return "<ThePlayer>"
         
     def SetLevel(self,level):
         Entity.SetLevel(self,level)
@@ -376,8 +383,8 @@ class Player(Entity):
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
             if defaults.debug_updown_move is True else 0)) * time]
 
-        vec[0] += newvel[0] * time
-        vec[1] += newvel[1] * time
+        vec[0] += max(-defaults.max_velocity_x, min(defaults.max_velocity_x, newvel[0])) * time
+        vec[1] += max(-defaults.max_velocity_y, min(defaults.max_velocity_y, newvel[1])) * time
 
         newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
 
@@ -493,152 +500,167 @@ class Player(Entity):
         # and the algorithm works for rectangles only.
         cnt, hasall = 0, 0
         floor_touch = False
-        ab = (newpos[0] + self.pofsx, newpos[1], newpos[0] + self.pofsx + self.pwidth, newpos[1] + self.pheight)
         
-        #np,nv,f = Entity._HandleCollisions(self,ab)
+        old_ab = self.GetBoundingBoxAbs()
+        ab = self.GetBoundingBoxAbsForPos(newpos) 
         
-        # left, top, right, bottom
-        intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
-        colliders = []
-        fric = 1e10
-        for collider in self.game.GetLevel().EnumPossibleColliders(ab):
-            if collider is self:
-                continue
+        dx,dy = ab[0]-old_ab[0], ab[1]-old_ab[1]
+        taps = max(1, int((dx**2 + dy**2)**0.5 / defaults.collision_tap_size))
+        
+        ignore = [False,False,False,False]
             
-            cd = collider.GetBoundingBox()
-            if cd is None:
-                continue
+        dx,dy = dx/taps,dy/taps
+        #print("taps: {0}".format(taps))
+        for n in range(taps):
             
-            cd = (cd[0], cd[1], cd[2] + cd[0], cd[3] + cd[1])  
-            res = None   
-            
-            # is our left border intersecting?
-            if cd[2] >= ab[0] >= cd[0]:
-                if ab[1] <= cd[1] <= ab[3] or cd[1] <= ab[1] <= cd[3]:
-                    
-                    res = collider.Interact(self)
-                    if res == Entity.KILL:
-                        print("hit deadly entity, need to commit suicide")
-                        if defaults.debug_godmode is False and self.unkillable == 0:
-                            self._Kill(collider.GetVerboseName())
-                            return newpos, newvel
-            
-                    elif res & Entity.BLOCK_RIGHT and newvel[0] <= 0:
-                        intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
-                        intersect[0][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])     
-                        
-                        colliders.append(collider)          
+            # left, top, right, bottom
+            intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
+            colliders = []
+            fric = 1e10
+        
+            n = n+1
+            ab = old_ab[0]+dx*n,old_ab[1]+dy*n,old_ab[2]+dx*n,old_ab[3]+dy*n
+        
+            for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+                if collider is self:
+                    continue
                 
-            # is our right border intersecting?
-            if cd[2] >= ab[2] >= cd[0]:
-                if ab[1] <= cd[1] <= ab[3] or cd[1] <= ab[1] <= cd[3]:
-                    
-                    res = res or collider.Interact(self)
-                    if res == Entity.KILL:
-                        print("hit deadly entity, need to commit suicide")
-                        if defaults.debug_godmode is False and self.unkillable == 0:
-                            self._Kill(collider.GetVerboseName())
-                            return newpos, newvel
-            
-                    elif res & Entity.BLOCK_LEFT and newvel[0] >= 0:
-                    
-                        intersect[2][0] = max(intersect[2][0],cd[0] - self.pwidth - self.pofsx)
-                        intersect[2][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])    
-                        
-                        colliders.append(collider)
-                
-            # is our lower border intersecting?
-            if cd[1] <= ab[3] <= cd[3]:
-                if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2]:
-                    
-                    res = res or collider.Interact(self)
-                    if res == Entity.KILL:
-                        print("hit deadly entity, need to commit suicide")
-                        if defaults.debug_godmode is False and self.unkillable == 0:
-                            self._Kill(collider.GetVerboseName())
-                            return newpos, newvel
-            
-                    elif res & Entity.BLOCK_TOP and newvel[1] >= 0:
-               
-                        intersect[3][0] = max(intersect[3][0], cd[1] - self.pheight)
-                        intersect[3][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
-                        
-                        colliders.append(collider)
-                        fric = min(fric, collider.GetFriction())
-                                           
-                    
-            # is our top border intersecting?
-            if cd[1] <= ab[1] <= cd[3]:
-                if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2]:
-                    
-                    res = res or collider.Interact(self)
-                    if res == Entity.KILL:
-                        print("hit deadly entity, need to commit suicide")
-                        if defaults.debug_godmode is False and self.unkillable == 0:
-                            self._Kill(collider.GetVerboseName())
-                            return newpos, newvel
-            
-                    elif res & Entity.BLOCK_BOTTOM and newvel[1] <= 0:
-        
-                        # XXX one day, I need to cleanup these messy size calculations in Player
-                        intersect[1][0] = min(intersect[1][0], cd[3])
-                        intersect[1][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
-                        
-                        colliders.append(collider)
-                    
-        pain = 0
-        if colliders: #sum(e[1] for e in intersect) != 0:
-            #print(intersect)
-            cnt += len(colliders)
-            for collider in colliders:
-                collider.AddToActiveBBs()            
-            
-            for n,elem in enumerate(intersect): # sorted(enumerate(intersect),key=lambda x:x[1][1],reverse=True):
-                if elem[1] < 0.3:
+                cd = collider.GetBoundingBoxAbs()
+                if cd is None:
                     continue
             
-                if n == 3:
-                    newpos[1] = elem[0]
-                    pain +=  newvel[1]
-                    painpos = ((ab[0]+ab[2])*0.5,ab[3])
+                res = None   
+                
+                # is our left border intersecting?
+                if cd[2] >= ab[0] >= cd[0]:
+                    if ab[1] <= cd[1] <= ab[3] or cd[1] <= ab[1] <= cd[3]:
+                        
+                        res = collider.Interact(self)
+                        if res == Entity.KILL:
+                            print("hit deadly entity, need to commit suicide")
+                            if defaults.debug_godmode is False and self.unkillable == 0:
+                                self._Kill(collider.GetVerboseName())
+                                return newpos, newvel
+                
+                        elif res & Entity.BLOCK_RIGHT and newvel[0] <= 0:
+                            intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
+                            intersect[0][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])     
+                            
+                            colliders.append(collider)          
                     
-                    newvel[1] = min(0, newvel[1])
-                                
-                    f = fric*time # XXX too lazy to think of a pure arithmetic solution
-                    newvel[0] = newvel[0] - (min(newvel[0],f) if newvel[0]>0 else max(newvel[0],-f))
-                    floor_touch = True
-                    #print("floor")
-        
-                    self.cur_tile = Player.ANIM_WALK
-                    self.in_jump = self.in_djump = False
+                # is our right border intersecting?
+                if cd[2] >= ab[2] >= cd[0]:
+                    if ab[1] <= cd[1] <= ab[3] or cd[1] <= ab[1] <= cd[3]:
+                        
+                        res = res or collider.Interact(self)
+                        if res == Entity.KILL:
+                            print("hit deadly entity, need to commit suicide")
+                            if defaults.debug_godmode is False and self.unkillable == 0:
+                                self._Kill(collider.GetVerboseName())
+                                return newpos, newvel
+                
+                        elif res & Entity.BLOCK_LEFT and newvel[0] >= 0:
+                        
+                            intersect[2][0] = max(intersect[2][0],cd[0] - self.pwidth - self.pofsx)
+                            intersect[2][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])    
+                            
+                            colliders.append(collider)
                     
-                elif n == 0:
-                    newpos[0] = elem[0]
-                    pain += -newvel[0]
-                    painpos = (ab[0],(ab[3]+ab[1])*0.5)
+                # is our lower border intersecting?
+                if cd[1] <= ab[3] <= cd[3]:
+                    if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2]:
+                        
+                        res = res or collider.Interact(self)
+                        if res == Entity.KILL:
+                            print("hit deadly entity, need to commit suicide")
+                            if defaults.debug_godmode is False and self.unkillable == 0:
+                                self._Kill(collider.GetVerboseName())
+                                return newpos, newvel
+                
+                        elif res & Entity.BLOCK_TOP and newvel[1] >= 0:
+                   
+                            intersect[3][0] = max(intersect[3][0], cd[1] - self.pheight - self.pofsy)
+                            intersect[3][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
+                            
+                            colliders.append(collider)
+                            fric = min(fric, collider.GetFriction())
+                                               
+                        
+                # is our top border intersecting?
+                if cd[1] <= ab[1] <= cd[3]:
+                    if ab[0] <= cd[0] <= ab[2] or cd[0] <= ab[0] <= cd[2]:
+                        
+                        res = res or collider.Interact(self)
+                        if res == Entity.KILL:
+                            print("hit deadly entity, need to commit suicide")
+                            if defaults.debug_godmode is False and self.unkillable == 0:
+                                self._Kill(collider.GetVerboseName())
+                                return newpos, newvel
+                
+                        elif res & Entity.BLOCK_BOTTOM and newvel[1] <= 0:
+            
+                            # XXX one day, I need to cleanup these messy size calculations in Player
+                            intersect[1][0] = min(intersect[1][0], cd[3] - self.pofsy)
+                            intersect[1][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
+                            
+                            colliders.append(collider)
                     
-                    newvel[0] = max(0, newvel[0])
-                    #print("left")
+            pain = 0
+            if colliders: #sum(e[1] for e in intersect) != 0:
+                #print(intersect)
+                cnt += len(colliders)
+                for collider in colliders:
+                    collider.AddToActiveBBs()            
+                
+                for n,elem in enumerate(intersect): # sorted(enumerate(intersect),key=lambda x:x[1][1],reverse=True):
+                    if elem[1] < 0.3 or ignore[n]:
+                        continue
+                
+                    if elem[1] > 0.6:
+                        ignore[n] = True
                     
-                elif n == 2:
-                    newpos[0] = elem[0]
-                    pain += newvel[0]
-                    painpos = (ab[2],(ab[3]+ab[1])*0.5)
-                    
-                    newvel[0] = min(0, newvel[0])
-                    #print("right")
-                    
-                elif n == 1:
-                    newpos[1] = elem[0]
-                    pain += -newvel[1]
-                    painpos = ((ab[0]+ab[2])*0.5,ab[1])
-                    
-                    newvel[1] = max(0, newvel[1])  
-                    #print("top")   
-                    
-        if pain > defaults.pain_treshold:
-            print("Very hard landing, spawning cries")  
-            self._ExperiencePain(self.vel,pain/defaults.pain_treshold,painpos) 
+                    if n == 3:
+                        newpos[1] = elem[0]
+                        pain +=  newvel[1]
+                        painpos = ((ab[0]+ab[2])*0.5,ab[3])
+                        
+                        newvel[1] = min(0, newvel[1])
+                                    
+                        f = fric*time # XXX too lazy to think of a pure arithmetic solution
+                        newvel[0] = newvel[0] - (min(newvel[0],f) if newvel[0]>0 else max(newvel[0],-f))
+                        floor_touch = True
+                        #print("floor")
+            
+                        self.cur_tile = Player.ANIM_WALK
+                        self.in_jump = self.in_djump = False
+                        
+                    elif n == 0:
+                        newpos[0] = elem[0]
+                        pain += -newvel[0]
+                        painpos = (ab[0],(ab[3]+ab[1])*0.5)
+                        
+                        newvel[0] = max(0, newvel[0])
+                        #print("left")
+                        
+                    elif n == 2:
+                        newpos[0] = elem[0]
+                        pain += newvel[0]
+                        painpos = (ab[2],(ab[3]+ab[1])*0.5)
+                        
+                        newvel[0] = min(0, newvel[0])
+                        #print("right")
+                        
+                    elif n == 1:
+                        newpos[1] = elem[0]
+                        pain += -newvel[1]
+                        painpos = ((ab[0]+ab[2])*0.5,ab[1])
+                        
+                        newvel[1] = max(0, newvel[1])  
+                        #print("top")   
+                            
+            if pain > defaults.pain_treshold:
+                print("Very hard landing, spawning cries")  
+                self._ExperiencePain(self.vel,pain/defaults.pain_treshold,painpos) 
                      
              
         if floor_touch is False:
@@ -678,11 +700,21 @@ class Player(Entity):
     def GetBoundingBox(self):
         # Adjust the size of the bb slightly to increase the likelihood
         # to pass tight tunnels.
-        pcb = (defaults.player_caution_border[0] / defaults.tiles_size_px[0], \
-            defaults.player_caution_border[1] / defaults.tiles_size_px[1])
-
-        return (self.pos[0] + self.pofsx + pcb[0] / 2, self.pos[1] + pcb[1], \
-            self.pwidth - pcb[0], self.pheight - pcb[1])
+        return self.GetBoundingBoxForPos(self.pos)
+    
+    
+    # XXX these are called a lot, so they need to be fast    
+    def GetBoundingBoxForPos(self,pos):
+        return (pos[0] + self.pofsx, pos[1] + self.pofsy, self.pwidth, self.pheight)
+        
+    def GetBoundingBoxAbsForPos(self,pos):
+        bb = self.GetBoundingBoxForPos(pos)
+        return (bb[0],bb[1],bb[0]+bb[2],bb[3]+bb[1])
+    
+    def GetBoundingBoxAbs(self):
+        bb = self.GetBoundingBoxForPos(self.pos)
+        return (bb[0],bb[1],bb[0]+bb[2],bb[3]+bb[1])
+    
 
     def _AddRespawnPoint(self, pos, color=None):
         """Add a possible respawn position to the player entity."""
@@ -801,6 +833,9 @@ class KillAnimStub(Tile):
         self.SetColor(sf.Color(random.randint(100,150),0,0,255))
         
     def SetGame(self,game):
+        if self.game is game:
+            return
+            
         Tile.SetGame(self,game)
         self.game.useless_sprites += 1
         

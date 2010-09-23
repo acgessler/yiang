@@ -399,8 +399,8 @@ class LevelEntrance(AnimTile):
         return LevelLoader.GuessLevelName(self.next_level)
         
     def _RunLevel(self):
-        if self.game.GetGameMode() in (Game.EDITOR,Game.EDITOR_HIDDEN):
-            pass
+        if self.game.GetGameMode() in (Game.EDITOR,Game.EDITOR_HIDDEN) or hasattr(self,"now_locked"):
+            return
         
         self.now_locked = True
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("escape"))
@@ -408,13 +408,17 @@ class LevelEntrance(AnimTile):
             if key == accepted[0]:
                 
                 def pushit(x):
+                    Renderer.RemoveDrawable(x)
+                    
                     self.game.PopSuspend()
                     self.game.PushLevel(self.next_level)
                     
-                    delattr( self, "now_locked" )
-                    Renderer.RemoveDrawable(x)
+                    try:
+                        delattr( self, "now_locked" )
+                    except AttributeError:
+                        pass
                     
-                    raise NewFrame()
+                    #raise NewFrame()
                 
                 from posteffect import FadeOutOverlay
                 Renderer.AddDrawable( FadeOutOverlay(defaults.enter_level_fade_time, fade_end=0.0, on_close=pushit) )

@@ -418,7 +418,9 @@ class Level:
             self.entities.add(entity)
             self._AddEntityToWindows(entity)
             
-        for entity in self.entities_mov:
+        mov = self.entities_mov
+        self.entities_mov = set()
+        for entity in mov:
             if not entity in self.entities or entity in self.entities_add:
                 continue
             
@@ -430,7 +432,7 @@ class Level:
                 
             self._AddEntityToWindows(entity)
             
-        self.entities_add, self.entities_rem, self.entities_mov = set(), set(), set()
+        self.entities_add, self.entities_rem = set(), set()
         
     def GetEntityStats(self):
         """Return a 4-tuple (entities_total,entities_active,entities_visible,entities_nowindow).
