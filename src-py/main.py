@@ -134,9 +134,8 @@ class MainMenu(Drawable):
         self.clock = sf.Clock()
         self.images = [ ]
         
-        img = sf.Image()
-        img.LoadFromFile(os.path.join(defaults.data_dir,"textures",
-            "title_small.png"))
+        from textures import TextureCache
+        img = TextureCache.Get(os.path.join(defaults.data_dir,"textures","title_small.png"))
         
         sp = sf.Sprite(img)
         
@@ -476,12 +475,22 @@ Hit {1} to cancel""".format(
                     base_offset[1]+y*height_spacing + 20,
                     sf.Color.Red if self.level == i else sf.Color.White )
                 
+        height = int(0.7*height)
+        from level import LevelLoader
+        sf_draw_string_with_shadow(
+            "Press {0} to enter Level {1} - '{2}'".format(KeyMapping.GetString("accept"),self.level,LevelLoader.GuessLevelName(self.level)),
+            defaults.font_menu,
+            height,
+            base_offset[0]+20,
+            ry - 130*defaults.scale[1] - height*1.2,
+            sf.Color.White )
+                
         sf_draw_string_with_shadow(
             "Press {0} to return".format(KeyMapping.GetString("escape")),
             defaults.font_menu,
             height,
             base_offset[0]+20,
-            ry - 140*defaults.scale[1],
+            ry - 130*defaults.scale[1],
             sf.Color.White )
         
         

@@ -616,8 +616,8 @@ class Player(Entity):
                     if elem[1] < 0.3 or ignore[n]:
                         continue
                 
-                    if elem[1] > 0.6:
-                        ignore[n] = True
+                    #if elem[1] > 0.6:
+                    ignore[n] = True
                     
                     if n == 3:
                         newpos[1] = elem[0]
