@@ -103,8 +103,20 @@ class Game(Drawable):
         self.cookies = {}
         
         self.useless_sprites=1
-        
         self.swallow_escape = False
+        
+        
+    def OnRemoveFromRenderer(self):
+        Drawable.OnRemoveFromRenderer(self)
+        
+        if self.level:
+            self.level.OnDisable()
+            
+    def OnAddToRenderer(self):
+        Drawable.OnAddToRenderer(self)
+        
+        if self.level:
+            self.level.OnEnable()
         
     def GetCookie(self,name,default):
         """Get/set a cookie. Cookies are small chunks of data
@@ -702,7 +714,8 @@ Hit {2} to return to the menu""").format(
             self.level = LevelLoader.LoadLevel(idx,self,no_loadscreen)
             
         if self.level:
-            self.level.OnEnable()
+            if self.QueryFlag(Drawable.FLAG_ACTIVE):
+                self.level.OnEnable()
             return True
             
         return False 

@@ -365,8 +365,27 @@ class Level:
         the effect stack. Use RemovePostFX() to revert."""
         p = PostFXCache.Get(name,env)
         if not p is None:
-            p.SetUpdaterParam("game",self.game)
+            self._SetupStandardPostFXParams(p)
         self.postfx_rt.append((name,p,env))
+        
+    def _SetupStandardPostFXParams(self,p):
+        """Setup some predefined postfx parameters; used internally"""
+        p.SetUpdaterParam("game",self.game)
+        
+        
+    def OnEnable(self):
+        self._SetupAudioSection()
+        for entity in self.EnumAllEntities():
+            entity.OnEnterLevel()
+            
+        # need to recover postfx state (the 'game' parameter needs to be set properly
+        # because postfx instances may be shared across multiple game instances)
+        for name,p,env in self.postfx_rt:
+            self._SetupStandardPostFXParams(p)
+    
+    def OnDisable(self):
+        for entity in self.EnumAllEntities():
+            entity.OnLeaveLevel()
 
     def RemovePostFX(self,name):
         """Remove a specific postfx from the stack. If there is
@@ -662,15 +681,6 @@ class Level:
             self.dither_strength = 1.0
             #if defaults.no_ppfx is False: 
             #    self.RemovePostFX("grayscale.sfx")
-                
-    def OnEnable(self):
-        self._SetupAudioSection()
-        for entity in self.EnumAllEntities():
-            entity.OnEnterLevel()
-    
-    def OnDisable(self):
-        for entity in self.EnumAllEntities():
-            entity.OnLeaveLevel()
             
     def Draw(self, time, dtime):
         """Called by the Game matchmaker class once per frame,

@@ -89,6 +89,9 @@ class BackgroundLight(Tile):
     #    return s
     
     def Draw(self):
+        if len(self.cached) < 2:
+            return
+        
         lv = self.game.GetLevel()
         offset,elem = self.cached[1]
             

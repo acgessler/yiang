@@ -330,7 +330,8 @@ Hit {1} to cancel""".format(
         
     def _DrawRectangle(self,bb,cola=None,colb=None,scale=1.0):
         shape = sf.Shape()
-        cola, colb = cola or sf.Color(40,40,40,int(165*scale)), colb or sf.Color(120,120,120,int(165*scale))
+        basea = 255 if defaults.no_ppfx else 175 
+        cola, colb = cola or sf.Color(40,40,40,int(basea*scale)), colb or sf.Color(120,120,120,int(basea*scale))
         
         shape.AddPoint(bb[0],bb[1],cola,colb)
         shape.AddPoint(bb[2],bb[1],cola,colb)

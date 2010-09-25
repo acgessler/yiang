@@ -322,7 +322,7 @@ class CampaignLevel(Level):
         # near entities as well.
         self.entities_active = set()
         for n,window in self._EnumWindows():
-            if n:
+            if n > 1:
                 continue
             
             for entity in window:
