@@ -656,8 +656,13 @@ class Level:
                     entity.in_visible_set = False
                 
         self.entities_active.update(self.window_unassigned)
-        for entity in sorted(self.EnumActiveEntities(),key=lambda x:x.GetDrawOrder(),reverse=True):
-            entity.Update(time,dtime)
+        se = sorted(self.EnumActiveEntities(),key=lambda x:x.GetDrawOrder(),reverse=True)
+        
+        steps = math.ceil( dtime/(1/defaults.update_tickrate) )
+        stepd = dtime / steps
+        for n in range(steps):
+            for entity in se:
+                entity.Update(time,stepd)
             
     def _UpdateDistortion(self,time,dtime):
         # distortion_params is (time_between,distortion_time,scale).

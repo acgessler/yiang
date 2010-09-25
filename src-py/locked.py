@@ -161,8 +161,7 @@ class Key(Tile,InventoryItem):
         
     def Interact(self, other):
         if isinstance(other,Player):
-            other.AddToInventory(self)
-            self.game.RemoveEntity(self)
+            self.TakeMe(other)
         
         return Entity.ENTER
     

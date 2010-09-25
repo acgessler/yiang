@@ -40,7 +40,6 @@ class InventoryItem:
     Such items are collected by the player and are subsequently
     reused to perform specific actions, i.e. open doors."""
     
-    
     def GetItemName(self):
         """Return a descriptive item name to be displayed to the user"""
         return "an unnamed inventory item"
@@ -48,8 +47,15 @@ class InventoryItem:
     def SameKind(self,other):
         return not not (type(self) == type(other) and self.color == other.color)
     
-    #def __hash__(self):
-    #    return id(self)
+    def TakeMe(self,player):
+        """Let the player take the item and remove it from the scene"""
+        if not hasattr(self,"item_taken"):
+            # we need to deal with te situation that the player may interact 
+            # with us multiple times in a single frame, so we may not yet 
+            # have been removed from the entity list.
+            player.AddToInventory(self)
+            self.game.RemoveEntity(self)
+            self.item_taken = True
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -510,19 +516,19 @@ class Player(Entity):
         ignore = [False,False,False,False]
             
         dx,dy = dx/taps,dy/taps
-        #print("taps: {0}".format(taps))
+        #all = set()
         for n in range(taps):
             
             # left, top, right, bottom
             intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]
-            colliders = []
+            colliders = set()
             fric = 1e10
         
             n = n+1
             ab = old_ab[0]+dx*n,old_ab[1]+dy*n,old_ab[2]+dx*n,old_ab[3]+dy*n
         
             for collider in self.game.GetLevel().EnumPossibleColliders(ab):
-                if collider is self:
+                if collider is self: # or collider in all:
                     continue
                 
                 cd = collider.GetBoundingBoxAbs()
@@ -546,7 +552,7 @@ class Player(Entity):
                             intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
                             intersect[0][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])     
                             
-                            colliders.append(collider)          
+                            colliders.add(collider)          
                     
                 # is our right border intersecting?
                 if cd[2] >= ab[2] >= cd[0]:
@@ -564,7 +570,7 @@ class Player(Entity):
                             intersect[2][0] = max(intersect[2][0],cd[0] - self.pwidth - self.pofsx)
                             intersect[2][1] += min( ab[3], cd[3]) - max(ab[1], cd[1])    
                             
-                            colliders.append(collider)
+                            colliders.add(collider)
                     
                 # is our lower border intersecting?
                 if cd[1] <= ab[3] <= cd[3]:
@@ -582,7 +588,7 @@ class Player(Entity):
                             intersect[3][0] = max(intersect[3][0], cd[1] - self.pheight - self.pofsy)
                             intersect[3][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
                             
-                            colliders.append(collider)
+                            colliders.add(collider)
                             fric = min(fric, collider.GetFriction())
                                                
                         
@@ -603,11 +609,10 @@ class Player(Entity):
                             intersect[1][0] = min(intersect[1][0], cd[3] - self.pofsy)
                             intersect[1][1] += min( ab[2], cd[2]) - max(ab[0], cd[0])
                             
-                            colliders.append(collider)
+                            colliders.add(collider)
                     
             pain = 0
             if colliders: #sum(e[1] for e in intersect) != 0:
-                #print(intersect)
                 cnt += len(colliders)
                 for collider in colliders:
                     collider.AddToActiveBBs()            

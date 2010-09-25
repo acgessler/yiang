@@ -36,10 +36,14 @@ class ScoreTile(AnimTile):
         
     def Interact(self,other):
         if isinstance(other,Player):
-            points = self.game.Award(self.points)
             
-            self.game.RemoveEntity(self) 
-            self.game.AddEntity(ScoreTileAnimStub("{0:4.4} ct".format(points),self.pos,1.0))
+            if not hasattr(self,"score_taken"):
+            
+                points = self.game.Award(self.points)
+                
+                self.game.RemoveEntity(self) 
+                self.game.AddEntity(ScoreTileAnimStub("{0:4.4} ct".format(points),self.pos,1.0))
+                self.score_taken = True
             
         return Entity.ENTER
 

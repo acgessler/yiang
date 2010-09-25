@@ -95,8 +95,7 @@ class Weapon(InventoryItem, Tile):
     
     def Interact(self, other):
         if isinstance(other,Player):
-            other.AddToInventory(self)
-            self.game.RemoveEntity(self)
+            self.TakeMe(other)
         
         return Entity.ENTER
     
@@ -148,7 +147,13 @@ class Ammo(AnimTile):
         
     def Interact(self, other):
         if isinstance(other,Player):
-            other.AddAmmo(self.amount)
-            self.game.RemoveEntity(self)
+            
+            if not hasattr(self,"ammo_taken"):
+                other.AddAmmo(self.amount)
+                self.game.RemoveEntity(self)
+                self.ammo_taken = True
         
         return Entity.ENTER
+    
+    
+    
