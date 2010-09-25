@@ -97,7 +97,7 @@ class Level:
         self.gravity = defaults.gravity if gravity is None else gravity
         self.SetDistortionParams((0,0,0) if distortion_params is False else
              ((not defaults.no_distortion and distortion_params) 
-             or (30.0,5.0,10.0)
+             or (30.0,1.5,10.0)
         ))
         
         self.audio_section = audio_section or "level_{0}".format(self.level)

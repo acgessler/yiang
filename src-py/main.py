@@ -475,7 +475,7 @@ Hit {1} to cancel""".format(
                     base_offset[1]+y*height_spacing + 20,
                     sf.Color.Red if self.level == i else sf.Color.White )
                 
-        height = int(0.7*height)
+        height = int(0.5*height)
         from level import LevelLoader
         sf_draw_string_with_shadow(
             "Press {0} to enter Level {1} - '{2}'".format(KeyMapping.GetString("accept"),self.level,LevelLoader.GuessLevelName(self.level)),
