@@ -370,8 +370,9 @@ class Level:
         
     def _SetupStandardPostFXParams(self,p):
         """Setup some predefined postfx parameters; used internally"""
+        if not p:
+            return
         p.SetUpdaterParam("game",self.game)
-        
         
     def OnEnable(self):
         self._SetupAudioSection()
@@ -658,11 +659,12 @@ class Level:
         self.entities_active.update(self.window_unassigned)
         se = sorted(self.EnumActiveEntities(),key=lambda x:x.GetDrawOrder(),reverse=True)
         
-        steps = math.ceil( dtime/(1/defaults.update_tickrate) )
+        steps = max(1, int( dtime/(1/defaults.update_tickrate) ))
         stepd = dtime / steps
+        timeo = time - dtime
         for n in range(steps):
             for entity in se:
-                entity.Update(time,stepd)
+                entity.Update(timeo + n*stepd,stepd)
             
     def _UpdateDistortion(self,time,dtime):
         # distortion_params is (time_between,distortion_time,scale).

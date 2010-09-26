@@ -34,7 +34,9 @@ class LevelUp(Tile):
         Tile.__init__(self,text,width,height)
         
     def Interact(self,other):
-        if isinstance(other,Player) and not hasattr(self,"working_now"):
+        if isinstance(other,Player) and not hasattr(other,"has_levelup"):
+            # we can no longer be sure that only one LevelUp will be triggered
+            
             print("Level completed: {0}!".format(self.level.GetName() or ""))
             self.game.Award(defaults.levelup_score_base*self.game.GetLevelStats()[-1])
                       
@@ -44,7 +46,7 @@ class LevelUp(Tile):
             self.game.MarkLevelDone(self.level.GetLevelIndex())
             
     
-            self.working_now = True
+            other.has_levelup = True
             if self.game.GetGameMode() == Game.CAMPAIGN:
                 self.game.BackToWorldMap()
             
