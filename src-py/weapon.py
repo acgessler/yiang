@@ -37,6 +37,7 @@ class Shot(Tile):
         Tile.__init__(self,*args,**kwargs)
         self.speed = 1.0
         self.onhit = lambda x:True
+        self.protected = []
         
     def SetDirection(self,dir):
         """Set the target direction for the shot"""
@@ -45,8 +46,8 @@ class Shot(Tile):
     def SetSpeed(self,speed):
         self.speed = speed
         
-    def SetOnHit(self,oh):
-        self.onhit = oh
+    def SetProtected(self,pro):
+        self.protected = pro
         
     def GetBoundingBox(self):
         return None
@@ -65,15 +66,18 @@ class Shot(Tile):
     
         # check for any collisions
         for collider in self.game.GetLevel().EnumPossibleColliders(ab):
-            cd = collider.GetBoundingBox()
+            if collider in self.protected:
+                continue
+            
+            cd = collider.GetBoundingBoxAbs()
             if cd is None:
                 continue
             
             # XXX won't work for non horizontal movements
-            if (self.dir[0] < 0 and self._HitsMyLeft(ab,cd) or self.dir[0] > 0 and self._HitsMyRight(ab,cd)) \
-                and self.onhit(collider) is True and collider.Interact(self) != Entity.ENTER:
-                
-                self.game.RemoveEntity(self)
+            if (self.dir[0] < 0 and self._HitsMyLeft(ab,cd) or self.dir[0] > 0 and self._HitsMyRight(ab,cd)):
+                bl = collider.Interact(self) 
+                if bl != Entity.ENTER:
+                    self.game.RemoveEntity(self)
                 
         Tile.Update(self,time_elapsed,time)
         
@@ -99,15 +103,15 @@ class Weapon(InventoryItem, Tile):
         
         return Entity.ENTER
     
-    def Shoot(self,pos, dir,color,speed=None, on_hit=lambda x: True):
+    def Shoot(self,pos, dir,color=None,protected=[],speed=None):
         t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",self.shot_tile),self.game)
                 
         t.SetSpeed(speed or self.speed)
         t.SetDirection(dir)
         t.SetPosition(pos)
-        t.SetOnHit(on_hit)
-        t.SetColor(color)
+        t.SetColor(color or sf.Color(200,200,255))
         t.SetLevel(self.level)
+        t.SetProtected(protected)
                 
         self.game.AddEntity(t)
         

@@ -73,13 +73,13 @@ class Enemy(AnimTile):
         """Get the score the player receives for slaying this enemy"""
         return -0.05
         
-    def _SpreadSplatter(self):
+    def _SpreadSplatter(self,scale=1.0):
         name = "splatter1.txt"
         remaining = max(0 if self.game.GetFrameRateUnsmoothed() <= defaults.max_framerate_for_sprites else
             defaults.max_useless_sprites - self.game.useless_sprites , 
             defaults.min_death_sprites
         )
-        for i in range(min(remaining, defaults.death_sprites)):
+        for i in range(min(remaining, int(defaults.death_sprites * scale))):
             from tile import TileLoader
                 
             t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
@@ -91,11 +91,12 @@ class Enemy(AnimTile):
     def Interact(self, other):
         """The default behaviour for enemies is to be killable by a shot with any gun.
         Also, enemies usually don't kill each other """
+        if isinstance(other,Shot):
+            if other.color == self.color:
+                self._Die()
+                
         if isinstance(other,Enemy):
             return Entity.BLOCK
-        
-        if isinstance(other,Shot):
-            self._Die()
             
         return Entity.KILL
     
@@ -361,7 +362,7 @@ class SmallBob(Enemy):
     def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.5, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.5, accel_time=3.0):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
-        self.hits = 4
+        self.hits = self.hits_needed = 4
         self.vel = self.last = random.choice((-1, 1)) 
         self.move_speed = move_speed_base*random.uniform(0.8,1.2)
         self.trigger_distance = trigger_distance**2
@@ -383,6 +384,7 @@ class SmallBob(Enemy):
         """SmallBob needs 4 hits to die"""
         if isinstance(other,Shot):
             self.hits -= 1
+            self._SpreadSplatter(0.1* (self.hits_needed - self.hits))
             if self.hits == 0:
                 self._Die()
             
@@ -466,7 +468,7 @@ class SmallBob(Enemy):
 from weapon import Weapon
 class SmallRobot(SmallTraverser):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=6, shot_delta=0.25, shots=3, shot_ofs_y=0.55, **kwargs):
+    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, **kwargs):
         SmallTraverser.__init__(self, *args, verbose="a Nifty Robot Intruder", halo_img=None, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
@@ -487,6 +489,12 @@ class SmallRobot(SmallTraverser):
         # We CANNOT die.
         return
     
+    def Interact(self,other):
+        if isinstance(other,Shot): # avoid swallowing our own shoots
+            return Entity.ENTER
+        
+        return SmallTraverser.Interact(self, other)
+    
     def Update(self, time_elapsed, time):
         SmallTraverser.Update(self, time_elapsed, time)
         if not self.game.IsGameRunning():
@@ -502,8 +510,7 @@ class SmallRobot(SmallTraverser):
         if id < self.shots and id > self.last_shot:
             self.weapon.Shoot((self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.shot_ofs_y),
                 (self.vel/abs(self.vel),0),
-                self.color,
-                on_hit=lambda x:isinstance(x,Player))
+                self.color,[self])
             self.last_shot = id
         
         

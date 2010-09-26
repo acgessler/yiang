@@ -56,6 +56,7 @@ class InventoryItem:
             player.AddToInventory(self)
             self.game.RemoveEntity(self)
             self.item_taken = True
+            
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -310,17 +311,21 @@ class Player(Entity):
         if self.ammo == 2:
             self.game.AddEntity(InventoryChangeAnimStub("Warn: low ammo",
                 self.pos,color=sf.Color.Yellow))
-
-        print("Shoot!")
-        def check(other):
-            return other.color == self.color
         
         if self.dir == Player.RIGHT:
             weapon.Shoot((self.pos[0]+self.pwidth*1.2,self.pos[1]+self.pheight*0.6),\
-                (1.0,0.0),sf.Color(200,200,255),check)
+                (1.0,0.0),self.color,[self])
         else:
             weapon.Shoot((self.pos[0]-1.0,self.pos[1]+self.pheight*0.6),\
-                (-1.0,0.0),sf.Color(200,200,255),check)
+                (-1.0,0.0),self.color,[self])
+            
+    def Interact(self,other):
+        from weapon import Shot
+        if isinstance(other, Shot):
+            self._Kill("a ray-blaster shot")
+            return Entity.BLOCK
+            
+        return Entity.Interact(self,other)
                          
     def Update(self, time_elapsed, time):
         if self.game.IsGameRunning() is False:
