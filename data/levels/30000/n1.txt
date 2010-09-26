@@ -1,3 +1,5 @@
 from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_1",text_color=sf.Color(180,0,0),audio_fx="_story_0.ogg")
-Thus spoke the priest:
-As simple as their cities is their faith: the reduced their world to 128 characters. They are linguist pagans awaiting your strike to be enlightened. They represent a DANGER for us and our faith. 
+A nasty voice in your mind explains the rules of this world: ASCII life may be a very limited form of life, but it is still worth living and you shouldn't take it without good reason. To aid you at protecting those small creatures, a special rule has been added to this world: you cannot kill other creatures unless they have the same color as you. There are magic bricks to change color, however. Use them with care.
+
+
+(the voice is getting louder and louder so you turn on your mp3 player and listen to some metal - honestly, real men NEVER read the manual)
