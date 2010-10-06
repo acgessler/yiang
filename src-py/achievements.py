@@ -27,12 +27,12 @@ import sf
 # Our stuff
 import defaults
 
-
+# Very strong encryption, almost unbreakable
 def Scramble(x):
-    return x
+    return "".join(hex(ord(c)^0x153392b) for c in x)
 
 def UnScramble(x):
-    return x
+    return "".join(hex(ord(c)^0x153392b) for c in x)
 
 
 class Achievements:

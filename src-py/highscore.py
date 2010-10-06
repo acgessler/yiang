@@ -27,6 +27,13 @@ import sf
 
 import defaults
 
+# Very strong encryption, almost unbreakable
+def Scramble(x):
+    return "".join(hex(ord(c)^0x150392c) for c in x)
+
+def UnScramble(x):
+    return "".join(hex(ord(c)^0x150392c) for c in x)
+
 class HighscoreManager:
     """Static class to keep track of the highest highscore
     the game instance has ever happened to encounter, also
@@ -41,7 +48,7 @@ class HighscoreManager:
         
         try:
             with open(HighscoreManager.file,"rt") as r:
-                HighscoreManager.record = float(r.read())
+                HighscoreManager.record = float(UnScramble( r.read()))
                 print("Highscore record is {0}".format(HighscoreManager.record))
         except IOError:
             print("Found no highscore file, seemingly this is the first try :-)")
@@ -74,7 +81,7 @@ class HighscoreManager:
     def _Flush():
         try:
             with open(HighscoreManager.file,"wt") as r:
-                r.write(str(HighscoreManager.record))
+                r.write(Scramble(str(HighscoreManager.record)))
         except IOError:
             print("Failed to flush highscore file")
         
