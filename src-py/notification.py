@@ -217,7 +217,10 @@ class SimpleNotification(EntityWithEditorImage):
             
             if self.audio_fx:
                 from audio import SoundEffectCache
-                SoundEffectCache.Get(self.audio_fx).SetVolume(4.0).Play()
+                try:
+                    SoundEffectCache.Get(self.audio_fx).SetVolume(4.0).Play()
+                except: # be gratious (aka careless)
+                    pass
             
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
