@@ -873,7 +873,7 @@ class KillAnimStub(Tile):
         """Setup random direction, speed and ttl"""
         self.SetSpeed(random.uniform(-1.0, 1.0))
         self.SetDirection((random.uniform(-1.0, 1.0),random.uniform(-1.0, 1.0)))
-        self.SetTTL(random.random()*18.0)
+        self.SetTTL(random.random()*6.0)
 
     def Update(self, time_elapsed, time_delta):
         self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, 

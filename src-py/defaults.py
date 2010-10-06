@@ -161,7 +161,7 @@ no_distortion = False
 pain_treshold = 15
 
 # Frame rate limiting, up to 4 steps.
-slowdown_level = 2
+slowdown_level = 0
 
 # Size of a single collision tap, in tiles. If the player moves
 # by n times this distance in a single frame, collision detection
