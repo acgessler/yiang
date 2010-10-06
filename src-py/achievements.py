@@ -27,23 +27,33 @@ import sf
 # Our stuff
 import defaults
 
+
+def Scramble(x):
+    return x
+
+def UnScramble(x):
+    return x
+
+
 class Achievements:
     """Static class to keep track of all achievements which
     the player has earned so far."""
     
     all = dict()
     have = set()
-    file = "achievements.txt"
+    file = None
     
     @staticmethod
     def Initialize():
+        Achievements.file = Achievements.file or os.path.join(defaults.cur_user_profile_dir,"achievements.txt")
+        
         d = os.path.join( defaults.data_dir,"achievements")
         Achievements.all = dict([f[:-4],None] for f in os.listdir(d ) \
             if os.path.isfile(os.path.join(d,f)) and f[-4:].lower()==".txt") 
         
         try:
             with open(Achievements.file,"rt") as r:
-                Achievements.have = Achievements.have | set(f.strip() for f in r.readlines())
+                Achievements.have = Achievements.have | set(UnScramble(f.strip()) for f in r.readlines())
                 
                 print("Current achievements: {0}".format(list(Achievements.have)))
                 print("Known achievements: {0}".format(list(Achievements.all.keys())))
@@ -94,7 +104,7 @@ class Achievements:
         try:
             with open(Achievements.file,"wt") as r:
                 for a in Achievements.have:
-                    r.write(a+"\n")
+                    r.write(Scramble(a)+"\n")
         except IOError:
             print("Failed to flush achievements file")
             

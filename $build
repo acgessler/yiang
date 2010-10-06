@@ -15,6 +15,7 @@ build data
 
 print App configuration
 build config
+build userdata
 
 # push CREDITS to both so there is still a text file
 # with the authors, even if the app doesn't run 

@@ -25,16 +25,20 @@ import os
 # PySFML
 import sf
 
+import defaults
+
 class HighscoreManager:
     """Static class to keep track of the highest highscore
     the game instance has ever happened to encounter, also
     possible highscore rankings will go here."""
     
     record = 0
-    file = "highscore.txt"
+    file = None
     
     @staticmethod
     def Initialize():
+        HighscoreManager.file = HighscoreManager.file or os.path.join(defaults.cur_user_profile_dir,"highscore.txt")
+        
         try:
             with open(HighscoreManager.file,"rt") as r:
                 HighscoreManager.record = float(r.read())

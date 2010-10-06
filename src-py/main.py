@@ -288,10 +288,10 @@ Hit {1} to cancel""".format(
             Renderer.app.Draw(entry)
             
         a,b = sf_string_with_shadow(
-                "Best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100),
+                "Profile: {1} / best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100,defaults.cur_user_profile),
                 defaults.font_menu,
                 int(20*defaults.scale[1]),
-                int(defaults.resolution[0]-225*defaults.scale[1]),
+                int(defaults.resolution[0]-425*defaults.scale[1]),
                 10,
                 sf.Color.Green)
         Renderer.app.Draw(a); 
@@ -628,6 +628,21 @@ Hit {1} to cancel""".format(
             y += height+height_spacing
             
                     
+                    
+
+        
+import userprofile
+
+
+def LaunchMenu():
+    if defaults.no_bg_music is False:
+        class DummyMusicPlayer(Drawable):
+            def Draw(self):
+                BerlinerPhilharmoniker.Process()
+        Renderer.AddDrawable(DummyMusicPlayer())
+        BerlinerPhilharmoniker.SetAudioSection("menu")
+
+    Renderer.AddDrawable(MainMenu())
 
 
 def main():
@@ -646,6 +661,8 @@ def main():
         
     print("Startup ...")
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
+    
+    userprofile.LoadPreviousProfile()
 
     Renderer.Initialize()
     HighscoreManager.Initialize()
@@ -661,25 +678,17 @@ def main():
     if defaults.no_halos is True:
         defaults.death_sprites = min( 20, defaults.death_sprites )
     
-    """
-    accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+    
+    """accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
     def on_close(key, accepted=accepted):
         if key == accepted[1]:
-            if defaults.no_bg_music is False:
-                class DummyMusicPlayer(Drawable):
-                    def Draw(self):
-                        BerlinerPhilharmoniker.Process()
-                Renderer.AddDrawable(DummyMusicPlayer())
-                BerlinerPhilharmoniker.SetAudioSection("menu")
-        
-            Renderer.AddDrawable(MainMenu())
-            #Renderer.AddDrawable(FadeInOverlay(fade_time=0.8,fade_start=0.0,draworder=50000))
+            LaunchMenu():
             return 
         sys.exit(0)
                
     Renderer.SetClearColor(sf.Color(100,0,0)) 
     Renderer.AddDrawable( MessageBox(sf.String(
-Do not continue if you can't read.
+
     
 Hit {0} to continue
 Hit {1} to cancel.format(
@@ -690,15 +699,8 @@ Hit {1} to cancel.format(
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
             )), defaults.game_over_fade_time, (550, 150), 0.0, accepted, sf.Color(150,0,0), on_close))
     """
-    if defaults.no_bg_music is False:
-        class DummyMusicPlayer(Drawable):
-            def Draw(self):
-                BerlinerPhilharmoniker.Process()
-        Renderer.AddDrawable(DummyMusicPlayer())
-        BerlinerPhilharmoniker.SetAudioSection("menu")
-
-    Renderer.AddDrawable(MainMenu())
     
+    userprofile.SetupSelectionGUI(LaunchMenu)
     Renderer.DoLoop()
     Renderer.Terminate()
     

@@ -108,6 +108,7 @@ organ_transplant_dollar_in = 1.0
 no_bg_music = False
 no_bg_sound = False
 audio_volume_scale = 0.8
+def_user_profile = "Wurzelgnom"
 
 # Disable threading. This implies disabling loading screens.
 no_threading = False
@@ -175,6 +176,7 @@ update_tickrate = 60
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.
 root_dir = ".."
+udata_dir = os.path.join(root_dir, "userdata")
 data_dir = os.path.join(root_dir, "data")
 profile_dir = os.path.join(root_dir, "profile")
 config_dir = os.path.join(root_dir, "config")
@@ -191,7 +193,7 @@ credits_string = "(c) 2010 Alexander Christoph Gessler"
 resolution_base = [1280, 850]
 
 # -----------------------------------------------------------------------------
-# derived values, do not change. you have been warned.
+# derived values (not configurable settings!), do not change. you have been warned.
 cells = None
 cells_intro = None
 tiles = None
@@ -200,6 +202,8 @@ cull_distance = None
 scale = None
 max_game_tiles_y = None
 level_window_size_abs = None
+cur_user_profile = None
+cur_user_profile_dir = None
 
 # -----------------------------------------------------------------------------
 def update_derived():
