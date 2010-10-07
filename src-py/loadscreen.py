@@ -66,13 +66,14 @@ class EntitySpawner(Entity):
 from level import Level
 class LoadScreenLevel(Level):
         
-    def __init__(self, level, game, raw, name="GenericLoadScreenLevel",color=(30,30,30)):
-        Level.__init__(self, level, game, raw,
+    def __init__(self, level, game, raw, *args, name="GenericLoadScreenLevel",distortion_params=False,color=(30,30,30),scroll=0,autoscroll_speed=(0.0,0.0),vis_ofs=0,**kwargs):
+        Level.__init__(self, level, game, raw, *args,
+            distortion_params=distortion_params,
             color=color,
-            name=name,
-            scroll=0,
-            autoscroll_speed=(0.0,0.0),
-            distortion_params=False
+            scroll=scroll,
+            autoscroll_speed=autoscroll_speed,
+            vis_ofs=vis_ofs,
+            **kwargs
         )
         
         
