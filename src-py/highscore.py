@@ -62,7 +62,7 @@ class HighscoreManager:
             with open(HighscoreManager.file,"rt") as r:
                 HighscoreManager.record = float(CheckIfNonEmpty( r.read())) 
                 print("Highscore record is {0}".format(HighscoreManager.record))
-        except IOError:
+        except:
             print("Found no highscore file, seemingly this is the first try or you cheated :-)")
             # failure to hack highscore.txt properly results in 0 :-)
             HighscoreManager._Flush()

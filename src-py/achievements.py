@@ -70,7 +70,7 @@ class Achievements:
                 
                 print("Current achievements: {0}".format(list(Achievements.have)))
                 print("Known achievements: {0}".format(list(Achievements.all.keys())))
-        except IOError:
+        except:
             print("Found no achievements file, seemingly this is the first try :-)")
             Achievements._Flush()
             

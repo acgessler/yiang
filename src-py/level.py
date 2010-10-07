@@ -989,7 +989,8 @@ class LevelLoader:
         if not no_loadscreen and not defaults.no_threading:
             from loadscreen import LoadScreen
             lv = LoadScreen.Load(LevelLoader.LoadLevel,level,game,no_loadscreen=True)
-            lv.used_loadscreen = True
+            if lv:
+                lv.used_loadscreen = True
             return lv
        
         file = LevelLoader.BuildLevelPath(level)

@@ -29,6 +29,7 @@ from tile import Tile
 from game import Entity,Game
 from keys import KeyMapping
 
+import time
 
 # range of levels usable as background for the loadscreen
 SPECIAL_LEVEL_LOADING_START = 50000
@@ -75,6 +76,12 @@ class LoadScreenLevel(Level):
             vis_ofs=vis_ofs,
             **kwargs
         )
+        
+    def Draw(self, _time, dtime):
+        frate = self.game.GetFrameRateUnsmoothed()
+        if frate > 20.0:
+            time.sleep(0.025) # try to slow down this thread to favour the loading thread
+        Level.Draw(self,_time,dtime)
         
         
 class LoadScreen:
