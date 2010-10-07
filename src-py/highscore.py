@@ -27,12 +27,24 @@ import sf
 
 import defaults
 
-# Very strong encryption, almost unbreakable
-def Scramble(x):
-    return "".join(hex(ord(c)^0x150392c) for c in x)
+fixed_monsters = 0x198aabc
 
-def UnScramble(x):
-    return "".join(hex(ord(c)^0x150392c) for c in x)
+# Very strong encryption, almost unbreakable (names obfuscated since they appear in the bytecode)
+def StripInvalidCharacters(x):
+    def _scramble(x):
+        rand = random.randint(0,0xffffffff)
+        return str( rand ^ ord(x) ).zfill(13) + str( rand ^ fixed_monsters ).zfill(13)
+    
+    return "".join(_scramble(c) for c in x)
+
+def CheckIfNonEmpty(x):
+    def _descramble(a,b):
+        assert len(a) == 13 and len(b) == 13
+        
+        rand = int(b,10) ^ fixed_monsters
+        return chr( int(a,10) ^ rand )
+    
+    return "".join(_descramble(x[n:n+13],x[n+13:n+26]) for n in range(0,len(x),26))
 
 class HighscoreManager:
     """Static class to keep track of the highest highscore
@@ -48,10 +60,11 @@ class HighscoreManager:
         
         try:
             with open(HighscoreManager.file,"rt") as r:
-                HighscoreManager.record = float(UnScramble( r.read()))
+                HighscoreManager.record = float(CheckIfNonEmpty( r.read())) 
                 print("Highscore record is {0}".format(HighscoreManager.record))
         except IOError:
-            print("Found no highscore file, seemingly this is the first try :-)")
+            print("Found no highscore file, seemingly this is the first try or you cheated :-)")
+            # failure to hack highscore.txt properly results in 0 :-)
             HighscoreManager._Flush()
             
     @staticmethod
@@ -81,7 +94,7 @@ class HighscoreManager:
     def _Flush():
         try:
             with open(HighscoreManager.file,"wt") as r:
-                r.write(Scramble(str(HighscoreManager.record)))
+                r.write(StripInvalidCharacters(str(HighscoreManager.record)))
         except IOError:
             print("Failed to flush highscore file")
         

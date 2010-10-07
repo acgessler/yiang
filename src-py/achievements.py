@@ -20,6 +20,7 @@
 # Python core
 import os
 import itertools
+import random
 
 # PySFML
 import sf
@@ -27,12 +28,24 @@ import sf
 # Our stuff
 import defaults
 
-# Very strong encryption, almost unbreakable
-def Scramble(x):
-    return "".join(hex(ord(c)^0x153392b) for c in x)
+fixed_monsters = 0x150392
 
-def UnScramble(x):
-    return "".join(hex(ord(c)^0x153392b) for c in x)
+# Very strong encryption, almost unbreakable (names obfuscated since they appear in the bytecode)
+def StripInvalidCharacters(x):
+    def _scramble(x):
+        rand = random.randint(0,0xffffffff)
+        return str( rand ^ ord(x) ).zfill(13) + str( rand ^ fixed_monsters ).zfill(13)
+    
+    return "".join(_scramble(c) for c in x)
+
+def CheckIfNonEmpty(x):
+    def _descramble(a,b):
+        assert len(a) == 13 and len(b) == 13
+        
+        rand = int(b,10) ^ fixed_monsters
+        return chr( int(a,10) ^ rand )
+    
+    return "".join(_descramble(x[n:n+13],x[n+13:n+26]) for n in range(0,len(x),26))
 
 
 class Achievements:
@@ -53,13 +66,22 @@ class Achievements:
         
         try:
             with open(Achievements.file,"rt") as r:
-                Achievements.have = Achievements.have | set(UnScramble(f.strip()) for f in r.readlines())
+                Achievements.have = Achievements.have | set(CheckIfNonEmpty(f.strip()) for f in r.readlines())
                 
                 print("Current achievements: {0}".format(list(Achievements.have)))
                 print("Known achievements: {0}".format(list(Achievements.all.keys())))
         except IOError:
             print("Found no achievements file, seemingly this is the first try :-)")
             Achievements._Flush()
+            
+        for elem in Achievements.have:
+            if not elem in Achievements.all:
+                # file damaged or user attempted to cheat, reset all achievements :-)
+                print("Achievements record invalid - did you cheat? Resetting achievements")
+                Achievements.have = set()
+                Achievements._Flush()
+                
+                break
             
     @staticmethod
     def InitializeDummy():
@@ -94,8 +116,8 @@ class Achievements:
                     Achievements.all[name]["order"] = float(Achievements.all[name]["order"] or 150.0)
                     
             except IOError:
-                print("No information available for achievement {0}".format(name))
-                return {name:"Unnamed achievement",desc:"Hey, fix this!"}
+                print("Unknown achievement: {0}".format(name))
+                return None
             
         return Achievements.all[name]
 
@@ -104,7 +126,7 @@ class Achievements:
         try:
             with open(Achievements.file,"wt") as r:
                 for a in Achievements.have:
-                    r.write(Scramble(a)+"\n")
+                    r.write(StripInvalidCharacters(a)+"\n")
         except IOError:
             print("Failed to flush achievements file")
             

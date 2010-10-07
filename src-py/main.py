@@ -323,7 +323,7 @@ Hit {1} to cancel""".format(
                         self.SetMenuOption(self.cur_option-1)
 
                 if event.Type == sf.Event.Resized:
-                    assert False
+                    continue
                     
         for image in self.images:
             Renderer.app.Draw(image)
