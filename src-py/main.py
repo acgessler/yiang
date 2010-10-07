@@ -152,7 +152,7 @@ class MainMenu(Drawable):
             self.AddSlaveDrawable(self.bggame)
 
     def _OptionsQuit(self):
-        Renderer.Quit()
+        self.AskQuit()
 
     def _OptionsCredits(self):
         self.subindex = SI_CREDITS
@@ -267,6 +267,27 @@ Hit {1} to cancel""".format(
         """Get the currently active Game or None if none is active"""
         return self.game
     
+    def AskQuit(self):
+        if not self.GetCurrentGame():
+            Renderer.Quit()
+            
+        accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+        def on_close(key):
+            if key == accepted[1]:
+                Renderer.Quit()
+            
+        Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
+If you quit without saving, all your progress will be lost.
+
+Hit {0} to continue without fear
+Hit {1} to reconsider your decision""".format(
+                KeyMapping.GetString("accept"),
+                KeyMapping.GetString("escape")
+            ),
+            Size=defaults.letter_height_game_over,
+            Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+        )), defaults.game_over_fade_time, (550, 120), 0.0, accepted, sf.Color.Black, on_close))
+    
     def Draw(self):
         if not self.game is None and self.game.IsGameOver():
             self.game = None
@@ -309,7 +330,7 @@ Hit {1} to cancel""".format(
                 # Escape key : exit
                 if event.Type == sf.Event.KeyPressed:
                     if event.Key.Code == KeyMapping.Get("escape"):
-                        Renderer.Quit()
+                        self.AskQuit()
                         return
 
                     elif event.Key.Code == KeyMapping.Get("accept"):
@@ -324,6 +345,9 @@ Hit {1} to cancel""".format(
 
                 if event.Type == sf.Event.Resized:
                     continue
+                
+                if event.Type == sf.Event.Closed: # XXX currently processed in Renderer
+                    self.AskQuit()
                     
         for image in self.images:
             Renderer.app.Draw(image)

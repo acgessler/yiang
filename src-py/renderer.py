@@ -234,7 +234,7 @@ class Renderer:
         
         while Renderer.app.GetEvent(event):
             #Close window : exit
-            if event.Type == sf.Event.Closed:
+            if event.Type == sf.Event.Closed: # XXX propagate this to users?
                 Renderer.app.Close()
 
                 Renderer.loop_running = False
