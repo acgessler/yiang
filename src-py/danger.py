@@ -95,12 +95,11 @@ class Heat(AnimTile):
     """Player gets 'hot' and dies around this brick"""
     
     HOT_COLOR = sf.Color.Red
-    POSTFX_NAME = "heat.sfx"
-    FADE_IN_SPEED = 1
     
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,hideontouch=False,halo_img=None,**kwargs):
-        AnimTile.__init__(self,text,height,frames,speed,2,halo_img=halo_img,**kwargs)
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,timerEnd=0.5,hideontouch=False,**kwargs):
+        AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None,**kwargs)
         self.heat_activated = False
+        self.DeathTimerEnd = timerEnd
         self.hideontouch = hideontouch
         self.radius = radius
         if randomize is True:
@@ -114,17 +113,11 @@ class Heat(AnimTile):
         else:
             if self.DistanceInnerRadius(other):
                 self.DeathTimer = sf.Clock()
-                self.DeathTimerEnd = 1
                 self.__other = other
                 self.heat_activated = True
                 if not hasattr(self.__other,"oldcolor"):
                     self.__other.oldcolor = other.color
                     self.__other.heat_counter = 1
-                    
-                    if not Heat.POSTFX_NAME in [ n for n,p,e in self.level.postfx_rt ]:
-                        self.__other.postfx_heat_shader = self.level.AddPostFX(Heat.POSTFX_NAME, ())
-                        self.__other.postfx_heat_shader_intensity = 0.0
-                        
                 else:
                     self.__other.heat_counter += 1
                 other.SetColor(Heat.HOT_COLOR)
@@ -134,13 +127,7 @@ class Heat(AnimTile):
     def Update(self,time_elapsed,time_delta):
         AnimTile.Update(self,time_elapsed,time_delta)
         if self.heat_activated == True:
-            
-            now, end = self.DeathTimer.GetElapsedTime(), self.DeathTimerEnd
-            
-            self.__other.postfx_heat_shader_intensity += now*time_delta*Heat.FADE_IN_SPEED/end
-            self.__other.postfx_heat_shader.SetParameter("redintensity",min(1,self.__other.postfx_heat_shader_intensity))
-            
-            if now >= end:
+            if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
                 if self.DistanceInnerRadius(self.__other):
                     if not defaults.debug_godmode:
                         self.game.Kill(self.GetVerboseName(),self.__other)
@@ -150,8 +137,6 @@ class Heat(AnimTile):
                     if self.__other.heat_counter == 0:
                         self.__other.SetColor(self.__other.oldcolor)
                         delattr(self.__other,"oldcolor")
-                        
-                        self.level.RemovePostFX(Heat.POSTFX_NAME)
                     
                     
                 self.heat_activated = False
