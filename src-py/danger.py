@@ -85,16 +85,17 @@ class Mine(AnimTile):
     
     def GetVerboseName(self):
         return "an exploded mine (BOOooOOM!)"
-
+    
     def DistanceInnerRadius(self,other):
-        midpoint1 = (self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.dim[1]*0.5)
-        midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
-        distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
-        return False if distance >= (self.radius**2) else True
+        return self.Distance(other) < (self.radius**2) 
+
     
 
 class Heat(AnimTile):
     """Player gets 'hot' and dies around this brick"""
+    
+    HOT_COLOR = sf.Color.Red
+    
     def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,hideontouch=False,**kwargs):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None,**kwargs)
         self.heat_activated = False
@@ -114,8 +115,12 @@ class Heat(AnimTile):
                 self.DeathTimerEnd = 1
                 self.__other = other
                 self.heat_activated = True
-                self.__other.oldcolor = other.color
-                other.SetColor(sf.Color.Red)
+                if not hasattr(self.__other,"oldcolor"):
+                    self.__other.oldcolor = other.color
+                    self.__other.heat_counter = 1
+                else:
+                    self.__other.heat_counter += 1
+                other.SetColor(Heat.HOT_COLOR)
             return Entity.ENTER
         
         
@@ -126,17 +131,22 @@ class Heat(AnimTile):
                 if self.DistanceInnerRadius(self.__other):
                     if not defaults.debug_godmode:
                         self.game.Kill(self.GetVerboseName(),self.__other)
-                self.__other.SetColor(self.__other.oldcolor)
+                        
+                if hasattr(self.__other,"oldcolor"):
+                    self.__other.heat_counter -= 1
+                    if self.__other.heat_counter == 0:
+                        self.__other.SetColor(self.__other.oldcolor)
+                        delattr(self.__other,"oldcolor")
+                    
+                    
                 self.heat_activated = False
     
     def GetVerboseName(self):
-        return "a too hot stone!"
+        return "a terribly hot stone"
     
     def DistanceInnerRadius(self,other):
-        midpoint1 = (self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.dim[1]*0.5)
-        midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
-        distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
-        return False if distance >= (self.radius**2) else True
+        return self.Distance(other) < (self.radius**2) 
+    
   
   
 class FakeDangerousBarrel(AnimTile):
