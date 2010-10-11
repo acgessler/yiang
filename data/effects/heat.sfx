@@ -1,0 +1,11 @@
+texture framebuffer = {FRAMEBUFFER}
+float redintensity = 0.0
+
+effect
+{
+	vec4 pixel = framebuffer(_in);	
+
+	_out.rgb = pixel.rgb * vec3(1.0,1.0f-redintensity,1.0f-redintensity);
+	_out.a = 1.0;
+}
+
