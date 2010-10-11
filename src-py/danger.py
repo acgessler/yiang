@@ -92,7 +92,53 @@ class Mine(AnimTile):
         distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
         return False if distance >= (self.radius**2) else True
     
+
+class Heat(AnimTile):
+    """Player gets 'hot' and dies around this brick"""
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,hideontouch=False,**kwargs):
+        AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None,**kwargs)
+        self.heat_activated = False
+        self.hideontouch = hideontouch
+        self.radius = radius
+        if randomize is True:
+            self.GotoRandom()
+
+        self._ShrinkBB(bbadjust)
+
+    def Interact(self,other):
+        if self.heat_activated:
+            return Entity.ENTER
+        else:
+            if self.DistanceInnerRadius(other):
+                self.DeathTimer = sf.Clock()
+                self.DeathTimerEnd = 1
+                self.__other = other
+                self.heat_activated = True
+                self.__other.oldcolor = other.color
+                other.SetColor(sf.Color.Red)
+            return Entity.ENTER
+        
+        
+    def Update(self,time_elapsed,time_delta):
+        AnimTile.Update(self,time_elapsed,time_delta)
+        if self.heat_activated == True:
+            if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
+                if self.DistanceInnerRadius(self.__other):
+                    if not defaults.debug_godmode:
+                        self.game.Kill(self.GetVerboseName(),self.__other)
+                self.__other.SetColor(self.__other.oldcolor)
+                self.heat_activated = False
     
+    def GetVerboseName(self):
+        return "a too hot stone!"
+    
+    def DistanceInnerRadius(self,other):
+        midpoint1 = (self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.dim[1]*0.5)
+        midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
+        distance = (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
+        return False if distance >= (self.radius**2) else True
+  
+  
 class FakeDangerousBarrel(AnimTile):
     """This entity looks like a DangerousBarrel, but
     actually it doesn't kill the player - it just

@@ -1,0 +1,16 @@
+from danger import Heat; <out> = Heat(<raw>,3,4,1,False,1,1.4)
+ )  )
+(  ( 
+ )§ )
+
+(  ( 
+ )§ )
+(  ( 
+
+ )§ )
+(  ( 
+ )  )
+
+(  ( 
+ )  )
+(  ( 
