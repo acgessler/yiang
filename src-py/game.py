@@ -1133,13 +1133,6 @@ class Entity(Drawable):
                 return img
             
         return Entity.halo_cache[halo_img]
-    
-    
-    def Distance(self,other):
-        """Find a quick estimate for the distance between @self and @other"""
-        midpoint1 = (self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.dim[1]*0.5)
-        midpoint2 = (other.pos[0]+other.dim[0]*0.5,other.pos[1]+other.dim[1]*0.5)
-        return (midpoint1[0]-midpoint2[0])**2+(midpoint1[1]-midpoint2[1])**2
         
 
 class EntityWithEditorImage(Entity):

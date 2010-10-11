@@ -367,7 +367,6 @@ class Level:
         if not p is None:
             self._SetupStandardPostFXParams(p)
         self.postfx_rt.append((name,p,env))
-        return p
         
     def _SetupStandardPostFXParams(self,p):
         """Setup some predefined postfx parameters; used internally"""
