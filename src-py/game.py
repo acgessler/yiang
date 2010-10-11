@@ -353,6 +353,14 @@ OOOOOO  OOOOO  \n\
 
                 elif event.Key.Code == KeyMapping.Get("debug-showinfo"):
                     defaults.debug_draw_info = not defaults.debug_draw_info
+                    
+                elif event.Key.Code == KeyMapping.Get("debug-godmode-addlive"):
+                    if defaults.debug_godmode:
+                        self.lives += 1
+                    
+                elif event.Key.Code == KeyMapping.Get("debug-godmode-addscore"):
+                    if defaults.debug_godmode:
+                        self.score += 1.0
 
                 elif event.Key.Code == KeyMapping.Get("debug-godmode"):
                     defaults.debug_godmode = not defaults.debug_godmode

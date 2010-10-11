@@ -36,6 +36,8 @@ class KeyMapping:
         "menu-left"     : "Left",
         "menu-right"    : "Right",
         "debug-godmode" : "X",
+        "debug-godmode-addlive" : "O",
+        "debug-godmode-addscore" : "I",
         "debug-showbb"  : "B",
         "debug-showinfo": "D",
         "debug-allowup" : "G",
