@@ -1,23 +1,23 @@
 <out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Desert Day',color=(50, 50, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0,)
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ySU
-
-
-
-
-
-
-
-
-.  0PL
-
-
-
-
-
-.  .  .  .  .  .  .  .  .  .  .  yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6
-.  .  .  .  .  .  .  .  .  .  .  _AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF
-.  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE
-yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ySU.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAE.  yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  0PL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAErTRyAEyAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAE.  .  .  .  .  .  .  .  .  .  .  .  .  yAE.  .  .  .  .  .  .  .  .  yAE.  .  .  yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAE.  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAE.  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAE.  .  .  .  .  .  .  .  yAE.  .  .  yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAE.  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  .  yAEyAE.  .  .  yAEyAE.  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  .  yAE.  .  .  .  .  yAE.  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAE.  .  .  .  .  .  yAE.  .  .  .  .  yAE.  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAE.  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyRD.  .  .  .  yAEyAEyAEyS1yS1yAEyAEyAE.  .  .  .  .  .  yAEyAEyAEyS1yS1yAEyAEyAE.  .  .  .  .  yAEyAE.  .  .  .  yS4yAErTR.  .  .  .  .  .  .  .  .  yFIyAEyAEyS1yS1yAEyAEyAE.  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  ~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF.  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAE.  .  .  .  .  yAEyAEyAEyS1yS1.  yMI.  .  .  .  .  .  .  yAEyAEyAEyS1yS1.  yMI.  .  .  .  .  .  yAEyS4yS4.  yTA.  yS4yS4rTR.  .  .  .  .  .  .  .  .  yAEyAEyAEyS1yS1yINyMI.  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  yAEyAEyAEyAE.  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAE.  .  .  .  .  .  .  .  .  .  yAEyS4yS4yS4.  yS4yS4yS4rDA.  .  .  .  .  .  .  .  yAEyAEyAEyAE.  .  yIN.  .  .  .  .  .  .  yIN
+yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE0A90A90A90A90A90A90A9yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyDAyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE
 .  iAEiAEiAEiAE
 
 
