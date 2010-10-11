@@ -1,0 +1,27 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Desert Day',color=(50, 50, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0,)
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ySU
+
+
+
+
+
+
+
+
+.  0PL
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6yD6
+.  .  .  .  .  .  .  .  .  .  .  _AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF_AF
+.  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE
+yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE
+.  iAEiAEiAEiAE
+
+
+
+
+
+
