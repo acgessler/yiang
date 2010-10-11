@@ -98,7 +98,7 @@ class Heat(AnimTile):
     POSTFX_NAME = "heat.sfx"
     FADE_IN_SPEED = 1
     
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,DeathTimerEnd=0.5,hideontouch=False,halo_img=None,**kwargs):
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,DeathTimerEnd=1.0,hideontouch=False,halo_img=None,**kwargs):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=halo_img,**kwargs)
         self.heat_activated = False
         self.DeathTimerEnd = DeathTimerEnd
