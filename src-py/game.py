@@ -94,7 +94,7 @@ class Game(Drawable):
         self.lives = 100000 if self.mode in (Game.EDITOR,Game.EDITOR_HIDDEN,Game.BACKGROUND) else defaults.lives 
             
         self.game_over = False
-        self.speed_scale = 1.0
+        self.speed_scale = 1.25
         self.rounds = 1
         self.level_size = (0,0)
         self.suspended = []
@@ -233,7 +233,7 @@ OOOOOO  OOOOO  \n\
             self.old_lives = self.lives
                 
         xstart = defaults.resolution[0]- (
-            math.log10(self.lives)*defaults.letter_height_lives_numeric 
+            math.log10(self.lives)*defaults.letter_height_lives_numeric*1.5
             if self.lives > treshold 
             else self.lives*defaults.letter_height_lives*10  
         )
