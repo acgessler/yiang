@@ -98,9 +98,10 @@ class Heat(AnimTile):
     POSTFX_NAME = "heat.sfx"
     FADE_IN_SPEED = 1
     
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,hideontouch=False,halo_img=None,**kwargs):
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,DeathTimerEnd=0.5,hideontouch=False,halo_img=None,**kwargs):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=halo_img,**kwargs)
         self.heat_activated = False
+        self.DeathTimerEnd = DeathTimerEnd
         self.hideontouch = hideontouch
         self.radius = radius
         if randomize is True:
@@ -114,7 +115,6 @@ class Heat(AnimTile):
         else:
             if self.DistanceInnerRadius(other):
                 self.DeathTimer = sf.Clock()
-                self.DeathTimerEnd = 1
                 self.__other = other
                 self.heat_activated = True
                 if not hasattr(self.__other,"oldcolor"):
