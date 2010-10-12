@@ -519,7 +519,7 @@ TimeDelta:         {dtime:.4}
         return 0 if self.GetFrameRateUnsmoothed() <= defaults.max_framerate_for_sprites else\
             defaults.max_useless_sprites - self.useless_sprites
     
-    def Kill(self,killer="an unknown enemy ",player=None):
+    def Kill(self,killer="an unknown enemy ",player=None,on_close_mb_extra=None):
         """Kill the player immediately, respawn if they have
         another life, set game over alternatively"""
         DebugTools.Trace()
@@ -539,6 +539,9 @@ TimeDelta:         {dtime:.4}
 
         accepted = (KeyMapping.Get("accept"),KeyMapping.Get("level-new"),KeyMapping.Get("escape"))
         def on_close(key):
+            if on_close_mb_extra:
+                on_close_mb_extra()
+            
             if key == accepted[2]:
                 self.BackToWorldMap() if self.GetGameMode() == Game.CAMPAIGN else self.GameOver()
             player.Respawn(True if key == accepted[0] else False)

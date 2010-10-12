@@ -115,42 +115,53 @@ class Heat(AnimTile):
         else:
             if self.DistanceInnerRadius(other):
                 self.DeathTimer = sf.Clock()
-                self.__other = other
+                self.myplayer = other
                 self.heat_activated = True
-                if not hasattr(self.__other,"oldcolor"):
-                    self.__other.oldcolor = other.color
-                    self.__other.heat_counter = 1
+                if not hasattr(self.myplayer,"oldcolor"):
+                    self.myplayer.oldcolor = other.color
+                    self.myplayer.heat_counter = 1
                     
                     if not Heat.POSTFX_NAME in [ n for n,p,e in self.level.postfx_rt ]:
-                        self.__other.postfx_heat_shader = self.level.AddPostFX(Heat.POSTFX_NAME, ())
-                        self.__other.postfx_heat_shader_intensity = 0.0
+                        self.myplayer.postfx_heat_shader = self.level.AddPostFX(Heat.POSTFX_NAME, ())
+                    self.myplayer.postfx_heat_shader_intensity = 0.0
                         
                 else:
-                    self.__other.heat_counter += 1
+                    self.myplayer.heat_counter += 1
                 other.SetColor(Heat.HOT_COLOR)
             return Entity.ENTER
         
         
     def Update(self,time_elapsed,time_delta):
         AnimTile.Update(self,time_elapsed,time_delta)
-        if self.heat_activated == True:
+        if self.heat_activated and self.myplayer.heat_counter > 0:
             
             # fix to avoid different behaviour in higher rounds
             now, end = self.DeathTimer.GetElapsedTime(), self.DeathTimerEnd  / self.game.speed_scale 
             
-            self.__other.postfx_heat_shader_intensity += now*time_delta*Heat.FADE_IN_SPEED/end
-            self.__other.postfx_heat_shader.SetParameter("redintensity",min(1,self.__other.postfx_heat_shader_intensity))
+            self.myplayer.postfx_heat_shader_intensity += now*time_delta*Heat.FADE_IN_SPEED/end
+            self.myplayer.postfx_heat_shader.SetParameter("redintensity",min(1,self.myplayer.postfx_heat_shader_intensity))
             
             if now >= end:
-                if self.DistanceInnerRadius(self.__other):
+                if self.DistanceInnerRadius(self.myplayer):
                     if not defaults.debug_godmode:
-                        self.game.Kill(self.GetVerboseName(),self.__other)
                         
-                if hasattr(self.__other,"oldcolor"):
-                    self.__other.heat_counter -= 1
-                    if self.__other.heat_counter == 0:
-                        self.__other.SetColor(self.__other.oldcolor)
-                        delattr(self.__other,"oldcolor")
+                        def garbagify_ppfx():
+                            self.level.RemovePostFX(Heat.POSTFX_NAME)
+                        
+                        # manually reset everything to keep other Heat tiles from kicking in
+                        delattr(self.myplayer,"oldcolor")
+                        self.myplayer.heat_counter = 0
+                        self.heat_activated = False
+                        
+                        self.myplayer.postfx_heat_shader.SetParameter("redintensity",1.0)
+                        self.game.Kill(self.GetVerboseName(),self.myplayer,on_close_mb_extra=garbagify_ppfx)
+                        return
+                        
+                if hasattr(self.myplayer,"oldcolor"):
+                    self.myplayer.heat_counter -= 1
+                    if self.myplayer.heat_counter == 0:
+                        self.myplayer.SetColor(self.myplayer.oldcolor)
+                        delattr(self.myplayer,"oldcolor")
                         
                         self.level.RemovePostFX(Heat.POSTFX_NAME)
                     
