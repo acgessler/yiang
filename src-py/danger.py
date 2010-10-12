@@ -135,7 +135,8 @@ class Heat(AnimTile):
         AnimTile.Update(self,time_elapsed,time_delta)
         if self.heat_activated == True:
             
-            now, end = self.DeathTimer.GetElapsedTime(), self.DeathTimerEnd
+            # fix to avoid different behaviour in higher rounds
+            now, end = self.DeathTimer.GetElapsedTime(), self.DeathTimerEnd  / self.game.speed_scale 
             
             self.__other.postfx_heat_shader_intensity += now*time_delta*Heat.FADE_IN_SPEED/end
             self.__other.postfx_heat_shader.SetParameter("redintensity",min(1,self.__other.postfx_heat_shader_intensity))

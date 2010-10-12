@@ -1,17 +1,17 @@
 texture framebuffer = {FRAMEBUFFER}
-float redintensity = 0.0
 texture noisesrc = ../data/textures/noise.png
 vec2 randomUV = {RANDOM}
 
 effect
 {
+	float blueintensity = 0.45;
+
 	vec2 inc = _in;
 	vec2 rgnoise = noisesrc(randomUV-vec2(0.5,0.5)+inc).rg;
-	inc.xy += rgnoise * redintensity * 0.01;
+	inc.xy += rgnoise * blueintensity * 0.005;
 
 	vec4 pixel = framebuffer(inc);	
 
-	_out.rgb = pixel.rgb * vec3(1.0,1.0f-redintensity,1.0f-redintensity);
+	_out.rgb = pixel.rgb * vec3(1.0-blueintensity,1.0f-blueintensity*0.5,1.0f);
 	_out.a = 1.0;
 }
-
