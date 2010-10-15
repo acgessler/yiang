@@ -89,8 +89,8 @@ def generate():
                          7*4+len(keys)*8,   # start of value index
                          0, 0)              # size and offset of hash table
     output += array.array("i", offsets).tostring()
-    output += ids
-    output += strs
+    output += ids.encode("utf-8")
+    output += strs.encode("utf-8")
     return output
 
 

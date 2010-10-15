@@ -1,0 +1,191 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-10-15 18:06+W. Europe Daylight Time\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: ../../src-py\editor.py:180
+msgid ""
+"Don't you want to save first?\n"
+"    \n"
+"    Press {0} to save first and reload then\n"
+"    Press {1} to reload immediately, without saving \n"
+"    Press {2} to abort"
+msgstr ""
+
+#: ../../src-py\editor.py:393
+msgid "Apply"
+msgstr ""
+
+#: ../../src-py\editor.py:396
+msgid "Cancel"
+msgstr ""
+
+#: ../../src-py\editor.py:400
+msgid "Level name (not too long, please)"
+msgstr ""
+
+#: ../../src-py\editor.py:432
+msgid "Background color, RED"
+msgstr ""
+
+#: ../../src-py\editor.py:439
+msgid "Background color, GREEN"
+msgstr ""
+
+#: ../../src-py\editor.py:446
+msgid "Background color, BLUE"
+msgstr ""
+
+#: ../../src-py\editor.py:454
+msgid "Visible offset above upper status bar"
+msgstr ""
+
+#: ../../src-py\editor.py:462
+msgid "Visible offset above lower status bar"
+msgstr ""
+
+#: ../../src-py\editor.py:481
+msgid "Scroll left"
+msgstr ""
+
+#: ../../src-py\editor.py:487
+msgid "Scroll right"
+msgstr ""
+
+#: ../../src-py\editor.py:493
+msgid "Scroll top"
+msgstr ""
+
+#: ../../src-py\editor.py:499
+msgid "Scroll bottom"
+msgstr ""
+
+#: ../../src-py\editor.py:600
+msgid "Postprocessing effects"
+msgstr ""
+
+#: ../../src-py\editor.py:1624
+msgid "'{0}' for rectangle selection, '{1}' to hold selection, '{2}' to remove elements"
+msgstr ""
+
+#: ../../src-py\editor.py:2992
+msgid ""
+"You are about to leave. Save first?\n"
+"\n"
+"Press {0} to save first and leave then\n"
+"Press {1} to leave immediately, without saving \n"
+"Press {2} to abort"
+msgstr ""
+
+#: ../../src-py\editor.py:3150
+msgid "Choose a level to edit. Yellow entries are read-only and cannot be saved."
+msgstr ""
+
+#: ../../src-py\game.py:549
+msgid ""
+"You died a martyr and are now awaiting resurrection!\n"
+"  .. the godless slaughterer was {0}\n"
+"\n"
+"Press {1} to restart at the last respawning point\n"
+"Press {2} to restart the level\n"
+"Press {3} to {4}"
+msgstr ""
+
+#: ../../src-py\game.py:559
+msgid "leave the game"
+msgstr ""
+
+#: ../../src-py\game.py:559
+msgid "return to the map"
+msgstr ""
+
+#: ../../src-py\main.py:233
+msgid "Resume Game"
+msgstr ""
+
+#: ../../src-py\main.py:234
+msgid "Campaign"
+msgstr ""
+
+#: ../../src-py\main.py:235
+msgid "Load"
+msgstr ""
+
+#: ../../src-py\main.py:236
+msgid "Save"
+msgstr ""
+
+#: ../../src-py\main.py:237
+msgid "Quick Game"
+msgstr ""
+
+#: ../../src-py\main.py:238
+msgid "Start Tutorial"
+msgstr ""
+
+#: ../../src-py\main.py:239
+msgid "Choose Level"
+msgstr ""
+
+#: ../../src-py\main.py:240
+msgid "Achievements"
+msgstr ""
+
+#: ../../src-py\main.py:242
+msgid "Credits"
+msgstr ""
+
+#: ../../src-py\main.py:243
+msgid "Online Highscore"
+msgstr ""
+
+#: ../../src-py\main.py:244
+msgid "Check for Updates"
+msgstr ""
+
+#: ../../src-py\main.py:245
+msgid "Quit!"
+msgstr ""
+
+#: ../../src-py\main.py:260
+msgid ""
+"You are currently in a game. \n"
+"If you start a new game, all your progress will be lost.\n"
+"\n"
+"Hit {0} to continue\n"
+"Hit {1} to cancel"
+msgstr ""
+
+#: ../../src-py\main.py:298
+msgid ""
+"You are currently in a game. \n"
+"If you quit without saving, all your progress will be lost.\n"
+"\n"
+"Hit {0} to continue without fear\n"
+"Hit {1} to reconsider your decision"
+msgstr ""
+
+#: ../../src-py\main.py:331
+msgid "Profile: {1} / best result so far: $ {0:.4}"
+msgstr ""
+
+#: ../../src-py\main.py:525
+msgid "Press {0} to enter Level {1} - '{2}'"
+msgstr ""
+
+#: ../../src-py\main.py:533
+msgid "Press {0} to return"
+msgstr ""
+

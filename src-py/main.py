@@ -50,6 +50,25 @@ SPECIAL_LEVEL_INTRO = 20000
 SPECIAL_LEVEL_CAMPAIGN = 30000
 SPECIAL_LEVEL_MENU = 40000
 
+
+
+### need to push these up since we need _() to be available when the rest of the module is parsed
+
+# Read game.txt, which is the master config file
+#Log.Enable(defaults.enable_log)
+defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
+Log.Enable(defaults.enable_log)
+
+import fshack
+fshack.Enable()
+
+import gettext
+#gettext.install('yiang', './locale')
+    
+lang_en = gettext.translation("yiang", "./../locale", languages=['en'])
+lang_de = gettext.translation("yiang", "./../locale", languages=['de'])
+
+
 def get_level_count():
     """Get the number of ordered, regular levels in the data/levels folder."""
     global level_count
@@ -210,20 +229,20 @@ class MainMenu(Drawable):
         pass
             
 
-    options = [
-        ("Resume Game", _OptionsResumeGame, "You will die soon",0.4,False),
-        ("Campaign", _OptionsNewCampaignGame, "You will die",1.0,False),
-        ("Load", _OptionsLoadGame, "You will die soon",0.7,False),
-        ("Save", _OptionsSaveGame, "You will die soon",0.5,False),
-        ("Quick Game", _OptionsNewGame, "You will die",1.0,False),
-        ("Start Tutorial", _OptionsTutorial, "You will die",0.5,False),
-        ("Choose Level", _OptionsNewGameChoose, "Bad idea",0.35,False),
-        ("Achievements", _OptionsShowAchievements, "Updates!",0.7,False),
+    options = [ # don't need [1] anymore
+        (_("Resume Game"), _OptionsResumeGame, "You will die soon",0.4,False),
+        (_("Campaign"), _OptionsNewCampaignGame, "You will die",1.0,False),
+        (_("Load"), _OptionsLoadGame, "You will die soon",0.7,False),
+        (_("Save"), _OptionsSaveGame, "You will die soon",0.5,False),
+        (_("Quick Game"), _OptionsNewGame, "You will die",1.0,False),
+        (_("Start Tutorial"), _OptionsTutorial, "You will die",0.5,False),
+        (_("Choose Level"), _OptionsNewGameChoose, "Bad idea",0.35,False),
+        (_("Achievements"), _OptionsShowAchievements, "Updates!",0.7,False),
      #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
-        ("Credits", _OptionsCredits, "CREDITS",0.4,False),
-        ("Online Highscore", _OptionsViewHighscore, "Updates!",0.35,False),
-        ("Check for Updates", _OptionsNotImplemented, "Updates!",0.35,False),
-        ("Quit!", _OptionsQuit ,"",1.0,False)
+        (_("Credits"), _OptionsCredits, "CREDITS",0.4,False),
+        (_("Online Highscore"), _OptionsViewHighscore, "Updates!",0.35,False),
+        (_("Check for Updates"), _OptionsNotImplemented, "Updates!",0.35,False),
+        (_("Quit!"), _OptionsQuit ,"",1.0,False)
     ]
     
     def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME,on_loaded=lambda:None):
@@ -238,11 +257,11 @@ class MainMenu(Drawable):
                     self.game = None
                     self._TryStartGameFromLevel(level,old,mode,on_loaded)
                 
-            Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
+            Renderer.AddDrawable( MessageBox(sf.String(_("""You are currently in a game. 
 If you start a new game, all your progress will be lost.
 
 Hit {0} to continue
-Hit {1} to cancel""".format(
+Hit {1} to cancel""").format(
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("escape")
                 ),
@@ -276,11 +295,11 @@ Hit {1} to cancel""".format(
             if key == accepted[1]:
                 Renderer.Quit()
             
-        Renderer.AddDrawable( MessageBox(sf.String("""You are currently in a game. 
+        Renderer.AddDrawable( MessageBox(sf.String(_("""You are currently in a game. 
 If you quit without saving, all your progress will be lost.
 
 Hit {0} to continue without fear
-Hit {1} to reconsider your decision""".format(
+Hit {1} to reconsider your decision""").format(
                 KeyMapping.GetString("accept"),
                 KeyMapping.GetString("escape")
             ),
@@ -309,7 +328,7 @@ Hit {1} to reconsider your decision""".format(
             Renderer.app.Draw(entry)
             
         a,b = sf_string_with_shadow(
-                "Profile: {1} / best result so far: $ {0:.4}".format(HighscoreManager.GetHighscoreRecord()/100,defaults.cur_user_profile),
+                _("Profile: {1} / best result so far: $ {0:.4}").format(HighscoreManager.GetHighscoreRecord()/100,defaults.cur_user_profile),
                 defaults.font_menu,
                 int(20*defaults.scale[1]),
                 int(defaults.resolution[0]-425*defaults.scale[1]),
@@ -503,7 +522,7 @@ Hit {1} to reconsider your decision""".format(
         height = int(0.5*height)
         from level import LevelLoader
         sf_draw_string_with_shadow(
-            "Press {0} to enter Level {1} - '{2}'".format(KeyMapping.GetString("accept"),self.level,LevelLoader.GuessLevelName(self.level)),
+            _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),self.level,LevelLoader.GuessLevelName(self.level)),
             defaults.font_menu,
             height,
             base_offset[0]+20,
@@ -511,7 +530,7 @@ Hit {1} to reconsider your decision""".format(
             sf.Color.White )
                 
         sf_draw_string_with_shadow(
-            "Press {0} to return".format(KeyMapping.GetString("escape")),
+            _("Press {0} to return").format(KeyMapping.GetString("escape")),
             defaults.font_menu,
             height,
             base_offset[0]+20,
@@ -671,17 +690,6 @@ def LaunchMenu():
 
 def main():
     """Main entry point to the application"""
-
-    # Read game.txt, which is the master config file
-    #Log.Enable(defaults.enable_log)
-    defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
-    Log.Enable(defaults.enable_log)
-    
-    import fshack
-    fshack.Enable()
-    
-    import gettext
-    gettext.install('yiang', './locale')
         
     print("Startup ...")
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))
