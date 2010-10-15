@@ -1,4 +1,7 @@
 pygettext.py ../../src-py/*.py
 patch.py
-copy messages.pot messages_ger.po
-copy messages.pot messages_eng.po
+copy messages.pot messages_ger_new.po
+copy messages.pot messages_eng_new.po
+
+msgmerge.py -U messages_ger.po messages_ger_new.po
+msgmerge.py -U messages_eng.po messages_eng_new.po

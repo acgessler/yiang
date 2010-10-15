@@ -29,7 +29,7 @@ msgstr ""
 msgid "Leave the level editor and return to the main menu"
 msgstr ""
 
-#: ../../src-py\editor.py:225 ../../src-py\main.py:235
+#: ../../src-py\editor.py:225 ../../src-py\main.py:237
 msgid "Save"
 msgstr ""
 
@@ -421,55 +421,55 @@ msgstr ""
 msgid "{0} key"
 msgstr ""
 
-#: ../../src-py\main.py:219
+#: ../../src-py\main.py:221
 msgid "This feature is not currently implemented, sorry."
 msgstr ""
 
-#: ../../src-py\main.py:232
+#: ../../src-py\main.py:234
 msgid "Resume Game"
 msgstr ""
 
-#: ../../src-py\main.py:233
+#: ../../src-py\main.py:235
 msgid "Campaign"
 msgstr ""
 
-#: ../../src-py\main.py:234
+#: ../../src-py\main.py:236
 msgid "Load"
 msgstr ""
 
-#: ../../src-py\main.py:236
+#: ../../src-py\main.py:238
 msgid "Quick Game"
 msgstr ""
 
-#: ../../src-py\main.py:237
+#: ../../src-py\main.py:239
 msgid "Start Tutorial"
 msgstr ""
 
-#: ../../src-py\main.py:238
+#: ../../src-py\main.py:240
 msgid "Choose Level"
 msgstr ""
 
-#: ../../src-py\main.py:239
+#: ../../src-py\main.py:241
 msgid "Achievements"
 msgstr ""
 
-#: ../../src-py\main.py:241
+#: ../../src-py\main.py:243
 msgid "Credits"
 msgstr ""
 
-#: ../../src-py\main.py:242
+#: ../../src-py\main.py:244
 msgid "Online Highscore"
 msgstr ""
 
-#: ../../src-py\main.py:243
+#: ../../src-py\main.py:245
 msgid "Check for Updates"
 msgstr ""
 
-#: ../../src-py\main.py:244
+#: ../../src-py\main.py:246
 msgid "Quit!"
 msgstr ""
 
-#: ../../src-py\main.py:259
+#: ../../src-py\main.py:261
 msgid ""
 "You are currently in a game. \n"
 "If you start a new game, all your progress will be lost.\n"
@@ -478,7 +478,7 @@ msgid ""
 "Hit {1} to cancel"
 msgstr ""
 
-#: ../../src-py\main.py:297
+#: ../../src-py\main.py:299
 msgid ""
 "You are currently in a game. \n"
 "If you quit without saving, all your progress will be lost.\n"
@@ -487,15 +487,15 @@ msgid ""
 "Hit {1} to reconsider your decision"
 msgstr ""
 
-#: ../../src-py\main.py:330
+#: ../../src-py\main.py:332
 msgid "Profile: {1} / best result so far: $ {0:.4}"
 msgstr ""
 
-#: ../../src-py\main.py:524
+#: ../../src-py\main.py:526
 msgid "Press {0} to enter Level {1} - '{2}'"
 msgstr ""
 
-#: ../../src-py\main.py:532
+#: ../../src-py\main.py:534
 msgid "Press {0} to return"
 msgstr ""
 
