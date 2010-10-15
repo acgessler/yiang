@@ -4,4 +4,5 @@
 # To access 2-tuples (such as resolution), .x and .y can be
 # used to access the values (i.e. resolution.x)
 
+master_locale="de"
 fullscreen=True

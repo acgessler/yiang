@@ -106,7 +106,7 @@ class SmallTraverser(Enemy):
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose="a Harmful Traverser Unit (HTU)",shrinkbb=0.65,halo_img="default"):
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default"):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=halo_img)
 
         self.verbose = verbose
@@ -232,7 +232,7 @@ class NaughtyPongPong(Enemy):
     a few moments. Can be killed only by Mario-style (
     jump on its top ..)"""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose="a Naughty Pong Pong (NPP)",shrinkbb=0.65):
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong (NPP)"),shrinkbb=0.65):
         AnimTile.__init__(self, text, height, frames, speed, 2)
 
         self.verbose = verbose
@@ -317,7 +317,7 @@ class RotatingInferno(Enemy):
         return Entity.KILL
     
     def GetVerboseName(self):
-        return "Rotating Inferno"
+        return _("Rotating Inferno")
     
     def SetPosition(self,pos):
         self.real_pos = (pos[0]+self.ofs_vec[0],pos[1]+self.ofs_vec[1])
@@ -469,7 +469,7 @@ from weapon import Weapon
 class SmallRobot(SmallTraverser):
     
     def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, **kwargs):
-        SmallTraverser.__init__(self, *args, verbose="a Nifty Robot Intruder", halo_img=None, **kwargs)
+        SmallTraverser.__init__(self, *args, verbose=_("a Nifty Robot Intruder"), halo_img=None, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
         self.shots = shots

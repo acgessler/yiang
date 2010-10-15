@@ -141,10 +141,10 @@ class LoadScreen:
         if not e:
             return ret
         
-        e.text = """
+        e.text = _("""
 Finally, everything is ready. 
 This makes me SO happy {0} 
-... Press any key to continue ... """.format(random.choice(
+... Press any key to continue ... """).format(random.choice(
         (":-)",";-0",";-)",";-*","8)",":)",";)")
         ))
         e._Recache()

@@ -95,7 +95,7 @@ class Weapon(InventoryItem, Tile):
         self.speed= speed
     
     def GetItemName(self):
-        return "Hot-zoop's Steak'n'Slay Gun"
+        return _("Hot-zoop's Steak'n'Slay Gun")
     
     def Interact(self, other):
         if isinstance(other,Player):
@@ -125,7 +125,7 @@ class Flamethrower(Weapon):
     upon touching a flame."""
     
     def GetItemName(self):
-        return "The Rumpsteak Machine"
+        return _("The Rumpsteak Machine")
     
     def Shoot(self,dir,color,on_hit=lambda x: True):
         pass
@@ -136,7 +136,7 @@ class LaserWeapon(Weapon):
     upon touching an entity, so it's a bit hard to use."""
     
     def GetItemName(self):
-        return "The Self-Reflecting Painless Chicken Slayer"
+        return _("The Self-Reflecting Painless Chicken Slayer")
     
     def Shoot(self,dir,color,on_hit=lambda x: True):
         pass

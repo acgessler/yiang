@@ -51,7 +51,6 @@ SPECIAL_LEVEL_CAMPAIGN = 30000
 SPECIAL_LEVEL_MENU = 40000
 
 
-
 ### need to push these up since we need _() to be available when the rest of the module is parsed
 
 # Read game.txt, which is the master config file
@@ -63,11 +62,13 @@ import fshack
 fshack.Enable()
 
 import gettext
-#gettext.install('yiang', './locale')
+lang = gettext.translation("yiang", defaults.locale_dir, languages=[defaults.master_locale])
+if not lang:
+    lang = gettext.translation("yiang", defaults.locale_dir, languages=['en'])
+    if not lang:
+        assert False
     
-lang_en = gettext.translation("yiang", "./../locale", languages=['en'])
-lang_de = gettext.translation("yiang", "./../locale", languages=['de'])
-
+lang.install()
 
 def get_level_count():
     """Get the number of ordered, regular levels in the data/levels folder."""
@@ -217,7 +218,7 @@ class MainMenu(Drawable):
                         
         self.block = True
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
-        Renderer.AddDrawable( MessageBox(sf.String("""This feature is not currently implemented, sorry.""",
+        Renderer.AddDrawable( MessageBox(sf.String(_("""This feature is not currently implemented, sorry."""),
             Size=defaults.letter_height_game_over,
             Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
         )), defaults.game_over_fade_time, (550, 50), 0.0, accepted, sf.Color.Black, on_close))

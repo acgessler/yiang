@@ -279,7 +279,7 @@ OOOOOO  OOOOO  \n\
         
         if self.undecorated is False:
             
-            text = "{0}\n{1:4.5} $".format(("Level {0}.{1} {2:.2} days".format(
+            text = _("{0}\n{1:4.5} $").format((_("Level {0}.{1} {2:.2} days").format(
                 self.rounds,
                 int(self.level_idx),
                 Game.SecondsToDays( self.GetTotalElapsedTime() )
@@ -603,13 +603,13 @@ Press {3} to {4}""").format(
             Renderer.RemoveDrawable(self)
             raise NewFrame()
             
-        self._FadeOutAndShowStatusNotice(sf.String("""You survived {0:.4} days and collected {1:.4} dollars.
+        self._FadeOutAndShowStatusNotice(sf.String(_("""You survived {0:.4} days and collected {1:.4} dollars.
 That's {2}.\n\n
-""".format(Game.SecondsToDays(self.GetTotalElapsedTime()),self.score/100,
-           "a new high score record" if record is True else self.score_map[int(math.log((self.score*10)+1,2))]) +
+""").format(Game.SecondsToDays(self.GetTotalElapsedTime()),self.score/100,
+           _("a new high score record") if record is True else self.score_map[int(math.log((self.score*10)+1,2))]) +
 self.level.GetStatsString()+
-"""
-Hit {0} or {1} to return to the menu .. """.format(
+_("""
+Hit {0} or {1} to return to the menu .. """).format(
                     KeyMapping.GetString("escape"),
                     KeyMapping.GetString("accept")
                 ),
@@ -674,14 +674,14 @@ Hit any key to continue.
                 
             raise NewFrame()
 
-        self._FadeOutAndShowStatusNotice(sf.String(("""Hey, you solved Level {0}!.
+        self._FadeOutAndShowStatusNotice(sf.String((_("""Hey, you solved Level {0}!.
 
-"""+
+""")+
             self.level.GetStatsString()+                                                 
 
-"""
+_("""
 Hit {1} to continue .. (don't disappoint me)
-Hit {2} to return to the menu""").format(
+Hit {2} to return to the menu""")).format(
                     self.level_idx,
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("escape")

@@ -1,6 +1,9 @@
 
 print Preparing to build YIANG
 
+print Collect translations
+build locale
+
 print Rebuild embeddable rc for MSVC
 build src-py
 
@@ -12,6 +15,7 @@ build bin-x86-windows
 
 print Collect data
 build data
+
 
 print App configuration
 build config

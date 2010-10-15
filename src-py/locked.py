@@ -170,33 +170,33 @@ class Key(Tile,InventoryItem):
         # XXX temporary solution
         def GetName(col):
             if col.a == 0:
-                return "Invisible"
+                return _("Invisible")
                 
             if col.r > 60:
                 if col.g > 60:
                     if col.b > 60:
-                        return "Gray" if col.r+col.b+col.g!=255*3 else  "White"
+                        return _("Gray") if col.r+col.b+col.g!=255*3 else _("White")
                     else:
-                        return "Yellow"
+                        return _("Yellow")
                 else:         
                     if col.b > 60:
-                        return "Pink"
+                        return _("Pink")
                     else:
-                        return "Red"
+                        return _("Red")
             else:
                 if col.g > 60:
                     if col.b > 60:
-                        return "Azure"
+                        return _("Azure")
                     else:
-                        return "Green"
+                        return _("Green")
                 else:         
                     if col.b > 60:
-                        return "Blue"
+                        return _("Blue")
                     else:
-                        return "Black"
+                        return _("Black")
             assert False
         
-        return "{0} key".format(GetName( self.color ))
+        return _("{0} key").format(GetName( self.color ))
     
     
     

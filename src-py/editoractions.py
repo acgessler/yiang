@@ -83,11 +83,11 @@ class ContextHandler_Player(ContextHandler):
     
     def __call__(self, entities):
         self.entities = entities
-        self.elements.append(Button(text="Award 1ct (temporary)") + 
+        self.elements.append(Button(text=_("Award 1ct (temporary)")) + 
             ("release", (lambda src: self._Dispatch(self.Award,1.0)))
         )
         
-        self.elements.append(Button(text="Award 1$  (temporary)") + 
+        self.elements.append(Button(text=_("Award 1$  (temporary)")) + 
             ("release", (lambda src: self._Dispatch(self.Award,100.0)))
         )
         
@@ -135,9 +135,9 @@ class ContextHandler_SmallTraverser(ContextHandler):
         self.entities = entities
         
         values = {
-            "Horizontal moves"           : "E0",
-            "Vertical moves"             : "E2",
-            "Horizontal moves, quick"    : "E1"
+            _("Horizontal moves")           : "E0",
+            _("Vertical moves")             : "E2",
+            _("Horizontal moves, quick")    : "E1"
         }
         
         self._SetupSimpleAlternatives(values)
@@ -155,9 +155,9 @@ class ContextHandler_DangerBarrel(ContextHandler):
         self.entities = entities
         
         values = {
-                "'Normal' barrel"    : "DA",
-                "Rounded barrel"     : "DS",
-                "Fake barrel"        : "TR"
+                _("'Normal' barrel")    : "DA",
+                _("Rounded barrel")     : "DS",
+                _("Fake barrel")        : "TR"
         }
         
         self._SetupSimpleAlternatives(values)
@@ -194,7 +194,7 @@ class ContextHandler_Door(ContextHandler):
             door.Lock() if door.unlocked else door.Unlock() 
             
         def UpdateDoorCaption(door,gui):
-            gui.text = "Close Door" if door.unlocked else "Open Door"
+            gui.text = _("Close Door") if door.unlocked else _("Open Door")
        
         self.elements.append(Button(text="") + 
             ("update",  (lambda src: UpdateDoorCaption((lambda:self.entities[0])(),src))) +
@@ -203,15 +203,15 @@ class ContextHandler_Door(ContextHandler):
      
         if len([ e for e in entities if e.color==entities[0].color ]) == len(self.entities):
             if [e for e in entities if isinstance(e,Bridge)]:
-                self.elements.append(Button(text="Select switch [off]") + 
+                self.elements.append(Button(text=_("Select switch [off]")) + 
                     ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"C9")))
                 )
-                self.elements.append(Button(text="Select switch [on]") + 
+                self.elements.append(Button(text=_("Select switch [on]")) + 
                     ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"CB")))
                 )
             else:
                 
-                self.elements.append(Button(text="Select key") + 
+                self.elements.append(Button(text=_("Select key")) + 
                     ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"KE")))
                 )
         
@@ -228,7 +228,7 @@ class ContextHandler_Key(ContextHandler):
         self.entities = entities
         
         if len([ e for e in entities if e.color==entities[0].color ]) == len(self.entities):
-            self.elements.append(Button(text="Select corr. door") + 
+            self.elements.append(Button(text=_("Select corr. door")) + 
                 ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"DO")))
             )
             
@@ -245,8 +245,8 @@ class ContextHandler_BridgeControl(ContextHandler):
         self.entities = entities
         
         values = {
-            "Default: on"           : "CB",
-            "Default: off"          : "C9"
+            _("Default: on")           : "CB",
+            _("Default: off")          : "C9"
         }
         
         self._SetupSimpleAlternatives(values)
@@ -269,15 +269,15 @@ class ContextHandler_Sender(ContextHandler):
         self.entities = entities
         
         if len([ e for e in entities if e.color==entities[0].color ]) == len(self.entities):
-            self.elements.append(Button(text="Select receiver") +          
+            self.elements.append(Button(text=_("Select receiver")) +          
                 ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"TB")))
             )
             
-            self.elements.append(Button(text="Select receiver 90\xb0 cw.") +         
+            self.elements.append(Button(text=_("Select receiver 90\xb0 cw.")) +         
                 ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"TC")))
             )
             
-            self.elements.append(Button(text="Select receiver 90\xb0 ccw.") + 
+            self.elements.append(Button(text=_("Select receiver 90\xb0 ccw.")) + 
                 ("release", (lambda src: self._Dispatch( self._SelectEntitySameColor,"TD")))
             )
             
@@ -293,9 +293,9 @@ class ContextHandler_Receiver(ContextHandler):
     def __call__(self, entities):
         self.entities = entities
         values = {
-            "Normal"                : "TB",
-            "Rotate 90\xb0 cw."     : "TC",
-            "Rotate 90\xb0 ccw."    : "TD"
+            _("Normal")                : "TB",
+            _("Rotate 90\xb0 cw.")     : "TC",
+            _("Rotate 90\xb0 ccw.")    : "TD"
         }
         
         self._SetupSimpleAlternatives(values)
@@ -318,8 +318,8 @@ class ContextHandler_OneSidedWall(ContextHandler):
     def __call__(self, entities):
         self.entities = entities
         values = {
-            "Block Left"                  : "D3",
-            "Block Right"                 : "D4"
+            _("Block Left")                  : "D3",
+            _("Block Right")                 : "D4"
         }
         
         self._SetupSimpleAlternatives(values)

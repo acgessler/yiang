@@ -1,0 +1,6 @@
+group re ^..$ 
+	build ~ {
+		build LC_MESSAGES {
+			push archive_files (expand yiang.mo)
+		}
+	}

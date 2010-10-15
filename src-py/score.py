@@ -42,7 +42,7 @@ class ScoreTile(AnimTile):
                 points = self.game.Award(self.points)
                 
                 self.game.RemoveEntity(self) 
-                self.game.AddEntity(ScoreTileAnimStub("{0:4.4} ct".format(points),self.pos,1.0))
+                self.game.AddEntity(ScoreTileAnimStub(_("{0:4.4} ct").format(points),self.pos,1.0))
                 self.score_taken = True
             
         return Entity.ENTER
@@ -61,7 +61,7 @@ class LifeTile(AnimTile):
             self.game.AddLife(self.lives)
             
             self.game.RemoveEntity(self) 
-            self.game.AddEntity(ScoreTileAnimStub("+ 1 Life",self.pos,1.0))
+            self.game.AddEntity(ScoreTileAnimStub(_("+ 1 Life"),self.pos,1.0))
             
         return Entity.ENTER
 

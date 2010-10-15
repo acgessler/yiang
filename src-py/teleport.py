@@ -103,7 +103,7 @@ class Sender(AnimTile):
         
 
     def GetVerboseName(self):
-        return "a sender teleport brick"
+        return _("a sender teleport brick")
     
     
 class Receiver(AnimTile):
@@ -122,7 +122,7 @@ class Receiver(AnimTile):
         st.SetPosition(self.pos)
 
     def GetVerboseName(self):
-        return "a receiver teleport brick"
+        return _("a receiver teleport brick")
     
     
 class ReceiverRotateRight(Receiver):
@@ -148,7 +148,7 @@ class ReceiverRotateRight(Receiver):
         st.direction = 1-st.direction
 
     def GetVerboseName(self):
-        return "a receiver right-rotating teleport brick"
+        return _("a receiver right-rotating teleport brick")
     
     
 class ReceiverRotateLeft(Receiver):
@@ -174,7 +174,7 @@ class ReceiverRotateLeft(Receiver):
         st.direction = 1-st.direction
 
     def GetVerboseName(self):
-        return "a receiver left-rotating teleport brick"
+        return _("a receiver left-rotating teleport brick")
     
     
     

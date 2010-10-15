@@ -26,6 +26,7 @@ version = 2.0
 revision = 374
 server_name = "www.greentoken.de"
 homepage_url = "http://"+server_name+"/yiang"
+master_locale="en"
 resolution = [1280, 850]
 fullscreen = False
 resizable = False
@@ -176,6 +177,7 @@ update_tickrate = 60
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.
 root_dir = ".."
+locale_dir = os.path.join(root_dir, "locale")
 udata_dir = os.path.join(root_dir, "userdata")
 data_dir = os.path.join(root_dir, "data")
 profile_dir = os.path.join(root_dir, "profile")

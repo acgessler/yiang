@@ -218,22 +218,22 @@ class EditorGame(Game):
             gui.disabled = not self.IsEditorRunning() or self.readonly
         
         # Upper left / general editor functionality
-        self.AddSlaveDrawable((Button(text="Leave", rect=[30, 10, 60, 25],
-              tip="Leave the level editor and return to the main menu") + 
+        self.AddSlaveDrawable((Button(text=_("Leave"), rect=[30, 10, 60, 25],
+              tip=_("Leave the level editor and return to the main menu")) + 
               ("release", (lambda src: self._OnEscape()))
         ))
-        self.AddSlaveDrawable((Button(text="Save", rect=[100, 10, 60, 25],
-              tip= "You cannot save, this level is readonly" if self.readonly else "Save to disk (regular save, no further optimizations)") + 
+        self.AddSlaveDrawable((Button(text=_("Save"), rect=[100, 10, 60, 25],
+              tip=(_("You cannot save, this level is readonly") if self.readonly else _("Save to disk (regular save, no further optimizations)"))) + 
               ("update",  (lambda src: UpdateSaveState(src))) +
 		      ("release", (lambda src: self.Save()))
         ))
-        self.AddSlaveDrawable((Button(text="Undo", rect=[200, 10, 50, 25],
-              tip="Revert the last action, if possible") + 
+        self.AddSlaveDrawable((Button(text=_("Undo"), rect=[200, 10, 50, 25],
+              tip=_("Revert the last action, if possible")) + 
               ("update",  (lambda src: UpdateUndoState(src))) +
 		      ("release", (lambda src: self.Undo()))
         ))
-        self.AddSlaveDrawable((Button(text="Redo", rect=[260, 10, 50, 25],
-              tip="Repeat a recently reverted action, if possible") + 
+        self.AddSlaveDrawable((Button(text=_("Redo"), rect=[260, 10, 50, 25],
+              tip=_("Repeat a recently reverted action, if possible")) + 
               ("update",  (lambda src: UpdateRedoState(src))) +
 		      ("release", (lambda src: self.Redo()))
         ))
@@ -250,8 +250,8 @@ class EditorGame(Game):
             else:            
                 self.PushOverlay(Overlay_ShowLevelSettings())    
         
-        self.AddSlaveDrawable((Button(text="Edit Level Settings", 
-            tip="Change level name, speed, movement, post processing ... etc.",                          
+        self.AddSlaveDrawable((Button(text=_("Edit Level Settings"), 
+            tip=_("Change level name, speed, movement, post processing ... etc."),                          
             rect=[350, 10, 150, 25]) + 
               ("release", (lambda src: EditSettings())) +
               ("update",  (lambda src: UpdateSettingsGUIState(src)))
@@ -286,8 +286,8 @@ class EditorGame(Game):
         
         
         self.PushSuspend()
-        self.AddSlaveDrawable((ToggleButton(text="Suspend\x00Resume",
-             tip="Switch between game and editor mode. The old state is recovered when editor mode is entered again.",                               
+        self.AddSlaveDrawable((ToggleButton(text=_("Suspend\x00Resume"),
+             tip=_("Switch between game and editor mode. The old state is recovered when editor mode is entered again."),                               
              on=False, rect=[-290,10,80,25]) +
              
              # Event handlers
@@ -296,8 +296,8 @@ class EditorGame(Game):
              ("on",(lambda src: Resume())) 
         ))
             
-        self.AddSlaveDrawable((ToggleButton(text="Abandon God\x00Become God",
-             tip="Enable or disable god mode. Nothing can harm you while you are god.",                                 
+        self.AddSlaveDrawable((ToggleButton(text=_("Abandon God\x00Become God"),
+             tip=_("Enable or disable god mode. Nothing can harm you while you are god."),                                 
              on=defaults.debug_godmode, rect=[-400,10,100,25]) +
              
              # Event handlers
@@ -306,8 +306,8 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("debug_godmode",True))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Hide stats\x00Show stats",
-             tip="Show or hide the tile engine's internal performance counters",  
+        self.AddSlaveDrawable((ToggleButton(text=_("Hide stats\x00Show stats"),
+             tip=_("Show or hide the tile engine's internal performance counters"),  
              on=defaults.debug_godmode, rect=[-510,10,100,25]) +
              
              # Event handlers
@@ -316,8 +316,8 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("debug_draw_info",True))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Hide BBs\x00Show BBs",
-             tip="Show or hide the bounding boxes for all entities",  
+        self.AddSlaveDrawable((ToggleButton(text=_("Hide BBs\x00Show BBs"),
+             tip=_("Show or hide the bounding boxes for all entities"),  
              on=defaults.debug_draw_bounding_boxes, rect=[-620,10,100,25]) +
              
              # Event handlers
@@ -326,8 +326,8 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("debug_draw_bounding_boxes",True))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Disable PostFX\x00Enable PostFx",
-             tip="Enable or disable postprocessing. No postprocessing is equivalent to 'pure ascii mode'",  
+        self.AddSlaveDrawable((ToggleButton(text=_("Disable PostFX\x00Enable PostFx"),
+             tip=_("Enable or disable postprocessing. No postprocessing is equivalent to 'pure ascii mode'"),  
              on=not defaults.no_ppfx, rect=[-730,10,100,25]) +
              
              # Event handlers
@@ -336,8 +336,8 @@ class EditorGame(Game):
              ("on",(lambda src: defaults.__setattr__("no_ppfx",False))) 
         ))
         
-        self.AddSlaveDrawable((ToggleButton(text="Switch to BG\x00Switch to FG",
-             tip="Switch between editing layers",  
+        self.AddSlaveDrawable((ToggleButton(text=_("Switch to BG\x00Switch to FG"),
+             tip=_("Switch between editing layers"),  
              on=self.layer!=LAYER_BACKGROUND, rect=[-170,10,150,25]) +
              
              # Event handlers
@@ -356,8 +356,8 @@ class EditorGame(Game):
             if hasattr(self,"osm"):
                 self.RemoveOverlay(self.osm)
         
-        self.AddSlaveDrawable((ToggleButton(text="Disable Markup\x00Enable Markup",
-             tip="Enable or disable scene markups. Scene markups highlight entity paths and item relationships",  
+        self.AddSlaveDrawable((ToggleButton(text=_("Disable Markup\x00Enable Markup"),
+             tip=_("Enable or disable scene markups. Scene markups highlight entity paths and item relationships"),  
              on=True, rect=[-850,10,110,25]) +
              
              # Event handlers
@@ -830,7 +830,7 @@ class EditorGame(Game):
                                 elem.editor_tcode,
                                 int( (getattr( elem, "orig_dim",None) or elem.dim) [0] ),
                                 int( (getattr( elem, "orig_dim",None) or elem.dim) [1] ),
-                                "Preview scaled" if hasattr(elem,"orig_dim") else "Preview in original size"
+                                _("Preview scaled") if hasattr(elem,"orig_dim") else _("Preview in original size")
                             )
                             
                             h  = 16

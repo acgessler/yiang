@@ -59,13 +59,13 @@ def generate():
     # the keys are sorted in the .mo file
     keys = sorted(MESSAGES.keys())
     offsets = []
-    ids = strs = ''
+    ids = strs = b''
     for id in keys:
         # For each string, we need size and file offset.  Each string is NUL
         # terminated; the NUL does not count into the size.
         offsets.append((len(ids), len(id), len(strs), len(MESSAGES[id])))
-        ids += id + '\0'
-        strs += MESSAGES[id] + '\0'
+        ids += id + b'\0'
+        strs += MESSAGES[id] + b'\0'
     output = ''
     # The header is 7 32-bit unsigned integers.  We don't use hash tables, so
     # the keys start right after the index tables.
@@ -88,9 +88,9 @@ def generate():
                          7*4,               # start of key index
                          7*4+len(keys)*8,   # start of value index
                          0, 0)              # size and offset of hash table
-    output += array.array("i", offsets).tostring()
-    output += ids.encode("utf-8")
-    output += strs.encode("utf-8")
+    output += array.array("i", offsets)
+    output += ids
+    output += strs
     return output
 
 
@@ -108,7 +108,7 @@ def make(filename, outfile):
         outfile = os.path.splitext(infile)[0] + '.mo'
 
     try:
-        lines = open(infile).readlines()
+        lines = open(infile,"rb").readlines()
     except IOError as msg:
         print(msg, file=sys.stderr)
         sys.exit(1)
@@ -121,25 +121,25 @@ def make(filename, outfile):
     for l in lines:
         lno += 1
         # If we get a comment line after a msgstr, this is a new entry
-        if l[0] == '#' and section == STR:
+        if l[0] == b'#' and section == STR:
             add(msgid, msgstr, fuzzy)
             section = None
             fuzzy = 0
         # Record a fuzzy mark
-        if l[:2] == '#,' and 'fuzzy' in l:
+        if l[:2] == b'#,' and b'fuzzy' in l:
             fuzzy = 1
         # Skip comments
-        if l[0] == '#':
+        if l[0:1] == b'#':
             continue
         # Now we are in a msgid section, output previous section
-        if l.startswith('msgid'):
+        if l.startswith(b'msgid'):
             if section == STR:
                 add(msgid, msgstr, fuzzy)
             section = ID
             l = l[5:]
-            msgid = msgstr = ''
+            msgid = msgstr = b''
         # Now we are in a msgstr section
-        elif l.startswith('msgstr'):
+        elif l.startswith(b'msgstr'):
             section = STR
             l = l[6:]
         # Skip empty lines
@@ -148,6 +148,9 @@ def make(filename, outfile):
             continue
         # XXX: Does this always follow Python escape semantics?
         l = eval(l)
+        if isinstance(l,str):
+            l = l.encode()
+            
         if section == ID:
             msgid += l
         elif section == STR:

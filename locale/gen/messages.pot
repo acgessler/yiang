@@ -1,19 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# The YIANG project (http://www.greentoken.de/yiang)
+# Copyright (C) 2010, YIANG Development Team
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-15 18:06+W. Europe Daylight Time\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: 2.0\n"
+"POT-Creation-Date: 2010-10-15 18:34+W. Europe Daylight Time\n"
+"Last-Translator: yiang-core-team <yiang@greentoken.de>\n"
+"Language-Team: generic <yiang@greentoken.de>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: UTF-8\n"
 "Generated-By: pygettext.py 1.5\n"
-
 
 #: ../../src-py\editor.py:180
 msgid ""
@@ -22,6 +19,106 @@ msgid ""
 "    Press {0} to save first and reload then\n"
 "    Press {1} to reload immediately, without saving \n"
 "    Press {2} to abort"
+msgstr ""
+
+#: ../../src-py\editor.py:221
+msgid "Leave"
+msgstr ""
+
+#: ../../src-py\editor.py:222
+msgid "Leave the level editor and return to the main menu"
+msgstr ""
+
+#: ../../src-py\editor.py:225 ../../src-py\main.py:235
+msgid "Save"
+msgstr ""
+
+#: ../../src-py\editor.py:226
+msgid "Save to disk (regular save, no further optimizations)"
+msgstr ""
+
+#: ../../src-py\editor.py:226
+msgid "You cannot save, this level is readonly"
+msgstr ""
+
+#: ../../src-py\editor.py:230
+msgid "Undo"
+msgstr ""
+
+#: ../../src-py\editor.py:231
+msgid "Revert the last action, if possible"
+msgstr ""
+
+#: ../../src-py\editor.py:235
+msgid "Redo"
+msgstr ""
+
+#: ../../src-py\editor.py:236
+msgid "Repeat a recently reverted action, if possible"
+msgstr ""
+
+#: ../../src-py\editor.py:253
+msgid "Edit Level Settings"
+msgstr ""
+
+#: ../../src-py\editor.py:254
+msgid "Change level name, speed, movement, post processing ... etc."
+msgstr ""
+
+#: ../../src-py\editor.py:289
+msgid "Suspend\000Resume"
+msgstr ""
+
+#: ../../src-py\editor.py:290
+msgid "Switch between game and editor mode. The old state is recovered when editor mode is entered again."
+msgstr ""
+
+#: ../../src-py\editor.py:299
+msgid "Abandon God\000Become God"
+msgstr ""
+
+#: ../../src-py\editor.py:300
+msgid "Enable or disable god mode. Nothing can harm you while you are god."
+msgstr ""
+
+#: ../../src-py\editor.py:309
+msgid "Hide stats\000Show stats"
+msgstr ""
+
+#: ../../src-py\editor.py:310
+msgid "Show or hide the tile engine's internal performance counters"
+msgstr ""
+
+#: ../../src-py\editor.py:319
+msgid "Hide BBs\000Show BBs"
+msgstr ""
+
+#: ../../src-py\editor.py:320
+msgid "Show or hide the bounding boxes for all entities"
+msgstr ""
+
+#: ../../src-py\editor.py:329
+msgid "Disable PostFX\000Enable PostFx"
+msgstr ""
+
+#: ../../src-py\editor.py:330
+msgid "Enable or disable postprocessing. No postprocessing is equivalent to 'pure ascii mode'"
+msgstr ""
+
+#: ../../src-py\editor.py:339
+msgid "Switch to BG\000Switch to FG"
+msgstr ""
+
+#: ../../src-py\editor.py:340
+msgid "Switch between editing layers"
+msgstr ""
+
+#: ../../src-py\editor.py:359
+msgid "Disable Markup\000Enable Markup"
+msgstr ""
+
+#: ../../src-py\editor.py:360
+msgid "Enable or disable scene markups. Scene markups highlight entity paths and item relationships"
 msgstr ""
 
 #: ../../src-py\editor.py:393
@@ -76,6 +173,14 @@ msgstr ""
 msgid "Postprocessing effects"
 msgstr ""
 
+#: ../../src-py\editor.py:833
+msgid "Preview in original size"
+msgstr ""
+
+#: ../../src-py\editor.py:833
+msgid "Preview scaled"
+msgstr ""
+
 #: ../../src-py\editor.py:1624
 msgid "'{0}' for rectangle selection, '{1}' to hold selection, '{2}' to remove elements"
 msgstr ""
@@ -91,6 +196,128 @@ msgstr ""
 
 #: ../../src-py\editor.py:3150
 msgid "Choose a level to edit. Yellow entries are read-only and cannot be saved."
+msgstr ""
+
+#: ../../src-py\editoractions.py:86
+msgid "Award 1ct (temporary)"
+msgstr ""
+
+#: ../../src-py\editoractions.py:90
+msgid "Award 1$  (temporary)"
+msgstr ""
+
+#: ../../src-py\editoractions.py:138
+msgid "Horizontal moves"
+msgstr ""
+
+#: ../../src-py\editoractions.py:139
+msgid "Vertical moves"
+msgstr ""
+
+#: ../../src-py\editoractions.py:140
+msgid "Horizontal moves, quick"
+msgstr ""
+
+#: ../../src-py\editoractions.py:158
+msgid "'Normal' barrel"
+msgstr ""
+
+#: ../../src-py\editoractions.py:159
+msgid "Rounded barrel"
+msgstr ""
+
+#: ../../src-py\editoractions.py:160
+msgid "Fake barrel"
+msgstr ""
+
+#: ../../src-py\editoractions.py:197
+msgid "Close Door"
+msgstr ""
+
+#: ../../src-py\editoractions.py:197
+msgid "Open Door"
+msgstr ""
+
+#: ../../src-py\editoractions.py:206
+msgid "Select switch [off]"
+msgstr ""
+
+#: ../../src-py\editoractions.py:209
+msgid "Select switch [on]"
+msgstr ""
+
+#: ../../src-py\editoractions.py:214
+msgid "Select key"
+msgstr ""
+
+#: ../../src-py\editoractions.py:231
+msgid "Select corr. door"
+msgstr ""
+
+#: ../../src-py\editoractions.py:248
+msgid "Default: on"
+msgstr ""
+
+#: ../../src-py\editoractions.py:249
+msgid "Default: off"
+msgstr ""
+
+#: ../../src-py\editoractions.py:272
+msgid "Select receiver"
+msgstr ""
+
+#: ../../src-py\editoractions.py:276
+msgid "Select receiver 90\260 cw."
+msgstr ""
+
+#: ../../src-py\editoractions.py:280
+msgid "Select receiver 90\260 ccw."
+msgstr ""
+
+#: ../../src-py\editoractions.py:296
+msgid "Normal"
+msgstr ""
+
+#: ../../src-py\editoractions.py:297
+msgid "Rotate 90\260 cw."
+msgstr ""
+
+#: ../../src-py\editoractions.py:298
+msgid "Rotate 90\260 ccw."
+msgstr ""
+
+#: ../../src-py\editoractions.py:321
+msgid "Block Left"
+msgstr ""
+
+#: ../../src-py\editoractions.py:322
+msgid "Block Right"
+msgstr ""
+
+#: ../../src-py\enemy.py:109
+msgid "a Harmful Traverser Unit (HTU)"
+msgstr ""
+
+#: ../../src-py\enemy.py:235
+msgid "a Naughty Pong Pong (NPP)"
+msgstr ""
+
+#: ../../src-py\enemy.py:320
+msgid "Rotating Inferno"
+msgstr ""
+
+#: ../../src-py\enemy.py:472
+msgid "a Nifty Robot Intruder"
+msgstr ""
+
+#: ../../src-py\game.py:282
+msgid "Level {0}.{1} {2:.2} days"
+msgstr ""
+
+#: ../../src-py\game.py:282
+msgid ""
+"{0}\n"
+"{1:4.5} $"
 msgstr ""
 
 #: ../../src-py\game.py:549
@@ -111,55 +338,138 @@ msgstr ""
 msgid "return to the map"
 msgstr ""
 
-#: ../../src-py\main.py:233
+#: ../../src-py\game.py:606
+msgid ""
+"You survived {0:.4} days and collected {1:.4} dollars.\n"
+"That's {2}.\n"
+"\n"
+"\n"
+msgstr ""
+
+#: ../../src-py\game.py:609
+msgid "a new high score record"
+msgstr ""
+
+#: ../../src-py\game.py:611
+msgid ""
+"\n"
+"Hit {0} or {1} to return to the menu .. "
+msgstr ""
+
+#: ../../src-py\game.py:677
+msgid ""
+"Hey, you solved Level {0}!.\n"
+"\n"
+msgstr ""
+
+#: ../../src-py\game.py:682
+msgid ""
+"\n"
+"Hit {1} to continue .. (don't disappoint me)\n"
+"Hit {2} to return to the menu"
+msgstr ""
+
+#: ../../src-py\loadscreen.py:144
+msgid ""
+"\n"
+"Finally, everything is ready. \n"
+"This makes me SO happy {0} \n"
+"... Press any key to continue ... "
+msgstr ""
+
+#: ../../src-py\locked.py:173
+msgid "Invisible"
+msgstr ""
+
+#: ../../src-py\locked.py:178
+msgid "Gray"
+msgstr ""
+
+#: ../../src-py\locked.py:178
+msgid "White"
+msgstr ""
+
+#: ../../src-py\locked.py:180
+msgid "Yellow"
+msgstr ""
+
+#: ../../src-py\locked.py:183
+msgid "Pink"
+msgstr ""
+
+#: ../../src-py\locked.py:185
+msgid "Red"
+msgstr ""
+
+#: ../../src-py\locked.py:189
+msgid "Azure"
+msgstr ""
+
+#: ../../src-py\locked.py:191
+msgid "Green"
+msgstr ""
+
+#: ../../src-py\locked.py:194
+msgid "Blue"
+msgstr ""
+
+#: ../../src-py\locked.py:196
+msgid "Black"
+msgstr ""
+
+#: ../../src-py\locked.py:199
+msgid "{0} key"
+msgstr ""
+
+#: ../../src-py\main.py:219
+msgid "This feature is not currently implemented, sorry."
+msgstr ""
+
+#: ../../src-py\main.py:232
 msgid "Resume Game"
 msgstr ""
 
-#: ../../src-py\main.py:234
+#: ../../src-py\main.py:233
 msgid "Campaign"
 msgstr ""
 
-#: ../../src-py\main.py:235
+#: ../../src-py\main.py:234
 msgid "Load"
 msgstr ""
 
 #: ../../src-py\main.py:236
-msgid "Save"
-msgstr ""
-
-#: ../../src-py\main.py:237
 msgid "Quick Game"
 msgstr ""
 
-#: ../../src-py\main.py:238
+#: ../../src-py\main.py:237
 msgid "Start Tutorial"
 msgstr ""
 
-#: ../../src-py\main.py:239
+#: ../../src-py\main.py:238
 msgid "Choose Level"
 msgstr ""
 
-#: ../../src-py\main.py:240
+#: ../../src-py\main.py:239
 msgid "Achievements"
 msgstr ""
 
-#: ../../src-py\main.py:242
+#: ../../src-py\main.py:241
 msgid "Credits"
 msgstr ""
 
-#: ../../src-py\main.py:243
+#: ../../src-py\main.py:242
 msgid "Online Highscore"
 msgstr ""
 
-#: ../../src-py\main.py:244
+#: ../../src-py\main.py:243
 msgid "Check for Updates"
 msgstr ""
 
-#: ../../src-py\main.py:245
+#: ../../src-py\main.py:244
 msgid "Quit!"
 msgstr ""
 
-#: ../../src-py\main.py:260
+#: ../../src-py\main.py:259
 msgid ""
 "You are currently in a game. \n"
 "If you start a new game, all your progress will be lost.\n"
@@ -168,7 +478,7 @@ msgid ""
 "Hit {1} to cancel"
 msgstr ""
 
-#: ../../src-py\main.py:298
+#: ../../src-py\main.py:297
 msgid ""
 "You are currently in a game. \n"
 "If you quit without saving, all your progress will be lost.\n"
@@ -177,15 +487,63 @@ msgid ""
 "Hit {1} to reconsider your decision"
 msgstr ""
 
-#: ../../src-py\main.py:331
+#: ../../src-py\main.py:330
 msgid "Profile: {1} / best result so far: $ {0:.4}"
 msgstr ""
 
-#: ../../src-py\main.py:525
+#: ../../src-py\main.py:524
 msgid "Press {0} to enter Level {1} - '{2}'"
 msgstr ""
 
-#: ../../src-py\main.py:533
+#: ../../src-py\main.py:532
 msgid "Press {0} to return"
+msgstr ""
+
+#: ../../src-py\player.py:227
+msgid " [#{0} of this item]"
+msgstr ""
+
+#: ../../src-py\player.py:236
+msgid "++ {0}x ammo"
+msgstr ""
+
+#: ../../src-py\player.py:252
+msgid " [I have {0} more of this kind]"
+msgstr ""
+
+#: ../../src-py\score.py:45
+msgid "{0:4.4} ct"
+msgstr ""
+
+#: ../../src-py\score.py:64
+msgid "+ 1 Life"
+msgstr ""
+
+#: ../../src-py\teleport.py:106
+msgid "a sender teleport brick"
+msgstr ""
+
+#: ../../src-py\teleport.py:125
+msgid "a receiver teleport brick"
+msgstr ""
+
+#: ../../src-py\teleport.py:151
+msgid "a receiver right-rotating teleport brick"
+msgstr ""
+
+#: ../../src-py\teleport.py:177
+msgid "a receiver left-rotating teleport brick"
+msgstr ""
+
+#: ../../src-py\weapon.py:98
+msgid "Hot-zoop's Steak'n'Slay Gun"
+msgstr ""
+
+#: ../../src-py\weapon.py:128
+msgid "The Rumpsteak Machine"
+msgstr ""
+
+#: ../../src-py\weapon.py:139
+msgid "The Self-Reflecting Painless Chicken Slayer"
 msgstr ""
 

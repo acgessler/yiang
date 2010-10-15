@@ -26,7 +26,11 @@ verbose = True
 class Base:
 
     def _Normalize(self,path):
-        return path.replace("/","\\").replace("\\\\","\\").strip()
+        path = path.replace("/","\\").replace("\\\\","\\").strip()
+        if path[:2] == ".\\":
+            path = path[2:]
+            
+        return path
     
     def _NormalizeDir(self,dir):
         if dir[-1] != "\\":
@@ -142,6 +146,7 @@ class Reader(Base):
             
     def Contains(self,filename):
         filename = self._Normalize(filename)
+        print("Have {0}? {1}".format(filename,not not [e for e in self.files if e[0]==filename]))
         return not not [e for e in self.files if e[0]==filename]
     
     def ContainsDir(self,dir):

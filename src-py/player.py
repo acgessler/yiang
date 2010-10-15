@@ -224,7 +224,7 @@ class Player(Entity):
         
         self.inventory.append(item)
         self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName() + 
-            (" [#{0} of this item]".format(cnt+1) if cnt else ""),self.pos))
+            (_(" [#{0} of this item]").format(cnt+1) if cnt else ""),self.pos))
         
         print("Add item to inventory: {0}".format(item))
         
@@ -233,7 +233,7 @@ class Player(Entity):
         One shoot consumes one unit of ammo.""" 
         assert ammo > 0
         self.ammo += ammo
-        self.game.AddEntity(InventoryChangeAnimStub("++ {0}x ammo".format(ammo),
+        self.game.AddEntity(InventoryChangeAnimStub(_("++ {0}x ammo").format(ammo),
             self.pos,color=sf.Color.Yellow))
         
         print("Add ammo: {0}".format(ammo))
@@ -249,7 +249,7 @@ class Player(Entity):
         self.inventory.remove(item)
         cnt = len([i for i in self.inventory if i.SameKind(item)])
         self.game.AddEntity(InventoryChangeAnimStub("-- "+item.GetItemName()+
-            (" [I have {0} more of this kind]".format(cnt) if cnt else ""),
+            (_(" [I have {0} more of this kind]").format(cnt) if cnt else ""),
             self.pos,color=sf.Color.Red))
             
     def SetPositionAndMoveView(self, pos, ofs=None):
