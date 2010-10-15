@@ -468,8 +468,17 @@ def func_run(scope, *args):
     func = args[1] if len(args) > 1 else None
     print('RUN %s.%s()' % (file, func))
     
-    myd,myf = os.path.split(os.path.join( lookup(scope, '_dir'), file ))
+    full = os.path.join( lookup(scope, '_dir'), file )
+    myd,myf = os.path.split(full)
     sys.path.insert(0, myd)
+    
+    if os.path.splitext(myf)[1].lower() in ( ".bat", ".sh" ):
+        prv = os.getcwd()
+        print("Execute external shell script: {0}".format(full))
+        os.chdir(myd)
+        os.system(myf)
+        os.chdir(prv) # doesn't wait() on linux!
+        return
 
     try:
         mod = __import__(myf)

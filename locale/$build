@@ -4,3 +4,7 @@ group re ^..$
 			push archive_files (expand yiang.mo)
 		}
 	}
+
+build gen {
+	run compile.bat
+}

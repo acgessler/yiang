@@ -1,3 +1,7 @@
+@echo off
+
+echo Compiling locale tables (*.mo files) ...
+
 msgfmt.py messages_ger.po
 msgfmt.py messages_eng.po
 copy messages_ger.mo .\..\de\LC_MESSAGES\yiang.mo
