@@ -321,13 +321,15 @@ msgstr ""
 
 #: ../../src-py\game.py:282
 msgid "Level {0}.{1} {2:.2} days"
-msgstr ""
+msgstr "Level {0}.{1} {2:.2} Tage"
 
 #: ../../src-py\game.py:282
 msgid ""
 "{0}\n"
 "{1:4.5} $"
 msgstr ""
+"{0}\n"
+"{1:4.5} $"
 
 #: ../../src-py\game.py:549
 msgid ""
@@ -338,14 +340,20 @@ msgid ""
 "Press {2} to restart the level\n"
 "Press {3} to {4}"
 msgstr ""
+"Du starbst einen Märtyrertod und wartest nun auf die Auferstehung!\n"
+"  .. der gottlose Schlächter war {0}\n"
+"\n"
+"Drücke {1} um am letzten Respawn Punkt zu starten\n"
+"Drücke {2} um das Level neu zu starten\n"
+"Drücke {3} um {4}"
 
 #: ../../src-py\game.py:559
 msgid "leave the game"
-msgstr ""
+msgstr "das Spiel verlassen"
 
 #: ../../src-py\game.py:559
 msgid "return to the map"
-msgstr ""
+msgstr "zur Karte zurückkehren"
 
 #: ../../src-py\game.py:606
 msgid ""
@@ -354,22 +362,30 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Du hast {0:.4} Tage überlebt und {1:.4} Dollar gesammelt.\n"
+"Das ist {2}.\n"
+"\n"
+"\n"
 
 #: ../../src-py\game.py:609
 msgid "a new high score record"
-msgstr ""
+msgstr "ein neuer Highscore Rekord"
 
 #: ../../src-py\game.py:611
 msgid ""
 "\n"
 "Hit {0} or {1} to return to the menu .. "
 msgstr ""
+"\n"
+"Drücke {0} oder {1} um zum Menü zurückzukehren .. "
 
 #: ../../src-py\game.py:677
 msgid ""
 "Hey, you solved Level {0}!.\n"
 "\n"
 msgstr ""
+"Hey, du hast Level {0} geschafft!.\n"
+"\n"
 
 #: ../../src-py\game.py:682
 msgid ""
@@ -377,6 +393,9 @@ msgid ""
 "Hit {1} to continue .. (don't disappoint me)\n"
 "Hit {2} to return to the menu"
 msgstr ""
+"\n"
+"Drücke {1} um fortzufahren .. (Enttäusche mich nicht)\n"
+"Drücke {2} um zum Menü zurückzukehren"
 
 #: ../../src-py\loadscreen.py:144
 msgid ""
@@ -385,66 +404,70 @@ msgid ""
 "This makes me SO happy {0} \n"
 "... Press any key to continue ... "
 msgstr ""
+"\n"
+"Endlich ist alles bereit. \n"
+"Das macht mich so glücklich {0} \n"
+"... Drücke eine beliebige Taste um fortzufahren ... "
 
 #: ../../src-py\locked.py:173
 msgid "Invisible"
-msgstr ""
+msgstr "unsichtbar"
 
 #: ../../src-py\locked.py:178
 msgid "Gray"
-msgstr ""
+msgstr "grau"
 
 #: ../../src-py\locked.py:178
 msgid "White"
-msgstr ""
+msgstr "weiß"
 
 #: ../../src-py\locked.py:180
 msgid "Yellow"
-msgstr ""
+msgstr "gelb"
 
 #: ../../src-py\locked.py:183
 msgid "Pink"
-msgstr ""
+msgstr "pink"
 
 #: ../../src-py\locked.py:185
 msgid "Red"
-msgstr ""
+msgstr "rot"
 
 #: ../../src-py\locked.py:189
 msgid "Azure"
-msgstr ""
+msgstr "azur"
 
 #: ../../src-py\locked.py:191
 msgid "Green"
-msgstr ""
+msgstr "grün"
 
 #: ../../src-py\locked.py:194
 msgid "Blue"
-msgstr ""
+msgstr "blau"
 
 #: ../../src-py\locked.py:196
 msgid "Black"
-msgstr ""
+msgstr "schwarz"
 
 #: ../../src-py\locked.py:199
 msgid "{0} key"
-msgstr ""
+msgstr "{0}er Schlüssel"
 
 #: ../../src-py\main.py:221
 msgid "This feature is not currently implemented, sorry."
-msgstr ""
+msgstr "Diese Funktion ist leider noch nicht verfügbar!"
 
 #: ../../src-py\main.py:234
 msgid "Resume Game"
-msgstr ""
+msgstr "Fortfahren"
 
 #: ../../src-py\main.py:235
 msgid "Campaign"
-msgstr ""
+msgstr "Kampagne"
 
 #: ../../src-py\main.py:236
 msgid "Load"
-msgstr ""
+msgstr "Laden"
 
 #: ../../src-py\main.py:238
 msgid "Quick Game"
@@ -452,11 +475,11 @@ msgstr "Schnelles Spiel"
 
 #: ../../src-py\main.py:239
 msgid "Start Tutorial"
-msgstr ""
+msgstr "Anleitung starten"
 
 #: ../../src-py\main.py:240
 msgid "Choose Level"
-msgstr ""
+msgstr "Level wählen"
 
 #: ../../src-py\main.py:241
 msgid "Achievements"
@@ -468,15 +491,15 @@ msgstr ""
 
 #: ../../src-py\main.py:244
 msgid "Online Highscore"
-msgstr ""
+msgstr "Online Highscore"
 
 #: ../../src-py\main.py:245
 msgid "Check for Updates"
-msgstr ""
+msgstr "Auf Updates prüfen"
 
 #: ../../src-py\main.py:246
 msgid "Quit!"
-msgstr ""
+msgstr "Beenden"
 
 #: ../../src-py\main.py:261
 msgid ""
@@ -486,6 +509,11 @@ msgid ""
 "Hit {0} to continue\n"
 "Hit {1} to cancel"
 msgstr ""
+"Du befindest dich gerade in einem Spiel. \n"
+"Wenn du ein neues Spiel startest,geht dein Spielstand verloren.\n"
+"\n"
+"Drücke {0} um fortzufahren\n"
+"Drücke {1} zum abbrechen"
 
 #: ../../src-py\main.py:299
 msgid ""
@@ -495,54 +523,59 @@ msgid ""
 "Hit {0} to continue without fear\n"
 "Hit {1} to reconsider your decision"
 msgstr ""
+"Du befindest dich gerade in einem Spiel. \n"
+"Wenn du das Spiel verlässt, ohne zu speichern, geht dein Spielstand verloren.\n"
+"\n"
+"Drücke {0} um ohne Angst fortzufahren\n"
+"Drücke {1} um noch einmal darüber nachzudenken"
 
 #: ../../src-py\main.py:332
 msgid "Profile: {1} / best result so far: $ {0:.4}"
-msgstr ""
+msgstr "Profil: {1} / bestes Ergebnis: $ {0:.4}"
 
 #: ../../src-py\main.py:526
 msgid "Press {0} to enter Level {1} - '{2}'"
-msgstr ""
+msgstr "Drücke {0} um das Level {1} - '{2}' zu betreten"
 
 #: ../../src-py\main.py:534
 msgid "Press {0} to return"
-msgstr ""
+msgstr "Drücke {0} um zurückzukehren"
 
 #: ../../src-py\player.py:227
 msgid " [#{0} of this item]"
-msgstr ""
+msgstr "[#{0} von diesem item]"
 
 #: ../../src-py\player.py:236
 msgid "++ {0}x ammo"
-msgstr ""
+msgstr "++ {0}x Munition"
 
 #: ../../src-py\player.py:252
 msgid " [I have {0} more of this kind]"
-msgstr ""
+msgstr " [Ich habe noch {0} mehr von dieser Sorte]"
 
 #: ../../src-py\score.py:45
 msgid "{0:4.4} ct"
-msgstr ""
+msgstr "{0:4.4} ct"
 
 #: ../../src-py\score.py:64
 msgid "+ 1 Life"
-msgstr ""
+msgstr "+ 1 Leben"
 
 #: ../../src-py\teleport.py:106
 msgid "a sender teleport brick"
-msgstr ""
+msgstr "ein Sendeteleportstein"
 
 #: ../../src-py\teleport.py:125
 msgid "a receiver teleport brick"
-msgstr ""
+msgstr "ein Empfangsteleportstein"
 
 #: ../../src-py\teleport.py:151
 msgid "a receiver right-rotating teleport brick"
-msgstr ""
+msgstr "ein rechts-umlenkender Empfangsteleportstein"
 
 #: ../../src-py\teleport.py:177
 msgid "a receiver left-rotating teleport brick"
-msgstr ""
+msgstr "ein links-umlenkender Empfangsteleportstein"
 
 #: ../../src-py\weapon.py:98
 msgid "Hot-zoop's Steak'n'Slay Gun"
