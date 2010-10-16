@@ -28,6 +28,9 @@ import itertools
 import collections
 import operator
 
+
+
+
 # Our stuff
 import defaults
 
@@ -42,14 +45,18 @@ from renderer import Renderer,Drawable,NewFrame
 from highscore import HighscoreManager
 from audio import BerlinerPhilharmoniker
 from achievements import Achievements
-from enemy import Enemy
 from score import ScoreTile
 from player import Player
 from keys import KeyMapping
 from tile import Tile,AnimTile,TileLoader
 from level import Level
-
 from minigui import Component, Button, ToggleButton, Label, GUIManager, EditControl
+
+import preboot # preboot.py *must* be loaded first ----- but if we do so,
+# we end up with strange tile scalings.
+
+from enemy import Enemy
+
 
 # Sentinel decorator to indicate that a particular function overrides
 # a equally named function in a baseclass
@@ -3163,16 +3170,6 @@ class EditorMenu(Drawable):
     
 def main():
     """Main entry point to the editor application"""
-
-    # Read game.txt, which is the master config file
-    defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
-    Log.Enable(defaults.enable_log)
-    
-    import fshack
-    fshack.Enable()
-    
-    import gettext
-    gettext.install('yiang', './locale')
     
     defaults.caption = "YIANG-ED 0.1"
     defaults.resolution[0] = 1450;

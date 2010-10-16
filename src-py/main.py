@@ -27,6 +27,11 @@ import os
 import itertools
 import math
 
+
+
+
+
+
 # My own stuff
 import defaults
 from fonts import FontCache
@@ -40,6 +45,9 @@ from notification import MessageBox
 from audio import SoundEffectCache,BerlinerPhilharmoniker
 from achievements import Achievements
 
+import preboot # preboot.py *must* be loaded first ----- but if we do so,
+# we end up with strange tile scalings.
+
 # numeric constants for the menu entries
 OPTION_RESUME,OPTION_NEWCAMPAGIN,OPTION_NEWGAME,OPTION_TUTORIAL,OPTION_CHOOSELEVEL,\
 OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(8)
@@ -50,25 +58,6 @@ SPECIAL_LEVEL_INTRO = 20000
 SPECIAL_LEVEL_CAMPAIGN = 30000
 SPECIAL_LEVEL_MENU = 40000
 
-
-### need to push these up since we need _() to be available when the rest of the module is parsed
-
-# Read game.txt, which is the master config file
-#Log.Enable(defaults.enable_log)
-defaults.merge_config(sys.argv[1] if len(sys.argv)>1 else os.path.join(defaults.config_dir,"game.txt"))
-Log.Enable(defaults.enable_log)
-
-import fshack
-fshack.Enable()
-
-import gettext
-lang = gettext.translation("yiang", defaults.locale_dir, languages=[defaults.master_locale])
-if not lang:
-    lang = gettext.translation("yiang", defaults.locale_dir, languages=['en'])
-    if not lang:
-        assert False
-    
-lang.install()
 
 def get_level_count():
     """Get the number of ordered, regular levels in the data/levels folder."""

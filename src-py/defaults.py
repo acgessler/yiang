@@ -19,6 +19,18 @@
 
 import os
 
+#
+# Do *not* load any other modules here. It is essential that the initialization
+# order is as follows:
+#
+# - os, sys, ... (Python core)
+# - defaults
+# - preboot
+# - log
+# - main/editor
+# - ... doesn't care ...
+#
+
 # -----------------------------------------------------------------------------
 # configurable metrics, altered by config/game.txt upon startup
 
@@ -30,7 +42,7 @@ master_locale="en"
 resolution = [1280, 850]
 fullscreen = False
 resizable = False
-letter_size = [7, 12]
+letter_size = [6.5, 11.5]
 letter_height_intro = 13
 letter_height_menu = 52
 letter_height_status = 36
