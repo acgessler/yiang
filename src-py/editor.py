@@ -1184,7 +1184,7 @@ class EditorGame(Game):
                             break
                     else:
                         print("Could not find a valid player, creating one!")
-                        PlaceEntity("_PL")
+                        self._PlaceEntity("_PL")
                         
                 def TestFromHere(respawn_protect=True,force_respawn_from_here=False,replace_editor_overlays=False):
                     self2._RemoveMe()
