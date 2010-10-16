@@ -1,7 +1,9 @@
 
 group wc *.ico
 	push archive_files ~
+end
 	
 group wc *.txt
 	push archive_files ~
+end
  

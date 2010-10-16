@@ -1,3 +1,4 @@
 
 group wc *.png
 	push archive_files ~
+end

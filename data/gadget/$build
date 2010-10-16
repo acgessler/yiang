@@ -1,1 +1,15 @@
 
+build yiang.gadget {
+	group wc *
+		group type dir
+			build ~ {
+				group type file
+					push files (expand ~)
+				end
+			}
+		end
+		group type file
+			push files (expand ~)
+		end
+	end
+}

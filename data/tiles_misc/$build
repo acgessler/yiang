@@ -2,6 +2,7 @@
 
 group wc *.txt
 	push archive_files ~
+end
 
 build cooked {
 	push archive_files (expand tiles.dat)

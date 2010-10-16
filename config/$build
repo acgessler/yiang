@@ -8,3 +8,5 @@ group unpushed
 
 	group wc *.cfg
 		push files ~
+end
+
