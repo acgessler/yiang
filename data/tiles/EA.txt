@@ -1,0 +1,13 @@
+from enemy import RotatingInferno; <out> = RotatingInferno(<raw>,1,5, rotate_speed_base = -0.8, radius=5)
+*
+
+'
+
+#
+
+'
+
+*
+  
+  
+ 

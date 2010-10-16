@@ -310,7 +310,7 @@ class RotatingInferno(Enemy):
     def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5):
         AnimTile.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
         
-        self.rotate_speed_base = rotate_speed_base
+        self.rotate_speed_base = rotate_speed_base * 0.75 # balancing
         self.ofs_vec = [radius,0]
         
     def Interact(self, other):
