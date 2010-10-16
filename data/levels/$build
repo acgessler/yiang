@@ -2,15 +2,28 @@
 
 push files (expand 60000.txt)
 
-group unpushed
-	group re [0-9]+.txt
+group re ^[0-9]+$
+	group type dir 
+		build ~ {
+			build cooked {
+				push archive_files (expand tiles.dat)
+			}
+			group type file
+				push archive_files ~
+			end
+		}
+	end
+end
+
+
+
+group unpushed 
+	group re ^[0-9]+\.txt$ 
 		group type file
 			push archive_files ~
+		end
+	end
+end
+
 	
-group re [0-9]+ 
-	build (splice ~ 0 -4) {
-		build cooked {
-			push archive_files (expand tiles.dat)
-		}
-	}
 

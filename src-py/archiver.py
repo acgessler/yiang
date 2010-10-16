@@ -146,7 +146,7 @@ class Reader(Base):
             
     def Contains(self,filename):
         filename = self._Normalize(filename)
-        print("Have {0}? {1}".format(filename,not not [e for e in self.files if e[0]==filename]))
+        #print("Have {0}? {1}".format(filename,not not [e for e in self.files if e[0]==filename]))
         return not not [e for e in self.files if e[0]==filename]
     
     def ContainsDir(self,dir):

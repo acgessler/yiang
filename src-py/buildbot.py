@@ -261,23 +261,26 @@ def execute(scope, group, args, lines):
             #assert out[0] == len(item)-1
 
         scope.pop()
-    return n
+    return n+1
 
 
 # -----------------------------------------------------------------------------------
-def lookup_nofault(scope, name):
+def lookup_nofault(scope, name, local=False):
     for tt in scope[-1::-1]:
         #print(tt)
         try:
             return tt[name]
         except KeyError:
             pass
+        
+        if local and "_dir" in tt:
+            break
     
     return None
 
 # -----------------------------------------------------------------------------------
-def lookup(scope, name):
-    res = lookup_nofault(scope, name)
+def lookup(scope, name, local=False):
+    res = lookup_nofault(scope, name, local)
     if res is None:
         #print(scope)
         error(scope, 'Name not found: %s' % name)
@@ -299,7 +302,7 @@ def block_group(scope, kind, *args):
         def group_filter(fname):
             f = s.get("_pushed")
 
-            return False if f and opj(pd, fname) in f else True
+            return not (f and opj(pd, fname) in f) 
         
     #scope,kind,expr = args
     elif kind == "wc" or kind == "wildcard":
@@ -328,25 +331,24 @@ def block_group(scope, kind, *args):
         import re  
         group_filter = (lambda x,e=re.compile(expr): re.match(e,x))
       
-    scope[-1]['_group_filter'] = lambda x: not not (x != "$build" and group_filter(x))
-    for t in old(pd):
-        fail = False
-        for s in scope[-1::-1]:
-            f = s.get("_group_filter",None)
-            if f:
-                if not f(t):
-                    fail = True
-                    break
-                
-            if "_dir" in s:
-                break
-                
-        if not fail: 
-            yield {'~':opj(pd, t),"~~":t}
+    scope[-1]['_group_filter'] = gf = lambda x: not not (x != "$build" and group_filter(x))
+    try:
+        base = lookup_nofault(scope, "~~", True)
+        if base:
+            base = [base]
+        else:
+            base = old(pd)
+        
+        for t in base:
+            #print(expr,t,gf(t))
+            #import time
+            #time.sleep(0.05)
+            if gf(t):
+                yield {'~':opj(pd, t),"~~":t}
             
-    # XXX nested group statements are far from being optimal or right --
-    # each group() call re-evaluates all preceeding ones, leading to terrible
-    # runtime complexity. Need to check if it works at all.
+    except(OSError):
+        pass
+            
 
 # -----------------------------------------------------------------------------------
 def block_if(scope, *args):
