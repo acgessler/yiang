@@ -147,7 +147,7 @@ def make(filename, outfile):
         if not l:
             continue
         # XXX: Does this always follow Python escape semantics?
-        l = eval(l)
+        l = eval(l.decode("cp1252"))
         if isinstance(l,str):
             l = l.encode()
             
