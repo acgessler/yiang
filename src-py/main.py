@@ -56,7 +56,9 @@ OPTION_PREFS,OPTION_CREDITS,OPTION_QUIT, = range(8)
 SPECIAL_LEVEL_TUTORIAL = 10000
 SPECIAL_LEVEL_INTRO = 20000
 SPECIAL_LEVEL_CAMPAIGN = 30000
-SPECIAL_LEVEL_MENU = 40000
+
+SPECIAL_LEVEL_MENUBG_START = 40000
+SPECIAL_LEVEL_MENUBG_END = -1
 
 
 def get_level_count():
@@ -155,9 +157,25 @@ class MainMenu(Drawable):
 
         print("Entering main menu")
         self.SetMenuOption(self.cur_option,first=True)
-
+        
+        # copy'n'paste from loadsceen.py
+        global SPECIAL_LEVEL_MENUBG_END
+        if SPECIAL_LEVEL_MENUBG_END < SPECIAL_LEVEL_MENUBG_START:
+            from level import LevelLoader
+            
+            m = SPECIAL_LEVEL_MENUBG_START-1
+            for n,readonly in sorted(LevelLoader.EnumLevelIndices()):
+                if n < SPECIAL_LEVEL_MENUBG_START:
+                    continue
+                if n-m != 1:
+                    break
+                m = n
+                
+            SPECIAL_LEVEL_MENUBG_END = m+1
+            
+        import random
         self.bggame = Game(mode=Game.BACKGROUND,undecorated=True)
-        if self.bggame.LoadLevel(SPECIAL_LEVEL_MENU,no_loadscreen=True):
+        if self.bggame.LoadLevel(random.randint(SPECIAL_LEVEL_MENUBG_START,SPECIAL_LEVEL_MENUBG_END-1),no_loadscreen=True):
             self.AddSlaveDrawable(self.bggame)
 
     def _OptionsQuit(self):

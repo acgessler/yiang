@@ -1,0 +1,20 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0),name='MenuBackground',color=(20, 20, 20),postfx=[('ingame1.sfx', ()), ('menu2.sfx', ())],distortion_params=False,vis_ofs=0,scroll=0,lower_offset=1.2,)
+rA9rA9rA9rA9rA9rA9rA9rA9rA9rA9rA9rINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINaB3
+rA9.  .  .  .  .  .  .  rA9rE4.  .  .  .  .  .  .  .  .  .  .  .  .  .  rPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TB.  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  rA9rA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  rA9rA9rA9.  .  .  .  .  .  .  .  .  .  rDKrDKgDJ.  .  gS0gS0gS0gS0.  gS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  rA9rA9.  .  .  .  .  _CB.  .  .  .  .  .  gS0gS0gS0gS0gS0gS0gS0gS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  rA9rA9.  .  .  .  aACaAC.  .  .  .  .  gS0gS0gS0gS0_A9gS0gS0gS0gS0.  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  gDJ.  rA9rA9.  .  .  .  gS0.  .  .  gS0gS0gS0gS0gS0gS0_A9gS0gS0gS0gS0gS0.  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  .  .  rA9rA9.  .  .  .  aCE.  .  .  gS0gS0.  .  .  _D3.  .  aDJgS0.  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  gS0.  .  .  .  .  aDAaDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rKE_A9.  aC2aDA.  aDJ.  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  .  .  rA9rA9.  .  .  .  aCE.  .  .  .  .  .  .  .  _A9.  aC2aC2aDAaDA.  .  .  .  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  .  .  rA9.  .  .  gDJ.  .  .  .  .  .  .  .  .  aDA_A9aC2aC2aC2aC2aC2aDA.  aDJ.  .  .  gDJ.  .  .  .  .  aB3
+rA9.  .  .  .  .  rABrABrABrABrAB.  .  .  rA9.  _C8.  .  .  .  .  .  aB2aB2aB2aB2aB2aC3_A9aC2aC2aC2aC2aC2aC2aDAaDA.  .  .  .  .  .  .  .  .  aB3
+rA9.  .  .  .  .  .  .  .  .  .  .  .  .  rE4.  .  .  .  .  .  gS0aC2aC2_A9_A9_A9_A9_A9_A9_A9aC2aC2aC2aC2aC2aC2aC2aDAaDA.  .  .  gS5.  .  .  aB3
+rA9.  .  .  .  .  .  aDAaDA.  .  .  .  .  rA9.  .  .  .  .  gS0aC2aC2_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9aC2aC2aC2aC2aC2aC2aC2aDA.  .  .  .  .  aB3aB3
+rA9.  .  .  .  .  .  aDAaDAaDA.  .  .  .  rA9.  rE0.  .  aC2aC2aC2_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9aC2aC2aC2aC2aC2aC2aDAaDAaDAaDA.  aB3aB3aB3
+rA9.  .  .  .  .  .  aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3.  aB3aB3_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3
+aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3.  aB3_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3aB3
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TA
