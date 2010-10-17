@@ -146,7 +146,7 @@ class Heat(AnimTile):
             
             if now >= end:
                 if self.DistanceInnerRadius(self.myplayer):
-                    if not defaults.debug_godmode:
+                    if not defaults.debug_godmode and not self.game.mode == Game.BACKGROUND:
                         
                         def garbagify_ppfx():
                             self.level.RemovePostFX(Heat.POSTFX_NAME)
