@@ -110,6 +110,9 @@ class Heat(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
+        if not isinstance(other,Player):
+            return Entity.BLOCK
+        
         if self.heat_activated:
             return Entity.ENTER
         else:
