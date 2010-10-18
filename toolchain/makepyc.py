@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!echo /usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
 #/////////////////////////////////////////////////////////////////////////////////
@@ -17,31 +17,12 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+
 import os
 
-def line_count (file):
-    i = 0
-    with open(file) as f:
-        for i, l in enumerate(f):
-            pass
-        
-    return i + 1
+def run():
+    import compileall
+    compileall.compile_dir(os.path.join("..","src-py"))
 
-
-def line_count_all():
-    total = 0
-    for dirpath, dirnames, filenames in os.walk("."):
-        for file in filenames:
-            if os.path.splitext(file)[-1].lower() != ".py":
-                continue
-
-            t = os.path.join(dirpath,file)
-            cnt = line_count(t)
-            print("{0} {1} lines".format(t,cnt))
-            total += cnt
-        
-    print("Total: {0} lines".format(total))
-
-if __name__ ==  '__main__':
-    line_count_all()
-    input("Press any key to continue")
+if __name__ == "__main__":
+    run()

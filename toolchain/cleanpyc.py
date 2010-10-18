@@ -1,4 +1,4 @@
-#!echo /usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
 #/////////////////////////////////////////////////////////////////////////////////
@@ -17,10 +17,20 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+# Delete all *.pyc recursively.
+import os
 
-def run():
-    import compileall
-    compileall.compile_dir(".")
+def main(root):
+    for t in os.listdir(root):
+        fullp =os.path.join(root,t)
+        if os.path.isdir(fullp):
+            main(fullp)
+            continue
 
-if __name__ == "__main__":
-    run()
+        if os.path.splitext(fullp)[-1].lower() == '.pyc':
+            os.unlink(fullp)
+
+
+
+if __name__ ==  '__main__':
+    main(os.path.join("..","src-py"))

@@ -1,0 +1,9 @@
+
+run cleanpyc
+run makepyc
+run genrc
+
+run compiletiles
+run genworldmaps
+
+

@@ -18,6 +18,9 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 import os
+import sys
+
+sys.path.append(os.path.join("..","src-py"))
 import defaults
 
 dirs = [
@@ -32,6 +35,8 @@ for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
     m = re.match(reg,file)
     if m:
         dirs.append( os.path.join(defaults.data_dir,"levels", str( m.groups()[0] )))
+        
+cnt, ccnt = 0,0
         
 reg = re.compile(r"[a-zA-Z0-9]+\.txt$")
 for dir in dirs:
@@ -66,6 +71,8 @@ for dir in dirs:
                         except:
                             print("Failure compiling {0}; skipping".format(e))
                             pass
+                        print("Processed: {0}".format(e))
+                        cnt += 1
                     
             except IOError:
                 print("Failure accessing {0}; skipping".format(e))
@@ -87,8 +94,10 @@ for dir in dirs:
     outf = os.path.join(path,"tiles.dat")
     with open(outf,"wb") as file:
         marshal.dump(matches,file)
+        
+    ccnt += 1
     
-    
+print("Finished, cached {0} tiles in {1} cookies".format(cnt,ccnt))
     
     
     

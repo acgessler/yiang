@@ -5,6 +5,7 @@ print Collect translations
 build locale
 
 print Rebuild embeddable rc for MSVC
+build toolchain
 build src-py
 
 print currently skipped - compile yiang.dll
