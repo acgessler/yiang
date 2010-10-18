@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
-#/////////////////////////////////////////////////////////////////////////////////
-# Yet Another Jump'n'Run Game, unfair this time.
-# (c) 2010 Alexander Christoph Gessler
+# ///////////////////////////////////////////////////////////////////////////////////
+# MGL Framework Python Scripting Interface (v0.1)
+# [buildbot.py]
+# (c) Alexander Gessler, 2009
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -17,21 +18,4 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# Delete all *.pyc recursively.
-import os
 
-def main(root):
-    for t in os.listdir(root):
-        fullp =os.path.join(root,t)
-        if os.path.isdir(fullp):
-            main(fullp)
-            continue
-
-        if os.path.splitext(fullp)[-1].lower() == '.pyc':
-            os.unlink(fullp)
-
-
-
-if __name__ ==  '__main__':
-    main(os.path.join("..","src-py"))
-    main(".")

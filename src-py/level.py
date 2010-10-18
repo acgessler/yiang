@@ -142,8 +142,8 @@ class Level:
                     if tcode[0] in spaces:
                         continue
                     
-                    self._LoadSingleTile(tcode, line[x],x//3,y)
-                    ecnt += 1
+                    if self._LoadSingleTile(tcode, line[x],x//3,y):
+                        ecnt += 1
                     
                 xmax = max(x,xmax)
                 
@@ -153,6 +153,7 @@ class Level:
 
         self.level_size = (xmax // 3 + 1, y + 1)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
+        assert(ecnt != 0)
         
         if not skip_validation:
             validator.validate_level(self.lines, level)
@@ -183,6 +184,8 @@ class Level:
         if tile is None:
             # (HACK) avoid os.path.join() calls
             tile = TileLoader.Load(self.tlbase + "\\" + tcode + ".txt", self.game)
+            if tile is None:
+                return None
                 
         from tile import TileLoader
         tile.SetColor(TileLoader.GetColor(ccode))
@@ -1033,6 +1036,7 @@ class LevelLoader:
         except:
             print("exec() fails loading level {0}, executing line: {1} ".format(file, l))
             traceback.print_exc()
+            return None
             
         lv = tempdict.get("level", None)
         if lv and isinstance(lv,Level) and game.GetGameMode() == 3: # Game.EDITOR:

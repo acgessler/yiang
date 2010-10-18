@@ -166,6 +166,8 @@ This makes me SO happy {0}
         def DoLoading():    
             
             ret[0] = loadProc(*args,**kwargs)
+            if not ret[0]:
+                return
             
             while True:
                 b = time.time()
@@ -194,8 +196,8 @@ This makes me SO happy {0}
                 if t.is_alive():
                     c = time.time()
                     LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
-                else:
-                    if LoadScreen.EndProgressBar():
+                else:    
+                    if not ret[0] or LoadScreen.EndProgressBar():
                         break
         
         finally:

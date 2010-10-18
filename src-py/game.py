@@ -695,7 +695,7 @@ Hit {2} to return to the menu""")).format(
         """Restart the current level and discard all changes made"""
         self.LoadLevel(self.level_idx,no_loadscreen=((not hasattr(self.level,"used_loadscreen")) if self.level else False))
         
-    def LoadLevel(self,idx,no_loadscreen=False):
+    def LoadLevel(self,idx,no_loadscreen=False,no_alert=False):
         """Load a particular level and drop the old one"""
         self.DropLevel()
         self.level_idx = idx
@@ -728,6 +728,17 @@ Hit {2} to return to the menu""")).format(
             if self.QueryFlag(Drawable.FLAG_ACTIVE):
                 self.level.OnEnable()
             return True
+        
+        if not no_alert:
+            def on_close(a):
+                self._OnEscape()
+            
+            accepted = (KeyMapping.Get("accept"),)
+            self._FadeOutAndShowStatusNotice(sf.String((_("""Something went wrong. Can't load this level. 
+Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+                )),defaults.game_over_fade_time,(550,70),0.0,accepted,sf.Color.Red,on_close) 
             
         return False 
     
