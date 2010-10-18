@@ -16,11 +16,12 @@ function cleanupPage() {
 }
 
 function loadPage(index,itemcnt,byname,previous) {
-	index = index  || 0;
-	itemcnt = itemcnt || 30;
+	var index = index  || 0;
+	var itemcnt = itemcnt || 30;
+
  
 	// obtain the highscore list in JSON format using another AJAX request 
-	$.getJSON("./php/highscore.php?itemcnt=" + itemcnt + "&page="+index+(byname ? ("&byname="+byname) : "" ),function(data) {		
+	$.getJSON("./php/highscore.php?itemcnt=" + itemcnt + "&page="+index+(byname ? ("&byname="+byname) : "" ),function(data) {			
 		var cnt = data.pages, pselect = "<b>";
 		
 		if (byname) {
@@ -29,6 +30,9 @@ function loadPage(index,itemcnt,byname,previous) {
 			}
 			else {
 				index = data.thispage;
+				// crucial! need to unbind previous handler or more than one of them
+				// is active (in nested closures -> hell is here)
+				$("#search").unbind("keydown");
 			}
 		}
 		
@@ -38,20 +42,20 @@ function loadPage(index,itemcnt,byname,previous) {
 		var min = Math.min, max = Math.max;
 		
 		var pad = 1, end = 3;
-		for (a=0; a < min(end,cnt,index-pad); ++a) {
+		for (var a=0; a < min(end,cnt,index-pad); ++a) {
 			add(a);
 		}
 		
 		if (index > end) {
 			pselect += "...&nbsp;"
 		}
-		for (a = max(index - pad, 0); a < min(cnt,index + pad+1); ++a) {
+		for (var a = max(index - pad, 0); a < min(cnt,index + pad+1); ++a) {
 			add(a);
 		}
 		
 		if (cnt-end > index + pad) {
 			pselect += "...&nbsp;"
-			for (a = max(cnt - end, 0); a < cnt; ++a) {
+			for (var a = max(cnt - end, 0); a < cnt; ++a) {
 				add(a);
 			}
 		}
@@ -65,12 +69,17 @@ function loadPage(index,itemcnt,byname,previous) {
                  e.preventDefault();
                  
                  cleanupPage();
+		 //data.items = [];
                  loadPage(index, itemcnt, $(this).val().trim());
+
 	         }
 	     });
 		 
 		 $(".choosep").click(function(){
 	         cleanupPage();
+
+		 // see note above. crucial as well.
+	 	 $(".choosep").unbind("click");
 	         loadPage(parseInt($(this).attr("id")));
 	     });
 		
