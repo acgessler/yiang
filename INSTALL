@@ -4,39 +4,97 @@ YIANG INSTALL INSTRUCTIONS
 ==========================
 
 
-Windows
-=======
+============================================================
+I. Windows
+============================================================
 
-Basically, run bin-x86-windows/game.exe or game_conapp.exe if you're interested in debug information. This will start the game in 16:10 widescreen (windowed) mode. You can also use thee BAT files in the root directory to launch the game in one of the predefined resolutions or in fullscreen mode.
+
+APPLIES TO
+----------
+
+Windows XP, Windows Vista, Windows 7+ (32 and 64 bit)
 
 
-Linux
-=====
+WHAT TO DO
+----------
 
-This is a bit tricky. The main difference is that we don't embedd PySFML on Linux, so the system-wide package is to be taken. The following instructions where tested on Ubuntu 10.04 and may need minor changes to suit your distribution.
+Basically, run bin-x86-windows/game.exe or bin-x86-windows/editor.exe. It is recommended to leave the default settings.
 
-1. Make sure python3.x is installed. You need the developer files as well
+
+INFO FOR TESTERS
+----------------
+
+game_conapp.exe will start the game in 16:10 widescreen (windowed) mode. You can also use thee BAT files in the root directory to launch the game in one of the predefined resolutions or in fullscreen mode.
+
+
+============================================================
+II. Linux
+============================================================
+
+
+APPLIES TO
+----------
+
+Any (more or less).
+
+
+
+WHAT TO DO
+----------
+
+This is a bit tricky. The main difference is that we don't embedd PySFML on Linux, so the system-wide package is to be taken. The following instructions have been tested on Ubuntu 10.04 and may need minor changes to suit your distribution.
+
+
+SHORT STORY
+-----------
+
+The following is the full command sequence (assuming `pwd` is the folder where this file resides), below is a detailed explanation to assist you if something goes wrong (if anyone wants to hack together a fool-proof shell script or even a MAKE-environment, go ahead :-):
+
+
 	sudo apt-get install python3 python3-dev
-
-2. Install SFML 1.5 (1.6 may work as well, but I could not test it!) and the corresponding developer files (you can get them either from their sf.net download page or from your package manager).
 	sudo apt-get install libsfml-dev 
+	wget http://downloads.sourceforge.net/sfml/SFML-1.5-python-sdk.zip
+	unzip SFML-1.5-python-sdk.zip
+	cd SFML-1.0/python
+	sudo python3 setup.py install
+	cd src-cpp
+	g++ Main.cpp -lpython3.<python-minor> -o./../bin-<your-arch>-linux/yiang2.0
+	g++ MainEditor.cpp -lpython3.<python-minor> -o./../bin-<your-arch>-linux/yiangedit2.0
+
+(substitute appropriate values for <python-minor> and <your-arch>)
+
+
+
+FULL NOVEL
+-----------
+
+1.) Make sure python3.x is installed. You need the developer files as well.
+	$ sudo apt-get install python3 python3-dev
+
+2.) Install SFML 1.5 (1.6 may work as well, but currently no packages are available) and the corresponding developer files (you can get them either from their sf.net download page or from your package manager).
+	$ sudo apt-get install libsfml-dev 
 	(+ all the libsfml-.... packages if necessary)
 
-3. Get PySFML 1.5 for Python 3.x. Taking it from the sf.net page is at the time of this writing (2010-07-22) the only way to do it.
-	wget, unzip, ... etc.
+3.) Get PySFML 1.5 for Python 3.x. Taking it from the sf.net page is at the time of this writing (2010-07-22) the only way to do it.
+	$ wget, unzip, ... etc.
+        (http://downloads.sourceforge.net/sfml/SFML-1.5-python-sdk.zip)
 
-4. Install PySFML - this can be done using distutils / setup.py in the PySFML folder. You may, however, need to edit the setup.py file and add '/usr/include/python3.1' (or at whichever location your python 3 headers are placed at!) to the list of include directories (syntactically, it's a python list, so it needs to look like this: ['entry','entry2',...] or you will get errors during installing).
-	sudo setup.py install
+4.) Install PySFML - this can be done using distutils / setup.py in the PySFML folder. You may, however, need to edit the setup.py file and add '/usr/include/python3.1' (or at whichever location your python 3 headers are placed at!) to the list of include directories (syntactically, it's a python list, so it needs to look like this: ['entry','entry2',...] or you will get errors during installing).
+	$ sudo python3 setup.py install
 
-5. Verify everything is working fine by firing up a python 3 shell (`python3`) and trying to import the PySFML.sf module. If PySFML.sf.Version is '1.5', everything is fine.
+5.) Verify everything is working fine by firing up a python 3 shell (`python3`) and trying to import the PySFML.sf module. If PySFML.sf.Version is '1.5' or higher, everything is fine.
 
-6. If there isn't a prebuilt YIANG binary in ./bin-<yourArchitecture>-linux, build it. There's no makefile because building is really straightforward (x being your python minor version):
-	g++ main.cpp lpython3.<x> -o./../bin-<yourArchitecture>-linux/yiang1.1
+6.) If there isn't a prebuilt and up-to-date YIANG binary in ./bin-<yourArchitecture>-linux, build it. There's no makefile because building is really straightforward (x being your python minor version):
+  	$ cd src-cpp
+	$ g++ Main.cpp -lpython3.<python-minor> -o./../bin-<your-architecture>-linux/yiang2.0
+	$ g++ MainEditor.cpp -lpython3.<python-minor> -o./../bin-<your-architecture>-linux/yiangedit2.0
 
-7. Run the created executable. 
+7.) Run the created executable. 
+	$ cd ../bin-<your-architecture>-linux
+	$ ./yiang2.0
 
+============================================================
+III. GENERAL
+============================================================
 
-GENERAL
-=======
-
-Please any flaws you may encounter in this instructions.
+Please report any flaws you may encounter in this instructions.

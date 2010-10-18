@@ -547,7 +547,10 @@ class TileLoader:
             "_" : sf.Color.White,
         })
         
-        file = file.replace("/","\\")
+        file_norm = file.replace("/","\\")
+
+        if os.name == 'posix':
+                file = file.replace("\\","/")
 
         # the actual mapping table has been outsourced to config/colors.txt
         if not hasattr(TileLoader, "cached_color_dict"):
@@ -579,7 +582,7 @@ class TileLoader:
                 print("color.txt is not well-formed: ")
                 traceback.print_exc()
 
-        lines = TileLoader.cache.get(file,None)
+        lines = TileLoader.cache.get(file_norm,None)
         if lines is None:
             # Check if a pre-compiled cache exists in this directory
             dir, name = os.path.split(file)
@@ -600,11 +603,13 @@ class TileLoader:
                 except:
                     print("Failure reading cooked tiles: {0}".format(cache))
                     traceback.print_exc()
+
+               
             
         if lines is None:
             try:
                 print("Loading tile from "+file)
-                with open(file,"rt") as f:
+                with open(file,"rt",encoding='cp1252') as f:
                     lines = f.read().split("\n",1)
                       
             except IOError:
@@ -629,7 +634,7 @@ class TileLoader:
             for k,v in replace.items():
                 lines = lines.replace(k,v)
                 
-            TileLoader.cache[file] = lines = compile(lines,"<shebang-string>","exec")
+            TileLoader.cache[file_norm] = lines = compile(lines,"<shebang-string>","exec")
 
         #print(l)
         tempdict = dict(locals())

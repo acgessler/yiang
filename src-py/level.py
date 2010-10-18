@@ -999,7 +999,7 @@ class LevelLoader:
         if lines is None:
             try:
                 print("Loading level from " + file)
-                with open(file, "rt") as f:
+                with open(file, "rt", encoding='cp1252') as f:
                     lines = f.read().split("\n", 1)
 
                     LevelLoader.cache[file] = lines

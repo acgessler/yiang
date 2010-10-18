@@ -17,35 +17,39 @@
 // Main entry point, initializes Python and calls main.py
 
 #ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
+#   define _CRT_SECURE_NO_WARNINGS
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#   define WIN32_LEAN_AND_MEAN
+#   include <Windows.h>
 
 // CommandLineToArgvW, GetCommandLineW
-#include <Shellapi.h>
+#   include <Shellapi.h>
 // ShCreateDirectory()
-#include <Shlobj.h>
+#   include <Shlobj.h>
 
-#include <fstream>
-#include <string>
+#   include <fstream>
+#   include <string>
 
 // Python C API, PySFML module initialization stub
-#include <Python.h>
-#pragma comment (lib, "Python31.lib")
-#pragma comment (lib, "pysfml.lib")
-#pragma comment (lib, "yiang.lib")
+#   include <Python.h>
+#   pragma comment (lib, "Python31.lib")
+#   pragma comment (lib, "pysfml.lib")
+#   pragma comment (lib, "yiang.lib")
 
-#include "PyCache.h"
+#   include "PyCache.h"
 
 #else
 
-#include <python3.1/Python.h>
+#   include <python3.1/Python.h>
+#   define USE_C_MAIN
 
 #endif
 
 PyMODINIT_FUNC PyInit_sf(void);
-#include "StartupDialog.h"
+
+#ifdef _MSC_VER
+#   include "StartupDialog.h"
+#endif
 
 #if 0
 // --------------------------------------------------------------------------------------------

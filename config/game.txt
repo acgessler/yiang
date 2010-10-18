@@ -8,3 +8,4 @@ master_locale="de"
 fullscreen=False
 resolution.x=1280
 resolution.y=750
+
