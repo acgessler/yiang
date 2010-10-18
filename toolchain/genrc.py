@@ -26,7 +26,8 @@ import makepyc
 makepyc.run()
 
 ignore = []
-dirs = [os.path.join("..","src-py"),os.path.join("..","src-py","updaters")]
+basedir = os.path.join("..","src-py")
+dirs = [".",os.path.join(".","updaters")]
 outrc = os.path.join("..","vc9","yiang.rc")
 outh = os.path.join("..","vc9","yiang.h")
 
@@ -34,12 +35,12 @@ files = {}
 
 for dir in dirs:
     print("Enter directory {0}".format(dir))
-    for file in os.listdir(dir):
-        path = os.path.join(dir,file)
+    for file in os.listdir(os.path.join(basedir,dir)):
+        path = os.path.join(os.path.join(basedir,dir),file)
         if os.path.splitext(file)[-1].lower() == ".pyc" and not (file in ignore or path in ignore):
             print("Slurp {0}".format(path))
             with open(path,"rb") as inp:
-                files[path[2:].replace("/","\\").replace("\\","\\\\")] = inp.read()
+                files[os.path.join(dir,file)[2:].replace("/","\\").replace("\\","\\\\")] = inp.read()
     
 indices = {}
 
