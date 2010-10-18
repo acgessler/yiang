@@ -35,7 +35,7 @@ import os
 # configurable metrics, altered by config/game.txt upon startup
 
 version = 2.0
-revision = 374
+revision = 607
 server_name = "www.greentoken.de"
 homepage_url = "http://"+server_name+"/yiang"
 master_locale="en"
