@@ -33,6 +33,7 @@ from player import Player
 from keys import KeyMapping
 from level import Level,LevelLoader
 from fonts import FontCache
+from textures import TextureCache
 
 class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
@@ -168,8 +169,10 @@ class CampaignLevel(Level):
                 self.minimap_vis.SetPixel(x,y,col)
             
     def _LoadHUD(self):
-        self.minimap_img, self.minimap_vis, self.minimap_sprite = sf.Image(), sf.Image(), None
-        if not self.minimap_img.LoadFromFile(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap )):
+        self.minimap_vis, self.minimap_sprite = sf.Image(), None
+        #if not self.minimap_img.LoadFromFile(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap )):
+        self.minimap_img = TextureCache.Get(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap ))
+        if not self.minimap_img:
             print("Failure loading HUD minimap from {0}".format(self.minimap))
             return
         
