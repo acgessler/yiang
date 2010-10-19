@@ -182,7 +182,7 @@ slowdown_level = 0
 # is performed multiple times.
 collision_tap_size = 0.1
 
-max_velocity_x,max_velocity_y = 45,55
+max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
 
 # -----------------------------------------------------------------------------

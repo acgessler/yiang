@@ -512,7 +512,9 @@ TimeDelta:         {dtime:.4}
                 return entity
         
         # we can safely assume that there MUST be a player.
-        assert False
+        # assert False
+        ## we can't.
+        return None
         
     def MaxUselessSprites(self):
         """Maximum number of effect sprites that can now be spawned

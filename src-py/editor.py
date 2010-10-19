@@ -1850,10 +1850,10 @@ class EditorGame(Game):
         return not not [e for e in self.overlays if hasattr(e,"__class__") and e.__class__ in args\
             or e in args]
         
-    def _PlaceEntity(self,codename,pos):
+    def _PlaceEntity(self,codename,pos=None):
         elem = self._LoadTileFromTag(codename)
         
-        elem.SetPosition(pos)
+        elem.SetPosition(pos or (self.tx,self.ty))
         self.ControlledAddEntity(elem)
         return elem
         
