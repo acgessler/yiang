@@ -322,8 +322,9 @@ OOOOOO  OOOOO  \n\
         
     def _OnEscape(self):
         """Called when the ESCAPE key is hit"""
-        self.total_accum += self.time
-        delattr(self,"clock")
+        if hasattr(self,"time"):
+            self.total_accum += self.time
+            delattr(self,"clock")
         
         Renderer.RemoveDrawable(self)
 

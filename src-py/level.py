@@ -153,7 +153,7 @@ class Level:
 
         self.level_size = (xmax // 3 + 1, y + 1)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
-        assert(ecnt != 0)
+        assert(ecnt != 0 or game.mode == game.EDITOR)
         
         if not skip_validation:
             validator.validate_level(self.lines, level)
