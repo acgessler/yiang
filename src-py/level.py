@@ -697,9 +697,11 @@ class Level:
         """Called by the Game matchmaker class once per frame,
         may raise Game.NewFrame to advance to the next frame
         and skip any other jobs for this frame"""
+        
+        self._DoAutoScroll(dtime)
+        self._GenToDeviceCoordinates()
             
         self._UpdateEntities(time,dtime)
-        self._DoAutoScroll(dtime)
         self._UpdateDistortion(time,dtime)
         self._DrawEntities()
         self._UpdateEntityList()
@@ -710,8 +712,7 @@ class Level:
         specified in level-relative tile coordinates."""
 
         if not pos is None:
-            pos = self.game.ToDeviceCoordinates(self.ToCameraCoordinates(pos))
-            drawable.SetPosition(*pos)
+            drawable.SetPosition(*self.ToCameraDeviceCoordinates(pos))
             
         Renderer.app.Draw(drawable)
         self.game.draw_counter += 1
@@ -720,6 +721,26 @@ class Level:
         """Get from world- to camera coordinates. This transforms
         everything by the local level origin."""
         return (coords[0] - self.origin[0], coords[1] - self.origin[1])
+    
+    
+    def _GenToDeviceCoordinates(self): # optimize - get an optimized closure to avoid some lookups
+        floor = math.floor
+        origin = self.origin
+        tiles_size_px = defaults.tiles_size_px
+    
+        # on nt, we have a modified PySFML version which does the rounding in C++, which is way faster 
+        if defaults.draw_clamp_to_pixel and os.name != "nt": 
+            def ToCameraDeviceCoordinates(coords):
+                #optimize - merge ToCameraCoordinates and game.ToDeviceCoordinates()
+                return (floor((coords[0]- origin[0] )*tiles_size_px[0]),
+                        floor((coords[1]- origin[1] )*tiles_size_px[1]))
+        else:                          
+            def ToCameraDeviceCoordinates(coords):
+                #optimize - merge ToCameraCoordinates and game.ToDeviceCoordinates()
+                return ((coords[0]- origin[0] )*tiles_size_px[0],
+                        (coords[1]- origin[1] )*tiles_size_px[1])
+            
+        self.ToCameraDeviceCoordinates = ToCameraDeviceCoordinates
     
     def GetPostFX(self):
         """Get the list of all active postprocessing effects

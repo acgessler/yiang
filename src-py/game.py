@@ -29,6 +29,8 @@ import math
 import traceback
 import threading
 
+floor = math.floor # optimize
+
 # My own stuff
 import mathutil
 import defaults
@@ -897,8 +899,8 @@ Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")
 
     def _ToDeviceCoordinates_Floored(self,coords):
         """Replacement for ToDeviceCoordinate() if defaults.draw_clamp_to_pixels is True """
-        return (math.floor(coords[0]*defaults.tiles_size_px[0]),
-                math.floor(coords[1]*defaults.tiles_size_px[1]))
+        return (floor(coords[0]*defaults.tiles_size_px[0]),
+                floor(coords[1]*defaults.tiles_size_px[1]))
 
     def ToDeviceCoordinates(self,coords):
         """Get from camera coordinates to SFML (device) coordinates"""

@@ -109,6 +109,8 @@ class SmallTraverser(Enemy):
     def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default"):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=halo_img)
 
+        move_speed *= 0.65 # balancing
+
         self.verbose = verbose
         self.vel = (move_speed * random.uniform(0.8,1.2) * random.choice((-1, 1))) if randomdir is True else 1
         self.direction = direction
@@ -237,7 +239,7 @@ class NaughtyPongPong(Enemy):
 
         self.verbose = verbose
         #self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
-        self.vel = -defaults.jump_vel
+        self.vel = -defaults.jump_vel   
 
         self._ShrinkBB(shrinkbb)
 
@@ -310,7 +312,7 @@ class RotatingInferno(Enemy):
     def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5):
         AnimTile.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
         
-        self.rotate_speed_base = rotate_speed_base * 0.75 # balancing
+        self.rotate_speed_base = rotate_speed_base * 0.65 # balancing
         self.ofs_vec = [radius,0]
         
     def Interact(self, other):
@@ -359,7 +361,7 @@ class SmallBob(Enemy):
     """This guy is not actually friendly, but he's much less a danger
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
-    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.5, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.5, accel_time=3.0):
+    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.2, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.0, accel_time=3.0):
         AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
         self.hits = self.hits_needed = 4

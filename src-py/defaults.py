@@ -100,7 +100,7 @@ teleport_origin_distance = 8.0
 speed_scale_per_round = 1.5
 antialiasing_level = 2
 player_caution_border = [2, 12]
-draw_clamp_to_pixel = True
+draw_clamp_to_pixel = True # may be ignored on Windows
 debug_trace_keypoints = False
 show_window_caption = True
 enable_menu_image_bg = False
@@ -151,7 +151,7 @@ profile_level_loading = False
 # every 600st frame for a level (~10s).
 # writes cProfile results to the profile directory
 # and dumps the 20 hottest locations to the console
-profile_rendering = False
+profile_rendering = True
 
 # Draw the HUD (minimap) in world maps. Disable if
 # this causes problems with your screen setup (i.e.
