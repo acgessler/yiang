@@ -109,8 +109,10 @@ class CampaignLevel(Level):
         print("Load level overlay {0}, got {1} tiles".format(filename,cnt))
         
     def Draw(self, time, dtime):
-        self._UpdateEntities(time,dtime)
+        self._GenToDeviceCoordinates()
         self._DoAutoScroll(dtime)
+        
+        self._UpdateEntities(time,dtime)
         self._UpdateDistortion(time,dtime)
         self._DrawEntities()
         self._UpdateEntityList()
@@ -318,6 +320,12 @@ class CampaignLevel(Level):
         # are not as tall as they could be for their font size (i.e. 'a' leaves a
         # gap underneath)
         return ( (coords[0] - self.origin[0])* 29.8/30.0, (coords[1] - self.origin[1])* 28.9/30.0)
+    
+    def _GenToDeviceCoordinates(self):
+        def doit(coords):
+            return self.game.ToDeviceCoordinates( self.ToCameraCoordinates(coords) )
+        
+        self.ToCameraDeviceCoordinates = doit
     
     def _UpdateEntities(self,time,dtime):
         # As a further optimization, we will only include visible entities

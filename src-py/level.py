@@ -163,10 +163,13 @@ class Level:
         self._UpdateEntityList()
         self._ComputeOrigin()
         
-        from game import Game
-        if self.game.GetGameMode() == Game.CAMPAIGN:
+        #from game import Game
+        from loadscreen import LoadScreen
+        if self.game.GetGameMode() == game.CAMPAIGN and not LoadScreen.IsRunning():
             from posteffect import FadeInOverlay
             Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
+            
+        self._GenToDeviceCoordinates()
             
     def AddTileFromCode(self,code,x,y):
         assert len(code)==3

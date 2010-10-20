@@ -89,6 +89,7 @@ class LoadScreen:
     
     loadlevel = None
     progress_tile = None
+    running = False
     
     @staticmethod
     def LoadLoadLevel():
@@ -134,6 +135,10 @@ class LoadScreen:
         e._Recache()
         
     @staticmethod
+    def IsRunning():
+        return LoadScreen.running
+        
+    @staticmethod
     def EndProgressBar():
         import random
         ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed]
@@ -162,48 +167,55 @@ This makes me SO happy {0}
         import time 
         a = time.time()
         
-        ret = [None]
-        def DoLoading():    
-            
-            ret[0] = loadProc(*args,**kwargs)
-            if not ret[0]:
-                return
-            
-            while True:
-                b = time.time()
-                if inp.IsKeyDown(sf.Key.S) or b-a > defaults.loading_time:
-                    break
-                    
-                time.sleep( min(1.0, max(0, defaults.loading_time - (b-a))))
-            
-        if LoadScreen.loadlevel:
-            Renderer.AddDrawable(LoadScreen.loadlevel)
+        LoadScreen.running = True
         
-        LoadScreen.stop = False
-        t = Thread(target=DoLoading)
-        t.daemon = True
-        t.start()
-        
-        inp = Renderer.app.GetInput()    
         try:
-            while Renderer.IsMainloopRunning():
-                if [e for e in Renderer.SwallowEvents() if e.Type == sf.Event.KeyPressed 
-                    and e.Key.Code == KeyMapping.Get("escape")]:
-                   break
-                        
-                Renderer._DoSingleFrame()
-                
-                if t.is_alive():
-                    c = time.time()
-                    LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
-                else:    
-                    if not ret[0] or LoadScreen.EndProgressBar():
-                        break
         
-        finally:
-            if LoadScreen.loadlevel:
-                Renderer.RemoveDrawable(LoadScreen.loadlevel)
+            ret = [None]
+            def DoLoading():    
                 
+                ret[0] = loadProc(*args,**kwargs)
+                if not ret[0]:
+                    return
+                
+                while True:
+                    b = time.time()
+                    if inp.IsKeyDown(sf.Key.S) or b-a > defaults.loading_time:
+                        break
+                        
+                    time.sleep( min(1.0, max(0, defaults.loading_time - (b-a))))
+                
+            if LoadScreen.loadlevel:
+                Renderer.AddDrawable(LoadScreen.loadlevel)
+            
+            LoadScreen.stop = False
+            t = Thread(target=DoLoading)
+            t.daemon = True
+            t.start()
+            
+            inp = Renderer.app.GetInput()    
+            try:
+                while Renderer.IsMainloopRunning():
+                    if [e for e in Renderer.SwallowEvents() if e.Type == sf.Event.KeyPressed 
+                        and e.Key.Code == KeyMapping.Get("escape")]:
+                       break
+                            
+                    Renderer._DoSingleFrame()
+                    
+                    if t.is_alive():
+                        c = time.time()
+                        LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
+                    else:    
+                        if not ret[0] or LoadScreen.EndProgressBar():
+                            break
+            
+            finally:
+                if LoadScreen.loadlevel:
+                    Renderer.RemoveDrawable(LoadScreen.loadlevel)
+        except:
+            raise
+        finally:
+            LoadScreen.running = False
         return ret[0]
         
 
