@@ -999,29 +999,33 @@ class Entity(Drawable):
         self.game = game
         if game.level:
             self.level = game.level
-            self._Optimize()
+            #self._Optimize()
         
     def SetLevel(self,level):
         """Binds the Entity to a Level instance. This is called
         automatically for all entities loaded as part of a level"""
         self.level = level
-        if level.game:
-            self._Optimize()
+        #if level.game:
+        #    self._Optimize()
             
-    def _Optimize(self):
-        level = self.level
-        def SetPosition_Quick(pos): # optimize
-            self.pos = list(pos)
-            level._MarkEntityAsMoved(self)
-            self._UpdateBB()
-        
-        self.SetPosition = SetPosition_Quick
+    #def _Optimize(self):
+    #    level = self.level
+    #    
+    #    old = self.SetPosition
+    #    def SetPosition_Quick(pos): # optimize
+    #        old(pos)
+    #        level._MarkEntityAsMoved(self)
+    #        self._UpdateBB()
+    #    
+    #    self.SetPosition = SetPosition_Quick
 
     def SetPosition(self,pos):
         self.pos = list(pos)
         
-        if not self.game is None and not self.game.GetLevel() is None:
-            self.game.GetLevel()._MarkEntityAsMoved(self)
+        if self.game:
+            level= self.game.level
+            if level:
+                level._MarkEntityAsMoved(self)
             
         self._UpdateBB()
         
