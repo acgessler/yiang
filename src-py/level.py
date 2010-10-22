@@ -934,9 +934,9 @@ class LevelLoader:
         try:
             with open(file,"rt") as file:
                 import re
-                look = re.search(r"name=[\"'](.+?)[\"']",file.read(250))
+                look = re.search(r"name=(?:_\()?[\"'](.+?)[\"']\)?",file.read(250))
                 if not look is None:
-                    LevelLoader.name_cache[index] = name = look.groups()[0]
+                    LevelLoader.name_cache[index] = name = _( look.groups()[0] )
                     print("Guess level name for {0}: {1}".format(index,name))
         except IOError:
             # LevelLoader will take care of this error, we don't bother for now

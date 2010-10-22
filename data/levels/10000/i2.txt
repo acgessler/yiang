@@ -1,4 +1,4 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_2",text_color=sf.Color.Black,only_once=True)
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_2",text_color=sf.Color.Black,only_once=True)
 I don't like you. You don't deserve the score you just received (Side note: Get more than 1000$ and I shall be seriously impressed!).
 
 Well, these TREASURE signs were quite easy to spot, weren't they? But sometimes there will be no visual difference at all. Like for the next DANGER barrel. Touch it, it is not dangerous.

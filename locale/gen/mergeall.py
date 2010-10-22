@@ -63,7 +63,7 @@ def ProcessFolder(folder,outf):
                     print("check manually: ")
                     print(eval_string)
                 
-                outf.write("# {0}\n".format(path))
+                #outf.write("# {0}\n".format(path))
                 outf.write(eval_string + "\n"*5)
             
         

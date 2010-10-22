@@ -12,6 +12,14 @@ msgstr ""
 "Content-Transfer-Encoding: UTF-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
+#: ../../src-py\campaign.py:394
+msgid "You completed this level!"
+msgstr "Du hast dieses Level bereits geschafft!"
+
+#: ../../src-py\campaign.py:396
+msgid "Press {0} to enter '{1}'"
+msgstr "Drücke {0} um das Level {1} - '{2}' zu betreten"
+
 #: ../../src-py\editor.py:187
 msgid ""
 "Don't you want to save first?\n"
@@ -27,43 +35,43 @@ msgstr "Verlassen"
 
 #: ../../src-py\editor.py:229
 msgid "Leave the level editor and return to the main menu"
-msgstr ""
+msgstr "Editor verlassen und zurück zum Hauptmenü"
 
 #: ../../src-py\editor.py:232 ../../src-py\main.py:244
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 #: ../../src-py\editor.py:233
 msgid "Save to disk (regular save, no further optimizations)"
-msgstr ""
+msgstr "Speichern ohne Optimierungen"
 
 #: ../../src-py\editor.py:233
 msgid "You cannot save, this level is readonly"
-msgstr ""
+msgstr "Du kannst dieses Level nicht speichern da es schreibgeschützt ist"
 
 #: ../../src-py\editor.py:237
 msgid "Undo"
-msgstr ""
+msgstr "Undo"
 
 #: ../../src-py\editor.py:238
 msgid "Revert the last action, if possible"
-msgstr ""
+msgstr "Die letzte Action zurücknehmen, wenn möglich"
 
 #: ../../src-py\editor.py:242
 msgid "Redo"
-msgstr ""
+msgstr "Redo"
 
 #: ../../src-py\editor.py:243
 msgid "Repeat a recently reverted action, if possible"
-msgstr ""
+msgstr "Die zuletzt zurückgenommene Aktion wiederholen"
 
 #: ../../src-py\editor.py:260
 msgid "Edit Level Settings"
-msgstr "Leveleinstellungen aendern"
+msgstr "Leveleinstellungen ändern"
 
 #: ../../src-py\editor.py:261
 msgid "Change level name, speed, movement, post processing ... etc."
-msgstr ""
+msgstr "Levelname, -Geschwindigkeit, -Bewegung, -PostProcessing .. etc. ändern"
 
 #: ../../src-py\editor.py:296
 msgid "Suspend\000Resume"
@@ -340,7 +348,7 @@ msgid ""
 "Press {2} to restart the level\n"
 "Press {3} to {4}"
 msgstr ""
-"Du starbst einen Märtyrertod und wartest nun auf die Auferstehung!\n"
+"Du hast einen Märtyrertod erlitten und wartest nun auf die Auferstehung!\n"
 "  .. der gottlose Schlächter war {0}\n"
 "\n"
 "Drücke {1} um am letzten Respawn Punkt zu starten\n"
@@ -597,183 +605,372 @@ msgstr ""
 msgid "The Self-Reflecting Painless Chicken Slayer"
 msgstr ""
 
-#: merged_master.txt:3000
+#: merged_master.txt:2722
+msgid ""
+"\n"
+"Please be patient while your game is being loaded.\n"
+"[hit 'E' to frie an enemy and keep 'S' pressed to skip loading]\n"
+"\n"
+"{0}"
+msgstr ""
+"\n"
+"Bitte habe etwas Geduld während Dein Spiel geladen wird.\n"
+"[drücke 'E' um einen Gegner zu grillen und 'S' um das Laden abzubrechen]\n"
+"\n"
+"{0}"
+
+#: merged_master.txt:2848
+msgid ""
+"A mysterious voice says: \"I cannot teach him. The boy has no patience!\", "
+"and another voice responds: \"He will learn patience\". A few seconds pass "
+"until you realize that this is just your imagination randomly throwing in "
+"movie quotes."
+msgstr ""
+"Eine mysteriöse Stimme spricht: \"I cannot teach him. The boy has no "
+"patience!\"und eine andere Stimme antwortet: \"He will learn patience\". Es "
+"dauert einweilchen bis Dir klar wird dass dein krankes und Hollywoord-"
+"geschädigtes Hirn mal wieder mehr oder weniger zufällig gewählte Filmzitate "
+"einbringt. "
+
+#: merged_master.txt:2853
+msgid ""
+"Here is another life for you - you might need it. Watch out for hidden "
+"secrets like this one. Usually, at least 5 of them can be found in every "
+"single level."
+msgstr ""
+"Hier is ein zusätzliches Leben für Dich - Du könntest es brauchen. Immer "
+"fleißig Ausschau halten nach versteckten Überaschungsleben (nun in jedem "
+"7ten Geheimversteck zu finden)!"
+
+#: merged_master.txt:2881
 msgid "A Brave New World"
 msgstr "Schöne neue Welt"
 
-#: merged_master.txt:3023
+#: merged_master.txt:2903
 msgid "Volcano Jack"
+msgstr "Volcano Jack"
+
+#: merged_master.txt:2908
+msgid ""
+"Hello and welcome to THE tutorial! You are probably used to these boring "
+"video game opening tutorials and may tend to get annoyed as soon as the word "
+"'tutorial' shows up. Be aware, however, that this tutorial is a bit special. "
+"If you play through me, you will get a special item which might be worth the "
+"effort.\n"
+"\n"
+"If you're still with me, use the LEFT and RIGHT arrow keys to move and the "
+"UP arrow key to jump. Try to reach the next tutorial block (it is invisible "
+"and I hope you won't experience severe difficulties at finding it). If this "
+"keyboard setup doesn't suit your preferred key pattern, edit ./config/"
+"key_bindings.txt. \n"
+"\n"
+"See you later. Hit {enter} or {accept} to continue!"
+msgstr ""
+"Hallo und herzlich Willkommen zu DEM Tutorial. Via Google erreichbare "
+"Tutorials sind ja bekanntlich die ultimative Lösung um zu Wissen zu gelangen "
+"und ersetzen problemlos Erfahrung und eigenständiges Denken. In diesem "
+"Sinne: auf geht's. Ein ganz normales Tutorial ist es übrigens nicht, denn am "
+"Ende gibt es ein spezielles und ganz tolles Item. \n"
+"\n"
+"Noch da? Super. Dann die Pfeiltasten benutzen um die Spielfigur zu bewegen "
+"und um zu springen. Versuch bitte mal den nächsten Teil des Tutorialtextes "
+"zu finden, er ist ganz in der Nähe. \n"
+"\n"
+"(Deine Tastatur hat keine Pfeiltasten oder selbige haben durch exzessiven "
+"Gebrauch  bei gleichzeitigem Verzehr von sog. 'Schnellessen' die engen "
+"Grenzen der EU-Hygienevorschriften weit hinter sich gelassen? Einfach die  ./"
+"config/ key_bindings.txt im Texteditor deiner Wahl öffnen und die Tasten "
+"anpassen) \n"
+"\n"
+"Bis später. Haue (so stark du kannst!) auf {enter} oder {accept} um "
+"fortzufahren!"
+
+#: merged_master.txt:2917
+msgid ""
+"You got it, these DANGER tiles are DANGERous. They will kill you "
+"immediately. But some of them are special - if you are not brave enough to "
+"try them, you won't find the next part of me (I'm the tutorial).\n"
+"\n"
+"See you."
 msgstr ""
 
-#: merged_master.txt:3170
+#: merged_master.txt:2924
+msgid ""
+"I don't like you. You don't deserve the score you just received (Side note: "
+"Get more than 1000$ and I shall be seriously impressed!).\n"
+"\n"
+"Well, these TREASURE signs were quite easy to spot, weren't they? But "
+"sometimes there will be no visual difference at all. Like for the next "
+"DANGER barrel. Touch it, it is not dangerous."
+msgstr ""
+
+#: merged_master.txt:2931
+msgid ""
+"HAHA! I fooled you. You got killed, lost 10% of your score and you respawned "
+"here. However, As you can see it can be necessary to commit suicide (well, "
+"kind of) in order to advance in this game. So be careful with your lives, "
+"for you haven't got too many of them.\n"
+"\n"
+"The nice guy next to you is your first enemy. You can't kill them, so don't "
+"even bother trying it."
+msgstr ""
+
+#: merged_master.txt:2938
+msgid ""
+"These SuperSpeed signs make you much faster for a specific amount of time. "
+"Be aware, however, that you cannot accumulate them - touching a second "
+"SuperSpeed item will increase the total duration of the effect, but it won't "
+"make you faster."
+msgstr ""
+
+#: merged_master.txt:2943
+msgid ""
+"MegaJump makes you jump much, much higher. It cannot be accumulated as "
+"well.\n"
+"\n"
+"Note: There are many other perks in the game. I am not going to explain all "
+"of them, because most of them do what they look like. Most. Be careful: some "
+"may affect you negatively."
+msgstr ""
+
+#: merged_master.txt:2950
+msgid ""
+"What you can see here is a ColorChanger. What it does? Yeah, it changes your "
+"player's color, dude. And why? Because you need to match your color with the "
+"color of your enemies or you won't be able to shoot them."
+msgstr ""
+
+#: merged_master.txt:2955
+msgid ""
+"The next enemies will be much more demanding than the HTUs - 'cause they are "
+"highly intelligent. You can, however, collect ammo and shoot them by "
+"pressing SPACE. Note that this feature hasn't been implemented either, so "
+"you just wasted your time staring at your space key."
+msgstr ""
+
+#: merged_master.txt:2960
+msgid ""
+"Obviously it wasn't a good idea to use that machine ...\n"
+"\n"
+"Sadly, I don't have more tutorial content at the moment. Have fun with the "
+"game. To be continued ... (The special item was a joke but you knew that, "
+"didn't you?)"
+msgstr ""
+
+#: merged_master.txt:2967
+msgid ""
+"This is your first machine. Machines give you the oppotunity to buy "
+"upgrades, ammo, lives, ... this one sells lives. To use it, stand in front "
+"of it and press {interact} (Space) [you may currently need to touch either "
+"the left or the right border of the machine or it won't work].\n"
+"\n"
+"Now go, and buy a life."
+msgstr ""
+
+#: merged_master.txt:3038
 msgid "YIANG for Dummies"
-msgstr ""
+msgstr "YIANG für Idioten (und Normalos)"
 
-#: merged_master.txt:3195
-#, fuzzy
+#: merged_master.txt:3062
 msgid "Green Temple"
-msgstr "grün"
+msgstr "Grüner Tempel"
 
-#: merged_master.txt:3234
+#: merged_master.txt:3099
 msgid "Wild West revisited"
 msgstr ""
 
-#: merged_master.txt:3258
+#: merged_master.txt:3122
 msgid "Sickness"
 msgstr ""
 
-#: merged_master.txt:3284
+#: merged_master.txt:3147
 msgid "Pumpkin City"
-msgstr ""
+msgstr "Herr der Kürbisköpfe"
 
-#: merged_master.txt:3312
+#: merged_master.txt:3174
 msgid "Tricky"
 msgstr ""
 
-#: merged_master.txt:3324
+#: merged_master.txt:3185
 msgid "Unkillable "
 msgstr ""
 
-#: merged_master.txt:3349
+#: merged_master.txt:3209
 msgid "Illegal Organ Trade"
 msgstr ""
 
-#: merged_master.txt:3368
+#: merged_master.txt:3227
 msgid "Good friends again"
 msgstr ""
 
-#: merged_master.txt:3389
+#: merged_master.txt:3247
 msgid "Monochrome Reality"
-msgstr ""
+msgstr "Graue Wirklichkeit"
 
-#: merged_master.txt:3412
+#: merged_master.txt:3269
 msgid "Welcome to your last journey"
-msgstr ""
+msgstr "Willkommen zur Deiner letzten Reise!"
 
-#: merged_master.txt:3842
+#: merged_master.txt:3698
 msgid "Up and Down"
-msgstr ""
+msgstr "Auf und ab"
 
-#: merged_master.txt:3905
+#: merged_master.txt:3758
 msgid "Hell is here"
-msgstr ""
+msgstr "Hölle? Hier lang"
 
-#: merged_master.txt:3950
+#: merged_master.txt:3801
 msgid "Jumper"
 msgstr ""
 
-#: merged_master.txt:3980
-#, fuzzy
+#: merged_master.txt:3830
 msgid "Frozen Cave"
-msgstr "Verlassen"
+msgstr "Gefrorene Höhle"
 
-#: merged_master.txt:4006
+#: merged_master.txt:3855
 msgid "Shooting Yard #1"
 msgstr ""
 
-#: merged_master.txt:4026
+#: merged_master.txt:3874
 msgid "25 to live"
 msgstr ""
 
-#: merged_master.txt:4058
+#: merged_master.txt:3904
 msgid "Hardly frozen"
 msgstr "Angenehm kühl"
 
-#: merged_master.txt:4087
+#: merged_master.txt:3932
 msgid "Frozen Dreams"
 msgstr "Eingefrorener Traum"
 
-#: merged_master.txt:4112
+#: merged_master.txt:3956
 msgid "The Tunnel"
 msgstr "Der Tunnel"
 
-#: merged_master.txt:4139
+#: merged_master.txt:3982
 msgid "Wild West"
 msgstr "Wilder Westen"
 
-#: merged_master.txt:5073 merged_master.txt:5513 merged_master.txt:6172
-#: merged_master.txt:6178
+#: merged_master.txt:4794
+msgid ""
+"A nasty voice in your mind explains the rules of this world: \n"
+"HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
+"\n"
+"(You don't listen. You never do.)"
+msgstr ""
+"Eine lästige Stimme in deinem Kopf erklärt dir die Regeln dieser "
+"Spielwelt: \n"
+"HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
+"\n"
+"(Schwachsinn, ok. Aber du hast ja sowieso nicht zugehört.)"
+
+#: merged_master.txt:4802
+msgid ""
+"A nasty voice in your mind explains the rules of this world: ASCII life may "
+"be a very limited form of life, but it is still worth living and you "
+"shouldn't take it without good reason. To aid you at protecting those small "
+"creatures, a special rule has been added to this world: you cannot kill "
+"other creatures unless they have the same color as you. There are magic "
+"bricks to change color, however. Use them with care.\n"
+"\n"
+"\n"
+"(the voice is getting louder and louder so you turn on your mp3 player and "
+"listen to some metal - honestly, real men NEVER read the manual)"
+msgstr ""
+
+#: merged_master.txt:4810
+msgid ""
+"A flower on the path asks himselfs what his name might be - this strong man "
+"passing by. After a few moments, the small plant makes the decision not to "
+"ask him for his name before the highscore screen and continues to collect "
+"sun light and water. No need to interfere with the tall people ..."
+msgstr ""
+
+#: merged_master.txt:4857
+msgid "Hit {0} to read this message again"
+msgstr ""
+
+#: merged_master.txt:4862 merged_master.txt:5297 merged_master.txt:5929
+#: merged_master.txt:5934
 msgid "Map of the World"
 msgstr "Weltkarte"
 
-#: merged_master.txt:5868
+#: merged_master.txt:5631
 msgid "Desert of Doom"
 msgstr "Schicksalswüste"
 
-#: merged_master.txt:6207
+#: merged_master.txt:5962
 msgid "Too hot"
 msgstr "Zu heiß"
 
-#: merged_master.txt:6435
+#: merged_master.txt:6189
 msgid "Alice in the Rabbit Hole"
 msgstr "Alice in der Kaninchenhöhle"
 
-#: merged_master.txt:6468
+#: merged_master.txt:6221
 msgid "Tower of the Jungle Monster"
 msgstr "Turm des Dschungelmonsters"
 
-#: merged_master.txt:6493
+#: merged_master.txt:6245
 msgid "Desert Day"
 msgstr "Wüstentag"
 
-#: merged_master.txt:6516
+#: merged_master.txt:6267
 msgid "A Vast Ocean"
 msgstr "Ein weiter Ozean ..."
 
-#: merged_master.txt:6540
+#: merged_master.txt:6290
 msgid "Method of Rotating Calipers"
 msgstr "Rotierende Messer"
 
-#: merged_master.txt:6577
+#: merged_master.txt:6326
 msgid "Red Temple"
 msgstr "Tempel der Röte"
 
-#: merged_master.txt:6610
+#: merged_master.txt:6358
 msgid "Sandboarding"
 msgstr "Sandboarding"
 
-#: merged_master.txt:6637
+#: merged_master.txt:6384
 msgid "Dungeon without Dragons"
 msgstr "Dungeon ohne Dragons"
 
-#: merged_master.txt:6653
+#: merged_master.txt:6399
 msgid "So what is up ..."
 msgstr "Ey, was geht ab?"
 
-#: merged_master.txt:6698
+#: merged_master.txt:6443
 msgid "Death"
 msgstr ""
 
-#: merged_master.txt:6796
+#: merged_master.txt:6537
 msgid "Volcano"
 msgstr ""
 
-#: merged_master.txt:6825
+#: merged_master.txt:6565
 msgid "shrOoms"
 msgstr ""
 
-#: merged_master.txt:6844
+#: merged_master.txt:6583
 msgid "Meeting some friends"
 msgstr ""
 
-#: merged_master.txt:6977
+#: merged_master.txt:6709
 msgid "Level Starts Here"
 msgstr ""
 
-#: merged_master.txt:6996
+#: merged_master.txt:6727
 msgid "Editable Sample Level"
 msgstr ""
 
-#: merged_master.txt:7025
+#: merged_master.txt:6755
 msgid "Jump And Run"
 msgstr ""
 
-#: merged_master.txt:7048
-#, fuzzy
+#: merged_master.txt:6777
 msgid "Take the longer way"
-msgstr "das Spiel zu verlassen"
+msgstr "Lang oder kurz?"
 
-#: merged_master.txt:7079
-#, fuzzy
+#: merged_master.txt:6807
 msgid "Cave of the Wanderer"
-msgstr "das Spiel zu verlassen"
+msgstr "Höhle des Suchenden"

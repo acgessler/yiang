@@ -92,7 +92,7 @@ def Main():
     
     danger_pad = 20
     with open(fpath,"wt") as outfile:
-        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}),name=\"{name_human}\")\n".format(**locals()))
+        outfile.write("<out> = Level(<level>,<game>,<raw>,color=({r},{g},{b}),name=_(\"{name_human}\"))\n".format(**locals()))
         for y in range(height):
     
             s = ""

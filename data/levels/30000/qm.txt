@@ -1,4 +1,4 @@
-from campaign import CampaignTile; from keys import KeyMapping; <out> = CampaignTile(<raw>,5,3,halo_img=None,collision=Entity.ENTER,draworder=10001,permute=False,status_msg="Hit {0} to read this message again".format(KeyMapping.GetString("interact")))
+from campaign import CampaignTile; from keys import KeyMapping; <out> = CampaignTile(<raw>,5,3,halo_img=None,collision=Entity.ENTER,draworder=10001,permute=False,status_msg=_("Hit {0} to read this message again").format(KeyMapping.GetString("interact")))
  ??? 
 ?????
  ???

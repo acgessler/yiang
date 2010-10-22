@@ -1,6 +1,8 @@
-fade.sfx
 grayscale.sfx
 ingame1.sfx
 ingame2.sfx
 invert.sfx
 invert_screen.sfx
+underwater.sfx
+heat.sfx
+menu2.sfx

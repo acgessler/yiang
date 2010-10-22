@@ -1,12 +1,17 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.4, 0),name=_('So what is up ...'),color=(0, 15, 15),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=-2.5,)
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
-.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yE2_AA_AA_AA_AA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rKE.  .  .  .  .  .  .  .  .  .  .  .  gKE.  .  .  .  .  .  .  .  .  .  .  bKE.  .  .  .  .  .  rDObDOgDO_FI_DA
-.  .  .  .  _A0rS0rS0rS0rS0rS0rS0rS0rS0rS0rS0rS0_A0.  bE0.  .  .  .  .  .  .  .  .  .  _A0.  rE0.  .  .  .  .  .  .  .  _A0.  .  .  .  gE0.  .  .  .  .  .  _A0.  .  .  .  .  .  .  _DA
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA
-_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.4, 0),name=_('So what is up ...'),color=(0, 15, 15),postfx=[('ingame1.sfx', ()), ('invert_screen.sfx', ())],vis_ofs=0,scroll=2,lower_offset=-2.5)
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
+.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
+
+
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yE2_AA_AA_AA_AA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rKE.  .  .  .  .  .  .  .  .  .  .  .  gKE.  .  .  .  .  .  .  .  .  .  .  bKE.  .  .  .  .  .  rDObDOgDO_FI_DA
+.  .  .  .  .  .  .  _A0rS0rS0rS0rS0rS0rS0rS0rS0rS0rS0rS0_A0.  bE0.  .  .  .  .  .  .  .  .  .  _A0.  rE0.  .  .  .  .  .  .  .  _A0.  .  .  .  gE0.  .  .  .  .  .  _A0.  .  .  .  .  .  .  _DA
+_A0_A0_A0.  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA
+_DA_DA_DA.  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA

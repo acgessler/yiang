@@ -1,2 +1,2 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_2",text_color=sf.Color(0,150,0),audio_fx="_story_2.ogg")
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="story_2",text_color=sf.Color(0,150,0),audio_fx="_story_2.ogg")
 A flower on the path asks himselfs what his name might be - this strong man passing by. After a few moments, the small plant makes the decision not to ask him for his name before the highscore screen and continues to collect sun light and water. No need to interfere with the tall people ...

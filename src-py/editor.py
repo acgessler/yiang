@@ -91,6 +91,8 @@ look_for_levelarg = r"""
             |      
                 ( \( [^()]+? \) )       # tuple
             |
+                (?:_\( (.+?) \))        # localizable string
+            |
                 (.+?)                   # literal arguments              
         ) \s* ((,.*\))| \) )            # closing parentheses          
 """
@@ -552,9 +554,18 @@ class EditorGame(Game):
                 
                 effects = sorted(effects,key=lambda x: ("a"+x if (x in (e[0] for e in pfx)) else "z" ))
                 rows = []
+                level = self.level
                 
                 def UpdateActiveEffects():
-                    pass
+                    from posteffect import PostFXCache
+                    
+                    level.postfx_rt = []
+                    
+                    for name,env in pfx:
+                        p = PostFXCache.Get(name,env)
+                        if not p is None:
+                            level._SetupStandardPostFXParams(p)
+                        level.postfx_rt.append((name,p,env))
                 
                 def EnableBG(d):
                     self2.enable_bg = d
@@ -566,7 +577,7 @@ class EditorGame(Game):
                     
                 def AddEffect(effect):
                     if not [e[0] for e in pfx if e[0] == effect]:
-                        pfx.append( ( e, () ))
+                        pfx.append( ( effect, () ))
                     UpdateActiveEffects()
                         
                 def RemoveEffect(effect):
@@ -2071,8 +2082,17 @@ class EditorGame(Game):
 
         # again, a bit hacky
         shebang = self.level.editor_shebang
-        return shebang.split("(",1)[0] + "(" + "<level>,<game>,<raw>," + "".join("{k}={v!r},".format(**locals()) 
-            for k,v in self.settings.items()) + ")"
+        res = []
+        for k,v in self.settings.items():
+            # (hack) -- level name must be localizable
+            if k == "name":
+                v = "_({0!r})".format(v)
+            else:
+                v = repr(v)
+                
+            res.append("{k}={v}".format(**locals()))
+                
+        return shebang.split("(",1)[0] + "(" + "<level>,<game>,<raw>," + ",".join(res) + ")"
         
     def Save(self):
         
@@ -2969,8 +2989,12 @@ class EditorGame(Game):
             match = re.search( look_for_levelarg
                 .format(re.escape( arg )), shebang, re.VERBOSE | re.DOTALL )
             if match:
-                match = match.groups()[0]
+                match = match.groups()[0].strip()
                 try:
+                    if (match[:2]=="_(" and match[-1]==")"):
+                         # _(x) -- don't want localization here, stick with the english version
+                         match = match[2:-1]
+                         
                     self.settings[arg] = eval( match )
                 except:
                     import traceback

@@ -1,2 +1,2 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_5",text_color=sf.Color.Black,only_once=True)
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_5",text_color=sf.Color.Black,only_once=True)
 These SuperSpeed signs make you much faster for a specific amount of time. Be aware, however, that you cannot accumulate them - touching a second SuperSpeed item will increase the total duration of the effect, but it won't make you faster.

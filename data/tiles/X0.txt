@@ -1,4 +1,4 @@
-from loadscreen import CountingTile; <out> = CountingTile(<raw>,48,8,halo_img=None,rsize=int(13*defaults.scale[1]))
+from loadscreen import CountingTile; <out> = CountingTile(_(<raw>),48,8,halo_img=None,rsize=int(13*defaults.scale[1]))
 
 Please be patient while your game is being loaded.
 [hit 'E' to frie an enemy and keep 'S' pressed to skip loading]

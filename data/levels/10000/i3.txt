@@ -1,4 +1,4 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_3",text_color=sf.Color.Black,only_once=True)
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_3",text_color=sf.Color.Black,only_once=True)
 HAHA! I fooled you. You got killed, lost 10% of your score and you respawned here. However, As you can see it can be necessary to commit suicide (well, kind of) in order to advance in this game. So be careful with your lives, for you haven't got too many of them.
 
 The nice guy next to you is your first enemy. You can't kill them, so don't even bother trying it.

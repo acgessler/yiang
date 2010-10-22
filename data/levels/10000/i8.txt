@@ -1,4 +1,4 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="tutorial_9",text_color=sf.Color.Black,only_once=True)
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_9",text_color=sf.Color.Black,only_once=True)
 Obviously it wasn't a good idea to use that machine ...
 
 Sadly, I don't have more tutorial content at the moment. Have fun with the game. To be continued ... (The special item was a joke but you knew that, didn't you?)

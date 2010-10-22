@@ -1,4 +1,4 @@
-from notification import SimpleNotification; <out> = SimpleNotification(<raw>,desc="story_0",text_color=sf.Color(180,0,0),audio_fx="_story_0.ogg")
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="story_0",text_color=sf.Color(180,0,0),audio_fx="_story_0.ogg")
 A nasty voice in your mind explains the rules of this world: 
 HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!
 
