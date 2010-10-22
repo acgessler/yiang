@@ -218,6 +218,7 @@ class PostFXOverlay(Drawable):
     def __init__(self,postfx,draworder=900):
         Drawable.__init__(self)
         self.postfx = postfx
+        assert self.postfx
         self.draworder = draworder
         
     def Draw(self):
@@ -310,6 +311,103 @@ class FadeOutOverlay(PostFXOverlay):
         
         if self.fade <= self.fade_end and not self.on_close is None:
             print("End FadeOutOverlay anim")
+            
+            self.on_close(self)
+            self.on_close = None
+            
+            
+            
+            
+class BlurInOverlay(PostFXOverlay):
+    """A special overlay to slowly decrease the amount of blur until the normal status is reached"""
+    def __init__(self,blur_time=1.0,blur_start=defaults.blur_start,on_close=None,draworder=910):
+        """
+        Construct a BlurOverlay.
+        
+        Parameters:
+            blur_time -- Time to life
+            blur_start  -- Blur intensity to start with
+            on_close  -- Closure to be called when the end status of the
+               animation has been reached. Pass None to let the 
+               overlay automatically unregister itself.
+            draworder -- Draw order ordinal
+                         
+        """
+        PostFXOverlay.__init__(self,PostFXCache.Get("blur_x.sfx",()),draworder)
+        self.postfx2 = PostFXCache.Get("blur_y.sfx",())
+        assert self.postfx2
+        
+        self.blur_time = blur_time
+        self.blur = self.blur_start  = blur_start
+        self.on_close  = (lambda x:Renderer.RemoveDrawable(x)) if on_close is None else on_close 
+        
+    def GetCurrentStrength(self):
+        return self.blur
+        
+    def Draw(self):
+        PostFXOverlay.Draw(self)
+        self.postfx2.Draw()
+        
+        if not hasattr(self,"clock"):
+            self.clock = sf.Clock()
+            print("Begin BlurInOverlay anim")
+            return
+            
+        curtime = self.clock.GetElapsedTime()
+        self.blur = min(1.0, self.blur_start + curtime/self.blur_time)
+        self.postfx.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[0])
+        self.postfx2.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[1])
+        
+        if self.blur>=1.0 and not self.on_close is None:
+            print("End BlurInOverlay anim")
+            
+            self.on_close(self)
+            self.on_close = None
+        
+            
+class BlurOutOverlay(PostFXOverlay):
+    """A special overlay to vlur the normal view up to a certain intensity"""
+    def __init__(self,blur_time=1.0,blur_end=defaults.blur_stop,on_close=None,draworder=910):
+        """
+        Construct a BlurOverlay.
+        
+        Parameters:
+            blur_time -- Time to life
+            blur_end  -- Blur intensity to end at
+            on_close  -- Closure to be called when the end status of the
+               animation has been reached. Pass None to let the 
+               overlay automatically unregister itself.
+            draworder -- Draw order ordinal
+                         
+        """
+        PostFXOverlay.__init__(self,PostFXCache.Get("blur_x.sfx",()),draworder)
+        self.postfx2 = PostFXCache.Get("blur_y.sfx",())
+        assert self.postfx2
+        
+        self.blur_time = blur_time
+        self.blur_end  = blur_end
+        self.blur = 1.0
+        self.on_close  = (lambda x:Renderer.RemoveDrawable(x)) if on_close is None else on_close 
+        
+    def GetCurrentStrength(self):
+        return self.blur
+        
+    def Draw(self):
+        PostFXOverlay.Draw(self)
+        self.postfx2.Draw()
+        
+        if not hasattr(self,"clock"):
+            print("Begin BlurOutOverlay anim")
+            self.clock = sf.Clock()
+            return
+            
+        curtime = self.clock.GetElapsedTime()
+        self.blur = max(self.blur_end, 1.0 - curtime/self.blur_time)
+        self.postfx.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[0])
+        self.postfx2.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[1])
+        
+        if self.blur <= self.blur_end and not self.on_close is None:
+            print("End BlurOutOverlay anim")
             
             self.on_close(self)
             self.on_close = None

@@ -17,8 +17,8 @@ msgid "You completed this level!"
 msgstr "Du hast dieses Level bereits geschafft!"
 
 #: ../../src-py\campaign.py:396
-msgid "Press {0} to enter '{1}'"
-msgstr "Drücke {0} um das Level {1} - '{2}' zu betreten"
+msgid "Press {0} to enter {1}"
+msgstr "Drücke {0} um {1} zu betreten"
 
 #: ../../src-py\editor.py:189
 msgid ""
@@ -348,7 +348,9 @@ msgid ""
 "Press {2} to restart the level\n"
 "Press {3} to {4}"
 msgstr ""
-"Du hast einen Märtyrertod erlitten und wartest nun auf die Auferstehung!\n"
+"Du hast den Märtyrertod erlitten! \n" 
+(all-inclusive, sprich mit Auferstehung!)\n"
+"\n"
 "  .. der gottlose Schlächter war {0}\n"
 "\n"
 "Drücke {1} um am letzten Respawn Punkt zu starten\n"
@@ -924,7 +926,7 @@ msgstr ""
 
 #: merged_master.txt:4966
 msgid "Hit {0} to read this message again"
-msgstr ""
+msgstr "Drücke {0} um die Nachricht zu öffnen"
 
 #: merged_master.txt:4971 merged_master.txt:5406 merged_master.txt:6038
 #: merged_master.txt:6043

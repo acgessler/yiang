@@ -1,0 +1,19 @@
+texture framebuffer = {FRAMEBUFFER}
+float blurSize = 0.001;
+
+effect
+{
+   vec4 result = vec4(0.0);
+ 
+   result += framebuffer(vec2(_in.x - 4.0*blurSize, _in.y)) * 0.05;
+   result += framebuffer(vec2(_in.x - 3.0*blurSize, _in.y)) * 0.09;
+   result += framebuffer(vec2(_in.x - 2.0*blurSize, _in.y)) * 0.12;
+   result += framebuffer(vec2(_in.x - blurSize, _in.y)) * 0.15;
+   result += framebuffer(vec2(_in.x, _in.y)) * 0.16;
+   result += framebuffer(vec2(_in.x + blurSize, _in.y)) * 0.15;
+   result += framebuffer(vec2(_in.x + 2.0*blurSize, _in.y)) * 0.12;
+   result += framebuffer(vec2(_in.x + 3.0*blurSize, _in.y)) * 0.09;
+   result += framebuffer(vec2(_in.x + 4.0*blurSize, _in.y)) * 0.05;
+ 
+   _out = result;
+}

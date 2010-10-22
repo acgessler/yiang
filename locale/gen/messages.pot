@@ -17,7 +17,19 @@ msgid "You completed this level!"
 msgstr ""
 
 #: ../../src-py\campaign.py:396
-msgid "Press {0} to enter '{1}'"
+msgid "Press {0} to enter {1}"
+msgstr ""
+
+#: ../../src-py\danger.py:47
+msgid "a deathly barrel (it's hilarious!)"
+msgstr ""
+
+#: ../../src-py\danger.py:87
+msgid "an explosive mine (BOOooOOM!)"
+msgstr ""
+
+#: ../../src-py\danger.py:175
+msgid "a terribly hot stone"
 msgstr ""
 
 #: ../../src-py\editor.py:189

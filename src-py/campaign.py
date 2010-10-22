@@ -393,7 +393,7 @@ class LevelEntrance(AnimTile):
             if self.done is True and defaults.debug_godmode is False:
                 self.level.SetStatusMessage(_("You completed this level!"),sf.Color.Green)
             else:
-                self.level.SetStatusMessage(_("Press {0} to enter '{1}'").format(KeyMapping.GetString("accept"),self._GuessLevelName()))
+                self.level.SetStatusMessage(_("Press {0} to enter {1}").format(KeyMapping.GetString("accept"),self._GuessLevelName()))
                 if Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("accept")):
                     self._RunLevel()
         

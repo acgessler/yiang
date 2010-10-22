@@ -44,7 +44,7 @@ class DangerousBarrel(AnimTile):
         return Entity.KILL if other.color != self.color else Entity.BLOCK
 
     def GetVerboseName(self):
-        return "a deathly barrel (it's hilarious!)"
+        return _("a deathly barrel (it's hilarious!)")
 
 
 class Mine(AnimTile):
@@ -84,7 +84,7 @@ class Mine(AnimTile):
                 self.level.RemoveEntity(self)
     
     def GetVerboseName(self):
-        return "an exploded mine (BOOooOOM!)"
+        return _("an explosive mine (BOOooOOM!)")
     
     def DistanceInnerRadius(self,other):
         return self.Distance(other) < (self.radius**2) 
@@ -172,7 +172,7 @@ class Heat(AnimTile):
                 self.heat_activated = False
     
     def GetVerboseName(self):
-        return "a terribly hot stone"
+        return _("a terribly hot stone")
     
     def DistanceInnerRadius(self,other):
         return self.Distance(other) < (self.radius**2) 

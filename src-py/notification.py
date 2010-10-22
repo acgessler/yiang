@@ -31,7 +31,7 @@ from renderer import Drawable, Renderer
 class MessageBox(Drawable):
     """Implements a reusable, generic message box that is drawn as overlay"""
     
-    NO_FADE_IN, NO_FADE_OUT = 0x10000,0x20000
+    NO_FADE_IN, NO_FADE_OUT, NO_BLUR_IN, NO_BLUR_OUT = 0x10000,0x20000, 0x40000, 0x80000
     
     def __init__(self, text,
         fade_time=1.0,
@@ -56,10 +56,14 @@ class MessageBox(Drawable):
         self.size = size
         self.flags |= flags
                 
-        from posteffect import FadeOutOverlay
+        from posteffect import FadeOutOverlay, BlurOutOverlay
         
+        self.fade, self.blur = None,None
         if self.flags & MessageBox.NO_FADE_IN == 0:
             self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
+            
+        if self.flags & MessageBox.NO_BLUR_IN == 0:
+            self.blur = BlurOutOverlay(self.fade_time, on_close=lambda x:None)
             
     def ProcessEvents(self):
         for event in Renderer.SwallowEvents():
@@ -74,6 +78,10 @@ class MessageBox(Drawable):
             if self.flags & MessageBox.NO_FADE_IN == 0:
                 Renderer.AddDrawable(self.fade)
                 
+            if self.flags & MessageBox.NO_BLUR_IN == 0:
+                Renderer.AddDrawable(self.blur)
+ 
+                
         curtime = self.clock.GetElapsedTime() 
         if self.auto_time > 0.0 and curtime > self.auto_time:
             self.result.append(False)
@@ -85,16 +93,22 @@ class MessageBox(Drawable):
         return True
             
     def _RemoveMe(self):
-        if self.flags & MessageBox.NO_FADE_IN == 0:
+        if self.fade:
             Renderer.RemoveDrawable(self.fade)
+            
+        if self.blur:
+            Renderer.RemoveDrawable(self.blur)
             
         Renderer.RemoveDrawable(self)
       
+        a,b = self.fade_time * 0.5, defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()
         if self.flags & MessageBox.NO_FADE_OUT == 0:
             from posteffect import FadeInOverlay
-            Renderer.AddDrawable(FadeInOverlay(self.fade_time * 0.5, 
-                defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()
-            ))
+            Renderer.AddDrawable(FadeInOverlay(a,b))
+            
+        if self.flags & MessageBox.NO_BLUR_OUT == 0:
+            from posteffect import BlurInOverlay
+            Renderer.AddDrawable(BlurInOverlay(a,b))
                 
         self.on_close(self.result[-1])
         #raise NewFrame()
