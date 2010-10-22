@@ -58,7 +58,6 @@ class MessageBox(Drawable):
                 
         from posteffect import FadeOutOverlay, BlurOutOverlay
         
-        self.fade, self.blur = None,None
         if self.flags & MessageBox.NO_FADE_IN == 0:
             self.fade = FadeOutOverlay(self.fade_time, on_close=lambda x:None)
             
@@ -101,13 +100,14 @@ class MessageBox(Drawable):
             
         Renderer.RemoveDrawable(self)
       
-        a,b = self.fade_time * 0.5, defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()
         if self.flags & MessageBox.NO_FADE_OUT == 0:
             from posteffect import FadeInOverlay
+            a,b = self.fade_time * 0.5, defaults.fade_stop if not hasattr(self, "fade") else self.fade.GetCurrentStrength()
             Renderer.AddDrawable(FadeInOverlay(a,b))
             
         if self.flags & MessageBox.NO_BLUR_OUT == 0:
             from posteffect import BlurInOverlay
+            a,b = self.fade_time * 0.5, defaults.blur_stop if not hasattr(self, "fade") else self.blur.GetCurrentStrength()
             Renderer.AddDrawable(BlurInOverlay(a,b))
                 
         self.on_close(self.result[-1])

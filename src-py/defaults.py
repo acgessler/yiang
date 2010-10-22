@@ -75,10 +75,10 @@ move_map_speed_fast = 0.3
 lives = 6
 enable_log = True
 log_file = "log.txt"
-game_over_fade_time = 2.0
+game_over_fade_time = 2.2
 enter_level_fade_time = 1.0
-enter_worldmap_fade_time = 1.0
-messagebox_fade_time = 2.5
+enter_worldmap_fade_time = 2.0
+messagebox_fade_time = 2.2
 loading_time = 15.0
 death_sprites = 130
 min_death_sprites = 5
@@ -154,7 +154,7 @@ profile_level_loading = False
 # every 600st frame for a level (~10s).
 # writes cProfile results to the profile directory
 # and dumps the 20 hottest locations to the console
-profile_rendering = True
+profile_rendering = False
 
 # Draw the HUD (minimap) in world maps. Disable if
 # this causes problems with your screen setup (i.e.

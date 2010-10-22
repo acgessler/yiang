@@ -825,7 +825,11 @@ msgstr ""
 msgid "Wild West"
 msgstr ""
 
-#: merged_master.txt:4903
+#: merged_master.txt:4815 merged_master.txt:4964
+msgid "Hit {0} to read this message again"
+msgstr ""
+
+#: merged_master.txt:4901
 msgid ""
 "A nasty voice in your mind explains the rules of this world: \n"
 "HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
@@ -833,7 +837,7 @@ msgid ""
 "(You don't listen. You never do.) "
 msgstr ""
 
-#: merged_master.txt:4911
+#: merged_master.txt:4909
 msgid ""
 "A nasty voice in your mind explains the rules of this world: ASCII life may "
 "be a very limited form of life, but it is still worth living and you "
@@ -847,7 +851,7 @@ msgid ""
 "listen to some metal - honestly, real men NEVER read the manual) "
 msgstr ""
 
-#: merged_master.txt:4919
+#: merged_master.txt:4917
 msgid ""
 "A flower on the path asks himselfs what his name might be - this strong man "
 "passing by. After a few moments, the small plant makes the decision not to "
@@ -855,91 +859,87 @@ msgid ""
 "sun light and water. No need to interfere with the tall people ... "
 msgstr ""
 
-#: merged_master.txt:4966
-msgid "Hit {0} to read this message again"
-msgstr ""
-
-#: merged_master.txt:4971 merged_master.txt:5406 merged_master.txt:6038
-#: merged_master.txt:6043
+#: merged_master.txt:4969 merged_master.txt:5404 merged_master.txt:6036
+#: merged_master.txt:6041
 msgid "Map of the World"
 msgstr ""
 
-#: merged_master.txt:5740
+#: merged_master.txt:5738
 msgid "Desert of Doom"
 msgstr ""
 
-#: merged_master.txt:6071
+#: merged_master.txt:6069
 msgid "Too hot"
 msgstr ""
 
-#: merged_master.txt:6298
+#: merged_master.txt:6296
 msgid "Alice in the Rabbit Hole"
 msgstr ""
 
-#: merged_master.txt:6330
+#: merged_master.txt:6328
 msgid "Tower of the Jungle Monster"
 msgstr ""
 
-#: merged_master.txt:6354
+#: merged_master.txt:6352
 msgid "Desert Day"
 msgstr ""
 
-#: merged_master.txt:6376
+#: merged_master.txt:6374
 msgid "A Vast Ocean"
 msgstr ""
 
-#: merged_master.txt:6399
+#: merged_master.txt:6397
 msgid "Method of Rotating Calipers"
 msgstr ""
 
-#: merged_master.txt:6435
+#: merged_master.txt:6433
 msgid "Red Temple"
 msgstr ""
 
-#: merged_master.txt:6467
+#: merged_master.txt:6465
 msgid "Sandboarding"
 msgstr ""
 
-#: merged_master.txt:6493
+#: merged_master.txt:6491
 msgid "Dungeon without Dragons"
 msgstr ""
 
-#: merged_master.txt:6513
+#: merged_master.txt:6511
 msgid "So what is up ..."
 msgstr ""
 
-#: merged_master.txt:6557
+#: merged_master.txt:6555
 msgid "Death"
 msgstr ""
 
-#: merged_master.txt:6651
+#: merged_master.txt:6649
 msgid "Volcano"
 msgstr ""
 
-#: merged_master.txt:6679
+#: merged_master.txt:6677
 msgid "shrOoms"
 msgstr ""
 
-#: merged_master.txt:6697
+#: merged_master.txt:6695
 msgid "Meeting some friends"
 msgstr ""
 
-#: merged_master.txt:6823
+#: merged_master.txt:6821
 msgid "Level Starts Here"
 msgstr ""
 
-#: merged_master.txt:6841
+#: merged_master.txt:6839
 msgid "Editable Sample Level"
 msgstr ""
 
-#: merged_master.txt:6869
+#: merged_master.txt:6867
 msgid "Jump And Run"
 msgstr ""
 
-#: merged_master.txt:6891
+#: merged_master.txt:6889
 msgid "Take the longer way"
 msgstr ""
 
-#: merged_master.txt:6921
+#: merged_master.txt:6919
 msgid "Cave of the Wanderer"
 msgstr ""
