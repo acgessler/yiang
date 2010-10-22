@@ -19,3 +19,61 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 
+
+import os
+
+outfile = "merged_master.txt"
+folders = [os.path.join("..","..","data","tiles"), os.path.join("..","..","data","levels")]
+
+
+def Stringify(string):
+    return 'r"""' + string.rstrip().replace('\"\"\"','\"\"\" + \'\"\"\"\' + \"\"\"') + '"""' 
+
+def ProcessFolder(folder,outf):
+    for file in os.listdir(folder):
+        path = os.path.join(folder,file)
+        if os.path.isdir(path):
+            ProcessFolder(path,outf)
+            
+        if not os.path.isfile(path):
+            continue
+        
+        if os.path.splitext(path)[-1].lower() != ".txt":
+            continue
+        
+        # try to get valid python expressions so pygettext can parse properly.
+        with open(path,"rt") as inp:
+            data = inp.read()
+            data = data.split("\n",1)
+        
+            shebang = data[0].strip()
+            shebang_words = shebang.split()
+            if not "<out>" in shebang_words:
+                continue
+        
+            eval_string = shebang.replace("<raw>", Stringify( data[1] ) if len(data) > 1 else "missing" )
+            eval_string = eval_string.replace("<","").replace(">","").replace("\\","\\\\")
+            if eval_string:
+                
+                try:
+                    exec(eval_string)
+                except (ImportError,NameError):
+                    pass
+                except:
+                    print("check manually: ")
+                    print(eval_string)
+                
+                outf.write("# {0}\n".format(path))
+                outf.write(eval_string + "\n"*5)
+            
+        
+def Main():
+    with open(outfile,"wt") as outf:
+        for folder in folders:
+            ProcessFolder(folder,outf)
+        
+    print("Done!")
+    
+    
+if __name__ == "__main__":
+    Main()

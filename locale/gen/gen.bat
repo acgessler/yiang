@@ -1,4 +1,5 @@
-pygettext.py ../../src-py/*.py
+mergeall.py
+pygettext.py ../../src-py/*.py merged_master.txt
 patch.py
 copy messages.pot messages_ger_new.po
 copy messages.pot messages_eng_new.po

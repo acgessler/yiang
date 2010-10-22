@@ -8,11 +8,11 @@ msgstr ""
 "Last-Translator: yiang-core-team <yiang@greentoken.de>\n"
 "Language-Team: generic <yiang@greentoken.de>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: UTF-8\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: cp1252\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../../src-py\editor.py:180
+#: ../../src-py\editor.py:187
 msgid ""
 "Don't you want to save first?\n"
 "    \n"
@@ -21,171 +21,171 @@ msgid ""
 "    Press {2} to abort"
 msgstr ""
 
-#: ../../src-py\editor.py:221
+#: ../../src-py\editor.py:228
 msgid "Leave"
 msgstr ""
 
-#: ../../src-py\editor.py:222
+#: ../../src-py\editor.py:229
 msgid "Leave the level editor and return to the main menu"
 msgstr ""
 
-#: ../../src-py\editor.py:225 ../../src-py\main.py:237
+#: ../../src-py\editor.py:232 ../../src-py\main.py:244
 msgid "Save"
 msgstr ""
 
-#: ../../src-py\editor.py:226
+#: ../../src-py\editor.py:233
 msgid "Save to disk (regular save, no further optimizations)"
 msgstr ""
 
-#: ../../src-py\editor.py:226
+#: ../../src-py\editor.py:233
 msgid "You cannot save, this level is readonly"
 msgstr ""
 
-#: ../../src-py\editor.py:230
+#: ../../src-py\editor.py:237
 msgid "Undo"
 msgstr ""
 
-#: ../../src-py\editor.py:231
+#: ../../src-py\editor.py:238
 msgid "Revert the last action, if possible"
 msgstr ""
 
-#: ../../src-py\editor.py:235
+#: ../../src-py\editor.py:242
 msgid "Redo"
 msgstr ""
 
-#: ../../src-py\editor.py:236
+#: ../../src-py\editor.py:243
 msgid "Repeat a recently reverted action, if possible"
 msgstr ""
 
-#: ../../src-py\editor.py:253
+#: ../../src-py\editor.py:260
 msgid "Edit Level Settings"
 msgstr ""
 
-#: ../../src-py\editor.py:254
+#: ../../src-py\editor.py:261
 msgid "Change level name, speed, movement, post processing ... etc."
 msgstr ""
 
-#: ../../src-py\editor.py:289
+#: ../../src-py\editor.py:296
 msgid "Suspend\000Resume"
 msgstr ""
 
-#: ../../src-py\editor.py:290
+#: ../../src-py\editor.py:297
 msgid "Switch between game and editor mode. The old state is recovered when editor mode is entered again."
 msgstr ""
 
-#: ../../src-py\editor.py:299
+#: ../../src-py\editor.py:306
 msgid "Abandon God\000Become God"
 msgstr ""
 
-#: ../../src-py\editor.py:300
+#: ../../src-py\editor.py:307
 msgid "Enable or disable god mode. Nothing can harm you while you are god."
 msgstr ""
 
-#: ../../src-py\editor.py:309
+#: ../../src-py\editor.py:316
 msgid "Hide stats\000Show stats"
 msgstr ""
 
-#: ../../src-py\editor.py:310
+#: ../../src-py\editor.py:317
 msgid "Show or hide the tile engine's internal performance counters"
 msgstr ""
 
-#: ../../src-py\editor.py:319
+#: ../../src-py\editor.py:326
 msgid "Hide BBs\000Show BBs"
 msgstr ""
 
-#: ../../src-py\editor.py:320
+#: ../../src-py\editor.py:327
 msgid "Show or hide the bounding boxes for all entities"
 msgstr ""
 
-#: ../../src-py\editor.py:329
+#: ../../src-py\editor.py:336
 msgid "Disable PostFX\000Enable PostFx"
 msgstr ""
 
-#: ../../src-py\editor.py:330
+#: ../../src-py\editor.py:337
 msgid "Enable or disable postprocessing. No postprocessing is equivalent to 'pure ascii mode'"
 msgstr ""
 
-#: ../../src-py\editor.py:339
+#: ../../src-py\editor.py:346
 msgid "Switch to BG\000Switch to FG"
 msgstr ""
 
-#: ../../src-py\editor.py:340
+#: ../../src-py\editor.py:347
 msgid "Switch between editing layers"
 msgstr ""
 
-#: ../../src-py\editor.py:359
+#: ../../src-py\editor.py:366
 msgid "Disable Markup\000Enable Markup"
 msgstr ""
 
-#: ../../src-py\editor.py:360
+#: ../../src-py\editor.py:367
 msgid "Enable or disable scene markups. Scene markups highlight entity paths and item relationships"
 msgstr ""
 
-#: ../../src-py\editor.py:393
+#: ../../src-py\editor.py:400
 msgid "Apply"
 msgstr ""
 
-#: ../../src-py\editor.py:396
+#: ../../src-py\editor.py:403
 msgid "Cancel"
 msgstr ""
 
-#: ../../src-py\editor.py:400
+#: ../../src-py\editor.py:407
 msgid "Level name (not too long, please)"
 msgstr ""
 
-#: ../../src-py\editor.py:432
+#: ../../src-py\editor.py:439
 msgid "Background color, RED"
 msgstr ""
 
-#: ../../src-py\editor.py:439
+#: ../../src-py\editor.py:446
 msgid "Background color, GREEN"
 msgstr ""
 
-#: ../../src-py\editor.py:446
+#: ../../src-py\editor.py:453
 msgid "Background color, BLUE"
 msgstr ""
 
-#: ../../src-py\editor.py:454
+#: ../../src-py\editor.py:461
 msgid "Visible offset above upper status bar"
 msgstr ""
 
-#: ../../src-py\editor.py:462
+#: ../../src-py\editor.py:469
 msgid "Visible offset above lower status bar"
 msgstr ""
 
-#: ../../src-py\editor.py:481
+#: ../../src-py\editor.py:488
 msgid "Scroll left"
 msgstr ""
 
-#: ../../src-py\editor.py:487
+#: ../../src-py\editor.py:494
 msgid "Scroll right"
 msgstr ""
 
-#: ../../src-py\editor.py:493
+#: ../../src-py\editor.py:500
 msgid "Scroll top"
 msgstr ""
 
-#: ../../src-py\editor.py:499
+#: ../../src-py\editor.py:506
 msgid "Scroll bottom"
 msgstr ""
 
-#: ../../src-py\editor.py:600
+#: ../../src-py\editor.py:607
 msgid "Postprocessing effects"
 msgstr ""
 
-#: ../../src-py\editor.py:833
+#: ../../src-py\editor.py:840
 msgid "Preview in original size"
 msgstr ""
 
-#: ../../src-py\editor.py:833
+#: ../../src-py\editor.py:840
 msgid "Preview scaled"
 msgstr ""
 
-#: ../../src-py\editor.py:1624
+#: ../../src-py\editor.py:1631
 msgid "'{0}' for rectangle selection, '{1}' to hold selection, '{2}' to remove elements"
 msgstr ""
 
-#: ../../src-py\editor.py:2992
+#: ../../src-py\editor.py:2999
 msgid ""
 "You are about to leave. Save first?\n"
 "\n"
@@ -194,7 +194,7 @@ msgid ""
 "Press {2} to abort"
 msgstr ""
 
-#: ../../src-py\editor.py:3150
+#: ../../src-py\editor.py:3157
 msgid "Choose a level to edit. Yellow entries are read-only and cannot be saved."
 msgstr ""
 
@@ -298,29 +298,29 @@ msgstr ""
 msgid "a Harmful Traverser Unit (HTU)"
 msgstr ""
 
-#: ../../src-py\enemy.py:235
+#: ../../src-py\enemy.py:237
 msgid "a Naughty Pong Pong (NPP)"
 msgstr ""
 
-#: ../../src-py\enemy.py:320
+#: ../../src-py\enemy.py:322
 msgid "Rotating Inferno"
 msgstr ""
 
-#: ../../src-py\enemy.py:472
+#: ../../src-py\enemy.py:474
 msgid "a Nifty Robot Intruder"
 msgstr ""
 
-#: ../../src-py\game.py:282
+#: ../../src-py\game.py:284
 msgid "Level {0}.{1} {2:.2} days"
 msgstr ""
 
-#: ../../src-py\game.py:282
+#: ../../src-py\game.py:284
 msgid ""
 "{0}\n"
 "{1:4.5} $"
 msgstr ""
 
-#: ../../src-py\game.py:549
+#: ../../src-py\game.py:554
 msgid ""
 "You died a martyr and are now awaiting resurrection!\n"
 "  .. the godless slaughterer was {0}\n"
@@ -330,15 +330,15 @@ msgid ""
 "Press {3} to {4}"
 msgstr ""
 
-#: ../../src-py\game.py:559
+#: ../../src-py\game.py:564
 msgid "leave the game"
 msgstr ""
 
-#: ../../src-py\game.py:559
+#: ../../src-py\game.py:564
 msgid "return to the map"
 msgstr ""
 
-#: ../../src-py\game.py:606
+#: ../../src-py\game.py:611
 msgid ""
 "You survived {0:.4} days and collected {1:.4} dollars.\n"
 "That's {2}.\n"
@@ -346,30 +346,36 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../src-py\game.py:609
+#: ../../src-py\game.py:614
 msgid "a new high score record"
 msgstr ""
 
-#: ../../src-py\game.py:611
+#: ../../src-py\game.py:616
 msgid ""
 "\n"
 "Hit {0} or {1} to return to the menu .. "
 msgstr ""
 
-#: ../../src-py\game.py:677
+#: ../../src-py\game.py:682
 msgid ""
 "Hey, you solved Level {0}!.\n"
 "\n"
 msgstr ""
 
-#: ../../src-py\game.py:682
+#: ../../src-py\game.py:687
 msgid ""
 "\n"
 "Hit {1} to continue .. (don't disappoint me)\n"
 "Hit {2} to return to the menu"
 msgstr ""
 
-#: ../../src-py\loadscreen.py:144
+#: ../../src-py\game.py:742
+msgid ""
+"Something went wrong. Can't load this level. \n"
+"Hit {0} to return to the menu. Sorry."
+msgstr ""
+
+#: ../../src-py\loadscreen.py:149
 msgid ""
 "\n"
 "Finally, everything is ready. \n"
@@ -421,55 +427,55 @@ msgstr ""
 msgid "{0} key"
 msgstr ""
 
-#: ../../src-py\main.py:221
+#: ../../src-py\main.py:228
 msgid "This feature is not currently implemented, sorry."
 msgstr ""
 
-#: ../../src-py\main.py:234
+#: ../../src-py\main.py:241
 msgid "Resume Game"
 msgstr ""
 
-#: ../../src-py\main.py:235
+#: ../../src-py\main.py:242
 msgid "Campaign"
 msgstr ""
 
-#: ../../src-py\main.py:236
+#: ../../src-py\main.py:243
 msgid "Load"
 msgstr ""
 
-#: ../../src-py\main.py:238
+#: ../../src-py\main.py:245
 msgid "Quick Game"
 msgstr ""
 
-#: ../../src-py\main.py:239
+#: ../../src-py\main.py:246
 msgid "Start Tutorial"
 msgstr ""
 
-#: ../../src-py\main.py:240
+#: ../../src-py\main.py:247
 msgid "Choose Level"
 msgstr ""
 
-#: ../../src-py\main.py:241
+#: ../../src-py\main.py:248
 msgid "Achievements"
 msgstr ""
 
-#: ../../src-py\main.py:243
+#: ../../src-py\main.py:250
 msgid "Credits"
 msgstr ""
 
-#: ../../src-py\main.py:244
+#: ../../src-py\main.py:251
 msgid "Online Highscore"
 msgstr ""
 
-#: ../../src-py\main.py:245
+#: ../../src-py\main.py:252
 msgid "Check for Updates"
 msgstr ""
 
-#: ../../src-py\main.py:246
+#: ../../src-py\main.py:253
 msgid "Quit!"
 msgstr ""
 
-#: ../../src-py\main.py:261
+#: ../../src-py\main.py:268
 msgid ""
 "You are currently in a game. \n"
 "If you start a new game, all your progress will be lost.\n"
@@ -478,7 +484,7 @@ msgid ""
 "Hit {1} to cancel"
 msgstr ""
 
-#: ../../src-py\main.py:299
+#: ../../src-py\main.py:306
 msgid ""
 "You are currently in a game. \n"
 "If you quit without saving, all your progress will be lost.\n"
@@ -487,15 +493,15 @@ msgid ""
 "Hit {1} to reconsider your decision"
 msgstr ""
 
-#: ../../src-py\main.py:332
+#: ../../src-py\main.py:339
 msgid "Profile: {1} / best result so far: $ {0:.4}"
 msgstr ""
 
-#: ../../src-py\main.py:526
+#: ../../src-py\main.py:533
 msgid "Press {0} to enter Level {1} - '{2}'"
 msgstr ""
 
-#: ../../src-py\main.py:534
+#: ../../src-py\main.py:541
 msgid "Press {0} to return"
 msgstr ""
 
