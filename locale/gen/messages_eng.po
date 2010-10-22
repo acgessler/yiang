@@ -20,7 +20,7 @@ msgstr ""
 msgid "Press {0} to enter '{1}'"
 msgstr ""
 
-#: ../../src-py\editor.py:187
+#: ../../src-py\editor.py:189
 msgid ""
 "Don't you want to save first?\n"
 "    \n"
@@ -29,179 +29,179 @@ msgid ""
 "    Press {2} to abort"
 msgstr ""
 
-#: ../../src-py\editor.py:228
+#: ../../src-py\editor.py:230
 msgid "Leave"
 msgstr ""
 
-#: ../../src-py\editor.py:229
+#: ../../src-py\editor.py:231
 msgid "Leave the level editor and return to the main menu"
 msgstr ""
 
-#: ../../src-py\editor.py:232 ../../src-py\main.py:244
+#: ../../src-py\editor.py:234 ../../src-py\main.py:244
 msgid "Save"
 msgstr ""
 
-#: ../../src-py\editor.py:233
+#: ../../src-py\editor.py:235
 msgid "Save to disk (regular save, no further optimizations)"
 msgstr ""
 
-#: ../../src-py\editor.py:233
+#: ../../src-py\editor.py:235
 msgid "You cannot save, this level is readonly"
 msgstr ""
 
-#: ../../src-py\editor.py:237
+#: ../../src-py\editor.py:239
 msgid "Undo"
 msgstr ""
 
-#: ../../src-py\editor.py:238
+#: ../../src-py\editor.py:240
 msgid "Revert the last action, if possible"
 msgstr ""
 
-#: ../../src-py\editor.py:242
+#: ../../src-py\editor.py:244
 msgid "Redo"
 msgstr ""
 
-#: ../../src-py\editor.py:243
+#: ../../src-py\editor.py:245
 msgid "Repeat a recently reverted action, if possible"
 msgstr ""
 
-#: ../../src-py\editor.py:260
+#: ../../src-py\editor.py:262
 msgid "Edit Level Settings"
 msgstr ""
 
-#: ../../src-py\editor.py:261
+#: ../../src-py\editor.py:263
 msgid "Change level name, speed, movement, post processing ... etc."
 msgstr ""
 
-#: ../../src-py\editor.py:296
+#: ../../src-py\editor.py:298
 msgid "Suspend\000Resume"
 msgstr ""
 
-#: ../../src-py\editor.py:297
+#: ../../src-py\editor.py:299
 msgid ""
 "Switch between game and editor mode. The old state is recovered when editor "
 "mode is entered again."
 msgstr ""
 
-#: ../../src-py\editor.py:306
+#: ../../src-py\editor.py:308
 msgid "Abandon God\000Become God"
 msgstr ""
 
-#: ../../src-py\editor.py:307
+#: ../../src-py\editor.py:309
 msgid "Enable or disable god mode. Nothing can harm you while you are god."
 msgstr ""
 
-#: ../../src-py\editor.py:316
+#: ../../src-py\editor.py:318
 msgid "Hide stats\000Show stats"
 msgstr ""
 
-#: ../../src-py\editor.py:317
+#: ../../src-py\editor.py:319
 msgid "Show or hide the tile engine's internal performance counters"
 msgstr ""
 
-#: ../../src-py\editor.py:326
+#: ../../src-py\editor.py:328
 msgid "Hide BBs\000Show BBs"
 msgstr ""
 
-#: ../../src-py\editor.py:327
+#: ../../src-py\editor.py:329
 msgid "Show or hide the bounding boxes for all entities"
 msgstr ""
 
-#: ../../src-py\editor.py:336
+#: ../../src-py\editor.py:338
 msgid "Disable PostFX\000Enable PostFx"
 msgstr ""
 
-#: ../../src-py\editor.py:337
+#: ../../src-py\editor.py:339
 msgid ""
 "Enable or disable postprocessing. No postprocessing is equivalent to 'pure "
 "ascii mode'"
 msgstr ""
 
-#: ../../src-py\editor.py:346
+#: ../../src-py\editor.py:348
 msgid "Switch to BG\000Switch to FG"
 msgstr ""
 
-#: ../../src-py\editor.py:347
+#: ../../src-py\editor.py:349
 msgid "Switch between editing layers"
 msgstr ""
 
-#: ../../src-py\editor.py:366
+#: ../../src-py\editor.py:368
 msgid "Disable Markup\000Enable Markup"
 msgstr ""
 
-#: ../../src-py\editor.py:367
+#: ../../src-py\editor.py:369
 msgid ""
 "Enable or disable scene markups. Scene markups highlight entity paths and "
 "item relationships"
 msgstr ""
 
-#: ../../src-py\editor.py:400
+#: ../../src-py\editor.py:402
 msgid "Apply"
 msgstr ""
 
-#: ../../src-py\editor.py:403
+#: ../../src-py\editor.py:405
 msgid "Cancel"
 msgstr ""
 
-#: ../../src-py\editor.py:407
+#: ../../src-py\editor.py:409
 msgid "Level name (not too long, please)"
 msgstr ""
 
-#: ../../src-py\editor.py:439
+#: ../../src-py\editor.py:441
 msgid "Background color, RED"
 msgstr ""
 
-#: ../../src-py\editor.py:446
+#: ../../src-py\editor.py:448
 msgid "Background color, GREEN"
 msgstr ""
 
-#: ../../src-py\editor.py:453
+#: ../../src-py\editor.py:455
 msgid "Background color, BLUE"
 msgstr ""
 
-#: ../../src-py\editor.py:461
+#: ../../src-py\editor.py:463
 msgid "Visible offset above upper status bar"
 msgstr ""
 
-#: ../../src-py\editor.py:469
+#: ../../src-py\editor.py:471
 msgid "Visible offset above lower status bar"
 msgstr ""
 
-#: ../../src-py\editor.py:488
+#: ../../src-py\editor.py:490
 msgid "Scroll left"
 msgstr ""
 
-#: ../../src-py\editor.py:494
+#: ../../src-py\editor.py:496
 msgid "Scroll right"
 msgstr ""
 
-#: ../../src-py\editor.py:500
+#: ../../src-py\editor.py:502
 msgid "Scroll top"
 msgstr ""
 
-#: ../../src-py\editor.py:506
+#: ../../src-py\editor.py:508
 msgid "Scroll bottom"
 msgstr ""
 
-#: ../../src-py\editor.py:607
+#: ../../src-py\editor.py:618
 msgid "Postprocessing effects"
 msgstr ""
 
-#: ../../src-py\editor.py:840
+#: ../../src-py\editor.py:851
 msgid "Preview in original size"
 msgstr ""
 
-#: ../../src-py\editor.py:840
+#: ../../src-py\editor.py:851
 msgid "Preview scaled"
 msgstr ""
 
-#: ../../src-py\editor.py:1631
+#: ../../src-py\editor.py:1642
 msgid ""
 "'{0}' for rectangle selection, '{1}' to hold selection, '{2}' to remove "
 "elements"
 msgstr ""
 
-#: ../../src-py\editor.py:2999
+#: ../../src-py\editor.py:3023
 msgid ""
 "You are about to leave. Save first?\n"
 "\n"
@@ -210,7 +210,7 @@ msgid ""
 "Press {2} to abort"
 msgstr ""
 
-#: ../../src-py\editor.py:3157
+#: ../../src-py\editor.py:3181
 msgid ""
 "Choose a level to edit. Yellow entries are read-only and cannot be saved."
 msgstr ""
@@ -579,7 +579,35 @@ msgid ""
 "{0}"
 msgstr ""
 
-#: merged_master.txt:2848
+#: merged_master.txt:2779
+msgid ""
+"JUMP HIGHER (x1.6) \n"
+"{remaining:3.2}s remaining"
+msgstr ""
+
+#: merged_master.txt:2785
+msgid ""
+"You lost your greatness, figuratively\n"
+"{remaining:3.2}s remaining"
+msgstr ""
+
+#: merged_master.txt:2871
+msgid ""
+"RUN FASTER (2x) \n"
+"{remaining:3.2}s remaining"
+msgstr ""
+
+#: merged_master.txt:2877
+msgid ""
+"BE GOD (same color only)\n"
+"{remaining:3.2}s remaining"
+msgstr ""
+
+#: merged_master.txt:2883
+msgid "NO Gravity! (local Area only)"
+msgstr ""
+
+#: merged_master.txt:2957
 msgid ""
 "A mysterious voice says: \"I cannot teach him. The boy has no patience!\", "
 "and another voice responds: \"He will learn patience\". A few seconds pass "
@@ -587,22 +615,22 @@ msgid ""
 "movie quotes."
 msgstr ""
 
-#: merged_master.txt:2853
+#: merged_master.txt:2962
 msgid ""
 "Here is another life for you - you might need it. Watch out for hidden "
 "secrets like this one. Usually, at least 5 of them can be found in every "
 "single level."
 msgstr ""
 
-#: merged_master.txt:2881
+#: merged_master.txt:2990
 msgid "A Brave New World"
 msgstr ""
 
-#: merged_master.txt:2903
+#: merged_master.txt:3012
 msgid "Volcano Jack"
 msgstr ""
 
-#: merged_master.txt:2908
+#: merged_master.txt:3017
 msgid ""
 "Hello and welcome to THE tutorial! You are probably used to these boring "
 "video game opening tutorials and may tend to get annoyed as soon as the word "
@@ -619,7 +647,7 @@ msgid ""
 "See you later. Hit {enter} or {accept} to continue!"
 msgstr ""
 
-#: merged_master.txt:2917
+#: merged_master.txt:3026
 msgid ""
 "You got it, these DANGER tiles are DANGERous. They will kill you "
 "immediately. But some of them are special - if you are not brave enough to "
@@ -628,7 +656,7 @@ msgid ""
 "See you."
 msgstr ""
 
-#: merged_master.txt:2924
+#: merged_master.txt:3033
 msgid ""
 "I don't like you. You don't deserve the score you just received (Side note: "
 "Get more than 1000$ and I shall be seriously impressed!).\n"
@@ -638,7 +666,7 @@ msgid ""
 "DANGER barrel. Touch it, it is not dangerous."
 msgstr ""
 
-#: merged_master.txt:2931
+#: merged_master.txt:3040
 msgid ""
 "HAHA! I fooled you. You got killed, lost 10% of your score and you respawned "
 "here. However, As you can see it can be necessary to commit suicide (well, "
@@ -649,7 +677,7 @@ msgid ""
 "even bother trying it."
 msgstr ""
 
-#: merged_master.txt:2938
+#: merged_master.txt:3047
 msgid ""
 "These SuperSpeed signs make you much faster for a specific amount of time. "
 "Be aware, however, that you cannot accumulate them - touching a second "
@@ -657,7 +685,7 @@ msgid ""
 "make you faster."
 msgstr ""
 
-#: merged_master.txt:2943
+#: merged_master.txt:3052
 msgid ""
 "MegaJump makes you jump much, much higher. It cannot be accumulated as "
 "well.\n"
@@ -667,14 +695,14 @@ msgid ""
 "may affect you negatively."
 msgstr ""
 
-#: merged_master.txt:2950
+#: merged_master.txt:3059
 msgid ""
 "What you can see here is a ColorChanger. What it does? Yeah, it changes your "
 "player's color, dude. And why? Because you need to match your color with the "
 "color of your enemies or you won't be able to shoot them."
 msgstr ""
 
-#: merged_master.txt:2955
+#: merged_master.txt:3064
 msgid ""
 "The next enemies will be much more demanding than the HTUs - 'cause they are "
 "highly intelligent. You can, however, collect ammo and shoot them by "
@@ -682,7 +710,7 @@ msgid ""
 "you just wasted your time staring at your space key."
 msgstr ""
 
-#: merged_master.txt:2960
+#: merged_master.txt:3069
 msgid ""
 "Obviously it wasn't a good idea to use that machine ...\n"
 "\n"
@@ -691,7 +719,7 @@ msgid ""
 "didn't you?)"
 msgstr ""
 
-#: merged_master.txt:2967
+#: merged_master.txt:3076
 msgid ""
 "This is your first machine. Machines give you the oppotunity to buy "
 "upgrades, ammo, lives, ... this one sells lives. To use it, stand in front "
@@ -701,91 +729,91 @@ msgid ""
 "Now go, and buy a life."
 msgstr ""
 
-#: merged_master.txt:3038
+#: merged_master.txt:3147
 msgid "YIANG for Dummies"
 msgstr ""
 
-#: merged_master.txt:3062
+#: merged_master.txt:3171
 msgid "Green Temple"
 msgstr ""
 
-#: merged_master.txt:3099
+#: merged_master.txt:3208
 msgid "Wild West revisited"
 msgstr ""
 
-#: merged_master.txt:3122
+#: merged_master.txt:3231
 msgid "Sickness"
 msgstr ""
 
-#: merged_master.txt:3147
+#: merged_master.txt:3256
 msgid "Pumpkin City"
 msgstr ""
 
-#: merged_master.txt:3174
+#: merged_master.txt:3283
 msgid "Tricky"
 msgstr ""
 
-#: merged_master.txt:3185
+#: merged_master.txt:3294
 msgid "Unkillable "
 msgstr ""
 
-#: merged_master.txt:3209
+#: merged_master.txt:3318
 msgid "Illegal Organ Trade"
 msgstr ""
 
-#: merged_master.txt:3227
+#: merged_master.txt:3336
 msgid "Good friends again"
 msgstr ""
 
-#: merged_master.txt:3247
+#: merged_master.txt:3356
 msgid "Monochrome Reality"
 msgstr ""
 
-#: merged_master.txt:3269
+#: merged_master.txt:3378
 msgid "Welcome to your last journey"
 msgstr ""
 
-#: merged_master.txt:3698
+#: merged_master.txt:3807
 msgid "Up and Down"
 msgstr ""
 
-#: merged_master.txt:3758
+#: merged_master.txt:3867
 msgid "Hell is here"
 msgstr ""
 
-#: merged_master.txt:3801
+#: merged_master.txt:3910
 msgid "Jumper"
 msgstr ""
 
-#: merged_master.txt:3830
+#: merged_master.txt:3939
 msgid "Frozen Cave"
 msgstr ""
 
-#: merged_master.txt:3855
+#: merged_master.txt:3964
 msgid "Shooting Yard #1"
 msgstr ""
 
-#: merged_master.txt:3874
+#: merged_master.txt:3983
 msgid "25 to live"
 msgstr ""
 
-#: merged_master.txt:3904
+#: merged_master.txt:4013
 msgid "Hardly frozen"
 msgstr ""
 
-#: merged_master.txt:3932
+#: merged_master.txt:4041
 msgid "Frozen Dreams"
 msgstr ""
 
-#: merged_master.txt:3956
+#: merged_master.txt:4065
 msgid "The Tunnel"
 msgstr ""
 
-#: merged_master.txt:3982
+#: merged_master.txt:4091
 msgid "Wild West"
 msgstr ""
 
-#: merged_master.txt:4794
+#: merged_master.txt:4903
 msgid ""
 "A nasty voice in your mind explains the rules of this world: \n"
 "HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
@@ -793,7 +821,7 @@ msgid ""
 "(You don't listen. You never do.)"
 msgstr ""
 
-#: merged_master.txt:4802
+#: merged_master.txt:4911
 msgid ""
 "A nasty voice in your mind explains the rules of this world: ASCII life may "
 "be a very limited form of life, but it is still worth living and you "
@@ -807,7 +835,7 @@ msgid ""
 "listen to some metal - honestly, real men NEVER read the manual)"
 msgstr ""
 
-#: merged_master.txt:4810
+#: merged_master.txt:4919
 msgid ""
 "A flower on the path asks himselfs what his name might be - this strong man "
 "passing by. After a few moments, the small plant makes the decision not to "
@@ -815,91 +843,91 @@ msgid ""
 "sun light and water. No need to interfere with the tall people ..."
 msgstr ""
 
-#: merged_master.txt:4857
+#: merged_master.txt:4966
 msgid "Hit {0} to read this message again"
 msgstr ""
 
-#: merged_master.txt:4862 merged_master.txt:5297 merged_master.txt:5929
-#: merged_master.txt:5934
+#: merged_master.txt:4971 merged_master.txt:5406 merged_master.txt:6038
+#: merged_master.txt:6043
 msgid "Map of the World"
 msgstr ""
 
-#: merged_master.txt:5631
+#: merged_master.txt:5740
 msgid "Desert of Doom"
 msgstr ""
 
-#: merged_master.txt:5962
+#: merged_master.txt:6071
 msgid "Too hot"
 msgstr ""
 
-#: merged_master.txt:6189
+#: merged_master.txt:6298
 msgid "Alice in the Rabbit Hole"
 msgstr ""
 
-#: merged_master.txt:6221
+#: merged_master.txt:6330
 msgid "Tower of the Jungle Monster"
 msgstr ""
 
-#: merged_master.txt:6245
+#: merged_master.txt:6354
 msgid "Desert Day"
 msgstr ""
 
-#: merged_master.txt:6267
+#: merged_master.txt:6376
 msgid "A Vast Ocean"
 msgstr ""
 
-#: merged_master.txt:6290
+#: merged_master.txt:6399
 msgid "Method of Rotating Calipers"
 msgstr ""
 
-#: merged_master.txt:6326
+#: merged_master.txt:6435
 msgid "Red Temple"
 msgstr ""
 
-#: merged_master.txt:6358
+#: merged_master.txt:6467
 msgid "Sandboarding"
 msgstr ""
 
-#: merged_master.txt:6384
+#: merged_master.txt:6493
 msgid "Dungeon without Dragons"
 msgstr ""
 
-#: merged_master.txt:6399
+#: merged_master.txt:6513
 msgid "So what is up ..."
 msgstr ""
 
-#: merged_master.txt:6443
+#: merged_master.txt:6557
 msgid "Death"
 msgstr ""
 
-#: merged_master.txt:6537
+#: merged_master.txt:6651
 msgid "Volcano"
 msgstr ""
 
-#: merged_master.txt:6565
+#: merged_master.txt:6679
 msgid "shrOoms"
 msgstr ""
 
-#: merged_master.txt:6583
+#: merged_master.txt:6697
 msgid "Meeting some friends"
 msgstr ""
 
-#: merged_master.txt:6709
+#: merged_master.txt:6823
 msgid "Level Starts Here"
 msgstr ""
 
-#: merged_master.txt:6727
+#: merged_master.txt:6841
 msgid "Editable Sample Level"
 msgstr ""
 
-#: merged_master.txt:6755
+#: merged_master.txt:6869
 msgid "Jump And Run"
 msgstr ""
 
-#: merged_master.txt:6777
+#: merged_master.txt:6891
 msgid "Take the longer way"
 msgstr ""
 
-#: merged_master.txt:6807
+#: merged_master.txt:6921
 msgid "Cave of the Wanderer"
 msgstr ""

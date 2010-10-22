@@ -29,6 +29,7 @@ import os
 import itertools
 import math
 import operator
+import builtins
 
 # My own stuff
 import defaults
@@ -936,7 +937,7 @@ class LevelLoader:
                 import re
                 look = re.search(r"name=(?:_\()?[\"'](.+?)[\"']\)?",file.read(250))
                 if not look is None:
-                    LevelLoader.name_cache[index] = name = _( look.groups()[0] )
+                    LevelLoader.name_cache[index] = name = builtins.__dict__["_"] ( look.groups()[0] )
                     print("Guess level name for {0}: {1}".format(index,name))
         except IOError:
             # LevelLoader will take care of this error, we don't bother for now

@@ -23,7 +23,9 @@
 import os
 
 outfile = "merged_master.txt"
-folders = [os.path.join("..","..","data","tiles"), os.path.join("..","..","data","levels")]
+folders = [os.path.join("..","..","data","tiles"), 
+           os.path.join("..","..","data","tiles_misc"), 
+           os.path.join("..","..","data","levels")]
 
 
 def Stringify(string):

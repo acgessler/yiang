@@ -1,3 +1,3 @@
-from perks import PerkOverlay; <out> = PerkOverlay(<raw>)
+from perks import PerkOverlay; <out> = PerkOverlay(_(<raw>))
 You lost your greatness, figuratively
 {remaining:3.2}s remaining

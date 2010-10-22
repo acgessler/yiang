@@ -1,2 +1,2 @@
-from perks import PerkOverlay; <out> = PerkOverlay(<raw>)
+from perks import PerkOverlay; <out> = PerkOverlay(_(<raw>))
 NO Gravity! (local Area only)
