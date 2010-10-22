@@ -29,7 +29,7 @@ folders = [os.path.join("..","..","data","tiles"),
 
 
 def Stringify(string):
-    return 'r"""' + string.rstrip().replace('\"\"\"','\"\"\" + \'\"\"\"\' + \"\"\"') + '"""' 
+    return 'r"""' + string.rstrip().replace('\"\"\"','\"\"\" + \'\"\"\"\' + \"\"\"') + ' """' 
 
 def ProcessFolder(folder,outf):
     for file in os.listdir(folder):
@@ -44,17 +44,18 @@ def ProcessFolder(folder,outf):
             continue
         
         # try to get valid python expressions so pygettext can parse properly.
-        with open(path,"rt") as inp:
+        with open(path,"rt",encoding='cp1252') as inp:
             data = inp.read()
             data = data.split("\n",1)
         
-            shebang = data[0].strip()
+            shebang = data[0]
             shebang_words = shebang.split()
             if not "<out>" in shebang_words:
                 continue
         
-            eval_string = shebang.replace("<raw>", Stringify( data[1] ) if len(data) > 1 else "missing" )
-            eval_string = eval_string.replace("<","").replace(">","").replace("\\","\\\\")
+            eval_string = shebang.replace("<raw>","$$$$$$$").replace("<","").replace(">","")
+            eval_string = eval_string.replace("$$$$$$$", Stringify( data[1] ) if len(data) > 1 else "missing" )
+            eval_string = eval_string.replace("\\","\\\\")
             if eval_string:
                 
                 try:
@@ -70,7 +71,7 @@ def ProcessFolder(folder,outf):
             
         
 def Main():
-    with open(outfile,"wt") as outf:
+    with open(outfile,"wt",encoding='cp1252') as outf:
         for folder in folders:
             ProcessFolder(folder,outf)
         

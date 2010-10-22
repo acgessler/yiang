@@ -567,43 +567,43 @@ msgid ""
 "Please be patient while your game is being loaded.\n"
 "[hit 'E' to frie an enemy and keep 'S' pressed to skip loading]\n"
 "\n"
-"{0}"
+"{0} "
 msgstr ""
 
 #: merged_master.txt:2779
 msgid ""
 "JUMP HIGHER (x1.6) \n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 
 #: merged_master.txt:2785
 msgid ""
 "You lost your greatness, figuratively\n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 
 #: merged_master.txt:2871
 msgid ""
 "RUN FASTER (2x) \n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 
 #: merged_master.txt:2877
 msgid ""
 "BE GOD (same color only)\n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 
 #: merged_master.txt:2883
-msgid "NO Gravity! (local Area only)"
+msgid "NO Gravity! (local Area only) "
 msgstr ""
 
 #: merged_master.txt:2957
-msgid "A mysterious voice says: \"I cannot teach him. The boy has no patience!\", and another voice responds: \"He will learn patience\". A few seconds pass until you realize that this is just your imagination randomly throwing in movie quotes."
+msgid "A mysterious voice says: \"I cannot teach him. The boy has no patience!\", and another voice responds: \"He will learn patience\". A few seconds pass until you realize that this is just your imagination randomly throwing in movie quotes. "
 msgstr ""
 
 #: merged_master.txt:2962
-msgid "Here is another life for you - you might need it. Watch out for hidden secrets like this one. Usually, at least 5 of them can be found in every single level."
+msgid "Here is another life for you - you might need it. Watch out for hidden secrets like this one. Usually, at least 5 of them can be found in every single level. "
 msgstr ""
 
 #: merged_master.txt:2990
@@ -620,61 +620,61 @@ msgid ""
 "\n"
 "If you're still with me, use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump. Try to reach the next tutorial block (it is invisible and I hope you won't experience severe difficulties at finding it). If this keyboard setup doesn't suit your preferred key pattern, edit ./config/key_bindings.txt. \n"
 "\n"
-"See you later. Hit {enter} or {accept} to continue!"
+"See you later. Hit {enter} or {accept} to continue! "
 msgstr ""
 
 #: merged_master.txt:3026
 msgid ""
 "You got it, these DANGER tiles are DANGERous. They will kill you immediately. But some of them are special - if you are not brave enough to try them, you won't find the next part of me (I'm the tutorial).\n"
 "\n"
-"See you."
+"See you. "
 msgstr ""
 
 #: merged_master.txt:3033
 msgid ""
 "I don't like you. You don't deserve the score you just received (Side note: Get more than 1000$ and I shall be seriously impressed!).\n"
 "\n"
-"Well, these TREASURE signs were quite easy to spot, weren't they? But sometimes there will be no visual difference at all. Like for the next DANGER barrel. Touch it, it is not dangerous."
+"Well, these TREASURE signs were quite easy to spot, weren't they? But sometimes there will be no visual difference at all. Like for the next DANGER barrel. Touch it, it is not dangerous. "
 msgstr ""
 
 #: merged_master.txt:3040
 msgid ""
 "HAHA! I fooled you. You got killed, lost 10% of your score and you respawned here. However, As you can see it can be necessary to commit suicide (well, kind of) in order to advance in this game. So be careful with your lives, for you haven't got too many of them.\n"
 "\n"
-"The nice guy next to you is your first enemy. You can't kill them, so don't even bother trying it."
+"The nice guy next to you is your first enemy. You can't kill them, so don't even bother trying it. "
 msgstr ""
 
 #: merged_master.txt:3047
-msgid "These SuperSpeed signs make you much faster for a specific amount of time. Be aware, however, that you cannot accumulate them - touching a second SuperSpeed item will increase the total duration of the effect, but it won't make you faster."
+msgid "These SuperSpeed signs make you much faster for a specific amount of time. Be aware, however, that you cannot accumulate them - touching a second SuperSpeed item will increase the total duration of the effect, but it won't make you faster. "
 msgstr ""
 
 #: merged_master.txt:3052
 msgid ""
 "MegaJump makes you jump much, much higher. It cannot be accumulated as well.\n"
 "\n"
-"Note: There are many other perks in the game. I am not going to explain all of them, because most of them do what they look like. Most. Be careful: some may affect you negatively."
+"Note: There are many other perks in the game. I am not going to explain all of them, because most of them do what they look like. Most. Be careful: some may affect you negatively. "
 msgstr ""
 
 #: merged_master.txt:3059
-msgid "What you can see here is a ColorChanger. What it does? Yeah, it changes your player's color, dude. And why? Because you need to match your color with the color of your enemies or you won't be able to shoot them."
+msgid "What you can see here is a ColorChanger. What it does? Yeah, it changes your player's color, dude. And why? Because you need to match your color with the color of your enemies or you won't be able to shoot them. "
 msgstr ""
 
 #: merged_master.txt:3064
-msgid "The next enemies will be much more demanding than the HTUs - 'cause they are highly intelligent. You can, however, collect ammo and shoot them by pressing SPACE. Note that this feature hasn't been implemented either, so you just wasted your time staring at your space key."
+msgid "The next enemies will be much more demanding than the HTUs - 'cause they are highly intelligent. You can, however, collect ammo and shoot them by pressing SPACE. Note that this feature hasn't been implemented either, so you just wasted your time staring at your space key. "
 msgstr ""
 
 #: merged_master.txt:3069
 msgid ""
 "Obviously it wasn't a good idea to use that machine ...\n"
 "\n"
-"Sadly, I don't have more tutorial content at the moment. Have fun with the game. To be continued ... (The special item was a joke but you knew that, didn't you?)"
+"Sadly, I don't have more tutorial content at the moment. Have fun with the game. To be continued ... (The special item was a joke but you knew that, didn't you?) "
 msgstr ""
 
 #: merged_master.txt:3076
 msgid ""
 "This is your first machine. Machines give you the oppotunity to buy upgrades, ammo, lives, ... this one sells lives. To use it, stand in front of it and press {interact} (Space) [you may currently need to touch either the left or the right border of the machine or it won't work].\n"
 "\n"
-"Now go, and buy a life."
+"Now go, and buy a life. "
 msgstr ""
 
 #: merged_master.txt:3147
@@ -766,7 +766,7 @@ msgid ""
 "A nasty voice in your mind explains the rules of this world: \n"
 "HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
 "\n"
-"(You don't listen. You never do.)"
+"(You don't listen. You never do.) "
 msgstr ""
 
 #: merged_master.txt:4911
@@ -774,11 +774,11 @@ msgid ""
 "A nasty voice in your mind explains the rules of this world: ASCII life may be a very limited form of life, but it is still worth living and you shouldn't take it without good reason. To aid you at protecting those small creatures, a special rule has been added to this world: you cannot kill other creatures unless they have the same color as you. There are magic bricks to change color, however. Use them with care.\n"
 "\n"
 "\n"
-"(the voice is getting louder and louder so you turn on your mp3 player and listen to some metal - honestly, real men NEVER read the manual)"
+"(the voice is getting louder and louder so you turn on your mp3 player and listen to some metal - honestly, real men NEVER read the manual) "
 msgstr ""
 
 #: merged_master.txt:4919
-msgid "A flower on the path asks himselfs what his name might be - this strong man passing by. After a few moments, the small plant makes the decision not to ask him for his name before the highscore screen and continues to collect sun light and water. No need to interfere with the tall people ..."
+msgid "A flower on the path asks himselfs what his name might be - this strong man passing by. After a few moments, the small plant makes the decision not to ask him for his name before the highscore screen and continues to collect sun light and water. No need to interfere with the tall people ... "
 msgstr ""
 
 #: merged_master.txt:4966

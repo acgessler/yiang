@@ -634,6 +634,9 @@ class TileLoader:
             for k,v in replace.items():
                 lines = lines.replace(k,v)
                 
+            #if lines.find( "_(" ) != -1:
+            #    print(lines)
+                
             TileLoader.cache[file_norm] = lines = compile(lines,"<shebang-string>","exec")
 
         #print(l)

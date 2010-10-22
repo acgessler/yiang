@@ -611,7 +611,7 @@ msgid ""
 "Please be patient while your game is being loaded.\n"
 "[hit 'E' to frie an enemy and keep 'S' pressed to skip loading]\n"
 "\n"
-"{0}"
+"{0} "
 msgstr ""
 "\n"
 "Bitte habe etwas Geduld während Dein Spiel geladen wird.\n"
@@ -622,7 +622,7 @@ msgstr ""
 #: merged_master.txt:2779
 msgid ""
 "JUMP HIGHER (x1.6) \n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 "Du springst höher (x1.6) \n"
 "{remaining:3.2}s verbleibend"
@@ -630,7 +630,7 @@ msgstr ""
 #: merged_master.txt:2785
 msgid ""
 "You lost your greatness, figuratively\n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 "Du hast Deine Größe verloren\n"
 "{remaining:3.2}s verbleibend"
@@ -638,22 +638,21 @@ msgstr ""
 #: merged_master.txt:2871
 msgid ""
 "RUN FASTER (2x) \n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
-"Renn schneller (2x) \n"
+"Du rennst schneller (2x) \n"
 "{remaining:3.2}s verbleibend"
 
 #: merged_master.txt:2877
-#, fuzzy
 msgid ""
 "BE GOD (same color only)\n"
-"{remaining:3.2}s remaining"
+"{remaining:3.2}s remaining "
 msgstr ""
 "Gotteskomplex (einfarbig) \n"
 "{remaining:3.2}s verbleibend"
 
 #: merged_master.txt:2883
-msgid "NO Gravity! (local Area only)"
+msgid "NO Gravity! (local Area only) "
 msgstr "Nix mit Newton und seinem Apfel (lokal begrenzt)"
 
 #: merged_master.txt:2957
@@ -661,7 +660,7 @@ msgid ""
 "A mysterious voice says: \"I cannot teach him. The boy has no patience!\", "
 "and another voice responds: \"He will learn patience\". A few seconds pass "
 "until you realize that this is just your imagination randomly throwing in "
-"movie quotes."
+"movie quotes. "
 msgstr ""
 "Eine mysteriöse Stimme spricht: \"I cannot teach him. The boy has no "
 "patience!\"und eine andere Stimme antwortet: \"He will learn patience\". Es "
@@ -673,7 +672,7 @@ msgstr ""
 msgid ""
 "Here is another life for you - you might need it. Watch out for hidden "
 "secrets like this one. Usually, at least 5 of them can be found in every "
-"single level."
+"single level. "
 msgstr ""
 "Hier is ein zusätzliches Leben für Dich - Du könntest es brauchen. Immer "
 "fleißig Ausschau halten nach versteckten Überaschungsleben (nun in jedem "
@@ -701,7 +700,7 @@ msgid ""
 "keyboard setup doesn't suit your preferred key pattern, edit ./config/"
 "key_bindings.txt. \n"
 "\n"
-"See you later. Hit {enter} or {accept} to continue!"
+"See you later. Hit {enter} or {accept} to continue! "
 msgstr ""
 "Hallo und herzlich Willkommen zu DEM Tutorial. Via Google erreichbare "
 "Tutorials sind ja bekanntlich die ultimative Lösung um zu Wissen zu gelangen "
@@ -728,7 +727,7 @@ msgid ""
 "immediately. But some of them are special - if you are not brave enough to "
 "try them, you won't find the next part of me (I'm the tutorial).\n"
 "\n"
-"See you."
+"See you. "
 msgstr ""
 
 #: merged_master.txt:3033
@@ -738,7 +737,7 @@ msgid ""
 "\n"
 "Well, these TREASURE signs were quite easy to spot, weren't they? But "
 "sometimes there will be no visual difference at all. Like for the next "
-"DANGER barrel. Touch it, it is not dangerous."
+"DANGER barrel. Touch it, it is not dangerous. "
 msgstr ""
 
 #: merged_master.txt:3040
@@ -749,7 +748,7 @@ msgid ""
 "for you haven't got too many of them.\n"
 "\n"
 "The nice guy next to you is your first enemy. You can't kill them, so don't "
-"even bother trying it."
+"even bother trying it. "
 msgstr ""
 
 #: merged_master.txt:3047
@@ -757,7 +756,7 @@ msgid ""
 "These SuperSpeed signs make you much faster for a specific amount of time. "
 "Be aware, however, that you cannot accumulate them - touching a second "
 "SuperSpeed item will increase the total duration of the effect, but it won't "
-"make you faster."
+"make you faster. "
 msgstr ""
 
 #: merged_master.txt:3052
@@ -767,14 +766,14 @@ msgid ""
 "\n"
 "Note: There are many other perks in the game. I am not going to explain all "
 "of them, because most of them do what they look like. Most. Be careful: some "
-"may affect you negatively."
+"may affect you negatively. "
 msgstr ""
 
 #: merged_master.txt:3059
 msgid ""
 "What you can see here is a ColorChanger. What it does? Yeah, it changes your "
 "player's color, dude. And why? Because you need to match your color with the "
-"color of your enemies or you won't be able to shoot them."
+"color of your enemies or you won't be able to shoot them. "
 msgstr ""
 
 #: merged_master.txt:3064
@@ -782,7 +781,7 @@ msgid ""
 "The next enemies will be much more demanding than the HTUs - 'cause they are "
 "highly intelligent. You can, however, collect ammo and shoot them by "
 "pressing SPACE. Note that this feature hasn't been implemented either, so "
-"you just wasted your time staring at your space key."
+"you just wasted your time staring at your space key. "
 msgstr ""
 
 #: merged_master.txt:3069
@@ -791,7 +790,7 @@ msgid ""
 "\n"
 "Sadly, I don't have more tutorial content at the moment. Have fun with the "
 "game. To be continued ... (The special item was a joke but you knew that, "
-"didn't you?)"
+"didn't you?) "
 msgstr ""
 
 #: merged_master.txt:3076
@@ -801,7 +800,7 @@ msgid ""
 "of it and press {interact} (Space) [you may currently need to touch either "
 "the left or the right border of the machine or it won't work].\n"
 "\n"
-"Now go, and buy a life."
+"Now go, and buy a life. "
 msgstr ""
 
 #: merged_master.txt:3147
@@ -814,7 +813,7 @@ msgstr "Grüner Tempel"
 
 #: merged_master.txt:3208
 msgid "Wild West revisited"
-msgstr ""
+msgstr "Wilder Westen"
 
 #: merged_master.txt:3231
 msgid "Sickness"
@@ -893,7 +892,7 @@ msgid ""
 "A nasty voice in your mind explains the rules of this world: \n"
 "HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
 "\n"
-"(You don't listen. You never do.)"
+"(You don't listen. You never do.) "
 msgstr ""
 "Eine lästige Stimme in deinem Kopf erklärt dir die Regeln dieser "
 "Spielwelt: \n"
@@ -912,7 +911,7 @@ msgid ""
 "\n"
 "\n"
 "(the voice is getting louder and louder so you turn on your mp3 player and "
-"listen to some metal - honestly, real men NEVER read the manual)"
+"listen to some metal - honestly, real men NEVER read the manual) "
 msgstr ""
 
 #: merged_master.txt:4919
@@ -920,7 +919,7 @@ msgid ""
 "A flower on the path asks himselfs what his name might be - this strong man "
 "passing by. After a few moments, the small plant makes the decision not to "
 "ask him for his name before the highscore screen and continues to collect "
-"sun light and water. No need to interfere with the tall people ..."
+"sun light and water. No need to interfere with the tall people ... "
 msgstr ""
 
 #: merged_master.txt:4966
@@ -994,7 +993,7 @@ msgstr ""
 
 #: merged_master.txt:6823
 msgid "Level Starts Here"
-msgstr ""
+msgstr "Hölle? Hier lang"
 
 #: merged_master.txt:6841
 msgid "Editable Sample Level"
@@ -1002,7 +1001,7 @@ msgstr ""
 
 #: merged_master.txt:6869
 msgid "Jump And Run"
-msgstr ""
+msgstr "Auf und ab"
 
 #: merged_master.txt:6891
 msgid "Take the longer way"
