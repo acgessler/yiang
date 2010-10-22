@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 30, 3),vis_ofs=2,autoscroll_speed=(0.25, 0),scroll=2,name='Illegal Organ Trade',)
+<out> = Level(<level>,<game>,<raw>,color=(0, 30, 3),vis_ofs=2,autoscroll_speed=(0.25, 0),scroll=2,name=_('Illegal Organ Trade'),)
 _IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
 
 .  .  _IN.  .  .  .  .  gE0.  .  .  _IN.  .  .  .  .  _RE.  .  .  .  .  _S4_S4_S4_S4_S4.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA

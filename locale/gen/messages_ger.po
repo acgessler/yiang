@@ -596,3 +596,184 @@ msgstr ""
 #: ../../src-py\weapon.py:139
 msgid "The Self-Reflecting Painless Chicken Slayer"
 msgstr ""
+
+#: merged_master.txt:3000
+msgid "A Brave New World"
+msgstr "Schöne neue Welt"
+
+#: merged_master.txt:3023
+msgid "Volcano Jack"
+msgstr ""
+
+#: merged_master.txt:3170
+msgid "YIANG for Dummies"
+msgstr ""
+
+#: merged_master.txt:3195
+#, fuzzy
+msgid "Green Temple"
+msgstr "grün"
+
+#: merged_master.txt:3234
+msgid "Wild West revisited"
+msgstr ""
+
+#: merged_master.txt:3258
+msgid "Sickness"
+msgstr ""
+
+#: merged_master.txt:3284
+msgid "Pumpkin City"
+msgstr ""
+
+#: merged_master.txt:3312
+msgid "Tricky"
+msgstr ""
+
+#: merged_master.txt:3324
+msgid "Unkillable "
+msgstr ""
+
+#: merged_master.txt:3349
+msgid "Illegal Organ Trade"
+msgstr ""
+
+#: merged_master.txt:3368
+msgid "Good friends again"
+msgstr ""
+
+#: merged_master.txt:3389
+msgid "Monochrome Reality"
+msgstr ""
+
+#: merged_master.txt:3412
+msgid "Welcome to your last journey"
+msgstr ""
+
+#: merged_master.txt:3842
+msgid "Up and Down"
+msgstr ""
+
+#: merged_master.txt:3905
+msgid "Hell is here"
+msgstr ""
+
+#: merged_master.txt:3950
+msgid "Jumper"
+msgstr ""
+
+#: merged_master.txt:3980
+#, fuzzy
+msgid "Frozen Cave"
+msgstr "Verlassen"
+
+#: merged_master.txt:4006
+msgid "Shooting Yard #1"
+msgstr ""
+
+#: merged_master.txt:4026
+msgid "25 to live"
+msgstr ""
+
+#: merged_master.txt:4058
+msgid "Hardly frozen"
+msgstr "Angenehm kühl"
+
+#: merged_master.txt:4087
+msgid "Frozen Dreams"
+msgstr "Eingefrorener Traum"
+
+#: merged_master.txt:4112
+msgid "The Tunnel"
+msgstr "Der Tunnel"
+
+#: merged_master.txt:4139
+msgid "Wild West"
+msgstr "Wilder Westen"
+
+#: merged_master.txt:5073 merged_master.txt:5513 merged_master.txt:6172
+#: merged_master.txt:6178
+msgid "Map of the World"
+msgstr "Weltkarte"
+
+#: merged_master.txt:5868
+msgid "Desert of Doom"
+msgstr "Schicksalswüste"
+
+#: merged_master.txt:6207
+msgid "Too hot"
+msgstr "Zu heiß"
+
+#: merged_master.txt:6435
+msgid "Alice in the Rabbit Hole"
+msgstr "Alice in der Kaninchenhöhle"
+
+#: merged_master.txt:6468
+msgid "Tower of the Jungle Monster"
+msgstr "Turm des Dschungelmonsters"
+
+#: merged_master.txt:6493
+msgid "Desert Day"
+msgstr "Wüstentag"
+
+#: merged_master.txt:6516
+msgid "A Vast Ocean"
+msgstr "Ein weiter Ozean ..."
+
+#: merged_master.txt:6540
+msgid "Method of Rotating Calipers"
+msgstr "Rotierende Messer"
+
+#: merged_master.txt:6577
+msgid "Red Temple"
+msgstr "Tempel der Röte"
+
+#: merged_master.txt:6610
+msgid "Sandboarding"
+msgstr "Sandboarding"
+
+#: merged_master.txt:6637
+msgid "Dungeon without Dragons"
+msgstr "Dungeon ohne Dragons"
+
+#: merged_master.txt:6653
+msgid "So what is up ..."
+msgstr "Ey, was geht ab?"
+
+#: merged_master.txt:6698
+msgid "Death"
+msgstr ""
+
+#: merged_master.txt:6796
+msgid "Volcano"
+msgstr ""
+
+#: merged_master.txt:6825
+msgid "shrOoms"
+msgstr ""
+
+#: merged_master.txt:6844
+msgid "Meeting some friends"
+msgstr ""
+
+#: merged_master.txt:6977
+msgid "Level Starts Here"
+msgstr ""
+
+#: merged_master.txt:6996
+msgid "Editable Sample Level"
+msgstr ""
+
+#: merged_master.txt:7025
+msgid "Jump And Run"
+msgstr ""
+
+#: merged_master.txt:7048
+#, fuzzy
+msgid "Take the longer way"
+msgstr "das Spiel zu verlassen"
+
+#: merged_master.txt:7079
+#, fuzzy
+msgid "Cave of the Wanderer"
+msgstr "das Spiel zu verlassen"

@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='A Brave New World',color=(30, 20, 20),vis_ofs=5,scroll=2,lower_offset=0.8,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('A Brave New World'),color=(30, 20, 20),vis_ofs=5,scroll=2,lower_offset=0.8,)
 
 
 

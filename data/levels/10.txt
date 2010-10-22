@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Volcano Jack',color=(0, 0, 0),vis_ofs=0,scroll=2,lower_offset=-0.5,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Volcano Jack'),color=(0, 0, 0),vis_ofs=0,scroll=2,lower_offset=-0.5,)
 
 .  .  .  .  .  .  .  ySU
 

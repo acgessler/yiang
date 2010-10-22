@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),name='Method of Rotating Calipers',)
+<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),name=_('Method of Rotating Calipers'),)
 .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
 .  rA6_S0_S0_S0rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  .  .  .  .  .  bE2.  .  .  .  bE2.  .  .  .  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6
 .  rA6_S0_S0_S0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF.  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6

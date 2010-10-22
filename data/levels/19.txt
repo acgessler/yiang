@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Monochrome Reality',color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('grayscale.sfx', ())],vis_ofs=3,scroll=2,lower_offset=0.1,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Monochrome Reality'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('grayscale.sfx', ())],vis_ofs=3,scroll=2,lower_offset=0.1,)
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gB2gD0gD0gD0gD0gD0gD0gD0gD0gD0gD0gB2gD0gD0gD0gD0gD0gD0gD0gD0gD0gD0gD0gB2gD0gD0gD0gD0gD0gD0gD0gD0gD0gD0gD0gD0gB2gD0gD0gD0gD0gD0gD0gD0gD0gD0
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gB2.  .  .  .  .  .  .  .  .  .  gB2.  .  .  .  .  .  .  .  .  .  .  gB2.  .  .  .  .  .  .  .  .  .  .  .  gB2

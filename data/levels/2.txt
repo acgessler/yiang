@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Welcome to your last journey',color=(20, 10, 10),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=-0.3,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Welcome to your last journey'),color=(20, 10, 10),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=-0.3,)
 .  .  rPL.  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RE.  .  .  gA9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _MJ.  .  .  gA9
 .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gAM.  gAM.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9

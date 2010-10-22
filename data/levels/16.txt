@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 10),vis_ofs=1,autoscroll_speed=(0.25, 0),scroll=2,name='Unkillable ',)
+<out> = Level(<level>,<game>,<raw>,color=(0, 0, 10),vis_ofs=1,autoscroll_speed=(0.25, 0),scroll=2,name=_('Unkillable '),)
 _IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
 .  dPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  .  .  .  rFI.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA

@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.4, 0),name='So what is up ...',color=(0, 15, 15),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=-2.5,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.4, 0),name=_('So what is up ...'),color=(0, 15, 15),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=-2.5,)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
 .  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA

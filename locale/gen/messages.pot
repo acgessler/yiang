@@ -553,3 +553,180 @@ msgstr ""
 msgid "The Self-Reflecting Painless Chicken Slayer"
 msgstr ""
 
+#: merged_master.txt:3000
+msgid "A Brave New World"
+msgstr ""
+
+#: merged_master.txt:3023
+msgid "Volcano Jack"
+msgstr ""
+
+#: merged_master.txt:3170
+msgid "YIANG for Dummies"
+msgstr ""
+
+#: merged_master.txt:3195
+msgid "Green Temple"
+msgstr ""
+
+#: merged_master.txt:3234
+msgid "Wild West revisited"
+msgstr ""
+
+#: merged_master.txt:3258
+msgid "Sickness"
+msgstr ""
+
+#: merged_master.txt:3284
+msgid "Pumpkin City"
+msgstr ""
+
+#: merged_master.txt:3312
+msgid "Tricky"
+msgstr ""
+
+#: merged_master.txt:3324
+msgid "Unkillable "
+msgstr ""
+
+#: merged_master.txt:3349
+msgid "Illegal Organ Trade"
+msgstr ""
+
+#: merged_master.txt:3368
+msgid "Good friends again"
+msgstr ""
+
+#: merged_master.txt:3389
+msgid "Monochrome Reality"
+msgstr ""
+
+#: merged_master.txt:3412
+msgid "Welcome to your last journey"
+msgstr ""
+
+#: merged_master.txt:3842
+msgid "Up and Down"
+msgstr ""
+
+#: merged_master.txt:3905
+msgid "Hell is here"
+msgstr ""
+
+#: merged_master.txt:3950
+msgid "Jumper"
+msgstr ""
+
+#: merged_master.txt:3980
+msgid "Frozen Cave"
+msgstr ""
+
+#: merged_master.txt:4006
+msgid "Shooting Yard #1"
+msgstr ""
+
+#: merged_master.txt:4026
+msgid "25 to live"
+msgstr ""
+
+#: merged_master.txt:4058
+msgid "Hardly frozen"
+msgstr ""
+
+#: merged_master.txt:4087
+msgid "Frozen Dreams"
+msgstr ""
+
+#: merged_master.txt:4112
+msgid "The Tunnel"
+msgstr ""
+
+#: merged_master.txt:4139
+msgid "Wild West"
+msgstr ""
+
+#: merged_master.txt:5073 merged_master.txt:5513 merged_master.txt:6172
+#: merged_master.txt:6178
+msgid "Map of the World"
+msgstr ""
+
+#: merged_master.txt:5868
+msgid "Desert of Doom"
+msgstr ""
+
+#: merged_master.txt:6207
+msgid "Too hot"
+msgstr ""
+
+#: merged_master.txt:6435
+msgid "Alice in the Rabbit Hole"
+msgstr ""
+
+#: merged_master.txt:6468
+msgid "Tower of the Jungle Monster"
+msgstr ""
+
+#: merged_master.txt:6493
+msgid "Desert Day"
+msgstr ""
+
+#: merged_master.txt:6516
+msgid "A Vast Ocean"
+msgstr ""
+
+#: merged_master.txt:6540
+msgid "Method of Rotating Calipers"
+msgstr ""
+
+#: merged_master.txt:6577
+msgid "Red Temple"
+msgstr ""
+
+#: merged_master.txt:6610
+msgid "Sandboarding"
+msgstr ""
+
+#: merged_master.txt:6637
+msgid "Dungeon without Dragons"
+msgstr ""
+
+#: merged_master.txt:6653
+msgid "So what is up ..."
+msgstr ""
+
+#: merged_master.txt:6698
+msgid "Death"
+msgstr ""
+
+#: merged_master.txt:6796
+msgid "Volcano"
+msgstr ""
+
+#: merged_master.txt:6825
+msgid "shrOoms"
+msgstr ""
+
+#: merged_master.txt:6844
+msgid "Meeting some friends"
+msgstr ""
+
+#: merged_master.txt:6977
+msgid "Level Starts Here"
+msgstr ""
+
+#: merged_master.txt:6996
+msgid "Editable Sample Level"
+msgstr ""
+
+#: merged_master.txt:7025
+msgid "Jump And Run"
+msgstr ""
+
+#: merged_master.txt:7048
+msgid "Take the longer way"
+msgstr ""
+
+#: merged_master.txt:7079
+msgid "Cave of the Wanderer"
+msgstr ""
+

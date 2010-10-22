@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Editable Sample Level',color=(0, 0, 30),vis_ofs=0,scroll=2,lower_offset=-0.3,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Editable Sample Level'),color=(0, 0, 30),vis_ofs=0,scroll=2,lower_offset=-0.3,)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DK.  .  _DK.  .  .  _DK
 
 .  .  .  .  .  aA9aA9aA9aA9aA9.  aA9aA9aA9aA9.  aA9aA9aA9aA9aA9.  aA9aA9aA9aA9aA9

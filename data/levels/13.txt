@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,name='Sickness',)
+<out> = Level(<level>,<game>,<raw>,name=_('Sickness'),)
 
 
 

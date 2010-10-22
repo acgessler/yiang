@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name='Wild West',color=(0, 10, 30),vis_ofs=4,scroll=2,lower_offset=-0.5,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Wild West'),color=(0, 10, 30),vis_ofs=4,scroll=2,lower_offset=-0.5,)
 
 
 

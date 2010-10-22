@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 30),vis_ofs=7,autoscroll_speed=(0.25, 0),scroll=2,name='Tricky',)
+<out> = Level(<level>,<game>,<raw>,color=(0, 0, 30),vis_ofs=7,autoscroll_speed=(0.25, 0),scroll=2,name=_('Tricky'),)
 
 
 

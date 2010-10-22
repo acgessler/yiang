@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),vis_ofs=2,autoscroll_speed=(0.25, 0),name='Cave of the Wanderer',scroll=2,)
+<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),vis_ofs=2,autoscroll_speed=(0.25, 0),name=_('Cave of the Wanderer'),scroll=2,)
 
 
 _PL.  .  .  .  BDJ.  .  .  .  .  .  .  BDF.  .  .  .  .  BDJBDFrS1.  BDF.  .  .  .  .  BDJBDF.  _MI.  .  .  .  .  .  .  cINcINcINcINcINcINcINcINcINcINcINcINcINcINcINcINcIN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _MI.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cC5cC5cC5cC5.  .  .  .  .  .  .  .  .  .  .  .  cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5.  cC5cC5.  .  .  cC5.  cC5BDFcC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5BDF.  BDFrS0rS0rS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cC5cC5cC5cC5.  rS1rTBrS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1rS1.  cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5cC5
