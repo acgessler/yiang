@@ -12,6 +12,17 @@ msgstr ""
 "Content-Transfer-Encoding: UTF-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
+#: ../../src-py\achievements.py:130
+msgid ""
+"You earned the '{0}' achievement\n"
+"\n"
+"This is freaking awesome. But there's more to do. Head over\n"
+"to the 'Achievements' menu and find out which achievements \n"
+"you haven't got yet. \n"
+"        \n"
+"Press {1} to continue.\n"
+msgstr ""
+
 #: ../../src-py\campaign.py:394
 msgid "You completed this level!"
 msgstr "Du hast dieses Level bereits geschafft!"
@@ -19,6 +30,37 @@ msgstr "Du hast dieses Level bereits geschafft!"
 #: ../../src-py\campaign.py:396
 msgid "Press {0} to enter {1}"
 msgstr "Drücke {0} um {1} zu betreten"
+
+#: ../../src-py\campaign.py:442
+msgid ""
+"Enter '{1}'? \n"
+"You might die at this place, so be careful. \n"
+"\n"
+"Press {0} to risk it and {2} to leave."
+msgstr ""
+"'{1}' betreten? \n"
+"Du könntest an diesem Ort sterben. \n"
+"\n"
+"Drücke {0} wenn du mit dem Risiko leben kannst.\n"
+"Drücke {2} wenn du ein kleiner Feigling bist."
+
+#: ../../src-py\campaign.py:461
+msgid ""
+"You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-"
+"Dur."
+msgstr ""
+
+#: ../../src-py\danger.py:47
+msgid "a deathly barrel (it's hilarious!)"
+msgstr ""
+
+#: ../../src-py\danger.py:87
+msgid "an explosive mine (BOOooOOM!)"
+msgstr ""
+
+#: ../../src-py\danger.py:175
+msgid "a terribly hot stone"
+msgstr ""
 
 #: ../../src-py\editor.py:189
 msgid ""
@@ -348,8 +390,8 @@ msgid ""
 "Press {2} to restart the level\n"
 "Press {3} to {4}"
 msgstr ""
-"Du hast den Märtyrertod erlitten! \n" 
-(all-inclusive, sprich mit Auferstehung!)\n"
+"Du hast den Märtyrertod erlitten! \n"
+"(all-inclusive, sprich mit Auferstehung!)\n"
 "\n"
 "  .. der gottlose Schlächter war {0}\n"
 "\n"
@@ -551,11 +593,11 @@ msgstr ""
 msgid "Profile: {1} / best result so far: $ {0:.4}"
 msgstr "Profil: {1} / bestes Ergebnis: $ {0:.4}"
 
-#: ../../src-py\main.py:533
+#: ../../src-py\main.py:535
 msgid "Press {0} to enter Level {1} - '{2}'"
 msgstr "Drücke {0} um das Level {1} - '{2}' zu betreten"
 
-#: ../../src-py\main.py:541
+#: ../../src-py\main.py:543
 msgid "Press {0} to return"
 msgstr "Drücke {0} zum Verlassen"
 
@@ -889,7 +931,11 @@ msgstr "Der Tunnel"
 msgid "Wild West"
 msgstr "Wilder Westen"
 
-#: merged_master.txt:4903
+#: merged_master.txt:4815 merged_master.txt:4964
+msgid "Hit {0} to read this message again"
+msgstr "Drücke {0} um die Nachricht zu öffnen"
+
+#: merged_master.txt:4901
 msgid ""
 "A nasty voice in your mind explains the rules of this world: \n"
 "HAHAHAHA HHHHHHAAHAA! HHAHAAHAHAHAHA!\n"
@@ -902,7 +948,7 @@ msgstr ""
 "\n"
 "(Schwachsinn, ok. Aber du hast ja sowieso nicht zugehört.)"
 
-#: merged_master.txt:4911
+#: merged_master.txt:4909
 msgid ""
 "A nasty voice in your mind explains the rules of this world: ASCII life may "
 "be a very limited form of life, but it is still worth living and you "
@@ -916,7 +962,7 @@ msgid ""
 "listen to some metal - honestly, real men NEVER read the manual) "
 msgstr ""
 
-#: merged_master.txt:4919
+#: merged_master.txt:4917
 msgid ""
 "A flower on the path asks himselfs what his name might be - this strong man "
 "passing by. After a few moments, the small plant makes the decision not to "
@@ -924,91 +970,87 @@ msgid ""
 "sun light and water. No need to interfere with the tall people ... "
 msgstr ""
 
-#: merged_master.txt:4966
-msgid "Hit {0} to read this message again"
-msgstr "Drücke {0} um die Nachricht zu öffnen"
-
-#: merged_master.txt:4971 merged_master.txt:5406 merged_master.txt:6038
-#: merged_master.txt:6043
+#: merged_master.txt:4969 merged_master.txt:5404 merged_master.txt:6036
+#: merged_master.txt:6041
 msgid "Map of the World"
 msgstr "Weltkarte"
 
-#: merged_master.txt:5740
+#: merged_master.txt:5738
 msgid "Desert of Doom"
 msgstr "Schicksalswüste"
 
-#: merged_master.txt:6071
+#: merged_master.txt:6069
 msgid "Too hot"
 msgstr "Zu heiß"
 
-#: merged_master.txt:6298
+#: merged_master.txt:6296
 msgid "Alice in the Rabbit Hole"
 msgstr "Alice in der Kaninchenhöhle"
 
-#: merged_master.txt:6330
+#: merged_master.txt:6328
 msgid "Tower of the Jungle Monster"
 msgstr "Turm des Dschungelmonsters"
 
-#: merged_master.txt:6354
+#: merged_master.txt:6352
 msgid "Desert Day"
 msgstr "Wüstentag"
 
-#: merged_master.txt:6376
+#: merged_master.txt:6374
 msgid "A Vast Ocean"
 msgstr "Ein weiter Ozean ..."
 
-#: merged_master.txt:6399
+#: merged_master.txt:6397
 msgid "Method of Rotating Calipers"
 msgstr "Rotierende Messer"
 
-#: merged_master.txt:6435
+#: merged_master.txt:6433
 msgid "Red Temple"
 msgstr "Tempel der Röte"
 
-#: merged_master.txt:6467
+#: merged_master.txt:6465
 msgid "Sandboarding"
 msgstr "Sandboarding"
 
-#: merged_master.txt:6493
+#: merged_master.txt:6491
 msgid "Dungeon without Dragons"
 msgstr "Dungeon ohne Dragons"
 
-#: merged_master.txt:6513
+#: merged_master.txt:6511
 msgid "So what is up ..."
 msgstr "Ey, was geht ab?"
 
-#: merged_master.txt:6557
+#: merged_master.txt:6555
 msgid "Death"
 msgstr ""
 
-#: merged_master.txt:6651
+#: merged_master.txt:6649
 msgid "Volcano"
 msgstr ""
 
-#: merged_master.txt:6679
+#: merged_master.txt:6677
 msgid "shrOoms"
 msgstr ""
 
-#: merged_master.txt:6697
+#: merged_master.txt:6695
 msgid "Meeting some friends"
 msgstr ""
 
-#: merged_master.txt:6823
+#: merged_master.txt:6821
 msgid "Level Starts Here"
 msgstr "Hölle? Hier lang"
 
-#: merged_master.txt:6841
+#: merged_master.txt:6839
 msgid "Editable Sample Level"
 msgstr ""
 
-#: merged_master.txt:6869
+#: merged_master.txt:6867
 msgid "Jump And Run"
 msgstr "Auf und ab"
 
-#: merged_master.txt:6891
+#: merged_master.txt:6889
 msgid "Take the longer way"
 msgstr "Lang oder kurz?"
 
-#: merged_master.txt:6921
+#: merged_master.txt:6919
 msgid "Cave of the Wanderer"
 msgstr "Höhle des Suchenden"

@@ -439,14 +439,14 @@ class LevelEntrance(AnimTile):
             self.game.PopSuspend()
         
         from notification import MessageBox
-        self.game.FadeOutAndShowStatusNotice("""Enter '{1}'? 
+        self.game.FadeOutAndShowStatusNotice(_("""Enter '{1}'? 
 You might die at this place, so be careful. 
 
-Press {0} to risk it and {2} to leave.""".format(
+Press {0} to risk it and {2} to leave.""").format(
                 KeyMapping.GetString("accept"),
                 self._GuessLevelName(),
                 KeyMapping.GetString("escape")),
-            defaults.messagebox_fade_time,(550,90),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_OUT)
+            defaults.messagebox_fade_time,(550,115),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_OUT)
         
         self.game.PushSuspend()
         
@@ -458,7 +458,7 @@ class Blocker(Tile):
     def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None):
         Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img)
         self.need_levels = need_levels
-        self.status_msg = status_msg or "You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur."
+        self.status_msg = status_msg or _("You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur.")
         
     def Interact(self,other):
         if isinstance(other, Player):

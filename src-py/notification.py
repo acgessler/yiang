@@ -92,10 +92,9 @@ class MessageBox(Drawable):
         return True
             
     def _RemoveMe(self):
-        if self.fade:
+        if hasattr(self,"fade"):
             Renderer.RemoveDrawable(self.fade)
-            
-        if self.blur:
+        if hasattr(self,"blur"):
             Renderer.RemoveDrawable(self.blur)
             
         Renderer.RemoveDrawable(self)
@@ -107,7 +106,7 @@ class MessageBox(Drawable):
             
         if self.flags & MessageBox.NO_BLUR_OUT == 0:
             from posteffect import BlurInOverlay
-            a,b = self.fade_time * 0.5, defaults.blur_stop if not hasattr(self, "fade") else self.blur.GetCurrentStrength()
+            a,b = self.fade_time * 0.5, defaults.blur_stop if not hasattr(self, "blur") else self.blur.GetCurrentStrength()
             Renderer.AddDrawable(BlurInOverlay(a,b))
                 
         if self.on_close:

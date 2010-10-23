@@ -12,12 +12,35 @@ msgstr ""
 "Content-Transfer-Encoding: cp1252\n"
 "Generated-By: pygettext.py 1.5\n"
 
+#: ../../src-py\achievements.py:130
+msgid ""
+"You earned the '{0}' achievement\n"
+"\n"
+"This is freaking awesome. But there's more to do. Head over\n"
+"to the 'Achievements' menu and find out which achievements \n"
+"you haven't got yet. \n"
+"        \n"
+"Press {1} to continue.\n"
+msgstr ""
+
 #: ../../src-py\campaign.py:394
 msgid "You completed this level!"
 msgstr ""
 
 #: ../../src-py\campaign.py:396
 msgid "Press {0} to enter {1}"
+msgstr ""
+
+#: ../../src-py\campaign.py:442
+msgid ""
+"Enter '{1}'? \n"
+"You might die at this place, so be careful. \n"
+"\n"
+"Press {0} to risk it and {2} to leave."
+msgstr ""
+
+#: ../../src-py\campaign.py:461
+msgid "You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur."
 msgstr ""
 
 #: ../../src-py\danger.py:47
@@ -517,11 +540,11 @@ msgstr ""
 msgid "Profile: {1} / best result so far: $ {0:.4}"
 msgstr ""
 
-#: ../../src-py\main.py:533
+#: ../../src-py\main.py:535
 msgid "Press {0} to enter Level {1} - '{2}'"
 msgstr ""
 
-#: ../../src-py\main.py:541
+#: ../../src-py\main.py:543
 msgid "Press {0} to return"
 msgstr ""
 
