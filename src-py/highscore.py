@@ -56,7 +56,7 @@ class HighscoreManager:
     
     @staticmethod
     def Initialize():
-        HighscoreManager.file = HighscoreManager.file or os.path.join(defaults.cur_user_profile_dir,"highscore.txt")
+        HighscoreManager.file = HighscoreManager.file or os.path.join(defaults.cur_user_profile_dir,"highscore")
         
         try:
             with open(HighscoreManager.file,"rt") as r:

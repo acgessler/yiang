@@ -110,7 +110,8 @@ class MessageBox(Drawable):
             a,b = self.fade_time * 0.5, defaults.blur_stop if not hasattr(self, "fade") else self.blur.GetCurrentStrength()
             Renderer.AddDrawable(BlurInOverlay(a,b))
                 
-        self.on_close(self.result[-1])
+        if self.on_close:
+            self.on_close(self.result[-1])
         #raise NewFrame()
             
     def GetDrawOrder(self):

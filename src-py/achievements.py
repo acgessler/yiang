@@ -54,22 +54,27 @@ class Achievements:
     
     all = dict()
     have = set()
+    acked = set()
     file = None
     
     @staticmethod
     def Initialize():
-        Achievements.file = Achievements.file or os.path.join(defaults.cur_user_profile_dir,"achievements.txt")
+        Achievements.file = Achievements.file or os.path.join(defaults.cur_user_profile_dir,"achievements")
         
         d = os.path.join( defaults.data_dir,"achievements")
         Achievements.all = dict([f[:-4],None] for f in os.listdir(d ) \
             if os.path.isfile(os.path.join(d,f)) and f[-4:].lower()==".txt") 
         
+        print("All achievements: {0}".format(list(Achievements.all.keys())))
         try:
             with open(Achievements.file,"rt") as r:
                 Achievements.have = Achievements.have | set(CheckIfNonEmpty(f.strip()) for f in r.readlines())
                 
                 print("Current achievements: {0}".format(list(Achievements.have)))
-                print("Known achievements: {0}".format(list(Achievements.all.keys())))
+                
+            with open(Achievements.file+"2","rt") as r:
+                Achievements.acked = Achievements.acked | set(CheckIfNonEmpty(f.strip()) for f in r.readlines())
+
         except:
             print("Found no achievements file, seemingly this is the first try :-)")
             Achievements._Flush()
@@ -98,6 +103,41 @@ class Achievements:
             print("Earn achievement: {0}".format(name))
             
             Achievements._Flush()
+            
+    @staticmethod
+    def CheckAcknowledgeStatus():
+        """Call this regularly when the user can be safely interrupted (i.e.
+        he's not in a game). It checks if the user earned new achievements
+        in the meantime and displays notifications via Acknowledge()"""
+        for ach in Achievements.have:
+            if not ach in Achievements.acked:
+                Achievements.Acknowledge(ach)
+                 
+    @staticmethod
+    def Acknowledge(ach):
+        """Inform the user about his reception of an achievement."""
+        print("Acknowledge achievement: "+ach)
+        
+        from notification import MessageBox
+        from keys import KeyMapping
+        from renderer import Renderer
+        from fonts import FontCache
+        
+        Achievements.acked.add(ach)
+        Achievements._Flush()
+        
+        accepted = (KeyMapping.Get("accept"),)
+        Renderer.AddDrawable( MessageBox(sf.String(_("""You earned the '{0}' achievement
+
+This is freaking awesome. But there's more to do. Head over
+to the 'Achievements' menu and find out which achievements 
+you haven't got yet. 
+        
+Press {1} to continue.
+""").format(ach,KeyMapping.GetString("accept")),
+            Size=defaults.letter_height_game_over,
+            Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+        )), defaults.game_over_fade_time, (560, 150), 0.0, accepted, sf.Color.Yellow, None))
         
     @staticmethod
     def GetInfo(name):
@@ -126,6 +166,9 @@ class Achievements:
         try:
             with open(Achievements.file,"wt") as r:
                 for a in Achievements.have:
+                    r.write(StripInvalidCharacters(a)+"\n")
+            with open(Achievements.file+"2","wt") as r:
+                for a in Achievements.acked:
                     r.write(StripInvalidCharacters(a)+"\n")
         except IOError:
             print("Failed to flush achievements file")

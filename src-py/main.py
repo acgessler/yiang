@@ -378,6 +378,8 @@ Hit {1} to reconsider your decision""").format(
                     
         for image in self.images:
             Renderer.app.Draw(image)
+            
+        Achievements.CheckAcknowledgeStatus()
         
     def _DrawRectangle(self,bb,cola=None,colb=None,scale=1.0):
         shape = sf.Shape()
@@ -587,7 +589,8 @@ Hit {1} to reconsider your decision""").format(
                 else : # event.Key.Code == KeyMapping.Get("accept"):
                     GetBack()
                     return
-                        
+                    
+        have = Achievements.have    
         for y, ach in zip( range(num), sorted( Achievements.all, key=lambda x: Achievements.GetInfo(x)["order"]) ):
             info = Achievements.GetInfo(ach)
 
@@ -597,7 +600,7 @@ Hit {1} to reconsider your decision""").format(
                 height,
                 base_offset[0]+20,
                 base_offset[1]+y*height_spacing+20,
-                sf.Color.Red if self.achievement == y else sf.Color.White )
+                (sf.Color.Red if ach in have else sf.Color(175,0,0)) if self.achievement == y else (sf.Color.White if ach in have else sf.Color(160,160,160)) )
             
             if self.achievement == y:
                 sf_draw_string_with_shadow(
