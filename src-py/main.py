@@ -78,7 +78,7 @@ def get_level_count():
     return level_count
 
 
-def sf_string_with_shadow(text,font_name,size,x,y,color,bgcolor=sf.Color(100,100,100),shadow_diff=0):
+def sf_string_with_shadow(text,font_name,size,x,y,color,bgcolor=sf.Color(0,0,0),shadow_diff=0):
     """Spawn a string with a shadow behind, which is actually the same
     string in a different color, moved and scaled slightly. Return a
     2-tuple (a,b) where a is the shadow string"""
@@ -209,8 +209,10 @@ class MainMenu(Drawable):
         self.subindex = SI_ACHIEVEMENTS
         
     def _OptionsViewHighscore(self):
-        import webbrowser
-        webbrowser.open(defaults.homepage_url+"/highscore.html",)
+        #import webbrowser
+        #webbrowser.open(defaults.homepage_url+"/highscore.html",)
+        
+        self.subindex = SI_HIGHSCORE
 
     def _OptionsResumeGame(self):
         if self.game is None:
@@ -351,6 +353,8 @@ Hit {1} to reconsider your decision""").format(
             self.ShowAchievements()
         elif self.subindex == SI_CREDITS:
             self.ShowCredits()
+        elif self.subindex == SI_HIGHSCORE:
+            self.ShowHighscore()
             
         if self.block is False:
             for event in Renderer.SwallowEvents():
@@ -549,6 +553,120 @@ Hit {1} to reconsider your decision""").format(
             sf.Color.White )
         
         
+    def ShowHighscore(self):
+        """Show online highscore"""
+        
+        import urllib.request
+        import json
+       
+        base_height = 24
+        base_offset = [self.base_x+50,self.base_y]
+        rx,ry = defaults.resolution
+
+        height = int(base_height*defaults.scale[0])-2
+        #height_large = (height*3)/2
+        height_small = height # (height*5)/6
+        width_spacing, height_spacing = 290*defaults.scale[1],int(height*1.2)
+        bb = (base_offset[0],base_offset[1],rx-40,ry-60)        
+        
+        def GetBack():
+            self.subindex = SI_NONE
+            delattr(self,"hs_clock")
+            delattr(self,"hs_json")
+            
+        if not hasattr(self,"hs_clock"):
+            self.hs_clock = sf.Clock()
+            
+                  
+        self._DrawRectangle(bb,scale=min(1.0, self.hs_clock.GetElapsedTime()*3.0))
+        extra = ""
+        
+        if not hasattr(self,"cur_hs_page"):
+            self.cur_hs_page = 0
+            
+        if not hasattr(self,"cur_hs_itemcnt"):
+            self.cur_hs_itemcnt = int(12 * defaults.scale[1]/defaults.scale[0])
+        
+        if not hasattr(self,'hs_json'):
+            page = self.cur_hs_page
+            itemcnt = self.cur_hs_itemcnt 
+            url = defaults.highscore_json_url+"?page={page}&itemcnt={itemcnt}{extra}".format(**locals())
+            print("Send json request: {0}".format(url))
+            self.hs_json = json.loads( urllib.request.urlopen(url).read().decode() )
+        
+        base_offset[0] += int(20*defaults.scale[0])
+        base_offset[1] += int(85*defaults.scale[0])
+        sf_draw_string_with_shadow(_("""This is the list of the people who have devoted their time to master YIANG. 
+Consider them heroes."""),defaults.font_menu,
+            height_small,
+            base_offset[0],
+            base_offset[1]-int(65*defaults.scale[0]),
+            sf.Color.White)
+        
+        sf_draw_string_with_shadow(
+            "   #    {0}    {1}    {2}".format(_("Region"),_("Score"),_("Name")),
+            defaults.font_monospace,
+            height,
+            base_offset[0],
+            base_offset[1],
+            sf.Color.Red,sf.Color.Black)
+        
+        base = self.cur_hs_itemcnt * self.cur_hs_page
+        for y,elem in enumerate(self.hs_json["items"]):
+            rank = base+y+1
+            color = sf.Color(155,155,155)
+            
+            # special coloring for the first three ranks
+            if rank <= 3:
+                color = sf.Color(220,220,220)
+                
+            bgcolor = sf.Color.Black
+                
+            sf_draw_string_with_shadow(
+                    "{0:>4}.    {1:>2}    {2:>9}    {3:<32}".format(rank,elem["country"], elem["score"]/10000, elem["player"]),
+                    defaults.font_monospace,
+                    height,
+                    base_offset[0],
+                    base_offset[1]+(y+2)*height_spacing,
+                    color,
+                    bgcolor)
+            
+        sf_draw_string_with_shadow(_("Page {0} out of {1}\nUse {2} and {3} to change").format(
+                self.cur_hs_page,
+                self.hs_json["pages"],
+                KeyMapping.GetString("menu-left"),
+                KeyMapping.GetString("menu-right") 
+            ),defaults.font_menu,
+            height_small,
+            base_offset[0],
+            base_offset[1]+(y+2)*height_spacing+int(40*defaults.scale[0]),
+            sf.Color.White)
+
+            
+        for event in Renderer.SwallowEvents():
+            if event.Type == sf.Event.KeyPressed:
+            
+                if event.Key.Code == KeyMapping.Get("menu-right"):
+                    self.cur_hs_page += 1
+                    try:
+                        self.cur_hs_page = min(self.cur_hs_page, self.hs_json["pages"]-1)
+                        delattr(self,"hs_json")
+                    except AttributeError:
+                        pass
+
+                elif event.Key.Code == KeyMapping.Get("menu-left"):
+                    self.cur_hs_page -= 1
+                    self.cur_hs_page = max(self.cur_hs_page,0)
+                    try:
+                        delattr(self,"hs_json")
+                    except AttributeError:
+                        pass
+                    
+                else: 
+                    GetBack()
+                    return
+        
+        
     def ShowAchievements(self):
         """Show a list of all achievements, highlight those earned by the player"""
 
@@ -577,17 +695,13 @@ Hit {1} to reconsider your decision""").format(
         for event in Renderer.SwallowEvents():
             if event.Type == sf.Event.KeyPressed:
                 
-                if event.Key.Code == KeyMapping.Get("escape"):
-                    GetBack()
-                    return
-
-                elif event.Key.Code == KeyMapping.Get("menu-down"):
+                if event.Key.Code == KeyMapping.Get("menu-down"):
                     self.achievement = (self.achievement+1)%(num)
 
                 elif event.Key.Code == KeyMapping.Get("menu-up"):
                     self.achievement = (self.achievement-1)%(num)
 
-                else : # event.Key.Code == KeyMapping.Get("accept"):
+                else:
                     GetBack()
                     return
                     
@@ -601,7 +715,7 @@ Hit {1} to reconsider your decision""").format(
                 height,
                 base_offset[0]+20,
                 base_offset[1]+y*height_spacing+20,
-                (sf.Color.Red if ach in have else sf.Color(175,0,0)) if self.achievement == y else (sf.Color.White if ach in have else sf.Color(160,160,160)) )
+                (sf.Color.Red if ach in have else sf.Color(175,0,0)) if self.achievement == y else (sf.Color.White if ach in have else sf.Color(160,160,160)))
             
             if self.achievement == y:
                 sf_draw_string_with_shadow(

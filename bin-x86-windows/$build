@@ -5,4 +5,8 @@ push files (expand Python31.zip)
 
 group wc *.dll
 	push files ~
+end
 
+group wc *.pyd
+	push files ~
+end
