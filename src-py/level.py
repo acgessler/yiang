@@ -102,7 +102,6 @@ class Level:
         ))
         
         self.audio_section = audio_section or "level_{0}".format(self.level)
-        self._SetupAudioSection()
         
         # pre-defined ('well-known') stats entries
         self.stats = {"deaths":[0],"s_kills":[0],"e_kills":[0],"l_kills":[0],"score":[0.0],"achievements":[0]}
@@ -206,7 +205,7 @@ class Level:
         return tile
     
     def _SetupAudioSection(self):
-        if self.audio_section == "current":
+        if self.audio_section == "current" or self.game.mode == self.game.BACKGROUND:
             return
         
         from audio import BerlinerPhilharmoniker

@@ -379,7 +379,8 @@ Hit {1} to reconsider your decision""").format(
         for image in self.images:
             Renderer.app.Draw(image)
             
-        Achievements.CheckAcknowledgeStatus()
+        if self.m_clock.GetElapsedTime() > 2:
+            Achievements.CheckAcknowledgeStatus()
         
     def _DrawRectangle(self,bb,cola=None,colb=None,scale=1.0):
         shape = sf.Shape()

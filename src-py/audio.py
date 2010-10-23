@@ -162,7 +162,7 @@ class BerlinerPhilharmoniker:
         pass
         
     @classmethod    
-    def SetAudioSection(cls,name):
+    def SetAudioSection(cls,name,push=False):
         """Set the current audio track section. The class loops all
         the tracks within the current section until another
         section is choosen. Raise KeyError if this audio section
@@ -174,13 +174,17 @@ class BerlinerPhilharmoniker:
             if name == cls.section:
                 return # keep running section intact
                 
+            cls.status_cache.setdefault(name,{})
             cls.status_cache.setdefault(cls.section,{})["current"] = cls.current_music
             cls.status_cache[cls.section]["current_idx"] = cls.current_index
+                
+            if push:
+                cls.status_cache[name]["previous"] = cls.section
                 
             cls.section = name
             old = cls.current_music
             
-            if cls.section in cls.status_cache:
+            if "current" in cls.status_cache[cls.section]:
                 cls.current_music = cls.status_cache[cls.section]["current"]
                 cls.current_index = cls.status_cache[cls.section]["current_idx"]
                 #if cls.current_music:
@@ -192,7 +196,6 @@ class BerlinerPhilharmoniker:
             if old and cls.current_music_name != cls.playlist[name][cls.current_index]:
                 old.Stop()
             
-            s = cls.playlist[name]
             print("Set audio section: {0}".format(name))
     
     @classmethod
@@ -213,18 +216,22 @@ class BerlinerPhilharmoniker:
                 except KeyError:
                     print("Audio section {0} does not exist".format(cls.section))
                     return
+                
+                plist = cls.playlist[cls.section]
                        
-                cls.current_index = random.randint(0,len(cls.playlist[cls.section])-1) \
-                    if defaults.audio_randomize_playlist is True \
-                    else (cls.current_index +1) % len(cls.playlist[cls.section])
+                cls.current_index = (cls.current_index +1)
+                if cls.current_index == len(plist):
+                    if "previous" in cls.status_cache[cls.section]:
+                        cls.SetAudioSection(cls.status_cache[cls.section]["previous"])
+                        return
+                    
+                    cls.current_index %= len(cls.playlist[cls.section])
+                    
                 path = cls.playlist[cls.section][cls.current_index]
                 cls.current_music_name = path
-                 
-                #if path.find("/") == -1 and path.find("\\") == -1:
-                #    path = os.path.join(defaults.data_dir,"sounds",path)
                     
                 cls.current_music = SoundEffectCache.Get(path)
-                if cls.current_music is None:#cls.current_music.OpenFromFile(path) is False:
+                if cls.current_music is None:
                     print("Can't load track {2}-{0} \ {1} from playlist, this is a bit sad".format(
                         cls.current_index,path,cls.section
                     ))

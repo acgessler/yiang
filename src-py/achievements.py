@@ -139,6 +139,9 @@ Press {1} to continue.
             Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
         )), defaults.game_over_fade_time, (560, 150), 0.0, accepted, sf.Color.Yellow, None))
         
+        from audio import BerlinerPhilharmoniker
+        BerlinerPhilharmoniker.SetAudioSection("achievement_earned",True)
+        
     @staticmethod
     def GetInfo(name):
         """Get a dict with information on a specific achievements. Entries:
