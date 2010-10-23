@@ -242,7 +242,7 @@ class MainMenu(Drawable):
         (_("Campaign"), _OptionsNewCampaignGame, "You will die",1.0,False),
         (_("Load"), _OptionsLoadGame, "You will die soon",0.7,False),
         (_("Save"), _OptionsSaveGame, "You will die soon",0.5,False),
-        (_("Quick Game"), _OptionsNewGame, "You will die",1.0,False),
+        (_("Quick Game"), _OptionsNewGame, "You will die",0.85,False),
         (_("Start Tutorial"), _OptionsTutorial, "You will die",0.5,False),
         (_("Choose Level"), _OptionsNewGameChoose, "Bad idea",0.35,False),
         (_("Achievements"), _OptionsShowAchievements, "Updates!",0.7,False),
@@ -322,7 +322,7 @@ Hit {1} to reconsider your decision""").format(
         Renderer.SetClearColor(sf.Color.Black)
 
         rx,ry = defaults.resolution
-        bb = (-10,160,350*defaults.scale[1],ry-60)    
+        bb = (-10,160,355*defaults.scale[1],ry-60)    
 
         if not hasattr(self,"m_clock"):
             self.m_clock = sf.Clock()
@@ -696,6 +696,9 @@ def LaunchMenu():
         Renderer.AddDrawable(DummyMusicPlayer())
         BerlinerPhilharmoniker.SetAudioSection("menu")
 
+    from posteffect import BlurInOverlay, FadeInOverlay
+    Renderer.AddDrawable(BlurInOverlay(2.0,0.0))
+    Renderer.AddDrawable(FadeInOverlay(2.5,0.0))
     Renderer.AddDrawable(MainMenu())
 
 
