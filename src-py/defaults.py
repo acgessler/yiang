@@ -36,7 +36,7 @@ import os
 
 version = 2.0
 revision = 607
-server_name = "www.greentoken.de"
+server_name = "www.yiang-thegame.com"
 master_locale="en"
 resolution = [1280, 850]
 fullscreen = False
