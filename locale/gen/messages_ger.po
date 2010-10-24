@@ -901,7 +901,7 @@ msgstr "Hölle? Hier lang"
 
 #: merged_master.txt:3910
 msgid "Jumper"
-msgstr ""
+msgstr "Jumper"
 
 #: merged_master.txt:3939
 msgid "Frozen Cave"
