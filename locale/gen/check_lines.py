@@ -1,5 +1,5 @@
-#! /usr/bin/env python
-#Check if some strings are not translated
+#!/usr/bin/env python3
+# Check if some strings are not translated
 
 #---Settings START---
 
