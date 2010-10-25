@@ -626,7 +626,9 @@ Hit either {1} (yes) or {2} (no) to proceed.
             
             try:
                 self.hs_json = json.loads( urllib.request.urlopen(url).read().decode() )
-            except:
+            except Exception as a:
+                
+                print("Failure: {0}".format(a))
                 
                 def on_close(a):
                     pass
