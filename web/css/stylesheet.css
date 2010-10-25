@@ -54,7 +54,7 @@ div.header {
     height: 26px;
     BACKGROUND-COLOR: #707070;
     color: #cdcdcd;
-    z-index: 0;
+    z-index: 1;
     PADDING: 5px 5px 5px 5px;
 }
 
@@ -83,30 +83,32 @@ div.header {
 }
 
 div.main {
-    width: 428px;
+    width: 728px;
+	height: 100%;
     BACKGROUND-COLOR: #101010;
-    COLOR: #40cd40;
+    COLOR: #505050;
     TEXT-ALIGN: left;
     TEXT-DECORATION: none;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 100px;
+    margin-top: 250px;
     opacity: 0.75;
     PADDING: 10px 15px 10px 15px;
     BORDER: #404040 4px solid;
     font-family: "Georgia", "Arial", serif;
-    z-index: 1;
+    z-index: 5;
 }
 
 .main_wide {
-    width: 665px;
+    width: 745px;
+	height: 100%;
     BACKGROUND-COLOR: #101010;
-    COLOR: #40cd40;
+    COLOR: #505050;
     TEXT-ALIGN: left;
     TEXT-DECORATION: none;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 100px;
+    margin-top: 250px;
     opacity: 0.75;
     PADDING: 10px 15px 10px 15px;
      BORDER: #404040 4px solid;

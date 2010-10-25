@@ -1,19 +1,35 @@
 <out> = Level(<level>,<game>,<raw>,color=(30,0,0))
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-   gPL                                                            _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                             gE2                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-            gPL                                                   _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                                                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                             rE2               rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-                                 _A1_A0_A0_A0_A2                  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-            _S0               _A1_B0_B0_B0_A5                  rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                                                                                                                         
-            _A1            _A1_B0_B0_B0_B0_A5                     _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                                                                                                                                           
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_B0_B0_B0_B0_B0_B0_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA                 
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA       
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA       
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA  
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA       
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA  
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA       
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA  
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA       
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA   
+rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA  

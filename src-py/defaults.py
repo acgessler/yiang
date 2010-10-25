@@ -38,6 +38,7 @@ version = 2.0
 revision = 607
 server_name = "www.yiang-thegame.com"
 master_locale="en"
+allow_network_use=False
 resolution = [1280, 850]
 fullscreen = False
 resizable = False
@@ -208,8 +209,8 @@ font_machines = os.path.join(data_dir, "fonts", "VeraMono.ttf")
 credits_string = "(c) 2010 Alexander Christoph Gessler"
 resolution_base = [1280, 850]
 
-homepage_url = "http://"+server_name+"/yiang"
-highscore_json_url = "http://"+server_name+"/yiang/php/highscore.php"
+homepage_url = "http://"+server_name
+highscore_json_url = "http://"+server_name+"/php/highscore.php"
 
 # -----------------------------------------------------------------------------
 # derived values (not configurable settings!), do not change. you have been warned.

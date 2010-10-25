@@ -47,7 +47,9 @@ class KeyMapping:
         "escape"        : "Escape",
         "accept"        : "Return",
         "interact"      : "Return",
-        "shoot"         : "LControl"
+        "shoot"         : "LControl",
+        "yes"           : "Y",
+        "no"            : "N",
     }
 
     @classmethod

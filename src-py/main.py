@@ -553,6 +553,29 @@ Hit {1} to reconsider your decision""").format(
             sf.Color.White )
         
         
+    def AskForNetworkUse(self):
+        """Ask the user if they want to allow us to connect to yiang-thegame.com."""
+        
+        accepted = (KeyMapping.Get("yes"),KeyMapping.Get("no"),KeyMapping.Get("accept"))
+        def on_close(a):
+            if a == accepted[0]:
+                defaults.allow_network_use = True
+            elif a == accepted[1]:
+                defaults.allow_network_use = False
+        
+        Renderer.AddDrawable( MessageBox(sf.String(_("""Some features of this game require an internet connection.
+        
+Do you want to allow YIANG to connect to the master server ({0})
+to automatically obtain updates and updated highscore tables? Note that this is
+a permanent setting. This annoying dialog won't bother you again if you opt-in.
+
+Hit either {1} (yes) or {2} (no) to proceed.
+""".format(defaults.server_name,KeyMapping.GetString("yes"),KeyMapping.GetString("no"))),
+            Size=defaults.letter_height_game_over,
+            Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+        )), defaults.game_over_fade_time, (750, 150), 0.0, accepted, sf.Color.Black, on_close))
+        
+        
     def ShowHighscore(self):
         """Show online highscore"""
         
@@ -571,8 +594,16 @@ Hit {1} to reconsider your decision""").format(
         
         def GetBack():
             self.subindex = SI_NONE
-            delattr(self,"hs_clock")
-            delattr(self,"hs_json")
+            try:
+                delattr(self,"hs_clock")
+                delattr(self,"hs_json")
+            except AttributeError:
+                pass
+            
+        if not defaults.allow_network_use:
+            self.subindex = SI_NONE
+            self.AskForNetworkUse()
+            return
             
         if not hasattr(self,"hs_clock"):
             self.hs_clock = sf.Clock()
@@ -592,7 +623,22 @@ Hit {1} to reconsider your decision""").format(
             itemcnt = self.cur_hs_itemcnt 
             url = defaults.highscore_json_url+"?page={page}&itemcnt={itemcnt}{extra}".format(**locals())
             print("Send json request: {0}".format(url))
-            self.hs_json = json.loads( urllib.request.urlopen(url).read().decode() )
+            
+            try:
+                self.hs_json = json.loads( urllib.request.urlopen(url).read().decode() )
+            except:
+                
+                def on_close(a):
+                    pass
+                
+                accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
+                Renderer.AddDrawable( MessageBox(sf.String(_("""Failure retrieving highscore list from the server"""),
+                    Size=defaults.letter_height_game_over,
+                    Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
+                )), defaults.game_over_fade_time, (550, 50), 0.0, accepted, sf.Color.Black, on_close))
+                
+                GetBack()
+                return
         
         base_offset[0] += int(20*defaults.scale[0])
         base_offset[1] += int(85*defaults.scale[0])
