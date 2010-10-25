@@ -570,7 +570,7 @@ function loadMapFromServerAsync(index){
 		loadMap(map_cache[index],index);
 		return;
 	}
-    var url = '/yiang/levels/' + index + ".txt";
+    var url = '/levels/' + index + ".txt";
     $.ajax({
         url: url,
         data: {},
