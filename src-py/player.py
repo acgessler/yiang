@@ -150,9 +150,10 @@ class Player(Entity):
                 Drawable.__init__(self)
                 self.time = time
                 self.timer = sf.Clock()
+                outer.unkillable += 1
                 
             def _RemoveMe(self):
-                outer.unkillable -= 1
+                outer.unkillable = max(0, outer.unkillable- 1)
                 try:
                     delattr( outer, "flash_halo" )
                     outer.protectors.remove(self)
@@ -168,7 +169,6 @@ class Player(Entity):
                     
         
         print("Set respawn protection on {0}".format(self))
-        self.unkillable += 1
         
         img = self._GetHaloImage("halo_protect.png")
         if not img is None:

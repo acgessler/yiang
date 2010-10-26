@@ -77,7 +77,7 @@ class Mine(AnimTile):
         if self.GetState() == 1:
             if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
                 self.Set(self.GetNumFrames())
-                if not defaults.debug_godmode:
+                if not defaults.debug_godmode and not self.game.mode == Game.BACKGROUND:
                     if self.DistanceInnerRadius(self.__other):
                         self.game.Kill(self.GetVerboseName(),self.__other)
                 self.SetState(0)
@@ -113,7 +113,7 @@ class Heat(AnimTile):
         if not isinstance(other,Player):
             return Entity.BLOCK
         
-        if self.heat_activated:
+        if self.heat_activated and self.myplayer.heat_counter > 0:
             return Entity.ENTER
         else:
             if self.DistanceInnerRadius(other):
@@ -160,16 +160,14 @@ class Heat(AnimTile):
                         self.game.Kill(self.GetVerboseName(),self.myplayer,on_close_mb_extra=garbagify_ppfx)
                         return
                         
-                if hasattr(self.myplayer,"oldcolor"):
-                    self.myplayer.heat_counter -= 1
-                    if self.myplayer.heat_counter == 0:
-                        self.myplayer.SetColor(self.myplayer.oldcolor)
-                        delattr(self.myplayer,"oldcolor")
-                        
-                        self.level.RemovePostFX(Heat.POSTFX_NAME)
-                    
-                    
+                self.myplayer.heat_counter -= 1
                 self.heat_activated = False
+                if self.myplayer.heat_counter == 0:
+                    self.myplayer.SetColor(self.myplayer.oldcolor)
+                    delattr(self.myplayer,"oldcolor")
+                    
+                    self.level.RemovePostFX(Heat.POSTFX_NAME)
+                    
     
     def GetVerboseName(self):
         return _("a terribly hot stone")
