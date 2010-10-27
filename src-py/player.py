@@ -531,6 +531,12 @@ class Player(Entity):
         
             n = n+1
             ab = old_ab[0]+dx*n,old_ab[1]+dy*n,old_ab[2]+dx*n,old_ab[3]+dy*n
+            
+            # (hack) temporarily set this bb as our own so colliders can rely on GetBoundingBox[Abs]() and GetPosition().
+            # store a tuple to trigger problems if self.pos is accessed or modified by other means
+            # than the aforementioned methods. This would indicate that this hack might have unwanted
+            # side-effects.
+            self.pos = (old_ab[0]+dx*n,old_ab[1]+dy*n)
         
             for collider in self.game.GetLevel().EnumPossibleColliders(ab):
                 if collider is self: # or collider in all:
@@ -708,10 +714,7 @@ class Player(Entity):
         self.extra_vel = (x+vel[0],y+vel[1])
 
     def GetBoundingBox(self):
-        # Adjust the size of the bb slightly to increase the likelihood
-        # to pass tight tunnels.
         return self.GetBoundingBoxForPos(self.pos)
-    
     
     # XXX these are called a lot, so they need to be fast    
     def GetBoundingBoxForPos(self,pos):

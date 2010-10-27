@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('shrOoms'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=3,lower_offset=0.0,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('shrOoms'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=3,lower_offset=0.0)
 _IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_INyINyINyINyINyINyINyINyINyINyINyIN
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEdDAyIN
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  oA6oA6oA6oA6oA6oA6oA6.  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEdDAyIN

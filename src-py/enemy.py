@@ -269,7 +269,7 @@ class NaughtyPongPong(Enemy):
         pos = self.pos
         self.SetPosition( (pos[0], pos[1] + vec ) )
         
-        # check for possible colliders on the bottom to determine when we
+        # Check for possible colliders on the bottom to determine when we
         # are touching the ground
         
         ab = self.GetBoundingBoxAbs()  
