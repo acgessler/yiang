@@ -1087,11 +1087,11 @@ class Entity(Drawable):
         
     def _HitsMyRight(self,ab,cd):
         return cd[2] >= ab[2] >= cd[0] and (ab[1] <= cd[1] <= ab[3] 
-            or cd[1] <= ab[1] <= cd[3])
+            or cd[1] <= ab[1] <= cd[3] and min( ab[3], cd[3]) - max(ab[1], cd[1]) >= 0.1)
         
     def _HitsMyLeft(self,ab,cd):
         return cd[2] >= ab[0] >= cd[0] and (ab[1] <= cd[1] <= ab[3] 
-            or cd[1] <= ab[1] <= cd[3])
+            or cd[1] <= ab[1] <= cd[3] and min( ab[3], cd[3]) - max(ab[1], cd[1]) >= 0.1)
 
     def _BBCollide(self,rect,mycorner):
         """Collide the first axis-aligned BB (x,y,x2,y2) with the
