@@ -87,6 +87,9 @@ FULL NOVEL
 	$ sudo apt-get install libsfml-dev 
 	(+ all the libsfml-.... packages if necessary)
 
+	NOTE: try to get freetype 2.39 for best font quality. freetype 2.4x
+	looks uglier for some reason.
+
 3.) Get PySFML 1.5 for Python 3.x. Taking it from the sf.net page is at the time of 
     this writing (2010-07-22) the only way to do it.
 
