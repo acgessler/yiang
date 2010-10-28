@@ -374,7 +374,7 @@ class SmallBob(Enemy):
         self.accel_time = accel_time
 
     def GetVerboseName(self):
-        return "Small Bob"
+        return _("Small Bob")
     
     def GetDrawOrder(self):
         return 2100
@@ -470,8 +470,8 @@ class SmallBob(Enemy):
 from weapon import Weapon
 class SmallRobot(SmallTraverser):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, **kwargs):
-        SmallTraverser.__init__(self, *args, verbose=_("a Nifty Robot Intruder"), halo_img=None, **kwargs)
+    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, verbose=_("a Nifty Robot Intruder"), **kwargs):
+        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
         self.shots = shots
@@ -513,6 +513,53 @@ class SmallRobot(SmallTraverser):
             self.weapon.Shoot((self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.shot_ofs_y),
                 (self.vel/abs(self.vel),0),
                 self.color,[self])
+            self.last_shot = id
+            
+            
+
+class Turret(Enemy):
+    
+    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.1, shots=5, shot_ofs_y=0.55, **kwargs):
+        AnimTile.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
+        self.weapon = Weapon()
+        self.cooldown_time = cooldown_time
+        self.shots = shots
+        self.shot_delta = shot_delta
+        self.shot_ofs_y = shot_ofs_y
+        self.last_shot = -1
+        
+    def SetGame(self,game):
+        self.game = game
+        self.weapon.SetGame(game)
+        
+    def SetLevel(self,level):
+        self.level = level
+        self.weapon.SetLevel(level)
+        
+    def GetVerboseName(self):
+        return _("Turret")
+        
+    def _Die(self):
+        # We CANNOT die.
+        return
+    
+    def Interact(self,other):
+        return Entity.ENTER
+    
+    def Update(self, time_elapsed, time):
+        Enemy.Update(self, time_elapsed, time)
+        if not self.game.IsGameRunning():
+            return 
+        
+        if not hasattr(self,"shot_timer") or self.shot_timer.GetElapsedTime() > self.cooldown_time:
+            self.shot_timer = sf.Clock()
+            
+        id = int( self.shot_timer.GetElapsedTime()/self.shot_delta )
+        if id == 0 and self.last_shot == self.shots-1:
+            self.last_shot = -1
+            
+        if id < self.shots and id > self.last_shot:
+            self.weapon.Shoot((self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.shot_ofs_y),(1.0,0),self.color,[self])
             self.last_shot = id
         
         

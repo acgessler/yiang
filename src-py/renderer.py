@@ -19,6 +19,7 @@
 
 # Python core
 import os
+import platform
 
 # PySFML
 import sf
@@ -184,7 +185,9 @@ class Renderer:
         settings = sf.WindowSettings()
         settings.DepthBits = 0
         settings.StencilBits = 0  
-        settings.AntialiasingLevel = defaults.antialiasing_level 
+        settings.AntialiasingLevel = defaults.antialiasing_level
+        
+        print("Running: {0}, {1}, {2}".format(platform.platform(),platform.machine(),platform.architecture()[0])) 
             
         # Create main window
         dm = sf.VideoMode.GetDesktopMode()
@@ -198,7 +201,7 @@ class Renderer:
                     min(defaults.resolution[0], dm.Width),
                     min(defaults.resolution[1], dm.Height)
                 ),
-                defaults.caption, tb, settings)
+                defaults.caption + " v{0}.{1} ({2} Bit Build)".format(defaults.version,defaults.revision, platform.architecture()[0][0:2]), tb, settings)
 
 
         # Setup a dummy icon, I might add a proper one later

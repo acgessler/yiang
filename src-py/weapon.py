@@ -38,6 +38,7 @@ class Shot(Tile):
         self.speed = 1.0
         self.onhit = lambda x:True
         self.protected = []
+        self.dir = (1.0,0.0)
         
     def SetDirection(self,dir):
         """Set the target direction for the shot"""

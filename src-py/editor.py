@@ -3195,7 +3195,7 @@ class EditorMenu(Drawable):
 def main():
     """Main entry point to the editor application"""
     
-    defaults.caption = "YIANG-ED 0.1"
+    defaults.caption = "YIANG-ED "
     defaults.resolution[0] = 1450;
     defaults.resizable = True
 
