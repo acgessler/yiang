@@ -519,14 +519,15 @@ class SmallRobot(SmallTraverser):
 
 class Turret(Enemy):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.1, shots=5, shot_ofs_y=0.55, **kwargs):
+    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=(0.3,0.55), angle_limit=70, **kwargs):
         AnimTile.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
         self.shots = shots
         self.shot_delta = shot_delta
-        self.shot_ofs_y = shot_ofs_y
+        self.shot_ofs = shot_ofs
         self.last_shot = -1
+        self.cos_angle_limit = math.cos( math.radians( angle_limit ) )
         
     def SetGame(self,game):
         self.game = game
@@ -551,6 +552,16 @@ class Turret(Enemy):
         if not self.game.IsGameRunning():
             return 
         
+        player,pos = self.game._GetAPlayer(),self.pos
+        if player:
+            ppos = player.pos
+            if ppos[0] < pos[0]:
+                if self.state == 0:
+                    self.SetState(1)
+            else:
+                if self.state == 1:
+                    self.SetState(0)
+        
         if not hasattr(self,"shot_timer") or self.shot_timer.GetElapsedTime() > self.cooldown_time:
             self.shot_timer = sf.Clock()
             
@@ -559,7 +570,17 @@ class Turret(Enemy):
             self.last_shot = -1
             
         if id < self.shots and id > self.last_shot:
-            self.weapon.Shoot((self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.shot_ofs_y),(1.0,0),self.color,[self])
+            dir = (1.0,0)
+            if player:
+                dir = (ppos[0]-pos[0],ppos[1]-pos[1])
+                dl  = (dir[0]**2 + dir[1]**2) **0.5
+                dir = (dir[0]/dl,dir[1]/dl)
+                
+                # implement angle limit
+                if abs(dir[0]) < self.cos_angle_limit:
+                    return
+                
+            self.weapon.Shoot((self.pos[0]+self.shot_ofs[0],self.pos[1]+self.shot_ofs[1]),dir,self.color,[self])
             self.last_shot = id
         
         

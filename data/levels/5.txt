@@ -1,15 +1,15 @@
-<out> = Level(<level>,<game>,<raw>,color=(15, 0, 15),vis_ofs=0,autoscroll_speed=(0.25, 0),name=_('Meeting some friends'),scroll=2,)
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  gE2_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9rE2.  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  _E0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yE2gA5yA6.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5yA6.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  gA1_A5.  gE2.  rA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  _A1bB0_A5.  .  .  bA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  bA1_B0_B0_A5bE2rE2.  rA5.  .  .  .  .  bE0.  rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  gTB.  .  .  .  .  .  .  .  _A1rB0gB0_B0_A5.  rKEgTAbA5.  .  .  .  rE0.  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  _E0.  bA1_B0yB0_B0rB0_A5.  .  .  gA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.1, 0),name=_('Meeting some friends'),color=(15, 0, 15),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=3,lower_offset=0.0)
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  gE2.  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gRD
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _CC_A9.  .  .  gE2.  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gE2.  .  .  gE2
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9dE2.  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gRD
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gRDdDO.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  .  .  gE2.  .  .  .  .  .  .  gE2.  .  gE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  .  .  .  .  .  .  .  .  gS1
+.  .  .  .  .  .  .  .  dE0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _BO.  .  .  .  .  .  .  .  _BO.  .  .  .  .  .  .  gE2.  .  .  .  .  .  gE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1_A0_A0_A0_A0_A0_A0_A0_A0_A0gS1
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  dE2_A5_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gE2.  .  .  .  .  .  .  .  .  gRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1gS1_A0_A0_A0_A0_A0_A0_A0gS1gS1
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gE2_A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0gS1gS1_A0_A0_A0gS1gS1_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  gA1_A5.  gE2.  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  gE2.  _A0_A0_A0_A0_A0_A0.  gS1_A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0gS1_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  gA1_B0_A5.  .  .  .  _A9BTB.  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0.  .  _A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0gS1_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  gA1_B0_B0_A5dE2dE2.  .  _A9.  .  .  .  dE0.  rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DAgS1.  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0.  .  _A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0gS1_A0_A0_A0_A0
+.  gTB.  .  .  .  .  .  .  .  gA1_B0_B0_B0_A5.  dKEgTA.  _A9.  .  .  dE0.  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DAgS1.  .  .  cMJ.  .  .  _A0_A0_A0_A0_A0_A0_I0_I0_A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0gS1gS1_A0_A0_A0gS1gS1_A0
+.  .  .  .  .  .  .  _E0.  gA1_B0_B0_B0_B0_A5.  .  .  .  _A9.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DAgS1.  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0bAFbAF_A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0gS1gS1gS1gS1gS1_A0_A0
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DAbAFbAFbAF_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0bAFbAF_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0bAFbAFbAFbAFbAFbAFbAFbAFbAFbAF_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0bAFbAFbAFbAFbAFbAFbAF_A0_A0_A0_A0_A0_A0bAFbAF_A0_A0_A0bAFbAF_A0_A0_A0_A0bAFbAF_A0_A0_A0_A0_A0_A0bAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAFbAF
