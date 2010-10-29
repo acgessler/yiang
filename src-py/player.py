@@ -841,7 +841,7 @@ class KillAnimStub(Tile):
     the player is killed."""
 
     def __init__(self, text, index=None):
-        Tile.__init__(self, random.choice(text.split("\n\n")),draworder=11000)
+        Tile.__init__(self, random.choice(text.split("\n\n")),draworder=11000,rsize=random.randint(6,25))
 
         self.ttl = 0
         
