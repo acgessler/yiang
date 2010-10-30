@@ -6,4 +6,4 @@ invert_screen.sfx
 underwater.sfx
 heat.sfx
 menu2.sfx
-
+dimmed_colors.sfx

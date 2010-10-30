@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Red Temple'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=15,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Red Temple'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=15,scroll=3,lower_offset=0.0)
 
 
 

@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Hell is here'),color=(0, 0, 40),postfx=[('ingame1.sfx', ())],vis_ofs=6,scroll=2,lower_offset=2.6,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Hell is here'),color=(0, 0, 40),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=6,scroll=2,lower_offset=2.6)
 
 
 
