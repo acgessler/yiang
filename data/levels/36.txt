@@ -1,28 +1,20 @@
-<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),name=_('Method of Rotating Calipers'),)
-.  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
-.  rA6_S0_S0_S0rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  .  .  .  .  .  bE2.  .  .  .  bE2.  .  .  .  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6
-.  rA6_S0_S0_S0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF.  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6
-.  rA6_S0_S0_S0.  .  .  .  .  .  .  .  yD9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6
-.  rA6_S0_S0_S0rA5.  .  rA6rA5rA5.  .  rA5rA5rA5rA5rA5rA5.  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6bE1.  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  _KErA6
-.  rA6rA5rA5rA5rA5.  .  .  .  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S0_S0rA6.  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6
-.  rA6.  .  .  .  .  .  .  .  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S0_S0rA6.  .  .  .  rA5.  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6
-.  rA6.  .  .  rA5.  .  .  .  .  _CE.  rA5.  .  .  .  .  _CD.  .  .  .  .  .  rA6rA6rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S0_S0rA6.  .  .  .  rA5.  .  .  .  .  .  .  yDAyDAyDAyDAyDArA6
-.  rA6.  .  .  rA5.  .  .  .  .  .  .  rA5.  _S2_S2.  rA6.  .  .  .  .  .  rA6_S0_S0_S0_S0rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S0_S0rA6.  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  .  .  rA6
-.  rA6.  .  .  rA5_AM_AM_AM_AM_AM.  .  rA5.  _S2_S2.  rA6.  .  .  .  .  rA6.  .  0E6.  .  .  rA6.  .  .  .  .  .  rA6rA6rA6rA6.  .  .  .  .  .  .  rA6rA6rA6.  .  .  bE1rA5.  .  .  .  _CD.  .  .  .  .  .  .  rA6
-.  rA6.  .  .  rA5rA5rA5rA5rA5rA5rA5rA5rA5.  _S2_S2.  rA6rA6rA6rA6rA6rA6.  .  .  0E6.  .  .  .  rA6.  .  .  .  rA6bE2.  .  .  rA6.  .  .  .  .  .  rA6rA6rA6.  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  yDAyDArA6
-.  rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  0E6.  .  .  .  .  rA6rA6rA6rA6.  .  yDI.  .  .  rA6rA6rA6.  .  .  rA6rA6rA6.  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  yDAyDArA6
-.  rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  .  .  rA6rA6rA6rA6.  .  .  .  rA5.  .  .  .  rA6rA6rA6rA6_DO_DOyDAyDArA6
-.  rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6.  .  .  .  rA5.  .  .  .  yDAyDAyDAyDA.  .  yDAyDArA6
-.  rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6.  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6bE1.  .  .  rA5.  .  .  .  yDAyDAyDAyDA.  .  yDAyDArA5
-.  rA6.  .  .  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6.  _CD.  .  .  rA6.  .  .  .  .  .  .  rA5.  .  rA5.  .  .  rA6rA6rA6rA6rA6rA6rA6.  .  .  .  .  _MJ.  .  .  yDAyDAyDAyDA.  .  .  _FIrA5
-.  rA6bPLrRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA6.  .  .  .  .  rA60DAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDA0DA0DArA6rA6rA6rA6rA6rA6rA6rA6.  .  .  .  .  .  .  .  .  yDAyDAyDAyDA.  .  .  .  rA5
-.  rA6.  .  .  .  .  .  .  .  .  .  .  .  _W0.  _AM_AM_AM_AM_AM_AM_AM.  rA6.  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5
-.  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
-
-
-
-
-
-
-
-
+<out> = Level(<level>,<game>,<raw>,color=(0, 0, 0),name=_('Method of Rotating Calipers'))
+rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6_S0_S0_S0rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  .  .  .  .  .  bE2.  .  .  .  bE2.  .  .  .  .  .  _S0rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6rA6rA6
+rA6rA6_S1_S0_S1.  .  .  bE2.  bE2.  .  .  .  .  .  .  bRD.  .  .  bRD.  _CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF_CF.  .  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6
+rA6rA6_S1_S1_S1.  .  .  .  .  .  .  .  yD9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA5yDAyDAyDAyDA~DK.  .  .  bE2bE2.  .  rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  rA5.  .  rA6rA5rA5.  .  rA5rA5rA5rA5rA5rA5.  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rAC.  .  rACrA5yDAyDAyDAyDA.  .  .  .  .  .  .  _KErA6rA6rA6rA6rA6rA6rA6
+rA6rA6rA5rA5rA5rA5.  .  .  .  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S1_S1rA6bE1.  .  .  rA5yDAyDAyDAyDA.  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6_E4.  .  .  .  .  .  .  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S1_S1rA6.  .  .  .  rA5.  .  .  .  .  ~DK.  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  bE2.  .  _CE.  rA5_E4.  .  .  .  _CD.  .  .  .  .  .  rA6rA6rA6rA6.  .  .  .  .  .  .  .  .  .  bRD.  .  .  .  .  .  .  .  _S1_S1rA6.  .  .  .  rA5.  .  .  .  .  .  .  yDAyDAyDAyDAyDArA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  rA5.  _AM.  _AM.  .  .  rA5yAF_S0_S0yAFrA6.  .  .  .  .  .  rA6_S1_S1_S1_S1rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S1_S1rA6.  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  _S0.  rA5.  _AM.  _AM.  .  .  rA5yAF_S0_S0yAFrA6.  .  .  .  .  rA6.  .  0E6.  .  .  rA6.  .  .  .  .  .  rA6rA6rA6rA6.  .  .  .  .  .  .  rA6rA6rA6.  .  .  bE1rA5.  .  .  .  _CE.  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  _S0.  rA5rA5rA5rA5rA5rA5rA5rA5rA5rACrACrACrACrA6rA6rA6rA6rA6rA6.  .  .  0E6.  .  .  .  rA6.  .  .  .  rA6bE2.  .  .  rA6.  .  .  .  .  .  rA6rA6rA6.  .  .  .  rA5.  ~DK.  .  .  .  .  .  .  .  yDAyDArA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  0E6.  .  .  .  .  rA6rA6rA6rA6.  .  ~DI.  .  .  rA6rA6rA6.  .  .  rA6rA6rA6.  .  .  .  rA5.  .  .  .  .  .  .  .  .  .  yDAyDArA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  bRD.  .  rA6rA6rA6rA6.  .  .  .  rA5.  .  .  .  rA6rA6rA6rA6_DO_DOyDAyDArA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DK.  .  .  .  .  ~DK.  .  .  .  ~DK.  .  .  ~DK.  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6.  .  .  .  rA5.  .  .  .  yDAyDAyDAyDA.  .  yDAyDArA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6.  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6bE1.  .  .  rA5.  .  .  .  yDAyDAyDAyDA.  .  yDAyDArA5rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6.  _CD.  .  .  rA6.  .  .  .  .  .  .  rA5.  .  rA5.  .  .  rA6rA6rA6rA6rA6rA6rA6.  .  .  .  bRD_MJ.  .  .  yDAyDAyDAyDA.  .  .  _FIrA5rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6bPLrRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA6.  .  .  .  .  rA6yAFyAFyAFyAFyAFyAFyAFyAFyAFyAFyAFyAFyAFrA6rA6rA6rA6rA6rA6rA6rA6.  .  .  .  .  .  .  .  .  yDAyDAyDAyDA.  .  .  .  rA5rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6.  .  .  .  .  .  .  .  .  .  .  .  _W0.  _AM_AM_AM.  _AM_AM_AM.  rA6.  .  .  .  .  rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA5rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
+rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6yAFyAFyAFyAFyAFrA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6rA6
