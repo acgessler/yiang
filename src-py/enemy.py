@@ -519,15 +519,16 @@ class SmallRobot(SmallTraverser):
 
 class Turret(Enemy):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=(0.3,0.55), angle_limit=70, **kwargs):
+    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=(0.3,0.55), angle_limit=55, distance_limit=5, shot_speed=20, **kwargs):
         AnimTile.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
-        self.weapon = Weapon()
+        self.weapon = Weapon(speed=shot_speed)
         self.cooldown_time = cooldown_time
         self.shots = shots
         self.shot_delta = shot_delta
         self.shot_ofs = shot_ofs
         self.last_shot = -1
         self.cos_angle_limit = math.cos( math.radians( angle_limit ) )
+        self.distance_limit = distance_limit
         
     def SetGame(self,game):
         self.game = game
@@ -576,8 +577,8 @@ class Turret(Enemy):
                 dl  = (dir[0]**2 + dir[1]**2) **0.5
                 dir = (dir[0]/dl,dir[1]/dl)
                 
-                # implement angle limit
-                if abs(dir[0]) < self.cos_angle_limit:
+                # implement angle and distance based limits
+                if abs(dir[0]) < self.cos_angle_limit or self.Distance(player) < self.distance_limit:
                     return
                 
             self.weapon.Shoot((self.pos[0]+self.shot_ofs[0],self.pos[1]+self.shot_ofs[1]),dir,self.color,[self])

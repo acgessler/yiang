@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Editable Sample Level'),color=(0, 0, 30),vis_ofs=0,scroll=2,lower_offset=-0.3,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Editable Sample Level'),color=(0, 0, 30),vis_ofs=0,scroll=2,lower_offset=-0.3)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DK.  .  _DK.  .  .  _DK
 
 .  .  .  .  .  aA9aA9aA9aA9aA9.  aA9aA9aA9aA9.  aA9aA9aA9aA9aA9.  aA9aA9aA9aA9aA9
@@ -8,20 +8,8 @@ _DF.  .  .  .  .  .  aA9.  .  .  aA9.  .  .  .  aA9.  .  .  .  .  .  .  aA9.  . 
 .  _DF.  .  .  .  .  aA9.  .  .  aA9.  .  .  .  .  .  .  .  aC4.  .  .  aA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DK
 .  .  .  .  .  .  .  aA9.  .  .  aA9.  .  .  .  .  .  .  .  aC4.  .  .  aC4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI
 _DF.  .  .  .  _DF.  aA9.  .  .  aA9aA9aA9aA9.  aA9aA9aA9aA9aA9.  .  .  aC4
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DF.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DF.  .  .  .  ~EC.  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0
 .  .  .  _PL.  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0
-.  .  .  .  .  .  .  .  rDArDA
-.  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0
-
-
-
-
-
-
-
-
-
-
-
-
+.  .  .  .  .  .  .  .  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A2
+.  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A2

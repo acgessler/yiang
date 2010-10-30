@@ -13,6 +13,7 @@ build vc9
 
 print Collect binaries
 build bin-x86-windows
+#build bin-amd64-windows
 
 print Collect data
 build data

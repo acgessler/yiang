@@ -47,6 +47,8 @@ indices = {}
 with open(outrc,"wt") as outf:            
     for file,contents in files.items():
         index = random.randint(1,2**16 -1)
+        while index in indices.values():
+            index = random.randint(1,2**16 -1)
         indices[file] = index
         print("Write {0} as {1}".format(file,index))
         
