@@ -107,6 +107,7 @@ class Game(Drawable):
         self.useless_sprites=1
         self.swallow_escape = False
         
+        self.cached_player = None
         
         
         

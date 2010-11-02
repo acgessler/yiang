@@ -89,7 +89,7 @@ class Player(Entity):
         from weapon import Weapon
         self.inventory = []
         self.ordered_respawn_positions = []
-        self.ammo = 0
+        self.ammo = [0]
         self.move_freely = move_freely
 
         # XXX use AnimTile instead
@@ -107,6 +107,13 @@ class Player(Entity):
     def SetLevel(self,level):
         Entity.SetLevel(self,level)
         self._Reset()
+        
+    def SetGame(self,game):
+        Entity.SetGame(game)
+        self.ammo = game.GetCookie("ammo",self.ammo)
+        
+    def GetRemainingAmmo(self):
+        return self.ammo[0]
 
     def _Reset(self):
         """Reset the state of the player instance, this is needed
@@ -232,7 +239,7 @@ class Player(Entity):
         """Add a specific amount of ammo to the player's inventory.
         One shoot consumes one unit of ammo.""" 
         assert ammo > 0
-        self.ammo += ammo
+        self.ammo[0] += ammo
         self.game.AddEntity(InventoryChangeAnimStub(_("++ {0}x ammo").format(ammo),
             self.pos,color=sf.Color.Yellow))
         
@@ -291,7 +298,7 @@ class Player(Entity):
                 break
         else:
             if self.block_shoot is False:
-                self.game.AddEntity(InventoryChangeAnimStub("Dude, you have no weapon ...",
+                self.game.AddEntity(InventoryChangeAnimStub(_("Dude, you have no weapon ..."),
                     self.pos,color=sf.Color.Yellow))
                 
                 self.block_shoot = True
@@ -302,14 +309,14 @@ class Player(Entity):
             return
             
         self.moved_once = self.block_shoot = True
-        if self.ammo == 0:
-            self.game.AddEntity(InventoryChangeAnimStub("Out of ammo, idiot",
+        if self.ammo[0] == 0:
+            self.game.AddEntity(InventoryChangeAnimStub(_("Out of ammo, idiot"),
                 self.pos,color=sf.Color.Yellow))
             return 
         
-        self.ammo -= 1
-        if self.ammo == 2:
-            self.game.AddEntity(InventoryChangeAnimStub("Warn: low ammo",
+        self.ammo[0] -= 1
+        if self.ammo[0] == 2:
+            self.game.AddEntity(InventoryChangeAnimStub(_("Warn: low ammo"),
                 self.pos,color=sf.Color.Yellow))
         
         if self.dir == Player.RIGHT:
@@ -453,7 +460,7 @@ class Player(Entity):
                     self.SetColor(sf.Color.Yellow)
                     print("Entering left danger area")
             else:
-                self._Kill("the dangerous wall on the left")
+                self._Kill(_("the dangerous wall on the left"))
 
         else:
             if hasattr(self, "restore_color"):
@@ -474,9 +481,10 @@ class Player(Entity):
         #    1.0 - (self.pos[1] + self.pheight // 2 - origin[1]) / defaults.tiles[1])
         pass
 
-    def _Kill(self, killer="<add reason>"):
+    def _Kill(self, killer=None):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event."""
+        killer = killer or _("<add reason>")
         print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
             name = "splatter1.txt"
