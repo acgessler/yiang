@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Take the longer way'),color=(0, 15, 15),postfx=[('ingame1.sfx', ())],vis_ofs=3,scroll=3,lower_offset=0.0,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Take the longer way'),color=(0, 15, 15),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=3,scroll=3,lower_offset=0.0)
 
 
 _A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3
@@ -17,3 +17,5 @@ _H1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI.  _E0gE0.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0
 gS1gS1gS1gS1gS1gS1gS1gS1gS1gDAgS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gE0gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1yE0gS1gS1gS1gS1_A0_A0_A0_A0_A0_A0_A0_A0
 _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+
+

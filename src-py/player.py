@@ -322,7 +322,8 @@ class Player(Entity):
     def Interact(self,other):
         from weapon import Shot
         if isinstance(other, Shot):
-            self._Kill("a ray-blaster shot")
+            if self.MeCanDie():
+                self._Kill("a ray-blaster shot")
             return Entity.BLOCK
             
         return Entity.Interact(self,other)
@@ -500,7 +501,12 @@ class Player(Entity):
             
         self.draw = False
         self.game.Kill(killer,self)
-
+        
+        
+    def MeCanDie(self):
+        return defaults.debug_godmode is False and self.unkillable==0
+    
+        
     def _HandleCollisions(self, newpos, newvel, time):
         """Handle any collision events, given the computed new position
         of the player. The funtion returns the actual position after
@@ -555,7 +561,7 @@ class Player(Entity):
                         res = collider.Interact(self)
                         if res == Entity.KILL:
                             print("hit deadly entity, need to commit suicide")
-                            if defaults.debug_godmode is False and self.unkillable == 0:
+                            if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
                                 return newpos, newvel
                 
@@ -572,7 +578,7 @@ class Player(Entity):
                         res = res or collider.Interact(self)
                         if res == Entity.KILL:
                             print("hit deadly entity, need to commit suicide")
-                            if defaults.debug_godmode is False and self.unkillable == 0:
+                            if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
                                 return newpos, newvel
                 
@@ -590,7 +596,7 @@ class Player(Entity):
                         res = res or collider.Interact(self)
                         if res == Entity.KILL:
                             print("hit deadly entity, need to commit suicide")
-                            if defaults.debug_godmode is False and self.unkillable == 0:
+                            if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
                                 return newpos, newvel
                 
@@ -610,7 +616,7 @@ class Player(Entity):
                         res = res or collider.Interact(self)
                         if res == Entity.KILL:
                             print("hit deadly entity, need to commit suicide")
-                            if defaults.debug_godmode is False and self.unkillable == 0:
+                            if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
                                 return newpos, newvel
                 
