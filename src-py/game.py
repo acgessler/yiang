@@ -108,6 +108,16 @@ class Game(Drawable):
         self.swallow_escape = False
         
         
+        
+        
+    def Load(self,filename):
+        pass
+    
+    def Save(self,filename):
+        pass
+        
+        
+        
     def OnRemoveFromRenderer(self):
         Drawable.OnRemoveFromRenderer(self)
         

@@ -102,7 +102,7 @@ INT_PTR CALLBACK DialogProc(
 
 		LoadSettings(props);
 
-		if( props[L"fullscreen"] != L"False") {
+		if( props[L"fullscreen"] == L"True") {
 			CheckDlgButton(hwndDlg,IDC_FS,BST_CHECKED);	
 		}
 		else {
