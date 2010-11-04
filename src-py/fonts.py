@@ -34,6 +34,14 @@ class FontCache:
 
     cached = {}
     lock = threading.Lock()
+    
+    @staticmethod
+    def Find(font_obj):
+        for k,v in FontCache.cached.items():
+            if v == font_obj:
+                return k
+        return None 
+        
 
     @staticmethod
     def get(height,face=""):

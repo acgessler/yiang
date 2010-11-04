@@ -117,9 +117,28 @@ class MessageBox(Drawable):
         return 1100
            
     @staticmethod
-    def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0):
+    def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0,auto_adjust=True):
         """Utility to draw a messagebox-like status notice in the
         center of the screen."""
+        
+        # (hack) after adding translation support, most text boxes have changed their dimensions
+        if auto_adjust:
+            otext = text.GetText()
+            x,y = size
+            xbase,ybase = 20,10
+            from fonts import FontCache
+            face,height = FontCache.Find(text.GetFont())
+            width = height/2
+            
+            cnt = 0 
+            for n,line in enumerate(otext.split("\n")):
+                x = max(x, len(line.strip()) * width + xbase) 
+                if len(line.strip())==0:
+                    cnt+=1
+                else:
+                    cnt = 0
+            y = max(y,(n+1-cnt) * (height*1.09) + ybase)
+            size = int(x),int(y)
         
         # FIX: avoid odd numbers to get pixel-exact font rendering
         size = (size[0]&~0x1,size[1]&~0x1)
