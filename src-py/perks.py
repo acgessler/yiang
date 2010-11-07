@@ -352,6 +352,7 @@ class Minimi(Perk):
             
             if player._HitsMyTop(ab,cd) and player._HitsMyBottom(cd,ab) and collider.Interact(player)==Entity.BLOCK:
                 player._Kill(_("crushed by matter"))
+                break
             
             
             
