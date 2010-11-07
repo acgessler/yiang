@@ -340,6 +340,17 @@ class Tile(Entity):
         for offsetit, elem in self.cached: 
             elem.SetColor(self.color)
             lv.DrawSingle(elem,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
+            
+            
+    def Scale(self,factor):
+        """Scale the tile on all axes uniformly"""
+        if not hasattr(self,"orsize"):
+            self.orsize = self.rsize
+            
+        self.orsize = self.orsize * factor
+        self.rsize = int( self.orsize )
+        self.dim = self.dim[0]*factor,self.dim[1]*factor
+        self._Recache()
 
 
 class AnimTile(Tile):
@@ -425,7 +436,8 @@ class AnimTile(Tile):
 
     def SetState(self,state):
         self.state = state % len(self.texts)
-        self.animofs = self.animidx = 0
+        self.animofs -= self.animidx
+        self.animidx = 0
         self.reset_anim = True
 
     def GetState(self):
@@ -444,7 +456,7 @@ class AnimTile(Tile):
     def Set(self,idx):
         """Set the current animation frame """
         self.animidx = idx
-        self.reset_anim = True
+        #self.reset_anim = True
 
         if self.speed==-1:
             self._UpdateAnim()

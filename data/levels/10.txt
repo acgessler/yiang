@@ -1,19 +1,59 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Volcano Jack'),color=(0, 0, 0),vis_ofs=0,scroll=2,lower_offset=-0.5,)
-
-.  .  .  .  .  .  .  ySU
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Volcano Jack'),color=(20, 10, 0),postfx=[('ingame1.sfx', ())],vis_ofs=20,scroll=3,lower_offset=0.8)
 
 
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S1_S1_S1_S1_S1
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A1_A1_A1rDArDArDArDA.  .  .  .  .  .  .  _RE
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S1_S1_S1_S1_S1_S1.  .  .  .  .  .  .  .  .  .  rDArDArDArDArDA
-.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3rDArDArDArDArDA_A2.  .  .  .  .  _A0rE0.  .  .  .  .  rE0.  .  .  .  _A0.  .  .  .  .  .  _RE
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rRE.  .  .  rDArDArDArDArDArDA_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A2_A3_A4_A5_A6_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A6_A6rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bH1
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A5_A5_A5rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A4_A4_A4_A4rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAgFI
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A3_A3_A3_A3_A3rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A3.  .  .  .  .  .  .  .  .  _A0_A0_A0
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A2_A2_A2_A2_A2_A2rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAgFI.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A2_A2rE0rE0rE0rE0.  .  .  .  .  _A0_A0_A0
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A1_A1_A1_A1_A1_A1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA.  .  .  .  .  _A1rE0.  .  .  .  .  .  rE0.  .  .  .  _A1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A1_A1rE0rE0rE0rE0.  .  .  .  .  _A0_A0_A0
-_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+
+
+
+
+
+
+
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rD9
+
+
+.  .  _A5_A5_A5_A5_A5.  .  .  .  .  .  _S1.  _S1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DA~DA~DA~DA~DA
+.  .  .  .  .  .  _A5.  .  .  .  .  .  _S1_S1_S1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _SM.  .  .  .  ~DA~DA~DA~DA~DA_A0_A0_A0_A0_A0_A0.  .  .  rD8.  rD8.  rD8.  rD8
+.  _A5.  .  _TB.  _A5.  .  .  .  .  .  _S1_S1_S1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~DA~DA~DA~DA~DA_A0~DArDArDA~DA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+.  _A5.  .  .  .  _A5.  .  .  .  .  .  _S1_S1_S1.  .  .  .  .  _S1_S1_S1_S1_S1_S1rI0.  .  .  .  .  .  .  .  .  rE0.  .  .  .  .  .  .  .  rI0.  .  .  rE0.  .  .  .  .  rE0.  .  .  .  .  rE0.  .  .  .  .  .  .  .  rI0.  .  .  .  rE0.  .  .  .  .  rE2.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDA_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0
+.  _A5.  .  .  .  _A5ySU.  .  .  .  .  .  .  .  .  .  .  _KE.  _AB_AB_AB_AB_AB_AB.  .  _AB_AB_AB.  .  .  _AB_AB_ABrD9.  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  _AB_AB_AB.  .  .  rDA_A0_A0_A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  _A0.  .  .  .  _A0rD8.  .  .  .  _A0.  .  .  .  .  _A0.  .  _EC.  .  .  ~S4~S4~S4~S4.  .  .  .  _A0_A0
+.  _A5.  .  .  .  _A5.  .  .  .  .  .  _A5_A5_A5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDA_A0_A0_A0_A0gD8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  _A0.  .  .  rKE.  _A0.  .  .  .  .  _A0_A0.  .  .  .  .  .  ~S4~S4.  .  .  .  .  _A0_A0
+.  _A5.  _FI.  .  _A5.  .  .  .  .  .  .  _A5_A5_A5.  .  _RD_RD.  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rI0.  rDA_A0_A0_A0.  .  .  _A0_A0_A0_A0_A0_A0_A0.  _A0_A0_A0_A0_A0_A0.  .  .  .  .  .  rCC.  .  _A0.  .  .  .  .  _A0.  .  .  .  .  _A0_A0_A0.  .  .  .  _A0_A0_A0_A0.  .  .  .  _A0_A0
+.  _A5.  .  .  .  _A5.  .  .  .  .  .  .  .  _A5_A5_A5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _S1_S1_S1_S1_S1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  rDA_A0_A0.  .  gKE_A0.  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  _A0.  .  .  .  _A0.  .  .  .  .  _A0.  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  _CE.  _A0_A0
+.  _A5_AB_AB_AB_AB_A5.  .  .  .  .  .  .  .  .  .  _A5_A5_A5rC8rI0.  .  rE0.  .  .  .  .  rE0.  .  rE0.  .  .  .  .  rC9.  rI0.  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDA_A0.  .  .  _A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0.  .  .  .  _A0.  .  _A0_A0_A0_A0.  .  .  .  .  BDO.  .  yDO.  .  _RD.  .  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rI0.  .  .  .  .  .  .  .  .  .  .  .  rE0.  .  .  .  .  .  .  .  .  _A1_A1_A1_A1rDArDArDArDA.  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDA.  .  .  _A0.  .  .  _A0_A0_A0.  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  .  .  _A0.  .  .  .  .  _A0.  .  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rD9.  rD9.  .  rD9_S1_S1_S1rD9_S1.  .  rD9.  .  .  rD9.  .  .  rD9rD9rDArDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rI0.  .  .  .  .  .  yD8.  _A0.  .  .  _A0_A0.  .  .  .  .  .  .  .  .  .  .  .  _A0.  .  .  .  _A0.  .  .  .  .  _A0.  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  .  .  _A0_A0
+.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3rDArDArDArDArDA_A2.  .  .  .  .  _A0rE0.  .  .  .  .  rE0.  .  .  .  _A0.  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  _A0.  .  .  .  _A0.  .  .  .  .  .  .  .  .  .  .  .  _C8.  .  .  .  _A0.  .  .  .  .  _A0.  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A8_A8_A8_A8_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  rDArDArDArDArDArDA_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A1_A2_A3_A4_A5_A6_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0yKE.  .  .  _RD.  .  _A0_A0_A0_A0_A0.  _A0_A0_A0_A0_A0~DA.  .  .  _A0.  .  rE2.  .  _A0_CE.  rE2.  .  gDO.  .  pDO.  .  _RD.  .  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rD9.  .  .  _A6rDArDArDArDArDArDArDArDArDArDArD9rDArDArDArDArDArD9rDArDArDArD9rDArDArDArDArDArDArDArDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rD9.  .  .  .  .  .  .  .  .  .  .  .  _A0.  .  .  .  .  .  .  _A0_A0BD8.  .  .  .  .  .  .  _A0.  .  .  .  _A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A6_A6rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArCCrDA.  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DO.  .  .  .  bH1.  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0.  .  .  _A0.  .  .  .  .  .  .  .  _A0_CE.  _CE.  _A0.  .  .  _CE.  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  .  .  _A0_A0
+.  .  .  .  .  .  rD9.  .  .  .  .  .  .  .  .  .  .  .  .  _A5_A5_A5rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BKE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  _A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A4_A4_A4_A4rDArDArDArDArDArD9rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA_A0_A0_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PD8.  _A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A3_A3_A3_A3_A3rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA_A0_A0_A0cS5cS5~DA~DA~DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A3.  .  .  _AC_AC_AC.  .  .  _A0_A0_A0.  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  .  _A0.  .  _EC.  .  .  ~S0.  .  .  _CE.  PKE.  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A2_A2_A2_A2_A2_A2rDArDApKErDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA_A0_A0_A0_A0gFI.  ~DA~DA~DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  _RD.  .  .  .  .  _A2_A2rE0rE0rE0rE0.  .  .  .  .  _A0.  PDO.  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0.  .  .  .  .  .  ~S0.  .  .  .  .  .  .  _A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A1_A1_A1_A1_A1_A1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA_A0_A0_A0_A0_A0.  .  ~DA~DA~DA_A1rE0.  .  .  .  .  .  rE0.  .  .  .  _A1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A1_A1rE0rE0rE0rE0.  .  .  _CB.  _A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0
+_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -34,7 +34,7 @@ from keys import KeyMapping
 class Door(AnimTile):
     """A door blocks the player unless he presents a key of the same color"""
     def __init__(self, text, height, frames, speed = 1.0, halo_img = None):
-        AnimTile.__init__(self, text, height, frames, states=4, speed=speed, halo_img=halo_img)
+        AnimTile.__init__(self, text, height, frames, speed*1.5, states=4, halo_img=halo_img, noloop=True) # balancing
         self.unlocked = False
 
     def Interact(self, other):

@@ -100,6 +100,8 @@ class Player(Entity):
             self.tiles[-1].SetPosition((0, 0))
 
         assert len(self.tiles) == (Player.MAX_ANIMS*2)
+        self.dead = False
+        self.scale = 1.0
         
     def __str__(self):
         return "<ThePlayer>"
@@ -114,6 +116,26 @@ class Player(Entity):
         
     def GetRemainingAmmo(self):
         return self.ammo[0]
+    
+    def Scale(self,factor):
+        """Scale the player's body dimensions on all axes uniformly"""
+        assert factor > 0.0
+        
+        #self.rsize *= factor
+        self.dim = self.dim[0]*factor,self.dim[1]*factor
+        self.pwidth *= factor
+        self.pheight *= factor
+        self.pofsx *= factor
+        self.pofsy *= factor
+        
+        for elem in self.tiles:
+            elem.Scale(factor)
+            
+        self.scale *= factor
+        
+    def Unscale(self):
+        """Undo any scaling applied to the object"""
+        self.Scale(1.0/self.scale)
 
     def _Reset(self):
         """Reset the state of the player instance, this is needed
@@ -143,6 +165,8 @@ class Player(Entity):
         # self.draw is set to False while the player is death and 
         # his body is therefore not visible.
         self.draw = True
+        self.dead = False
+        self.Unscale()
         
     def Protect(self,time=None):
         """Protect the player from being killed for a specific
@@ -484,6 +508,9 @@ class Player(Entity):
     def _Kill(self, killer=None):
         """Internal stub to kill the player and to fire some nice
         animations to celebrate the event."""
+        if self.dead:
+            return # we are already bad. dumbass.
+        
         killer = killer or _("<add reason>")
         print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
@@ -508,6 +535,7 @@ class Player(Entity):
                 self.game.AddEntity(t)
             
         self.draw = False
+        self.dead = True
         self.game.Kill(killer,self)
         
         

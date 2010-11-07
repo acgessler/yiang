@@ -329,6 +329,7 @@ class Minimi(Perk):
         other = Perk.EnablePerk(self,player)
         if other is None:
             self._SetAutoExpire(player,self.time)
+            player.Scale(0.6)
             return
 
         other._SetAutoExpire(player,self.time,True)
@@ -336,6 +337,33 @@ class Minimi(Perk):
     def DisablePerk(self,player):
         Perk.DisablePerk(self,player)
         print("Disable perk: Minimi")
+        player.Scale(1/0.6)
+        
+        ab = player.GetBoundingBoxAbs()
+        
+        # Check if we are trapped in a 1-tile height cave. If so, die.
+        for collider in self.game.GetLevel().EnumPossibleColliders(ab):
+            if collider is player: 
+                continue
+            
+            cd = collider.GetBoundingBoxAbs()
+            if cd is None:
+                continue
+            
+            if player._HitsMyTop(ab,cd) and player._HitsMyBottom(cd,ab) and collider.Interact(player)==Entity.BLOCK:
+                player._Kill(_("crushed by matter"))
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                
         
         
         
