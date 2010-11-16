@@ -127,15 +127,15 @@ msgstr ""
 
 #: ../../src-py\editor.py:308
 msgid "Abandon God\000Become God"
-msgstr ""
+msgstr "Himmel verlassen\000Gott werden"
 
 #: ../../src-py\editor.py:309
 msgid "Enable or disable god mode. Nothing can harm you while you are god."
-msgstr ""
+msgstr "Aktviert oder Deaktiviert den Gott Modus. Nichts kann dir Schaden, während du Gott bist."
 
 #: ../../src-py\editor.py:318
 msgid "Hide stats\000Show stats"
-msgstr ""
+msgstr "Verstecke Statistik\000Zeige Statistik"
 
 #: ../../src-py\editor.py:319
 msgid "Show or hide the tile engine's internal performance counters"
@@ -390,9 +390,8 @@ msgid ""
 "Press {2} to restart the level\n"
 "Press {3} to {4}"
 msgstr ""
-"Du hast den Märtyrertod erlitten! \n"
+"Du hast den Märtyrertod erlitten!\n" 
 "(all-inclusive, sprich mit Auferstehung!)\n"
-"\n"
 "  .. der gottlose Schlächter war {0}\n"
 "\n"
 "Drücke {1} um am letzten Respawn Punkt zu starten\n"
