@@ -482,10 +482,10 @@ Hit {1} to reconsider your decision""").format(
         height = int(base_height*defaults.scale[1])
         width_spacing, height_spacing = int(height*1.55),int(height*1.2)
 
-        num   = get_level_count()+1
+        num   = get_level_count()
         xnum  = int((rx-base_offset[0]-50)//width_spacing)
         rows  = math.ceil( num/xnum )
-        self.level = getattr(self,"level", 1)
+        self.level = getattr(self,"level", 0)
         bb = (base_offset[0],base_offset[1],rx-40,ry-60)  
         
         def GetBack():
@@ -511,23 +511,23 @@ Hit {1} to reconsider your decision""").format(
                     self.level = (self.level-1)%(num)
 
                 elif event.Key.Code == KeyMapping.Get("menu-down"):
-                    self.level = (self.level+xnum)%(num)
+                    self.level = (self.level+( (xnum+num - xnum*rows) if (self.level//xnum == rows-1) else xnum  ) )%(num) 
 
                 elif event.Key.Code == KeyMapping.Get("menu-up"):
-                    self.level = (self.level-xnum)%(num)
+                    self.level = (self.level-( (xnum+num - xnum*rows) if (self.level//xnum == 0) else xnum  ) )%(num) 
 
                 elif event.Key.Code == KeyMapping.Get("accept"):
                     
                     GetBack()
-                    self._TryStartGameFromLevel(self.level) 
+                    self._TryStartGameFromLevel(self.level+1) 
                    
         for y in range(rows):
-            for x in range(min(num-1 - y*xnum,xnum)):
-                i = y*xnum +x+1 
+            for x in range(min(num - y*xnum,xnum)):
+                i = y*xnum +x 
                 #print(i)
 
                 sf_draw_string_with_shadow(
-                    str(i).zfill(2) ,
+                    str(i+1).zfill(2) ,
                     defaults.font_menu,
                     height,
                     base_offset[0]+(x*width_spacing) + 20,
@@ -537,7 +537,7 @@ Hit {1} to reconsider your decision""").format(
         height = int(0.5*height)
         from level import LevelLoader
         sf_draw_string_with_shadow(
-            _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),self.level,LevelLoader.GuessLevelName(self.level)),
+            _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),self.level+1,LevelLoader.GuessLevelName(self.level+1)),
             defaults.font_menu,
             height,
             base_offset[0]+20,
