@@ -430,7 +430,10 @@ class Level:
                 pass
                 
             if hasattr(entity,"window_unassigned"):
-                self.window_unassigned.remove(entity)
+                try:
+                    self.window_unassigned.remove(entity)
+                except KeyError:
+                    pass
             
         from game import Game
         from player import Player

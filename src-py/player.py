@@ -287,7 +287,28 @@ class Player(Entity):
         """Change the players position and adjust the viewport accordingly.
         The optional offset value is the distance from the left viewport
         border."""
+        
+        
+        # some tiles (i.e. Heat) may be relying on the fact that they
+        # receive continous Update() calls while the player is in
+        # a certain range. If the player suddently changes his position,
+        # those tiles may not react correctly because they miss
+        # the ultimate Update() call that would cause them to revert
+        # their effect (postfx in case of the Heat effect) on the
+        # player or the screen. So we need to grab the previous
+        # visible set, move the player and call Update() once on all
+        # tiles that were previously visible. 
+        
+        
+        entities = self.level.EnumActiveEntities(); 
         self.SetPosition(pos)
+        
+        t = self.game.time
+        tdelta = self.game.time_delta
+        for e in entities:
+            if e != self: # exclude the player since this would trigger unwanted Interact() calls
+                e.Update(t,tdelta) 
+        
         self.level.SetOriginX(self.pos[0] - (ofs or defaults.respawn_origin_distance))
 
     def SetColor(self, pos):

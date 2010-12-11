@@ -96,9 +96,9 @@ class Heat(AnimTile):
     
     HOT_COLOR = sf.Color.Red
     POSTFX_NAME = "heat.sfx"
-    FADE_IN_SPEED = 1
+    FADE_IN_SPEED = 2
     
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,DeathTimerEnd=1.0,hideontouch=False,halo_img=None,**kwargs):
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=2,DeathTimerEnd=1.5,hideontouch=False,halo_img=None,**kwargs):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=halo_img,**kwargs)
         self.heat_activated = False
         self.DeathTimerEnd = DeathTimerEnd
@@ -159,7 +159,8 @@ class Heat(AnimTile):
                         self.myplayer.postfx_heat_shader.SetParameter("redintensity",1.0)
                         self.game.Kill(self.GetVerboseName(),self.myplayer,on_close_mb_extra=garbagify_ppfx)
                         return
-                        
+                    
+            if now >= end or not self.DistanceInnerRadius(self.myplayer):    
                 self.myplayer.heat_counter -= 1
                 self.heat_activated = False
                 if self.myplayer.heat_counter == 0:
@@ -167,6 +168,7 @@ class Heat(AnimTile):
                     delattr(self.myplayer,"oldcolor")
                     
                     self.level.RemovePostFX(Heat.POSTFX_NAME)
+                    
                     
     
     def GetVerboseName(self):
