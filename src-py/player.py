@@ -372,6 +372,7 @@ class Player(Entity):
                 (-1.0,0.0),self.color,[self])
             
     def Interact(self,other):
+        
         from weapon import Shot
         if isinstance(other, Shot):
             if self.MeCanDie():
@@ -381,8 +382,9 @@ class Player(Entity):
         return Entity.Interact(self,other)
                          
     def Update(self, time_elapsed, time):
-        if self.game.IsGameRunning() is False:
+        if self.game.IsGameRunning() is False or self.dead is True:
             return
+            
         
         # if self.game.mode == Game.BACKGROUND:
         #    return
@@ -850,6 +852,8 @@ class Player(Entity):
         # Reset our status
         self._Reset()
         self.Protect(defaults.respawn_protection_time)
+        
+        self.level.ResetPostFXToDefaults()
 
 
 class RespawnPoint(EntityWithEditorImage):

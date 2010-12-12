@@ -116,7 +116,7 @@ class Heat(AnimTile):
         if self.heat_activated and self.myplayer.heat_counter > 0:
             return Entity.ENTER
         else:
-            if self.DistanceInnerRadius(other):
+            if self.DistanceInnerRadius(other) and other.dead is False:
                 self.DeathTimer = sf.Clock()
                 self.myplayer = other
                 self.heat_activated = True
@@ -142,7 +142,9 @@ class Heat(AnimTile):
             now, end = self.DeathTimer.GetElapsedTime(), self.DeathTimerEnd  / self.game.speed_scale 
             
             self.myplayer.postfx_heat_shader_intensity += now*time_delta*Heat.FADE_IN_SPEED/end
-            self.myplayer.postfx_heat_shader.SetParameter("redintensity",min(1,self.myplayer.postfx_heat_shader_intensity))
+            
+            s = min(1,self.myplayer.postfx_heat_shader_intensity)
+            self.myplayer.postfx_heat_shader.SetParameter("col_scale", self.color.r * s, self.color.g * s, self.color.b * s)
             
             if now >= end:
                 if self.DistanceInnerRadius(self.myplayer):

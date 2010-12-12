@@ -365,6 +365,12 @@ class Level:
         self.postfx_rt = []
         for pfx,env in self.postfx:
             self.AddPostFX(pfx, env)
+            
+        self.default_postfx = list(self.postfx_rt)
+        
+    def ResetPostFXToDefaults(self):
+        """Revert to the default set of postfx specified in the level file"""
+        self.postfx_rt = self.default_postfx
                 
     def AddPostFX(self,name,env):
         """Temporarily push another postprocessing effect onto

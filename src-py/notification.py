@@ -111,7 +111,7 @@ class MessageBox(Drawable):
                 
         if self.on_close:
             self.on_close(self.result[-1])
-        #raise NewFrame()
+        raise NewFrame()
             
     def GetDrawOrder(self):
         return 1100
