@@ -94,7 +94,7 @@ class Mine(AnimTile):
 class Heat(AnimTile):
     """Player gets 'hot' and dies around this brick"""
     
-    HOT_COLOR = sf.Color.Red
+    # HOT_COLOR = sf.Color.Red
     POSTFX_NAME = "heat.sfx"
     FADE_IN_SPEED = 2
     
@@ -130,7 +130,7 @@ class Heat(AnimTile):
                         
                 else:
                     self.myplayer.heat_counter += 1
-                other.SetColor(Heat.HOT_COLOR)
+                other.SetColor(self.color)
             return Entity.ENTER
         
         
