@@ -1,0 +1,62 @@
+-----------------------------------------------------------------
+                           ___             
+                          /   \ ___    ___ 
+                         / /\ // _ \  / __|
+                        / /_//| (_) || (__ 
+                       /___,'  \___/  \___|
+                                           
+-----------------------------------------------------------------
+##### This is the Documentation to the level_metadata file ######
+-----------------------------------------------------------------
+The file is xml conform
+Example:
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+<Metadata>
+
+	<Level idx="0">
+
+		<Property name="difficulty_level">
+			1
+		</Property>
+
+		<Property name="reward_lives">
+			3
+		</Property>
+
+		<Property name="reward_score">
+			2.0
+		</Property>
+
+	</Level>
+
+</Metadata>
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+_______________
+<Level idx="0">|
+_______________|
+
+this tag starts a new set of properties for the specified level.The level id is given in (idx="id")
+
+
+__________________________________
+<Property name="difficulty_level">|
+__________________________________|
+
+Numeric Valuethis property defines the difficulty level in categories. 1 is tho most easiest one; 3 the harder one.
+You CAN'T make the level easier with this setting, its only to define the selections of tasks.
+
+
+______________________________
+<Property name="reward_lives">|
+______________________________|
+
+Numeric Value. Defines how many bonus lives the player gets once completed the level.
+
+
+______________________________
+<Property name="reward_score">|
+______________________________|
+
+Numeric Value(Float). Amount of money the player is given on finishing the level.
+

@@ -38,7 +38,15 @@ from level import Level
 class InventoryItem:
     """Base class for inventory items.
     Such items are collected by the player and are subsequently
-    reused to perform specific actions, i.e. open doors."""
+    reused to perform specific actions, i.e. open doors.
+    
+    Permanent inventory items remain in the player's inventory
+    upon level switching. That is used i.e. to control the
+    story-related items the player has to collect.
+    """
+    
+    def __init__(self,permanent = False):
+        self.permanent = permanent
     
     def GetItemName(self):
         """Return a descriptive item name to be displayed to the user"""

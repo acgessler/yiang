@@ -1,0 +1,4 @@
+from machineparts import Part; <out> = Part(<raw>,name=_("The first part of the machine"))
+XXXXXXX
+XXXXXXX
+XXXXXXX

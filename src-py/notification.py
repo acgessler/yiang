@@ -66,7 +66,8 @@ class MessageBox(Drawable):
             
     def ProcessEvents(self):
         for event in Renderer.SwallowEvents():
-            if event.Type == sf.Event.KeyPressed and event.Key.Code in self.break_codes:
+            # break_codes == True serves as wildcard
+            if event.Type == sf.Event.KeyPressed and (self.break_codes is True or event.Key.Code in self.break_codes):
                 self.result.append(event.Key.Code)
                 self._RemoveMe()
                 

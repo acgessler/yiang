@@ -1,0 +1,23 @@
+<Metadata>
+
+	<Level idx="0">
+
+		<Property name="difficulty_level">
+			1
+		</Property>
+
+		<Property name="reward_lives">
+			3
+		</Property>
+
+		<Property name="reward_score">
+			2.0
+		</Property>
+
+		<Property name="reward_part">
+			part1.txt
+		</Property>
+
+	</Level>
+
+</Metadata>
