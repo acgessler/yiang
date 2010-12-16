@@ -24,6 +24,9 @@ p=ff00ff
 # White
 _=ffffff
 
+#Light Gray
+-=dcdcdc
+
 # Dark Gray
 ~=999999
 
@@ -47,4 +50,3 @@ P=554c2c
 
 # Light shiny blue
 c=4b55da45
-           
