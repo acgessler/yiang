@@ -111,6 +111,10 @@ def process_map(level):
                 ww,hh = k
                 ww = min(x+ww,w-1)-x
                 hh = min(y+hh,h-1)-y
+                
+                if ww < k[0] or hh < k[1]:
+                    continue
+                    
                 for yy in range(hh):
                     for xx in range(ww):
                         if cells[yy+y][xx+x] != thiscell:
