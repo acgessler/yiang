@@ -337,7 +337,17 @@ class Player(Entity):
         if hasattr(self,"flash_halo"): # XXX
             self.game.GetLevel().DrawSingle( self.flash_halo, (self.pos[0]-0.2,self.pos[1]-1.55) )
         
-        self.tiles[self._GetTileIndex(self.cur_tile)].DrawRelative(self.pos)
+        t = self.tiles[self._GetTileIndex(self.cur_tile)] 
+        
+        # draw a quick shadow to improve the visibility of the player
+        old, t.color = t.color, sf.Color(30,30,30,150)
+        t.DrawRelative((self.pos[0]-0.05,self.pos[1]-0.05))
+        t.DrawRelative((self.pos[0]-0.05,self.pos[1]+0.05))
+        t.DrawRelative((self.pos[0]+0.05,self.pos[1]+0.05))
+        t.DrawRelative((self.pos[0]+0.05,self.pos[1]-0.05))
+        
+        t.color = old
+        t.DrawRelative(self.pos)
         
     def _GetTileIndex(self,index):
         return self.cur_tile if self.dir == Player.RIGHT else self.cur_tile + Player.MAX_ANIMS
