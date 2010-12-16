@@ -23,6 +23,8 @@ import sys
 import collections
 
 # Our stuff
+sys.path.append(os.path.join("..","src-py"))
+
 import defaults
 defaults.update_derived()
 
