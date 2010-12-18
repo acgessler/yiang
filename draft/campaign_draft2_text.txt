@@ -1,0 +1,25 @@
+1: >2.tutorial
+   >ASCII einstieg
+   >UTF einstieg
+   >Quiz
+#A 1:Quiz
+2: > 2 easy
+3: > 2 easy
+   > 3 moderate
+#B 2+3:all
+4: > 1 easy
+   > 4 moderate
+#C 4:all
+5: > 1 easy
+   > 3 moderate
+#D 5:all
+6: > 3 easy      -----\
+   > 5 moderate  -----/ Wüste
+#E 6:all
+7: > 5 easy
+#F 7:all
+8: > 6 moderate
+#G 8:all
+9: > 2 easy
+   > 3 middle
+#H 9:all
