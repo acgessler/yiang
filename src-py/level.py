@@ -46,6 +46,8 @@ class Level:
     SCROLL_LEFT,SCROLL_RIGHT,SCROLL_TOP,SCROLL_BOTTOM = 1,2,4,8
     SCROLL_ALL = 0xf
     
+    all_metadata = None
+    
     def __init__(self, level, game, lines, 
         color=sf.Color.Black, 
         vis_ofs=0, 
@@ -109,6 +111,7 @@ class Level:
         self.postfx_rt = []
         self.postfx = postfx or []
         self._LoadPostFX()
+        self._LoadMetaData()
         
         self.entities_active = set()
         self.window_unassigned = set()
@@ -203,6 +206,57 @@ class Level:
             
         self.AddEntity(tile)
         return tile
+    
+    def _LoadMetaData(self):
+        """Get level-specific meta data from level_metadata.xml"""
+        
+        if Level.all_metadata is None:
+            import xml.sax
+            
+            Level.all_metadata = {}
+            
+            class myHandler(xml.sax.ContentHandler):
+                
+                def __init__(self):
+                    xml.sax.ContentHandler.__init__(self)
+                    self.out = Level.all_metadata
+                
+                def startElement(self,name,attrs):
+                    if name == "Level":
+                        assert "idx" in attrs
+                        self.active = self.out.setdefault(int(attrs["idx"]),{})
+                    elif name == "Property":
+                        assert hasattr(self, "active" )
+                        assert "name" in attrs
+                        
+                        self.active_prop = attrs["name"]
+                        
+                def endElement(self,name):
+                    if name == "Level":
+                        delattr(self,"active")
+                    elif name == "Property":
+                        delattr(self,"active_prop")
+                        
+                def characters(self,content):
+                    if hasattr(self, "active_prop" ) and hasattr(self, "active" ):
+                        self.active[ self.active_prop ] = content.strip()
+            
+            try:
+                xml.sax.parse(os.path.join(defaults.data_dir,"level_metadata.xml"),myHandler())
+                print("Read level metadata file, got {0} entries with totally {1} properties".format(
+                    len(Level.all_metadata),
+                    sum(len(v) for v in Level.all_metadata.values())                                                                             
+                ))
+            except xml.sax.SAXParseException as e:
+                print("Failure loading metadata from xml, got SAX parse error: " + e)
+            except e:
+                print("Failure loading metadata from xml, file is malformed: " + e)
+     
+        try:
+            self.metadata = Level.all_metadata[self.level]
+        except KeyError:
+            self.metadata = {}
+        
     
     def _SetupAudioSection(self):
         if self.audio_section == "current" or self.game.mode == self.game.BACKGROUND:
