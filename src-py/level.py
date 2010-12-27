@@ -242,15 +242,18 @@ class Level:
                         self.active[ self.active_prop ] = content.strip()
             
             try:
-                xml.sax.parse(os.path.join(defaults.data_dir,"level_metadata.xml"),myHandler())
+                # use parseString() because parse() causes trouble in packed releases, xml.sax
+                # seemingly uses urllib to access the file - urllib is not affected by
+                # fs redirection, so it fails there.
+                xml.sax.parseString(open( os.path.join(defaults.data_dir,"level_metadata.xml"), "rb" ).read(),myHandler())
                 print("Read level metadata file, got {0} entries with totally {1} properties".format(
                     len(Level.all_metadata),
                     sum(len(v) for v in Level.all_metadata.values())                                                                             
                 ))
             except xml.sax.SAXParseException as e:
                 print("Failure loading metadata from xml, got SAX parse error: " + e)
-            except e:
-                print("Failure loading metadata from xml, file is malformed: " + e)
+            except BaseException as e:
+                print("Failure loading metadata from xml, file is malformed: " + repr(e))
      
         try:
             self.metadata = Level.all_metadata[self.level]
@@ -289,7 +292,7 @@ class Level:
         """Take the current gameplay statistics and format them nicely.
         The resulting string takes 8 lines.
         """
-        return """Statistics (last level played):
+        return _("""Statistics (last level played):
         
         {deaths:4} - Suicidal Deaths Committed
         {score:4.4} ct. - Score Received
@@ -297,7 +300,7 @@ class Level:
         {l_kills:4} - Major Enemy Kills:  
         {e_kills:4} - Epic Enemy Kills
         {achievements:4} - Achievements earned
-""".format(**dict( [(k,v[0]) for k,v in self.stats.items()]  ))
+""").format(**dict( [(k,v[0]) for k,v in self.stats.items()]  ))
         
     def GetLevelIndex(self):
         """Get the one-based index of the current level"""

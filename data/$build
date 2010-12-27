@@ -1,6 +1,8 @@
 
+push files (expand level_metadata.xml)
 group type dir
 	build ~~
 
 end
+
 
