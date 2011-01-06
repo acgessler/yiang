@@ -21,5 +21,18 @@
 8: > 6 moderate
 #G 8:all
 9: > 2 easy
-   > 3 middle
+   > 3 moderate
 #H 9:all
+10:> 2 easy
+   > 4 moderate
+#I 10:all
+11:> 1 hard
+#J 11:all
+12:> 3 easy      -----\
+   > 5 moderate  -----/ Eis
+#K 12:all
+13:> 4 Underwaterlevels
+
+
+#L ALL:ALL
+14:> 4 Bonuslevels

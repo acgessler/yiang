@@ -1,0 +1,25 @@
+from campaign import Blocker; <out> = Blocker(<raw>,8,24,need_levels=[1,2,3,4])
+ ___
+[___]
+[___]
+[___]
+    ___
+   [___]
+   [___]
+   [___]
+X'    X,
+ x'||x,
+ x,||x'
+X, || X'
+   ||   
+   ||   
+   ||   
+   ||   
+   ||   
+   ||   
+   ||   
+   ||   
+X' || X,
+ x'<>x,
+ x,<>x'
+X,    X'
