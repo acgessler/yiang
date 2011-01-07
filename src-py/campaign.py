@@ -101,8 +101,12 @@ class CampaignLevel(Level):
         filename = os.path.join(self.lvbase, filename)
         with open(filename,"rt") as extra:
             lines = [l.split(" ") for l in extra.read().split("\n") if len(l) > 0 and not l[0] == "#"]
-            for x,y,e in lines:
-                #cells[int(y)][int(x)] = e[:3]
+            for line in lines:
+                if len(line) != 3:
+                    print("Error reading overlay - each non-comment line must consist of three tokens, ignoring this line: {0}".format(line))
+                    continue
+                    
+                x,y,e = line
                 
                 self._LoadSingleTile(e[1:3],e[0],int(x),int(y))
                 cnt += 1
