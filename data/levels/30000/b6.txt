@@ -1,0 +1,6 @@
+from campaign import Blocker; <out> = Blocker(<raw>,30,5,need_levels=[1])
+__    __  __    __  __    __ 
+\ \  / /  \ \  / /  \ \  / / 
+ \ \/ /    \ \/ /    \ \/ /  
+ / /\ \    / /\ \    / /\ \  
+/_/  \_\  /_/  \_\  /_/  \_\ 

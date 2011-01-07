@@ -1,0 +1,7 @@
+from campaign import Blocker; <out> = Blocker(<raw>,24,6,need_levels=[1])
+  _____
+ _L____L_______________
+|_/_/_/_/_/_/_/_/_/_/_/
+  | \/ |
+  | /\ |
+ /______\

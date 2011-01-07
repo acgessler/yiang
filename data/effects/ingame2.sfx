@@ -41,7 +41,7 @@ effect
 	_out.rgb += (dither.rgb-0.5f)*0.0300 * dither_strength * scale;
 #endif
 
-	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.05f) * 1.35;
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.5f) * 1.35;
 	_out.a = 1.f;
 
 #endif
