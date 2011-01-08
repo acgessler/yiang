@@ -53,7 +53,7 @@ class CampaignLevel(Level):
             gravity=0.0,
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL,
-            distortion_params=(30.0,5.0,1.5),
+            distortion_params=(0,0,0),
             skip_validation=skip_validation)
         
         self.status_message = ""
@@ -323,7 +323,7 @@ class CampaignLevel(Level):
         # This fixes small gaps between the tiles caused by ascii characters which 
         # are not as tall as they could be for their font size (i.e. 'a' leaves a
         # gap underneath)
-        return ( (coords[0] - self.origin[0])* 29.8/30.0, (coords[1] - self.origin[1])* 28.9/30.0)
+        return ( (coords[0] - self.origin[0]), (coords[1] - self.origin[1])* 28.8/30.0)
     
     def _GenToDeviceCoordinates(self):
         def doit(coords):
@@ -371,7 +371,7 @@ class CampaignTile(Tile):
         # would get too high, so performance would potentially degrade.
         rand = random.random() 
         sp = list(("".join(reversed(n)) if rand>0.5 else n) for n in text.split("\n"))
-        Tile.__init__(self, "\n".join(reversed(sp) if random.random()>0.5 and permute is True else sp), *args,**kwargs)
+        Tile.__init__(self, "\n".join(reversed(sp) if random.random()>0.5 and permute is True else sp), *args,double=True,**kwargs)
         
         self.status_msg = status_msg
         
@@ -382,13 +382,30 @@ class CampaignTile(Tile):
             
         return Tile.Interact(self,other)
     
+    
+class CampaignAnimTile(AnimTile):
+    """Tile for the campaign map, randomly permutes parts of
+    its image to achieve greater realism"""
+    
+    def __init__(self,text, *args, permute=True, status_msg="" , **kwargs):
+        # randomly permute every tile into 4 different display tiles.
+        # if we made more, the number of different strings to be rendered
+        # would get too high, so performance would potentially degrade.
+        rand = random.random() 
+        sp = list(("".join(reversed(n)) if rand>0.5 else n) for n in text.split("\n"))
+        AnimTile.__init__(self, "\n".join(reversed(sp) if random.random()>0.5 and permute is True else sp), *args,double=True,**kwargs)
+        
+        
+    def Interact(self,other):
+        return AnimTile.Interact(self,other)
+    
 
 class LevelEntrance(AnimTile):
     """Only found on the campaign world map, marks the entrance
     to a particular level"""
     
-    def __init__(self,text,height,frames,speed,states,next_level=5,draworder=15000,halo_img=None):
-        AnimTile.__init__(self,text,height,frames,speed,states,draworder=draworder,halo_img=halo_img)
+    def __init__(self,text,height,frames,speed,states,next_level=5,draworder=15000,halo_img=None,dropshadow=True):
+        AnimTile.__init__(self,text,height,frames,speed,states,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow)
         self.next_level = next_level
         self.done = False
         
@@ -459,8 +476,8 @@ class Blocker(Tile):
     """Blockers prevent the player from entering certain
     areas of the game world."""
     
-    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None):
-        Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img)
+    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None,dropshadow=True):
+        Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow)
         self.need_levels = need_levels
         self.status_msg = status_msg or _("You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur.")
         

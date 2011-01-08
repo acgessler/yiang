@@ -59,7 +59,9 @@ class Tile(Entity):
         halo_img="default",
         width_ofs=0,
         height_ofs=0,
-        double=False):
+        double=False,
+        dropshadow=False,
+        dropshadow_color=sf.Color(30,30,30,150)):
         
         # Note: the 'constants' from defaults may change during startup, but 
         # this file may get parsed BEFORE this happens, so we can't
@@ -77,6 +79,8 @@ class Tile(Entity):
         self.collision = collision
         self.text = text
         self.double = double
+        self.dropshadow = dropshadow
+        self.dropshadow_color = dropshadow_color
             
         self.draworder = draworder
         self.halo_img = halo_img
@@ -325,13 +329,38 @@ class Tile(Entity):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
         lv = self.game.GetLevel()
-        for offsetit, elem in reversed(self.cached): 
+        lvd = lv.DrawSingle
+        ofs_x,ofs_y = self.ofs
+        pos_x,pos_y = self.pos
+        
+        if self.dropshadow: # the drop shadow only affects the first sub-part of the tile
+            offset_it,elem = self.cached[0]
             
+            d_x = 2.0/defaults.tiles_size_px[0]
+            d_y = 2.0/defaults.tiles_size_px[1]
+            
+            elem.SetColor(self.dropshadow_color)
+            if offset_it is True:
+                lvd(elem,(pos_x-ofs_x + d_x,pos_y-ofs_y + d_y))
+                lvd(elem,(pos_x-ofs_x + d_x,pos_y-ofs_y - d_y))
+                lvd(elem,(pos_x-ofs_x - d_x,pos_y-ofs_y - d_y))
+                lvd(elem,(pos_x-ofs_x - d_x,pos_y-ofs_y + d_y))
+            else:
+                lvd(elem,(pos_x + d_x,pos_y + d_y))
+                lvd(elem,(pos_x + d_x,pos_y - d_y))
+                lvd(elem,(pos_x - d_x,pos_y - d_y))
+                lvd(elem,(pos_x - d_x,pos_y + d_y))
+        
+        ofs_x,ofs_y = self.ofs
+        for offsetit, elem in reversed(self.cached):     
             elem.SetColor(self.color)
             if offsetit is True:
-                lv.DrawSingle(elem,(self.pos[0]-self.ofs[0],self.pos[1]-self.ofs[1]))
+                lvd(elem,(pos_x-ofs_x,pos_y-ofs_y))
             else:
-                lv.DrawSingle(elem,self.pos)
+                lvd(elem,self.pos)
+                
+        
+        
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile

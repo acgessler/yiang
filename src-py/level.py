@@ -742,7 +742,7 @@ class Level:
     def _UpdateDistortion(self,time,dtime):
         # distortion_params is (time_between,distortion_time,scale).
         # Use the sine function to get a smooth transition.
-        if not self.distortion_params[2]:
+        if not self.distortion_params[2] or defaults.no_distortion:
             return
         
         sint = math.sin(time * math.pi * 0.5  / self.distortion_params[0])

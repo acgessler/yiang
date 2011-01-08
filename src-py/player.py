@@ -342,8 +342,8 @@ class Player(Entity):
         # draw a quick shadow to improve the visibility of the player
         old, t.color = t.color, sf.Color(30,30,30,150)
         
-        ofs_x = 1.0/defaults.tiles_size_px[0]
-        ofs_y = 1.0/defaults.tiles_size_px[1]
+        ofs_x = 2.0/defaults.tiles_size_px[0]
+        ofs_y = 2.0/defaults.tiles_size_px[1]
         t.DrawRelative((self.pos[0]-ofs_x,self.pos[1]-ofs_y))
         t.DrawRelative((self.pos[0]-ofs_x,self.pos[1]+ofs_y))
         t.DrawRelative((self.pos[0]+ofs_x,self.pos[1]+ofs_y))

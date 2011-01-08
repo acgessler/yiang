@@ -37,6 +37,9 @@ class Enemy(AnimTile):
     """Sentinel base class for all entities"""
     
     firstnames,lastnames=None,None
+    
+    def __init__(self,*args,dropshadow=True, dropshadow_color=sf.Color(40,40,40,150),**kwargs):
+        AnimTile.__init__(self,*args,dropshadow=dropshadow, dropshadow_color=dropshadow_color,**kwargs)
 
     def GetVerboseName(self):
         return "an unknown enemy"
@@ -107,7 +110,7 @@ class SmallTraverser(Enemy):
     both horizontal and vertical moves."""
 
     def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default"):
-        AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=halo_img)
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img)
 
         move_speed *= 0.65 # balancing
 
@@ -235,7 +238,7 @@ class NaughtyPongPong(Enemy):
     jump on its top ..)"""
 
     def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong (NPP)"),shrinkbb=0.65):
-        AnimTile.__init__(self, text, height, frames, speed, 2)
+        Enemy.__init__(self, text, height, frames, speed, 2)
 
         self.verbose = verbose
         #self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
@@ -310,7 +313,7 @@ class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated
     tile which rotates around its center in a certain distance."""
     def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5):
-        AnimTile.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
+        Enemy.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
         
         self.rotate_speed_base = rotate_speed_base * 0.65 # balancing
         self.ofs_vec = [radius,0]
@@ -362,7 +365,7 @@ class SmallBob(Enemy):
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
     def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.2, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.0, accel_time=3.0):
-        AnimTile.__init__(self, text, height, frames, speed, 2, halo_img=None)
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=None)
         self._ShrinkBB(shrinkbb)
         self.hits = self.hits_needed = 4
         self.vel = self.last = random.choice((-1, 1)) 
@@ -520,7 +523,7 @@ class SmallRobot(SmallTraverser):
 class Turret(Enemy):
     
     def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=(0.3,0.55), angle_limit=55, distance_limit=5, shot_speed=20, **kwargs):
-        AnimTile.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
+        Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
         self.weapon = Weapon(speed=shot_speed)
         self.cooldown_time = cooldown_time
         self.shots = shots

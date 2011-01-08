@@ -172,7 +172,7 @@ minimap_alpha = 0x80
 delta_t_treshold = 0.2
 
 # Disable periods if very high distortion (their freuqncy is level-dependent)
-no_distortion = False
+no_distortion = True
 
 # Minimum velocity for 'pain, pain, cry' messages to  appear
 pain_treshold = 15
