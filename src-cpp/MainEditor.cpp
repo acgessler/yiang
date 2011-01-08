@@ -56,6 +56,7 @@ int PyMain(int argc, wchar_t* argv[])
 		"except Exception as e:\n"
 		"\tprint(e)\n"
 		"\ttraceback.print_exc()\n"
+		"\tprint(traceback.extract_stack())"
 	;
 #ifdef _MSC_VER
 	PyImport_AppendInittab("sf", & PyInit_sf);

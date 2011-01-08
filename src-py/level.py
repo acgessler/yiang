@@ -557,11 +557,11 @@ class Level:
         within the same window that could possibly collide."""
         had = set()
         xx,yy,xe,ye = self._BBToWindowRange(bb)
-        yy = min(yy,len(self.windows))
-        ye = min(ye,len(self.windows)-1)
+        yy = max(0,min(yy,len(self.windows)))
+        ye = max(0,min(ye,len(self.windows)-1))
         for yyy in range(yy,ye+1):
-            xx = min(xx,len(self.windows[yyy]))
-            xe = min(xe,len(self.windows[yyy])-1)
+            xx = max(0,min(xx,len(self.windows[yyy])))
+            xe = max(0,min(xe,len(self.windows[yyy])-1))
         
             for xxx in range(xx,xe+1):
                 thiswnd = self.windows[yyy][xxx]

@@ -77,6 +77,7 @@ int PyMain(int argc, wchar_t* argv[])
 		"except Exception as e:\n"
 		"\tprint(e)\n"
 		"\ttraceback.print_exc()\n"
+		"\tprint(traceback.extract_stack())"
 	;
 #ifdef _MSC_VER
 	PyImport_AppendInittab("sf", & PyInit_sf);
@@ -128,7 +129,7 @@ int WINAPI WinMain(
 	);
 
 	std::wstring old_config;
-
+# if 0
 	if (argc == 1 || argc == 2 && std::wstring(argv[1]) == L"--c") {
 		TCHAR szPath[MAX_PATH];
 
@@ -156,7 +157,7 @@ int WINAPI WinMain(
 
 		LocalFree(old);
 	}
-
+#endif
 	const int ret = PyMain(argc,argv);
 	LocalFree(argv);
 
