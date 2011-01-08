@@ -1,0 +1,14 @@
+from campaign import Blocker; <out> = Blocker(<raw>,48,13,need_levels=[1],status_msg=_('Ready for the ice expedition?Finish the levels to start the adventure!'))
+                    `;,    -`{$}´-
+T-------------------T °~,  ==========\
+I  ______     __    I    Ù ||       \\
+I  | () |    [__]   I    U ||        \\
+I  |    |           I    U ||_________\\
+I  |.   |           I  __U_| <->      )(´-
+I  |    |           I /HHHH|          ))`
+I  |____|           I|-HHHH|          )) 
+TTTTTTTTTTTTTTTTTTTTT|=====|__________))   __/
+""""""""""""""""""""""""""""""""""""""""==/-([[
+ ,vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv,  \_([[
+ >O..o..o..o..o..o..o..o..o..o..o..o..O<    ([[
+ ´^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^`

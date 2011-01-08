@@ -1,0 +1,9 @@
+from campaign import Blocker; <out> = Blocker(<raw>,30,8,need_levels=[1],status_msg=_("Oh a car!You'll have to manage a more difficult level to drive it!"))
+           _                 
+          //                 
+   ______//__________GGGGGGZ 
+  P IIII  |   <|   <|      E 
+  |   ___ |    |    | ___  E 
+ _|   OOO\|____|____|/OOO\ E 
+|_|__O o O\         /O o O\_E
+      OOO             OOO    

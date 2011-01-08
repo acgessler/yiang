@@ -1,0 +1,13 @@
+from campaign import Blocker; <out> = Blocker(<raw>,18,12,need_levels=[1])
+            |XXX|
+  §         |XXX|
+ °$°        |XXX|
+ $S$    |xxx|
+|XXX|   |XXX|
+|XXX|   |XXX|
+|XXX| |XXX|
+      |XXX|
+      |XXX|
+|XXX|
+|XXX|
+|XXX|
