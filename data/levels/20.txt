@@ -1,7 +1,7 @@
 <out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.4, -0.0),name=_('Up and Down'),color=(80, 80, 80),postfx=[('ingame1.sfx', ())],vis_ofs=3,scroll=14,lower_offset=0.0)
 _IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA
-.  .  .  .  .  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS4.  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  xC9.  0AA.  dFI0AA.  .  .  cCB.  .  .  .  0AA
-.  .  .  .  .  0AA.  .  .  .  .  .  .  .  .  bRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cC8.  .  .  .  .  .  0AA.  .  0AA.  .  .  pS5.  .  .  .  0AA
+.  .  .  .  .  0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS4.  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  xC9.  0AA.  dFI0AA.  .  .  bCB.  .  .  .  0AA
+.  .  .  .  .  0AA.  .  .  .  .  .  .  .  .  bRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bC8.  .  .  .  .  .  0AA.  .  0AA.  .  .  pS5.  .  .  .  0AA
 .  bPL.  .  .  xAA.  .  .  .  .  .  rDA.  .  .  .  .  .  rDArDA.  .  .  .  .  .  .  rBOrBOrBO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  0AA.  .  0AA.  .  .  0AA0AArDA0AA.  0AA
 .  .  .  .  .  0AA.  .  .  .  .  .  rDA.  .  0AA0AA.  .  .  .  .  .  .  .  .  .  .  .  0AA0AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  0AA0AA.  0AA.  .  .  0AA.  .  .  .  0AA
 0AA0AA.  .  0AA0AA.  .  .  .  .  .  rTR0AA.  0AA.  .  .  rDA.  .  .  .  .  .  .  .  .  .  .  0ZG.  .  .  0ZG.  .  .  0ZG.  .  .  0ZG.  .  .  .  .  .  0AA.  .  .  .  .  .  0AA.  .  .  .  0AA
@@ -20,19 +20,5 @@ rH4.  .  .  .  rDA0AA.  .  .  .  .  rDA.  .  rDA.  rDA.  .  .  .  rBO.  .  .  . 
 .  .  .  .  .  .  0AA.  .  0AA.  .  .  .  .  rDA.  .  .  gMJ.  .  .  .  .  rMI0AA0AArMIyS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDA.  .  .  .  0AA
 rDArDArDA.  .  .  0AAyS3yS30AA.  .  .  .  .  0AA.  .  .  .  .  .  .  .  rMI0AA0AA0AArMIyS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  0AA0AA0AA
 0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA0AA
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
