@@ -553,15 +553,26 @@ Hit {1} to reconsider your decision""").format(
             sf.Color.White )
         
         
-    def AskForNetworkUse(self):
+    def AskForNetworkUse(self,on_done=None):
         """Ask the user if they want to allow us to connect to yiang-thegame.com."""
         
         accepted = (KeyMapping.Get("yes"),KeyMapping.Get("no"),KeyMapping.Get("accept"))
         def on_close(a):
             if a == accepted[0]:
                 defaults.allow_network_use = True
+                
+                if on_done:
+                    on_done()
+                
+                return
             elif a == accepted[1]:
                 defaults.allow_network_use = False
+                
+            # automatically return to the main menu
+            self.subindex = SI_NONE
+            
+            if on_done:
+                on_done()
         
         Renderer.AddDrawable( MessageBox(sf.String(_("""Some features of this game require an internet connection.
         
@@ -602,7 +613,12 @@ Hit either {1} (yes) or {2} (no) to proceed.
             
         if not defaults.allow_network_use:
             self.subindex = SI_NONE
-            self.AskForNetworkUse()
+            
+            def on_try_again():
+                if defaults.allow_network_use:
+                    self.subindex = SI_HIGHSCORE
+            
+            self.AskForNetworkUse(on_try_again)
             return
             
         if not hasattr(self,"hs_clock"):
