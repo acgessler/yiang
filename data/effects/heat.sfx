@@ -7,7 +7,7 @@ effect
 {
 	vec2 inc = _in;
 	vec2 rgnoise = noisesrc(randomUV-vec2(0.5,0.5)+inc).rg;
-	inc.xy += rgnoise * (length(col_scale)) * 0.0005;
+	inc.xy += rgnoise * (length(col_scale)) * 0.00002;
 
 	vec4 pixel = framebuffer(inc);	
 
