@@ -915,10 +915,7 @@ class DisabledRespawnPoint(RespawnPoint):
 
     def Interact(self, other):
         if isinstance(other,Player):
-
-            for entity in self.game._EnumEntities():
-                if hasattr(entity, "_AddRespawnPoint"):
-                    entity._AddOrderedRespawnPoint(self.pos)
+            other._AddOrderedRespawnPoint(self.pos)
                 
         return Entity.ENTER
 

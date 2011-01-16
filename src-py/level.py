@@ -555,23 +555,28 @@ class Level:
     def EnumPossibleColliders(self,bb):
         """Given a bounding box (x,y,x2,y2), enumerate all entities
         within the same window that could possibly collide."""
-        had = set()
-        xx,yy,xe,ye = self._BBToWindowRange(bb)
-        yy = max(0,min(yy,len(self.windows)))
-        ye = max(0,min(ye,len(self.windows)-1))
-        for yyy in range(yy,ye+1):
-            xx = max(0,min(xx,len(self.windows[yyy])))
-            xe = max(0,min(xe,len(self.windows[yyy])-1))
-        
-            for xxx in range(xx,xe+1):
-                thiswnd = self.windows[yyy][xxx]
-                
-                for entity in thiswnd:
-                    if entity in had:
-                        continue
+        try:
+            had = set()
+            xx,yy,xe,ye = self._BBToWindowRange(bb)
+            yy = max(0,min(yy,len(self.windows)))
+            ye = max(0,min(ye,len(self.windows)-1))
+            for yyy in range(yy,ye+1):
+                xx = max(0,min(xx,len(self.windows[yyy])))
+                xe = max(0,min(xe,len(self.windows[yyy])-1))
+            
+                for xxx in range(xx,xe+1):
+                    thiswnd = self.windows[yyy][xxx]
                     
-                    yield entity
-                    had.add(entity)
+                    for entity in thiswnd:
+                        if entity in had:
+                            continue
+                        
+                        yield entity
+                        had.add(entity)
+        except IndexError:
+            # happens when the player has left the area that is covered by windows
+            pass
+        
                     
     def EnumEntitiesAt(self,pos):
         """Enum all entities touching a specific position, pos, 

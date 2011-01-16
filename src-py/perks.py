@@ -318,9 +318,10 @@ class Minimi(Perk):
     """The minimi perk halves the player's body dimensions,
     which make him fit in one-tile-long caves"""
     
-    def __init__(self,text,height,frames,time=1.0,anim_speed=1.0):
+    def __init__(self,text,height,frames,time=1.0,anim_speed=1.0,scaling=0.6):
         Perk.__init__(self,os.path.join(defaults.data_dir,"tiles_misc","minimi.txt"),text,height,frames,anim_speed)
         self.time = time
+        self.scaling = scaling
         
     def EnablePerk(self,player):
         if player in self.players:
@@ -329,7 +330,7 @@ class Minimi(Perk):
         other = Perk.EnablePerk(self,player)
         if other is None:
             self._SetAutoExpire(player,self.time)
-            player.Scale(0.6)
+            player.Scale(self.scaling)
             return
 
         other._SetAutoExpire(player,self.time,True)
@@ -337,11 +338,15 @@ class Minimi(Perk):
     def DisablePerk(self,player):
         Perk.DisablePerk(self,player)
         print("Disable perk: Minimi")
-        player.Scale(1/0.6)
+        player.Scale(1/self.scaling)
         
-        ab = player.GetBoundingBoxAbs()
+        bb = player.GetBoundingBox()
         
-        # Check if we are trapped in a 1-tile height cave. If so, die.
+        # construct a 1.5x*1.5x sized box around the player. If we
+        # can find a possible way to place him in there, he survives.
+        ab = (bb[0]-0.5*bb[2],bb[1]-0.5*bb[3],bb[0]+1.5*bb[2],bb[1]+1.5*bb[3])
+        aa = list(ab)
+        
         for collider in self.game.GetLevel().EnumPossibleColliders(ab):
             if collider is player: 
                 continue
@@ -350,10 +355,40 @@ class Minimi(Perk):
             if cd is None:
                 continue
             
-            if player._HitsMyTop(ab,cd) and player._HitsMyBottom(cd,ab) and collider.Interact(player)==Entity.BLOCK:
-                player._Kill(_("crushed by matter"))
-                break
+            print(cd)
             
+            if player._HitsMyTop(ab,cd):
+                if ab[2] - cd[2] < bb[2] and cd[0] - ab[0] < bb[2]:
+                    aa[1] = max(aa[1], cd[3])
+                
+            if player._HitsMyBottom(ab,cd) or ab[1]+0.5 <= cd[1] and cd[3] <= ab[3] :  
+                if ab[2] - cd[2] < bb[2] and cd[0] - ab[0] < bb[2]:
+                    aa[3] = min(aa[3], cd[1])
+                
+            if player._HitsMyLeft(ab,cd):             
+                if ab[3] - cd[3] < bb[3] and cd[1] - ab[1] < bb[3]:
+                    aa[0] = max(aa[0], cd[2])
+                
+            elif player._HitsMyRight(ab,cd):          
+                if ab[3] - cd[3] < bb[3] and cd[1] - ab[1] < bb[3]:
+                    aa[2] = min(aa[2], cd[0])
+            
+        print(bb)
+        print(ab)
+        print(aa)
+        ab = player.GetBoundingBox()
+        if aa[2]-aa[0] < bb[2]*0.98 or aa[3]-aa[1] < bb[3]*0.98:
+            player._Kill(_("crushed by massive amounts of matter"))
+            return
+       
+        x,y = min(aa[2]-bb[2], max(aa[0],ab[0])), min(aa[3]-bb[3], max(aa[1],ab[1])) 
+        
+        # adjustment by pofsx,y needed since the Player class fakes
+        # the player's bounding box internally. Hate.
+        player.SetPosition((x-player.pofsx,y-player.pofsy))
+        
+        
+       
             
             
             
