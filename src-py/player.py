@@ -116,6 +116,8 @@ class Player(Entity):
         
     def SetLevel(self,level):
         Entity.SetLevel(self,level)
+        
+        self.inventory = level.inventory_shared
         self._Reset()
         
     def SetGame(self,game):
@@ -227,7 +229,7 @@ class Player(Entity):
         self.game = game
         for tile in self.tiles:
             tile.SetGame(self.game)
-
+        
     def SetPosition(self, pos):
         Entity.SetPosition(self,pos)
 
