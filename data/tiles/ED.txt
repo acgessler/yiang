@@ -1,0 +1,27 @@
+from enemy import NaughtyPongPong; <out> = NaughtyPongPong(<raw>,3,3,killable=False)
+_/^\_
+]|||[
+/---\
+
+_/^\_
+][||[
+/---\
+
+_/^\_
+]|[|[
+/---\
+
+
+_/^\_
+]||[[
+/---\
+
+_/^\_
+]]||[
+/---\
+
+_/^\_
+]|]|[
+/---\
+
+

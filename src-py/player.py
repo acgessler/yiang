@@ -46,8 +46,8 @@ class InventoryItem:
     story-related items the player has to collect.
     """
     
-    def __init__(self,permanent = False):
-        self.permanent = permanent
+    def __init__(self):
+        pass
     
     def GetItemName(self):
         """Return a descriptive item name to be displayed to the user"""

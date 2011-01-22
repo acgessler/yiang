@@ -36,7 +36,7 @@ class Part(InventoryItem, Tile):
     
     def __init__(self, text="", width=Tile.AUTO,height = Tile.AUTO,halo_img=None,name=""):
         Tile.__init__(self,text,width,height,halo_img=halo_img)
-        InventoryItem.__init__(self,True)
+        InventoryItem.__init__(self)
         self.name = name
     
     def GetItemName(self):
