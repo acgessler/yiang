@@ -144,7 +144,7 @@ class SmallTraverser(Enemy):
         
         if self.direction == Entity.DIR_HOR:
             for collider in self.game.GetLevel().EnumPossibleColliders(ab):
-                if isinstance(collider,Enemy):
+                if isinstance(collider,Enemy) or isinstance(collider,Player) and collider.MeCanDie():
                     continue
                 
                 cd = collider.GetBoundingBoxAbs()
@@ -170,7 +170,7 @@ class SmallTraverser(Enemy):
                         self._Die()
         else:
             for collider in self.game.GetLevel().EnumPossibleColliders(ab):
-                if isinstance(collider,Enemy):
+                if isinstance(collider,Enemy) or isinstance(collider,Player) and collider.MeCanDie():
                     continue
                 
                 cd = collider.GetBoundingBoxAbs()
