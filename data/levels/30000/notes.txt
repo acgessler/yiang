@@ -1,1 +1,2 @@
 cd: port to desert map
+cg: port to ice map
