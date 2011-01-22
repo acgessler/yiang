@@ -135,7 +135,9 @@ class ReceiverRotateRight(Receiver):
     
     def OnDoTeleport(self,source,player):
         Receiver.OnDoTeleport(self,source,player)
-        player.vel = [player.vel[1]*2.0, -player.vel[0]]
+
+        velabs = (player.vel[0]**2+player.vel[1]**2)**0.5
+        player.vel = [velabs*1.5,0]
         
     def OnDoTeleportSmallTraverser(self,source,st):
         st.SetPosition(self.pos)
@@ -161,7 +163,8 @@ class ReceiverRotateLeft(Receiver):
     
     def OnDoTeleport(self,source,player):
         Receiver.OnDoTeleport(self,source,player)
-        player.vel = [-player.vel[1]*2.0, player.vel[0]]
+        velabs = (player.vel[0]**2+player.vel[1]**2)**0.5
+        player.vel = [-velabs*1.5,0]
         
     def OnDoTeleportSmallTraverser(self,source,st):
         st.SetPosition(self.pos)
