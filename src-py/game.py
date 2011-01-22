@@ -428,10 +428,13 @@ OOOOOO  OOOOO  \n\
         import gc
         gcc = gc.get_count()
 
+        scaled_score = self.score/100
+        
         # this is expensive, but we will survive it.
         locdef = locals().copy()
         locdef.update(defaults.__dict__)
         locdef.update(self.__dict__)
+
         
         text = """
 EntitiesTotal:     {entity_count}
@@ -453,6 +456,8 @@ LevelSize:         {level_size}
 
 TimeDelta:         {dtime:.4}
 1/TimeDelta:       {fps:.4}
+
+MoneyAmount:       {scaled_score} $
 
 """.format(**locdef)
         
