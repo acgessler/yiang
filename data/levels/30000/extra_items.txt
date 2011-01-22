@@ -48,11 +48,13 @@
 197 240 0ba
 98 140 dbb
 59 57 0bc
+191 270 0bd
+202 271 0be
 
 #Entrances to Desert and Ice
 
 182 17 _cd
-192 279 0cg
+202 264 0cg
 
 
 
