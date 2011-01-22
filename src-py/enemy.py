@@ -437,7 +437,7 @@ class SmallBob(Enemy):
         
         floor = False
         for collider in self.game.GetLevel().EnumPossibleColliders(ab2):
-            if isinstance(collider,Enemy):
+            if isinstance(collider,Enemy) or isinstance(collider,Player) and collider.MeCanDie():
                 continue
             
             cd = collider.GetBoundingBoxAbs()
