@@ -948,10 +948,10 @@ class KillAnimStub(Tile):
         ))
         
     def SetDirection(self,dirvec):
-        self.dirvec = mathutil.Normalize(dirvec)
+        self.dirvec = list( mathutil.Normalize(dirvec) )
         
     def SetSpeed(self,speed):
-        self.speed = speed
+        self.speed = speed*3
         
     def SetTTL(self,ttl):
         self.ttl = ttl
@@ -971,6 +971,9 @@ class KillAnimStub(Tile):
     def Update(self, time_elapsed, time_delta):
         self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, 
             self.pos[1] + self.dirvec[1] * time_delta * self.speed))
+        
+        self.dirvec[0] = self.dirvec[0] * pow(0.6,time_delta)
+        self.dirvec[1] = self.dirvec[1] * pow(0.6,time_delta)
 
         if not hasattr(self, "time_start"):
             self.time_start = time_elapsed

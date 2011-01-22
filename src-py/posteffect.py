@@ -47,7 +47,10 @@ class PostFX:
         for updater in self.updater:
             updater()
             
-        Renderer.app.Draw(self.pfx)
+        # last try to stop postfx to occur if the user disabled it.
+        # normally, we shouldn't even get that far.
+        if not defaults.no_ppfx:
+            Renderer.app.Draw(self.pfx)
     
     def SetParameter(self,name,*args):
         """See sf.PostFX.SetParameter()"""
