@@ -288,15 +288,20 @@ class NaughtyPongPong(Enemy):
             
             # lower border    
             if self._HitsMyBottom(ab, cd):
-                self.vel = min(0,self.vel)
-                collider.AddToActiveBBs()     
+
+                if collider.Interact(self) & Entity.BLOCK_TOP:
+                    self.vel = min(0,self.vel)
+                    collider.AddToActiveBBs()     
                 
-                self.relaunch_time = sf.Clock()    
-                break
+                    self.relaunch_time = sf.Clock()    
+                    break
                     
             # top border
             elif self._HitsMyTop(ab, cd):
-                self.vel = max(0,self.vel)
+
+                if collider.Interact(self) & Entity.BLOCK_BOTTOM:
+                    self.vel = max(0,self.vel)
+                    collider.AddToActiveBBs()     
                 break
                 
     def Interact(self, other):
