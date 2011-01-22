@@ -238,12 +238,13 @@ class NaughtyPongPong(Enemy):
     a few moments. Can be killed only by Mario-style (
     jump on its top ..)"""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong (NPP)"),shrinkbb=0.65):
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong (NPP)"),shrinkbb=0.55,killable=True):
         Enemy.__init__(self, text, height, frames, speed, 2)
 
         self.verbose = verbose
         #self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
         self.vel = -defaults.jump_vel   
+        self.killable=killable
 
         self._ShrinkBB(shrinkbb)
 
@@ -299,7 +300,7 @@ class NaughtyPongPong(Enemy):
                 break
                 
     def Interact(self, other):
-        if isinstance(other,Player):
+        if isinstance(other,Player) and self.killable:
             ab = self.GetBoundingBoxAbs()
             cd = other.GetBoundingBoxAbs()    
             

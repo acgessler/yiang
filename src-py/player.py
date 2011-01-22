@@ -46,8 +46,8 @@ class InventoryItem:
     story-related items the player has to collect.
     """
     
-    def __init__(self,permanent = False):
-        self.permanent = permanent
+    def __init__(self):
+        pass
     
     def GetItemName(self):
         """Return a descriptive item name to be displayed to the user"""
@@ -65,6 +65,13 @@ class InventoryItem:
             player.AddToInventory(self)
             self.game.RemoveEntity(self)
             self.item_taken = True
+
+    def IsPersistent(self):
+        """Persistent inventory items remain in the player's
+        possession upon completing the level they can be
+        found in. Non-persistent items are lost upon
+        leaving a level."""
+        return False
             
 
 class Player(Entity):

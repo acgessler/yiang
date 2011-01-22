@@ -107,7 +107,7 @@ class Level:
         # all player instances in this level will share this inventory.
         # upon leaving the level, we'll merge all persistent items
         # in it back to the game inventory
-        self.inventory_shared = []
+        self.inventory_shared = game.cookies.setdefault("inventory",[])
         
         self.audio_section = audio_section or "level_{0}".format(self.level)
         

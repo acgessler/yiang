@@ -640,6 +640,14 @@ Hit {0} or {1} to return to the menu .. """).format(
         )),defaults.game_over_fade_time,(550,260),0.0,accepted,sf.Color.Green,on_close)
         
         raise NewFrame()
+
+    def MergeInventoryBack(self):
+        self.cookies.setdefault("inventory",[])
+        for i in self.level.inventory_shared:
+            if i.IsPersistent():
+                self.cookies["inventory"].append(i)
+
+
     
     def BackToWorldMap(self):
         """Display level statistics and move the player back to the world map"""
@@ -647,6 +655,7 @@ Hit {0} or {1} to return to the menu .. """).format(
         from posteffect import FadeOutOverlay, FadeInOverlay
         from notification import MessageBox
         
+        self.MergeInventoryBack()
         accepted = KeyMapping.Get("accept"),
         
         def dropit(x):
@@ -672,6 +681,8 @@ Hit any key to continue.
     def NextLevel(self):
         """Load the next level, cycle if the last level was reached"""
         DebugTools.Trace()
+        
+        self.MergeInventoryBack()
         
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level_idx))
