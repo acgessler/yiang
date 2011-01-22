@@ -142,7 +142,7 @@ class Heat(AnimTile):
             # fix to avoid different behaviour in higher rounds
             now, end = self.DeathTimer.GetElapsedTime(), self.DeathTimerEnd  / self.game.speed_scale 
             
-            self.myplayer.postfx_heat_shader_intensity += now*time_delta*Heat.FADE_IN_SPEED/end
+            self.myplayer.postfx_heat_shader_intensity += time_delta*Heat.FADE_IN_SPEED
             
             s = min(1,self.myplayer.postfx_heat_shader_intensity)
             self.myplayer.postfx_heat_shader.SetParameter("col_scale", self.color.r * s, self.color.g * s, self.color.b * s)
