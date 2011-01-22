@@ -1,9 +1,10 @@
-#!echo "This file is not executable"
+#! /usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
-#/////////////////////////////////////////////////////////////////////////////////
-# Yet Another Jump'n'Run Game, unfair this time.
-# (c) 2010 Alexander Christoph Gessler
+# ///////////////////////////////////////////////////////////////////////////////////
+# YIANG (v2.0)
+# [userprofile.py]
+# (c) 2008-2011 Yiang Development Team
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -53,3 +54,5 @@ def SetupSelectionGUI(on_done):
     on_done()
         
         
+
+# vim: ai ts=4 sts=4 et sw=4

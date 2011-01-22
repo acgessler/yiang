@@ -1,9 +1,10 @@
-#!/usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
-#/////////////////////////////////////////////////////////////////////////////////
-# Useful abbreviations to reduce typing work writing typical python mini-scripts.
-# (c) Alexander Gessler, 2010
+# ///////////////////////////////////////////////////////////////////////////////////
+# YIANG (v2.0)
+# [abbrev.py]
+# (c) 2008-2011 Yiang Development Team
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -48,4 +49,3 @@ import collections
 dd = collections.defaultdict
 
 # vim: ai ts=4 sts=4 et sw=4
-

@@ -1,9 +1,10 @@
-#!env python3
+#! /usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
-#/////////////////////////////////////////////////////////////////////////////////
-# Yet Another Jump'n'Run Game, unfair this time.
-# (c) 2010 Alexander Christoph Gessler
+# ///////////////////////////////////////////////////////////////////////////////////
+# YIANG (v2.0)
+# [genemptylevel.py]
+# (c) 2008-2011 Yiang Development Team
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -113,3 +114,5 @@ if __name__ == "__main__":
     Main()
     
     
+
+# vim: ai ts=4 sts=4 et sw=4

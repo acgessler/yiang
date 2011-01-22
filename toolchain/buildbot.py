@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#! /usr/bin/env python3
 # -*- coding: UTF_8 -*-
 
 # ///////////////////////////////////////////////////////////////////////////////////
-# MGL Framework Python Scripting Interface (v0.1)
+# YIANG (v2.0)
 # [buildbot.py]
-# (c) Alexander Gessler, 2009
+# (c) 2008-2011 Yiang Development Team
 #
 # HIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
