@@ -65,6 +65,13 @@ class InventoryItem:
             player.AddToInventory(self)
             self.game.RemoveEntity(self)
             self.item_taken = True
+
+    def IsPersistent(self):
+        """Persistent inventory items remain in the player's
+        possession upon completing the level they can be
+        found in. Non-persistent items are lost upon
+        leaving a level."""
+        return False
             
 
 class Player(Entity):

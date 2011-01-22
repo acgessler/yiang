@@ -65,6 +65,9 @@ Hit any key to continue""").format(self.name),
             
             
         return Entity.ENTER
+
+    def IsPersistent(self):
+        return True
     
    
    
