@@ -477,20 +477,37 @@ class Blocker(Tile):
     """Blockers prevent the player from entering certain
     areas of the game world."""
     
-    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None,dropshadow=True):
+    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None,dropshadow=True,opposite=False):
         Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow)
         self.need_levels = need_levels
         self.status_msg = status_msg or _("You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur.")
-        
+        self.opposite=self.nblocking=opposite
+        self.old_color=sf.Color(0xff,0xff,0xff,0xff)
+        if self.nblocking:
+            self.color = sf.Color(0,0,0,0)
+
+    def SetColor(self,color):
+
+        Tile.SetColor(self,color)
+        if self.nblocking:
+            self.color = sf.Color(0,0,0,0)
+
+        self.old_color = color
+
     def Interact(self,other):
         if isinstance(other, Player):
             self.level.SetStatusMessage(self.status_msg,sf.Color.Red)
         
-        return Entity.ENTER if defaults.debug_godmode else Entity.BLOCK
+        return Entity.ENTER if (defaults.debug_godmode or self.nblocking) else Entity.BLOCK
         
     def Update(self,time_elapsed,time):
+
         if not (set(self.need_levels ) - set(self.game.GetDoneLevels())):
-            self.game.RemoveEntity(self)
+            if self.opposite:
+                self.color = self.old_color
+                self.nblocking = False
+            else:
+                self.game.RemoveEntity(self)
             #raise NewFrame()
             
         Tile.Update(self,time_elapsed,time)
