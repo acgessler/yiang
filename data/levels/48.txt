@@ -1,0 +1,36 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Temple of Blue Danger'),color=(255, 255, 255),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.0)
+
+
+
+
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBINBIN
+.  .  .  .  .  BA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2.  .  .  .  .  .  .  BRD.  .  .  BA9PTA.  .  .  .  .  .  .  .  .  .  BIN_ED.  _EDBIN.  .  .  .  .  BA0BA0BA0BA0BA0BA0
+.  .  .  .  BA9BA9BA9.  .  .  .  .  _PL.  .  .  .  .  .  .  .  .  BRD.  .  .  .  _B2_B2_B2_B2BTC.  .  rKE.  .  _B2_B2_B2_B2.  .  .  .  .  .  .  .  .  .  BA9BA9BA9BA9BA9.  .  .  .  .  .  .  .  .  BIN.  .  .  BIN.  .  .  .  BA0BA0BA0BA0BA0BA0BA0BA0
+BA9BA9BA9BA9BA9BA9BA9BA9BA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B2_B2_B2.  .  .  .  .  PTA_B2_B2_B2.  .  .  .  .  .  .  .  .  BA9.  BAEBAEBAEBAEBAEBA9BA9.  .  .  .  .  .  .  BIN_ED.  _EDBIN.  .  aTA.  rDO.  .  .  .  .  .  rDO.  aTA
+BA9.  .  .  .  .  .  .  BA9BA9.  .  .  .  .  .  .  .  .  .  .  .  BA9.  .  .  .  .  .  _B2_B2_B2_B2_B2_B2_B2_B2_B2_B2.  .  .  .  .  .  .  .  .  BA9BA9.  BAEBAEBAEBAEBAEBAEBA9BA9.  .  .  .  .  .  BIN.  .  .  BIN
+BA9BFI.  BS5PS4.  aTD.  BA9BA9BA9.  .  .  .  .  .  .  .  .  BA9BA9BA9BA9BA9.  .  .  .  .  _B2PTC.  .  rKE.  .  _B2.  .  .  .  .  .  .  .  .  .  BA9BAE.  BAEBAEBAEBAEBAEBAEBAEBA9.  BCE.  .  cABBA0cABBA0.  BA0cABBA0cABBA0cABBA0cABBA0.  BA0BA0BA0BA0BA2
+BA9.  .  .  .  .  .  .  BA9BA9.  .  .  .  .  .  .  .  BA9BA9BAEBAEBAEBAEBAEBA9BA9.  .  .  _B2.  .  .  .  .  _TA_B2.  .  .  .  .  .  .  .  .  .  BA9BAE.  .  BA9BA9BA9BA9BA9BA9BA9BA9.  .  .  .  .  .  .  .  .  .  .  BRD.  .  .  .  .  .  .  .  .  BA0BA0BA0BA0BA2
+BA9BA9BA9BA9BA9BA9BA9BA9BA9.  .  .  .  .  .  .  yACBA9BA9BAEBAEBAEBAEBAEBAEBAEBA9BA9BAC.  _B2_B2_B2_B2_B2_B2_B2_B2.  .  .  .  .  .  .  .  .  .  BA9BAE.  .  .  rDOrDOrDO.  .  .  BA9.  .  .  .  .  .  .  .  _EDPTC.  .  .  .  .  .  .  .  .  .  .  .  BFIBFIBFIBB4
+BA9.  .  .  .  BA9BA9BC4.  .  .  .  .  .  .  .  .  BA9BAEBAEBAEBAEBAEBAEBAEBAEBAEBA9.  .  _B2_TC.  .  .  .  rKE.  .  .  .  .  .  .  .  .  .  .  BA9BAE.  .  .  .  .  .  .  .  BRD.  BA0cABBA0cABBA0cABBA0.  BA0BA0BB2BB2BB2BB2BB2BB2BB2.  BA0BA0.  .  .  .  .  BB4
+BA9.  .  .  .  .  BA9BC4.  .  .  .  .  BC4yACyACyACBA9BAEBAEBAEBAEBAEBAEBAEBAEBAEBA9BAC.  _B2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BA9BAEBTABAEBA9BA9BA9BA9BA9BA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  BA0BCE.  .  .  .  PS1BB5BA0BA0BA0BA0BA0BB4
+BA9.  .  .  .  .  .  BC4.  .  .  .  .  BC4.  .  .  BA9BAEBAEBAEBAEBAEBAEBAEBAEBAEBA9.  .  _B2_B2_B2_B2_B2_B2_B2_B2.  .  .  .  .  .  .  .  .  .  BA9BAEBAEBAEBA9BA8BA9BAEBAEBAEBA9.  .  .  .  .  .  .  _ED.  .  .  _ED.  .  .  .  .  .  .  PS1BB5BA9BA9BB4
+BA9rKE.  .  .  .  .  BC4.  .  BC4yACyACyACyACyACyACBA9BAEBAEBAEBAEBAEBAEBAEBAEBAEBA9BAC.  BACBACBACBACBC4.  .  .  .  .  .  .  .  .  .  .  .  .  BA9BAEBAEBAEBC4.  BC4BAEBAEBAEBA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PS1BB5BA9BA9BB4
+BA9.  .  .  .  .  .  BC4.  .  BC4.  .  .  .  .  .  BA9BAEBAEBAEBAEBAEBAEBAEBAEBAEBA9.  .  .  .  .  .  BC4.  .  .  .  .  .  .  .  .  .  .  .  .  BA9BAEBAEBAEBC4.  BC4BAEBAEBAEBA9.  .  .  .  cABBA0cABBA0.  BA0.  .  cABBA0cABBA0cABBA0.  BA0BA0BA9BA9BB4
+BA9.  .  .  _E3.  .  BC4yACyACyACyACyACyACyACyACyACBA9BAEBAEBAEBA8BA8BA8BAEBAEBAEBA9BACBACBAC.  BACBACBACBACBACBC4.  .  .  _E3.  .  .  .  BCE.  BB5BABBA9BABBA9BABBA9BABBA9BABBB4.  .  .  .  .  .  .  .  BCE.  .  .  .  .  .  .  .  BA0BCE.  BB5BA9BA9BB4
+BA9PS0.  .  .  .  .  BC4.  .  .  .  PS0PS0PS0PS0.  BA9BAEBAEBAEBC4.  BC4BAEBAEBAEBA9PS0.  .  _ED.  .  .  .  .  BC4.  .  .  .  .  .  .  .  .  .  BB5BABBA9BABBA9BABBA9BABBA9BABBB4.  .  .  .  .  .  .  .  .  .  .  aSM.  .  .  .  .  BA0.  .  BB5BA9BA9BB4
+BA9BA9.  .  .  .  .  BC4.  .  .  .  .  .  .  .  .  BA9BAEBAEBAEBC4.  BC4BAEBAEBAEBA9PS0.  .  .  .  .  .  .  .  BC4.  .  .  .  .  .  .  .  .  .  BB5BABBA9BABBA9BABBA9BABBA9BABBB4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BA0.  .  BB5BA9BA9BB4
+BA9BA9BA9BA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BB5BABBA9BABBA9BABBA9BABBA9BABBB4BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BABBA0BA0BA0BA0BB4
+
+
+
+
+
+
+
+
+
