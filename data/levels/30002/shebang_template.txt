@@ -1,1 +1,1 @@
-from campaign import CampaignLevel; <out> = CampaignLevel(<level>,<game>,<raw>,name=_("Map of the World"),minimap="map.bmp",skip_validation=True)
+from campaign import CampaignLevel; <out> = CampaignLevel(<level>,<game>,<raw>,name=_("Frozen part of the world"),minimap="map.bmp",skip_validation=True)

@@ -1,0 +1,17 @@
+from tile import Tile; <out> = Tile(<raw>,20,12,halo_img=None,collision=Entity.ENTER)
+igiiip*opppo*ppiippi
+i*ppi°gii~iii°iiip*p
+po*ppiippipo*ppiippi
+°ip*iig~iii°iiipoopp
+poop°*ippiigiiip*op°
+i°iiipooppo~iii°iiio
+iippi*giii°pioii~Op°
+igiiip*opppo*ppiippi
+i*ppi°gii~iii°iiip*p
+po*ppiippipo*ppiippi
+°ip*iig~iii°iiipoopp
+poop°*ippiigiiip*op°
+i°iiipooppo~iii°iiio
+iippi*giii°pioii~Op°
+
+

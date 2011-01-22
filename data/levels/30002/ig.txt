@@ -1,0 +1,7 @@
+from campaign import CampaignTile; <out> = CampaignTile(<raw>,5,6,halo_img=None,collision=Entity.BLOCK)
+*o°*x
+@~*°$
+%°o$*
+*o°*x
+@~*°$
+%°o$*

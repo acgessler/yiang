@@ -1,0 +1,13 @@
+from campaign import CampaignTile; <out> = CampaignTile(<raw>,20,12,halo_img=None,collision=Entity.BLOCK)
+*o°*x@~*°$*o°*x*o°*x
+@~*°$*o°*x*o°*x@~*°$
+%°o$*%°o$*@~*°o$*%°o
+*o°*x*o°*x@~*°$%°~o*
+@~*°$%°o$*%°o$*o°*x°
+%°o$**o°*xo°*x*~*°$*
+*o°*x@~*°$*o°*x*o°*x
+@~*°$*o°*x*o°*x@~*°$
+%°o$*%°o$*@~*°o$*%°o
+*o°*x*o°*x@~*°$%°~o*
+@~*°$%°o$*%°o$*o°*x°
+%°o$**o°*xo°*x*~*°$*

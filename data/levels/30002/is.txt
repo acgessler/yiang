@@ -1,0 +1,4 @@
+from tile import Tile; <out> = Tile(<raw>,10,3,halo_img=None,collision=Entity.ENTER)
+igiiip*opp
+i*ppi°giii
+po*ppiippi
