@@ -1,15 +1,15 @@
-from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name='KillTheChicken4')
-.  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rC5rC5rC5rC5
-.  .  .  .  .  .  .  .  .  .  _X1
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rINrINrINrINrINrINrINrINrINrINrINrIN
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  rPL.  .  .  .  .  rIN
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _X0
+from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name=_('KillTheChicken4'))
+.  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rC5rC5rC5rC5
+.  .  .  .  .  .  .  .  .  yE2_X1rE2
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rINrINrINrINrINrINrINrINrINrINrINrIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  rPL.  .  .  .  .  rIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _X0
 
 
-.  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN
+.  .  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN

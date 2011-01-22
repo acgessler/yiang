@@ -1,15 +1,15 @@
-from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0.0),name='KillTheChicken5',color=(30, 30, 30),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0,)
-.  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  ~D9
-.  .  .  .  .  .  .  .  .  .  _X1
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA9gA9rA9gA9rA9gA9rA9gA9rA9gA9rA9gA9rA9
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  gA9
-.  .  .  .  .  gTA.  .  .  _TC_TA.  .  .  .  rA9.  .  .  .  .  .  .  .  .  .  .  rA9
-.  .  .  .  .  gTC.  .  .  .  _B2_B2.  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  gA9
-.  .  .  .  .  .  .  .  .  .  .  .  _B2_B2_B2rA9.  .  .  .  _PL.  .  .  .  .  .  _B2_B2_B2_B2.  .  .  _TD
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  _B2_B2_B2.  .  .  .  .  .  .  .  .  _B2_B2_B2.  _TA_TC.  .  _TA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_A2
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _X0
+from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0.0),name=_('KillTheChicken5'),color=(30, 30, 30),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bE2.  .  .  .  ~D9
+.  .  .  .  .  .  .  .  .  bE2.  .  _E2gE2.  ~E2
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rA9gA9rA9gA9rA9gA9rA9gA9rA9gA9rA9gA9rA9
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  gA9
+.  .  .  .  .  .  .  .  .  .  gTA.  .  .  _TC_TA.  .  .  .  rA9.  .  .  .  .  .  .  .  .  .  .  rA9
+.  .  .  .  .  .  .  .  .  .  gTC.  .  .  .  _B2_B2.  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  gA9
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B2_B2_B2rA9.  .  .  .  _PL.  .  .  .  .  .  _B2_B2_B2_B2.  .  .  _TD
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B2_B2_B2.  .  .  .  .  .  .  .  .  _B2_B2_B2.  _TA_TC.  .  _TA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_A2
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _X0
 
 
-.  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN
+.  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN

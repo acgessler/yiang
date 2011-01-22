@@ -1,14 +1,14 @@
-from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name='KillTheChicken3')
-.  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TB
-.  .  .  .  .  .  .  .  .  .  _X1.  .  .  .  .  .  .  .  _X0
-.  .  .  .  .  rDArDArDA.  .  .  .  .  _AB_AB_AB_AB
-.  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  .  _B6
-.  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  _A0_B6_A0_A0_A0_A0_A0
-.  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  .  _B6_A9.  .  .  _A9
-.  .  .  .  .  rDArDArDA.  .  .  .  .  .  cTD_A0_A0_A0_B6.  rPL.  _A9.  _A0_C8
-.  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  _C4.  .  .  .  .  .  _C4.  .  _B6_B6
-.  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  _C4.  .  .  .  .  .  _C4.  .  _B6
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6_B6.  _C9.  .  .  _A9.  _B6_B6
-.  .  .  .  .  .  .  .  .  .  _TA.  .  .  .  .  .  _B6_B6_B6_B6_B6_B6_A9
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6_B6_B6_B6
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6.  .  .  .  .  .  .  .  .  .  cTA
+from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name=_('KillTheChicken3'))
+.  .  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TB
+.  .  .  .  .  .  .  .  .  .  gE2~E2.  _E2.  .  .  .  .  .  .  .  _X0
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  _AB_AB_AB_AB
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  .  _B6
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  _A0_B6_A0_A0_A0_A0_A0
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  .  _B6_A9.  .  .  _A9
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  cTD_A0_A0_A0_B6.  rPL.  _A9.  _A0_C8
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  _C4.  .  .  .  .  .  _C4.  .  _B6_B6
+.  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  _C4.  .  .  .  .  .  _C4.  .  _B6
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6_B6.  _C9.  .  .  _A9.  _B6_B6
+.  .  .  .  .  .  .  .  .  .  .  .  .  _TA.  .  .  .  .  .  _B6_B6_B6_B6_B6_B6_A9
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6_B6_B6_B6
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6.  .  .  .  .  .  .  .  .  .  cTA
