@@ -1,0 +1,38 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_("Traitor's Gate"),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.0)
+
+
+
+
+
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAF
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rKE
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  _A8_A8.  .  _A8_A8.  .  _A9_A9_A9.  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9cS0cS0_A9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _PL.  .  .  .  .  .  .  .  .  rKE.  _A9.  .  .  .  .  .  .  .  .  .  _A9.  .  .  gDO_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  _A9_A9_A9_A9.  .  .  .  .  .  .  _A9_A9_A9_A9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  _A1_A5_A5_A5_A5_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9.  .  .  .  .  .  .  .  _A9_A9_A9_A9.  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  cS5_A9.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  _A9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bDO.  _A9.  .  gKE.  .  .  .  .  _A9.  .  .  .  .  .  .  _PL.  .  .  .  gDOcRD.  .  .  cRD.  .  cRD.  .  cRDgDO.  cS5_A9.  .  .  .  .  .  .  .  .  .  .  .  .  _A9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  rDArDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cS0_A9.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  _A9
+.  .  .  .  .  _A9_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_A9cS0_A9.  .  gKE.  .  .  .  .  _A9_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_AC.  _AC_AC.  _AC_AC_AC.  _AC_AC_AC_ACcA9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9cAF_A9cAFcAFcAF.  .  .  .  .  .  .  _A9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9cAFcAFcAF_A9.  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cS1cS1
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  _H1.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  bKE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9.  cS5_A9.  .  .  cRDcRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cS1cS1
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  cRD.  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  cRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cS1cS1.  .  .  _FI
+.  .  .  .  .  _A9.  .  .  .  _A1_A5_A5_A5_A5_A2.  .  .  .  .  .  .  .  _PL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cRD.  _AC_AC.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cRD.  .  cRD
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9cRDcRD.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  _AC_AC_AC.  .  .  .  .  .  .  _AC_AC_AC.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  aE3.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AC_A9_AC_AC_AC_AC_AC_AC
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  _A9.  _AC_AC.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AC_A9.  .  _AC_A9_A9_AC.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
+.  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA.  _A9_CD.  .  .  _CE.  _CE.  _CE.  _A9.  .  .  .  .  cAFcAFcAFcAFcAFrKE.  .  _AC_AC_AC.  .  cAFcAF.  .  _AC.  _AC_AC.  _A9.  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
+.  .  .  .  .  _A9.  rCC.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA.  _A9.  .  .  .  .  .  .  .  .  .  _A9cAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAF.  .  .  .  .  cAFcAFcAFcAFcAF.  .  .  .  .  .  _A9.  .  .  _A9_A9_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_A9_A9
+.  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_B2_A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  _A9cAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAFcAF_A9.  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9
+
+
+
+
+
+
+
+
+
