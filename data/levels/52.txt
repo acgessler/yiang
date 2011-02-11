@@ -1,0 +1,23 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Classical'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],gravity=0,vis_ofs=0,scroll=0,lower_offset=0.0)
+_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+_A9yS1yS1.  .  .  .  .  .  aE0.  .  .  .  .  .  _AA.  .  yS1_AAyS1.  .  .  dE0.  .  .  .  .  .  .  .  .  .  .  .  .  yS1.  .  yS1.  .  .  .  .  .  .  .  _AA.  .  .  .  yS1_A9
+_A9yS1.  .  .  .  .  .  .  _AAyS1.  .  .  .  .  _AA.  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  .  _AA_AA.  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
+_A9.  .  _AA_AA_AA_AA_AA.  _AAyS1.  .  .  _AA.  _AA.  .  .  .  .  .  .  .  .  aE0_AAyS1.  _AA.  .  _AA.  .  .  yS1.  .  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  _A9
+_A9.  .  _AA_AA_AA_AA_AA.  _AA_AA_AA_AA_AA_AA.  _AA.  .  .  .  .  .  .  .  .  .  _AA_AA.  .  .  .  _AA.  .  .  .  .  .  .  .  _AA_AA.  .  .  .  .  .  .  .  .  _AA_AA.  _AA_A9
+_A9.  .  _AA_AA_AA.  .  .  .  .  .  .  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  .  .  _AA_AA.  .  .  .  .  .  .  _AA.  .  .  .  _AArE2.  .  _A9
+_A9rE2.  _AA.  .  .  .  .  .  .  .  .  .  .  .  pE0.  .  .  .  _AA.  .  .  .  oE0.  .  .  .  .  .  .  _AA.  _AA_AA.  _AA.  .  .  .  .  _AA_AA.  _AA_AA_AA_AA.  _AA.  .  yS1_A9
+_A9.  .  .  .  .  .  .  .  .  .  .  .  _AA_AA.  _AA_AA_AA_AA_AA_AA.  _AA.  .  _AA.  .  _AA_AA_AA_AA.  _AA.  .  .  .  _AA.  .  .  .  .  dE0.  .  .  .  _AA.  .  .  .  .  .  _A9
+_A9.  .  .  .  _AA.  _AA.  .  .  .  .  _AA.  .  .  _GO.  .  yS1_AA.  _AA_AA_AA_AA.  .  _AA.  .  _AA_AA_AA.  .  .  .  .  .  _AA_AA_AA.  .  .  .  .  .  _AA.  .  .  .  .  .  _A9
+_A9_AA_AA_AA_AA_AA.  _AA.  .  _AA.  .  _AA.  .  .  .  .  .  yS1_AA.  .  _AA.  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  _AA_AA_AA_AA_A9
+-ADyPL.  .  .  .  .  .  .  .  _AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA_AA.  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI
+-AD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  pRD.  .  _AA.  .  .  .  .  .  .  .  _AA_AA_AA.  .  .  .  .  .  _AA_AA_AA
+_A9_AA_AA_AA_AA_AAyS1_AA.  .  .  .  .  .  .  .  _AA.  .  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AA_AA_AA_AA_A9
+_A9yS1yS1.  .  .  .  _AA.  .  .  .  _AA.  .  .  _AA.  .  _AA.  .  .  .  .  _AA_AA.  _AA_AA_AA_AA_AA_AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS1_A9
+_A9yS1.  .  .  .  .  _AA.  .  .  .  _AA.  .  .  .  .  .  _AA.  .  .  .  .  .  _AA.  .  .  .  yS1yS1_AA.  .  .  .  _AA_AA.  .  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  _A9
+_A9.  .  _AA_AA_AA.  _AA_AA_AA.  _AA_AA.  .  .  .  .  .  _AA.  .  _AA.  .  .  _AA.  .  .  .  yS1yS1_AA.  .  .  .  .  .  .  .  .  .  .  .  _AA_AA.  .  .  _AA_AA_AA_AA.  _AA_A9
+_A9.  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  _AA_AA_AA_AA.  .  _AA_AA.  _AA_AA_AA_AA_AAbE2_AA_AA_AA_AA_AA_AA.  .  .  .  .  .  .  .  .  yS1_AA.  .  .  .  _AAyS1.  .  .  _A9
+_A9.  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  _AApE0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  .  rE0.  .  .  .  .  yS1_AA_AA.  .  .  _AAyS1.  .  .  _A9
+_A9_AA_AA.  .  _AA.  .  .  .  _AA.  .  .  _AA_AA_AA.  _AA_AA.  .  .  .  .  _AA_AA.  .  .  .  .  .  .  yS1_AA_AA_AA.  _AA_AA.  .  .  .  .  .  .  .  .  .  .  _AA.  _AA.  .  _A9
+_A9.  .  .  .  .  .  _AA_AA_AA_AA.  .  .  .  yS1_AA.  yS1yS1.  .  .  .  .  yS1_AA.  .  .  .  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
+_A9yS1.  .  .  .  .  .  .  .  .  .  .  .  .  dE0_AA.  yS1yS1.  .  .  .  .  .  _AA.  .  .  yS1.  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS1_A9
+_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
