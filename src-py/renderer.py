@@ -180,8 +180,7 @@ class Renderer:
         """Initialize the rendering infrastructure and
         create a window"""
 
-        Renderer._CheckRequirements()
-
+        #Renderer._CheckRequirements()
         print("Creating window ...")
         settings = sf.WindowSettings()
         settings.DepthBits = 0
@@ -194,6 +193,7 @@ class Renderer:
         dm = sf.VideoMode.GetDesktopMode()
         if defaults.fullscreen is True:
         
+            p[4] = 4
             defaults.resolution = dm.Width, dm.Height
             Renderer.app = sf.RenderWindow(dm, defaults.caption, sf.Style.Fullscreen, settings)
         else:

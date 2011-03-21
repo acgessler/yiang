@@ -26,7 +26,16 @@
 #include <fstream>
 
 // Python C API, PySFML module initialization stub
-#include <Python.h>
+#	ifdef _DEBUG // keep Python.h from #pragma linking to python3n_d.lib
+#		undef _DEBUG
+#		define RESTORE_DEBUG
+#	endif
+#   include <Python.h>
+
+#	ifdef RESTORE_DEBUG
+#		define _DEBUG
+#	endif
+
 #pragma comment (lib, "Python31.lib")
 #pragma comment (lib, "pysfml.lib")
 #pragma comment (lib, "yiang.lib")

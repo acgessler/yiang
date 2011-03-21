@@ -627,8 +627,6 @@ static PyTypeObject qfImporter_Type = {
 // --------------------------------------------------------------------------------------------
 PyObject *get_data(unsigned int rid)
 {	
-	assert (o);
-
 	size_t size;
 	char* res = FetchResource(rid,&size);
 

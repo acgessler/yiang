@@ -32,7 +32,7 @@
 namespace
 {
     // Make sure the dummy context is created at global startup
-    sf::Context& Dummy = sf::Context::GetGlobal();
+   // sf::Context& Dummy = sf::Context::GetGlobal();
 }
 
 
