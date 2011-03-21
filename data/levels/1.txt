@@ -1,28 +1,36 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('A Brave New World'),color=(42, 0, 20),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=5,scroll=2,lower_offset=0.8)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('A Brave New World'),color=(20, 0, 50),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.8)
 
 
 
-_B4~DA_B5~DA.  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  rDJ.  cDA
-_B4.  _B5_B4.  ~TB.  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  _i0_i0
-_B4.  _B5_B4.  _i1.  cDA.  .  rI0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  cDArE2.  .  .  .  .  .  .  .  .  rDO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDAcDAcDAcDAcDAcDAcDAcDA
-_B4gPL_B5_B4.  gS5.  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  ~TA.  .  .  .  .  .  .  .  .  ~H4.  .  .  .  .  .  cDAcDAcDAcDAcDAcDAcDAcDAcDAcDA
-_B4.  _B5_B4.  .  .  cDA.  .  rE2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  rDJ.  cDA.  .  .  .  .  .  _A1_A0_A0_A0_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FIcDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9
-_B4.  _B5_B4.  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  _A1_B0_B0_B0_A5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA
-_B4.  _B5_B4_A2.  _A2_A0_A0_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  _RD.  .  rDO.  .  .  .  _A1_B0_B0_B0_B0_A5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A9
-_B4.  _B5_A6.  .  .  .  .  _B4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDA.  rE2.  .  .  .  .  .  .  .  rE2.  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B4.  rKEyDJ.  .  _B4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  rDJ.  cDA.  .  .  .  .  .  _A1_A0_A0_A0_A2.  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B4.  .  .  .  .  _A0_A0_A2.  gDK.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  rE2.  .  .  .  .  .  .  .  cDA.  .  .  .  .  _A1_B0_B0_B0_A5.  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B4.  gS1.  .  .  yD3.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  _RD.  .  .  rDO.  .  .  .  _A1_B0_B0_B0_B0_A5.  .  .  .  .  gA9.  ~H4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B4.  gS1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  gC4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B4.  gS2.  .  .  _A0_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDJ.  cDA.  .  .  .  .  .  _A1_A0_A0_A0_A2.  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  gC4.  .  .  .  .  .  .  _RD.  .  .  .  .  gMJ.  .  .  .  .  gS1.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_A0_A0_B4.  _B5_A0_B0.  .  ~AB.  .  .  .  .  gS1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  _A1_B0_B0_B0_A5.  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1.  cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B0_B0_B4.  _B5_B0_B0.  .  .  ~AB.  .  .  gS1gS1gS1.  .  .  .  .  .  .  .  .  .  .  .  .  rKE.  rDO.  .  .  .  _A2_B0_B0_B0_B0_A5.  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-_B4.  _B5_B0_B0_B4.  _B5_B0.  .  .  .  .  .  .  gS1gS1gS1gS1gS1.  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  .  .  gA9.  .  .  .  .  .  .  .  _B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0cDAcDAcDAcDAcDAcDAcDAcDAcDA_A9
-.  .  .  .  .  .  .  _B0.  rKE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A2.  .  .  gA9.  .  .  .  cDScDScDScDScDScDScDScDS.  .  .  .  .  .  .  _B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_A9
-.  .  .  .  gS2.  .  rKE.  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_B0_B0_B0_A5.  .  .  .  gA9.  .  .  cDScDAcDAcDAcDAcDAcDAcDAcDS.  .  .  .  .  .  .  _A9_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_B0_A9
-.  .  .  .  _A1.  .  .  .  _A1_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A5.  .  .  .  gA9.  .  cDScDAcDAcDAcDAcDAcDAcDAcDAcDS.  .  .  .  .  .  .  _A9_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_A9
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_A9_B0_B0_B0_B0_A0_A0_A0_A0_A0_A0_A0cDAcDAcDAcDAcDAcDAcDAcDAcDAcDS.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDF
+.  ~DA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDF.  .  .  .  .  cDA.  .  .  BDFBDF.  .  .  .  .  cDA.  BDF.  .  .  .  .  .  .  cDA.  rS1rS1rS1rS1.  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  cDAcDAcDAcDA.  cDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  BDF.  .  .  cDA.  .  .  .  .  .  .  .  .  .  cDABDF.  .  .  .  .  .  .  .  cDAcDArS1rS1rS1.  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  .  .  .  .  _i0_i0cDAcDAcDAcDAcDAcDAcDAcDAcDAcDAcDAcDAcDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  .  .  .  .  .  .  .  .  cDAcDA.  .  .  .  .  .  BDF.  .  cDAcDArS1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDAcDAcDAcDAcDAcDAcDAcDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDAcDAcDA.  .  .  .  .  cDAcDAcDAcDA.  .  .  .  .  .  .  .  cDAcDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDAcDAcDAcDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  cDA.  cDAcDAcDAcDAcDAcDAcDA.  .  .  cDAcDAcDAcDAcDAcDAcDA.  .  .  .  cDAcDAcDAcDA.  .  .  ~AC~AC.  .  .  .  .  ~AC~AC.  gRD.  .  .  .  .  .  .  .  rS1rS1.  .  .  .  .  .  .  .  cDAcDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDAcDAcDAcDAcDAcDA.  .  .  cDAcDAcDA.  .  .  cDAcDA.  .  .  .  cDAcDAcDAcDAcDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~AC~AC.  .  .  .  .  .  .  rFIcDAcDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rS1rS1.  .  rS1rS1.  .  .  .  .  rS1.  .  .  .  rS1.  .  .  .  cDAcDAcDAcDAcDAcDAcDA.  .  .  .  .  .  .  .  ~AC~AC.  gRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDA
+.  .  .  .  .  .  .  .  .  .  _PL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA.  rS1.  cDAcDAcDAcDArS1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA_A9_A9_A9_A9_A9_A9_A9cDAcDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDK.  .  .  .  .  .  .  .  .  rDK.  .  .  .  gI0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gE0.  .  .  .  .  .  .  .  gI0cDAcDA.  .  .  .  .  .  .  .  ~AC~AC.  gRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gRD.  .  .  .  .  .  .  .  .  .  .  gRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  cDAcDAcDA.  .  .  .  .  .  .  .  .  .  .  .  rMJ.  .  .  .  .  .  .  .  .  .  .  .  .  rS1rS1rS1
+.  .  .  .  .  rDK.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _C9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rS1.  cDAcDA.  .  .  .  .  ~AC~AC~AC~AC.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cDA
+.  .  .  .  .  .  .  .  .  .  .  .  gRD.  .  .  .  .  gI0gE0.  .  .  gRD.  .  .  .  .  _A9_A9_A9_C8.  .  .  .  .  .  .  .  .  .  .  yC8.  .  .  .  .  .  .  .  .  gRD.  .  .  .  .  .  .  .  .  .  .  .  .  rDK.  .  .  rDK~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC~AC
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9.  .  .  .  .  _A9_A9_A9_A9_A9_A9.  .  .  .  .  .  .  rS1rS1.  _A9.  .  .  .  .  .  .  .  rDK.  .  .  rDK.  .  .  .  .  .  .  .  .  .  ~ACgRD
+.  .  .  .  .  .  .  .  .  _A9_A9_A9_A9.  .  .  .  .  _A9_A9_A9_A9_A9_A9.  .  .  .  .  _D3rS0rS0_D3.  .  .  .  .  .  .  .  rS1rS1.  _A9.  .  .  .  .  .  .  .  .  gRD
+.  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9.  .  .  .  _A9_A9_A9_A9_A9_A9.  rS1rS1.  .  .  .  .  .  .  .  yC9.  .  .  .  .  rS1rS1.  _A9.  .  .  .  .  .  .  .  .  .  .  gI0gE0.  rS1rS1rS1rS1rS1.  .  gI0.  ~AC~AC.  gI0gE0rS1rS1rS1gE0rS1rS1rS1gE0gI0
+.  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9.  .  .  .  _A9_A9_A9_A9_A9_A9.  ~AC~AC~AC~AC_A9_A9_A9_A9.  .  ~AC~AC.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  _A9_A9.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9
+.  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9.  .  .  .  .  _A9_A9_A9_A9.  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  _A9.  .  .  .  .  .  ~AC~AC.  .  .  .  .  .  _A9.  .  .  .  .  .  rS0rS0rS0
+~AF~AF~AF~AF~AF~AF~AF~AF~AF_A9_A9_A9_A9~AF~AF~AF~AF~AF~AF~AF_A9_A9~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF_A9~AF~AF~AF~AF~AF~AF~AF~AF_A9_A9~AF~AF~AF~AF~AF~AF_A9~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF_A9~AF~AF~AF~AF~AF~AF_A9_A9_A9~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF
+.  .  .  .  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC
+
+
+
+
+
 
 
 
