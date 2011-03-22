@@ -21,18 +21,11 @@
 # Python core
 import os
 
-# PySFML
-import sf
+from stubs import *
 
-# My own stuff
-import defaults
-from game import Entity,Game
-from tile import AnimTile
 from player import Player
 from notification import MessageBox
-from keys import KeyMapping
-from fonts import FontCache
-from renderer import Renderer
+
 
 
 class Machine(AnimTile):
