@@ -27,9 +27,7 @@ import os
 import sf
 
 # My own stuff
-import defaults
-from game import Entity, Game, EntityWithEditorImage
-from tile import Tile, AnimTile
+from stubs import *
 from weapon import Shot
 from score import ScoreTileAnimStub
 from player import KillAnimStub,Player

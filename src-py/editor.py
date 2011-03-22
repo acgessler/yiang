@@ -40,7 +40,8 @@ import defaults
 from fonts import FontCache
 from textures import TextureCache
 from keys import KeyMapping
-from game import Game,Entity
+from game import Game
+from entity import Entity
 from log import Log
 from renderer import Renderer,Drawable,NewFrame
 from highscore import HighscoreManager

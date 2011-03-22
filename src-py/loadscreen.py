@@ -18,19 +18,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# PySFML
-import sf
-
-# Our stuff
-import defaults
-
-from renderer import Drawable,Renderer,NewFrame
-from level import Level
-from tile import Tile
-from game import Entity,Game
-from keys import KeyMapping
-
 import time,random
+from stubs import *
 
 # range of levels usable as background for the loadscreen
 SPECIAL_LEVEL_LOADING_START = 50000

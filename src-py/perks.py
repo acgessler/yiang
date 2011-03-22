@@ -22,15 +22,9 @@
 import random
 import os
 
-# PySFML
-import sf
-
 # My own stuff
-import defaults
-from game import Entity,Game
-from tile import AnimTile,Tile,TileLoader
+from stubs import *
 from player import Player
-from renderer import Renderer,Drawable
 
 class PerkOverlay(Tile):
     """The nice ASCII icon displayed in the lower status bar while

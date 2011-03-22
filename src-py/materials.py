@@ -21,15 +21,8 @@
 # Python Core
 import random
 
-# PySFML
-import sf
-
-# My own stuff
-import defaults
-from game import Entity,Game, EntityWithEditorImage
-from tile import AnimTile,Tile,TileLoader
+from stubs import *
 from player import Player
-from renderer import Renderer,Drawable
 
 class Iceblock(Tile):
     """Iceblock is a normal tile with low friction"""
@@ -100,14 +93,6 @@ class BackgroundLight(Tile):
         c = self.color
         elem.SetColor(sf.Color( int(c.r*d), int(c.g*d), int(c.b*d) ,0xff ))
         lv.DrawSingle(elem,self.pos)
-    
-    
-    
-    
-    
-    
-    
-    
     
 
 # vim: ai ts=4 sts=4 et sw=4

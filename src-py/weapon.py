@@ -21,14 +21,7 @@
 # Python stuff
 import os
 
-# PySFML
-import sf
-
-# My own stuff
-import defaults
-from game import Entity, Game
-from renderer import NewFrame
-from tile import AnimTile, Tile, TileLoader
+from stubs import *
 from player import Player,InventoryItem
 
 class Shot(Tile):

@@ -21,15 +21,10 @@
 # Python stuff
 import os
 
-# PySFML
-import sf
 
-# My own stuff
-import defaults
-from game import Entity, Game
-from tile import Tile
+from stubs import *
 from player import Player,InventoryItem
-from fonts import FontCache
+
 
 class Part(InventoryItem, Tile):
     """A part of the mystic machine that the player is requested to complete"""

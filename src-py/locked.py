@@ -25,12 +25,9 @@
 import sf
 
 # My own stuff
-import defaults
-from game import Entity, Game
-from tile import AnimTile, Tile
+from stubs import *
 from player import Player, InventoryItem
-from renderer import Renderer
-from keys import KeyMapping
+
 
 class Door(AnimTile):
     """A door blocks the player unless he presents a key of the same color"""

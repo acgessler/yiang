@@ -23,7 +23,8 @@ import sf
 
 # My own stuff
 import defaults
-from game import Entity, NewFrame, EntityWithEditorImage, Game
+from game import NewFrame, Game
+from entity import Entity,EntityWithEditorImage
 from player import Player
 from keys import KeyMapping
 from fonts import FontCache

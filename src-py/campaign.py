@@ -22,19 +22,9 @@
 import os
 import random
 
-# PySFML
-import sf
-
-# My own stuff
-import defaults
-from game import Entity, Game
-from renderer import NewFrame, Renderer
-from tile import AnimTile, Tile
+from stubs import *
 from player import Player
-from keys import KeyMapping
-from level import Level,LevelLoader
-from fonts import FontCache
-from textures import TextureCache
+
 
 class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the

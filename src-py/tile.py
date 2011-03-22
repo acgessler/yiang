@@ -31,9 +31,8 @@ import collections
 # My own stuff
 import defaults
 from fonts import FontCache
-from game import Entity,Game
-
-
+from game import Game
+from entity import Entity
 
 
 class Tile(Entity):

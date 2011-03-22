@@ -18,16 +18,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# PySFML
-import sf
 
-# My own stuff
-import defaults
-from game import Entity,Game
-from tile import Tile,AnimTile
+from stubs import *
 from player import Player
-from level import Level
-from renderer import NewFrame, Renderer
 from posteffect import FadeInOverlay,FadeOutOverlay
 from enemy import SmallTraverser
 

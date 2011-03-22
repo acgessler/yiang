@@ -18,34 +18,20 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-from stubs import *
-from player import Player
+# pull in common stuff for tile implementations
 
-class ForceField(AnimTile):
-    """Accelerate the player in a specific direction"""
-    
-    def __init__(self,*args,vel=[0.0,-10.0],halo_img=None, **kwargs):
-        AnimTile.__init__(self,*args,halo_img=halo_img,**kwargs)
-        self.players = {}
-        self.vel = vel
-        
-    def Update(self,t,dt):
-        AnimTile.Update(self,t,dt)
-        
-        if hasattr(self,"players"):
-            for e in self.players:
-                # XXX after changing player physics, these values now need to be adjusted
-                s = 1.0
-                e.SetExtraVelocity((self.vel[0]*dt*s,self.vel[1]*dt*s))
-            
-            delattr(self,"players")
 
-    def Interact(self, other):
-        if isinstance(other,Player):
-            
-            self.__dict__.setdefault("players",[]).append(other)
-        
-        return Entity.ENTER
-        
+import sf
+
+import defaults
+import mathutil
+from game import Game
+from entity import Entity,EntityWithEditorImage
+from renderer import NewFrame, Drawable, Renderer
+from tile import Tile,AnimTile,TileLoader
+from keys import KeyMapping
+from level import Level,LevelLoader
+from fonts import FontCache
+from textures import TextureCache
 
 # vim: ai ts=4 sts=4 et sw=4

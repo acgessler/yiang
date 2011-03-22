@@ -810,15 +810,15 @@ class Level:
     
         # on nt, we have a modified PySFML version which does the rounding in C++, which is way faster 
         if defaults.draw_clamp_to_pixel and os.name != "nt": 
-            def ToCameraDeviceCoordinates(coords):
+            def ToCameraDeviceCoordinates(coords,floord = floor,tx=tiles_size_px[0],ty=tiles_size_px[1]):
                 #optimize - merge ToCameraCoordinates and game.ToDeviceCoordinates()
-                return (floor((coords[0]- origin[0] )*tiles_size_px[0]),
-                        floor((coords[1]- origin[1] )*tiles_size_px[1]))
+                return (floord((coords[0]- origin[0] )*tx),
+                        floord((coords[1]- origin[1] )*ty))
         else:                          
-            def ToCameraDeviceCoordinates(coords):
+            def ToCameraDeviceCoordinates(coords,tx=tiles_size_px[0],ty=tiles_size_px[1]):
                 #optimize - merge ToCameraCoordinates and game.ToDeviceCoordinates()
-                return ((coords[0]- origin[0] )*tiles_size_px[0],
-                        (coords[1]- origin[1] )*tiles_size_px[1])
+                return ((coords[0]- origin[0] )*tx,
+                        (coords[1]- origin[1] )*ty)
             
         self.ToCameraDeviceCoordinates = ToCameraDeviceCoordinates
     

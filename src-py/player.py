@@ -24,17 +24,8 @@ import random
 import os
 import operator
 
-# PySFML
-import sf
-
 # My own stuff
-import defaults
-import mathutil
-from game import Entity, Game, EntityWithEditorImage
-from renderer import NewFrame, Drawable, Renderer
-from tile import Tile
-from keys import KeyMapping
-from level import Level
+from stubs import *
 
 class InventoryItem:
     """Base class for inventory items.

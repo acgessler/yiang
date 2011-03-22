@@ -18,14 +18,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# PySFML
-import sf
-
-# My own stuff
-import defaults
-from game import Entity, Game
-from renderer import NewFrame
-from tile import Tile
+from stubs import *
 from player import Player
 
 class LevelUp(Tile):
