@@ -144,8 +144,9 @@ class Heat(AnimTile):
             
             self.myplayer.postfx_heat_shader_intensity += time_delta*Heat.FADE_IN_SPEED
             
-            s = min(1,self.myplayer.postfx_heat_shader_intensity)
-            self.myplayer.postfx_heat_shader.SetParameter("col_scale", self.color.r * s, self.color.g * s, self.color.b * s)
+            s = min(1,self.myplayer.postfx_heat_shader_intensity)*0.1
+            self.myplayer.postfx_heat_shader.SetParameter("col_scale", s)
+            self.myplayer.postfx_heat_shader.SetParameter("col_target", self.color.r*s, self.color.g*s, self.color.b*s)
             
             if now >= end:
                 if self.DistanceInnerRadius(self.myplayer):

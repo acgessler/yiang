@@ -1,5 +1,6 @@
 texture framebuffer = {FRAMEBUFFER}
-vec3 col_scale = vec3(1.0,1.0,1.0)
+float col_scale = 0.0
+vec3 col_target = vec3(0,0,0)
 texture noisesrc = ../data/textures/noise.png
 vec2 randomUV = {RANDOM}
 
@@ -11,7 +12,7 @@ effect
 
 	vec4 pixel = framebuffer(inc);	
 
-	_out.rgb = pixel.rgb * vec3(1.0-col_scale[2]-col_scale[1],1.0-col_scale[0]-col_scale[2],1.0-col_scale[0]-col_scale[1]);
+	_out.rgb = mix(pixel.rgb,col_target.rgb*length(pixel.rgb), col_scale);
 	_out.a = 1.0;
 }
 

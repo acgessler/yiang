@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('A Brave New World'),color=(20, 0, 50),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.8)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('A Brave New World'),color=(0, 10, 60),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.8)
 
 
 
@@ -26,6 +26,8 @@
 .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9.  .  .  .  .  _A9_A9_A9_A9.  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  _A9.  .  .  .  .  .  ~AC~AC.  .  .  .  .  .  _A9.  .  .  .  .  .  rS0rS0rS0
 ~AF~AF~AF~AF~AF~AF~AF~AF~AF_A9_A9_A9_A9~AF~AF~AF~AF~AF~AF~AF_A9_A9~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF_A9~AF~AF~AF~AF~AF~AF~AF~AF_A9_A9~AF~AF~AF~AF~AF~AF_A9~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF_A9~AF~AF~AF~AF~AF~AF_A9_A9_A9~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF~AF
 .  .  .  .  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC
+
+
 
 
 
