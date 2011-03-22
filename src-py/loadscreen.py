@@ -132,7 +132,9 @@ class LoadScreen:
     @staticmethod
     def EndProgressBar():
         import random
-        ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed]
+        
+        # exclude the movement keys - it's too likely that the user is using them already to move the player in the loadscreen level
+        ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed and not e.Key.Code in [KeyMapping.Get("move-left"),KeyMapping.Get("move-right")]]
         e = LoadScreen.progress_tile
         if not e:
             return ret
