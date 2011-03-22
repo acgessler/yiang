@@ -24,13 +24,13 @@ import sf
 # Our stuff
 import defaults
 
-from renderer import Drawable,Renderer
+from renderer import Drawable,Renderer,NewFrame
 from level import Level
 from tile import Tile
 from game import Entity,Game
 from keys import KeyMapping
 
-import time
+import time,random
 
 # range of levels usable as background for the loadscreen
 SPECIAL_LEVEL_LOADING_START = 50000
@@ -149,7 +149,7 @@ class LoadScreen:
             return ret
         
         e.text = _("""
-Finally, everything is ready. 
+Loading finished, everything is ready. 
 This makes me SO happy {0} 
 ... Press any key to continue ... """).format(random.choice(
         (":-)",";-0",";-)",";-*","8)",":)",";)")
@@ -180,9 +180,12 @@ This makes me SO happy {0}
                 if not ret[0]:
                     return
                 
-                while True:
+                #
+                loadtime = defaults.loading_time if random.random() > 0.75 else 0
+                
+                while False:
                     b = time.time()
-                    if inp.IsKeyDown(sf.Key.S) or b-a > defaults.loading_time:
+                    if inp.IsKeyDown(sf.Key.S) or b-a > loadtime:
                         break
                         
                     time.sleep( min(1.0, max(0, defaults.loading_time - (b-a))))
@@ -209,6 +212,10 @@ This makes me SO happy {0}
                         LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
                     else:    
                         if not ret[0] or LoadScreen.EndProgressBar():
+                            
+                            # fade to the level view
+                            from posteffect import FadeInOverlay
+                            Renderer.AddDrawable( FadeInOverlay(4.5, fade_start=0.0) )
                             break
             
             finally:

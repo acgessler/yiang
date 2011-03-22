@@ -72,6 +72,8 @@ class CampaignLevel(Level):
         if defaults.world_draw_hud is True:
             self._LoadHUD()
             
+        
+            
     def SetStatusMessage(self,msg,color=sf.Color.Yellow):
         self.status_color = color
         
