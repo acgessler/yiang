@@ -177,6 +177,8 @@ class Renderer:
     frame_cnt = 0
     
     bgimg = None
+    bgxpos = 0
+    bgymax = 1
 
     @staticmethod
     def Initialize():
@@ -215,6 +217,7 @@ class Renderer:
 
         print("Updating derived settings ...")
         defaults.update_derived()
+    
         
         print("-"*60)
         
@@ -226,6 +229,14 @@ class Renderer:
     def GetBGImage(id=-1):
         from textures import TextureCache
         return TextureCache.Get(os.path.join(defaults.data_dir,"bg","bg{0}.jpg".format(id)))
+    
+    @staticmethod
+    def SetBGXPos(p):
+        Renderer.bgxpos = p
+        
+    @staticmethod
+    def SetBGYMax(p):
+        Renderer.bgymax = p
 
     @staticmethod
     def _CheckRequirements():
@@ -271,9 +282,9 @@ class Renderer:
         
         if Renderer.bgimg:
             s = sf.Sprite(Renderer.bgimg)
-            s.Move(-Renderer.frame_cnt*0.02,0)
+            s.Move(-Renderer.bgxpos*(Renderer.bgimg.GetWidth()-defaults.resolution[0]) ,0)
             
-            sc = defaults.resolution[1]/Renderer.bgimg.GetHeight()
+            sc = Renderer.bgymax*defaults.resolution[1]/Renderer.bgimg.GetHeight()
             s.SetScale(sc,sc)
             Renderer.app.Draw(s)
         else:

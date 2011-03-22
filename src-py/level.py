@@ -656,6 +656,9 @@ class Level:
         else:
             if self.scroll[-1] & Level.SCROLL_LEFT == 0:
                 self.SetOrigin((self.origin[0] + dtime * s, self.origin[1]))
+                
+        Renderer.SetBGXPos(self.origin[0]/(self.level_size[0]-defaults.tiles[0]))
+        Renderer.SetBGYMax((defaults.tiles[1]-self.game.GetLowerStatusBarHeight())/defaults.tiles[1])
         
     def Scroll(self,pos):
         """ Update the view according to the player's position 'pos' 
