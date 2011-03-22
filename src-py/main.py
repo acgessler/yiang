@@ -39,7 +39,7 @@ from fonts import FontCache
 from keys import KeyMapping
 from game import Game
 from log import Log
-from renderer import Renderer,Drawable
+from renderer import Renderer,Drawable,NewFrame
 from posteffect import PostFXCache,FadeInOverlay,FadeOutOverlay
 from highscore import HighscoreManager
 from notification import MessageBox
@@ -284,10 +284,9 @@ Hit {1} to cancel""").format(
         
             self.game = Game(mode=mode)
             Renderer.AddDrawable(self.game,old)
-            
             self.game.LoadLevel(level)
-            on_loaded()
             
+            on_loaded()
 
     def GetDrawOrder(self):
         """Drawable's are drawn with ascending draw order"""

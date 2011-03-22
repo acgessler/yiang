@@ -83,9 +83,7 @@ class LoadScreen:
     running = False
     
     @staticmethod
-    def LoadLoadLevel():
-        import random
-        
+    def LoadLoadLevel():        
         LoadScreen.progress_tile = None
         
         global SPECIAL_LEVEL_LOADING_END
@@ -131,7 +129,6 @@ class LoadScreen:
         
     @staticmethod
     def EndProgressBar():
-        import random
         
         # exclude the movement keys - it's too likely that the user is using them already to move the player in the loadscreen level
         ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed and not e.Key.Code in [KeyMapping.Get("move-left"),KeyMapping.Get("move-right")]]
@@ -161,7 +158,6 @@ This makes me SO happy {0}
         a = time.time()
         
         LoadScreen.running = True
-        
         try:
         
             ret = [None]
@@ -171,7 +167,7 @@ This makes me SO happy {0}
                 if not ret[0]:
                     return
                 
-                #
+                # haha
                 loadtime = defaults.loading_time if random.random() > 0.75 else 0
                 
                 while False:
@@ -206,12 +202,13 @@ This makes me SO happy {0}
                             
                             # fade to the level view
                             from posteffect import FadeInOverlay
-                            Renderer.AddDrawable( FadeInOverlay(4.5, fade_start=0.0) )
+                            Renderer.AddDrawable( FadeInOverlay(3.0, fade_start=0.0) )
                             break
-            
+                        
             finally:
                 if LoadScreen.loadlevel:
                     Renderer.RemoveDrawable(LoadScreen.loadlevel)
+            
         except:
             raise
         finally:

@@ -18,12 +18,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
-# PySFML
-import sf
-
-# My own stuff
-from game import Entity
-from tile import AnimTile
+from stubs import *
 from player import Player
 
 class ColorChanger(AnimTile):

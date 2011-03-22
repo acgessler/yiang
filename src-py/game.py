@@ -760,6 +760,7 @@ Hit {2} to return to the menu""")).format(
         if self.level:
             if self.QueryFlag(Drawable.FLAG_ACTIVE):
                 self.level.OnEnable()
+                
             return True
         
         if not no_alert:

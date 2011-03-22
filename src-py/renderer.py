@@ -174,6 +174,9 @@ class Renderer:
     event = None
     loop_running = False
     fidx = -1
+    frame_cnt = 0
+    
+    bgimg = None
 
     @staticmethod
     def Initialize():
@@ -212,8 +215,17 @@ class Renderer:
 
         print("Updating derived settings ...")
         defaults.update_derived()
-
+        
         print("-"*60)
+        
+    @staticmethod
+    def SetBGImage(id=-1):
+        Renderer.bgimg = None if id==-1 else Renderer.GetBGImage(id) 
+        
+    @staticmethod
+    def GetBGImage(id=-1):
+        from textures import TextureCache
+        return TextureCache.Get(os.path.join(defaults.data_dir,"bg","bg{0}.jpg".format(id)))
 
     @staticmethod
     def _CheckRequirements():
@@ -256,10 +268,16 @@ class Renderer:
 
             Renderer.events.add(event)
             event = sf.Event()
-
-        # The background clear call is not implemented as a
-        # Drawable because it is *always* first and *always* active
-        Renderer.app.Clear(Renderer.clear_color)
+        
+        if Renderer.bgimg:
+            s = sf.Sprite(Renderer.bgimg)
+            s.Move(-Renderer.frame_cnt*0.02,0)
+            
+            sc = defaults.resolution[1]/Renderer.bgimg.GetHeight()
+            s.SetScale(sc,sc)
+            Renderer.app.Draw(s)
+        else:
+            Renderer.app.Clear(Renderer.clear_color)
 
         drawable = None
         sorted_drawables = sorted(Renderer.drawables, key=lambda x: x.GetDrawOrder())
@@ -309,6 +327,7 @@ class Renderer:
 
         # toggle front and backbuffer
         Renderer.app.Display()
+        Renderer.frame_cnt += 1
         
     @staticmethod
     def IsMainloopRunning():

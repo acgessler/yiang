@@ -60,7 +60,8 @@ class Level:
         distortion_params =None,
         audio_section=None,
         skip_validation=False,
-        lower_offset=0
+        lower_offset=0,
+        bgimg=-1
         ):
         """Construct a level given its textual description 
         
@@ -90,6 +91,7 @@ class Level:
         self.scroll = [scroll or Level.SCROLL_RIGHT]
         self.autoscroll_speed = [autoscroll_speed or defaults.move_map_speed]
         
+        self.bgimg = bgimg
         self.entities, self.entities_add, self.entities_rem, self.entities_mov = set(), set(), set(), set()
         self.origin = [0, 0]
         self.lower_offset = lower_offset
@@ -172,11 +174,16 @@ class Level:
         self._UpdateEntityList()
         self._ComputeOrigin()
         
+        # this just caches the background image, if there is any
+        if self.bgimg!=-1:
+            Renderer.GetBGImage(self.bgimg)
+        
         #from game import Game
         from loadscreen import LoadScreen
         if self.game.GetGameMode() == game.CAMPAIGN and not LoadScreen.IsRunning():
             from posteffect import FadeInOverlay
             Renderer.AddDrawable( FadeInOverlay(1.5, fade_start=0.0) )
+            
             
         self._GenToDeviceCoordinates()
             
@@ -459,10 +466,14 @@ class Level:
         # because postfx instances may be shared across multiple game instances)
         for name,p,env in self.postfx_rt:
             self._SetupStandardPostFXParams(p)
+            
+        Renderer.SetBGImage(self.bgimg)
     
     def OnDisable(self):
         for entity in self.EnumAllEntities():
             entity.OnLeaveLevel()
+            
+        #Renderer.SetBGImage(-1)
 
     def RemovePostFX(self,name):
         """Remove a specific postfx from the stack. If there is
