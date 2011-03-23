@@ -388,10 +388,10 @@ class Player(Entity):
         
         if self.dir == Player.RIGHT:
             weapon.Shoot((self.pos[0]+self.pwidth*1.2,self.pos[1]+self.pheight*0.6),\
-                (1.0,0.0),self.color,[self])
+                (1.0,0.0),self.color,[self],None,True)
         else:
             weapon.Shoot((self.pos[0]-1.0,self.pos[1]+self.pheight*0.6),\
-                (-1.0,0.0),self.color,[self])
+                (-1.0,0.0),self.color,[self],None,True)
             
     def Interact(self,other):
         

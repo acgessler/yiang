@@ -98,7 +98,7 @@ class Weapon(InventoryItem, Tile):
         
         return Entity.ENTER
     
-    def Shoot(self,pos, dir,color=None,protected=[],speed=None):
+    def Shoot(self,pos, dir,color=None,protected=[],speed=None,do_flash=False):
         t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",self.shot_tile),self.game)
                 
         color = color or sf.Color(200,200,255)
@@ -110,8 +110,9 @@ class Weapon(InventoryItem, Tile):
         t.SetLevel(self.level)
         t.SetProtected(protected)
                 
-        from posteffect import FlashOverlay
-        Renderer.AddDrawable(FlashOverlay(color,0.035,4))
+        if do_flash:
+            from posteffect import FlashOverlay
+            Renderer.AddDrawable(FlashOverlay(color,0.035,4))
                     
         self.game.AddEntity(t)
         

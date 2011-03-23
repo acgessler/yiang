@@ -69,7 +69,7 @@ class Door(AnimTile):
     
     def Flash(self):
         from posteffect import FlashOverlay
-        Renderer.AddDrawable(FlashOverlay(self.color,0.055))
+        Renderer.AddDrawable(FlashOverlay(self.color,0.045))
     
     def Unlock(self,flash=True):
         """Unlock the door, does not alter the players inventory"""
