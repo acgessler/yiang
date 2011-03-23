@@ -23,6 +23,7 @@ import sf
 import os
 import sys
 import threading
+import math
 
 # My stuff
 import defaults
@@ -264,13 +265,12 @@ class FadeInOverlay(PostFXOverlay):
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
             print("Begin FadeInOverlay anim")
-            return
             
         curtime = self.clock.GetElapsedTime()
         self.fade = min(1.0, self.fade_start + curtime/self.fade_time)
         self.postfx.SetParameter("fade",self.fade)
         
-        if self.fade>=1.0 and not self.on_close is None:
+        if self.fade>=1.0 and not self.on_close is None: # sanity check
             print("End FadeInOverlay anim")
             
             self.on_close(self)
@@ -307,13 +307,12 @@ class FadeOutOverlay(PostFXOverlay):
         if not hasattr(self,"clock"):
             print("Begin FadeOutOverlay anim")
             self.clock = sf.Clock()
-            return
             
         curtime = self.clock.GetElapsedTime()
         self.fade = max(self.fade_end, 1.0 - curtime/self.fade_time)
         self.postfx.SetParameter("fade",self.fade)
         
-        if self.fade <= self.fade_end and not self.on_close is None:
+        if self.fade <= self.fade_end and not self.on_close is None: # sanity check
             print("End FadeOutOverlay anim")
             
             self.on_close(self)
@@ -355,14 +354,13 @@ class BlurInOverlay(PostFXOverlay):
         if not hasattr(self,"clock"):
             self.clock = sf.Clock()
             print("Begin BlurInOverlay anim")
-            return
             
         curtime = self.clock.GetElapsedTime()
         self.blur = min(1.0, self.blur_start + curtime/self.blur_time)
         self.postfx.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[0])
         self.postfx2.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[1])
         
-        if self.blur>=1.0 and not self.on_close is None:
+        if self.blur>=1.0 and not self.on_close is None: # sanity check
             print("End BlurInOverlay anim")
             
             self.on_close(self)
@@ -403,30 +401,72 @@ class BlurOutOverlay(PostFXOverlay):
         if not hasattr(self,"clock"):
             print("Begin BlurOutOverlay anim")
             self.clock = sf.Clock()
-            return
             
         curtime = self.clock.GetElapsedTime()
         self.blur = max(self.blur_end, 1.0 - curtime/self.blur_time)
         self.postfx.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[0])
         self.postfx2.SetParameter("blurSize",(1-self.blur)*defaults.blur_multiplier / defaults.resolution[1])
         
-        if self.blur <= self.blur_end and not self.on_close is None:
+        if self.blur <= self.blur_end and not self.on_close is None: # sanity check
             print("End BlurOutOverlay anim")
             
             self.on_close(self)
             self.on_close = None
             
             
+class FlashOverlay(PostFXOverlay):
+    """A postprocessing overlay to apply a short color flash"""
+    def __init__(self,flash_color=sf.Color.White,flash_intensity=None, flash_length=None,func=0,on_close=None,draworder=900):
+        """
+        Construct a FadeOverlay.
         
-        
-        
-        
-        
-        
-        
-        
+        Parameters:
+            fade_time -- Time to life
+            fade_start  -- Fade intensity to start with
+            on_close  -- Closure to be called when the end status of the
+               animation has been reached. Pass None to let the 
+               overlay automatically unregister itself.
+            draworder -- Draw order ordinal
+                         
+        """
+        PostFXOverlay.__init__(self,PostFXCache.Get("heat.sfx",()),draworder)
+        self.flash_length = flash_length or defaults.postfx_flash_length
+        self.flash_intensity = flash_intensity or defaults.postfx_flash_intensity
+        self.flash_color = flash_color
+        self.on_close  = (lambda x:Renderer.RemoveDrawable(x)) if on_close is None else on_close 
+        self.func = 0
     
+    def EvalIntensity(self,t):
+        if self.func == 0:
+            # http://www.wolframalpha.com/input/?i=x^2*e^%28-x%29*100+for+x+%3D10
+            t *= 10
+            return ((t**2)*math.exp(-t)*100)/55
+        elif self.func == 1:
+            return t
+        elif self.func == 2:
+            return min(t*5,1) 
+            
+        
+        assert False
         
         
+    def Draw(self):
+        PostFXOverlay.Draw(self)
+        
+        if not hasattr(self,"clock"):
+            self.clock = sf.Clock()
+            print("Begin FlashOverlay anim")
+            
+        curtime = self.clock.GetElapsedTime()
+        
+        s = self.EvalIntensity(curtime/self.flash_length)*self.flash_intensity
+        self.postfx.SetParameter("col_scale",s)
+        self.postfx.SetParameter("col_target",self.flash_color.r*s,self.flash_color.g*s,self.flash_color.b*s)
+        
+        if curtime > self.flash_length and not self.on_close is None: # sanity check
+            print("End FlashOverlay anim")
+            
+            self.on_close(self)
+            self.on_close = None   
 
 # vim: ai ts=4 sts=4 et sw=4

@@ -578,6 +578,9 @@ class Player(Entity):
                 t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
                 
                 self.game.AddEntity(t)
+                
+        from posteffect import FlashOverlay
+        Renderer.AddDrawable(FlashOverlay(sf.Color(80,0,0),0.1,5.5,2))
             
         self.draw = False
         self.dead = True

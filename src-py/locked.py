@@ -67,7 +67,11 @@ class Door(AnimTile):
     def IsWorking(self):
         return hasattr( self, "during_interact" )
     
-    def Unlock(self):
+    def Flash(self):
+        from posteffect import FlashOverlay
+        Renderer.AddDrawable(FlashOverlay(self.color,0.055))
+    
+    def Unlock(self,flash=True):
         """Unlock the door, does not alter the players inventory"""
         self.SetState(1)
         self.Set(0)
@@ -76,7 +80,10 @@ class Door(AnimTile):
         self.during_interact = True
         print("Unlocking door {0}".format(self))
         
-    def Lock(self):
+        if flash:
+            self.Flash()
+        
+    def Lock(self,flash=True):
         """Lock the door again"""
         self.SetState(3)
         self.Set(0)
@@ -84,6 +91,9 @@ class Door(AnimTile):
         self.target_state= False
         self.during_interact = True
         print("Locking door {0}".format(self))
+        
+        if flash:
+            self.Flash()
         
         
 class Bridge(Door):
@@ -111,6 +121,7 @@ class BridgeControl(AnimTile):
             
             self.did_init = True
             self._UpdateBridge()
+
     
     def Interact(self, other):
         if isinstance(other,Player):
@@ -137,16 +148,16 @@ class BridgeControl(AnimTile):
     
     def _Toggle(self):
         self.initial_state = not self.initial_state
-        self._UpdateBridge()
+        self._UpdateBridge(True)
         
-    def _UpdateBridge(self):
+    def _UpdateBridge(self,flash=False):
         self.SetState(1 if self.initial_state is True else 0)
         self.last_bridge = self._GetBridge()
         if not self.last_bridge:
             return
         
         print("Update bridge state: {0}".format(self.last_bridge))
-        self.last_bridge.Unlock() if self.initial_state is True else self.last_bridge.Lock()
+        (self.last_bridge.Unlock if self.initial_state is True else self.last_bridge.Lock)(flash)
         
         
     
@@ -160,6 +171,9 @@ class Key(Tile,InventoryItem):
     def Interact(self, other):
         if isinstance(other,Player):
             self.TakeMe(other)
+            
+            from posteffect import FlashOverlay
+            Renderer.AddDrawable(FlashOverlay(self.color,0.075,0.5))
         
         return Entity.ENTER
     

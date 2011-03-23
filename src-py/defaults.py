@@ -127,6 +127,10 @@ no_bg_sound = False
 audio_volume_scale = 0.8
 def_user_profile = "Wurzelgnom"
 
+
+postfx_flash_length = 1
+postfx_flash_intensity = 0.08
+
 # Disable threading. This implies disabling loading screens.
 no_threading = False
 
