@@ -101,13 +101,18 @@ class Weapon(InventoryItem, Tile):
     def Shoot(self,pos, dir,color=None,protected=[],speed=None):
         t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",self.shot_tile),self.game)
                 
+        color = color or sf.Color(200,200,255)
+        
         t.SetSpeed(speed or self.speed)
         t.SetDirection(dir)
         t.SetPosition(pos)
-        t.SetColor(color or sf.Color(200,200,255))
+        t.SetColor(color)
         t.SetLevel(self.level)
         t.SetProtected(protected)
                 
+        from posteffect import FlashOverlay
+        Renderer.AddDrawable(FlashOverlay(color,0.035,4))
+                    
         self.game.AddEntity(t)
         
     def GetAmmoCode(self):

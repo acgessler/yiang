@@ -122,6 +122,7 @@ class Perk(AnimTile):
         if not self.overlay_file is None:
             self.overlay = TileLoader.Load(self.overlay_file,self.game)
             self.overlay.Enable()
+        
         return None
 
     def DisablePerk(self,player):
@@ -156,6 +157,9 @@ class Perk(AnimTile):
         
         playerd["time"] = time
         playerd["time_start"] = self.game.GetTotalElapsedTime()
+        
+        from posteffect import FlashOverlay
+        Renderer.AddDrawable(FlashOverlay(sf.Color.White,0.04,time,2))
 
     def _CheckIfExpired(self,player):
         """Called by Player during its Update() calls. We can'd do it

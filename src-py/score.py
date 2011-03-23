@@ -41,8 +41,9 @@ class ScoreTile(AnimTile):
                 self.game.AddEntity(ScoreTileAnimStub(_("{0:4.4} ct").format(points),self.pos,1.0))
                 self.score_taken = True
                 
-                from posteffect import FlashOverlay
-                Renderer.AddDrawable(FlashOverlay(self.color,0.02,0.5))
+                #if self.game.GetGameMode() != Game.BACKGROUND:
+                #    from posteffect import FlashOverlay
+                #    Renderer.AddDrawable(FlashOverlay(self.color,0.02,0.5))
             
         return Entity.ENTER
 

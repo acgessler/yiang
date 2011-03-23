@@ -579,8 +579,9 @@ class Player(Entity):
                 
                 self.game.AddEntity(t)
                 
-        from posteffect import FlashOverlay
-        Renderer.AddDrawable(FlashOverlay(sf.Color(80,0,0),0.1,5.5,2))
+        if self.game.GetGameMode() != Game.BACKGROUND:
+            from posteffect import FlashOverlay
+            Renderer.AddDrawable(FlashOverlay(sf.Color(80,0,0),0.1,5.5,2))
             
         self.draw = False
         self.dead = True

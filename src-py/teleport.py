@@ -21,7 +21,7 @@
 
 from stubs import *
 from player import Player
-from posteffect import FadeInOverlay,FadeOutOverlay
+from posteffect import FadeInOverlay,FadeOutOverlay,FlashOverlay
 from enemy import SmallTraverser
 
 # Python stuff
@@ -93,6 +93,7 @@ class Sender(AnimTile):
             
         self.game.PushSuspend()
         Renderer.AddDrawable(FadeOutOverlay(fade_time=fade_time,fade_end=fade_end,on_close=fadeback))
+        #Renderer.AddDrawable(FlashOverlay(sf.Color.White,0.06,0.3))
                               
         
 
