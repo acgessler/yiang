@@ -20,6 +20,7 @@
 
 # Python Core
 import random
+import math
 
 from stubs import *
 from player import Player
@@ -66,8 +67,10 @@ class BackgroundLight(Tile):
     """Show only a halo background, no real tile contents.
     This is no real illumination, but it serves well as cheap fake light."""
     
-    def __init__(self,*args,darken=0.8, **kwargs):
+    def __init__(self,*args,darken=0.8, pulse=True, **kwargs):
         self.darken =  max(0.15, darken*0.6)
+        self.pulse = pulse
+        self.seed = random.random()*6.28
         Tile.__init__(self,"", *args,draworder=-10000, collision=Entity.ENTER,**kwargs)
         
     # def _GetHaloImage(self):
@@ -82,6 +85,9 @@ class BackgroundLight(Tile):
     #    )
     #    return s
     
+    def Update(self,time_elapsed,time_delta):
+        self.alpha = int((math.sin(time_elapsed-self.seed)+1)*0.5*0xff if self.pulse else 0xff)
+    
     def Draw(self):
         if len(self.cached) < 2:
             return
@@ -91,7 +97,7 @@ class BackgroundLight(Tile):
             
         d = self.darken
         c = self.color
-        elem.SetColor(sf.Color( int(c.r*d), int(c.g*d), int(c.b*d) ,0xff ))
+        elem.SetColor(sf.Color( int(c.r*d), int(c.g*d), int(c.b*d),  self.alpha ))
         lv.DrawSingle(elem,self.pos)
     
 
