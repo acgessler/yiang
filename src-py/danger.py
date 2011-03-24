@@ -62,6 +62,10 @@ class Mine(AnimTile):
         else:
             self.Set(0)
             self.SetState(1)
+            
+            from posteffect import FlashOverlay
+            Renderer.AddDrawable(FlashOverlay(sf.Color(255,120,0),0.09,4,3))
+                
             self.DeathTimer = sf.Clock()
             self.DeathTimerEnd = (self.GetNumFrames()-1)*self.speed
             self.__other = other
@@ -73,6 +77,7 @@ class Mine(AnimTile):
         if self.GetState() == 1:
             if self.DeathTimer.GetElapsedTime() >= self.DeathTimerEnd:
                 self.Set(self.GetNumFrames())
+                
                 if not defaults.debug_godmode and not self.game.mode == Game.BACKGROUND:
                     if self.DistanceInnerRadius(self.__other):
                         self.game.Kill(self.GetVerboseName(),self.__other)

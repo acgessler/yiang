@@ -445,7 +445,10 @@ class FlashOverlay(PostFXOverlay):
             return t
         elif self.func == 2:
             return min(t*5,1) 
-            
+        if self.func == 3:
+            # same as 0, except it's sharper
+            t *= 10
+            return (((t*10)**3)*math.exp(-t)*100)/55
         
         assert False
         
