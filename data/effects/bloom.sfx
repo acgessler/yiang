@@ -1,0 +1,27 @@
+texture framebuffer = {FRAMEBUFFER}
+float blurSize = 0.0015;
+
+effect
+{
+   vec4 result = vec4(0.0);
+   float sat = 0.6;
+ 
+   // currently only single-pass, thus it suffers from star artifacts and terrific performance
+   result += clamp(framebuffer(vec2(_in.x - 4.0*blurSize, _in.y))-sat,0,1) * 0.05;
+   result += clamp(framebuffer(vec2(_in.x - 3.0*blurSize, _in.y))-sat,0,1) * 0.09;
+   result += clamp(framebuffer(vec2(_in.x - 2.0*blurSize, _in.y))-sat,0,1) * 0.12;
+   result += clamp(framebuffer(vec2(_in.x + 2.0*blurSize, _in.y))-sat,0,1) * 0.12;
+   result += clamp(framebuffer(vec2(_in.x + 3.0*blurSize, _in.y))-sat,0,1) * 0.09;
+   result += clamp(framebuffer(vec2(_in.x + 4.0*blurSize, _in.y))-sat,0,1) * 0.05;
+
+   result += clamp(framebuffer(vec2(_in.x, _in.y - 4.0*blurSize))-sat,0,1) * 0.05;
+   result += clamp(framebuffer(vec2(_in.x, _in.y - 3.0*blurSize))-sat,0,1) * 0.09;
+   result += clamp(framebuffer(vec2(_in.x, _in.y - 2.0*blurSize))-sat,0,1) * 0.12;
+   result += clamp(framebuffer(vec2(_in.x, _in.y + 2.0*blurSize))-sat,0,1) * 0.12;
+   result += clamp(framebuffer(vec2(_in.x, _in.y + 3.0*blurSize))-sat,0,1) * 0.09;
+   result += clamp(framebuffer(vec2(_in.x, _in.y + 4.0*blurSize))-sat,0,1) * 0.05;
+ 
+
+   result = result*2 + framebuffer(vec2(_in.x, _in.y));
+   _out = result;
+}
