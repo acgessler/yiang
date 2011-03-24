@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Poseidons Inferno'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=1.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Poseidons Inferno'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=1.0,bgimg=12)
 
 
 

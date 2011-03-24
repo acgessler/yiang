@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Take the longer way'),color=(0, 15, 15),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=3,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Take the longer way'),color=(0, 15, 15),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=3,scroll=3,lower_offset=0.0,bgimg=2)
 
 
 _A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3

@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0),name=_('MenuBackground'),color=(20, 20, 20),postfx=[('ingame1.sfx', ()), ('menu2.sfx', ())],distortion_params=False,vis_ofs=4,scroll=0,lower_offset=1.2)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0),name=_('MenuBackground'),color=(20, 20, 20),postfx=[('ingame1.sfx', ()), ('menu2.sfx', ())],distortion_params=False,vis_ofs=4,scroll=0,lower_offset=1.2,bgimg=10)
 
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  iTB.  .  .  aB3aB3aB3aB3aB3aB3aB3

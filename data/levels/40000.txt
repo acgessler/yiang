@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0),name=_('MenuBackground'),color=(20, 20, 20),postfx=[('ingame1.sfx', ()), ('menu2.sfx', ())],distortion_params=False,vis_ofs=0,scroll=0,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0),name=_('MenuBackground'),color=(20, 20, 20),postfx=[('ingame1.sfx', ()), ('menu2.sfx', ())],distortion_params=False,vis_ofs=0,scroll=0,lower_offset=0.0,bgimg=10)
 rA9rA9rA9.  .  .  .  rA9rA9rA9rA9rINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINrINaB3
 rA9rA9rA9rA9.  .  rA9rA9rA9rA9rA9.  .  gS0.  .  gS0gS0gS0.  .  .  .  .  rPL.  .  .  gDJ.  .  .  .  .  aDJ.  .  .  .  .  gDJ.  gS1.  aB3
 .  .  .  yD3.  .  .  .  .  .  yD4.  .  gS0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS0gS0.  .  .  .  rE4.  .  .  .  .  gS1.  aB3

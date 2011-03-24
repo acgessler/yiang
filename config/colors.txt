@@ -4,7 +4,7 @@
 r=ff0000
 
 # Green
-g=00ff00
+g=009000
 
 # Blue
 b=0000ff

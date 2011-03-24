@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Tower of the Jungle Monster'),color=(0, 30, 20),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=5,bgimg=7,scroll=3,lower_offset=3.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Tower of the Jungle Monster'),color=(0, 30, 20),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=5,bgimg=11,scroll=3,lower_offset=3.0)
 
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gD9.  .  .  .  .  .  gD9
