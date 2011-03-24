@@ -4,7 +4,7 @@
 r=ff0000
 
 # Green
-g=009000
+g=00a000
 
 # Blue
 b=0000ff
@@ -40,7 +40,7 @@ o=FF9F40
 x=121314
 
 # Dark Green
-d=009000
+d=005000
 
 # Invisible :-)
 i=00000000
