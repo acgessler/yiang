@@ -364,7 +364,7 @@ class CampaignTile(Tile):
         # would get too high, so performance would potentially degrade.
         rand = random.random() 
         sp = list(("".join(reversed(n)) if rand>0.5 else n) for n in text.split("\n"))
-        Tile.__init__(self, "\n".join(reversed(sp) if random.random()>0.5 and permute is True else sp), *args,double=True,**kwargs)
+        Tile.__init__(self, "\n".join(reversed(sp) if random.random()>0.5 and permute is True else sp), *args,double=True,permute=False,**kwargs)
         
         self.status_msg = status_msg
         

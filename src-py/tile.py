@@ -35,6 +35,38 @@ from game import Game
 from entity import Entity
 
 
+class CharMappingTable(dict):
+    
+    """Provide suitable substitutions for single characters. Usually,
+    the replacements are similar glpyhs used to improve the
+    diversity of the visuals."""
+    
+    def __init__(self):
+        dict.__init__(self)
+        self.update({
+             ')':'|}]'
+            ,'(':'|[{'
+            ,'[':'}(['
+            ,']':'({['
+            ,'{':'|)]'
+            ,'}':'|{['
+            ,'1':'|'
+            ,'|':'\''
+            ,'/':'|7'
+            ,'\\':'|'
+            ,'0':'o'
+            ,'o':'O0'
+        })
+    
+    def __missing__(self,key):
+        
+        if key.islower():
+            return key.upper()
+        elif key.isupper():
+            return key.lower()
+        return key
+    
+
 class Tile(Entity):
     """Base class for tiles, handles common behaviour, i.e, drawing.
     Extends Entity with more specialized behaviour."""
@@ -48,6 +80,8 @@ class Tile(Entity):
     
     global_dim_cache = {} # stores (dim,ofs) tuples
     global_str_cache = {} # stores sf.String's indexed by (str,rsize) pairs
+    
+    mapping_tbl = CharMappingTable()
            
     def __init__(self,
         text="<no text specified>",
@@ -60,6 +94,7 @@ class Tile(Entity):
         width_ofs=0,
         height_ofs=0,
         double=False,
+        permute=True,
         dropshadow=False,
         dropshadow_color=sf.Color(30,30,30,150)):
         
@@ -71,6 +106,8 @@ class Tile(Entity):
         width  = width  or Tile.AUTO
         rsize  = rsize  or defaults.letter_size[1]
         scale  =  rsize / defaults.letter_size[1] 
+        
+        self.permute = permute
             
         Entity.__init__(self)
 
@@ -97,6 +134,9 @@ class Tile(Entity):
             self.dim = self._LetterToTileCoords(width,height)
             self.ofs = (width_ofs,height_ofs)
             
+        
+        if self.permute:
+            self.text = self._Permute(self.text)
         self._Recache()
 
     def __str__(self):
@@ -110,6 +150,13 @@ class Tile(Entity):
         width,height = args if len(args)==2 else args[0]
         return width*self.scale/defaults.tiles_size[0],\
             height*self.scale/defaults.tiles_size[1]
+            
+    def _Permute(self,what):
+        # randomly replace every Nth characters by a similar character entity
+        if not what:
+            return what
+        tresh = 1 / len(what)
+        return "".join((c if random.random() > tresh else random.choice( Tile.mapping_tbl[c])) for c in what)
         
     def _GuessRealBB(self,text):
         """Return adjusted (width,height) (xofs,yofs) tuples
@@ -287,6 +334,8 @@ class Tile(Entity):
                 res = sf.String(text,Font=font,Size=rsize*0.5)
             else:
                 text = self.text
+                
+                                        
                 res = sf.String(text,Font=font,Size=rsize)
                 
             Tile.global_str_cache[(self.rsize,self.text)] = res
@@ -437,6 +486,9 @@ class AnimTile(Tile):
                 ))
                 n += height+1
             n += 1
+            
+            if self.permute:
+                self.texts[-1] = [self._Permute(n) for n in self.texts[-1]]
 
         self.SetSpeed(speed)
         self.animidx = -1
