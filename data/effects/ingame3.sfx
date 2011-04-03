@@ -1,0 +1,52 @@
+texture framebuffer = {FRAMEBUFFER}
+
+#ifndef NO_INTENSE_PPFX
+
+#ifndef NO_MIRROR
+vec2 lowerh = {STATUS_BAR_DIM}
+#endif
+
+#endif
+
+#ifdef ENABLE_DITHER
+texture noise = ../data/textures/noise.png
+vec2 randomUV = {RANDOM}
+float dither_strength = {DITHER_STRENGTH}
+#endif
+
+effect
+{
+#ifdef NO_INTENSE_PPFX
+	vec4 pixel = framebuffer(_in);
+	_out.rgba = pixel.rgba;
+#else
+
+	vec2 tin = _in;
+#ifndef NO_MIRROR
+	float overall_scale = 1.0;
+	if (tin[1] < lowerh[1]) {
+		tin[1] = lowerh[1] + (lowerh[1] - tin[1]);
+		overall_scale = 0.45 * ( 1.0 - (tin[1]-lowerh[1]) / lowerh[1] );
+	}
+#endif
+
+	vec3 pixel = framebuffer(tin).rgb; // * (pow(_in[1]+0.5,2)+0.1);
+
+#ifdef ENABLE_DITHER
+	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
+#endif
+
+	_out.rgb = pixel;
+
+#ifdef ENABLE_DITHER
+	_out.rgb += (dither.rgb-0.5f)*0.0100*dither_strength;
+#endif
+
+#ifndef NO_MIRROR
+	_out.rgb *= overall_scale;
+#endif
+	_out.a = 1.f;
+
+#endif
+}
+

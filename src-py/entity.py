@@ -40,10 +40,10 @@ from game import Game
 def gen_halo_default():
     """Programmatically generate the default 'halo', which 
     is a simple background rectangle behind the tile"""
-    text = bytes([0x50,0x50,0x50,0xb5])
+    text = bytes([0x60,0x60,0x60,0x90])
     
     img = sf.Image()
-    img.LoadFromPixels(64,64,text*(64*64))
+    img.LoadFromPixels(64,64,bytes([min(max(x+random.randint(-5,5),0),0xff) for x in text*(64*64)]))
     return img
 
 class Entity(Drawable):

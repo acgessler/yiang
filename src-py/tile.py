@@ -385,8 +385,8 @@ class Tile(Entity):
         if self.dropshadow: # the drop shadow only affects the first sub-part of the tile
             offset_it,elem = self.cached[0]
             
-            d_x = 2.0/defaults.tiles_size_px[0]
-            d_y = 2.0/defaults.tiles_size_px[1]
+            d_x = 1.0/defaults.tiles_size_px[0]
+            d_y = 1.0/defaults.tiles_size_px[1]
             
             elem.SetColor(self.dropshadow_color)
             if offset_it is True:

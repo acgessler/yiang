@@ -1,6 +1,7 @@
 grayscale.sfx
 ingame1.sfx
 ingame2.sfx
+ingame3.sfx
 invert.sfx
 invert_screen.sfx
 underwater.sfx
@@ -8,3 +9,4 @@ heat.sfx
 menu2.sfx
 dimmed_colors.sfx
 bloom.sfx
+fakeshadow.sfx
