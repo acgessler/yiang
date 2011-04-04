@@ -1,1 +1,1 @@
-from materials import BackgroundImage; <out> = BackgroundImage(600,54, halo_img="lv1_bg1.jpg")
+from materials import BackgroundImage; <out> = BackgroundImage(600,60, halo_img="lv1_bg1.jpg")
