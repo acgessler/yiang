@@ -1,21 +1,21 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Take the longer way'),color=(0, 15, 15),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=3,scroll=3,lower_offset=0.0,bgimg=2)
-
-
-_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3_A3
-gPL
-
-
-.  .  .  .  .  .  _A0.  .  .  .  .  rE8.  .  .  .  .  .  .  .  .  .  .  .  rE8.  .  .  .  .  bS5
-.  .  .  .  .  .  _A0.  gS4gS4gS4gS4gS1gS1gS1gS1gS1gS1gS0gS0gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1.  _A0
-.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0bA0_A0_A0_A0_A0_A0_A0_CD
-
-
-_H1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _CD
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE0bE0.  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI.  _E0gE0.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0
-gS1gS1gS1gS1gS1gS1gS1gS1gS1gDAgS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gE0gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1yE0gS1gS1gS1gS1_A0_A0_A0_A0_A0_A0_A0_A0
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
-
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Take the longer way'),color=(0, 15, 15),postfx=[('ingame1.sfx', ())],vis_ofs=3,bgimg=1,scroll=3,lower_offset=0.0)
+PAEPAEPAEPAEPAE.  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE
+PAEPAE.  PAEPA9PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEaAFPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPA9PA9PA9PA9PA9PA9PA9PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE
+PAEPAEPAEPAEPA9PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPA9PA9PA9PA9PA9PA9PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE
+PA9PA9PA9PAEPA9PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPA9PAE.  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE.  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE
+PAEPAEPA9PAEPA9.  .  _S5_S5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAE.  .  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAE.  .  .  PAE.  .  .  .  rKE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE
+PAEPAEPAEPA9PA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPAE.  .  .  .  .  PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPA9
+PA9PA9PAEPAEPAE.  PA9.  .  .  .  .  yE8.  .  .  .  .  .  .  .  .  .  .  .  yE8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAE.  .  .  .  .  rE6PAEPAEPAErE6.  .  rE6.  .  .  .  .  PAE.  .  .  .  .  .  .  .  .  .  PAEPAEPAEPA9PA9PA9PA9PA9PA9PA9
+PAEPAEPAE.  PAE.  PA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAE.  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE.  .  .  .  PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD
+PAEPAE.  .  .  .  PAEPA9PA9PA9PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPA9PA9PA9PA9PAEPAEPAEPAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  PA9PA9PA9PA9PA9PA9
+PAE.  .  .  .  .  PA9PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPA9PA9PA9PAEPAEPAE.  .  .  .  .  .  .  .  .  .  .  _RD.  .  .  _Q8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAE.  .  .  .  _RD.  PAEPAEPAEPAEPAEPAEPA9_RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAE
+PAE.  .  .  .  .  PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPA9PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAE.  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAE
+PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PCD.  .  .  .  .  .  .  .  .  PAEPAE.  PAEPA9PA9PA9PA9PA9.  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE.  .  .  .  PAEPAEPAE.  .  .  .  .  .  PAE
+PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _Q8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPIN.  PAEPAEPAEPA9PA9PA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAE.  .  .  .  .  PAEPAEPAE.  .  .  .  .  PAEPAEPAE.  .  .  .  .  .  .  PAE
+PAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RD.  .  _Q8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAE.  PIN.  .  .  PAEPA9PAEPAEPA9PA9PAEPAEPAEPAE.  .  .  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  _RD.  .  PAEPAEPAEPAEPAEPAE.  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAE.  PAEPAEPAEPAEPAE.  .  .  PAE
+PAEPAE.  .  .  yPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _Q8PAEPAEPAEPAE.  .  .  .  _Q8.  .  _RD.  .  .  .  .  _Q8.  PAEPAE.  .  .  PIN.  .  .  PAEPAEPAEPAEPAEPAEPAEPA9PAEPAEPAEPAEPAEPAEPAE.  .  .  .  .  .  .  -SM.  .  .  .  .  .  .  .  PAEPAEPAEPAEPAEPAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAE
+PA9PAEPAE_Q8.  .  _Q8_Q8.  .  _Q8_Q8.  .  _Q8.  .  .  _Q8.  PAEPAEPAEPAEPA9PAEPAE.  .  .  .  .  .  _Q8.  .  _Q8.  .  .  .  PAEPA9_FI.  .  PIN.  .  _S5.  .  .  .  PAEPAEPAEPAEPAEPAEPAEPAEPA9PAEPAEPAEPAE.  .  PAEPAEPAE.  .  .  .  PAEPAEPAEPAEaAFaAFPAEPAEPAE.  PAEPAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAE
+PA9PA9PA9PAEPAEPAE.  .  .  .  .  .  .  .  .  .  .  .  .  PAEPAEPAEPAEPA9PA9PAEPA9.  .  .  .  PAEPAEPAE.  .  .  .  .  .  PA9PAEPA9.  _Q8.  PIN_Q8.  .  .  .  .  .  .  .  PAEPAEPA9PA9PAEPAEPAEPAEPAEPAEPAEaAFaAFPAEPAEPAEaAFaAFaAFaAFPAEPAEPAEaAFaAFaAFaAFPAEPAEPAEPAEPAEPAEPAE.  .  .  .  .  .  .  PAE.  .  .  .  PAE.  .  .  .  .  PAEPAEPAEPAEPAE
+PA9PA9PAEPAEPA9PAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPA9PAEPAEPAEPAEPA9aAFaAFPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPA9PAEPAEPAEPAEPAEPAEPAEPAEaAFaAFaAFaAFaAFaAFaAFPAEPAEPAEPAEPA9PAEPAEPAEPAEaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFaAFPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAEPAE
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  aAF
 

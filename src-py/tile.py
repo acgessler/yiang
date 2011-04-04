@@ -56,6 +56,8 @@ class CharMappingTable(dict):
             ,'\\':'|'
             ,'0':'o'
             ,'o':'O0'
+            ,'~':'-'
+            ,'`':'"\''
         })
     
     def __missing__(self,key):
