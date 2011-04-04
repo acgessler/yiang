@@ -3186,6 +3186,7 @@ class EditorMenu(Drawable):
     @override 
     def Draw(self):
         Renderer.SetClearColor(sf.Color(90,90,90))
+        Renderer.SetBGImage(None)
     
         for event in Renderer.GetEvents():
             # Escape key : exit

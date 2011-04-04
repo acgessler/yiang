@@ -280,6 +280,7 @@ class Renderer:
             Renderer.events.add(event)
             event = sf.Event()
         
+        # draw background image, if applicable
         if Renderer.bgimg:
             s = sf.Sprite(Renderer.bgimg)
             s.Move(-Renderer.bgxpos*(Renderer.bgimg.GetWidth()-defaults.resolution[0]) ,0)
