@@ -10,5 +10,6 @@ Signs	H1	H3	H4	H5	H2
 Backgrounds	H0	SU
 Tricky	IN	I0	CA
 Player	PL	RD	RE	
-LightFX	D5	D6	D7	D8	D9	DG	DH	DI	DJ	DK	DB	DC	DD	DE	DF
+LightFX (Add)	D5	D6	D7	D8	D9	DG	DH	DI	DJ	DK	DB	DC	DD	DE	DF
+LightFX (Mul)	Q5	Q6	Q7	Q8	Q9
 MachineParts	P0

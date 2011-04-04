@@ -223,7 +223,7 @@ class Renderer:
         
     @staticmethod
     def SetBGImage(id=-1):
-        Renderer.bgimg = None if id==-1 else Renderer.GetBGImage(id) 
+        Renderer.bgimg = None if id==-1 or id is None else Renderer.GetBGImage(id) 
         
     @staticmethod
     def GetBGImage(id=-1):

@@ -65,14 +65,14 @@ class OneSidedWall(Tile):
         
 class BackgroundLight(Tile):
     """Show only a halo background, no real tile contents.
-    This is no real illumination, but it serves well as cheap fake light."""
+    This is no real illumination, but it serves well as cheap fake light. The light intensity will pulse."""
     
-    def __init__(self,*args,darken=0.8, pulse=True, multiply=False,**kwargs):
+    def __init__(self,*args,darken=0.8, pulse=True, multiply=False,collision=Entity.ENTER,**kwargs):
         self.darken =  max(0.15, darken*0.6)
         self.pulse = pulse
         self.seed = random.random()*6.28
         self.multiply = multiply
-        Tile.__init__(self,"", *args,draworder=-10000, collision=Entity.ENTER,**kwargs)
+        Tile.__init__(self,"", *args,draworder=-10000,collision=collision ,**kwargs)
         
     # def _GetHaloImage(self):
     #    img = Entity._GetHaloImage(self,self.halo_img)
@@ -95,14 +95,27 @@ class BackgroundLight(Tile):
         
         lv = self.game.GetLevel()
         offset,elem = self.cached[1]
-            
+        
+        elem.SetBlendMode(sf.Blend.Multiply if self.multiply else sf.Blend.Alpha)
+       
         d = self.darken
         c = self.color
-        elem.SetColor(sf.Color( int(c.r*d), int(c.g*d), int(c.b*d),  self.alpha ))
         
-        if self.multiply:
-            elem.SetBlendMode(sf.Blend.Multiply)
+        if not self.multiply:
+            elem.SetColor(sf.Color( int(c.r*d), int(c.g*d), int(c.b*d),  self.alpha ))
+        else:
+            # ignore darkening and alpha
+            elem.SetColor(self.color)
+              
         lv.DrawSingle(elem,self.pos)
     
+    
+class BackgroundImage(BackgroundLight):
+    """A static background image"""
+    
+    def __init__(self,*args,pulse=False, **kwargs):
+         BackgroundLight.__init__(self,*args,pulse=pulse,**Kwargs)
+         
+         
 
 # vim: ai ts=4 sts=4 et sw=4
