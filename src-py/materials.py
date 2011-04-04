@@ -114,7 +114,8 @@ class BackgroundImage(BackgroundLight):
     """A static background image"""
     
     def __init__(self,*args,pulse=False, **kwargs):
-         BackgroundLight.__init__(self,*args,pulse=pulse,**Kwargs)
+         BackgroundLight.__init__(self,*args,pulse=pulse,**kwargs)
+
          
          
 

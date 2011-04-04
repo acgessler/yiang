@@ -267,7 +267,8 @@ class Entity(Drawable):
                 else:
                     from textures import TextureCache
                     
-                    file = os.path.join(defaults.data_dir,"textures",halo_img)
+                    file = os.path.join(defaults.data_dir,("textures" if not '/' in halo_img else ""),halo_img)
+                    print(file)
                     img = TextureCache.Get(file)
                     if not img:
                         img = TextureCache.Get(halo_img)
