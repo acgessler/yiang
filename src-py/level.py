@@ -97,7 +97,7 @@ class Level:
         self.lower_offset = lower_offset
         self.game = game
         self.level = level
-        self.color = sf.Color(*color) if color.__class__ in (list,tuple) else color
+        self.color = sf.Color(*(color+(0x0,))) if color.__class__ in (list,tuple) else color
         self.vis_ofs = vis_ofs
         self.name = name #or "Level " +str(self.level)
         self.gravity = defaults.gravity if gravity is None else gravity

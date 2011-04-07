@@ -157,7 +157,7 @@ class Tile(Entity):
         # randomly replace every Nth characters by a similar character entity
         if not what:
             return what
-        tresh = 1 / len(what)
+        tresh = 2 / len(what)
         return "".join((c if random.random() > tresh else random.choice( Tile.mapping_tbl[c])) for c in what)
         
     def _GuessRealBB(self,text):
@@ -333,12 +333,12 @@ class Tile(Entity):
             
             if double:
                 text = "\n".join(m+"\n"+m for m in ["".join(m+m for m in n) for n in self.text.split("\n")] )
-                res = sf.String(text,Font=font,Size=rsize*0.5)
+                res = sf.CustomString(text,Font=font,Size=rsize*0.5)
             else:
                 text = self.text
                 
                                         
-                res = sf.String(text,Font=font,Size=rsize)
+                res = sf.CustomString(text,Font=font,Size=rsize)
                 
             Tile.global_str_cache[(self.rsize,self.text)] = res
         
