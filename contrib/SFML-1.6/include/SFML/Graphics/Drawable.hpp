@@ -330,7 +330,7 @@ private :
     /// \param Target : Target into which render the object
     ///
     ////////////////////////////////////////////////////////////
-    void Draw(RenderTarget& Target) const;
+    virtual void Draw(RenderTarget& Target) const;
 
     ////////////////////////////////////////////////////////////
     /// Render the specific geometry of the object

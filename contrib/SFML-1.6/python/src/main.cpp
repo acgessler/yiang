@@ -33,6 +33,7 @@
 #include "Blend.hpp"
 #include "Sound.hpp"
 #include "String.hpp"
+#include "../../../../src-cpp/CustomString.hpp"
 #include "SoundStream.hpp"
 
 #include "compat.hpp"
@@ -84,7 +85,7 @@ extern PyTypeObject PySfSoundRecorderType;
 extern PyTypeObject PySfSoundBufferRecorderType;
 extern PyTypeObject PySfSoundStreamType;
 extern PyTypeObject PySfListenerType;
-
+extern PyTypeObject PySfCustomStringType;
 
 static PyMethodDef module_methods[] = {
 	{"Sleep", (PyCFunction)PySFML_Sleep, METH_O, "Sleep(Duration)\nMake the current thread sleep for a given time.\n	Duration : Time to sleep, in seconds"},
@@ -170,6 +171,8 @@ initsf(void)
 		INITERROR;
 	if (PyType_Ready(&PySfStringType) < 0)
 		INITERROR;
+	if (PyType_Ready(&PySfCustomStringType) < 0)
+		INITERROR;
 	if (PyType_Ready(&PySfPostFXType) < 0)
 		INITERROR;
 
@@ -241,6 +244,8 @@ initsf(void)
 	PyModule_AddObject(m, "Glyph", (PyObject *)&PySfGlyphType);
 	Py_INCREF(&PySfStringType);
 	PyModule_AddObject(m, "String", (PyObject *)&PySfStringType);
+	Py_INCREF(&PySfCustomStringType);
+	PyModule_AddObject(m, "CustomString", (PyObject *)&PySfCustomStringType);
 	Py_INCREF(&PySfPostFXType);
 	PyModule_AddObject(m, "PostFX", (PyObject *)&PySfPostFXType);
 

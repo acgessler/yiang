@@ -1,20 +1,22 @@
 texture framebuffer = {FRAMEBUFFER}
-float blurSize = 0.0015;
-vec2 dir = vec(-0.01,-0.01);
+vec2 dirs = vec(-0.005,-0.005);
 
 effect
 {
-   vec4 result = framebuffer(_in);
+   vec4 result = vec4(0.0,0.0,0.0,0.0);
    float weight = 0.0;
 
    vec2 start = _in;
-   for(int i = 0; i < 16; ++i) {
-	start += dir;
+   for(int i = 0; i < 64; ++i) {
+	start += dirs;
 
-	weight += framebuffer(start).a;
+ 	vec4 s = framebuffer(start);
+	
+	result += s;
+	weight+=(1.0-s.a);
    }
 
-   weight /= 16.0;
-   _out.rgb = mix( result.rgb*(1.0-weight), result.rgb, length(result.rgb) );
-   _out.a = result.a;
+   vec4 fb = framebuffer(_in);
+   _out.rgb = result.rgb/(weight+64) + fb.rgb;
+   _out.a = fb.a;
 }

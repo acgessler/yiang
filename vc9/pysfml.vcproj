@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="python31.lib"
+				AdditionalDependencies="python31.lib opengl32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\contrib\python\lib\x86;&quot;..\contrib\SFML-1.6\lib\vc2008&quot;"
 				IgnoreDefaultLibraryNames="python31_d.lib"
@@ -193,7 +193,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;"
+				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PYSFML_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -212,6 +212,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib "
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\contrib\python\lib\x86;&quot;..\contrib\SFML-1.6\lib\vc2008&quot;"
 				GenerateDebugInformation="true"
@@ -271,7 +272,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;"
+				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PYSFML_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -290,6 +291,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\contrib\python\lib\amd64;&quot;..\contrib\SFML-1.6\lib\vc2008\x64&quot;"
 				GenerateDebugInformation="true"
@@ -367,6 +369,14 @@
 				</File>
 				<File
 					RelativePath="..\contrib\SFML-1.6\python\src\compat.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src-cpp\CustomStringPy.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src-cpp\CustomStringPy.hpp"
 					>
 				</File>
 				<File
@@ -603,6 +613,26 @@
 				</File>
 				<File
 					RelativePath="..\contrib\SFML-1.6\python\src\WindowStyle.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="custom"
+				>
+				<File
+					RelativePath="..\src-cpp\CustomString.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src-cpp\CustomString.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src-cpp\GPUStreaming.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src-cpp\GPUStreaming.h"
 					>
 				</File>
 			</Filter>
