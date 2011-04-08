@@ -98,11 +98,12 @@ class Player(Entity):
         self.ordered_respawn_positions = []
         self.ammo = [0]
         self.move_freely = move_freely
+        self.block_input = False
 
         # XXX use AnimTile instead
         self.tiles = []
         for i in range(0, (len(lines) // height) * height, height):
-            self.tiles.append(Tile("\n".join(lines[i:i + height]),halo_img=None))
+            self.tiles.append(Tile("\n".join(lines[i:i + height]),halo_img=None,permute=False))
             self.tiles[-1].SetDim(self.dim)
             self.tiles[-1].SetPosition((0, 0))
 
@@ -415,59 +416,62 @@ class Player(Entity):
         for perk in list(self.perks):
             perk._CheckIfExpired(self) 
         
-        inp = Renderer.app.GetInput()
+        
         self.acc = [0, self.level.gravity]
         vec = [0, 0]
         
         pvely = self.vel[1]
 
-        if inp.IsKeyDown(KeyMapping.Get("move-left")):
-            self.vel[0] = -defaults.move_speed[0] * self.speed_scale
-            self.cur_tile = Player.ANIM_WALK
-            self.dir = Player.LEFT
-
-            self.moved_once = True
-            
-        if inp.IsKeyDown(KeyMapping.Get("move-right")):
-            self.vel[0] = defaults.move_speed[0] * self.speed_scale
-            self.cur_tile = Player.ANIM_WALK
-            self.dir = Player.RIGHT
-
-            self.moved_once = True
-
-        if defaults.debug_updown_move is True or self.move_freely is True:
-            if inp.IsKeyDown(KeyMapping.Get("move-up")):
-                self.pos[1] -= time * defaults.move_speed[1]
-                self.moved_once = True
-                self.cur_tile = Player.ANIM_JUMP
-            if inp.IsKeyDown(KeyMapping.Get("move-down")):
-                self.pos[1] += time * defaults.move_speed[1]
-                self.moved_once = True
-                self.cur_tile = Player.ANIM_JUMP
-        else:
-            if inp.IsKeyDown(KeyMapping.Get("move-up")):
-                if self.in_jump is False and self.block_jump is False:
-                    self.vel[1] -= defaults.jump_vel * self.jump_scale
-                    self.in_jump = self.level.gravity != 0 
-                    self.block_jump = True
-
-                    self.cur_tile = Player.ANIM_JUMP
+        inp = Renderer.app.GetInput()
+        if not self.block_input:
+            if inp.IsKeyDown(KeyMapping.Get("move-left")):
+                self.vel[0] = -defaults.move_speed[0] * self.speed_scale
+                self.cur_tile = Player.ANIM_WALK
+                self.dir = Player.LEFT
+    
                 self.moved_once = True
                 
-            else:
-                self.block_jump = False
-                
-            if inp.IsKeyDown(KeyMapping.Get("move-down")):
-                if self.in_djump is False and self.block_djump is False:
-                    self.vel[1] += defaults.jump_vel * self.jump_scale
-                    self.in_djump = self.level.gravity != 0 
-                    self.block_djump = True
-
-                    self.cur_tile = Player.ANIM_JUMP
+            if inp.IsKeyDown(KeyMapping.Get("move-right")):
+                self.vel[0] = defaults.move_speed[0] * self.speed_scale
+                self.cur_tile = Player.ANIM_WALK
+                self.dir = Player.RIGHT
+    
+                self.moved_once = True
+    
+            if defaults.debug_updown_move is True or self.move_freely is True:
+                if inp.IsKeyDown(KeyMapping.Get("move-up")):
+                    self.pos[1] -= time * defaults.move_speed[1]
                     self.moved_once = True
+                    self.cur_tile = Player.ANIM_JUMP
+                if inp.IsKeyDown(KeyMapping.Get("move-down")):
+                    self.pos[1] += time * defaults.move_speed[1]
+                    self.moved_once = True
+                    self.cur_tile = Player.ANIM_JUMP
             else:
-                self.block_djump = False
+                if inp.IsKeyDown(KeyMapping.Get("move-up")):
+                    if self.in_jump is False and self.block_jump is False:
+                        self.vel[1] -= defaults.jump_vel * self.jump_scale
+                        self.in_jump = self.level.gravity != 0 
+                        self.block_jump = True
+    
+                        self.cur_tile = Player.ANIM_JUMP
+                    self.moved_once = True
+                    
+                else:
+                    self.block_jump = False
+                    
+                if inp.IsKeyDown(KeyMapping.Get("move-down")):
+                    if self.in_djump is False and self.block_djump is False:
+                        self.vel[1] += defaults.jump_vel * self.jump_scale
+                        self.in_djump = self.level.gravity != 0 
+                        self.block_djump = True
+    
+                        self.cur_tile = Player.ANIM_JUMP
+                        self.moved_once = True
+                else:
+                    self.block_djump = False
             
+        
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
             if defaults.debug_updown_move is True else 0)) * time]
 
@@ -549,6 +553,26 @@ class Player(Entity):
         #self.game.GetLevel().SetPostFXParameter("cur", (self.pos[0] + self.pwidth // 2 - origin[0]) / defaults.tiles[0],
         #    1.0 - (self.pos[1] + self.pheight // 2 - origin[1]) / defaults.tiles[1])
         pass
+    
+    def _SpreadSplatter(self):
+        name = "splatter1.txt"
+        remaining = min( max(self.game.MaxUselessSprites(), 
+            defaults.min_death_sprites_player
+        ),defaults.death_sprites_player)
+        
+        from tile import TileLoader
+        for i in range(remaining):
+            # add human body parts plus pieces of generic splatter
+            if i == remaining-2:
+                name = "splatter_player_special.txt"
+            elif i == remaining-1:
+                name = "splatter_player_special2.txt"
+                
+            t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
+            
+            t.RandomizeSplatter()
+            t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
+            self.game.AddEntity(t)
 
     def _Kill(self, killer=None):
         """Internal stub to kill the player and to fire some nice
@@ -559,25 +583,7 @@ class Player(Entity):
         killer = killer or _("<add reason>")
         print("Player has died, official reason: {0}".format(killer))
         if self.game.GetLives() > 0:
-            name = "splatter1.txt"
-            remaining = min( max(self.game.MaxUselessSprites(), 
-                defaults.min_death_sprites_player
-            ),defaults.death_sprites_player)
-            
-            from tile import TileLoader
-            for i in range(remaining):
-                # add human body parts plus pieces of generic splatter
-                if i == remaining-2:
-                    name = "splatter_player_special.txt"
-                elif i == remaining-1:
-                    name = "splatter_player_special2.txt"
-                    
-                t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
-                
-                t.RandomizeSplatter()
-                t.SetPosition((self.pos[0]+self.pwidth/2,self.pos[1]+self.pheight/2))
-                
-                self.game.AddEntity(t)
+            self._SpreadSplatter()
                 
         if self.game.GetGameMode() != Game.BACKGROUND:
             from posteffect import FlashOverlay
@@ -958,6 +964,9 @@ class KillAnimStub(Tile):
         ))
         
     def SetDirection(self,dirvec):
+        if dirvec[0]==0 and dirvec[1]==0:
+            return
+             
         self.dirvec = list( mathutil.Normalize(dirvec) )
         
     def SetSpeed(self,speed):
@@ -976,6 +985,8 @@ class KillAnimStub(Tile):
         """Setup random direction, speed and ttl"""
         self.SetSpeed(random.uniform(-1.0, 1.0))
         self.SetDirection((random.uniform(-1.0, 1.0),random.uniform(-1.0, 1.0)))
+        
+        
         self.SetTTL(random.random()*6.0)
 
     def Update(self, time_elapsed, time_delta):

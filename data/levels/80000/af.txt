@@ -1,0 +1,16 @@
+from tile import AnimTile; <out> = AnimTile(<raw>,3,4,1)
+ )  )
+(  ( 
+ )§ )
+
+(  ( 
+ )§ )
+(  ( 
+
+ )§ )
+(  ( 
+ )  )
+
+(  ( 
+ )  )
+(  ( 

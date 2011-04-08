@@ -1,0 +1,30 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Logo'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=5,scroll=2,lower_offset=0.0)
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _pl
+
+
+
+
+
+
+.  .  .  .  .  .  oi1
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDKrDK
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  oi2
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~A1rafrafrafraf~A2
+.  .  .  .  .  .  .  .  .  .  PE3.  .  .  .  .  .  .  .  ~A1~A9~A9rafraf~A9~A9~A2
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ~A1~A9~A9~A9~A9~A9~A9~A9~A9~A2
+.  .  .  .  .  .  .  ~A9.  .  .  .  .  .  .  .  .  ~A1~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A2
+.  .  .  .  .  .  .  ~A9~AC~AC~AC~AC~AC~AC~AC~AC~A1~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9
+.  .  .  .  .  .  .  ~A9.  .  .  .  .  .  .  ~A1~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A9~A2
+
+
+
+

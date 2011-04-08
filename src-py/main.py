@@ -29,10 +29,6 @@ import itertools
 import math
 
 
-
-
-
-
 # My own stuff
 import defaults
 from fonts import FontCache
@@ -861,7 +857,7 @@ Consider them heroes."""),defaults.font_menu,
             y += height+height_spacing
             
                     
-                    
+
 
         
 import userprofile
@@ -879,6 +875,7 @@ def LaunchMenu():
     Renderer.AddDrawable(BlurInOverlay(2.0,0.0))
     Renderer.AddDrawable(FadeInOverlay(2.5,0.0))
     Renderer.AddDrawable(MainMenu())
+
 
 
 def main():
@@ -924,8 +921,8 @@ Hit {1} to cancel.format(
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
             )), defaults.game_over_fade_time, (550, 150), 0.0, accepted, sf.Color(150,0,0), on_close))
     """
-    
-    userprofile.SetupSelectionGUI(LaunchMenu)
+    from title import Title
+    Renderer.AddDrawable(Title(lambda:userprofile.SetupSelectionGUI(LaunchMenu)))
     Renderer.DoLoop()
     Renderer.Terminate()
     

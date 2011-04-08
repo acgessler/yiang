@@ -1,0 +1,9 @@
+from title import FadeTile; <out> = FadeTile(<raw>,Tile.AUTO,Tile.AUTO,fade_start=1.0,fade_time=2.0,halo_img=None,collision=Entity.ENTER,rsize=26)
+                                                                                                                  
+____    ____  __       ___       __   __    _______ 
+\   \  /   / |  |     /   \     |  \ |  |  /  _____|
+ \   \/   /  |  |    /  ^  \    |   \|  | |  |  __  
+  \_    _/   |  |   /  /_\  \   |  . `  | |  | |_ | 
+    |  |     |  |  /  _____  \  |  |\   | |  |__| | 
+    |__|     |__| /__/     \__\ |__| \__|  \______| 
+                                                    
