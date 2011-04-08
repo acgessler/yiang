@@ -1,0 +1,10 @@
+texture framebuffer = {FRAMEBUFFER}
+vec2 cur = {PLAYER_POS}
+
+effect
+{
+	vec4 pixel = framebuffer(_in);
+
+	_out.rgb = mix(vec3(0.8) * smoothstep(0.3,0.4, length(pixel.rgb)*0.5),pixel.rgb,(1.0-smoothstep(0.3,0.6,length(_in-cur))));
+	_out.a = pixel.a;
+}
