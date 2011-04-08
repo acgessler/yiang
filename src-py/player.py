@@ -887,7 +887,7 @@ class Player(Entity):
         
         self.level.ResetPostFXToDefaults()
 
-        if not self.game.GetGameMode() == Game.BACKGROUND:
+        if self.game.GetGameMode() != Game.BACKGROUND:
             from posteffect import QuickFocus
             Renderer.AddDrawable(QuickFocus(self))
         

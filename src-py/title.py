@@ -36,6 +36,9 @@ class TitlePlayer(Player):
         self.unkillable = 0xffffffff
         self.splatter_cnt = 25
         
+    def __str__(self):
+        return "<TitlePlayer>"
+        
     def _Shoot(self):
         return
     
