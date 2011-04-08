@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Sickness'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Sickness'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ()), ('focusplayer_circle.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
 
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _I0

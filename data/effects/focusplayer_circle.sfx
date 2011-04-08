@@ -1,7 +1,6 @@
 texture framebuffer = {FRAMEBUFFER}
 vec2 curpos = {PLAYER_POS}
 float aspect = {ASPECT}
-float amount = 0.0
 
 effect
 {
@@ -12,6 +11,6 @@ effect
 	// we would need to adjust the overall length of diff as well,
 	// but the difference should be negligible
 
-	_out.rgb = pixel.rgb * (1.0-step(amount,length(diff)));
+	_out.rgb = pixel.rgb * (1.0-smoothstep(0.45,0.5,length(diff)));
 	_out.a = pixel.a;
 }

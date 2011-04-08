@@ -130,6 +130,7 @@ def_user_profile = "Wurzelgnom"
 
 postfx_flash_length = 1
 postfx_flash_intensity = 0.08
+postfx_focus_length = 0.8
 
 # Disable threading. This implies disabling loading screens.
 no_threading = False

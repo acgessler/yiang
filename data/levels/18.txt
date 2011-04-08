@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Good friends again'),color=(15, 0, 15),postfx=[('ingame1.sfx', ()), ('invert_screen.sfx', ())],vis_ofs=0,scroll=2,)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Good friends again'),color=(15, 0, 15),postfx=[('ingame1.sfx', ()), ('invert_screen.sfx', ()), ('focusplayer_circle.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gE2_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
 .  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA

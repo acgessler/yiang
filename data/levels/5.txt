@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.1, 0),name=_('Meeting some friends'),color=(15, 0, 15),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=5,bgimg=12,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.1, 0),name=_('Meeting some friends'),color=(15, 0, 15),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ()), ('focusplayer_bw.sfx', ())],vis_ofs=5,bgimg=12,scroll=3,lower_offset=0.0)
 
 
 .  .  .  .  .  .  ~A9

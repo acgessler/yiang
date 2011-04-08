@@ -28,10 +28,16 @@ def GetUpdater():
         def __call__(self,pfx, type, name):
             
             assert type == "vec2"
-            if hasattr(self,"game") is False or not self.game.GetLevel():
+            if hasattr(self,"game") is False:
+                if hasattr(self,"player"):
+                    self.game = self.player.game
+                else:
+                    return
+            
+            if not self.game.GetLevel():
                 return
             
-            if not hasattr(self,"player") or self.clock.GetElapsedTime() > 1.0:
+            if not hasattr(self,"player") or not hasattr(self,"clock") or self.clock.GetElapsedTime() > 1.0:
                 self.clock = sf.Clock()
                 candidates = (entity for entity in self.game.GetLevel().EnumActiveEntities() \
                     if isinstance(entity,Player))
@@ -50,6 +56,7 @@ def GetUpdater():
             origin = self.game.GetLevel().GetOrigin()
             x,y = ((player.pos[0] + player.pwidth // 2 - origin[0]) / defaults.tiles[0],
                 1.0 - (player.pos[1] + player.pheight // 2 - origin[1]) / defaults.tiles[1])
+            
                 
             # fix for editor mode: if the player is outside the valid range,
             # why not simply make the postfx belief he's at the center?
@@ -60,11 +67,14 @@ def GetUpdater():
                 or self.game.GetGameMode()==Game.BACKGROUND:
                 x = y = 0.5
                 
+            
             pfx.SetParameter(name,x,y)
             
         def SetOuterParam(self,name,value):
             if name == "game":
                 self.game = value
+            elif name == "player":
+                self.player = value
                 
     return Updater()
         

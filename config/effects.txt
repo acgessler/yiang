@@ -10,6 +10,6 @@ menu2.sfx
 dimmed_colors.sfx
 bloom.sfx
 fakeshadow.sfx
-focusplayer.sfx
+focusplayer_circle.sfx
 focusplayer_bw.sfx
 focusplayer_bw2.sfx

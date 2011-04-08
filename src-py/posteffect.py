@@ -151,6 +151,7 @@ class PostFXCache:
                                     def __call__(self):
                                         return self.inner(pfx,self.type,self.name)
                                 
+                                print("Set auto parameter updater: {0} -> {1}".format(words[1],words[0]))
                                 pfx.updater.append(closure_maker())
                             elif words[0]=="texture":
                                 # XXX unify this special case, too.
@@ -468,6 +469,37 @@ class FlashOverlay(PostFXOverlay):
         
         if curtime > self.flash_length and not self.on_close is None: # sanity check
             print("End FlashOverlay anim")
+            
+            self.on_close(self)
+            self.on_close = None   
+            
+            
+class QuickFocus(PostFXOverlay):
+    """A postprocessing overlay to limit the view to a circle around the player, 
+    which is gradually increased until normal size is reached again"""
+    def __init__(self,player,flash_color=sf.Color.White,focus_length=None,on_close=None,draworder=700):
+        
+        PostFXOverlay.__init__(self,PostFXCache.Get("focusplayer.sfx",()),draworder)
+        self.focus_length = focus_length or defaults.postfx_focus_length
+        self.on_close  = (lambda x:Renderer.RemoveDrawable(x)) if on_close is None else on_close 
+        self.player = player
+        
+        self.postfx.SetUpdaterParam("player",player)
+    
+        
+    def Draw(self):
+        PostFXOverlay.Draw(self)
+        
+        if not hasattr(self,"clock"):
+            self.clock = sf.Clock()
+            print("Begin QuickFocus anim")
+            
+        curtime = self.clock.GetElapsedTime()
+        self.postfx.SetParameter("amount",curtime/self.focus_length)
+        self.postfx.SetParameter("aspect",defaults.resolution[0]/defaults.resolution[1])
+        
+        if curtime > self.focus_length and not self.on_close is None: # sanity check
+            print("End QuickFocus anim")
             
             self.on_close(self)
             self.on_close = None   

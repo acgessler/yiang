@@ -881,6 +881,10 @@ class Player(Entity):
         
         self.level.ResetPostFXToDefaults()
 
+        if not self.game.GetGameMode() == Game.BACKGROUND:
+            from posteffect import QuickFocus
+            Renderer.AddDrawable(QuickFocus(self))
+        
 
 class RespawnPoint(EntityWithEditorImage):
     """A respawning point represents a possible position where
