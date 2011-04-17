@@ -48,5 +48,8 @@ i=00000000
 # Brown
 P=554c2c
 
+# Dark Brown
+Q=330000
+
 # Light shiny blue
 c=4b55da45
