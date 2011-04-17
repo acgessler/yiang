@@ -12,24 +12,25 @@ Kampagne:
   - Levels setzen
   - story tiles
 Textuebersetzungen
-Hiscore-Upload
+Hiscore-Upload (ggf. Hiscore fading -> 1000)
 Update-Check
 Achievements - Infrastruktur
 Load&Save
 Profilwahl
 Remove Cheats
+Punkte&Lebensverteilung
 
 NiceToHave
 ==========
 Kampagne:
   - optische,witzige Tiles
   - HUD bereiche erleuchten
+  - ggf. grosse Map (auf 'M')
 Flash-Effekt: Uebersaturation vermeiden
 Sound-Effekte
-Mehr Musik
+Mehr Musik, besseres Audiomixing
 Intro'video'
 Quizlevel
-Icon
 Gadget
 
 Nebentasks

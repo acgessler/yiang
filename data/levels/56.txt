@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Teleporter'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Teleporter'),color=[0, 0, 0],postfx=[('ingame1.sfx', ())],vis_ofs=10,bgimg=-1,scroll=3,lower_offset=0.0)
 
 
 
