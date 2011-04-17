@@ -1,15 +1,25 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Good friends again'),color=(15, 0, 15),postfx=[('ingame1.sfx', ()), ('invert_screen.sfx', ()), ('focusplayer_circle.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gE2_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  gPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  _E0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yE2gA5rE2.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  .  gA1_A5.  gE2.  rA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  .  _A1bB0_A5.  .  .  bA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  .  bA1_B0_B0_A5bE2rE2.  rA5.  .  .  .  .  bE0.  rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  .  .  .  _A1rB0gB0_B0_A5.  .  .  bA5.  .  .  .  rE0.  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-.  .  .  .  .  .  .  _E0.  bA1_B0yB0_B0rB0_A5.  .  .  gA5.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Good friends again'),color=(15, 0, 15),postfx=[('invert_screen.sfx', ()), ('focusplayer_circle.sfx', ())],vis_ofs=0,scroll=3,lower_offset=0.0)
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  dI0dI0dI0dI0.  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA5_E0.  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA1yA5rE2.  .  .  rA5.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rB0bB0rB0.  bE2.  .  bA5.  .  .  .  .  .  _E0_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  gA5gPL.  .  .  .  .  .  .  .  .  .  bA1yA5rB0yB0.  .  yE2.  rA5.  .  .  .  .  .  rFI_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  yA5rB0gB0bA1yA5.  .  .  dE2bA5.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  bA5yA5bA5.  .  .  .  .  .  _E0bA1bA1yB0rB0rB0bA5.  .  .  .  gA5.  .  .  .  .  .  .  _DA_DA_DA_DA_DA_DA_DA_DA_DA_DA
+.  .  .  .  .  .  .  .  .  .  .  .  rB0bA5rB0gA5yA5bA5rB0gA5yA5bA5rB0gA5yA5gA5bA5yA5gA5yA5rA5bA5rA5gA5yA5rA5bA5rA5yA5bA5_DA_DA_DA_DA_DA_DA_DA_DA_DA_DA.  .  .  .  .  .  .  bA5
+
+
+
+
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5
