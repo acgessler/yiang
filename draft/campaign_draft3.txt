@@ -1,0 +1,6 @@
+Glyph lebt auf dem Planeten UTF 16.
+Macht Urlaub auf Nachbarplaneten UTF 32.
+Bemerkt, dass UTF 32 von dem Virus ASCII befallen wurde und die Bewohner zu feindlichen ASCII Zombies mutierten.
+Glyph sucht den Professor Dr. White Char (?) auf einem Mond des Planeten UTF 32 um ihn um Hilfe zu bitten.
+Glyph erfährt die schokierende Wahrheit: Professor Doktor White Char hat den Virus entworfen und auf UTF 32 freigelassen.
+Er besiegt den verrückten Professor und rettet das Universum.
