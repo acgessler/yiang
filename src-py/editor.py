@@ -397,9 +397,6 @@ class EditorGame(Game):
             
             @classmethod
             def CacheBackgroundImageInfo(cls):
-                if cls.num_images != -1:
-                    return
-                
                 import re
                 
                 ratio_dist = []
