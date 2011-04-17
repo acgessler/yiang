@@ -260,11 +260,24 @@ class EditorGame(Game):
                 [e for e in self.overlays if e.__class__ == Overlay_ShowLevelSettings][0]._RemoveMe()
             else:            
                 self.PushOverlay(Overlay_ShowLevelSettings())    
+                
+        def EditBackground():
+            if self.IsOverlayActive(Overlay_ShowBackground):
+                [e for e in self.overlays if e.__class__ == Overlay_ShowBackground][0]._RemoveMe()
+            else:            
+                self.PushOverlay(Overlay_ShowBackground())   
         
         self.AddSlaveDrawable((Button(text=_("Edit Level Settings"), 
             tip=_("Change level name, speed, movement, post processing ... etc."),                          
             rect=[350, 10, 150, 25]) + 
               ("release", (lambda src: EditSettings())) +
+              ("update",  (lambda src: UpdateSettingsGUIState(src)))
+        ))
+        
+        self.AddSlaveDrawable((Button(text=_("Background"), 
+            tip=_("Change background image"),                          
+            rect=[350, 36, 150, 25]) + 
+              ("release", (lambda src: EditBackground())) +
               ("update",  (lambda src: UpdateSettingsGUIState(src)))
         ))
         
@@ -375,6 +388,73 @@ class EditorGame(Game):
              ("off", (lambda src: RemoveMarkup())) +
              ("on",(lambda src: AddMarkup())) 
         ))
+        
+        
+        
+        class Overlay_ShowBackground(Drawable):
+            
+            num_images = -1
+            images = []
+            
+            @classmethod
+            def CacheBackgroundImageInfo(cls):
+                if cls.num_images != -1:
+                    return
+                
+                dir= os.path.join(defaults.data_dir,"bg")
+                for file in os.listdir(dir):
+                    if not os.path.splitext(file)[1] in ('jpeg','jpg','png'):
+                        continue
+                    
+                    cls.num_images += 1
+                    cls.images.append(TextureCache.Get(os.path.join(dir,file)))
+            
+            def __init__(self_inner):
+                Drawable.__init__(self_inner)
+                self.AddSlaveDrawable(self_inner)
+                
+                self_inner.CacheBackgroundImageInfo()
+                self_inner.elements = []
+        
+                self_inner.bgimg = self.settings.setdefault('bgimg',-1)
+                
+                w,h = 180,26
+                rx,ry = defaults.resolution
+                self_inner.elements.append(Button(text=_("Apply"),rect=[rx-w*2-60,ry-50,w,h],fgcolor=sf.Color.Green) + 
+                    ("release", (lambda src: (self_inner._Save() or True) and self_inner._RemoveMe()))
+                  )
+                self_inner.elements.append(Button(text=_("Cancel"),rect=[rx-w-40,ry-50,w,h],fgcolor=sf.Color.Red) + 
+                    ("release", (lambda src: self_inner._RemoveMe()))
+                  )
+                
+                # arrange the background images
+                self_inner.sprites = []
+                
+                for e in self_inner.elements:
+                    e.draworder = 52000
+                    self.AddSlaveDrawable(e)
+                
+                
+            def _Save(self_inner):
+                # obtain a copy of the actual settings and merge our changes
+                orig = self.settings.copy()
+                orig["bgimg"] = self_inner.bgimg
+                self.ControlledChangeSettings(orig)
+        
+            def _RemoveMe(self_inner):
+                self.RemoveOverlay(self_inner)
+                for e in self_inner.elements:
+                    self.RemoveSlaveDrawable(e)
+                    
+                self.RemoveSlaveDrawable(self_inner)
+                    
+            def __call__(self_inner):
+                pass
+                    
+            def Draw(self_inner):
+                pass
+                    
+                    
         
         class Overlay_ShowLevelSettings(Drawable):
             
@@ -2757,6 +2837,7 @@ class EditorGame(Game):
         
         # XXX why -visofs? T smell an ugly workaround ..
         self.level.lower_offset = self.settings.get("lower_offset",0)
+        Renderer.SetBGImage(self.settings.get("bgimg",-1))
         
     def ControlledChangeSettings(self,new):
         """Push a set of changed settings onto the action stack"""

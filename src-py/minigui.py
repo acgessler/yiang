@@ -283,6 +283,9 @@ class HasAText(Component):
         return self
     
     def _DrawTextCentered(self):
+        if not len(self.text):
+            return
+        
         ts = self._text.split("\n")
         
         if self.align == Component.CENTER:
@@ -526,6 +529,33 @@ class EditControl(HasAText):
             self.text = new_text
             self.Fire("text_change")
         
+        
+class ImageControl(Button):
+    """The ImageControl is just a picture display, however if offers
+    regular button events so the app can respond to clicks on the image."""
+    
+    def __init__(self,image,tip=None,align=Component.CENTER,**kwargs):
+        Button.__init__(self,text="",**kwargs)
+        self.image = image
+        
+    @property
+    def image(self):
+        return self._image
+        
+    @image.setter
+    def image(self,image):
+        self._image = image
+        return self
+    
+    def _DrawImageCentered(self):
+        sp = sf.Sprite(self.image)
+        
+        
+    def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
+        Button.DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit)
+            
+        # drawthe image on top of everything
+        self._DrawImageCentered()
         
 
 # vim: ai ts=4 sts=4 et sw=4
