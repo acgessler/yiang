@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Welcome to your last journey'),color=(20, 10, 10),postfx=[('ingame1.sfx', ()), ('focusplayer_bw.sfx', ())],vis_ofs=10,bgimg=18,scroll=2,lower_offset=-0.3)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Welcome to your last journey'),color=[20, 10, 10],postfx=[('ingame1.sfx', ()), ('focusplayer_bw.sfx', ())],vis_ofs=10,bgimg=18,scroll=3,lower_offset=-0.3)
 
 
 
@@ -8,25 +8,28 @@
 
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gDF
-.  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
-.  .  rPL.  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RE.  .  .  gA9
-.  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _MJ.  .  .  gA9
-.  .  .  .  .  .  .  .  .  .  .  _A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  _A9_A9.  .  .  gAM.  gAM.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9
-.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9gA9gA9gA9gA9
-.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  gS2.  .  .  .  .  .  .  _A9
-.  .  yDF.  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  gS2.  .  .  .  _AB_AB_AB_A9.  _AB.  .  .  .  .  rE2.  rE2.  _A0
-.  .  .  .  .  .  .  rS0gE2.  .  .  _A9.  .  .  .  .  _AB_AB_AB.  .  .  .  .  .  _A9.  .  .  .  _A1_A0_A0_A0_A0_A2.  .  .  .  .  yDF.  .  .  gDF.  .  .  aDF
-.  .  .  .  rA9rA9rA9rA9.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
-.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  gDF.  .  .  .  .  .  .  .  .  _A9.  _AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS4
-.  .  .  rA9.  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS4
-.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  _AB_AB.  .  .  .  .  .  .  _RE
-.  .  rA9.  .  .  .  yW0.  .  .  .  _A9_RE.  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yE4.  .  yCC.  .  gCC.  .  bCC
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  _AB
-.  rA9rA9rA9rA9.  .  rS0gE2.  .  .  .  .  .  .  .  .  .  .  .  gAM.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  rE0.  .  .  .  gE0.  .  rE2.  .  bE0.  .  .  .  rE2.  .  yE0.  .  .  .  .  .  rE2.  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
-.  .  .  .  .  .  _A3.  .  .  .  _A4_A9_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AB_AB.  .  .  .  .  .  .  .  .  .  .  .  _AB_AB_AB_AB_AB_AB_AB_AB_A9_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_A9_AB_AB_AB_AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
-.  .  .  .  .  _A3.  .  .  .  _A3.  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  _AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rFI.  rDArDA
-.  .  .  .  _A3.  .  .  .  _A3.  .  _A9.  .  .  _AB.  .  .  _A3BDA.  .  _A3BDABDA_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rAFrAFrAFrAFrAFrAFrAF_A0_A0_A0_A0_A0_A0_A0_A0rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2rAFrAFrAFrAF_A1_A2rAFrAFrAFrAFrAFrAFrAFrAFrAF_A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF
+.  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+.  .  rPL.  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+.  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  gI0.  gI0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  gAM.  gAM.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _RE_MJ.  .  .  gA9
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  gS2.  .  .  .  .  gAM.  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gA9gA9gA9gA9gA9gA9
+.  .  yDF.  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  gS2.  .  .  .  .  _AB_AB_A9_AB_AB.  .  .  .  .  rE2.  rE2
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  _AB_AB_AB.  .  .  .  yS0yS0_A9.  _RE.  .  _A1_A0_A0_A0_A0_A2.  .  .  .  .  yDF.  .  .  gDF.  .  .  aDF
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  yS0yS0_A9
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  gDF.  .  .  .  .  .  .  _AB_AB_A9_AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS4
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  dI0.  dI0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  dI0.  .  .  dI0.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS4
+.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  yS0yS0_A9.  .  .  .  _AB_AB.  .  .  .  .  .  .  _RE.  .  .  .  .  .  .  dE2.  .  .  .  .  .  .  .  .  dI0
+.  .  .  .  .  .  .  .  _I0.  .  .  _A9.  .  .  .  rI0.  .  .  .  .  .  .  yS0yS0_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  dE2
+.  .  .  .  .  .  yW0.  bE2.  .  .  _RE.  .  .  .  .  .  .  .  .  .  .  .  _AB_AB_A9_AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  dI0.  .  .  yE1.  .  .  dI0.  dI0.  .  .  yE1.  .  dI0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  bE2.  .  .  .  .  .  .  .  .  .  .  dE2.  .  .  .  .  .  .  .  .  .  .  .  bE2.  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
+.  .  .  .  .  .  _A3.  .  .  .  _A4_A9.  .  .  .  rE2.  .  .  .  .  .  gAM.  .  .  .  .  .  .  _AB_AB.  .  .  .  .  .  .  .  .  .  .  .  _AB_AB_AB_AB_AB_AB_AB_AB_A9_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_A9_AB_AB_AB_AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
+.  .  .  .  .  _A3yS0.  .  .  _A3.  _A9.  .  .  .  .  .  .  .  .  .  .  gAM.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _C4gAMgAM.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gAM_C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rFI.  rDArDA
+.  .  .  .  _A3gAM.  .  .  _A3.  .  _A9.  .  .  .  _AB.  .  .  _A3BDABDA_A3BDABDA_A3_AB_AB.  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  _C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gAM_C4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDA
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rAFrAFrAFrAFrAFrAFrAFrAF_A0_A0_A0_A0_A0_A0_A0rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0.  _A0_A0_A0_A0.  _A0_A0_A0_A0.  _A0_A0rAFrAFrAFrAFrAFrAFrAFrAFrAFrAF_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0yCC_A0.  .  _A0dCC_A0.  .  _A0bCC_A0.  rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0.  .  _A0_A0_A0.  .  _A0_A0_A0.  rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rAF.  .  .  .  .  .  rAFrAF
 
 
 
