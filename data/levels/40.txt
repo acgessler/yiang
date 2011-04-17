@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Death'),color=(12, 12, 50),postfx=[('ingame1.sfx', ())],vis_ofs=10,scroll=3,lower_offset=0.0,bgimg=12)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Death'),color=(12, 12, 50),postfx=[('ingame1.sfx', ())],vis_ofs=10,bgimg=12,scroll=3,lower_offset=0.0)
 
 
 
