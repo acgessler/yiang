@@ -1,0 +1,41 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Teleporter'),color=[0, 0, 0],postfx=[('ingame1.sfx', ())],vis_ofs=10,bgimg=-1,scroll=3,lower_offset=0.0)
+
+
+
+
+
+
+
+
+
+
+
+.  _A9.  .  xTA.  .  _A9.  .  .  .  .  bTB
+.  _A9_A9.  .  .  _A9
+_A9_A9_AB_AB_AB_A9.  .  .  .  pPL.  .  .  .  _A9_A9_A9_A9_A9_A9_A9
+_A9_A9.  .  .  _RD.  .  .  .  .  .  .  .  .  _A9_A9.  pTB.  _A9_A9
+_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  _A9.  ~C9
+_A9_A9.  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  _A9_A9_A9_A9_A9
+_A9_A9_TA.  .  _A9.  .  .  .  .  .  .  .  .  _A9QTA.  .  .  rKE_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bDAbDAbDAbDAbDA
+_A9_A9.  .  .  _A9.  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  _A9.  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+_A9_A9_A9_A9.  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  _A9_A9.  .  .  .  .  .  _A9_A9.  QTB.  .  _A9_A9_A9_A9_A9.  xTB_A9_A9
+_A9_A9.  .  .  _A9rTB.  .  .  .  .  .  .  yTA_A9.  yTA.  gTA.  _A9_A9.  .  .  .  .  .  _A9_A9.  .  .  .  _A9_A9_A9bTA_A9.  .  _A9_A9_A9
+_A9_A9.  _KE.  _A9.  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  _A9_A9.  .  .  .  .  dMJ.  .  _A9yS0yS0_A9_A9_A9_A9
+_A9_A9.  .  .  _A9_A9_A9_A9_A9_A9.  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  _A9.  .  _A9_A9_A9_A9_A9
+_A9_A9_ABbTA_AB_A9.  .  .  .  _A9.  .  .  _A9.  _TB.  .  _A9_A9.  .  .  _A9_A9.  .  .  _A9~C8.  .  .  .  .  .  .  _A9_A9yS0yS0_A9_A9_A9_A9_A9_A9
+_A9_A9.  .  .  _DO.  .  .  .  rDO.  .  .  _A9.  .  .  .  _A9_A9.  .  .  _A9_A9.  yTB.  _A9_A9.  .  .  .  .  .  .  _A9_A9.  .  _A9_A9_A9_A9_A9_A9_A9
+_A9_A9_CB.  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  gTA_A9_A9.  .  .  _A9_A9.  .  .  _A9_A9.  bTA.  .  bDAbDAbDA_A9_A9yS0yS0_A9_A9_A9_A9_A9_A9_A9_A9
+_A9_A9_AB.  _AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_A9_AB_AB_AB_AB_A9_A9.  .  .  _A9.  .  .  .  _A9_C8.  .  .  .  .  .  .  _A9_A9.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9
+_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  _A9_A9_AB_AB_AB_A9.  .  _AB_AB_A9_A9.  .  .  .  .  .  .  _A9_A9yS0yS0_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+_A9_A9.  gTB.  .  .  .  .  .  .  .  rTA.  _A9.  .  .  .  _A9_A9.  .  .  _A9_A9.  .  pTA_A9_A9.  yS0.  .  .  gFI.  _A9_A9.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  _A9_A9.  .  .  _A9_A9.  .  .  _A9_A9.  .  .  .  .  .  .  _A9_A9.  pTA_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+
+
+
+
+
+
+
+
+

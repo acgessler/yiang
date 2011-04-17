@@ -1,0 +1,5 @@
+from tile import Tile; <out> = Tile(<raw>)
+_____
+\\\\\
+96969
+====/
