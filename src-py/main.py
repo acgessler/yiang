@@ -921,8 +921,22 @@ Hit {1} to cancel.format(
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
             )), defaults.game_over_fade_time, (550, 150), 0.0, accepted, sf.Color(150,0,0), on_close))
     """
-    from title import Title
-    Renderer.AddDrawable(Title(lambda:userprofile.SetupSelectionGUI(LaunchMenu)))
+    
+    def next():
+        next = lambda:userprofile.SetupSelectionGUI(LaunchMenu)
+        
+        if defaults.no_intro:
+            next()
+        else:
+            from title import Title
+            Renderer.AddDrawable(Title(next))
+    
+    if defaults.no_logo:
+        next()
+    else:
+        from studiosplash import Splash
+        Renderer.AddDrawable(Splash(next))
+        
     Renderer.DoLoop()
     Renderer.Terminate()
     
