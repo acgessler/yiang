@@ -1013,8 +1013,8 @@ class InventoryChangeAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player adds or removes an item from the inventory."""
 
-    def __init__(self,text,pos,speed=1.0,color=sf.Color.Green):
-        Tile.__init__(self,text,draworder=11002)
+    def __init__(self,text,pos,speed=1.0,color=sf.Color.Green,rsize=None):
+        Tile.__init__(self,text,draworder=11002,rsize=rsize)
         
         self.SetPosition( pos )
         self.speed = speed
