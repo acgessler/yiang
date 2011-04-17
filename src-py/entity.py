@@ -298,7 +298,7 @@ class EntityWithEditorImage(Entity):
     def Update(self, time_elapsed, time):
         
         if self.game.GetGameMode() == Game.EDITOR:
-            if not hasattr(self,"respawn_img"):
+            if not hasattr(self,"respawn_img") and self.editor_stub_img:
                 from textures import TextureCache
                 self.respawn_img = TextureCache.Get(os.path.join(defaults.data_dir,"textures",self.editor_stub_img))
                 
@@ -309,8 +309,7 @@ class EntityWithEditorImage(Entity):
                 self.respawn_sprite.Resize(tx*bb[2],ty*bb[3])
                 
     def Draw(self):
-        
-        if self.game.GetGameMode() == Game.EDITOR:
+        if self.game.GetGameMode() == Game.EDITOR  and self.editor_stub_img:
             self.game.GetLevel().DrawSingle( self.respawn_sprite, self.pos )
             
 # vim: ai ts=4 sts=4 et sw=4

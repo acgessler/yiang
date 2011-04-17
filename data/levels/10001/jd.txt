@@ -1,0 +1,3 @@
+from quiz import QuizChoice; <out> = QuizChoice(5,3,qid=2,letter='d')
+
+

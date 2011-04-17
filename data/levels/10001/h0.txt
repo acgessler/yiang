@@ -1,0 +1,2 @@
+from quiz import QuizAsk; <out> = QuizAsk(5,3,qid=0,quiz_id=0)
+
