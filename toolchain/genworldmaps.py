@@ -44,7 +44,8 @@ color_dict = collections.defaultdict(lambda : ".  ", {
     (0xff,0x90,0x0)   : "Pd1", 
     (0xd8,0xf1,0xf0)  : "-ip",
     (0xff,0xff,0xff)  : "_ic",
-    (0x0,0x0,0x0)   : "gg1", ## city locations  
+    (0x0,0x0,0x0)   : "gg1", ## city locations
+    (0xff,0x2c,0x0fd)   : "gg1", ## city locations
 })
 
 large_tiles = {
@@ -59,6 +60,7 @@ large_tiles = {
     ("-ip") : { (2,2) : "-iq", (4,4) : "-ir", (2,1) : "-is", (1,2) : "-it"}
 }
 
+level_door = ((0x0,0x0,0x0),(0xff,0x2c,0xfd))
 
 def main():
     for level in (30000,30001,30002,30003):
@@ -92,8 +94,8 @@ def process_map(level):
             cells[-1].append(color_dict[col]) # bgr - rgb
             orig[-1].append(cells[-1][-1])
             
-            if col == (0,0,0):
-                citypos.write("{0} {1} \n".format(x,y))
+            if col in level_door:
+                citypos.write("{0} {1}\n".format(x,y))
                 
     citypos.close()
                  
