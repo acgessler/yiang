@@ -210,8 +210,23 @@ class Renderer:
                 defaults.caption + " v{0}.{1} ({2} Bit Build)".format(defaults.version,defaults.revision, platform.architecture()[0][0:2]), tb, settings)
 
 
-        # Setup a dummy icon, I might add a proper one later
-        Renderer.app.SetIcon(16, 16, b'\xcd\x22\x22\xff' * 256)
+        # load the icon manually from a PNG - I don't know how to pass a proper ICON to SFML
+        from textures import TextureCache
+        icon = TextureCache.Get(os.path.join(defaults.data_dir,'icon','YIANG.png'))
+        assert icon.GetWidth() == 16 and icon.GetHeight() == 16
+        
+        import array
+        aico = array.array('B')
+        
+        for y in range(16):
+            for x in range(16):
+                col = icon.GetPixel(x,y)
+                aico.append(col.r)
+                aico.append(col.g)
+                aico.append(col.b)
+                aico.append(col.a)
+        
+        Renderer.app.SetIcon(16, 16, aico.tostring() )
         if defaults.framerate_limit > 0:
             Renderer.app.SetFramerateLimit(defaults.framerate_limit)
 

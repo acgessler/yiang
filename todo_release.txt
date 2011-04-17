@@ -15,7 +15,7 @@ Update-Check
 Achievements - Infrastruktur
 Load&Save
 Profilwahl
-
+Remove Cheats
 
 NiceToHave
 ==========
@@ -24,6 +24,8 @@ Sound-Effekte
 Mehr Musik
 Intro'video'
 Quizlevel
+Icon
+Gadget
 
 Nebentasks
 ==========
