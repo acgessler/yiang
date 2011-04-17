@@ -23,6 +23,7 @@ NiceToHave
 ==========
 Kampagne:
   - optische,witzige Tiles
+  - HUD bereiche erleuchten
 Flash-Effekt: Uebersaturation vermeiden
 Sound-Effekte
 Mehr Musik
@@ -33,5 +34,6 @@ Gadget
 
 Nebentasks
 ==========
-Trailer/Teaser
+Trailer/Teaser:
+  - "altes foto"-filter gimp! nutzbar für weltkarte o.ä.
 Neue Website
