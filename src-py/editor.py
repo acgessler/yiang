@@ -28,9 +28,7 @@ import traceback
 import itertools
 import collections
 import operator
-
-
-
+import re
 
 # Our stuff
 import defaults
@@ -52,7 +50,7 @@ from player import Player
 from keys import KeyMapping
 from tile import Tile,AnimTile,TileLoader
 from level import Level
-from minigui import Component, Button, ToggleButton, Label, GUIManager, EditControl
+from minigui import Component, Button, ToggleButton, Label, GUIManager, EditControl, ImageControl
 
 import preboot # preboot.py *must* be loaded first ----- but if we do so,
 # we end up with strange tile scalings.
@@ -393,21 +391,39 @@ class EditorGame(Game):
         
         class Overlay_ShowBackground(Drawable):
             
-            num_images = -1
-            images = []
+            num_images = -1 # maximum image index, not necessarily the real number of images
+            images = {}
+            ratio_guess = 0.0  # median ratio
             
             @classmethod
             def CacheBackgroundImageInfo(cls):
                 if cls.num_images != -1:
                     return
                 
+                import re
+                
+                ratio_dist = []
+                
                 dir= os.path.join(defaults.data_dir,"bg")
                 for file in os.listdir(dir):
-                    if not os.path.splitext(file)[1] in ('jpeg','jpg','png'):
+                    name,ext = os.path.splitext(file)
+                    if not ext.lower() in ('.jpeg','.jpg','.png'):
                         continue
-                    
-                    cls.num_images += 1
-                    cls.images.append(TextureCache.Get(os.path.join(dir,file)))
+               
+                    # q'n'd
+                    try:
+                        num = int(re.match(r'^\w*?(\d+)$',name).group(1))
+                        cls.num_images = max(cls.num_images,num)
+                        tex = TextureCache.Get(os.path.join(dir,file))
+                        cls.images[num] = tex
+                        ratio_dist.append(tex.GetWidth()/tex.GetHeight())
+                        
+                    except Exception as e:
+                        print(e)
+            
+                ratio_dist.sort()
+                cls.ratio_guess = ratio_dist[len(ratio_dist)//2]
+                print('bg image cnt: {0}'.format(cls.num_images))
             
             def __init__(self_inner):
                 Drawable.__init__(self_inner)
@@ -416,7 +432,7 @@ class EditorGame(Game):
                 self_inner.CacheBackgroundImageInfo()
                 self_inner.elements = []
         
-                self_inner.bgimg = self.settings.setdefault('bgimg',-1)
+                self_inner.bgimg = self_inner.previdx = self.settings.setdefault('bgimg',-1)
                 
                 w,h = 180,26
                 rx,ry = defaults.resolution
@@ -424,20 +440,39 @@ class EditorGame(Game):
                     ("release", (lambda src: (self_inner._Save() or True) and self_inner._RemoveMe()))
                   )
                 self_inner.elements.append(Button(text=_("Cancel"),rect=[rx-w-40,ry-50,w,h],fgcolor=sf.Color.Red) + 
-                    ("release", (lambda src: self_inner._RemoveMe()))
+                    ("release", (lambda src: (self_inner._SetIndex(self_inner.previdx) or True) and self_inner._RemoveMe()))
                   )
                 
-                # arrange the background images
-                self_inner.sprites = []
+                if len(self_inner.images):
+                    wb,hb = 50,60
+                    hd = 48
+                    wd = self_inner.ratio_guess*hd
+                    
+                    w,h = wb,hb
+            
+                    for num,img in itertools.chain(self_inner.images.items(),[(-1,None)]):
+                        if w+wd>defaults.resolution[0]-40:
+                            w = wb
+                            h += hd+10
+                            
+                        self_inner.elements.append(ImageControl(img,rect=[w,h,wd,hd]) + 
+                            ("release", (lambda src,num=num: self_inner._SetIndex(num)))
+                        )
+                        
+                        w += wd+10
+                        
                 
                 for e in self_inner.elements:
                     e.draworder = 52000
                     self.AddSlaveDrawable(e)
                 
+            def _SetIndex(self_inner,num):
+                self_inner.bgimg = num
+                Renderer.SetBGImage(num)
                 
             def _Save(self_inner):
                 # obtain a copy of the actual settings and merge our changes
-                orig = self.settings.copy()
+                orig = self.settings
                 orig["bgimg"] = self_inner.bgimg
                 self.ControlledChangeSettings(orig)
         
@@ -2837,7 +2872,8 @@ class EditorGame(Game):
         
         # XXX why -visofs? T smell an ugly workaround ..
         self.level.lower_offset = self.settings.get("lower_offset",0)
-        Renderer.SetBGImage(self.settings.get("bgimg",-1))
+        self.level.bgimg = self.settings.get("bgimg",-1)
+        
         
     def ControlledChangeSettings(self,new):
         """Push a set of changed settings onto the action stack"""

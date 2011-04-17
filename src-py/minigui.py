@@ -534,9 +534,18 @@ class ImageControl(Button):
     """The ImageControl is just a picture display, however if offers
     regular button events so the app can respond to clicks on the image."""
     
+    COLORS = {
+        Component.STATE_NORMAL   : sf.Color(50,50,50,20),
+        Component.STATE_ACTIVE   : sf.Color(180,75,75,55),
+        Component.STATE_HOVER    : sf.Color(90,75,75,55),
+        Component.STATE_DISABLED : sf.Color(160,160,160,20),
+    }
+    
     def __init__(self,image,tip=None,align=Component.CENTER,**kwargs):
         Button.__init__(self,text="",**kwargs)
         self.image = image
+        if not self.image:
+            self.text = "(no image)"
         
     @property
     def image(self):
@@ -548,14 +557,19 @@ class ImageControl(Button):
         return self
     
     def _DrawImageCentered(self):
+        if not self.image:
+            return
         sp = sf.Sprite(self.image)
-        
+        sp.SetPosition(*self.pos)
+        sp.Scale(*([min(self.w/self.image.GetWidth(),self.h/self.image.GetHeight())]*2))
+        Renderer.app.Draw(sp)
         
     def DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit):
+        # draw the image below the rest since the actual button is more or less transparent
+        self._DrawImageCentered()
+        
         Button.DrawMe(self,mx,my,hit,buttons,prev_buttons,prev_hit)
             
-        # drawthe image on top of everything
-        self._DrawImageCentered()
         
 
 # vim: ai ts=4 sts=4 et sw=4
