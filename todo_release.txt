@@ -1,0 +1,31 @@
+
+
+
+Critical
+========
+Levels:
+  - Gruen: mindestens 36 (inklusive Tutorial)
+  - Eiswelt: 4
+  - Wueste: 4
+  - Endlevel: 1
+Kampagne
+Textuebersetzungen
+Hiscore-Upload
+Update-Check
+Achievements - Infrastruktur
+Load&Save
+Profilwahl
+
+
+NiceToHave
+==========
+Flash-Effekt: Uebersaturation vermeiden
+Sound-Effekte
+Mehr Musik
+Intro'video'
+Quizlevel
+
+Nebentasks
+==========
+Trailer/Teaser
+Neue Website
