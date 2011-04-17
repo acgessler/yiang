@@ -683,7 +683,7 @@ Consider them heroes."""),defaults.font_menu,
             bgcolor = sf.Color.Black
                 
             sf_draw_string_with_shadow(
-                    "{0:>4}.    {1:>2}    {2:>9}    {3:<32}".format(rank,elem["country"], elem["score"]/10000, elem["player"]),
+                    "{0:>4}.    {1:>2}    {2:>9}    {3:<32}".format(rank,elem["country"], elem["score"]/100000, elem["player"]),
                     defaults.font_monospace,
                     height,
                     base_offset[0],
