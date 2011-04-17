@@ -116,8 +116,8 @@ class Title(Drawable):
         assert b
         self.AddSlaveDrawable(self.bggame)
             
-        from posteffect import QuickFocus
-        Renderer.AddDrawable(QuickFocus(self.bggame._GetAPlayer()))
+        from posteffect import FlashOverlay
+        Renderer.AddDrawable(FlashOverlay(sf.Color(150,0,0),flash_length=10))
             
         self.on_close = on_close
         self.trigger_close = False
