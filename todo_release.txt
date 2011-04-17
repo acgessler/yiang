@@ -8,7 +8,9 @@ Levels:
   - Eiswelt: 4
   - Wueste: 4
   - Endlevel: 1
-Kampagne
+Kampagne:
+  - Levels setzen
+  - story tiles
 Textuebersetzungen
 Hiscore-Upload
 Update-Check
@@ -19,6 +21,8 @@ Remove Cheats
 
 NiceToHave
 ==========
+Kampagne:
+  - optische,witzige Tiles
 Flash-Effekt: Uebersaturation vermeiden
 Sound-Effekte
 Mehr Musik

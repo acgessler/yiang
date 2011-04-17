@@ -126,8 +126,8 @@ no_bg_music = False
 no_bg_sound = False
 audio_volume_scale = 0.8
 def_user_profile = "Wurzelgnom"
-no_intro = False
-no_logo = False
+no_intro = True
+no_logo = True
 
 postfx_flash_length = 1
 postfx_flash_intensity = 0.08
