@@ -1,0 +1,13 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,5,1,1.0,2,halo_img=None,next_level=10000)
+§========§
+"Tutorial"
+"Start   "
+"    here"
+§========§
+
+
+§========§
+"Tutorial"
+"done    "
+"  super!"
+§========§

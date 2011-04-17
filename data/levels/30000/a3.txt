@@ -1,0 +1,12 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,4,1,1.0,2,halo_img=None,next_level=1)
+\|/[-!-]\|/
+ I       I
+ I Quest I
+ +       +
+
+
+\|/[-!-]\|/
+ I       I
+ I Done  I
+ +       +
+
