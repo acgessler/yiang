@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!echo not intended for execution
 # -*- coding: UTF_8 -*-
 
 # ///////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,8 @@ no_bg_music = False
 no_bg_sound = False
 audio_volume_scale = 0.8
 def_user_profile = "Wurzelgnom"
-
+no_intro = False
+no_logo = False
 
 postfx_flash_length = 1
 postfx_flash_intensity = 0.08
