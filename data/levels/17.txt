@@ -1,22 +1,22 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Illegal Organ Trade'),color=(0, 30, 3),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=2,scroll=2,lower_offset=0.0,bgimg=19)
-_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
-
-.  .  _IN.  .  .  .  .  gE0.  .  .  _IN.  .  .  .  .  _RE.  .  .  .  .  _S4_S4_S4_S4_S4.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rS1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN_IN_IN_IN_IN_IN.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rS1.  .  .  .  _S0.  .  .  .  .  .  .  .  .  .  .  .  _IN_IN_IN.  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rS1.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rS1.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rTR.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  _A9_A9_A9_A9_A9.  .  _A9_A9_A9gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  _A9.  .  rTRrTR.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  _A9.  .  .  .  _A9_S4.  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  _A9.  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  rPL.  .  .  _A9_A9.  gBU.  .  .  .  gBU.  .  .  .  gBU.  .  .  .  .  _A9.  .  rFI.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  gMJ.  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-.  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_A9_S4.  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
-_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Illegal Organ Trade'),color=(0, 30, 3),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=2,bgimg=19,scroll=2,lower_offset=0.0)
+.  .  .  .  .  .  _IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
+.  .  .  .  .  .  _A0
+.  .  .  .  .  .  _A0.  _IN.  .  .  .  .  gE0.  .  .  _IN.  .  .  .  .  .  .  _RE.  .  .  _S4_S4_S4_S4_S4.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rDA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rS1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rS1.  .  .  .  _S0.  .  .  .  .  .  .  .  .  .  .  .  _IN_IN_IN_IN_IN_IN_IN_IN_IN.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rS1.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rS1.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rTR.  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  _A9_A9_A9_A9.  .  _A9_A9_A9gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  .  _A9.  .  rTRrTR.  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0_A9_A9.  .  .  .  _A9_S4.  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  .  _A9.  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9gS1gS1gS1gS1rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  rPL.  .  .  _A9_A9.  gBU.  .  .  .  gBU.  .  .  .  gBU.  .  .  .  .  _A9.  .  rFI.  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  gMJ.  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0.  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _DA_A9_S4.  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
+.  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDA
 
