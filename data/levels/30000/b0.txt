@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,4,10,need_levels=[1],status_msg=_('Finish the quiz to proof that your are prepared for a cruel world!'))
+from campaign import Blocker; <out> = Blocker(<raw>,4,10,need_levels=[10001],status_msg=_('Finish the quiz to proof that your are prepared for a cruel world!'))
 ====
  II
  II
