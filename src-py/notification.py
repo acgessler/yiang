@@ -18,17 +18,14 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+
 # PySFML
 import sf
 
-# My own stuff
-import defaults
-from game import NewFrame, Game
+from stubs import *
 from entity import Entity,EntityWithEditorImage
 from player import Player
-from keys import KeyMapping
-from fonts import FontCache
-from renderer import Drawable, Renderer
+
 
 class MessageBox(Drawable):
     """Implements a reusable, generic message box that is drawn as overlay"""
@@ -42,7 +39,8 @@ class MessageBox(Drawable):
         break_codes=(KeyMapping.Get("accept")),
         text_color=sf.Color.Red,
         on_close=lambda x:None,
-        flags=0):
+        flags=0,
+        bgtile='dialogbg.png'):
         
         """Create a message box.
         XXX document parameters
@@ -57,6 +55,7 @@ class MessageBox(Drawable):
         self.on_close = on_close
         self.size = size
         self.flags |= flags
+        self.tile =  TextureCache.GetFromTextures(bgtile) if bgtile else None
                 
         from posteffect import FadeOutOverlay, BlurOutOverlay
         
@@ -91,7 +90,7 @@ class MessageBox(Drawable):
                     
         MessageBox._DrawStatusNotice(self.text, self.size, self.text_color, 
             min(1.0, curtime * 5 / self.fade_time
-        ))
+        ),tile=self.tile)
         return True
             
     def _RemoveMe(self):
@@ -120,7 +119,7 @@ class MessageBox(Drawable):
         return 1100
            
     @staticmethod
-    def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0,auto_adjust=True):
+    def _DrawStatusNotice(text,size=(550,120),text_color=sf.Color.Red,alpha=1.0,auto_adjust=True,tile=None):
         """Utility to draw a messagebox-like status notice in the
         center of the screen."""
         
@@ -146,16 +145,23 @@ class MessageBox(Drawable):
         # FIX: avoid odd numbers to get pixel-exact font rendering
         size = (size[0]&~0x1,size[1]&~0x1)
         
-        fg,bg = sf.Color(160,160,160,int(alpha*255)),sf.Color(50,50,50,int(alpha*255))
+        fg,bg = sf.Color(160,160,160,int(alpha*255)),sf.Color(50,50,45,int(alpha*255))
+        
+        r=defaults.resolution
+        s=size
+        
+        bb = (r[0]-s[0])/2,(r[1]-s[1])/2,(r[0]+s[0])/2,(r[1]+s[1])/2
+        if tile:
+            Renderer.DrawTiled(tile,int(alpha*220),*bb)
         
         shape = sf.Shape()
-        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
-        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]-size[1])/2,fg,bg )
-        shape.AddPoint((defaults.resolution[0]+size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
-        shape.AddPoint((defaults.resolution[0]-size[0])/2,(defaults.resolution[1]+size[1])/2,fg,bg )
+        shape.AddPoint(bb[0], bb[1],fg,bg )
+        shape.AddPoint(bb[2], bb[1],fg,bg )
+        shape.AddPoint(bb[2], bb[3],fg,bg )
+        shape.AddPoint(bb[0], bb[3],fg,bg )
         
         shape.SetOutlineWidth(4)
-        shape.EnableFill(True)
+        shape.EnableFill(not tile)
         shape.EnableOutline(True)
         Renderer.app.Draw(shape)
         pos = ((defaults.resolution[0]-size[0]+30)/2,(defaults.resolution[1]-size[1]+18)/2)
@@ -173,7 +179,7 @@ class SimpleNotification(EntityWithEditorImage):
     """The SimpleNotification tile displays a popup box when the players
     enters its area. This is used extensively for story telling."""
 
-    def __init__(self, text, desc=None, editor_image="notification_stub.png",
+    def __init__(self, text, desc=None, editor_image="notification_stub.png", bgtile='dialogbg.png',
         text_color=sf.Color.Red, 
         width=1, 
         height=1, 
@@ -191,6 +197,7 @@ class SimpleNotification(EntityWithEditorImage):
         self.text_color = sf.Color(*text_color) if isinstance(text_color, tuple) else text_color
         self.desc = desc
         self.audio_fx = audio_fx
+        self.bgtile = bgtile
         
         if not self.desc:
             import uuid
@@ -261,7 +268,7 @@ class SimpleNotification(EntityWithEditorImage):
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close)
+            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close, bgtile=self.bgtile)
             
         return Entity.ENTER
     

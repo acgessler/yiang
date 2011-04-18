@@ -21,6 +21,7 @@
 # Python core
 import os
 import platform
+import math
 
 # PySFML
 import sf
@@ -243,7 +244,7 @@ class Renderer:
     @staticmethod
     def GetBGImage(id=-1):
         from textures import TextureCache
-        return TextureCache.Get(os.path.join(defaults.data_dir,"bg","bg{0}.jpg".format(id)))
+        return TextureCache.GetFromBG("bg{0}.jpg".format(id))
     
     @staticmethod
     def SetBGXPos(p):
@@ -409,6 +410,27 @@ class Renderer:
 
         Renderer.loop_running = False
         return False
+    
+    @staticmethod
+    def DrawTiled(img,alpha,x0,y0,x1,y1):
+        x,y = img.GetWidth()-1,img.GetHeight()-1
+        t = sf.Sprite(img)
+        t.SetColor(sf.Color(0xff,0xff,0xff,alpha))
+        a = Renderer.app
+        
+        # -0.5 to guarantee pixel-exact mapping
+        x0,x1,y0,y1 = x0-0.5,x1-0.5,y0-0.5,y1-0.5
+        
+        for yy in range(math.ceil((y1-y0)/y)):
+            for xx in range(math.ceil((x1-x0)/x)):
+                xxx,yyy = x0+x*xx,y0+y*yy
+                dx,dy = x1-xxx, y1-yyy
+                
+                # XXX - get rid of those seams ..
+                t.SetSubRect(sf.IntRect(0,0, int(min(x,dx))+1, int(min(y,dy))+1))
+                t.SetPosition(xxx,yyy)
+                a.Draw(t)
+                
     
     @staticmethod
     def GetFrameIndex():

@@ -872,7 +872,8 @@ Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")
         break_codes=(KeyMapping.Get("accept")),
         text_color=sf.Color.Red,
         on_close=lambda x:None,
-        flags=0):
+        flags=0,
+        bgtile='dialogbg.png'):
         """Tiny utility to wrap the fade out effect used on game over
         and end of level. Alongside, a status message is displayed and
         control is not returned unless the user presses any key
@@ -907,7 +908,7 @@ Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")
         self.has_notification_box = True
             
         from notification import MessageBox
-        Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper,flags))
+        Renderer.AddDrawable(MessageBox(text,fade_time,size,auto_time,break_codes,text_color,on_close_wrapper,flags,bgtile=bgtile))
         self.PushSuspend()
 
     def DrawSingle(self,drawable,pos=None):

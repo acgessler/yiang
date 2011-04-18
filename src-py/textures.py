@@ -20,6 +20,7 @@
 
 import defaults
 import sf
+import os
 
 if defaults.no_threading:
     import dummy_threading as threading
@@ -32,6 +33,14 @@ class TextureCache:
 
     cached = {}
     lock = threading.Lock()
+    
+    @staticmethod
+    def GetFromTextures(name=""):
+        return TextureCache.Get(os.path.join(defaults.data_dir,'textures',name))
+    
+    @staticmethod
+    def GetFromBG(name=""):
+        return TextureCache.Get(os.path.join(defaults.data_dir,'bg',name))
 
     @staticmethod
     def Get(name=""):
