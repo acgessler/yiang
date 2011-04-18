@@ -1,15 +1,15 @@
 from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0.0),name=_('KillTheChicken6'),color=(30, 30, 30),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN
-.  .  .  .  .  .  .  .  .  .  _X1yE2yE2.  ~E2
+.  .  .  .  .  .  .  .  .  .              _X1
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_C4_A0_C4_A0_C4_A0_AC
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0.  .  .  .  .  .  .  .  gCB.  _A0gC5_C4gC5_C4gC5_C4
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0.  .  .  .  .  .  .  .  .  .  _A0.  gC5.  gC5.  gC5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0_A0.  .  .  .  .  .  .  .  yCB.  _A0rAFrAFrAFrAFrAF_C4
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_A0.  .  .  .  .  .  .  .  .  .  _A0
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_C8.  .  .  .  .  .  .  _A0_A0_A2
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1.  .  .  .  rPL.  .  .  .  .  _A2
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1.  .  .  .  .  .  .  _CB.  .  _A2
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2gC8
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2yC8
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _X0
 
 
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
+.  .  .  .  .  .  .  .  .  .  .  .  cTAcTAcTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN

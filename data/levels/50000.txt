@@ -1,8 +1,8 @@
 from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name=_('KillTheChicken'))
 .  .  .  .  .  .  .  .  .  .  .  .  .  _IN
-.  .  .  .  .  .  .  .  _E2.  _X1pE2.  _E2.  .  .  .  .  .  .  .  _X0
+                                 .  .  .  .  .  .  .  .  .  .  _X0.  .  .  .  .  .  .  .  .  .  .  
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AB_AB_AB_AB
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6
+.  .  .  .  .  .  .  .  .  .  .  .  .  _X1.  .  .  .  .  .  _B6
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A0_B6_A0_A0_A0_A0
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  _A0_A0
 .  .  .  .  .  .  .  .  .  .  .  _C8.  .  .  .  .  .  _A0_A0_A0_B6.  rPL.  .  .  _A0_B6

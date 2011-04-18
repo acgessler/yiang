@@ -168,14 +168,14 @@ This makes me SO happy {0}
                     return
                 
                 # haha
-                loadtime = defaults.loading_time if random.random() > 0.75 else 0
+                loadtime = defaults.loading_time if random.random() > 0.6 else 0
                 
-                while False:
+                while True:
                     b = time.time()
                     if inp.IsKeyDown(sf.Key.S) or b-a > loadtime:
                         break
                         
-                    time.sleep( min(1.0, max(0, defaults.loading_time - (b-a))))
+                    time.sleep(  max(0, defaults.loading_time - (b-a)))
                 
             if LoadScreen.loadlevel:
                 Renderer.AddDrawable(LoadScreen.loadlevel)

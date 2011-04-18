@@ -1,5 +1,5 @@
-from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name=_('KillTheChicken4'))
-.  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rC5rC5rC5rC5
+from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0.0),name=_('KillTheChicken4'),color=(30, 30, 30),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=0,lower_offset=0.0)
+.  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rAFrAFrAFrAF
 .  .  .  .  .  .  .  .  .  yE2_X1rE2
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rINrINrINrINrINrINrINrINrINrINrINrIN
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rIN.  .  .  .  .  .  .  .  .  .  rIN
@@ -11,5 +11,5 @@ from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _X0
 
 
-.  .  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
-.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN
+.  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cTB
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN

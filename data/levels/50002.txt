@@ -1,6 +1,6 @@
-from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,color=(30, 30, 30),name=_('KillTheChicken3'))
+from loadscreen import LoadScreenLevel; <out> = LoadScreenLevel(<level>,<game>,<raw>,autoscroll_speed=(0.0, 0.0),name=_('KillTheChicken3'),color=(30, 30, 30),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=0,lower_offset=0.0)
 .  .  .  .  .  .  .  .  .  .  .  .  .  _IN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _TB
-.  .  .  .  .  .  .  .  .  .  gE2~E2.  _E2.  .  .  .  .  .  .  .  _X0
+.  .  .  .  .  .  .  .  .  .  .  .  .  _X1.  .  .  .  .  .  .  .  _X0
 .  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  _AB_AB_AB_AB
 .  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  .  _B6
 .  .  .  .  .  .  .  .  rDArDArDA.  .  .  .  .  .  .  .  _A0_B6_A0_A0_A0_A0_A0
