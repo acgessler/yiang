@@ -915,9 +915,11 @@ class Level:
     def SetOrigin(self, origin):
         """Change the view origin"""
         assert isinstance(origin, tuple)
-        self.origin = (min(max(origin[0],0),abs(self.level_size[0]-defaults.tiles[0])), 
-            origin[1] if self.scroll[-1] & (Level.SCROLL_TOP|Level.SCROLL_BOTTOM) else -defaults.status_bar_top_tiles
-        )
+        
+        ls = self.level_size
+        self.origin = (min(max(origin[0],0),abs(ls[0]-defaults.tiles[0])), 
+             (min(max(origin[1],-self.vis_ofs),abs(ls[1]-defaults.tiles[1]-self.vis_ofs+1))) if self.scroll[-1] & (Level.SCROLL_TOP|Level.SCROLL_BOTTOM) 
+                else -defaults.status_bar_top_tiles)
         
     def SetOriginX(self, origin):
         """Change the view origin but leave the y axis intact"""
