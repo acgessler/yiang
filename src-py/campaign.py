@@ -286,6 +286,9 @@ class CampaignLevel(Level):
                         mx -= self.sx
                         my -= self.sy
                         
+                        mx = int( mx * self.minimap_img.GetWidth()/self.sw)
+                        my = int( my * self.minimap_img.GetHeight()/self.sh)
+                        
                         self._SetPlayerPos(mx,my)
             else:
                 try:
