@@ -1,0 +1,8 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,7,1,1.0,2,halo_img=None,next_level=1,dropshadow=False)
+[Fight 4]
+[ some  ]
+[   H20 ]
+   |"|   
+   |"|   
+   |"|   
+   |"|   

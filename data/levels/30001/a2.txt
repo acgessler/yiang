@@ -1,0 +1,7 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=1)
+H~碻创``碻~H
+H ~碻创``碻H
+H  ~碻创``碒~
+H  ,~碻创``H`~
+H (#)~碻创`H碻~
+H (#) ~碻创H`碻~
