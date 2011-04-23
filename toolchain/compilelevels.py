@@ -28,7 +28,7 @@ tile_input_folder = os.path.join('..','data','tiles')
 tile_output_folder = os.path.join('..','data','tiles','optimized')
 
 # largest cluster size to look for
-max_cluster = [10,10]
+max_cluster = [15,4]
 
 # minimum number a specific cluster must occur to be considered
 min_occurences = 1
@@ -207,6 +207,8 @@ for tile,cx,cy in cluster_count:
         for n,l in reversed(list(enumerate(lines))):
             if not l.strip():
                 lines = lines[:n]
+            else:
+                break
             
         if not lines:
             continue
