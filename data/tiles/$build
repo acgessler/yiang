@@ -6,3 +6,5 @@ build cooked {
 	push archive_files (expand tiles.dat)
 }
 
+build optimized 
+

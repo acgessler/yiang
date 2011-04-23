@@ -80,7 +80,8 @@ game_over_fade_time = 2.0
 enter_level_fade_time = 1.4
 enter_worldmap_fade_time = 2.0
 messagebox_fade_time = 2.0
-loading_time = 15.0
+loading_time = 10.0
+loading_fool_player = False
 death_sprites = 130
 min_death_sprites = 5
 death_sprites_player = 330
@@ -132,6 +133,8 @@ no_logo = True
 postfx_flash_length = 1
 postfx_flash_intensity = 0.08
 postfx_focus_length = 0.8
+
+load_optimized_levels = True
 
 # Disable threading. This implies disabling loading screens.
 no_threading = False

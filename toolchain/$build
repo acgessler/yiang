@@ -3,6 +3,7 @@ run cleanpyc
 run makepyc
 run genrc
 
+run compilelevels
 run compiletiles
 run genworldmaps
 

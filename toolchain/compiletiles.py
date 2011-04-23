@@ -1,4 +1,4 @@
-#!echo not intended for execution
+#!/bin/env python3
 # -*- coding: UTF_8 -*-
 
 # ///////////////////////////////////////////////////////////////////////////////////
@@ -26,6 +26,7 @@ import defaults
 
 dirs = [
     os.path.join(defaults.data_dir,"tiles"),
+    os.path.join(defaults.data_dir,"tiles","optimized"),
     os.path.join(defaults.data_dir,"tiles_misc"),
 ]
 
@@ -39,14 +40,12 @@ for file in os.listdir(os.path.join(defaults.data_dir,"levels")):
         
 cnt, ccnt = 0,0
         
-reg = re.compile(r"[a-zA-Z0-9]+\.txt$")
 for dir in dirs:
     print("Try enter directory: {0}".format(dir))
     try:
         matches = {}
         for e in os.listdir(dir):
-            m = re.match(reg,e)
-            if not m:
+            if os.path.splitext(e)[1] != '.txt':
                 continue
             
             print("Try to process: {0}".format(e))

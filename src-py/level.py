@@ -137,6 +137,7 @@ class Level:
         self.tlbase = os.path.join(defaults.data_dir, "tiles")
         
         xmax = 0
+        yempty = 0
         try:
             for y, line in enumerate(lines):
                 line_idx += 1
@@ -144,7 +145,10 @@ class Level:
                 
                 ll = len(line) # precomputed for performance reasons
                 if ll == 0:
+                    yempty += 1
                     continue
+                
+                yempty = 0
 
                 assert ll % 3 == 0
                 for x in range(0, ll, 3):
@@ -152,6 +156,15 @@ class Level:
 
                     if tcode[0] in spaces:
                         continue
+                    
+                    if tcode == '##':
+                        # optimized cluster tile, its name is a triple on the right of this tile 
+                        tcode = '##'+line[x+3:x+6]
+                        line = line[:x+3] + '.  ' + line[x+6:]
+                    elif tcode == '$$':
+                        # same, except the real tile name is specified on the tile directly beneath us
+                        tcode = '$$'+lines[y+1][x:x+3]
+                        lines[y+1] = lines[y+1][:x] + '.  ' + lines[y+1][x+3:]
                     
                     if self._LoadSingleTile(tcode, line[x],x//3,y):
                         ecnt += 1
@@ -162,7 +175,7 @@ class Level:
             print("Level " + str(level) + " is not well-formatted (line {0})".format(line_idx))
             traceback.print_exc()
 
-        self.level_size = (xmax // 3 + 1, y + 1)
+        self.level_size = (xmax // 3 + 1, y + 1 - yempty)
         print("Got {0} entities for level {1} [size: {2}x{3}]".format(ecnt, level, *self.level_size))
         assert(ecnt != 0 or game.mode == game.EDITOR)
         
@@ -193,9 +206,12 @@ class Level:
         
     def _LoadSingleTile(self,tcode,ccode,x,y):
         from tile import TileLoader
+        
+        if tcode[0] in ('$','#'):
+            tile = TileLoader.Load(self.tlbase + "\\optimized\\" + tcode + ".txt", self.game)
         # read from the private attachment tiles of the level if the tile
         # code starts with a lower-case character
-        if 122 >= ord( tcode[0] ) >= 97: #   in "abcdefghijklmnopqrstuvwxyz":
+        elif 122 >= ord( tcode[0] ) >= 97: #   in "abcdefghijklmnopqrstuvwxyz":
             tile = TileLoader.Load(self.lvbase + "\\" + tcode + ".txt", self.game)
         else:
             tile = None
@@ -1009,6 +1025,13 @@ class LevelLoader:
         """Obtain the (relative) path to the file containing the
         tile setup for a specific level, which is identified by
         its number"""
+        if defaults.load_optimized_levels:
+            path = os.path.join(defaults.data_dir, "levels","optimized", str(index) + ".txt")
+            if os.path.exists(path):
+                return path
+            
+            print('failed to locate optimized version for level {0}'.format(index))
+        
         return os.path.join(defaults.data_dir, "levels", str(index) + ".txt")
     
     @staticmethod

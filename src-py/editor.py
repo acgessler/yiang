@@ -2221,6 +2221,13 @@ class EditorGame(Game):
         except OSError:
             pass 
         
+        # delete any optimized versions of this level instantly
+        # to make sure the game will load the new version
+        try:
+            os.unlink(os.path.join(defaults.data_dir,"levels","optimized",str(self.level_idx)+'.txt'))
+        except OSError:
+            pass
+        
         self._UpdateLevelSize()
         shebang = self._BuildUpdatedShebang()
         
@@ -3315,6 +3322,7 @@ def main():
     defaults.caption = "YIANG-ED "
     defaults.resolution[0] = 1450;
     defaults.resizable = True
+    defaults.load_optimized_levels = False
 
     print("Startup ...")
     KeyMapping.LoadFromFile(os.path.join(defaults.config_dir,"key_bindings.txt"))

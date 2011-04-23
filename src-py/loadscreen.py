@@ -168,7 +168,7 @@ This makes me SO happy {0}
                     return
                 
                 # haha
-                loadtime = defaults.loading_time if random.random() > 0.6 else 0
+                loadtime = defaults.loading_time if random.random() > 0.6 and defaults.loading_fool_player else 0
                 
                 while True:
                     b = time.time()

@@ -1,4 +1,10 @@
 
+build optimized {
+	group re ^[0-9]+\.txt$
+		push archive_files ~
+	end
+}
+
 
 push files (expand 60000.txt)
 
@@ -26,4 +32,3 @@ group unpushed
 end
 
 	
-
