@@ -1,22 +1,21 @@
 from tile import AnimTile; <out> = AnimTile(<raw>,6,3,5.4,halo_img=None,collision=Entity.BLOCK,randomize=True)
-iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
+lliiilliii
+liliiiiiii
+iliillllli
+llillilill
+iiiiililll
+llliliilli
 
-llllllllll
-llllllllll
-llllllllll
-llllllllll
-llllllllll
-llllllllll
+llillillli
+iililillii
+illiliilil
+llilllilll
+illlliiiil
+iiilililll
 
-lilillilil
-lilillilil
-lilillilil
-lilillilil
-lilillilil
-lilillilil
-
+iliillllil
+lllillllii
+iillliilii
+illlllliil
+iillllllii
+lilllillll
