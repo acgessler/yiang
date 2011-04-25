@@ -1025,14 +1025,27 @@ class LevelLoader:
         """Obtain the (relative) path to the file containing the
         tile setup for a specific level, which is identified by
         its number"""
+        original = os.path.join(defaults.data_dir, "levels", str(index) + ".txt")
         if defaults.load_optimized_levels:
             path = os.path.join(defaults.data_dir, "levels","optimized", str(index) + ".txt")
             if os.path.exists(path):
-                return path
+                # stat both the original and the optimized file and see which is newer
+                try:
+                    time_orig,time_opti = os.stat(original).st_mtime,os.stat(path).st_mtime
+                except OSError:
+                    # stat() is not supported with fs redirection being active
+                    time_orig,time_opti = 0,0
+                    
+                if time_orig > time_opti:
+                    print('ignoring optimized version for level {0}, the original level file is newer'.format(index))
+                else:
+                    print('got valid optimized data for level {0}'.format(index))
+                    return path
             
-            print('failed to locate optimized version for level {0}'.format(index))
+            else:
+                print('failed to locate optimized version for level {0}'.format(index))
         
-        return os.path.join(defaults.data_dir, "levels", str(index) + ".txt")
+        return original
     
     @staticmethod
     def GuessLevelName(index):
