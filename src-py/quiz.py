@@ -26,7 +26,7 @@ from stubs import *
 
 from locked import Door 
 from notification import SimpleNotification
-from materials import BackgroundImage
+from materials import BackgroundImage,BackgroundLight
 from player import Player
 
 
@@ -85,7 +85,7 @@ class QuizAsk(BackgroundImage):
 
 class QuizChoice(BackgroundImage):
     def __init__(self,*args,qid,letter, **kwargs):
-        BackgroundImage.__init__(self, *args,halo_img='quiz_stub_'+letter+'_'+str(qid)+'.png',**kwargs)
+        BackgroundImage.__init__(self, *args,halo_img='quiz_stub_'+letter+'_'+str(qid)+'.png',draworder=800,**kwargs)
         self.letter = letter
         self.qid = qid
         
@@ -93,14 +93,31 @@ class QuizChoice(BackgroundImage):
         if isinstance(who,Player):
             if who.level.quiz_results.get(self.qid,' ') != self.letter:
                 who.level.quiz_results[self.qid] = self.letter
-
+                    
+                pos = self.pos[0]-10,self.pos[1]
                 
                 from player import InventoryChangeAnimStub
                 self.game.AddEntity(InventoryChangeAnimStub(_('You selected option {0} for question #{1}').format(self.letter.upper(),self.qid),
-                    self.pos,
+                    pos,
                     color=sf.Color(240,120,0)))
+                
+                assert hasattr(self,'light')
+                
+                if self.qid in who.level.quiz_lamp:
+                    who.level.quiz_lamp[self.qid].SetColor(sf.Color(0,0,0,0))
+                
+                who.level.quiz_lamp[self.qid] = self.light
+                self.light.SetColor(sf.Color(random.randint(0,0xff),random.randint(0,0xff),random.randint(0,0xff),0xb5))
+                
         
         return BackgroundImage.Interact(self,who)
+    
+    def Update(self,time,dtime):
+        BackgroundImage.Update(self,time,dtime)
+        if not hasattr(self,'light'):
+            self.light = self.level.FindClosestOf(self.pos,BackgroundLight,True)
+            self.light.SetColor(sf.Color(0,0,0,0))
+            self.light.pulse = False
     
     def Draw(self):
         return BackgroundImage.Draw(self)
@@ -113,7 +130,7 @@ class QuizLevel(Level):
             self.quiz_results = {}
             self.quiz_id = quiz_id
             self.quiz_source = quizes[quiz_id]
-            
+            self.quiz_lamp = {}
             
 class QuizDoor(Door):
    
@@ -127,14 +144,16 @@ class QuizDoor(Door):
             
             from player import InventoryChangeAnimStub
             
+            pos = self.pos[0]-10,self.pos[1]
+            
             result = VerifyQuizResult(self.level.quiz_results,self.level.quiz_source)
             if isinstance(result,str):
                 self.game.AddEntity(InventoryChangeAnimStub(_('You failed the quiz, dude: {0}').format(result),
-                        self.pos,
+                        pos,
                         color=sf.Color.Red))
             else:
                 self.game.AddEntity(InventoryChangeAnimStub(_('You completed the quiz successfully!'),
-                        self.pos,
+                        pos,
                         color=sf.Color.Green))
                 self.Unlock()
         

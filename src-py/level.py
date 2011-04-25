@@ -630,13 +630,15 @@ class Level:
             if pob == pos:
                 yield entity
                 
-    def FindClosestOf(self,pos,type):
+    def FindClosestOf(self,pos,type,exact_match=False):
         """Find the closest entity of a particular class type."""
         candidates = []
         
-        # XXX this can be easily optimized
+        # XXX this can be easily optimized 
+        check = lambda e:type==e.__class__ if exact_match else lambda e:isinstance(e,type)
+            
         for entity in self.EnumAllEntities():
-            if isinstance(entity,type):
+            if check(entity):
                 mypos = entity.pos
                 candidates.append(((pos[0]-mypos[0])**2 + (pos[1]-mypos[1])**2,entity))
         return None if not candidates else sorted(candidates,key=operator.itemgetter(0))[0][1]

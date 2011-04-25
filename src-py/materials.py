@@ -67,12 +67,12 @@ class BackgroundLight(Tile):
     """Show only a halo background, no real tile contents.
     This is no real illumination, but it serves well as cheap fake light. The light intensity will pulse."""
     
-    def __init__(self,*args,darken=0.8, pulse=True, multiply=False,collision=Entity.ENTER,**kwargs):
+    def __init__(self,*args,darken=0.8, pulse=True, multiply=False,draworder=-10000,collision=Entity.ENTER,**kwargs):
         self.darken =  max(0.15, darken*0.6)
         self.pulse = pulse
         self.seed = random.random()*6.28
         self.multiply = multiply
-        Tile.__init__(self,"", *args,draworder=-10000,collision=collision ,**kwargs)
+        Tile.__init__(self,"", *args,draworder=draworder,collision=collision ,**kwargs)
         
     # def _GetHaloImage(self):
     #    img = Entity._GetHaloImage(self,self.halo_img)
