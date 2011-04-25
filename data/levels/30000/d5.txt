@@ -1,10 +1,9 @@
 from campaign import CampaignTile; <out> = CampaignTile(<raw>,5,6,halo_img=None,collision=Entity.BLOCK)
-igiii
-iippi
-piiii
-igiii
-iiIpi
-pppip
-
+iplgl
+oioig
+olllo
+gopol
+oplgg
+gppgp
 
 

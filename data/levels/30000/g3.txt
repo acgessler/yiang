@@ -1,15 +1,13 @@
 from campaign import CampaignTile; <out> = CampaignTile(<raw>,20,12,halo_img=None,collision=Entity.ENTER)
-iiiiiiiiiiiiiiiiiiii
-iiiiiPiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiii
-iiiiipiiiiiiiiiiiiii
-iipppppiiiiiiiiiiiii
-iiiipppiiiiiiiiPiiii
-iiiiipiiiiiiiiiiiiip
-iiiiiiiiiiiiiiiipiii
-iiiiiiiiiiiiiiiiiiii
-iiiiiiiiiiiiiiiiiiii
-pppiiiiiiiipppippppp
-
-
+igggiogpggiiogipippg
+giiggippgiogpopoggpi
+ippoiiipooigoippogig
+ogoigiiigpgppogiooio
+gpopioggiippgiogpooi
+pgogpoioogigiooppoio
+igpgigppgogopgpoipop
+ggpiipooiipoiiiipoii
+piggioooipipgoiogigo
+pgopoiogooiopipipogo
+ppioiiogpgigigppoppo
+opggpippggpggoopigii

@@ -1,2 +1,2 @@
-cd: port to desert map
-cg: port to ice map
+a0: port to desert map
+a1: port to ice map

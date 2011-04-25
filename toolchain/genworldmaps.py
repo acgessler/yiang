@@ -63,7 +63,7 @@ large_tiles = {
 level_door = ((0x0,0x0,0x0),(0xff,0x2c,0xfd))
 
 def main():
-    for level in (30001,30002,30003):
+    for level in (30000,30002,30003):
         try:
             process_map(level)
         except IOError:
