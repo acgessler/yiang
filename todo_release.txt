@@ -18,7 +18,8 @@ Achievements - Infrastruktur
 Load&Save
 Profilwahl
 Remove Cheats
-Punkte&Lebensverteilung
+Punkte&Lebensverteilung (Levelende, Im Level)
+Minify Perk - fixup
 
 NiceToHave
 ==========
@@ -33,6 +34,7 @@ Intro'video'
 Quizlevel
 Gadget
 Regen&Schnee
+Todesmeldungen
 
 Nebentasks
 ==========
