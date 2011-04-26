@@ -1,4 +1,6 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_10",text_color=sf.Color.Black,only_once=True)
-This is your first machine. Machines give you the oppotunity to buy upgrades, ammo, lives, ... this one sells lives. To use it, stand in front of it and press {interact} (Space) [you may currently need to touch either the left or the right border of the machine or it won't work].
+another exception to the rule:
 
-Now go, and buy a life.
+Some of these DANGERS are special, you can walk through them!
+Watch carefully and then Jump with this MEGA JUMP into the finish of this Tutorial!
+Because you mastered this level you will get an achievement as a reward!

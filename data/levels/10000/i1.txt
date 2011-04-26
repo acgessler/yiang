@@ -1,5 +1,4 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_1",text_color=sf.Color.Black,only_once=True)
-You got it, these DANGER tiles are DANGERous. They will kill you immediately. But some of them are special - if you are not brave enough to try them, you won't find the next part of me (I'm the tutorial).
+So you made your first steps in the new ASCII world, now try this teleporter to get up there again!
 
-See you.
-
+Teleporters are linked through their colour, every "Sender" will send to the nearest "Receiver" with the same colour!

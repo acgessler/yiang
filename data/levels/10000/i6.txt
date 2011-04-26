@@ -1,2 +1,4 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_7",text_color=sf.Color.Black,only_once=True)
 What you can see here is a ColorChanger. What it does? Yeah, it changes your player's color, dude. And why? Because you need to match your color with the color of your enemies or you won't be able to shoot them.
+
+First try to shoot these four red enemies by hitting {shoot}, then go further down and shoot these other Traversers!What will be noticed?

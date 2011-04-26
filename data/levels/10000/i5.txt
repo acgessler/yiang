@@ -1,4 +1,4 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_6",text_color=sf.Color.Black,only_once=True)
-MegaJump makes you jump much, much higher. It cannot be accumulated as well.
+To get over this small gap, hit {interact} to use this switch. It can control a small bridge, but only if it has the same colour. Colours are essential in this game, you saw two examples but you will see more!
 
-Note: There are many other perks in the game. I am not going to explain all of them, because most of them do what they look like. Most. Be careful: some may affect you negatively.
+If you want to jump over the gap without the bridge go and try it. Do not worry if you fail you will be teleported up here again.
