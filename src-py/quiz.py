@@ -86,7 +86,7 @@ class QuizAskNotification(SimpleNotification):
     def __init__(self,w,h,quiz_id,qid,**kwargs):
         q = quizes[quiz_id][qid]
         text = "{0}\nA: {1}\nB: {2}\nC: {3}\nD: {4}\n".format(q['question'],q['a'],q['b'],q['c'],q['d'])
-        SimpleNotification.__init__(self,text,width=w/5,height=h/3,only_once=False,**kwargs)
+        SimpleNotification.__init__(self,text,width=w/5,height=h/3,only_once=False,no_blur=True,**kwargs)
         
 
 class QuizChoice(BackgroundImage):

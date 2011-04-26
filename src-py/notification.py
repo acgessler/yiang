@@ -186,7 +186,8 @@ class SimpleNotification(EntityWithEditorImage):
         line_length=50, 
         format=True, 
         audio_fx=None, 
-        only_once=True
+        only_once=True,
+        no_blur=False
     ):
         EntityWithEditorImage.__init__(self,editor_image)
         self.text = text
@@ -200,6 +201,7 @@ class SimpleNotification(EntityWithEditorImage):
         self.bgtile = bgtile
         self.only_once = only_once
         self.blocked = False
+        self.no_blur = no_blur
         
         if not self.desc:
             import uuid
@@ -280,7 +282,7 @@ class SimpleNotification(EntityWithEditorImage):
             self.game._FadeOutAndShowStatusNotice( sf.String(self.text_formatted,
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
-            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close, bgtile=self.bgtile)
+            )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close, MessageBox.NO_BLUR_IN|MessageBox.NO_BLUR_OUT, bgtile=self.bgtile)
             
         return Entity.ENTER
     
