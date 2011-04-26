@@ -190,7 +190,7 @@ class SimpleNotification(EntityWithEditorImage):
     ):
         EntityWithEditorImage.__init__(self,editor_image)
         self.text = text
-        self.use_counter = 1 # if only_once is True else 1000000000 
+        self.use_counter = 1 if only_once is True else 1000000000 
         self.dim = (width, height)
         self.text_formatted = ""
         self.line_length = line_length
@@ -198,6 +198,8 @@ class SimpleNotification(EntityWithEditorImage):
         self.desc = desc
         self.audio_fx = audio_fx
         self.bgtile = bgtile
+        self.only_once = only_once
+        self.blocked = False
         
         if not self.desc:
             import uuid
@@ -223,6 +225,7 @@ class SimpleNotification(EntityWithEditorImage):
             
             self.text_formatted += "\n\n"
         
+        self.block_timer = sf.Clock()
         self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), 
             int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.0)
         )
@@ -231,11 +234,17 @@ class SimpleNotification(EntityWithEditorImage):
         inp = Renderer.app.GetInput()
         # note: the notification can always be activated by pressing interact,
         # regardless of the use counter.
-        if isinstance(other, Player) and (self.game.__dict__.setdefault( "story_use_counter", {} )\
+        if isinstance(other, Player):
+            if self.blocked:
+                self.block_timer = sf.Clock()
+        else:
+            return Entity.ENTER
+                
+        if (self.game.__dict__.setdefault( "story_use_counter", {} )\
                 .setdefault(self.desc,self.use_counter) > 0
                  or inp.IsKeyDown(KeyMapping.Get("interact")))\
             and not hasattr(self, "running")\
-            and not self.game.GetGameMode() == Game.BACKGROUND:
+            and not self.game.GetGameMode() == Game.BACKGROUND and not self.blocked:
             
             print("Show notification '{0}', regular use counter: {1}".format(self.desc, self.use_counter))
             accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
@@ -245,15 +254,18 @@ class SimpleNotification(EntityWithEditorImage):
             # notification in a single frame, thus firing the popup
             # twice.
             self.game.story_use_counter[self.desc] -= 1
+            self.blocked = True
             
             # closure to be called when the player has made his decision
             def on_close(key):
                 delattr(self, "running")
                 self.level.PopAutoScroll()
                 
-                if self.game.story_use_counter[self.desc] == 0:
+                if self.only_once and self.game.story_use_counter[self.desc] == 0:
                     #self.game.RemoveEntity(self)
                     print("Disable notification '{0}'".format(self.desc))
+                elif not self.only_once:
+                    self.block_timer = sf.Clock()
                     
             self.level.PushAutoScroll(0.0)
             self.running  = True
@@ -271,6 +283,12 @@ class SimpleNotification(EntityWithEditorImage):
             )), defaults.game_over_fade_time, self.box_dim , 0.0, accepted, self.text_color, on_close, bgtile=self.bgtile)
             
         return Entity.ENTER
+    
+    def Update(self,time,dtime):
+        EntityWithEditorImage.Update(self,time,dtime)
+        
+        if not hasattr(self,'running') and self.blocked and self.block_timer.GetElapsedTime() > 1.0:
+            self.blocked = False
     
     def GetBoundingBox(self):
         return (self.pos[0], self.pos[1], self.dim[0], self.dim[1])

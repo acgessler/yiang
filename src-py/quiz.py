@@ -36,27 +36,27 @@ quizes = [
     # quiz #0 - very beginning of the game
     [
        {
-            'question':'Which of the enemies shown below could you kill, assuming you had weapon and ammo?',
-            'a': 'The blue one',
+            'question':'Which of the enemies shown below could you slay - assuming you had weapon and ammo? (neither of which can be found in this room, so this question is kind of theoretical)',
+            'a': 'The red one',
             'b': 'The green one',
             'c': 'All of them',
-            'd': 'Done of them',
+            'd': 'None of them',
             'correct': 'a'
        },
        {
-            'question':'Which of the danger barrels below would kill you, assuming you jumped through the hole below?',
+            'question':'Which of the danger barrels below would kill you, assuming you managed to get to them? (you won\'t, so don\'t bother trying)',
             'a': 'The blue and the green one',
-            'b': 'None of them',
-            'c': 'All of them',
+            'b': 'All except the red barrel',
+            'c': 'None of them',
             'd': 'The red and the yellow one',
             'correct': 'b'
        },
        {
-            'question':'What can you *not* do with the money you collect?',
-            'a': 'Buy achievements',
-            'b': 'Buy more lives',
-            'c': 'Improve your online highscore',
-            'd': 'Change your color',
+            'question':'What can you *not* do with your collected money? If you didn\'t know yet, money is the kind of item that seems to affect the number on the left of the dollar sign in the upper status bar',
+            'a': 'Loose it by killing too many monsters',
+            'b': 'Buy more lives to survive this hell of a torture longer',
+            'c': 'Improve my online highscore and show off how great I am',
+            'd': 'Change my player\'s body color at will',
             'correct': 'd'
        }
     ],
@@ -81,7 +81,13 @@ class QuizAsk(BackgroundImage):
         self.qid = qid
         BackgroundImage.__init__(self, *args,halo_img='quiz_stub_questionmark_'+str(qid)+'.png',**kwargs)
     
-
+    
+class QuizAskNotification(SimpleNotification):
+    def __init__(self,w,h,quiz_id,qid,**kwargs):
+        q = quizes[quiz_id][qid]
+        text = "{0}\nA: {1}\nB: {2}\nC: {3}\nD: {4}\n".format(q['question'],q['a'],q['b'],q['c'],q['d'])
+        SimpleNotification.__init__(self,text,width=w/5,height=h/3,only_once=False,**kwargs)
+        
 
 class QuizChoice(BackgroundImage):
     def __init__(self,*args,qid,letter, **kwargs):
@@ -107,7 +113,8 @@ class QuizChoice(BackgroundImage):
                     who.level.quiz_lamp[self.qid].SetColor(sf.Color(0,0,0,0))
                 
                 who.level.quiz_lamp[self.qid] = self.light
-                self.light.SetColor(sf.Color(random.randint(0,0xff),random.randint(0,0xff),random.randint(0,0xff),0xb5))
+                r0,r1 = random.randint(0,0xff),random.randint(0,0xff)
+                self.light.SetColor(sf.Color(r0,r1,max(random.randint(0,0x45),0xff-(r0+r1)),0xb5))
                 
         
         return BackgroundImage.Interact(self,who)

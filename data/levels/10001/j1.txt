@@ -1,0 +1,2 @@
+from quiz import QuizAskNotification; <out> = QuizAskNotification(15,9,qid=2,quiz_id=0)
+
