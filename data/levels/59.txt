@@ -1,0 +1,29 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Simplicity'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('focusplayer_circle.sfx', ())],vis_ofs=0,scroll=2,lower_offset=3.2)
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_C8.  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A9_A9_A9_A9_A9_A9_A9_A0_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  0TB.  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  .  .  gS0gS0.  .  gS0gS0.  .  gS0gS0.  .  .  .  .  .  _A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  _RD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI.  _A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  _B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9cTB_RD.  .  .  .  .  .  dH4.  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  dH5.  .  .  .  .  _B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9.  .  .  .  gS5gS5.  .  .  .  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB.  .  _AB_AB.  .  _AB_AB.  .  _AB_AB_A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  _B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _FI_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_A9_A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_C9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_A9_A9_A9_A9_A9_A9.  .  yPL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  -FI.  _A9_A9_A9_A9_A9_A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_C8.  .  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9.  .  .  .  .  .  .  .  .  .  cTA.  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_A9_A9_A9_A9_A9_A9.  .  .  .  .  .  .  .  .  .  .  _C9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+_A9_A9_A9_A9_A9_A9_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_C8.  .  .  .  .  .  .  _A0_A0_A0_A0_A0_A0_A9_A9_A9_A9_A9_A9_A9_A0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9.  .  .  .  .  .  .  _A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF_A9_A9_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9_B0_A9
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  0TA0TA0TA0TA0TA0TA0TA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
