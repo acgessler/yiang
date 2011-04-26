@@ -2953,9 +2953,9 @@ class EditorGame(Game):
         
         x,y = 35,math.floor(self.GetUpperStatusBarHeight()*defaults.tiles_size_px[0]) + 20
         
-        w,h = img.GetWidth(),img.GetHeight()
+        
         w = defaults.resolution[0] - x*2
-        h = w*img.GetHeight()/img.GetWidth()
+        h = w*img.GetHeight()/max(1,img.GetWidth())
         
         if h > defaults.resolution[1] - y*2:
             h = defaults.resolution[1] - y*2
@@ -3048,7 +3048,7 @@ class EditorGame(Game):
         self._GenMiniMapImage()
         
         self.minimap_sprite,self.sw,self.sh,self.sx,self.sy = self._GetImg(self.minimap)
-        self.msxp,self.msyp = (self.sw/self.minimap.GetWidth())*self.msx,(self.sh/self.minimap.GetHeight())*self.msy
+        self.msxp,self.msyp = (self.sw/max(1,self.minimap.GetWidth()))*self.msx,(self.sh/max(1,self.minimap.GetHeight()))*self.msy
         
         # Then construct the rectangle around the minimap
         self.minimap_shape = self._GenRectangularShape(self.sx-3,self.sy-3,self.sw,self.sh,sf.Color(0xcd,0x90,0x0,0xff))
