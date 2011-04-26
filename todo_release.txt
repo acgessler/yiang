@@ -31,10 +31,12 @@ Flash-Effekt: Uebersaturation vermeiden
 Sound-Effekte
 Mehr Musik, besseres Audiomixing
 Intro'video'
-Quizlevel
+DONE Quizlevel
 Gadget
 Regen&Schnee
-Todesmeldungen
+Todesmeldungen ueberarbeiten
+Optisches highlighting interaktiver Elemente
+Levels - Status&Schwierigkeitsbuttons im Editorm evtl Punkteueberblick
 
 Nebentasks
 ==========
