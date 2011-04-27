@@ -85,13 +85,15 @@ class ContextHandler_Player(ContextHandler):
     def __call__(self, entities):
         self.entities = entities
         self.elements.append(Button(text=_("Award 1ct (temporary)")) + 
-            ("release", (lambda src: self._Dispatch(self.Award,1.0)))
+            ("release", (lambda src: self._Dispatch(self._Award,1.0)))
         )
         
         self.elements.append(Button(text=_("Award 1$  (temporary)")) + 
-            ("release", (lambda src: self._Dispatch(self.Award,100.0)))
+            ("release", (lambda src: self._Dispatch(self._Award,100.0)))
         )
         
+    def _Award(self,player,what):
+        player.game.Award(what)
         
 from score import ScoreTile
 class ContextHandler_ScoreTile(ContextHandler):
