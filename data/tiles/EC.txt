@@ -1,4 +1,4 @@
-from enemy import Turret; <out> = Turret(<raw>,10,1)
+from enemy import Turret; <out> = Turret(<raw>,10,1,shot_ofs=((2.4,1),(0.2,1)))
          {|}
         __|__
        /'"'"'\____

@@ -527,7 +527,7 @@ class SmallRobot(SmallTraverser):
 
 class Turret(Enemy):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=(0.3,0.55), angle_limit=55, distance_limit=5, shot_speed=20, **kwargs):
+    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=((0.3,0.55),(0.6,0.55)), angle_limit=55, distance_limit=5, shot_speed=20, **kwargs):
         Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
         self.weapon = Weapon(speed=shot_speed)
         self.cooldown_time = cooldown_time
@@ -588,8 +588,7 @@ class Turret(Enemy):
                 # implement angle and distance based limits
                 if abs(dir[0]) < self.cos_angle_limit or self.Distance(player) < self.distance_limit:
                     return
-                
-            self.weapon.Shoot((self.pos[0]+self.shot_ofs[0],self.pos[1]+self.shot_ofs[1]),dir,self.color,[self])
+            self.weapon.Shoot((self.pos[0]+self.shot_ofs[self.state][0],self.pos[1]+self.shot_ofs[self.state][1]),dir,self.color,[self])
             self.last_shot = id
         
         
