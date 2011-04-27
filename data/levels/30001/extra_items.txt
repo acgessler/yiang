@@ -14,5 +14,5 @@
 
 #Door to green map
 38 130 _a0
-#blocker to green map NEED a4!!
-38 130 _b0
+#blocker to ccw round NEED a4!!
+64 118 gb0

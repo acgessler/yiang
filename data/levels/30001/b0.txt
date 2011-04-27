@@ -1,1 +1,19 @@
-from campaign import Blocker; <out> = Blocker(<raw>,96,6,need_levels=[1],status_msg=_(''))
+from campaign import Blocker; <out> = Blocker(<raw>,15,19,need_levels=[1],status_msg=_('Walk the other way round, here are too many cactuses!'))
+,  {}
+{} {}
+ \{}'   ,   {}
+  {} {} {}  {}
+, {} {}  \{}'
+{}   {}  `{}´
+ \{}'     {}
+ `{}´
+  {}
+     ,  {}
+     {} {}
+      \{}'
+{}    `{}´
+{}  ,  {}
+{}  {}
+ '{}/
+ `{}´
+  {}
