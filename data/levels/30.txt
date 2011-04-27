@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Wild West'),color=[0, 10, 30],postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=4,bgimg=12,scroll=2,lower_offset=1.2)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Sun Invasion'),color=(0, 10, 30),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=4,bgimg=25,scroll=2,lower_offset=1.2)
 
 
 
