@@ -225,9 +225,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6"
-     inkscape:cx="247.61116"
-     inkscape:cy="757.94279"
+     inkscape:zoom="3.959798"
+     inkscape:cx="200.46322"
+     inkscape:cy="686.54952"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -352,14 +352,14 @@
        inkscape:export-xdpi="49.068882"
        inkscape:export-ydpi="49.068882" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5616)"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5616)"
        d="m 240,309.50503 10,-10 -10,-85 -10,85 z"
        id="path5614"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\pointer.png"
-       inkscape:export-xdpi="50.001514"
-       inkscape:export-ydpi="50.001514"
-       transform="translate(0,2.6171874e-6)" />
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_pointer.png"
+       inkscape:export-xdpi="52.522881"
+       inkscape:export-ydpi="52.522881"
+       transform="matrix(-1,0,0,-1,480,619.01006)" />
     <rect
        style="color:#000000;fill:none;fill-opacity:0.64806865999999996;stroke:#7a7a7a;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.90128754000000000;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect4015"
