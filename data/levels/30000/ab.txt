@@ -1,4 +1,4 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=17)14(kürbis),17(machine),41,52(pcman)
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=17)
   I========H==I
  I             I
 I===============I
