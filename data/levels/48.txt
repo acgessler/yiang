@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Temple of Blue Danger'),color=(255, 255, 255),postfx=[('ingame1.sfx', ())],vis_ofs=10,bgimg=13,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Temple of Blue Danger'),color=[255, 255, 255],postfx=[('ingame1.sfx', ())],vis_ofs=10,bgimg=13,scroll=3,lower_offset=0.0)
 
 
 
