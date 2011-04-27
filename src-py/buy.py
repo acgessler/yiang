@@ -118,5 +118,40 @@ class OrganTransplantMachine(Machine):
     
     
     
+class AmmoTransplantMachine(Machine):
+    """The AmmoTransplantMachine allows the player to trade
+    money for lives."""
+    Message_Normal,Message_NotEnoughMoney = range(2)
+    
+    def __init__(self,text,height,frames,speed,use_counter=3):
+        Machine.__init__(self, "ammo_transplant.txt", text, height, frames, speed, use_counter)
+
+    def _RunMachine(self):
+        Machine._RunMachine(self)
+        accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
+        
+        player_dist = self.level.GetClosestPlayer(self.pos)
+        if not player_dist:
+            return
+        
+        player = player_dist[0]
+            
+        # closure to be called when the player has made his decision
+        def on_close(key):
+            if key == accepted[1] and self.game.GetScore() >= defaults.ammo_transplant_dollar_in:
+                player.AddAmmo(defaults.ammo_transplant_ammo_plus)
+                self.game.TakeScore(defaults.ammo_transplant_dollar_in)
+            
+                self.use_counter -= 1
+                if self.use_counter == 0:
+                    self.DisableMachine()
+            
+        self._ShowMachineDialog(on_close,accepted, AmmoTransplantMachine.Message_Normal 
+            if self.game.GetScore() >= defaults.ammo_transplant_dollar_in 
+            else AmmoTransplantMachine.Message_NotEnoughMoney)
+
+    def GetVerboseName(self):
+        return _("the Instant Ammo Regeneration Machine")
+    
 
 # vim: ai ts=4 sts=4 et sw=4
