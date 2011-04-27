@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="clock.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="SquareL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="SquareL"
+       style="overflow:visible">
+      <path
+         id="path4094"
+         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path4026"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="DotL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="DotL"
+       style="overflow:visible">
+      <path
+         id="path4085"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none"
+         transform="scale(0.8) translate(7.4, 1)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path4023"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <filter
+       id="filter3952"
+       inkscape:label="Thin Membrane"
+       inkscape:menu="Ridges"
+       inkscape:menu-tooltip="Thin like a soap membrane"
+       x="-0.05"
+       y="-0.05"
+       width="1.1"
+       height="1.1"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3954"
+         stdDeviation="5"
+         result="result1" />
+      <feComposite
+         id="feComposite3956"
+         in2="result1"
+         in="result1"
+         result="result4"
+         operator="xor" />
+      <feGaussianBlur
+         id="feGaussianBlur3958"
+         stdDeviation="8"
+         result="result6" />
+      <feComposite
+         id="feComposite3960"
+         in2="SourceGraphic"
+         operator="atop"
+         in="result6"
+         result="result8" />
+      <feComposite
+         id="feComposite3962"
+         in2="result8"
+         operator="in"
+         result="fbSourceGraphic"
+         in="result6" />
+      <feColorMatrix
+         id="feColorMatrix3964"
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 2 0 " />
+      <feGaussianBlur
+         id="feGaussianBlur3966"
+         result="result0"
+         in="fbSourceGraphicAlpha"
+         stdDeviation="2" />
+      <feSpecularLighting
+         id="feSpecularLighting3968"
+         specularExponent="25"
+         specularConstant="2"
+         surfaceScale="-5"
+         lighting-color="rgb(255,255,255)"
+         result="result1"
+         in="result0">
+        <fePointLight
+           id="fePointLight3970"
+           z="20000"
+           y="-10000"
+           x="-5000" />
+      </feSpecularLighting>
+      <feComposite
+         id="feComposite3972"
+         in2="fbSourceGraphicAlpha"
+         operator="in"
+         result="result2"
+         in="result1" />
+      <feComposite
+         id="feComposite3974"
+         in2="result2"
+         k3="2"
+         k2="1"
+         operator="arithmetic"
+         result="result4"
+         in="fbSourceGraphic" />
+      <feComposite
+         id="feComposite3976"
+         in2="result4"
+         operator="in"
+         in="result9"
+         result="result9" />
+      <feBlend
+         id="feBlend3978"
+         in2="result4"
+         mode="multiply"
+         in="result9" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter4004">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1"
+         id="feGaussianBlur4006" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter5616">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.2875"
+         id="feGaussianBlur5618" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="248.87797"
+     inkscape:cy="835.88925"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1576"
+     inkscape:window-height="926"
+     inkscape:window-x="100"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     showguides="false">
+    <sodipodi:guide
+       position="140,842.85715"
+       orientation="200,0"
+       id="guide2989" />
+    <sodipodi:guide
+       position="140,642.85715"
+       orientation="0,200"
+       id="guide2991" />
+    <sodipodi:guide
+       position="340,642.85715"
+       orientation="-200,0"
+       id="guide2993" />
+    <sodipodi:guide
+       position="340,842.85715"
+       orientation="0,-200"
+       id="guide2995" />
+    <sodipodi:guide
+       position="140,842.85715"
+       orientation="100,0"
+       id="guide4010" />
+    <sodipodi:guide
+       position="140,742.85715"
+       orientation="0,100"
+       id="guide4012" />
+    <sodipodi:guide
+       position="240,742.85715"
+       orientation="-100,0"
+       id="guide4014" />
+    <sodipodi:guide
+       position="240,842.85715"
+       orientation="0,-100"
+       id="guide4016" />
+    <sodipodi:guide
+       position="230,837.85715"
+       orientation="85,0"
+       id="guide5602" />
+    <sodipodi:guide
+       position="230,752.85715"
+       orientation="0,20"
+       id="guide5604" />
+    <sodipodi:guide
+       position="250,752.85715"
+       orientation="-85,0"
+       id="guide5606" />
+    <sodipodi:guide
+       position="250,837.85715"
+       orientation="0,-20"
+       id="guide5608" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#e2e2e2;fill-opacity:1;stroke:#404040;stroke-width:1.65799999999999990;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;color:#000000;fill-rule:nonzero;stroke-linecap:butt;stroke-linejoin:round;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;filter:url(#filter4004)"
+       id="path2997"
+       sodipodi:cx="240"
+       sodipodi:cy="309.50504"
+       sodipodi:rx="100"
+       sodipodi:ry="100"
+       d="m 340,309.50504 a 100,100 0 1 1 -200,0 100,100 0 1 1 200,0 z"
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_face.png"
+       inkscape:export-xdpi="48.68771"
+       inkscape:export-ydpi="48.68771" />
+    <path
+       transform="translate(0,-2.7832032e-6)"
+       sodipodi:type="arc"
+       style="fill:#e2e2e2;fill-opacity:1;stroke:#404040;stroke-width:1.65799999;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3952)"
+       id="path2997-0"
+       sodipodi:cx="240"
+       sodipodi:cy="309.50504"
+       sodipodi:rx="100"
+       sodipodi:ry="100"
+       d="m 340,309.50504 a 100,100 0 1 1 -200,0 100,100 0 1 1 200,0 z"
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_face.png"
+       inkscape:export-xdpi="48.68771"
+       inkscape:export-ydpi="48.68771" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter5616);fill-opacity:1"
+       d="m 240,309.50503 10,-10 -10,-85 -10,85 z"
+       id="path5614"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\pointer.png"
+       inkscape:export-xdpi="50.001514"
+       inkscape:export-ydpi="50.001514" />
+  </g>
+</svg>
