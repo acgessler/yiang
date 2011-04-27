@@ -3191,11 +3191,38 @@ class EditorMenu(Drawable):
     
     def __init__(self):
         Drawable.__init__(self)
+        
+        values = {}
+        try:
+            with open(os.path.join(defaults.config_dir,'diff_machinegen_donot_edit.txt'),'rt') as inp:
+                try:
+                    values = dict(map(int, map(str.strip, m.split('='))) for m in inp)
+                except Exception:
+                    print('gracefully ignoring exception reading difficulty db')
+        except IOError:
+            pass
+            
+        self.diff_level = collections.defaultdict((lambda:1),values)
+        self.diff_texts = ['E','M','H']
+        
+        values = {}
+        try:
+            with open(os.path.join(defaults.config_dir,'qa_machinegen_donot_edit.txt'),'rt') as inp:
+                try:
+                    values = dict(map(int, map(str.strip, m.split('='))) for m in inp)
+                except Exception as e:
+                    print('gracefully ignoring exception reading qa database')
+        except IOError:
+            pass
+        
+        self.qa_level = collections.defaultdict((lambda:0),values)
+        self.qa_colors = [sf.Color.Red,sf.Color.Yellow,sf.Color.Green]
             
         xs,ys = 50,150
         def AddLevelButtons():
             x,y = xs ,ys
-            w,h = 200,18
+            w,h = 200,14
+            w2,h2 = 16,14
             for i,readonly in sorted( LevelLoader.EnumLevelIndices(), key=operator.itemgetter(0) ):
                 nam = LevelLoader.GuessLevelName(i)
                 
@@ -3208,10 +3235,41 @@ class EditorMenu(Drawable):
                     ("release",(lambda src,i=i,readonly=readonly: EditLevel(i,readonly)))
                 ))
                 
-                y += h+1
-                if y >= defaults.resolution[1]-50:
+                # QA level
+                self.AddSlaveDrawable((Button(text="",
+                    font_height=11,
+                    rect=[x+w+2,y,w2,h2],
+                    bgcolor=self.qa_colors[self.qa_level[i]] 
+                ) + 
+                    ("release",(lambda src,i=i: NextQA(src,i)))
+                ))
+                
+                # difficulty level
+                self.AddSlaveDrawable((Button(text=self.diff_texts[self.diff_level[i]],
+                    font_height=11,
+                    rect=[x+w+w2+4,y,w2,h2] 
+                ) + 
+                    ("release",(lambda src,i=i: NextDifficulty(src,i)))
+                ))
+                
+                y += h+6
+                if y >= defaults.resolution[1]-30:
                     y = ys
-                    x += w+1
+                    x += w+14+w2*2
+                    
+        def NextDifficulty(src,i):
+            l = self.diff_level[i] = (self.diff_level[i]+1)%len(self.diff_texts)
+            src.text = self.diff_texts[l]
+            
+            with open(os.path.join(defaults.config_dir,'diff_machinegen_donot_edit.txt'),'wt') as outp:
+                [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in self.diff_level.items()]
+        
+        def NextQA(src,i):
+            l = self.qa_level[i] = (self.qa_level[i]+1)%len(self.qa_colors)
+            src.bgcolor = self.qa_colors[l]
+            
+            with open(os.path.join(defaults.config_dir,'qa_machinegen_donot_edit.txt'),'wt') as outp:
+                [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in self.qa_level.items()]
                     
         def Run(what):
             # (HACK) -- calling defaults.update_derived() (which is done at
