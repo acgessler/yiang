@@ -42,7 +42,7 @@ class Sender(AnimTile):
             
             mypos = self.pos
             
-            target = self.level.FindClosestOfSameColor(self.pos,Receiver,self.color)
+            target = self.level.FindClosestOfSameColor(self.pos,Receiver,self.color,exact_match=False)
             if not target:
                 print("Failed to find teleport target, my color is {0}".format(self.color))
                 

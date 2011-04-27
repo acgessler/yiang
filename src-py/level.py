@@ -106,6 +106,8 @@ class Level:
              or (30.0,1.5,10.0)
         ))
         
+        self.players = []
+        
         # all player instances in this level will share this inventory.
         # upon leaving the level, we'll merge all persistent items
         # in it back to the game inventory
@@ -135,6 +137,7 @@ class Level:
         
         self.lvbase = os.path.join(defaults.data_dir, "levels", str(level))
         self.tlbase = os.path.join(defaults.data_dir, "tiles")
+    
         
         xmax = 0
         yempty = 0
@@ -226,6 +229,9 @@ class Level:
         tile.SetColor(TileLoader.GetColor(ccode))
         tile.SetPosition((x, y - self.vis_ofs))
         tile.SetLevel(self)
+        
+        if isinstance(tile,Player):
+            self.players.append(tile)
         
         # (HACK) Editor mode: store color and type code in order to
         # save the level again later this day.
@@ -569,10 +575,25 @@ class Level:
                 len(self.window_unassigned)
          )
         
+    def IsPlayerClose(self,pos,max):
+        """Check if *any* player is close - the result is not necessarily the closeST player .."""
+        max *= max
+        for p in self.EnumAllEntitiesFilter(Player):
+            ppos = p.pos
+            dist = (ppos[0]-pos[0])**2 + (ppos[1]-ppos[1])**2
+            if dist < max:
+                return p,dist**0.5
+        return None
+        
     def EnumAllEntities(self):
         """Return an sequence (actually a set) of all entities
         in the level, be they active or not."""
         return self.entities
+    
+    def EnumAllEntitiesFilter(self,who):
+        if who == Player:
+            return self.players
+        return [e for e in self.entities if isinstance(e, who)]
         
     def EnumActiveEntities(self):
         """Enum all entities which are currently 'active', that is
@@ -635,7 +656,7 @@ class Level:
         candidates = []
         
         # XXX this can be easily optimized 
-        check = lambda e:type==e.__class__ if exact_match else lambda e:isinstance(e,type)
+        check = (lambda e:type==e.__class__) if exact_match else (lambda e:isinstance(e,type))
             
         for entity in self.EnumAllEntities():
             if check(entity):
@@ -643,15 +664,16 @@ class Level:
                 candidates.append(((pos[0]-mypos[0])**2 + (pos[1]-mypos[1])**2,entity))
         return None if not candidates else sorted(candidates,key=operator.itemgetter(0))[0][1]
              
-    def FindClosestOfSameColor(self,pos,type,color):
+    def FindClosestOfSameColor(self,pos,type,color,exact_match=False):
         """Find the closest entity of a particular class type,
-        an additional requirement is that theh entities' color must 
+        an additional requirement is that the entities' color must 
         match a given color."""
         candidates = []
+        check = (lambda e:type==e.__class__) if exact_match else (lambda e:isinstance(e,type))
         
         # XXX this can be easily optimized
         for entity in self.EnumAllEntities():
-            if isinstance(entity,type) and entity.color == color:
+            if check(entity) and entity.color == color:
                 mypos = entity.pos
                 candidates.append(((pos[0]-mypos[0])**2 + (pos[1]-mypos[1])**2,entity))
         return None if not candidates else sorted(candidates,key=operator.itemgetter(0))[0][1]       

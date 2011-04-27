@@ -526,9 +526,8 @@ MoneyAmount:       {scaled_score} $
         a single player in a level, so the return value is 
         predictable."""
         from player import Player
-        for entity in self.level.EnumAllEntities():
-            if isinstance(entity,Player):
-                return entity
+        for entity in self.level.EnumAllEntitiesFilter(Player):
+            return entity
         
         # we can safely assume that there MUST be a player.
         # assert False

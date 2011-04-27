@@ -37,6 +37,8 @@ Regen&Schnee
 Todesmeldungen ueberarbeiten
 Optisches highlighting interaktiver Elemente
 Levels - Status&Schwierigkeitsbuttons im Editorm evtl Punkteueberblick
+Bossgegner??
+Partikeleffekte
 
 Nebentasks
 ==========
