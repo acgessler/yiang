@@ -28,7 +28,8 @@ from player import Player
 
 class PerkOverlay(Tile):
     """The nice ASCII icon displayed in the lower status bar while
-    a perk is active"""
+    a perk is active .. it is also responsible for updating the
+    timer clock in the upper status bar"""
     active = []
     
     def __init__(self,elems):
@@ -46,10 +47,18 @@ class PerkOverlay(Tile):
         self.game.AddSlaveDrawable(self)
         PerkOverlay.active.append(self)
         
+        # locate a color that is not used yet 
+        colors = [sf.Color(0x90,0x20,0x20),sf.Color(0x20,0x90,0x20),sf.Color(0x20,0x20,0x90)]
+        candidates = set(colors)-set(v[1] for v in self.game.clock_overlays.values()) 
+            
+        self.clock_handle = self.game.clock_overlays[self] = [0.0, ( random.choice(list(candidates)) if len(candidates) else colors[0]) ]
+        
     def Disable(self):
         """Must be called instead of Renderer.RemoveDrawable()"""
         self.game.RemoveSlaveDrawable(self)
         PerkOverlay.active.remove(self)
+        
+        del self.game.clock_overlays[self]
         
     def SetFormatters(self,d={}):
         """Set format() kwargs to substitute text variables, i.e.
@@ -63,6 +72,8 @@ class PerkOverlay(Tile):
         self._Recache()
             
     def Draw(self):
+        self.clock_handle[0] = self.formatters['percentage']
+        
         offset = 0
         for other in PerkOverlay.active:
             if other is self:
@@ -170,8 +181,9 @@ class Perk(AnimTile):
         
         try:
             remaining = player_dict["time"] - (self.game.GetTotalElapsedTime()-player_dict["time_start"])
+            percentage = remaining/player_dict["time"]
             if hasattr(self,"overlay"):
-                self.overlay.SetFormatters({"remaining":remaining})
+                self.overlay.SetFormatters({"remaining":remaining,"percentage":percentage})
                 
             if remaining < 0:
                 self.DisablePerk(player)

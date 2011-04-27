@@ -109,7 +109,7 @@ class Game(Drawable):
         self.swallow_escape = False
         
         self.cached_player = None
-        
+        self.clock_overlays = {}
         
         
     def Load(self,filename):
@@ -315,6 +315,8 @@ OOOOOO  OOOOO  \n\
             self.DrawSingle(self.cached_status_text)
             
             self._DrawHearts()
+            
+            self._DrawClock()
         
         # finally, the lower part of the cinematic box
         shape = sf.Shape()
@@ -333,6 +335,41 @@ OOOOOO  OOOOO  \n\
         shape.EnableOutline(False)
 
         self.DrawSingle(shape)
+        
+    def _DrawClock(self):
+        """draw the timer clock"""
+        if self.level is None or not self.clock_overlays:
+            return
+        
+        if not hasattr(self,'clock_bg'):
+            from textures import TextureCache
+            self.clock_bg = TextureCache.GetFromTextures('clock_face.png')
+            self.clock_pointer = TextureCache.GetFromTextures('clock_pointer.png')
+        
+            assert self.clock_bg
+            assert self.clock_pointer
+            
+        sca = 0.85
+        y = 3
+        cw,ch = self.clock_bg.GetWidth()*sca,self.clock_bg.GetHeight()*sca
+            
+        sprite = sf.Sprite(self.clock_bg)
+        sprite.SetPosition((defaults.resolution[0]-cw)/2,y)
+        sprite.Scale(sca,sca)
+        sprite.SetColor(sf.Color(0xdf,0xdf,0xdf,0xff))
+        self.DrawSingle(sprite)
+        
+        for k,v in self.clock_overlays.items():
+            time,color = v
+            sprite = sf.Sprite(self.clock_pointer)
+            sprite.Rotate(180-(time*360))
+            sprite.Scale(sca,sca)
+            sprite.SetCenter(self.clock_pointer.GetWidth()*sca/2 + 0.5,0)
+            sprite.SetPosition((defaults.resolution[0]+1)/2,y+ch/2)
+            
+            sprite.SetColor(color)
+            self.DrawSingle(sprite)
+        
         
     def _OnEscape(self):
         """Called when the ESCAPE key is hit"""

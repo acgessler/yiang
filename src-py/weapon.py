@@ -24,6 +24,38 @@ import os
 from stubs import *
 from player import Player,InventoryItem
 
+class ShootAnimStub(Tile):
+    """Implements the text strings that are spawned whenever
+    the player is killed."""
+
+    def __init__(self,ttl=0.5):
+        Tile.__init__(self, "")
+
+        self.ttl = ttl
+         
+    def _GetHaloImage(self):
+        return Entity._GetHaloImage(self,"shootdrop1.png")     
+    
+    def GetBoundingBox(self):
+        return None
+    
+    def GetBoundingBoxAbs(self):
+        return None  
+
+    def Update(self, time_elapsed, time_delta):
+        Tile.Update(self,time_elapsed,time_delta)
+        if not hasattr(self, "time_start"):
+            self.time_start = time_elapsed
+            return
+
+        tdelta = time_elapsed - self.time_start
+        if tdelta > self.ttl:
+            self.game.RemoveEntity(self)
+            return
+    
+        self.color = sf.Color(self.color.r,self.color.g,self.color.b,0xff-int(tdelta*0xff/self.ttl))
+
+
 class Shot(Tile):
     """Utility class for weapons, wraps a single shot and
     handles any collision with entities"""
@@ -51,11 +83,22 @@ class Shot(Tile):
         return None
         
     def Update(self,time_elapsed,time):
+        
+        oldpos = getattr(self,'oldpos',self.pos)
+        
         self.SetPosition((self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed))
         lvdim = self.level.GetLevelSize()
         if self.pos[0] < 0 or self.pos[0] > lvdim[0] or self.pos[1] < 0 or self.pos[1] > lvdim[1]:
             self.game.RemoveEntity(self)
             return
+        
+        if (self.pos[0]-oldpos[0])**2 + (self.pos[1]-oldpos[1])**2 > 0.0040:
+            st = ShootAnimStub()
+            st.SetColor(self.color)
+            st.SetPosition((self.pos[0]+self.dim[0]/2,self.pos[1]))
+            self.game.AddEntity(st)
+            
+            self.oldpos = self.pos
         
         ab = Tile.GetBoundingBoxAbs(self)
     

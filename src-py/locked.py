@@ -183,12 +183,11 @@ class BridgeControl(AnimTile,FloatingNotification):
     
     def Draw(self):
         AnimTile.Draw(self)
-        
-        cl = self.level.IsPlayerClose(self.pos,4.0)
+        cl = self.level.IsPlayerClose(self.pos,2.0)
         
         doit = self.notify and cl and not self.moved_once
         if doit:
-            self.DrawNotification(text=_("Press {0} to talk to the bridge").format(KeyMapping.GetString('interact')),scale=1-cl[1]/3)
+            self.DrawNotification(text=_("Press {0} to talk to the bridge").format(KeyMapping.GetString('interact')),scale=1-cl[1]/2)
             
         # highlight the corr. bridge as well
         if self.last_bridge:
