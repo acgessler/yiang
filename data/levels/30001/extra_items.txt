@@ -8,9 +8,11 @@
 #Level
 14 16 Pa2
 #Level
-#120 18
+120 18 ~a3
 #Level
-#144 115
+144 115 0a4
 
 #Door to green map
 38 130 _a0
+#blocker to green map NEED a4!!
+38 130 _b0
