@@ -157,19 +157,65 @@
     </filter>
     <filter
        inkscape:collect="always"
-       id="filter4004">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1"
-         id="feGaussianBlur4006" />
-    </filter>
-    <filter
-       inkscape:collect="always"
        id="filter5616">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.2875"
          id="feGaussianBlur5618" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3815">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1"
+         id="feGaussianBlur3817" />
+    </filter>
+    <filter
+       id="filter3861"
+       y="-0.25"
+       height="1.5"
+       inkscape:menu-tooltip="Darkens the edge with an inner blur and adds a flexible glow"
+       inkscape:menu="Shadows and Glows"
+       inkscape:label="Dark and Glow"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3863"
+         stdDeviation="5"
+         result="result6" />
+      <feComposite
+         id="feComposite3865"
+         in2="result6"
+         result="result8"
+         in="SourceGraphic"
+         operator="atop" />
+      <feComposite
+         id="feComposite3867"
+         in2="SourceAlpha"
+         result="result9"
+         operator="over"
+         in="result8" />
+      <feColorMatrix
+         id="feColorMatrix3869"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result10" />
+      <feBlend
+         id="feBlend3871"
+         in2="result6"
+         in="result10"
+         mode="normal" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter4011"
+       x="-0.18"
+       width="1.36"
+       y="-0.18"
+       height="1.36">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.75"
+         id="feGaussianBlur4013" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -179,9 +225,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="248.87797"
-     inkscape:cy="835.88925"
+     inkscape:zoom="5.6"
+     inkscape:cx="247.61116"
+     inkscape:cy="757.94279"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -190,7 +236,10 @@
      inkscape:window-x="100"
      inkscape:window-y="-4"
      inkscape:window-maximized="1"
-     showguides="false">
+     showguides="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-bbox-midpoints="false"
+     inkscape:snap-bbox-edge-midpoints="false">
     <sodipodi:guide
        position="140,842.85715"
        orientation="200,0"
@@ -258,7 +307,7 @@
      id="layer1">
     <path
        sodipodi:type="arc"
-       style="opacity:1;fill:#e2e2e2;fill-opacity:1;stroke:#404040;stroke-width:1.65799999999999990;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;color:#000000;fill-rule:nonzero;stroke-linecap:butt;stroke-linejoin:round;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;filter:url(#filter4004)"
+       style="opacity:1;fill:#e2e2e2;fill-opacity:1;stroke:#404040;stroke-width:4;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;color:#000000;fill-rule:nonzero;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;filter:url(#filter3815)"
        id="path2997"
        sodipodi:cx="240"
        sodipodi:cy="309.50504"
@@ -266,12 +315,12 @@
        sodipodi:ry="100"
        d="m 340,309.50504 a 100,100 0 1 1 -200,0 100,100 0 1 1 200,0 z"
        inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_face.png"
-       inkscape:export-xdpi="48.68771"
-       inkscape:export-ydpi="48.68771" />
+       inkscape:export-xdpi="49.068882"
+       inkscape:export-ydpi="49.068882" />
     <path
        transform="translate(0,-2.7832032e-6)"
        sodipodi:type="arc"
-       style="fill:#e2e2e2;fill-opacity:1;stroke:#404040;stroke-width:1.65799999;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3952)"
+       style="fill:#e2e2e2;fill-opacity:1;stroke:#404040;stroke-width:1.65799999000000000;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3861)"
        id="path2997-0"
        sodipodi:cx="240"
        sodipodi:cy="309.50504"
@@ -282,12 +331,44 @@
        inkscape:export-xdpi="48.68771"
        inkscape:export-ydpi="48.68771" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter5616);fill-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.90128756;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+       d="m 240,214.50503 0,30.99781"
+       id="path3875"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_face.png"
+       inkscape:export-xdpi="49.068882"
+       inkscape:export-ydpi="49.068882" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#ffffff;stroke:#7a7a7a;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.90128756000000021;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;fill-opacity:1;filter:url(#filter4011)"
+       id="path3939"
+       sodipodi:cx="235"
+       sodipodi:cy="304.50504"
+       sodipodi:rx="5"
+       sodipodi:ry="5"
+       d="m 240,304.50504 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+       transform="translate(5,4.9999972)"
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_face.png"
+       inkscape:export-xdpi="49.068882"
+       inkscape:export-ydpi="49.068882" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5616)"
        d="m 240,309.50503 10,-10 -10,-85 -10,85 z"
        id="path5614"
        inkscape:connector-curvature="0"
        inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\pointer.png"
        inkscape:export-xdpi="50.001514"
-       inkscape:export-ydpi="50.001514" />
+       inkscape:export-ydpi="50.001514"
+       transform="translate(0,2.6171874e-6)" />
+    <rect
+       style="color:#000000;fill:none;fill-opacity:0.64806865999999996;stroke:#7a7a7a;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.90128754000000000;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect4015"
+       width="220"
+       height="220"
+       x="130"
+       y="199.45718"
+       inkscape:export-filename="D:\dev\YIANG2.hg\data\textures\clock_face.png"
+       inkscape:export-xdpi="49.068882"
+       inkscape:export-ydpi="49.068882" />
   </g>
 </svg>
