@@ -25,13 +25,14 @@ from stubs import *
 
 from player import Player
 from notification import MessageBox
+from floatingnotify import FloatingNotification
 
 
-
-class Machine(AnimTile):
+class Machine(AnimTile,FloatingNotification):
     """Base class for all kinds of machines, buy stocks, ..."""
     def __init__(self,message_text_file,text,height,frames,speed,use_counter=1):
         AnimTile.__init__(self,text,height,frames,speed,halo_img=None)
+        FloatingNotification.__init__(self)
         self.use_counter = use_counter
         
         path =os.path.join(defaults.data_dir,"messages",message_text_file)
@@ -44,12 +45,13 @@ class Machine(AnimTile):
             self.messages = ["Error, see the log file for more details"] * 50
             print("Failure reading {0}".format(path))
             
+        self.used_once = False
+            
     def Interact(self,other):
         if isinstance(other,Player) and not hasattr(self, "running") and self.use_counter > 0 \
             and Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
             
             self._RunMachine()
-        
         return Entity.ENTER
     
     def DisableMachine(self):
@@ -72,8 +74,18 @@ class Machine(AnimTile):
         )),defaults.game_over_fade_time, (580,180) , 0.0, accepted, sf.Color.Red, on_close_wrapped)
     
     def _RunMachine(self):
-        pass
+        self.used_once = True
     
+    def Draw(self):
+        AnimTile.Draw(self)
+        
+        cl = self.level.IsPlayerClose(self.pos,4.0)
+        if cl and not self.used_once:
+            self.dropshadow = True
+            self.DrawNotification(text=_("Press {0} to buy something").format(KeyMapping.GetString('interact')),scale=1-cl[1]/3)
+        else:
+            self.dropshadow = False
+            
 
 class OrganTransplantMachine(Machine):
     """The OrganTransplantMachine allows the player to trade
@@ -84,6 +96,7 @@ class OrganTransplantMachine(Machine):
         Machine.__init__(self, "organ_transplant.txt", text, height, frames, speed, use_counter)
 
     def _RunMachine(self):
+        Machine._RunMachine(self)
         accepted = (KeyMapping.Get("escape"), KeyMapping.Get("accept"))
             
         # closure to be called when the player has made his decision
@@ -101,7 +114,7 @@ class OrganTransplantMachine(Machine):
             else OrganTransplantMachine.Message_NotEnoughMoney)
 
     def GetVerboseName(self):
-        return "the Instant Organ Transplant Machine (OTM)"
+        return _("the Instant Organ Transplant Machine (OTM)")
     
     
     

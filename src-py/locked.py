@@ -27,39 +27,8 @@ import sf
 # My own stuff
 from stubs import *
 from player import Player, InventoryItem
+from floatingnotify import FloatingNotification
 
-
-class FloatingNotification:
-    
-    def __init__(self,alpha_scale=1.0):
-        self.alpha_scale = alpha_scale
-    
-    def DrawNotification(self,text='(no text specified)',scale=1.0):
-        scale = max(0,min(1,scale*self.alpha_scale))
-        
-        r,g,b = self.color.r,self.color.g,self.color.b
-        fg = sf.Color(r//4,g//4,b//4,int(0xff*scale))
-        bg = sf.Color(r//2,g//2,b//2,int(0xff*scale))
-        
-        pos = self.level.ToCameraDeviceCoordinates(self.pos)
-        bb = pos[0]-200,pos[1]+5,pos[0],pos[1]+19
-        shape = sf.Shape()
-        shape.AddPoint(bb[0], bb[1],fg,bg )
-        shape.AddPoint(bb[2], bb[1],fg,bg )
-        shape.AddPoint(bb[2], bb[3],fg,bg )
-        shape.AddPoint(bb[0], bb[3],fg,bg )
-        
-        shape.SetOutlineWidth(2)
-        shape.EnableFill(True)
-        shape.EnableOutline(True)
-        Renderer.app.Draw(shape)
-        
-        rsize = 8
-        text = sf.String(text,Font=FontCache.get(rsize),Size=rsize)
-        text.SetPosition(bb[0]+10,bb[1]+3)
-        text.SetColor(sf.Color(0xff,0xff,0xff,int(0xd0*scale)))
-        Renderer.app.Draw(text)
-        
 
 class Door(AnimTile,FloatingNotification):
     """A door blocks the player unless he presents a key of the same color"""
