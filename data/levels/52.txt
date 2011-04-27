@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Classical'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],gravity=0,vis_ofs=0,scroll=0,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Classical'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],gravity=0,vis_ofs=0,bgimg=-1,scroll=0,lower_offset=0.0)
 _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9
 _A9yS1yS1.  .  .  .  .  .  aE0.  .  .  .  .  .  _AA.  .  yS1_AAyS1.  .  .  dE0.  .  .  .  .  .  .  .  .  .  .  .  .  yS1.  .  yS1.  .  .  .  .  .  .  .  _AA.  .  .  .  yS1_A9
 _A9yS1.  .  .  .  .  .  .  _AAyS1.  .  .  .  .  _AA.  .  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  _AA.  .  .  _AA_AA.  .  _AA.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9

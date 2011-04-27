@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(2.0, 0),name=_('quark'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,scroll=2,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(2.0, 0),name=_('quark'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,bgimg=24,scroll=2,lower_offset=0.0)
 
 
 
@@ -25,5 +25,3 @@
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9
-
-

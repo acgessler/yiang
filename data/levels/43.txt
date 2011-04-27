@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Wandering below Star-Shine'),color=(10, 20, 20),postfx=[('ingame1.sfx', ())],vis_ofs=15,scroll=3,lower_offset=3.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('Wandering below Star-Shine'),color=(10, 20, 20),postfx=[('ingame1.sfx', ())],vis_ofs=15,bgimg=24,scroll=3,lower_offset=3.0)
 
 
 
