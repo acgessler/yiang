@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Tricky'),color=(0, 0, 30),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=7,scroll=2,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Tricky'),color=(0, 0, 30),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=7,scroll=3,lower_offset=0.0)
 
 
 
@@ -10,7 +10,7 @@
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA1.  .  .  .  yH3
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDA
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA1
-.  .  .  rDK.  .  .  .  .  .  .  .  bA1yE4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bMJ
+.  .  .  rDK.  .  .  .  .  .  .  .  bA1yE4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bMJ
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA1bA1bA1bA1bA1.  .  .  .  .  bA1bA1bA1bA1bA1
 
@@ -20,8 +20,9 @@
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bA9yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS3
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bTRyS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS3
 .  .  .  .  .  rBO.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bTRyS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS0yS3
-.  .  .  .  bA1bA1.  .  .  .  .  .  bA1.  .  rE0rTRbA1.  .  .  .  .  .  .  .  .  rDA.  .  .  .  .  .  .  .  bTRyS0yS0yS0yS0bA8yS0yS0yS0yS0yS0yS0yS0yS3yE0
-bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bMJbA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1
+.  .  .  .  bA1bA1.  .  .  .  .  .  bA1rE0.  rTRrTRrTRbA1.  .  .  .  .  .  .  .  rDA.  .  .  .  .  .  .  .  bTRyS0yS0yS0yS0bA8yS0yS0yS0yS0yS0yS0yS0yS3yE0_I0
+bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bMJ.  bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1
+bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1.  .  bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1bA1
 
 
 
