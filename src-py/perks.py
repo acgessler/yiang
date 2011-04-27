@@ -48,7 +48,7 @@ class PerkOverlay(Tile):
         PerkOverlay.active.append(self)
         
         # locate a color that is not used yet 
-        colors = [sf.Color(0x90,0x20,0x20),sf.Color(0x20,0x90,0x20),sf.Color(0x20,0x20,0x90)]
+        colors = [sf.Color(0x90,0x20,0x20,0xc0),sf.Color(0x20,0x90,0x20,0xc0),sf.Color(0x20,0x20,0x90,0xc0)]
         candidates = set(colors)-set(v[1] for v in self.game.clock_overlays.values()) 
             
         self.clock_handle = self.game.clock_overlays[self] = [0.0, ( random.choice(list(candidates)) if len(candidates) else colors[0]) ]
