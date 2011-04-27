@@ -356,7 +356,7 @@ OOOOOO  OOOOO  \n\
         sprite = sf.Sprite(self.clock_bg)
         sprite.SetPosition((defaults.resolution[0]-cw)/2,y)
         sprite.Scale(sca,sca)
-        sprite.SetColor(sf.Color(0xdf,0xdf,0xdf,0xff))
+        sprite.SetColor(sf.Color(0x90,0x90,0x90,0xff))
         self.DrawSingle(sprite)
         
         for k,v in self.clock_overlays.items():
@@ -364,8 +364,8 @@ OOOOOO  OOOOO  \n\
             sprite = sf.Sprite(self.clock_pointer)
             sprite.Rotate(180-(time*360))
             sprite.Scale(sca,sca)
-            sprite.SetCenter(self.clock_pointer.GetWidth()*sca/2 + 0.5,0)
-            sprite.SetPosition((defaults.resolution[0]+1)/2,y+ch/2)
+            sprite.SetCenter(self.clock_pointer.GetWidth()*sca/2,5)
+            sprite.SetPosition(defaults.resolution[0]/2,y+ch/2)
             
             sprite.SetColor(color)
             self.DrawSingle(sprite)

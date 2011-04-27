@@ -40,6 +40,7 @@ Levels - Status&Schwierigkeitsbuttons im Editorm evtl Punkteueberblick
 Bossgegner??
 Partikeleffekte
 Postfx-OnOff-Tiles
+Animationen Spieler
 
 Nebentasks
 ==========
