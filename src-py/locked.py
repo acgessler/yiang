@@ -99,7 +99,7 @@ class Door(AnimTile,FloatingNotification):
                 except AttributeError:
                     pass
             
-        elif not self.unlocked:
+        elif self._CanFlash():
             old,self.player_close = self.player_close,not not self.level.IsPlayerClose(self.pos,5.0) or self.force_flash
             if self.player_close:  
                 if not old:
@@ -116,13 +116,14 @@ class Door(AnimTile,FloatingNotification):
                 
         AnimTile.Update(self,time_elapsed,time)
         
+    def _CanFlash(self):
+        return not self.unlocked
         
     def Draw(self):
         AnimTile.Draw(self)
         
         if self.notify and self.player_close and not self.IsWorking():
             self.DrawNotification(text="Get a red key to open this door",scale=self.pulse_timer.GetElapsedTime())
-            
         
     def IsWorking(self):
         return hasattr( self, "during_interact" )
@@ -168,6 +169,9 @@ class Bridge(Door):
     
     def Draw(self):
         AnimTile.Draw(self)
+        
+    def _CanFlash(self):
+        return True # bridges can flash in any state
     
     
 class BridgeControl(AnimTile,FloatingNotification):
@@ -185,11 +189,9 @@ class BridgeControl(AnimTile,FloatingNotification):
     def Update(self,time,dtime):
         AnimTile.Update(self,time,dtime)
         if not hasattr(self,"did_init"):
-            
             self.did_init = True
             self._UpdateBridge()
-
-    
+ 
     def Interact(self, other):
         if isinstance(other,Player):
             if Renderer.app.GetInput().IsKeyDown(KeyMapping.Get("interact")):
@@ -207,7 +209,7 @@ class BridgeControl(AnimTile,FloatingNotification):
                     pass
             
         return Entity.ENTER
-    
+
     
     def Draw(self):
         AnimTile.Draw(self)
@@ -221,8 +223,7 @@ class BridgeControl(AnimTile,FloatingNotification):
         # highlight the corr. bridge as well
         if self.last_bridge:
             self.last_bridge.force_flash = doit
-            
-    
+               
     def _GetBridge(self):
         p = self.level.FindClosestOfSameColor(self.pos,Bridge,self.color,exact_match=True)
         if not p:
