@@ -584,6 +584,12 @@ class Level:
             if dist < max:
                 return p,dist**0.5
         return None
+    
+    def GetClosestPlayer(self,pos):
+        try:
+            return sorted(((p,((p.pos[0]-pos[0])**2 + (p.pos[1]-pos[1])**2)) for p in self.EnumAllEntitiesFilter(Player)),key=operator.itemgetter(1))[0]
+        except IndexError: 
+            return None
         
     def EnumAllEntities(self):
         """Return an sequence (actually a set) of all entities

@@ -1,0 +1,234 @@
+from buy import AmmoTransplantMachine; <out> = AmmoTransplantMachine(<raw>,12,18,3.0)
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    |
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(X)-----------
+| (O) AMMO      |
+| (O) WONDER    |
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (X) AMMO      |
+| (O) WONDER    |
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (X) AMMO      |
+| (O) WONDER    |
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (X) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (X) WONDER    | 
+| (o)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (X)           |
+| (o)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (X)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL_XX_______|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL____XX____|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL______XX__|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL________XX|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL________  |
+\---------------/XX
+| UU           |
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           | XX
+|UUUUUUUUUUUUUUU
+ o           o
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   XX
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   X.
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   ..
+
+  (O)
+/-(O)-----------
+| (O) AMMO      |
+| (O) WONDER    | 
+| (O)           |
+| (O)           |
+| (O)    OOO    |
+__pppOLLL__________|
+\---------------/
+| UU           |
+|UUUUUUUUUUUUUUU 
+ o           o   .

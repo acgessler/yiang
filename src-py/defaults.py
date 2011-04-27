@@ -123,6 +123,8 @@ perks_overlay_letter_height = 15
 audio_randomize_playlist = False
 levelup_score_base = 0.08
 organ_transplant_dollar_in = 1.0
+ammo_transplant_dollar_in = 0.2
+ammo_transplant_ammo_plus = 10
 no_bg_music = False
 no_bg_sound = False
 audio_volume_scale = 0.8
@@ -304,11 +306,33 @@ def merge_config(file):
     print("Processed " + file)
         
 
-
-
-
-
+def GetColorName(col):
+    if col.a == 0:
+        return _("Invisible")
         
+    if col.r > 60:
+        if col.g > 60:
+            if col.b > 60:
+                return _("Gray") if col.r+col.b+col.g!=255*3 else _("White")
+            else:
+                return _("Yellow")
+        else:         
+            if col.b > 60:
+                return _("Pink")
+            else:
+                return _("Red")
+    else:
+        if col.g > 60:
+            if col.b > 60:
+                return _("Azure")
+            else:
+                return _("Green")
+        else:         
+            if col.b > 60:
+                return _("Blue")
+            else:
+                return _("Black")
+    assert False
     
 
 # vim: ai ts=4 sts=4 et sw=4

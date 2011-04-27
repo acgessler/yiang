@@ -1,0 +1,21 @@
+Welcome to the Instant Ammo Regeneration Machine!
+
+Need fresh ammo to slay those nasty little ASCII dudes, dude? 
+Here we go! You can use this machine thrice if you wish to.
+
+
+
+Press {accept} to accept the deal (-ct {ammo_transplant_dollar_in}! , +10 Ammo) 
+and {escape} to leave. Have a nice day.
+###NEXT###
+Welcome to the Instant Ammo Regeneration Machine!
+
+Need fresh ammo to slay those nasty little ASCII dudes, dude? 
+Here we go!
+
+
+
+However, you don't have enough money. Press {escape} to leave. 
+Have a nice day.
+
+
