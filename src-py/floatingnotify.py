@@ -38,7 +38,8 @@ class FloatingNotification:
         fg = sf.Color(r//4,g//4,b//4,int(0xff*scale))
         bg = sf.Color(r//2,g//2,b//2,int(0xff*scale))
         
-        pos = self.level.ToCameraDeviceCoordinates((self.pos[0]+self.dim[0]/2,self.pos[1]+self.dim[1]/2))
+        pos = list(self.level.ToCameraDeviceCoordinates((self.pos[0]+self.dim[0]/2,self.pos[1]+self.dim[1]/2)))
+        pos[0] = max(240,pos[0])
         bb = pos[0]-200,pos[1]+5,pos[0],pos[1]+19
         shape = sf.Shape()
         shape.AddPoint(bb[0], bb[1],fg,bg )
