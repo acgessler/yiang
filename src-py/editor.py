@@ -3262,14 +3262,14 @@ class EditorMenu(Drawable):
             src.text = self.diff_texts[l]
             
             with open(os.path.join(defaults.config_dir,'diff_machinegen_donot_edit.txt'),'wt') as outp:
-                [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in self.diff_level.items()]
+                [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in sorted(self.diff_level.items(),key=operator.itemgetter(0))]
         
         def NextQA(src,i):
             l = self.qa_level[i] = (self.qa_level[i]+1)%len(self.qa_colors)
             src.bgcolor = self.qa_colors[l]
             
             with open(os.path.join(defaults.config_dir,'qa_machinegen_donot_edit.txt'),'wt') as outp:
-                [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in self.qa_level.items()]
+                [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in sorted(self.qa_level.items(),key=operator.itemgetter(0))]
                     
         def Run(what):
             # (HACK) -- calling defaults.update_derived() (which is done at
