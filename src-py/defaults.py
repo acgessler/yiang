@@ -304,11 +304,33 @@ def merge_config(file):
     print("Processed " + file)
         
 
-
-
-
-
+def GetColorName(col):
+    if col.a == 0:
+        return _("Invisible")
         
+    if col.r > 60:
+        if col.g > 60:
+            if col.b > 60:
+                return _("Gray") if col.r+col.b+col.g!=255*3 else _("White")
+            else:
+                return _("Yellow")
+        else:         
+            if col.b > 60:
+                return _("Pink")
+            else:
+                return _("Red")
+    else:
+        if col.g > 60:
+            if col.b > 60:
+                return _("Azure")
+            else:
+                return _("Green")
+        else:         
+            if col.b > 60:
+                return _("Blue")
+            else:
+                return _("Black")
+    assert False
     
 
 # vim: ai ts=4 sts=4 et sw=4

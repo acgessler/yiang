@@ -42,7 +42,7 @@ class FloatingNotification:
         bg = sf.Color(r//2,g//2,b//2,int(0xff*scale))
         
         pos = self.level.ToCameraDeviceCoordinates(self.pos)
-        bb = pos[0]-200,pos[1]+5,pos[0]-25,pos[1]+19
+        bb = pos[0]-200,pos[1]+5,pos[0],pos[1]+19
         shape = sf.Shape()
         shape.AddPoint(bb[0], bb[1],fg,bg )
         shape.AddPoint(bb[2], bb[1],fg,bg )
@@ -123,7 +123,8 @@ class Door(AnimTile,FloatingNotification):
         AnimTile.Draw(self)
         
         if self.notify and self.player_close and not self.IsWorking():
-            self.DrawNotification(text="Get a red key to open this door",scale=self.pulse_timer.GetElapsedTime())
+            self.DrawNotification(text=_("Get a {0} key to speak to this door").format(defaults.GetColorName(self.color)),
+                scale=self.pulse_timer.GetElapsedTime())
         
     def IsWorking(self):
         return hasattr( self, "during_interact" )
@@ -218,7 +219,7 @@ class BridgeControl(AnimTile,FloatingNotification):
         
         doit = self.notify and cl and not self.moved_once
         if doit:
-            self.DrawNotification(text="Press SPACE to toggle the bridge",scale=1-cl[1]/3)
+            self.DrawNotification(text=_("Press {0} to talk to the bridge").format(KeyMapping.GetString('interact')),scale=1-cl[1]/3)
             
         # highlight the corr. bridge as well
         if self.last_bridge:
@@ -267,37 +268,7 @@ class Key(Tile,InventoryItem):
         return Entity.ENTER
     
     def GetItemName(self):
-    
-        # XXX temporary solution
-        def GetName(col):
-            if col.a == 0:
-                return _("Invisible")
-                
-            if col.r > 60:
-                if col.g > 60:
-                    if col.b > 60:
-                        return _("Gray") if col.r+col.b+col.g!=255*3 else _("White")
-                    else:
-                        return _("Yellow")
-                else:         
-                    if col.b > 60:
-                        return _("Pink")
-                    else:
-                        return _("Red")
-            else:
-                if col.g > 60:
-                    if col.b > 60:
-                        return _("Azure")
-                    else:
-                        return _("Green")
-                else:         
-                    if col.b > 60:
-                        return _("Blue")
-                    else:
-                        return _("Black")
-            assert False
-        
-        return _("{0} key").format(GetName( self.color ))
+        return _("{0} key").format(defaults.GetColorName( self.color ))
     
     
     
