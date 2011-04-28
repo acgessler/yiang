@@ -74,11 +74,12 @@ class Enemy(AnimTile):
     
     firstnames,lastnames=None,None
     
-    def __init__(self,*args,dropshadow=True, dropshadow_color=sf.Color(40,40,40,150),sparkhalo=1,spark_density=0.5,spark_ttl=2.5,**kwargs):
-        AnimTile.__init__(self,*args,dropshadow=dropshadow, dropshadow_color=dropshadow_color,**kwargs)
+    def __init__(self,*args,dropshadow=True, dropshadow_blend_color=sf.Color(40,40,40,150),sparkhalo=1,spark_density=0.5,spark_ttl=2.5,**kwargs):
+        AnimTile.__init__(self,*args,dropshadow=dropshadow,**kwargs)
         self.sparkhalo = sparkhalo
         self.spark_density = spark_density
         self.spark_ttl = spark_ttl
+        self.dropshadow_blend_color = dropshadow_blend_color
 
     def GetVerboseName(self):
         return "an unknown enemy"
@@ -147,6 +148,7 @@ class Enemy(AnimTile):
         # the position member (i.e. all orbiting entities)
         AnimTile.Update(self,time,dtime)
         
+        self.dropshadow_color = defaults.ColorLerp(self.dropshadow_blend_color,self.color,(math.sin(time*10)+1.0)/2)
         if self.sparkhalo == 0:
             return
         
@@ -155,12 +157,14 @@ class Enemy(AnimTile):
         if (oldpos[0]-pos[0])**2+(oldpos[1]-pos[1])**2 > self.spark_density:     
             st = EnemyAnimStub(sparkhalo=self.sparkhalo,ttl=self.spark_ttl)
             st.SetColor(self.color)
-            st.SetPosition((pos[0]+self.dim[0]/2+(random.random()*0.5)-0.25,pos[1]+self.dim[1]/2+(random.random()*0.5)-0.25))
+            st.SetPosition((pos[0]+(oldpos[0]-pos[0])/2+self.dim[0]/2+(random.random()*0.5)-0.25,
+                            pos[1]+(oldpos[1]-pos[1])/2+self.dim[1]/2+(random.random()*0.5)-0.25))
             self.game.AddEntity(st)
             
             oldpos = pos
             
         self.oldpos = oldpos
+        
         
 
 class SmallTraverser(Enemy):
