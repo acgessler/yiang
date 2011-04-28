@@ -95,7 +95,7 @@ class Shot(Tile):
         if (self.pos[0]-oldpos[0])**2 + (self.pos[1]-oldpos[1])**2 > 0.0040:
             st = ShootAnimStub()
             st.SetColor(self.color)
-            st.SetPosition((self.pos[0]+self.dim[0]/2,self.pos[1]))
+            st.SetPosition(self.pos)
             self.game.AddEntity(st)
             
             self.oldpos = self.pos

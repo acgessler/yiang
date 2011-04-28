@@ -32,13 +32,53 @@ from weapon import Shot
 from score import ScoreTileAnimStub
 from player import KillAnimStub,Player
 
+
+class EnemyAnimStub(Tile):
+    """Small light spark as leftovers from moving enemies"""
+
+    def __init__(self,sparkhalo=1,statecount=3,ttl=2.5):
+        self.sparkhalo = sparkhalo
+        self.statecount = statecount
+        self.sparkstate = random.randint(0,self.statecount-1)
+        Tile.__init__(self, "")
+        self.ttl = ttl
+    
+         
+    def _GetHaloImage(self):
+        return Entity._GetHaloImage(self,"enemydrop{0}_{1}.png".format(self.sparkhalo,self.sparkstate+1))  
+    
+    def GetBoundingBox(self):
+        return None
+    
+    def GetBoundingBoxAbs(self):
+        return None  
+
+    def Update(self, time_elapsed, time_delta):
+        Tile.Update(self,time_elapsed,time_delta)
+        if not hasattr(self, "time_start"):
+            self.time_start = time_elapsed
+            return
+
+        tdelta = time_elapsed - self.time_start
+        if tdelta > self.ttl:
+            self.game.RemoveEntity(self)
+            return
+        
+    
+        # fade out, but modulate a high-frequency pulse onto the alpha channel curve
+        self.color = sf.Color(self.color.r,self.color.g,self.color.b,(0xff-int(tdelta*0xff/self.ttl)))
+        
+
 class Enemy(AnimTile):
     """Sentinel base class for all entities"""
     
     firstnames,lastnames=None,None
     
-    def __init__(self,*args,dropshadow=True, dropshadow_color=sf.Color(40,40,40,150),**kwargs):
+    def __init__(self,*args,dropshadow=True, dropshadow_color=sf.Color(40,40,40,150),sparkhalo=1,spark_density=0.5,spark_ttl=2.5,**kwargs):
         AnimTile.__init__(self,*args,dropshadow=dropshadow, dropshadow_color=dropshadow_color,**kwargs)
+        self.sparkhalo = sparkhalo
+        self.spark_density = spark_density
+        self.spark_ttl = spark_ttl
 
     def GetVerboseName(self):
         return "an unknown enemy"
@@ -102,6 +142,26 @@ class Enemy(AnimTile):
             
         return Entity.KILL
     
+    def Update(self,time,dtime,real_pos=None):
+        # (hack) the extra position argument is needed because some deriving classes hack
+        # the position member (i.e. all orbiting entities)
+        AnimTile.Update(self,time,dtime)
+        
+        if self.sparkhalo == 0:
+            return
+        
+        pos = real_pos or self.pos
+        oldpos = getattr(self,'oldpos',pos)
+        if (oldpos[0]-pos[0])**2+(oldpos[1]-pos[1])**2 > self.spark_density:     
+            st = EnemyAnimStub(sparkhalo=self.sparkhalo,ttl=self.spark_ttl)
+            st.SetColor(self.color)
+            st.SetPosition((pos[0]+self.dim[0]/2+(random.random()*0.5)-0.25,pos[1]+self.dim[1]/2+(random.random()*0.5)-0.25))
+            self.game.AddEntity(st)
+            
+            oldpos = pos
+            
+        self.oldpos = oldpos
+        
 
 class SmallTraverser(Enemy):
     """The simplest class of entities, it moves in a certain
@@ -109,7 +169,7 @@ class SmallTraverser(Enemy):
     both horizontal and vertical moves."""
 
     def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default"):
-        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img)
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (1 if direction==Entity.DIR_HOR else 2))
 
         move_speed *= 0.65 # balancing
 
@@ -129,7 +189,7 @@ class SmallTraverser(Enemy):
         return -0.05
 
     def Update(self, time_elapsed, time):
-        AnimTile.Update(self, time_elapsed, time)
+        Enemy.Update(self, time_elapsed, time)
         if not self.game.IsGameRunning():
             return 
             
@@ -256,7 +316,7 @@ class NaughtyPongPong(Enemy):
         return -0.01
 
     def Update(self, time_elapsed, time):
-        AnimTile.Update(self, time_elapsed, time)
+        Enemy.Update(self, time_elapsed, time)
         if not self.game.IsGameRunning():
             return 
         
@@ -317,8 +377,8 @@ class NaughtyPongPong(Enemy):
 class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated
     tile which rotates around its center in a certain distance."""
-    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5):
-        Enemy.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png")
+    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5, spark_density=0.002, spark_ttl=0.15):
+        Enemy.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png", spark_density=spark_density, spark_ttl=spark_ttl)
         
         self.rotate_speed_base = rotate_speed_base * 0.65 # balancing
         self.ofs_vec = [radius,0]
@@ -334,7 +394,7 @@ class RotatingInferno(Enemy):
         Enemy.SetPosition(self,pos)
     
     def Update(self, time_elapsed, time):
-        Enemy.Update(self,time_elapsed, time)
+        Enemy.Update(self,time_elapsed, time,self.real_pos)
         if not self.game.IsGameRunning():
             return 
         
@@ -370,7 +430,7 @@ class SmallBob(Enemy):
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
     def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.2, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.0, accel_time=3.0):
-        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=None)
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=None,sparkhalo=0)
         self._ShrinkBB(shrinkbb)
         self.hits = self.hits_needed = 4
         self.vel = self.last = random.choice((-1, 1)) 
@@ -401,7 +461,7 @@ class SmallBob(Enemy):
         return Entity.KILL
 
     def Update(self, time_elapsed, time):
-        AnimTile.Update(self, time_elapsed, time)
+        Enemy.Update(self, time_elapsed, time)
         if not self.game.IsGameRunning():
             return 
             
@@ -479,7 +539,7 @@ from weapon import Weapon
 class SmallRobot(SmallTraverser):
     
     def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, verbose=_("a Nifty Robot Intruder"), **kwargs):
-        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None, **kwargs)
+        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None,sparkhalo=0, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
         self.shots = shots
@@ -528,7 +588,7 @@ class SmallRobot(SmallTraverser):
 class Turret(Enemy):
     
     def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=((0.3,0.55),(0.6,0.55)), angle_limit=55, distance_limit=5, shot_speed=20, **kwargs):
-        Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, **kwargs)
+        Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, sparkhalo=0, **kwargs)
         self.weapon = Weapon(speed=shot_speed)
         self.cooldown_time = cooldown_time
         self.shots = shots
