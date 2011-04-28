@@ -519,7 +519,7 @@ class SmallRobot(SmallTraverser):
             
         if id < self.shots and id > self.last_shot:
             self.weapon.Shoot((self.pos[0]+self.dim[0]*0.5,self.pos[1]+self.shot_ofs_y),
-                (self.vel/abs(self.vel),0),
+                (self.vel/abs(self.vel),random.random()/20),
                 self.color,[self])
             self.last_shot = id
             
@@ -581,7 +581,7 @@ class Turret(Enemy):
         if id < self.shots and id > self.last_shot:
             dir = (1.0,0)
             if player:
-                dir = (ppos[0]-pos[0],ppos[1]-pos[1])
+                dir = (ppos[0]-pos[0],(ppos[1]-pos[1])*(1+(random.random()-1)/4))
                 dl  = (dir[0]**2 + dir[1]**2) **0.5
                 dir = (dir[0]/dl,dir[1]/dl)
                 

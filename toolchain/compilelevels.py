@@ -61,7 +61,7 @@ def include_tile(name):
 
 def clear_folder(folder):
     for the_file in os.listdir(folder):
-        if the_file == 'dummy.txt':
+        if the_file in ( 'dummy.txt', '$build' ):
             continue
         
         file_path = os.path.join(folder, the_file)

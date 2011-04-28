@@ -70,6 +70,8 @@ class Entity(Drawable):
             "default":gen_halo_default
     }
     
+    center = property((lambda self:(self.pos[0]+self.dim[0]/2,self.pos[1]+self.dim[1]/2)))
+    
     def __init__(self):
         Drawable.__init__(self)
         self.pos = Entity.DEFAULT_POS
