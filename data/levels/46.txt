@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('SimpleOne'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=5,bgimg=-1,scroll=14,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('SimpleOne'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=5,scroll=14,lower_offset=0.0)
 _B6.  _B6
 _B6.  _B6
 _B6.  _B6
@@ -6,8 +6,8 @@ _B6.  _B6
 _B6.  _B6
 _B6_PL_B6yKE
 _B6.  _B6_A1_A2
-_B6BDK_B6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  bDK
-_B6.  _B6.  .  .  .  .  .  .  .  .  .  .  BBU
+_B6.  _B6
+_B6.  _B6
 _B6.  _B6_A1_A0_A2
 _B6.  _B6
 _B6.  _B6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gD7
@@ -18,7 +18,7 @@ _B6.  _B6_A1_A0_A2.  .  .  .  _B6
 _B6.  _B6.  .  .  .  .  .  .  yDO.  _S3.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A2
 _B6.  _B6.  .  .  .  .  .  .  .  .  _S3
 _B6.  _B6.  .  _A1_A0_A0_A0_A0_A0_A0_A2.  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A2
-_B6.  _B6.  .  .  .  .  .  .  .  .  _A6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B6.  .  .  .  .  .  _AD
+_B6.  _B6.  .  .  .  .  .  .  .  .  _A6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AD
 _B6.  _B6.  .  .  .  .  .  .  .  .  _AD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _D3.  .  .  .  .  .  _AD.  .  .  .  .  .  .  .  .  .  .  .  _A1_A2
 _B6.  _B6_A1_A0_A2.  .  .  .  .  .  _AD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AD
 _B6.  .  .  .  .  .  .  .  .  .  .  _AD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _D3_S5.  .  .  .  .  _AD.  _A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2
@@ -28,10 +28,10 @@ _B6_A1_A0_A0_A0_A0_A0_A0_A0_A0_A0_A2.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A
 
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A1_A0_A0_A0_A0_A0_A2
 
-rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE.  .  rDE
 
 
-rAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAFrAF
+
+
 
 
 iDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDAiDA
