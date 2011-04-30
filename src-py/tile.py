@@ -721,7 +721,7 @@ class TileLoader:
             replace = {
                     "<out>"  : "entity",
                     "<raw>"  : 'r"""'+lines[1].rstrip().replace('\"\"\"',
-                        '\"\"\" + \'\"\"\"\' + \"\"\"') +' """',
+                        '\"\"\" + \'\"\"\"\' + \"\"\"').replace('\\\n','\x5c \n') +' """',
                     "<game>" : "game"
             }
 
