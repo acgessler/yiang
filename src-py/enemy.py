@@ -172,8 +172,8 @@ class SmallTraverser(Enemy):
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),sparkhalo=None,shrinkbb=0.65,halo_img="default"):
-        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (sparkhalo if sparkhalo is not None else (1 if direction==Entity.DIR_HOR else 2)))
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default",sparkhalo = False):
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (sparkhalo if sparkhalo == True else (1 if direction==Entity.DIR_HOR else 2))) 
 
         move_speed *= 0.65 # balancing
 
@@ -542,8 +542,8 @@ class SmallBob(Enemy):
 from weapon import Weapon
 class SmallRobot(SmallTraverser):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, verbose=_("a Nifty Robot Intruder"), sparkhalo=0, **kwargs):
-        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None, sparkhalo=sparkhalo, **kwargs)
+    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, verbose=_("a Nifty Robot Intruder"), **kwargs):
+        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None,sparkhalo=0, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
         self.shots = shots
