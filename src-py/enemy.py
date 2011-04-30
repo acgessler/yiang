@@ -172,8 +172,8 @@ class SmallTraverser(Enemy):
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default"):
-        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (1 if direction==Entity.DIR_HOR else 2))
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),shrinkbb=0.65,halo_img="default",sparkhalo = False):
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (sparkhalo if sparkhalo == True else (1 if direction==Entity.DIR_HOR else 2))) 
 
         move_speed *= 0.65 # balancing
 
