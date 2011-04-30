@@ -1,9 +1,9 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=25)
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,7,1,1.0,2,halo_img=None,next_level=25)
   I========H==I
- I             I
+ I Red or Blue I
 I===============I
- M     ____    M
- M     |. |    M
+ M ___ ____    M
+ M |_| |. |    M
  M     |  |    M
  TTTTTTTTTTTTTTT
 
@@ -11,7 +11,7 @@ I===============I
   I========H==I
  I     DONE    I
 I===============I
- M     ____    M
- M     | /|    M
+ M ___ ____    M
+ M |_| | /|    M
  M     ||.|    M
  TTTTTTT|/TTTTTT

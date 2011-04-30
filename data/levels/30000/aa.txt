@@ -1,17 +1,19 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=14)
-  I========H==I
- I             I
-I===============I
- M     ____    M
- M     |. |    M
- M     |  |    M
- TTTTTTTTTTTTTTT
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,8,1,1.0,2,halo_img=None,next_level=14)
+     i´
+  XXXXXXX
+ XX()x()XX
+XXXXXXXXXXX
+XXXVVVVVXXX
+XXX     XXX
+ XXAAAAAXX
+  XXXXXXX
 
 
-  I========H==I
- I     DONE    I
-I===============I
- M     ____    M
- M     | /|    M
- M     ||.|    M
- TTTTTTT|/TTTTTT
+     i´
+  XXXXXXX
+ XX()x()XX
+XXXXXXXXXXX
+XXX-___-XXX
+XXX\___/XXX
+ XXAAAAAXX
+  XXXXXXX

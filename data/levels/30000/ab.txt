@@ -1,6 +1,6 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=17)
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,7,1,1.0,2,halo_img=None,next_level=17)
   I========H==I
- I             I
+ IE<3LIFE<3LIFEI
 I===============I
  M     ____    M
  M     |. |    M
