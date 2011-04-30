@@ -334,10 +334,7 @@ def GetColorName(col):
                 return _("Black")
     assert False
     
-    
-import sf
-def ColorLerp(a,b,t):
-    return sf.Color(int(a.r+(b.r-a.r)*t),int(a.g+(b.g-a.g)*t),int(a.b+(b.b-a.b)*t),int(a.a+(b.a-a.a)*t))
+
     
 
 # vim: ai ts=4 sts=4 et sw=4

@@ -33,6 +33,10 @@ from score import ScoreTileAnimStub
 from player import KillAnimStub,Player
 
 
+def ColorLerp(a,b,t):
+    return sf.Color(int(a.r+(b.r-a.r)*t),int(a.g+(b.g-a.g)*t),int(a.b+(b.b-a.b)*t),int(a.a+(b.a-a.a)*t))
+
+
 class EnemyAnimStub(Tile):
     """Small light spark as leftovers from moving enemies"""
 
@@ -148,7 +152,7 @@ class Enemy(AnimTile):
         # the position member (i.e. all orbiting entities)
         AnimTile.Update(self,time,dtime)
         
-        self.dropshadow_color = defaults.ColorLerp(self.dropshadow_blend_color,self.color,(math.sin(time*10)+1.0)/2)
+        self.dropshadow_color = ColorLerp(self.dropshadow_blend_color,self.color,(math.sin(time*10)+1.0)/2)
         if self.sparkhalo == 0:
             return
         
