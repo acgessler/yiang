@@ -305,7 +305,7 @@ class NaughtyPongPong(Enemy):
     jump on its top ..)"""
 
     def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong (NPP)"),shrinkbb=0.55,killable=True):
-        Enemy.__init__(self, text, height, frames, speed, 2)
+        Enemy.__init__(self, text, height, frames, speed, 2, sparkhalo=2)
 
         self.verbose = verbose
         #self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
