@@ -76,12 +76,13 @@ class Enemy(AnimTile):
     
     firstnames,lastnames=None,None
     
-    def __init__(self,*args,dropshadow=True, dropshadow_blend_color=sf.Color(40,40,40,150),sparkhalo=1,spark_density=0.5,spark_ttl=2.5,**kwargs):
+    def __init__(self,*args,dropshadow=True, dropshadow_blend_color=sf.Color(40,40,40,150),sparkhalo=1,spark_density=0.5,spark_ttl=2.5,no_flash=False, **kwargs):
         AnimTile.__init__(self,*args,dropshadow=dropshadow,**kwargs)
         self.sparkhalo = sparkhalo
         self.spark_density = spark_density
         self.spark_ttl = spark_ttl
-        self.dropshadow_blend_color = dropshadow_blend_color
+        self.dropshadow_color = self.dropshadow_blend_color = dropshadow_blend_color
+        self.no_flash = no_flash
 
     def GetVerboseName(self):
         return "an unknown enemy"
@@ -150,7 +151,8 @@ class Enemy(AnimTile):
         # the position member (i.e. all orbiting entities)
         AnimTile.Update(self,time,dtime)
         
-        self.dropshadow_color = ColorLerp(self.dropshadow_blend_color,self.color,(math.sin(time*10)+1.0)/2)
+        if not self.no_flash:
+            self.dropshadow_color = ColorLerp(self.dropshadow_blend_color,self.color,(math.sin(time*10)+1.0)/2)
         if self.sparkhalo == 0:
             return
         
@@ -174,8 +176,8 @@ class SmallTraverser(Enemy):
     range and kills the player immediately. The class supports
     both horizontal and vertical moves."""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),sparkhalo=None,shrinkbb=0.65,halo_img="default"):
-        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (sparkhalo if sparkhalo is not None else (1 if direction==Entity.DIR_HOR else 2)))
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, direction=Entity.DIR_HOR, verbose=_("a Harmful Traverser Unit (HTU)"),sparkhalo=None,shrinkbb=0.5,halo_img="default",**kwargs):
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=halo_img, sparkhalo = (sparkhalo if sparkhalo is not None else (1 if direction==Entity.DIR_HOR else 2)),**kwargs)
 
         move_speed *= 0.65 # balancing
 
@@ -302,8 +304,8 @@ class NaughtyPongPong(Enemy):
     a few moments. Can be killed only by Mario-style (
     jump on its top ..)"""
 
-    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong (NPP)"),shrinkbb=0.55,killable=True):
-        Enemy.__init__(self, text, height, frames, speed, 2, sparkhalo=2)
+    def __init__(self, text, height, frames, speed=1.0, move_speed=3, randomdir=True, verbose=_("a Naughty Pong Pong "),shrinkbb=0.55,killable=True,sparkhalo=0,**kwargs):
+        Enemy.__init__(self, text, height, frames, speed, 2, sparkhalo=sparkhalo,**kwargs)
 
         self.verbose = verbose
         #self.vel = (move_speed * random.choice((-1, 1))) if randomdir is True else 1
@@ -383,8 +385,8 @@ class NaughtyPongPong(Enemy):
 class RotatingInferno(Enemy):
     """The RotatingInfero class of entities is simply an animated
     tile which rotates around its center in a certain distance."""
-    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5, spark_density=0.002, spark_ttl=0.15):
-        Enemy.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png", spark_density=spark_density, spark_ttl=spark_ttl)
+    def __init__(self, text, height, frames, speed=1.0, rotate_speed_base = 0.2, radius = 3.5, sparkhalo=0, no_flash=True, **kwargs):
+        Enemy.__init__(self, text, height, frames, speed, 1, halo_img="halo_rotating_inferno.png", sparkhalo=sparkhalo, no_flash=no_flash, **kwargs)
         
         self.rotate_speed_base = rotate_speed_base * 0.65 # balancing
         self.ofs_vec = [radius,0]
@@ -435,8 +437,8 @@ class SmallBob(Enemy):
     """This guy is not actually friendly, but he's much less a danger
     as his older (and bigger) brothers are. He does not shoot, for
     example."""
-    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.2, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.0, accel_time=3.0):
-        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=None,sparkhalo=0)
+    def __init__(self, text, height, frames, speed=1.0, move_speed_base = 1.2, shrinkbb=0.8,trigger_distance=22, trigger_speed_scale=4.0, accel_time=3.0, no_flash=True):
+        Enemy.__init__(self, text, height, frames, speed, 2, halo_img=None,sparkhalo=0,no_flash=no_flash)
         self._ShrinkBB(shrinkbb)
         self.hits = self.hits_needed = 4
         self.vel = self.last = random.choice((-1, 1)) 
@@ -544,8 +546,8 @@ class SmallBob(Enemy):
 from weapon import Weapon
 class SmallRobot(SmallTraverser):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, verbose=_("a Nifty Robot Intruder"), sparkhalo=0, **kwargs):
-        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None, sparkhalo=sparkhalo, **kwargs)
+    def __init__(self, *args, speed=0.5, cooldown_time=5, shot_delta=0.25, shots=4, shot_ofs_y=0.55, verbose=_("a Nifty Robot Intruder"), sparkhalo=0, no_flash=True, **kwargs):
+        SmallTraverser.__init__(self, *args, verbose=verbose, halo_img=None, sparkhalo=sparkhalo,no_flash=no_flash, **kwargs)
         self.weapon = Weapon()
         self.cooldown_time = cooldown_time
         self.shots = shots
@@ -593,8 +595,8 @@ class SmallRobot(SmallTraverser):
 
 class Turret(Enemy):
     
-    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=((0.3,0.55),(0.6,0.55)), angle_limit=55, distance_limit=5, shot_speed=20, **kwargs):
-        Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, sparkhalo=0, **kwargs)
+    def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=((0.3,0.55),(0.6,0.55)), angle_limit=55, distance_limit=5, shot_speed=20, no_flash=True, **kwargs):
+        Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, sparkhalo=0, no_flash=no_flash, **kwargs)
         self.weapon = Weapon(speed=shot_speed)
         self.cooldown_time = cooldown_time
         self.shots = shots
