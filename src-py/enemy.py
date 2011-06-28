@@ -47,7 +47,6 @@ class EnemyAnimStub(Tile):
         Tile.__init__(self, "")
         self.ttl = ttl
     
-         
     def _GetHaloImage(self):
         return Entity._GetHaloImage(self,"enemydrop{0}_{1}.png".format(self.sparkhalo,self.sparkstate+1))  
     
@@ -68,7 +67,6 @@ class EnemyAnimStub(Tile):
             self.game.RemoveEntity(self)
             return
         
-    
         # fade out, but modulate a high-frequency pulse onto the alpha channel curve
         self.color = sf.Color(self.color.r,self.color.g,self.color.b,(0xff-int(tdelta*0xff/self.ttl)))
         

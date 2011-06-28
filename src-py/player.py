@@ -944,7 +944,8 @@ class KillAnimStub(Tile):
         Tile.__init__(self, random.choice(text.split("\n\n")) if random.random() > 0.95 else "",
             draworder=11000,
             rsize=random.randint(6,16),
-            dropshadow=True)
+            dropshadow=True,
+            permute=False)
 
         self.ttl = 0
         
@@ -1014,7 +1015,7 @@ class InventoryChangeAnimStub(Tile):
     the player adds or removes an item from the inventory."""
 
     def __init__(self,text,pos,speed=1.0,color=sf.Color.Green,rsize=None):
-        Tile.__init__(self,text,draworder=11002,rsize=rsize)
+        Tile.__init__(self,text,draworder=11002,rsize=rsize,permute=False)
         
         self.SetPosition( pos )
         self.speed = speed

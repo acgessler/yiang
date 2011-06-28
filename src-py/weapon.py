@@ -29,7 +29,7 @@ class ShootAnimStub(Tile):
     the player is killed."""
 
     def __init__(self,ttl=0.5):
-        Tile.__init__(self, "")
+        Tile.__init__(self, "", permute=False)
 
         self.ttl = ttl
          
@@ -127,7 +127,7 @@ class Weapon(InventoryItem, Tile):
     they are not responsible for drawing the actual weapons"""
     
     def __init__(self, text="", width=Tile.AUTO,height = Tile.AUTO,shot_tile="shot1.txt",speed=10.0,halo_img=None):
-        Tile.__init__(self,text,width,height,halo_img=halo_img)
+        Tile.__init__(self,text,width,height,halo_img=halo_img,permute=False)
         InventoryItem.__init__(self)
         self.shot_tile= shot_tile
         self.speed= speed

@@ -41,6 +41,7 @@ Bossgegner??
 Partikeleffekte
 Postfx-OnOff-Tiles
 Animationen Spieler
+Stats-Shirm beim Verlassen eines Levels
 
 Nebentasks
 ==========

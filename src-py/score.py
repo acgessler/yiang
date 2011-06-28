@@ -71,7 +71,7 @@ class ScoreTileAnimStub(Tile):
     the player triggers a score item."""
 
     def __init__(self,text,pos,speed):
-        Tile.__init__(self,text,draworder=11001)
+        Tile.__init__(self,text,draworder=11001,permute=False)
         
         self.SetPosition( pos )
         self.speed = speed
