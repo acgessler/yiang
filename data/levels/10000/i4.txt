@@ -1,4 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_5",text_color=sf.Color.Black,only_once=True)
-You want to open this door?
-
-You need to have a key in the same colour as the door to be able to open it.Go back and search for a yellow key. You will find it at a very corner of this level!
+This is a door and to open a door one needs ... a key, genius. Go find one and REMEMBER NOT TO TOUCH THE FAT GUY.

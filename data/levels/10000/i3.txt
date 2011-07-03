@@ -1,4 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_3",text_color=sf.Color.Black,only_once=True)
-Welcome to the ASCII zoo, this is a cage full of enemies that will make you life much more difficult on this planet!Watch them close in order to see their special attacks!
-
-Note: In future they might not be caged again.
+Have a look at this beautiful guy down there. Just avoid getting into closer contact.

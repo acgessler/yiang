@@ -1,6 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_9",text_color=sf.Color.Black,only_once=True)
-Again a matter of colour in this game:
-Now you are painted white; if you fall into these DANGER barrels you will die. That's the normal procedure with these barrels - right i said normal; like every rule has its exception this one too:
-
-if you are coloured in the same colour as the DANGER tiles you can -magically- walk ontop of them wihtout getting hurt!
-Test it - now!
+There's another thing about color. At this point, you are white. Now walk into those flashing DANGER barrels and see what happens. After you respawn, use your brain to advance.

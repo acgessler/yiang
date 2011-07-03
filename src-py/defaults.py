@@ -38,7 +38,7 @@ import os
 version = 2.0
 revision = 607
 server_name = "www.yiang-thegame.com"
-master_locale="de"
+master_locale="en"
 allow_network_use=False
 resolution = [1280, 850]
 fullscreen = False

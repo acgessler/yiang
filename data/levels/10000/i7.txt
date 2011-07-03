@@ -1,4 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_8",text_color=sf.Color.Black,only_once=True)
-Kill'em'all? Fine, now go and search for the corresponding key.
-
-Tip: It is not as far as you think it is!
+To clarify: if you have a particular color, you can shoot only enemies of the same color (unless they are immortal, shit happens). 

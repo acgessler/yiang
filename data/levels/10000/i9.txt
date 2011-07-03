@@ -1,6 +1,4 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_10",text_color=sf.Color.Black,only_once=True)
-another exception to the rule:
+Now keep your eyes open and find out how to get through this last obstacle. Hint: just watch it for a while and be enlightened.
 
-Some of these DANGERS are special, you can walk through them!
-Watch carefully and then Jump with this MEGA JUMP into the finish of this Tutorial!
-Because you mastered this level you will get an achievement as a reward!
+Afterwards, advance to the exit gate and go fetch your achievement.

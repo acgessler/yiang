@@ -1,7 +1,9 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_0",text_color=sf.Color.Black,only_once=True)
-Hello and welcome to THE tutorial! You are probably used to these boring video game opening tutorials and may tend to get annoyed as soon as the word 'tutorial' shows up. Be aware, however, that this tutorial is a bit special. If you play through me, you will get a special item which might be worth the effort.
+Wanderer! 
 
-If you're still with me, use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump. Try to reach the next tutorial block (it is invisible and I hope you won't experience severe difficulties at finding it). If this keyboard setup doesn't suit your preferred key pattern, edit ./config/key_bindings.txt. 
+You are probably used to boring video game opening tutorials. Be aware, however, that this tutorial is a bit special because it gives you the unique chance of earning an achievement solely for completing it. 
 
-See you later. Hit {enter} or {accept} to continue!
+Use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump (if this keyboard setup doesn't suit your preferred key pattern, edit ./config/key_bindings.txt). 
+
+Hit {enter} or {accept} to accept the challenge (no, you don't have a choice).
 

@@ -1,4 +1,3 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_1",text_color=sf.Color.Black,only_once=True)
-So you made your first steps in the new ASCII world, now try this teleporter to get up there again!
+The yellow brick right in front of you is a teleporter. Touch it to get teleported to .... uhm, you'll find that out for yourself.
 
-Teleporters are linked through their colour, every "Sender" will send to the nearest "Receiver" with the same colour!

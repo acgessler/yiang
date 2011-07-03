@@ -1,6 +1,4 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_2",text_color=sf.Color.Black,only_once=True)
-Managed to jump over the teleporter? Nice, so let's go on..
+Congratulations. How many tries did you need?
 
-The following thingy works like a valve, it lets you pass through only into one direction!
-
-Test it before jumping into this accelerator! 
+To provide some theoretical background: as almost everything on this planet, teleporters have a color and a teleporter entrance will always teleport you to the closest receiver of the same color. Note that, according to quantum mechanics, there is a slight possibility of you failing to re-appear at the intended location but I seriously wouldn't worry about this. 

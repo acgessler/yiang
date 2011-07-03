@@ -1,4 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_6",text_color=sf.Color.Black,only_once=True)
-To get over this small gap, hit {interact} to use this switch. It can control a small bridge, but only if it has the same colour. Colours are essential in this game, you saw two examples but you will see more!
-
-If you want to jump over the gap without the bridge go and try it. Do not worry if you fail you will be teleported up here again.
+Just keep walking but try not to follow any useful advice because you surely don't want to miss the experience of being burnt alive (which is exactly what will happen if you should fail to enable the bridge).
