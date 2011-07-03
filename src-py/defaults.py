@@ -90,6 +90,7 @@ pain_sprites_player = 10
 min_pain_sprites_player = 2
 max_useless_sprites = 2000
 max_framerate_for_sprites = 30
+initial_speed_scale = 0.8
 
 framerate_limit = 60
 min_respawn_distance = 2.0
