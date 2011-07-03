@@ -82,6 +82,10 @@ void LoadSettings(std::map<std::wstring,std::wstring>& settings)
 	}
 }
 
+#define RES_LARGE   L"[1600,900]"
+#define RES_MEDIUM  L"[1378,775]"
+#define RES_SMALL   L"[900,506]"
+
 // ------------------------------------------------------------------------------------
 INT_PTR CALLBACK DialogProc(
   __in  HWND hwndDlg,
@@ -106,13 +110,13 @@ INT_PTR CALLBACK DialogProc(
 			CheckDlgButton(hwndDlg,IDC_FS,BST_CHECKED);	
 		}
 		else {
-			if( props[L"resolution"]== L"[1024,768]" ) {
+			if( props[L"resolution"]== RES_SMALL ) {
 				CheckDlgButton(hwndDlg,IDC_WND1024,BST_CHECKED);	
 			} 
-			else if( props[L"resolution"]== L"[1280,1024]" ) {
+			else if( props[L"resolution"]== RES_MEDIUM ) {
 				CheckDlgButton(hwndDlg,IDC_WND1280,BST_CHECKED);	
 			} 
-			else { // if( props[L"resolution"]== L"[1024,768]" ) {
+			else {
 				CheckDlgButton(hwndDlg,IDC_WND1200,BST_CHECKED);	
 			} 
 		}
@@ -150,19 +154,19 @@ INT_PTR CALLBACK DialogProc(
 			break;
 		case IDC_WND1024:
 			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_WND1024) == BST_CHECKED) {
-				props[L"resolution"] = L"[1024,768]";
+				props[L"resolution"] = RES_SMALL;
 				props[L"fullscreen"] = L"False";
 			}
 			break;
 		case IDC_WND1200:
 			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_WND1200) == BST_CHECKED) {
-				props[L"resolution"] = L"[1200,750]";
+				props[L"resolution"] = RES_LARGE;
 				props[L"fullscreen"] = L"False";
 			}
 			break;
 		case IDC_WND1280:
 			if (HIWORD(wParam) == BN_CLICKED && IsDlgButtonChecked(hwndDlg,IDC_WND1280) == BST_CHECKED) {
-				props[L"resolution"] = L"[1280,1024]";
+				props[L"resolution"] = RES_MEDIUM;
 				props[L"fullscreen"] = L"False";
 			}
 			break;
