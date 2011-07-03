@@ -1,0 +1,12 @@
+
+push files (expand editor.exe)
+push files (expand game.exe)
+push files (expand Python31.zip)
+
+group wc *.dll
+	push files ~
+end
+
+group wc *.pyd
+	push files ~
+end

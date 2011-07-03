@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;"
+				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;PYSFML_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,10 +64,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="python31.lib opengl32.lib"
+				AdditionalDependencies="opengl32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\contrib\python\lib\x86;&quot;..\contrib\SFML-1.6\lib\vc2008&quot;"
-				IgnoreDefaultLibraryNames="python31_d.lib"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -92,6 +92,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(TargetPath) ..\DEBUG-bin-x86-windows"
 			/>
 		</Configuration>
 		<Configuration

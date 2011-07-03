@@ -66,7 +66,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\contrib\python\lib\x86;&quot;..\contrib\SFML-1.6\lib\vc2008&quot;"
+				AdditionalLibraryDirectories="..\contrib\python\lib\x86;&quot;..\contrib\SFML-1.6\lib\vc2008&quot;;..\vc9\Debug"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -94,7 +94,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) ..\bin-x86-windows"
+				CommandLine="copy $(TargetPath) ..\DEBUG-bin-x86-windows"
 			/>
 		</Configuration>
 		<Configuration

@@ -1,0 +1,43 @@
+t2000: No archives found, filesystem remains unchanged
+t2000: Startup ...
+t2000: Loading key bindings from ..\config\key_bindings.txt
+t2000: ..\config\key_bindings.txt:4: Remap move-left action to Left key
+t2000: ..\config\key_bindings.txt:5: Remap move-right action to Right key
+t2000: ..\config\key_bindings.txt:6: Remap move-up action to Up key
+t2000: ..\config\key_bindings.txt:7: Remap move-down action to Down key
+t2000: ..\config\key_bindings.txt:8: Remap menu-up action to Up key
+t2000: ..\config\key_bindings.txt:9: Remap menu-down action to Down key
+t2000: ..\config\key_bindings.txt:10: Remap menu-left action to Left key
+t2000: ..\config\key_bindings.txt:11: Remap menu-right action to Right key
+t2000: ..\config\key_bindings.txt:12: Remap debug-godmode action to X key
+t2000: ..\config\key_bindings.txt:13: Remap debug-showbb action to B key
+t2000: ..\config\key_bindings.txt:14: Remap debug-showinfo action to D key
+t2000: ..\config\key_bindings.txt:15: Remap debug-allowup action to G key
+t2000: ..\config\key_bindings.txt:16: Remap debug-gameover action to Q key
+t2000: ..\config\key_bindings.txt:17: Remap level-new action to N key
+t2000: ..\config\key_bindings.txt:18: Remap debug-kill action to K key
+t2000: ..\config\key_bindings.txt:19: Remap escape action to Escape key
+t2000: ..\config\key_bindings.txt:20: Remap accept action to Return key
+t2000: ..\config\key_bindings.txt:21: Remap interact action to Space key
+t2000: Set user profile folder: ..\userdata\Wurzelgnom
+t2000: Creating window ...
+t2000: Running: Windows-post2008Server-6.1.7601-SP1, x86, 32bit
+t2000: Loading texture ..\data\icon\YIANG.png
+t2000: Updating derived settings ...
+t2000: ------------------------------------------------------------
+t2000: Highscore record is 13.56324624
+t2000: All achievements: ['teleport', 'have_all', 'money_2', 'money_3', 'campaign', 'headbanger', 'levels_1', 'time_2', 'money_1', 'pure_champ', 'time_3', 'kill_2', 'kill_3', 'donor', 'kill_1', 'levels_3', 'voracious', 'levels_2', 'tutorial', 'time_1']
+t2000: Current achievements: ['tutorial']
+t2000: Got 6 sections with totally 19 pieces from playlist.cfg
+t2000: Caching sound logo.ogg [..\data\sounds\logo.ogg,music: True]
+t2000: Set audio section: menu
+t2000: Loading postfx blur_x.sfx / environment: (('ENABLE_DITHER',),)
+t2000: Set auto parameter updater: framebuffer -> texture
+t2000: Loading postfx blur_y.sfx / environment: (('ENABLE_DITHER',),)
+t2000: Set auto parameter updater: framebuffer -> texture
+t2000: Loading postfx fade.sfx / environment: (('ENABLE_DITHER',),)
+t2000: Set auto parameter updater: framebuffer -> texture
+t2000: Loading font ..\data\fonts\VeraMoBd.ttf / 13
+t2000: Loading postfx intro.sfx / environment: (('ENABLE_DITHER',),)
+t2000: Set auto parameter updater: framebuffer -> texture
+t2000: Loading texture ..\data\textures\title_small.png

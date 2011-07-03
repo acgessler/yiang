@@ -18,11 +18,18 @@
 
 #include <Windows.h>
 
+#ifndef NDEBUG
+#pragma comment (lib, "sfml-graphics-d.lib")
+#pragma comment (lib, "sfml-window-d.lib")
+#pragma comment (lib, "sfml-audio-d.lib")
+#pragma comment (lib, "sfml-system-d.lib")
+#else
 // SFML libs
 #pragma comment (lib, "sfml-graphics.lib")
 #pragma comment (lib, "sfml-window.lib")
 #pragma comment (lib, "sfml-audio.lib")
 #pragma comment (lib, "sfml-system.lib")
+#endif
 
 // fixup code for some missing SFML symbols
 #include "fixers.h"

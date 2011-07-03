@@ -107,7 +107,7 @@ void CustomString::SetStyle(unsigned long TextStyle)
         myStyle = TextStyle;
     }
 
-	assert(myStyle & );
+//	assert(myStyle & );
 }
 
 
