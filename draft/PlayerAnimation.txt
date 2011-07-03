@@ -1,12 +1,36 @@
-from player import Player; <out> = Player(<raw>,5,6,1)
+#idle animation  eventuell mit sound effekt, steppen der figur passend zum takt :)
 
-#Laufen nach rechts, Dauerschleife
-  ____
-o|'O.O|o
+#Idle animation :) nach rechts abwechselnd mit links, so ca alle 8 frames
+ ======
+d|'O.O|b
  |___-|
   /  \ 
- o____o 
+ o____O 
  _|  |_
+
+ ======
+d|'O.O|b
+ |___-|
+  /  \ 
+ O____O 
+ _|  |/
+
+#Idle animation :) nach links abwechselnd mit rechts, so ca alle 8 frames
+
+ ====== 
+d|O.O'|b
+ |-___| 
+  /  \  
+ O____o 
+ _|  |_ 
+        
+ ====== 
+d|O.O'|b
+ |-___| 
+  /  \  
+ O____O 
+ \|  |_ 
+        
 
 
 #Laufen nach rechts, Dauerschleife
@@ -195,31 +219,156 @@ o°___|
  |__O_J
   ,/ \_
 
-
   ____
-o|'O.O|o
+ |M  O\
  |___-|
-o_/  \_o
-  |__|
- _|  |_
+  / |\ 
+ |__O_J
+   ||_
+
+#Hüpf animation nach links
+  ____  
+ /O  M| 
+ |-___| 
+  /| \  
+ G_O__| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |-___| 
+  // \  
+ GO___| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |-___| 
+  O- \  
+ G____| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |O___| 
+  /\ \  
+ G____| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |-O__| 
+  /| \  
+ G____| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |O___| 
+  /\ \  
+ G____| 
+  _//   
+        
+  ____  
+ /O  M| 
+ |-___| 
+ /O- \  
+ G____| 
+ GG     
+        
+  ____  
+ /O  M| 
+ |-___| 
+  // \  
+ GO___| 
+ GG     
+        
+  ____  
+ /O  M| 
+ |-___| 
+  /| \  
+ G_O__| 
+  _//   
+        
+  ____  
+ /O  M| 
+ |-___| 
+  /| \  
+ G_O__| 
+  _||   
+
+#wenn animation zuende: dauerschleife von folgendem (etwas langsamer als huepf animation, jedoch schneller als laufanimation)        
+  ____  
+ /O  M| 
+ |-___| 
+  /\ \  
+ G__O_| 
+ _/ \,  
+        
+  ____  
+ /O  M| 
+ |-___| 
+  / -o  
+ G____| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |-_o_| 
+  // \  
+ G____| 
+  _X,   
+        
+  ____  
+ /O  M| 
+ |-o__| 
+  /| \  
+ G____| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |O___| 
+  /\ \  
+ G____| 
+ _/ \,  
+        
+  ____  
+ /O  M| 
+ |-___| 
+ /O- \  
+ G____| 
+  _||   
+        
+  ____  
+ /O  M| 
+ |-___| 
+  // \  
+ GO___| 
+  _X,   
+        
+  ____  
+ /O  M| 
+ |-___| 
+  /| \  
+ G_O__| 
+ _/ \,  
+        
+  ____  
+ /O  M| 
+ |-___| 
+  /| \  
+ G_O__| 
+  _||   
+
+
   ____
 o|'x.O|o
  |___-|
    /P===X
  o_H_
  _|  |_
-  ____
-o|O.O'|o
- |-___|
-  /  \ 
- o____o 
- _|  |_
-  ____
-o|O.O'|o
- |-___|
-o_/  \_o
-  |__|
- _|  |_
+
   ____
 o|O.X'|o
  |-___|

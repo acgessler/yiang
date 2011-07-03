@@ -1,0 +1,28 @@
+from tile import AnimTile;<out> = AnimTile(<raw>,6,4,0.8,permute=False)
+  ____
+ |M  O\
+ |___-|
+  / I\ 
+ |___°o 
+ ,/  \_
+
+  ____
+ |M  O\
+ |___-|
+  / I\ 
+ |___°o 
+   ||_
+
+  ____
+ |M  O\
+ |___-|
+  / I\ 
+ |___°o 
+   ,X_  
+
+  ____
+ |M  O\
+ |___-|
+  / I\ 
+ |___°o 
+   ||_

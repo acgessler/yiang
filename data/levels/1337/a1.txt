@@ -1,0 +1,14 @@
+from tile import AnimTile;<out> = AnimTile(<raw>,6,2,1,permute=False)
+ ======
+d|'O.O|b
+ |___-|
+  /  \ 
+ o____O 
+ _|  |_
+
+ ======
+d|'O.O|b
+ |___-|
+  /  \ 
+ O____O 
+ _|  |/

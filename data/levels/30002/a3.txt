@@ -1,0 +1,19 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,8,1,4.0,2,halo_img=None,next_level=1)
+    .-. 
+   /  °)=-
+  sD  D  
+ iKKD  \
+ lkKo  l
+ `hE´ j'
+  VVV'
+   """"
+
+
+   .-.
+-=(°  \
+   C  Cs
+  /  CKKi
+  l  oKkl
+  't `hE´
+    'VVV
+   """"

@@ -1,0 +1,15 @@
+<out> = Level(<level>,<game>,<raw>,color=(0,0,0),name=_("Animation Test"))
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                                                                                          
+                  _a1      _a2   _a3                                                                  
+                                                                                          
+                                                                                          
+_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0_A0
