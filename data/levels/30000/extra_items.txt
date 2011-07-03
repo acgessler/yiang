@@ -38,9 +38,9 @@
 90 108 _ag
 #--b3--
 #22
-132 82 _ah
+132 82 gah
 #18
-149 35 _ai
+149 35 ~ai
 #--b4-- 
 #15
 229 36 _aj
@@ -77,8 +77,15 @@
 182 17 _a0
 202 264 0a1
 
-
-
+#------Trees-----
+125 75 gtr
+116 75 gtr
+114 80 dtr
+116 81 gtr
+140 78 dtr
+121 95 gtr
+119 60 dtr
+128 44 gtr
 
 # story components
 # see draft/story_xxx.txt for more details and the full text
