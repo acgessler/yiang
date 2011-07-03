@@ -1,6 +1,31 @@
-#idle animation  eventuell mit sound effekt, steppen der figur passend zum takt :)
+#=======CONTENT===========
 
-#Idle animation :) nach rechts abwechselnd mit links, so ca alle 8 frames
+1.idle
+ L rechts
+ L links
+ L von rechts
+ L von links
+
+2.laufen
+ L rechts
+ L links
+ L von rechts
+ L von links
+
+3.hüpfen
+ L rechts
+ L links
+ L mitte
+
+3.trudeln
+ L rechts
+ L links
+
+
+#idle animation  eventuell mit sound effekt(20s musik mit senderwechselrauschen am anfang), steppen der figur passend zum takt(0.5s/frame bei 120 bpm) :)
+#textzeilen(songtexte,formeln) die hinter ihm aufsteigen
+#random links rechts, evtl auch nur hin und herschauen(umdrehanim aneinandergehängt)
+#Idle animation :) nach rechts abwechselnd mit links
  ======
 d|'O.O|b
  |___-|
@@ -15,7 +40,7 @@ d|'O.O|b
  O____O 
  _|  |/
 
-#Idle animation :) nach links abwechselnd mit rechts, so ca alle 8 frames
+#Idle animation :) nach links abwechselnd mit rechts
 
  ====== 
 d|O.O'|b
@@ -31,7 +56,20 @@ d|O.O'|b
  O____O 
  \|  |_ 
         
-
+#Idle umdreh von links
+ ====== 
+d| O.O|b
+ |-___| 
+  /  \  
+ O____o 
+ _|  |_ 
+#von rechts
+ ======
+d|O.O |b
+ |___-|
+  /  \ 
+ o____O 
+ _|  |_
 
 #Laufen nach rechts, Dauerschleife
   ____
@@ -91,6 +129,113 @@ o°___|
  /I \ 
 o°___|
  _||
+
+#umdreh von rechts
+  ____
+ |M  O\
+ |___-|
+  / I\ 
+ |___°o 
+   ||_
+
+  ____
+ |i O.|
+ |___-|
+  /I \ 
+ |_°o_| 
+   |.|_
+
+  ____
+o| O.O|o
+ |___-|
+  /  \ 
+ |O___o 
+  .| |_
+#bis mitte
+  ____
+o|O.O |o
+ |___-|
+  /  \ 
+ o____O 
+ _|  |_
+
+  ____  
+o|O.O |o
+ |-___| 
+  /  \  
+ o___O| 
+  _| |.  
+
+  ____  
+ |.O i| 
+ |-___| 
+  / I\  
+ |_o°_| 
+  _|.|   
+
+ ____
+/o  M|
+|-___|
+ /I \ 
+o°___|
+ _||
+
+#umdreh von links
+ ____  
+/O  M| 
+|-___| 
+ /I \  
+o°___| 
+ _||   
+        
+ ____  
+|.O i| 
+|-___| 
+ / I\  
+|_o°_| 
+ _|.|   
+        
+  ____  
+o|O.O |o
+ |-___| 
+  /  \  
+ o___O| 
+ _| |.  
+#bis mitte
+  ____  
+o| O.O|o
+ |-___| 
+  /  \  
+ O____o 
+ _|  |_ 
+        
+  ____  
+o| O.O|o
+ |___-| 
+  /  \  
+ |O___o 
+ .| |_  
+         
+  ____  
+ |i O.| 
+ |___-| 
+  /I \  
+ |_°o_| 
+  |.|_  
+        
+   ____ 
+  |M  o\
+  |___-|
+   / I\ 
+  |___°o
+    ||_ 
+
+
+
+
+
+
+
 
 #Hüpfen nach rechts
   ____
@@ -201,7 +346,7 @@ o°___|
   ____
  |M  O\
  |___-|
-  / -O\ 
+  / -O 
  |____J
    ||_
 
@@ -336,7 +481,7 @@ o°___|
   ____  
  /O  M| 
  |-___| 
- /O- \  
+  O- \  
  G____| 
   _||   
         
@@ -360,6 +505,95 @@ o°___|
   /| \  
  G_O__| 
   _||   
+
+#mitte hüpfen
+  ____  
+o| O.O|o
+ |__-_| 
+  /  \  
+ O____o 
+ _|  |_ 
+
+  ____  
+o| O.O|o
+ |_-__| 
+o_/  \_o
+ |____| 
+ _|  |_ 
+
+  ____  
+o| O.O|o
+o|-___|o 
+ \/  \/  
+ |____| 
+ _|  |_ 
+
+  ____  
+o| O.O|o
+ |_-__| 
+o_/  \_o
+ |____| 
+   L L 
+  ____  
+o| O.O|o
+ |__-_| 
+  /  \  
+ O____o 
+  L  L 
+
+  ____  
+o| O.O|o
+ |__-_| 
+  /  \  
+ O____o 
+ _|  |_ 
+
+#wenn animation zuende: dauerschleife von folgendem (etwas langsamer als huepf animation, jedoch schneller als laufanimation)   
+
+  ____ 
+ |_  _|
+o| .,.|o
+  /  \  
+ O____o 
+  L  |_ 
+
+  ____  
+o| O.O|o
+ |__-_| 
+o_/  \
+ |____o 
+  |_ L 
+
+  ____  
+o| O.O|o
+o|-___| 
+ \/  \_o  
+ |____| 
+  L  |_ 
+
+  ____  
+o| O.O|o
+ |_-__|o 
+o_/  \/
+ |____| 
+  |_ L 
+  ____  
+o| O.O|o
+ |__-_| 
+  /  \_o
+ O____| 
+  L  L 
+
+
+
+
+
+
+
+
+
+
+
 
 
   ____
