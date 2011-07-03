@@ -106,6 +106,9 @@ class SoundEffectCache:
                         self.sound.SetVolume(defaults.audio_volume_scale*100)
                         
                     def Play(self):
+                        if defaults.disable_audio:
+                            return
+                        
                         self.sound.Play()
                         return self
                         
@@ -201,6 +204,9 @@ class BerlinerPhilharmoniker:
     
     @classmethod
     def Process(cls):
+        
+        if defaults.disable_audio:
+            return
         
         with BerlinerPhilharmoniker.lock:
             if not BerlinerPhilharmoniker.playlist:

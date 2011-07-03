@@ -133,6 +133,9 @@ def_user_profile = "Wurzelgnom"
 no_intro = True
 no_logo = True
 
+# this disables *all* audio
+disable_audio = True
+
 postfx_flash_length = 1
 postfx_flash_intensity = 0.08
 postfx_focus_length = 0.8
