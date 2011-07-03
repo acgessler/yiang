@@ -41,7 +41,6 @@ server_name = "www.yiang-thegame.com"
 master_locale="de"
 allow_network_use=False
 resolution = [1280, 850]
-enforce_scene_ratio = 16/9
 fullscreen = False
 resizable = False
 letter_size = [6.0, 10.5]
