@@ -84,7 +84,7 @@ void LoadSettings(std::map<std::wstring,std::wstring>& settings)
 
 #define RES_LARGE   L"[1600,900]"
 #define RES_MEDIUM  L"[1378,775]"
-#define RES_SMALL   L"[900,506]"
+#define RES_SMALL   L"[900,600]"
 
 // ------------------------------------------------------------------------------------
 INT_PTR CALLBACK DialogProc(
@@ -106,18 +106,29 @@ INT_PTR CALLBACK DialogProc(
 
 		LoadSettings(props);
 
-		if( props[L"fullscreen"] == L"True") {
-			CheckDlgButton(hwndDlg,IDC_FS,BST_CHECKED);	
-		}
-		else {
-			if( props[L"resolution"]== RES_SMALL ) {
-				CheckDlgButton(hwndDlg,IDC_WND1024,BST_CHECKED);	
-			} 
-			else if( props[L"resolution"]== RES_MEDIUM ) {
-				CheckDlgButton(hwndDlg,IDC_WND1280,BST_CHECKED);	
-			} 
+		{
+			const int sx = ::GetSystemMetrics(SM_CXSCREEN), sy = ::GetSystemMetrics(SM_CYSCREEN);
+			if( !props[L"fullscreen"].length() || props[L"fullscreen"] == L"True") {
+				CheckDlgButton(hwndDlg,IDC_FS,BST_CHECKED);	
+				props[L"fullscreen"] = L"True";
+			}
 			else {
-				CheckDlgButton(hwndDlg,IDC_WND1200,BST_CHECKED);	
+				// XXX get rid of those magic constants
+				if( props[L"resolution"]== RES_SMALL || sx < 1378 || sy < 775) {
+					CheckDlgButton(hwndDlg,IDC_WND1024,BST_CHECKED);
+				} 
+				else if( props[L"resolution"]== RES_MEDIUM  || sx < 1600 || sy < 900) {
+					CheckDlgButton(hwndDlg,IDC_WND1280,BST_CHECKED);	
+				} 
+				else {
+					CheckDlgButton(hwndDlg,IDC_WND1200,BST_CHECKED);	
+				} 
+			}
+			if (sx < 1600 || sy < 900) {
+				EnableWindow(GetDlgItem(hwndDlg,IDC_WND1200),FALSE);
+				if (sx < 1378 || sy < 775) {
+					EnableWindow(GetDlgItem(hwndDlg,IDC_WND1280),FALSE);
+				} 
 			} 
 		}
 

@@ -404,7 +404,7 @@ Hit {1} to reconsider your decision""").format(
         self.cur_option = i % len(MainMenu.options)
         print("Select menu option {0}".format(self.cur_option))
 
-        y = 180
+        y = 180 * defaults.scale[1]
         
         for i in range(len(MainMenu.options)):
             hscaled = int(MainMenu.options[i][3]*defaults.letter_height_menu*defaults.scale[1])
