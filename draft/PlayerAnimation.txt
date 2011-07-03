@@ -135,9 +135,65 @@ o°___|
   ____
  |M  O\
  |___-|
+  / |\ 
+ |__O_J
+   ||_
+#wenn animation zuende: dauerschleife von folgendem (etwas langsamer als huepf animation, jedoch schneller als laufanimation)
+  ____
+ |M  O\
+ |___-|
   / /\ 
  |_O__J
-   \\_
+  ,/ \_
+
+  ____
+ |M  O\
+ |___-|
+  o- \ 
+ |____J
+   ||_
+
+  ____
+ |M  O\
+ |_o_-|
+  / \\ 
+ |____J
+   ,X_
+
+  ____
+ |M  O\
+ |__o-|
+  / |\ 
+ |____J
+   ||_
+
+  ____
+ |M  O\
+ |___O|
+  / /\ 
+ |____J
+  ,/ \_
+
+  ____
+ |M  O\
+ |___-|
+  / -O\ 
+ |____J
+   ||_
+
+  ____
+ |M  O\
+ |___-|
+  / \\ 
+ |___OJ
+   ,X_
+
+  ____
+ |M  O\
+ |___-|
+  / |\ 
+ |__O_J
+  ,/ \_
 
 
   ____
