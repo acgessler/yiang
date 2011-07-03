@@ -1,0 +1,74 @@
+from player import Player; <out> = Player(<raw>,5,6,1)
+
+#Laufen nach rechts, Dauerschleife
+  ____
+o|'O.O|o
+ |___-|
+  /  \ 
+ o____o 
+ _|  |_
+
+
+#Laufen nach rechts, Dauerschleife
+  ____
+ |M  O\
+ |___-|
+  / I \ 
+ |___°o 
+ ,/  \_
+
+  ____
+ |M  O\
+ |___-|
+  / I \ 
+ |___°o 
+    ||_
+
+  ____
+ |M  O\
+ |___-|
+  / I \ 
+ |___°o 
+   ,X_  
+
+  ____
+ |M  O\
+ |___-|
+  / I \ 
+ |___°o 
+    ||_
+
+
+
+
+
+  ____
+o|'O.O|o
+ |___-|
+o_/  \_o
+  |__|
+ _|  |_
+  ____
+o|'x.O|o
+ |___-|
+   /P===X
+ o_H_
+ _|  |_
+  ____
+o|O.O'|o
+ |-___|
+  /  \ 
+ o____o 
+ _|  |_
+  ____
+o|O.O'|o
+ |-___|
+o_/  \_o
+  |__|
+ _|  |_
+  ____
+o|O.X'|o
+ |-___|
+X===P\  
+   _H_o 
+ _|  |_
