@@ -132,7 +132,7 @@ int WINAPI WinMain(
 	);
 
 	std::wstring old_config;
-# if 0
+
 	if (argc == 1 || argc == 2 && std::wstring(argv[1]) == L"--c") {
 		TCHAR szPath[MAX_PATH];
 
@@ -160,7 +160,7 @@ int WINAPI WinMain(
 
 		LocalFree(old);
 	}
-#endif
+
 	const int ret = PyMain(argc,argv);
 	LocalFree(argv);
 

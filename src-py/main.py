@@ -320,12 +320,12 @@ Hit {1} to reconsider your decision""").format(
         Renderer.SetClearColor(sf.Color.Black)
 
         rx,ry = defaults.resolution
-        bb = (-10,160,355*defaults.scale[1],ry-60)    
+        bb = (-10,160,375*defaults.scale[1],ry-60)    
 
         if not hasattr(self,"m_clock"):
             self.m_clock = sf.Clock()
                   
-        self._DrawRectangle(bb,scale=min(1.0, self.m_clock.GetElapsedTime()))
+        #self._DrawRectangle(bb,scale=min(1.0, self.m_clock.GetElapsedTime()))
         
         self.base_x,self.base_y = bb[2],bb[1]
 
