@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,8,39,need_levels=[1])
+from campaign import Blocker; <out> = Blocker(<raw>,8,39,need_levels=[22,18],status_msg=_('Search the desert for the lost machine parts first, think you will have more luck there!'))
     ___
    [___]
    [___]

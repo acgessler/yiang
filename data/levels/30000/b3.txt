@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,8,24,need_levels=[1,2,3,4])
+from campaign import Blocker; <out> = Blocker(<raw>,8,24,need_levels=[42,39,40],status_msg=_('Maybe some village people can help you to take that barrels away!'))
  ___
 [___]
 [___]
