@@ -199,7 +199,7 @@ class Renderer:
         dm = sf.VideoMode.GetDesktopMode()
         if defaults.fullscreen is True:
         
-            p[4] = 4
+            #p[4] = 4
             defaults.resolution = dm.Width, dm.Height
             Renderer.app = sf.RenderWindow(dm, defaults.caption, sf.Style.Fullscreen, settings)
         else:

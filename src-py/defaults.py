@@ -43,7 +43,7 @@ allow_network_use=False
 resolution = [1280, 850]
 fullscreen = False
 resizable = False
-letter_size = [6.5, 11.5]
+letter_size = [6.0, 10.5]
 letter_height_intro = 13
 letter_height_menu = 52
 letter_height_status = 20
@@ -60,7 +60,7 @@ letter_height_gui = 14
 caption = "YIANG |"
 danger_signs_ttl = 100
 tiles_size = [5, 3]
-move_speed = [5, 4]
+move_speed = [6, 5]
 gravity = 15 # tiles/m*s^2
 jump_vel = 9.5 # tiles/m*s
 debug_updown_move = False
@@ -80,7 +80,7 @@ game_over_fade_time = 2.0
 enter_level_fade_time = 1.4
 enter_worldmap_fade_time = 2.0
 messagebox_fade_time = 2.0
-loading_time = 10.0
+loading_time = 6.0
 loading_fool_player = False
 death_sprites = 130
 min_death_sprites = 5
@@ -99,6 +99,7 @@ top_scroll_distance = 4
 bottom_scroll_distance = 9
 respawn_origin_distance = 8.0
 teleport_origin_distance = 8.0
+initial_speed_scale = 1.0
 speed_scale_per_round = 1.5
 antialiasing_level = 2
 player_caution_border = [2, 12]
@@ -115,7 +116,7 @@ blur_start = 1.0 - blur_stop
 blur_multiplier = 1.0
 dither = True
 enable_menu_background_danger_stubs = False
-status_bar_top_tiles = 3.0
+status_bar_top_tiles = 3.5
 level_window_size_rel = [0.15,0.2]
 perks_overlay_start = 2.0
 perks_overlay_spacing = 1.0
@@ -175,7 +176,7 @@ world_draw_hud = True
 
 # Relative size of the minimap, x-axis
 # Note: the minimap is never minified.
-minimap_size = 0.2
+minimap_size = 0.22
 
 # Base alpha value for uncovered areas of the minimap
 minimap_alpha = 0x80
@@ -257,7 +258,7 @@ def update_derived():
 
     # this is a mess and we ought to clean up here ..
     scale = (resolution[0] / resolution_base[0], resolution[1] / resolution_base[1])
-    letter_size = (int(letter_size[0] * scale[1]), int(letter_size[1] * scale[1]))
+    letter_size = (int(letter_size[0] * scale[0]), int(letter_size[1] * scale[1]))
     cells = (resolution[0] // letter_size[0], resolution[1] // letter_size[1])
     cells_intro = ((resolution[0] * 4) // (letter_height_intro * 2), resolution[1] // letter_height_intro)
     tiles = (cells[0] // tiles_size[0], cells[1] // tiles_size[1])
