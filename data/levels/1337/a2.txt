@@ -1,4 +1,4 @@
-from tile import AnimTile;<out> = AnimTile(<raw>,6,4,0.8,permute=False)
+from tile import AnimTile;<out> = AnimTile(<raw>,6,4,0.6,permute=False)
   ____
  |M  O\
  |___-|
