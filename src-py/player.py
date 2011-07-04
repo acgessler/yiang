@@ -63,6 +63,127 @@ class InventoryItem:
         found in. Non-persistent items are lost upon
         leaving a level."""
         return False
+    
+    
+    
+class Anim:    
+    """Single animation of the player entity, used in conjunction with `AnimSet`"""
+    
+    modi = ('repeat','stop')
+    
+    def __init__(self,fname):
+        self.fname = fname
+        self.frame = 0
+        with open(fname,'rt') as inp:
+            lines = inp.readlines()
+            if len(lines) <= 1:
+                raise Exception('too few lines')
+            
+            
+            self.framecnt,self.framelen,self.mode = [s.strip() for s in lines[0].split(';') if len(s.strip())]
+            self.framecnt = int(self.framecnt)
+            self.framelen = float(self.framelen)
+            
+            if self.framecnt == 0:
+                raise Exception('need at least one frame')
+            
+            if not self.mode in Anim.modi:
+                raise Exception('animation mode not supported: ' + self.mode)
+            
+            frames = '\n'.join(s.rstrip() for s in lines[1:]).split('\n\n')
+            if len(frames) < self.framecnt:
+                raise Exception('too few frames, expected ' + str(self.framecnt))
+            
+            frames = frames[:self.framecnt]
+            if len(set(n.count('\n') for n in frames)) != 1:
+                raise Exception('all frames must have the same y size')
+            
+            self.tiles = [Tile(f,halo_img=None,permute=False) for f in frames]
+            
+    def __str__(self):
+        return "[Anim " + self.fname + '}'
+    
+    def GetTile(self):
+        return self.tiles[self.frame]
+    
+    def Select(self):
+        pass
+    
+    def Deselect(self):
+        self.frame = 0
+        try:
+            delattr(self,'started')
+        except AttributeError:
+            pass
+    
+    def Update(self,time,dtime):
+        if not hasattr(self,'started'):
+            self.started = time
+            
+        diff = time-self.started
+        if self.mode == 'stop' and diff >= self.framelen:
+            self.frame = self.framecnt-1
+            return
+        
+        self.frame = int(((diff % self.framelen)/self.framelen)*self.framecnt)
+        print(self.frame)
+                
+    
+class AnimSet:
+    """Class to keep track of all the animations for the player. Players have
+    significantly more complex animations as the rest of the entities,
+    so I'm introducing a dedicated solution at this point."""
+    def __init__(self,name):
+        self.name = name
+        self.active = None
+        
+        self.anims = {}
+        print('start loading AnimSet: ' + name)
+        
+        # scan the directory for all animations
+        base = os.path.join(defaults.data_dir,"external_anims",name)
+        for thisfile in os.listdir(base):      
+            fname,ext = os.path.splitext(thisfile)
+            if ext.lower() == '.txt':
+                full = os.path.join(base,thisfile)
+                try:
+                    self.anims[fname] = self._LoadAnimFile(full)
+                    print('got animation ' + fname)
+                except Exception as e:
+                    print('failed to load animation {0}, got exception: {1}'.format(fname,e))
+                    
+        print('finish loading AnimSet: {0}, got {1} animsets with totally {2} frames'.format(name,len(self.anims),sum(s.framecnt for s in self.anims.values())))
+        print(self.anims)
+              
+    def _LoadAnimFile(self,f):
+        return Anim(f)
+            
+    def __str__(self):
+        return "[AnimSet " + self.name + '}'
+    
+    def Select(self,name):
+        if name == self.active:
+            return
+        
+        if not self.active is None:
+            self.anims[self.active].Deselect()
+        
+        self.active = name
+        self.anims[self.active].Select()
+        
+    def GetCurrent(self):
+        return self.active
+    
+    def GetCurrentTile(self):
+        assert self.active in self.anims
+        return self.anims[self.active].GetTile()
+    
+    def UpdateCurrentTile(self,time,dtime):
+        assert self.active in self.anims
+        self.anims[self.active].Update(time,dtime)
+    
+    def ConfigureTilesGlobally(self,callback):
+        [[callback(t) for t in a.tiles] for a in self.anims.values()]
             
 
 class Player(Entity):
@@ -75,7 +196,7 @@ class Player(Entity):
     
     LEFT,RIGHT=range(2)
 
-    def __init__(self, text, width, height, ofsx, move_freely=False, draworder=1000):
+    def __init__(self, text, width, height, ofsx, move_freely=False, animset='player', draworder=1000):
         Entity.__init__(self)
 
         pcb = (defaults.player_caution_border[0] / defaults.tiles_size_px[0], 
@@ -100,14 +221,14 @@ class Player(Entity):
         self.move_freely = move_freely
         self.block_input = False
 
-        # XXX use AnimTile instead
-        self.tiles = []
-        for i in range(0, (len(lines) // height) * height, height):
-            self.tiles.append(Tile("\n".join(lines[i:i + height]),halo_img=None,permute=False))
-            self.tiles[-1].SetDim(self.dim)
-            self.tiles[-1].SetPosition((0, 0))
+        def config_tile(t):
+            t.SetDim(self.dim)
+            t.SetPosition((0,0))
 
-        assert len(self.tiles) == (Player.MAX_ANIMS*2)
+        self.animset = AnimSet(animset)
+        self.animset.ConfigureTilesGlobally(config_tile)
+        self.animset.Select('idle_left')
+
         self.dead = False
         self.scale = 1.0
         
@@ -138,9 +259,11 @@ class Player(Entity):
         self.pofsx *= factor
         self.pofsy *= factor
         
-        for elem in self.tiles:
-            elem.Scale(factor)
-            
+        def config_tile(t):
+            t.Scale(factor)
+
+        self.animset.ConfigureTilesGlobally(config_tile)
+        
         self.scale *= factor
         
     def Unscale(self):
@@ -227,8 +350,11 @@ class Player(Entity):
         
     def SetGame(self, game):
         self.game = game
-        for tile in self.tiles:
-            tile.SetGame(self.game)
+        
+        def config_tile(t):
+            t.SetGame(self.game)
+        self.animset.ConfigureTilesGlobally(config_tile)
+        
         
     def SetPosition(self, pos):
         Entity.SetPosition(self,pos)
@@ -323,8 +449,6 @@ class Player(Entity):
 
     def SetColor(self, pos):
         self.color = pos
-        for tile in self.tiles:
-            tile.SetColor(pos)
             
     def GetDrawOrder(self):
         return self.draworder
@@ -339,10 +463,10 @@ class Player(Entity):
         if hasattr(self,"flash_halo"): # XXX
             self.game.GetLevel().DrawSingle( self.flash_halo, (self.pos[0]-0.2,self.pos[1]-1.55) )
         
-        t = self.tiles[self._GetTileIndex(self.cur_tile)] 
+        t = self.animset.GetCurrentTile()
         
         # draw a quick shadow to improve the visibility of the player
-        old, t.color = t.color, sf.Color(30,30,30,150)
+        old, t.color = self.color, sf.Color(30,30,30,150)
         
         ofs_x = 1.0/defaults.tiles_size_px[0]
         ofs_y = 1.0/defaults.tiles_size_px[1]
@@ -421,19 +545,25 @@ class Player(Entity):
         vec = [0, 0]
         
         pvely = self.vel[1]
+        anim = None
 
         inp = Renderer.app.GetInput()
         if not self.block_input:
             if inp.IsKeyDown(KeyMapping.Get("move-left")):
                 self.vel[0] = -defaults.move_speed[0] * self.speed_scale
-                self.cur_tile = Player.ANIM_WALK
                 self.dir = Player.LEFT
+                
+                if not self.in_jump: # do not trigger walking animation while jumping
+                    anim = 'walk'
     
                 self.moved_once = True
                 
             if inp.IsKeyDown(KeyMapping.Get("move-right")):
                 self.vel[0] = defaults.move_speed[0] * self.speed_scale
-                self.cur_tile = Player.ANIM_WALK
+                
+                if not self.in_jump: # do not trigger walking animation while jumping
+                    anim = 'walk'
+                    
                 self.dir = Player.RIGHT
     
                 self.moved_once = True
@@ -442,11 +572,11 @@ class Player(Entity):
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):
                     self.pos[1] -= time * defaults.move_speed[1]
                     self.moved_once = True
-                    self.cur_tile = Player.ANIM_JUMP
+                    anim = 'jump'
                 if inp.IsKeyDown(KeyMapping.Get("move-down")):
                     self.pos[1] += time * defaults.move_speed[1]
                     self.moved_once = True
-                    self.cur_tile = Player.ANIM_JUMP
+                    anim = 'jump'
             else:
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):
                     if self.in_jump is False and self.block_jump is False:
@@ -454,7 +584,7 @@ class Player(Entity):
                         self.in_jump = self.level.gravity != 0 
                         self.block_jump = True
     
-                        self.cur_tile = Player.ANIM_JUMP
+                        anim = 'jump'
                     self.moved_once = True
                     
                 else:
@@ -466,7 +596,7 @@ class Player(Entity):
                         self.in_djump = self.level.gravity != 0 
                         self.block_djump = True
     
-                        self.cur_tile = Player.ANIM_JUMP
+                        anim = 'jump'
                         self.moved_once = True
                 else:
                     self.block_djump = False
@@ -499,6 +629,7 @@ class Player(Entity):
             self.pos[1] = 1
             self.in_jump, self.block_jump = False, False
             self.vel[1] = 0
+            
 
         self._CheckForTopMapBorder()
         self._CheckForBottomMapBorder()
@@ -510,6 +641,14 @@ class Player(Entity):
             if self.setup_autoscroll is False:
                 self.level.PopAutoScroll()
                 self.setup_autoscroll = True
+                
+        if anim is None:
+            if not self.in_jump:
+                anim = 'idle'
+        
+        if anim:
+            self.animset.Select(anim+'_'+('left' if self.dir == Player.LEFT else 'right'))
+        self.animset.UpdateCurrentTile(time_elapsed,time)
                 
     def _CheckForTopMapBorder(self):
         lv = self.game.GetLevel()
