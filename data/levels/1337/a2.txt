@@ -1,28 +1,56 @@
-from tile import AnimTile;<out> = AnimTile(<raw>,6,4,0.6,permute=False)
+from tile import AnimTile;<out> = AnimTile(<raw>,6,8,1.2,permute=False)
   ____
  |M  O\
  |___-|
-  / I\ 
- |___°o 
+  / \\ 
+ |___OJ 
  ,/  \_
 
   ____
  |M  O\
  |___-|
-  / I\ 
- |___°o 
+  / \\ 
+ |___OJ 
    ||_
 
   ____
  |M  O\
  |___-|
-  / I\ 
- |___°o 
+  / |\ 
+ |__O_J 
    ,X_  
 
   ____
  |M  O\
  |___-|
-  / I\ 
- |___°o 
+  / |\ 
+ |__O_J 
+   ||_
+
+  ____
+ |M  O\
+ |___-|
+  / /\ 
+ |_O__J 
+ ,/  \_
+
+  ____
+ |M  O\
+ |___-|
+  / /\ 
+ |_O__J 
+   ||_
+
+  ____
+ |M  O\
+ |___-|
+  / |\ 
+ |__O_J
+   ,X_  
+
+  ____
+ |M  O\
+ |___-|
+  / |\ 
+ |__O_J 
    ||_

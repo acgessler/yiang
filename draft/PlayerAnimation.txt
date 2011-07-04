@@ -550,9 +550,9 @@ o| O.O|o
 
 #wenn animation zuende: dauerschleife von folgendem (etwas langsamer als huepf animation, jedoch schneller als laufanimation)   
 
-  ____ 
- |_  _|
-o| .,.|o
+  ____  
+o| O.O|o
+ |__-_| 
   /  \  
  O____o 
   L  |_ 
@@ -566,17 +566,18 @@ o_/  \
 
   ____  
 o| O.O|o
-o|-___| 
+o|__-_| 
  \/  \_o  
  |____| 
   L  |_ 
 
   ____  
 o| O.O|o
- |_-__|o 
+ |__-_|o 
 o_/  \/
  |____| 
   |_ L 
+
   ____  
 o| O.O|o
  |__-_| 
@@ -585,9 +586,43 @@ o| O.O|o
   L  L 
 
 
+#Waffe ziehen rechts
+/P===X
+|/
+  ____
+ |M  O\
+ |___-|
+  / |\ 
+ |__O_J
+   ||_
 
+  ____
+ |M  O\
+ |___-|
+  / \\ 
+ |___OJ
+   ||_
 
+  ____
+ |M  O\
+ |___-|
+  / -P""° 
+ |____J
+   ||_
 
+  ____
+ |M  O\
+ |___-|
+  / \\ 
+ |___OJ
+   ||_
+
+  ____
+ |M  O\
+ |___-|
+  / |\ 
+ |__O_J
+   ||_
 
 
 
