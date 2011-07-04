@@ -1,0 +1,16 @@
+<out> = Tile(<raw>,15,51,halo_img=None,draworder=20)
+                            $(KwVsedfb+tXj 
+                      wRBafXE)>wiuh/N<Fbhua/b!§$(r
+                 w"%x@Uyt%§%aIfjniXj*hb&!)x@Uyh
+                 *+§$(KwVsed"§hbFDBsdbhff
+                   "§=/wR§bKcBafXE)>wiu*
+                    Ü$&%§%PVsedtXj*
+                "%x@UyhbVsed!§$
+             zkB§Kc"Vse§=/E)>w
+         wR§(KwRBKcBafX§(KwÜ$&
+      wRBafXE)>wiVsedu§(Kw
+ w"%x@UytXj*hb&!)x@Uyhb!§$(r
+ *+§$(KwVsedfb+tXj*+Zf)/
+   "§=/wR§(KwRBKcBafX
+    Ü$&%§%PdtXj*iu*
+      §bKcBaf
