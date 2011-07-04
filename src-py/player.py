@@ -196,7 +196,7 @@ class Player(Entity):
     
     LEFT,RIGHT=range(2)
 
-    def __init__(self, text, width, height, ofsx, move_freely=False, animset='player', draworder=1000):
+    def __init__(self, text, width, height, ofsx, move_freely=False, draworder=1000, animset='player'):
         Entity.__init__(self)
 
         pcb = (defaults.player_caution_border[0] / defaults.tiles_size_px[0], 
