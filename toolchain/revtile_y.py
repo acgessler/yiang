@@ -19,7 +19,7 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 
-mapper = {"\\":"/","/":"\\","<":">","<":">","J":"G","j":"c"}
+mapper = {"\\":"/","/":"\\","<":">",">":"<","J":"G","j":"c"}
 
 with open(input("Enter input file name (results written to out.txt)"),"rt") as i:
     with open("out.txt","wt") as o:
