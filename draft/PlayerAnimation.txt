@@ -1,62 +1,32 @@
-#=======CONTENT===========
+Definition:
+1. Zustand:
+Idle, kennt links und rechts, übergang zwischen Idle.links und Idle.rechts besteht, sowie übergang zu Laufen.links(von Idle.links) und Laufen.rechts(von Idle.r)
 
-1.idle
- L rechts
- L links
- L von rechts
- L von links
+2. Zustand
+Laufen, ebenfalls nach links und rechts, übergang zw. laufen.l und laufen.r erfolgt über Idle zustand
 
-2.laufen
- L rechts
- L links
- L von rechts
- L von links
+3. Zustand
+Hüpfen , links und rechts wie gewohnt, endet mit "beine angezogen", drehung zu hüpfen.l bzw .r erfolgt ebenfalls mit beinen angezogen ->übergangsanimation, die nur gestartet wird, wenn hüpfen animation am ende angekommen ist
 
-3.hüpfen
- L rechts
- L links
- L mitte
+4.Zustand
+Landen, l + r, Hüpfen muss voran gegangen sein, keine (neuen) übergänge
 
-3.trudeln
- L rechts
- L links
+5.Zustand
+Trudeln, l+r, wenn spieler fällt und davor nicht gehüpft ist, wenn er länger als einen bestimmten wert in der hüpfen animation verblieben ist und wenn er nach oben/unten gestoßen wird.
 
+6.zustand
+schießen, l+r, aus standartpose l/r (nach l/r schauend), dh zB aus idle muss umdrehanimation vorangehen
 
-#idle animation  eventuell mit sound effekt(20s musik mit senderwechselrauschen am anfang), steppen der figur passend zum takt(0.5s/frame bei 120 bpm) :)
-#textzeilen(songtexte,formeln) die hinter ihm aufsteigen
-#random links rechts, evtl auch nur hin und herschauen(umdrehanim aneinandergehängt)
-#Idle animation :) nach rechts abwechselnd mit links
- ======
-d|'O.O|b
- |___-|
-  /  \ 
- o____O 
- _|  |_
+7.zustand
+afk, erfolgt nach 10s idlezustand, kein l+r, evtl soundeffekte, texte aufsteigen lassen(gedanken)
 
- ======
-d|'O.O|b
- |___-|
-  /  \ 
- O____O 
- _|  |/
+8.zustand
+schmerz,l+r,muss nicht unmittelbar erfolgen, wenn blut spritzt, kann auch nach evtl. Landeanimation folgen (queued)
 
-#Idle animation :) nach links abwechselnd mit rechts
-
- ====== 
-d|O.O'|b
- |-___| 
-  /  \  
- O____o 
- _|  |_ 
+                                                      |            |
+##################################################### V # IGNORE # V ###################################
         
- ====== 
-d|O.O'|b
- |-___| 
-  /  \  
- O____O 
- \|  |_ 
-        
-#Idle umdreh von links
+#afk umdreh von links
  ====== 
 d| O.O|b
  |-___| 
@@ -70,65 +40,6 @@ d|O.O |b
   /  \ 
  o____O 
  _|  |_
-
-#Laufen nach rechts, Dauerschleife
-  ____
- |M  O\
- |___-|
-  / I\ 
- |___°o 
- ,/  \_
-
-  ____
- |M  O\
- |___-|
-  / I\ 
- |___°o 
-   ||_
-
-  ____
- |M  O\
- |___-|
-  / I\ 
- |___°o 
-   ,X_  
-
-  ____
- |M  O\
- |___-|
-  / I\ 
- |___°o 
-   ||_
-
-
-#Laufen nach links, Dauerschleife
- ____
-/o  M|
-|-___|
- /I \ 
-o°___|
-_/  \,
-
- ____
-/o  M|
-|-___|
- /I \ 
-o°___|
- _||
-
- ____
-/o  M|
-|-___|
- /I \ 
-o°___|
-  _X,
-
- ____
-/o  M|
-|-___|
- /I \ 
-o°___|
- _||
 
 #umdreh von rechts
   ____
@@ -234,277 +145,6 @@ o| O.O|o
 
 
 
-
-
-
-#Hüpfen nach rechts
-  ____
- |M  O\
- |___-|
-  / |\ 
- |__O_J
-   ||_
-
-  ____
- |M  O\
- |___-|
-  / \\ 
- |___OJ
-   ||_
-
-  ____
- |M  O\
- |___-|
-  / -O 
- |____J
-   ||_
-
-  ____
- |M  O\
- |___O|
-  / /\ 
- |____J
-   ||_
-
-  ____
- |M  O\
- |__O-|
-  / |\ 
- |____J
-   ||_
-
-  ____
- |M  O\
- |___O|
-  / /\ 
- |____J
-   \\_
-
-  ____
- |M  O\
- |___-|
-  / -O\ 
- |____J
-     JJ
-
-  ____
- |M  O\
- |___-|
-  / \\ 
- |___OJ
-     JJ
-
-  ____
- |M  O\
- |___-|
-  / |\ 
- |__O_J
-   \\_
-
-  ____
- |M  O\
- |___-|
-  / |\ 
- |__O_J
-   ||_
-#wenn animation zuende: dauerschleife von folgendem (etwas langsamer als huepf animation, jedoch schneller als laufanimation)
-  ____
- |M  O\
- |___-|
-  / /\ 
- |_O__J
-  ,/ \_
-
-  ____
- |M  O\
- |___-|
-  o- \ 
- |____J
-   ||_
-
-  ____
- |M  O\
- |_o_-|
-  / \\ 
- |____J
-   ,X_
-
-  ____
- |M  O\
- |__o-|
-  / |\ 
- |____J
-   ||_
-
-  ____
- |M  O\
- |___O|
-  / /\ 
- |____J
-  ,/ \_
-
-  ____
- |M  O\
- |___-|
-  / -O 
- |____J
-   ||_
-
-  ____
- |M  O\
- |___-|
-  / \\ 
- |___OJ
-   ,X_
-
-  ____
- |M  O\
- |___-|
-  / |\ 
- |__O_J
-  ,/ \_
-
-  ____
- |M  O\
- |___-|
-  / |\ 
- |__O_J
-   ||_
-
-#Hüpf animation nach links
-  ____  
- /O  M| 
- |-___| 
-  /| \  
- G_O__| 
-  _||   
-        
-  ____  
- /O  M| 
- |-___| 
-  // \  
- GO___| 
-  _||   
-        
-  ____  
- /O  M| 
- |-___| 
-  O- \  
- G____| 
-  _||   
-        
-  ____  
- /O  M| 
- |O___| 
-  /\ \  
- G____| 
-  _||   
-        
-  ____  
- /O  M| 
- |-O__| 
-  /| \  
- G____| 
-  _||   
-        
-  ____  
- /O  M| 
- |O___| 
-  /\ \  
- G____| 
-  _//   
-        
-  ____  
- /O  M| 
- |-___| 
- /O- \  
- G____| 
- GG     
-        
-  ____  
- /O  M| 
- |-___| 
-  // \  
- GO___| 
- GG     
-        
-  ____  
- /O  M| 
- |-___| 
-  /| \  
- G_O__| 
-  _//   
-        
-  ____  
- /O  M| 
- |-___| 
-  /| \  
- G_O__| 
-  _||   
-
-#wenn animation zuende: dauerschleife von folgendem (etwas langsamer als huepf animation, jedoch schneller als laufanimation)        
-  ____  
- /O  M| 
- |-___| 
-  /\ \  
- G__O_| 
- _/ \,  
-        
-  ____  
- /O  M| 
- |-___| 
-  / -o  
- G____| 
-  _||   
-        
-  ____  
- /O  M| 
- |-_o_| 
-  // \  
- G____| 
-  _X,   
-        
-  ____  
- /O  M| 
- |-o__| 
-  /| \  
- G____| 
-  _||   
-        
-  ____  
- /O  M| 
- |O___| 
-  /\ \  
- G____| 
- _/ \,  
-        
-  ____  
- /O  M| 
- |-___| 
-  O- \  
- G____| 
-  _||   
-        
-  ____  
- /O  M| 
- |-___| 
-  // \  
- GO___| 
-  _X,   
-        
-  ____  
- /O  M| 
- |-___| 
-  /| \  
- G_O__| 
- _/ \,  
-        
-  ____  
- /O  M| 
- |-___| 
-  /| \  
- G_O__| 
-  _||   
 
 #mitte hüpfen
   ____  
