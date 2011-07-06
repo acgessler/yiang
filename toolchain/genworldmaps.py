@@ -210,8 +210,16 @@ def spawn_content(level):
     
     path = os.path.join( defaults.data_dir, "levels", str(level) )
 
-    extra = open(os.path.join(path,"extra_items.txt"),"at")
-    
+    extra = open(os.path.join(path,"extra_items.txt"),"rt")
+    lines = extra.readlines()
+    extra.close()
+    extra = open(os.path.join(path,"extra_items.txt"),"wt")
+    for line in lines:
+        if line.find("-DO NOT EDIT BELOW-") == -1:
+            extra.write(line)
+        else:
+            extra.write(line)
+            break
     
     bm = Bitmap(os.path.join( path, "areas.bmp" ))
     bm.output()
@@ -238,7 +246,6 @@ def spawn_content(level):
         for entity in type_tiles[key]:
             weight_sum += entity[1]
         type_tiles[key].append(("",1-weight_sum))
-        print(type_tiles[key])
         
     w,h = bm.width,bm.height
     for y in range(h):
