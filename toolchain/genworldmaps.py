@@ -22,6 +22,7 @@
 import os
 import sys
 import collections
+import random
 
 # Our stuff
 sys.path.append(os.path.join("..","src-py"))
@@ -62,10 +63,18 @@ large_tiles = {
 
 level_door = ((0x0,0x0,0x0),(0xff,0x2c,0xfd))
 
+area_types = {
+    (0x0,0xff,0x0)   : "Wald",
+    (0xff,0xff,0xff) : "Background",
+}
+type_tiles = {
+    "Wald":[("gtr",0.05),("dtr",0.025)] #("tyle",weight) (weightmax:1)
+}
 def main():
-    for level in (30002,30003):
+    for level in (30000,30002,30003):
         try:
-            process_map(level)
+            #process_map(level)
+            spawn_content(level)
         except IOError:
             print("Failure processing level {0}, IOError occured".format(level))
             
@@ -193,6 +202,56 @@ def process_map(level):
     #        print("place entity {0} at {1}/{2}".format(e,x,y))
         
     print("***DONE*** level {0}, wrote output file, {1} tiles".format(level,cnt))
+
+def spawn_content(level):
+    
+    #Look for areas in areas.bmp(overlay of map.bmp)
+    #randomly spawn entitys corresponding to that area (grass,trees...)
+    
+    path = os.path.join( defaults.data_dir, "levels", str(level) )
+
+    extra = open(os.path.join(path,"extra_items.txt"),"at")
+    
+    
+    bm = Bitmap(os.path.join( path, "areas.bmp" ))
+    bm.output()
+    
+    output = ""
+
+    def weighted_choice_compile(items):
+        """returns a function that fetches a random item from items
+        items is a list of tuples in the form (item, weight)
+        taken from http://stackoverflow.com/questions/526255"""
+        
+        weight_total = sum((item[1] for item in items))
+        def choice(uniform = random.uniform):
+            n = uniform(0, weight_total)
+            for item, weight in items:
+                if n < weight:
+                    return item
+                n = n - weight
+            return item
+        return choice()
+
+    for key in type_tiles.keys():
+        weight_sum = 0
+        for entity in type_tiles[key]:
+            weight_sum += entity[1]
+        type_tiles[key].append(("",1-weight_sum))
+        print(type_tiles[key])
+        
+    w,h = bm.width,bm.height
+    for y in range(h):
+        for x in range(w):
+            col = tuple( reversed( bm.get_pixel_color(x,y) ))
+            area_type = area_types[col]
+            if area_type != "Background":
+                entity = weighted_choice_compile(type_tiles[area_type])
+                if entity != "":
+                    extra.write("{0} {1} {2}\n".format(x,y,entity))
+    extra.close()
+                    
+
 
 if __name__ == "__main__":
     main()
