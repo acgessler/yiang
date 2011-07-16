@@ -1,0 +1,12 @@
+<out> = Tile(<raw>,11,15,halo_img=None,collision=Entity.ENTER)
+    ,
+    °V  y
+  \,/' j_
+   h  ,H   y   
+   \H H°  >§  
+  _/||   \%*-<
+     \\ /#|
+      \##/
+      |#|
+      |#|
+      |#|

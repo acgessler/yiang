@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,9,8,halo_img=None)
+<out> = Tile(<raw>,9,8,halo_img=None,collision=Entity.ENTER)
     /\
    /#%\
    /#%\

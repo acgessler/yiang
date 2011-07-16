@@ -53,3 +53,6 @@ Q=330000
 
 # Light shiny blue
 c=4b55da45
+
+#light red/orange
+O=ff7847

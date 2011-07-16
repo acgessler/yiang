@@ -1,0 +1,6 @@
+from tile import AnimTile;<out> = AnimTile(<raw>,2,2,30,halo_img=None,randomize=True,collision=Entity.ENTER)
+u U u
+ \|/
+
+u u u
+ \|/

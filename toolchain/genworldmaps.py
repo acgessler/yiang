@@ -64,11 +64,32 @@ large_tiles = {
 level_door = ((0x0,0x0,0x0),(0xff,0x2c,0xfd))
 
 area_types = {
-    (0x0,0xff,0x0)   : "Wald",
+    (0x0,0xff,0x0)   : "Wiese",
     (0xff,0xff,0xff) : "Background",
+    (0x0,0x90,0x0) : "Nadelwald",
+    (0x6a,0xcd,0x5a) : "Mischwald"
 }
 type_tiles = {
-    "Wald":[("gtr",0.05),("dtr",0.025)] #("tyle",weight) (weightmax:1)
+    "Wiese":[("gga",0.01), #busch
+             ("dga",0.0125),
+             ("Ogb",0.005), #blume
+             ("dgc",0.20), #grashalme
+             ("dgd",0.20), #grashalme
+             ("gge",0.05) #grashalme(wenig)
+             ], #("tyle",weight) (weightmax:1)
+    
+    "Nadelwald":[
+            ("gtr",0.01), #tanne
+            ("dtr",0.15) #tanne
+            ],
+    
+    "Mischwald":[
+            ("gtr",0.008), #tanne
+            ("dtr",0.05), #tanne
+            ("gts",0.003), #kugelbaum
+            ("dts",0.05), #kugelbaum
+            ("gtt",0.008) #laublos
+            ]
 }
 def main():
     for level in (30000,30002,30003):

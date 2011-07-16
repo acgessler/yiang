@@ -1,0 +1,10 @@
+<out> = Tile(<raw>,9,11,halo_img=None,collision=Entity.ENTER)
+  .-=+-.
+ #'W}?a'#
+§*$%&"$&*§
+&"G&y§§*$%
+ %nQ!4(v%
+  °*~-*'
+    Pq
+    Pq
+    Pq

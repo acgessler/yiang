@@ -1,8 +1,0 @@
-from tile import AnimTile;<out> = AnimTile(<raw>,1,4,16,halo_img=None,randomize=True)
-|||| |||||| ||||||
-
-\\\\\\ \\\\\\ \\\\
-
-|||| ||||||| |||||
-
-///// ////// ////
