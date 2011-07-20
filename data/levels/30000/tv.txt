@@ -1,0 +1,4 @@
+<out> = Tile(<raw>,3,7,halo_img=None,collision=Entity.ENTER)
+ c'°p
+ |+#|
+,J+#L.

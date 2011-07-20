@@ -80,7 +80,9 @@ type_tiles = {
     
     "Nadelwald":[
             ("gtr",0.01), #tanne
-            ("dtr",0.15) #tanne
+            ("dtr",0.15), #tanne
+            ("Ptu",0.0005), #Baumstumpf
+            ("Ptv",0.001) #Baumstumpf
             ],
     
     "Mischwald":[
@@ -88,7 +90,9 @@ type_tiles = {
             ("dtr",0.05), #tanne
             ("gts",0.003), #kugelbaum
             ("dts",0.05), #kugelbaum
-            ("gtt",0.008) #laublos
+            ("gtt",0.008), #laublos
+            ("Ptu",0.0005), #Baumstumpf
+            ("Ptv",0.001) #Baumstumpf
             ]
 }
 def main():
@@ -267,6 +271,7 @@ def spawn_content(level):
         for entity in type_tiles[key]:
             weight_sum += entity[1]
         type_tiles[key].append(("",1-weight_sum))
+        print(key,' | ',weight_sum,'/1.0 max')
         
     w,h = bm.width,bm.height
     for y in range(h):

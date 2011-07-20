@@ -1,0 +1,6 @@
+<out> = Tile(<raw>,5,12,halo_img=None,collision=Entity.ENTER)
+     .~.
+    :._.:
+    |+##|
+   .J+##C.
+  *°' JJ'°*
