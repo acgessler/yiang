@@ -375,7 +375,12 @@ OOOOOO  OOOOO  \n\
         """Called when the ESCAPE key is hit"""
         if hasattr(self,"time"):
             self.total_accum += self.time
-            delattr(self,"clock")
+            try:
+                delattr(self,"clock")
+            except AttributeError:
+                # HACK: this happens if the user presses ESCAPE during level loading, but
+                # the event gets accidentially dispatched to the wrong handler.
+                pass
         
         Renderer.RemoveDrawable(self)
 

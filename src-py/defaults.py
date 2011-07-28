@@ -81,7 +81,7 @@ enter_level_fade_time = 1.4
 enter_worldmap_fade_time = 2.0
 messagebox_fade_time = 2.0
 loading_time = 6.0
-loading_fool_player = False
+loading_fool_player = True
 death_sprites = 130
 min_death_sprites = 5
 death_sprites_player = 330
@@ -180,7 +180,7 @@ world_draw_hud = True
 minimap_size = 0.22
 
 # Base alpha value for uncovered areas of the minimap
-minimap_alpha = 0x80
+minimap_alpha = 0xd0
 
 # Maximum delta t - dt's over this limit are silently ignored
 delta_t_treshold = 0.2
