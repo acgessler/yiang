@@ -207,6 +207,8 @@ class Player(Entity):
         self.pofsx = ofsx / defaults.tiles_size[0] + pcb[0]*0.5
         self.pofsy = pcb[1]*0.5
         
+        self.dirchange_clock = None
+        
         # XXX get rid of pwith and pheight
         self.dim = self.pwidth,self.pheight
         self.draworder = draworder
@@ -550,22 +552,33 @@ class Player(Entity):
         inp = Renderer.app.GetInput()
         if not self.block_input:
             if inp.IsKeyDown(KeyMapping.Get("move-left")):
-                self.vel[0] = -defaults.move_speed[0] * self.speed_scale
-                self.dir = Player.LEFT
+                if self.dir == Player.RIGHT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
+                    self.vel[0] = 0 
+                    if self.dir == Player.RIGHT:
+                        self.dirchange_clock = sf.Clock()
+                else:
+                    self.dirchange_clock = None
+                    self.vel[0] = -defaults.move_speed[0] * self.speed_scale
                 
                 if not self.in_jump: # do not trigger walking animation while jumping
                     anim = 'walk'
     
+                self.dir = Player.LEFT
                 self.moved_once = True
                 
             if inp.IsKeyDown(KeyMapping.Get("move-right")):
-                self.vel[0] = defaults.move_speed[0] * self.speed_scale
+                if self.dir == Player.LEFT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
+                    self.vel[0] = 0 
+                    if self.dir == Player.LEFT:
+                        self.dirchange_clock = sf.Clock()
+                else:
+                    self.dirchange_clock = None
+                    self.vel[0] = defaults.move_speed[0] * self.speed_scale
                 
                 if not self.in_jump: # do not trigger walking animation while jumping
                     anim = 'walk'
                     
                 self.dir = Player.RIGHT
-    
                 self.moved_once = True
     
             if defaults.debug_updown_move is True or self.move_freely is True:
