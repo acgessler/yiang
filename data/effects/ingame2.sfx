@@ -1,5 +1,5 @@
 
-
+#undef ENABLE_DITHER
 
 texture framebuffer = {FRAMEBUFFER}
 
@@ -27,9 +27,9 @@ effect
 
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(tin);
-	vec4 another = framebuffer(tin+vec2(-0.003,-0.002));
-	vec4 notthis = framebuffer(tin+vec2( 0.003,-0.002));
-	vec4 evenmor = framebuffer(tin+vec2(-0.003, 0.002));
+	vec4 another = framebuffer(tin+vec2(-0.001,-0.001));
+	vec4 notthis = framebuffer(tin+vec2( 0.001,-0.001));
+	vec4 evenmor = framebuffer(tin+vec2(-0.001, 0.001));
 #ifdef ENABLE_DITHER
 	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
 #endif

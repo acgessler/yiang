@@ -172,7 +172,7 @@ This makes me SO happy {0}
                 
                 while True:
                     b = time.time()
-                    if inp.IsKeyDown(sf.Key.S) or b-a > loadtime:
+                    if inp.IsKeyDown(sf.Key.Escape) or b-a > loadtime:
                         break
                         
                     time.sleep(  max(0, defaults.loading_time - (b-a)))
