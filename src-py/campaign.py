@@ -350,7 +350,7 @@ class CampaignPlayer(Player):
     For example, shooting does not work on the world map and the
     respective keys remain disabled"""
     
-    def __init__(self, text, width, height, ofsx, move_freely=True, draworder=10500):
+    def __init__(self, text, width, height, ofsx, move_freely=True, draworder=16500):
         Player.__init__(self,text,width,height,ofsx,move_freely,draworder)
         
     def _Shoot(self):

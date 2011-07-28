@@ -23,18 +23,18 @@ effect
 #else
 
 	vec2 tin = _in;
-	float scale =  clamp((length(tin-cur))*1.79,0.0,1.0)*1.1;
+	float scale =  clamp((length(tin-cur))*1.79,0.0,1.0);
 
 	// XXX compilation fails if these statements are put on one line, SFML what do you do?
 	vec4 pixel = framebuffer(tin);
-	vec4 another = framebuffer(tin+vec2(-0.001,-0.001));
-	vec4 notthis = framebuffer(tin+vec2( 0.001,-0.001));
-	vec4 evenmor = framebuffer(tin+vec2(-0.001, 0.001));
+	vec4 another = framebuffer(tin+vec2(-0.01,-0.01));
+	vec4 notthis = framebuffer(tin+vec2( 0.01,-0.01));
+	vec4 evenmor = framebuffer(tin+vec2(-0.01, 0.01));
 #ifdef ENABLE_DITHER
 	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
 #endif
 	
-	vec4 color = (pixel+another+notthis+evenmor)*0.25;
+	vec4 color = mix(pixel, (pixel+another+notthis+evenmor)*0.25, scale+0.2);
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
@@ -42,7 +42,7 @@ effect
 	_out.rgb += (dither.rgb-0.5f)*0.0200 * dither_strength * scale;
 #endif
 
-	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.5f) * 1.35;
+	_out.rgb = mix(vec3( dot(_out.rgb,vec3(0.5f,0.3f,0.2f)) ),_out.rgb,0.8f) * 1.35;
 	_out.a = 1.f;
 
 #endif

@@ -502,6 +502,8 @@ class AnimTile(Tile):
             assert len(self.texts[i]) == len(self.texts[0])
 
         self.dim,self.ofs = self.cached_sizes[0][0]
+        
+        self.SetState(0)
         if randomize is True:
             self.GotoRandom()
             
