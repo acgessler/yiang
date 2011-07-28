@@ -728,12 +728,12 @@ class Level:
         if scroll & Level.SCROLL_TOP:
             rmax = float(defaults.top_scroll_distance)
             if pos[1] < self.origin[1] + rmax:
-                self.SetOrigin((self.origin[0], pos[1] - rmax))
+                self.SetOrigin((self.origin[0], max(0, pos[1] - rmax)))
                 
         if scroll & Level.SCROLL_BOTTOM:
             rmax = float(defaults.bottom_scroll_distance)
             if pos[1] > self.origin[1] + defaults.tiles[1] - rmax:
-                self.SetOrigin((self.origin[0], pos[1] - defaults.tiles[1] + rmax))
+                self.SetOrigin((self.origin[0], min( self.GetLevelSize()[1],pos[1] + rmax)  - defaults.tiles[1]))
                 
     def PushAutoScroll(self,status):
         self.autoscroll_speed += [status]
