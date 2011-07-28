@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Volcano'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=0,bgimg=5,scroll=3,lower_offset=0.5)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('Volcano'),color=(0, 0, 0),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=0,bgimg=5,scroll=15,lower_offset=0.5)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rI0.  .  .  .  .  .  _IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  oAEoAE
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  oAEoAE
@@ -21,3 +21,7 @@ oAEoAEoAEoAEoAE.  .  .  .  .  .  .  .  .  .  .  .  .  rAFoA6rDArDArDArDArDArDArD
 oAEoAEoAEoAEoAEoAE.  .  bPL.  .  .  .  .  .  .  .  rAFoA6rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAoA6oA6oA6oA6oA6oA6oA6oA6rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAoA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6rAF.  .  .  .  .  .  .  .  .  .  .  .  oA6oAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAE
 oAEoAEoAEoAEoAEoAEoAE.  .  .  .  .  .  .  .  .  rAFoA6rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAoA6.  .  .  .  .  .  .  .  .  _S4.  _S5oA6oAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAE
 oAEoAEoAEoAEoAEoAEoAEoAEoA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oA6oAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAEoAE
+
+
+
+
