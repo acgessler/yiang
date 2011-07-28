@@ -95,62 +95,6 @@
 #=======================
 #Deco objects
 #=======================
-
-#-----grass------
-23 27 dgs
-24 19 ggu
-26 29 dgr
-26 33 dgs
-27 27 ggu
-32 28 dgr
-34 30 ggt
-38 28 dgr
-38 31 ggs
-39 19 dgt
-40 19 ggr
-42 27 ggr
-44 27 dgu
-44 35 dgs
-45 31 ggr
-46 19 dgt
-47 38 dgr
-53 21 dgt
-58 24 ggu
-59 32 dgs
-60 41 dgr
-62 43 ggu
-
-
-
-#------Trees-----
-125 75 gtr
-125 48 dtr
-129 49 dtr
-116 75 gtr
-114 80 dtr
-116 81 gtr
-140 78 dtr
-121 95 gtr
-119 60 dtr
-121 58 gtr
-128 44 gtr
-132 90 dtr
-101 100 gtr
-104 102 dtr
-102 103 dtr
-
-69 193 dtr
-73 194 gtr
-81 191 dtr
-89 189 dtr
-87 194 gtr
-91 195 dtr
-81 197 gtr
-88 198 dtr
-94 198 dtr
-77 200 gtr
-85 202 dtr
-
 #-----stones----
 148 44 ~st
 151 39 ~sv
