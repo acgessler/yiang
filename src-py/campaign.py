@@ -33,6 +33,7 @@ class CampaignLevel(Level):
     def __init__(self, level, game, lines, 
         name="Map of the World", 
         minimap="map.bmp", 
+        minimap_bg="questionmark.bmp", 
         overlays=["extra_items.txt"], 
         color=(15,30,15),
         skip_validation=True
@@ -58,6 +59,7 @@ class CampaignLevel(Level):
         self._ComputeOrigin()
         
         self.minimap = minimap
+        self.minimap_bg = minimap_bg
         self.minimap_offline = game.GetCookie("lv_{0}_minimap_offline".format(level),[])
         if defaults.world_draw_hud is True:
             self._LoadHUD()
@@ -171,14 +173,15 @@ class CampaignLevel(Level):
         self.minimap_vis, self.minimap_sprite = sf.Image(), None
         #if not self.minimap_img.LoadFromFile(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap )):
         self.minimap_img = TextureCache.Get(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap ))
+        self.minimap_bg_img = TextureCache.Get(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap_bg ))
         if not self.minimap_img:
             print("Failure loading HUD minimap from {0}".format(self.minimap))
             return
         
         # the visible minimap is initially black and is uncovered as the player moves
         w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
-        b = bytearray(b'\x00\x00\x00')
-        b.append(defaults.minimap_alpha)
+        b = bytearray(b'\x00\x00\x00\x00')
+        #b.append(defaults.minimap_alpha)
         self.minimap_vis.LoadFromPixels(w,h, bytes(b) * (w*h))
         
         if len(self.minimap_offline) != h:
@@ -189,6 +192,7 @@ class CampaignLevel(Level):
             self._RebuildMinimap()
             
         self.minimap_sprite,self.sw,self.sh,self.sx,self.sy = self._GetImg(self.minimap_vis)
+        self.minimap_bg,_,_,_,_ = self._GetImg(self.minimap_bg_img)
         
         # finally, construct the rectangle around the minimap
         self.minimap_shape = sf.Shape()
@@ -208,7 +212,7 @@ class CampaignLevel(Level):
     def UncoverMinimap(self,pos,radius=None):
         """Uncover all minimap pixels given a position on the map
         and a radius, in tile units as well."""
-        radius = radius or (defaults.tiles[0]+defaults.tiles[1])*0.5
+        radius = radius or (defaults.tiles[0]+defaults.tiles[1])*0.8
         
         # tiles map one by one to pixels on the minimap
         w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
@@ -224,16 +228,15 @@ class CampaignLevel(Level):
                 
                 col = self.minimap_img.GetPixel(x,y) 
                 
-                dsq = min(1.0, 1.7 - dsq*1.7/rsq)
+                dsq = min(1.0, 1.6 - dsq*2.0/rsq)
                 if dsq < self.minimap_offline[y][x]:
                     continue
                 
                 self.minimap_offline[y][x] = dsq
-                col.r *= dsq
-                col.g *= dsq
-                col.b *= dsq
-                col.a = max(defaults.minimap_alpha, col.a*dsq*0.5)
-                    
+                #col.r *= dsq
+                #col.g *= dsq
+                #col.b *= dsq
+                col.a = int(dsq*255)# max(defaults.minimap_alpha, col.a*dsq*0.5)
                 self.minimap_vis.SetPixel(x,y, col)
                 
         ipos = (int(pos[0]),int(pos[1]))
@@ -297,6 +300,8 @@ class CampaignLevel(Level):
                     pass
                     
             self.game.DrawSingle(self.minimap_debug_shape)
+        else:
+            self.game.DrawSingle(self.minimap_bg)
             
         self.game.DrawSingle(self.minimap_sprite)
         self.game.DrawSingle(self.minimap_shape)
