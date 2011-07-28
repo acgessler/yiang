@@ -3245,21 +3245,23 @@ class EditorMenu(Drawable):
                 ))
                 
                 # difficulty level
-                self.AddSlaveDrawable((Button(text=self.diff_texts[self.diff_level[i]],
+                self.AddSlaveDrawable((EditControl(allowed=EditControl.NUMERIC, text=str(self.diff_level[i]),
                     font_height=11,
-                    rect=[x+w+w2+4,y,w2,h2] 
+                    rect=[x+w+w2+4,y,w2*2,h2] 
                 ) + 
-                    ("release",(lambda src,i=i: NextDifficulty(src,i)))
+                    ("text_change",(lambda src,i=i: SetDifficulty(src.text,i)))
                 ))
                 
                 y += h+6
                 if y >= defaults.resolution[1]-30:
                     y = ys
-                    x += w+14+w2*2
+                    x += w+14+w2*3
                     
-        def NextDifficulty(src,i):
-            l = self.diff_level[i] = (self.diff_level[i]+1)%len(self.diff_texts)
-            src.text = self.diff_texts[l]
+        def SetDifficulty(src,i):
+            if not src:
+                return
+            l = self.diff_level[i] = int(src) # (self.diff_level[i]+1)%len(self.diff_texts)
+            #src.text = self.diff_texts[l]
             
             with open(os.path.join(defaults.config_dir,'diff_machinegen_donot_edit.txt'),'wt') as outp:
                 [outp.write('{k}={v}\n'.format(k=k,v=v)) for k,v in sorted(self.diff_level.items(),key=operator.itemgetter(0))]
