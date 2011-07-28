@@ -69,7 +69,7 @@ class InventoryItem:
 class Anim:    
     """Single animation of the player entity, used in conjunction with `AnimSet`"""
     
-    modi = ('repeat','stop')
+    modi = ('repeat','stop','goto')
     
     def __init__(self,fname):
         self.fname = fname
@@ -87,7 +87,7 @@ class Anim:
             if self.framecnt == 0:
                 raise Exception('need at least one frame')
             
-            if not self.mode in Anim.modi:
+            if not self.mode.split('=')[0] in Anim.modi:
                 raise Exception('animation mode not supported: ' + self.mode)
             
             frames = '\n'.join(s.rstrip() for s in lines[1:]).split('\n\n')
@@ -119,10 +119,14 @@ class Anim:
     def Update(self,time,dtime):
         if not hasattr(self,'started'):
             self.started = time
-            
+        
         diff = time-self.started
-        if self.mode == 'stop' and diff >= self.framelen:
+        if (self.mode == 'stop' or self.mode[:4] == 'goto') and diff >= self.framelen:
             self.frame = self.framecnt-1
+            if self.mode[:4] == 'goto':
+                assert self.mode[4] == '='
+                return self.mode[5:]
+            
             return
         
         self.frame = int(((diff % self.framelen)/self.framelen)*self.framecnt)
@@ -180,7 +184,9 @@ class AnimSet:
     
     def UpdateCurrentTile(self,time,dtime):
         assert self.active in self.anims
-        self.anims[self.active].Update(time,dtime)
+        newone = self.anims[self.active].Update(time,dtime)
+        if isinstance(newone,str):
+            self.Select(newone)
     
     def ConfigureTilesGlobally(self,callback):
         [[callback(t) for t in a.tiles] for a in self.anims.values()]
@@ -548,35 +554,64 @@ class Player(Entity):
         
         pvely = self.vel[1]
         anim = None
+        
+        cur_anim = self.animset.GetCurrent()
+        
+        def lr_suffix():
+            return '_'+('left' if self.dir == Player.LEFT else 'right')
 
         inp = Renderer.app.GetInput()
         if not self.block_input:
             if inp.IsKeyDown(KeyMapping.Get("move-left")):
                 if self.dir == Player.RIGHT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
+                    # player changes direction from right to left
+                    if self.vel[0] > 0:
+                        # player was moving to the right, so first get to idle-right
+                        anim = 'right_to_midr'
+                    elif cur_anim == 'idle_right':
+                        # player in idle_right, so get to idle-left
+                        anim = 'midr_to_midl'
+                    
                     self.vel[0] = 0 
+                    
                     if self.dir == Player.RIGHT:
-                        self.dirchange_clock = sf.Clock()
+                        self.dirchange_clock = sf.Clock()               
                 else:
                     self.dirchange_clock = None
                     self.vel[0] = -defaults.move_speed[0] * self.speed_scale
+                    
+                    if cur_anim == 'idle_left':
+                        anim = 'midl_to_left'
+                    elif cur_anim != 'midl_to_left':
+                        anim = 'walk_left'
                 
-                if not self.in_jump: # do not trigger walking animation while jumping
-                    anim = 'walk'
-    
                 self.dir = Player.LEFT
                 self.moved_once = True
                 
             if inp.IsKeyDown(KeyMapping.Get("move-right")):
                 if self.dir == Player.LEFT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
+                    # player changes direction from right to left
+                    if self.vel[0] < 0:
+                        # player was moving to the right, so first get to idle-right
+                        anim = 'left_to_midl'
+                    elif cur_anim == 'idle_left':
+                        # player in idle_right, so get to idle-left
+                        anim = 'midl_to_midr'
+                        
                     self.vel[0] = 0 
                     if self.dir == Player.LEFT:
                         self.dirchange_clock = sf.Clock()
                 else:
                     self.dirchange_clock = None
                     self.vel[0] = defaults.move_speed[0] * self.speed_scale
+                    
+                    if cur_anim == 'idle_right':
+                        anim = 'midr_to_right'
+                    elif cur_anim != 'midr_to_right':
+                        anim = 'walk_right'
                 
-                if not self.in_jump: # do not trigger walking animation while jumping
-                    anim = 'walk'
+                #if not self.in_jump: # do not trigger walking animation while jumping
+                #    anim = 'walk'+lr_suffix()
                     
                 self.dir = Player.RIGHT
                 self.moved_once = True
@@ -585,11 +620,11 @@ class Player(Entity):
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):
                     self.pos[1] -= time * defaults.move_speed[1]
                     self.moved_once = True
-                    anim = 'jump'
+                    anim = 'jump'+lr_suffix()
                 if inp.IsKeyDown(KeyMapping.Get("move-down")):
                     self.pos[1] += time * defaults.move_speed[1]
                     self.moved_once = True
-                    anim = 'jump'
+                    anim = 'jump'+lr_suffix()
             else:
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):
                     if self.in_jump is False and self.block_jump is False:
@@ -597,7 +632,7 @@ class Player(Entity):
                         self.in_jump = self.level.gravity != 0 
                         self.block_jump = True
     
-                        anim = 'jump'
+                        anim = 'jump'+lr_suffix()
                     self.moved_once = True
                     
                 else:
@@ -609,7 +644,7 @@ class Player(Entity):
                         self.in_djump = self.level.gravity != 0 
                         self.block_djump = True
     
-                        anim = 'jump'
+                        anim = 'jump'+lr_suffix()
                         self.moved_once = True
                 else:
                     self.block_djump = False
@@ -657,10 +692,14 @@ class Player(Entity):
                 
         if anim is None:
             if not self.in_jump:
-                anim = 'idle'
+                if self.dir == Player.LEFT:
+                    if cur_anim != 'idle_left':
+                        anim = 'left_to_midl'
+                elif cur_anim != 'idle_right':
+                    anim = 'right_to_midr'
         
         if anim:
-            self.animset.Select(anim+'_'+('left' if self.dir == Player.LEFT else 'right'))
+            self.animset.Select(anim)
         self.animset.UpdateCurrentTile(time_elapsed,time)
                 
     def _CheckForTopMapBorder(self):
