@@ -214,6 +214,8 @@ class Player(Entity):
         self.pofsy = pcb[1]*0.5
         
         self.dirchange_clock = None
+        self.count_shoot_unsuccessful = 0
+        self.weapon_shoot_unsuccessful = 0
         
         # XXX get rid of pwith and pheight
         self.dim = self.pwidth,self.pheight
@@ -498,9 +500,21 @@ class Player(Entity):
                 break
         else:
             if self.block_shoot is False:
-                self.game.AddEntity(InventoryChangeAnimStub(_("Dude, you have no weapon ..."),
+                messages = [
+                    _("Dude, you have no weapon ..."),
+                    _("You don't have a weapon"),
+                    _("You DON'T have a weapon"),
+                    _(".. and unless you have a wand (which you don't have), it's unlikely that this situation will change by means other than picking up a weapon"),
+                    _("I don't know why I'm saying this again: you have no weapon"),
+                    _("If you don't stop, I'll recite a poem"),
+                    _("I'll just ignore you"),
+                    _("--")
+                ]
+                
+                self.game.AddEntity(InventoryChangeAnimStub(messages[min(self.weapon_shoot_unsuccessful,len(messages)-1)],
                     self.pos,color=sf.Color.Yellow))
                 
+                self.weapon_shoot_unsuccessful += 1
                 self.block_shoot = True
             return
         
@@ -510,9 +524,23 @@ class Player(Entity):
             
         self.moved_once = self.block_shoot = True
         if self.ammo[0] == 0:
-            self.game.AddEntity(InventoryChangeAnimStub(_("Out of ammo, idiot"),
-                self.pos,color=sf.Color.Yellow))
+            messages = [
+                _("Out of ammo"),
+                _("Still out of ammo"),
+                _("Still out of ammo - bored?"),
+                _("Still out of ammo. Please don't hit 'shoot' unless you have ammo"),
+                _("Stop it!"),
+                _("If you don't stop, I'll recite a poem"),
+                _("I'll just ignore you"),
+                _("--")
+            ]
+            
+            self.game.AddEntity(InventoryChangeAnimStub(messages[min(self.count_shoot_unsuccessful,len(messages)-1)],self.pos,color=sf.Color.Yellow))
+            self.count_shoot_unsuccessful += 1
             return 
+        
+        self.count_shoot_unsuccessful = 0
+        self.weapon_shoot_unsuccessful = 0
         
         self.ammo[0] -= 1
         if self.ammo[0] == 2:
