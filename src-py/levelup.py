@@ -32,24 +32,24 @@ class LevelUp(Tile):
             # we can no longer be sure that only one LevelUp will be triggered
             
             print("Level completed: {0}!".format(self.level.GetName() or ""))
-            self.game.Award(defaults.levelup_score_base*self.game.GetLevelStats()[-1])
-                      
+            
             # in campaign mode, make sure the level is correctly marked done
             # so the player won't be able to enter it again, even if he
             # wants to because there's so much score in it.
             self.game.MarkLevelDone(self.level.GetLevelIndex())
-            
     
             other.has_levelup = True
             if self.game.GetGameMode() == Game.CAMPAIGN:
-                self.game.BackToWorldMap()
-            
-            elif self.game.GetGameMode() == Game.SINGLE:
-                self.game.GameOverQuitToMenu()
-            elif self.game.GetGameMode() == Game.EDITOR or self.game.GetGameMode() == Game.EDITOR_HIDDEN:
-                pass
+                self.game.BackToWorldMap(self.level.metadata.get('reward_lives',1))
             else:
-                self.game.NextLevel()
+                # score aways only outside campaign mode
+                self.game.Award(defaults.levelup_score_base*self.game.GetLevelStats()[-1])
+                if self.game.GetGameMode() == Game.SINGLE:
+                    self.game.GameOverQuitToMenu()
+                elif self.game.GetGameMode() == Game.EDITOR or self.game.GetGameMode() == Game.EDITOR_HIDDEN:
+                    pass
+                else:
+                    self.game.NextLevel()
 
             #raise NewFrame()
             

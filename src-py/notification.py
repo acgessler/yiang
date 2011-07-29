@@ -27,6 +27,23 @@ from entity import Entity,EntityWithEditorImage
 from player import Player
 
 
+
+def SimpleWrap(text,line_length):
+    text_formatted = ""
+    # XXX monospace is not the world, really -- this function should really take font metrics into account
+    for paragraph in text.split("\n"):
+        cnt = 0
+        for word in paragraph.split(" "):
+            if cnt + len(word) > line_length:
+                text_formatted += "\n"
+                cnt = 0
+            text_formatted += word + " "
+            cnt += len(word)
+        
+        text_formatted += "\n\n"
+    return text_formatted
+
+
 class MessageBox(Drawable):
     """Implements a reusable, generic message box that is drawn as overlay"""
     
@@ -214,18 +231,8 @@ class SimpleNotification(EntityWithEditorImage):
             except:
                 print("format() failed, consider passing False for the 'format' parameter")
         
-        # format the text nicely
-        # XXX monospace is not everything, really
-        for paragraph in self.text.split("\n"):
-            cnt = 0
-            for word in paragraph.split(" "):
-                if cnt + len(word) > line_length:
-                    self.text_formatted += "\n"
-                    cnt = 0
-                self.text_formatted += word + " "
-                cnt += len(word)
-            
-            self.text_formatted += "\n\n"
+        # fix wrapping
+        self.text_formatted = SimpleWrap(self.text,line_length)
         
         self.block_timer = sf.Clock()
         self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), 

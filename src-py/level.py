@@ -324,18 +324,25 @@ class Level:
         self.stats.setdefault(name,[0])[0] += add
     
     def GetStatsString(self):
-        """Take the current gameplay statistics and format them nicely.
-        The resulting string takes 8 lines.
+        """Take the current gameplay statistics and format them nicely, including a pseudo-grade to rate the player's performance.
         """
-        return _("""Statistics (last level played):
         
-        {deaths:4} - Suicidal Deaths Committed
+        # locale-specific grades, to be translated to the proper meaning
+        grades = _('A*,A,B,C').split(',')
+        
+        # A* is only awared if the player didn't die eben though the level's metadata thinks that this was to be expected
+        grade = grades[0] if (self.stats['deaths']==0 and self.metadata.get('reward_lives',1) != 0) else random.choice(grades[1:])
+        return _("""Your Performance:
+        
+        {deaths:4} - Unsuccessful suicide attempts
         {score:4.4} ct. - Score Received
         {s_kills:4} - Minor Enemy Kills:   
         {l_kills:4} - Major Enemy Kills:  
         {e_kills:4} - Epic Enemy Kills
         {achievements:4} - Achievements earned
-""").format(**dict( [(k,v[0]) for k,v in self.stats.items()]  ))
+        
+        Your overall grade for this level is: {grade}
+""").format(**dict( [(k,v[0]) for k,v in self.stats.items()] + [('grade',grade)] ))
         
     def GetLevelIndex(self):
         """Get the one-based index of the current level"""

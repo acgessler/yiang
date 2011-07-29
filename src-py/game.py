@@ -690,7 +690,7 @@ Hit {0} or {1} to return to the menu .. """).format(
 
 
     
-    def BackToWorldMap(self):
+    def BackToWorldMap(self,life_gain=0):
         """Display level statistics and move the player back to the world map"""
     
         from posteffect import FadeOutOverlay, FadeInOverlay
@@ -698,6 +698,15 @@ Hit {0} or {1} to return to the menu .. """).format(
         
         self.MergeInventoryBack()
         accepted = KeyMapping.Get("accept"),
+        
+        # this, perhaps, is best described as the ASCII equivalent of a demotivational pic
+        gain = _('not a single life, it seems either your performance was terrific, or the level too easy.')
+        if life_gain == 1:
+            gain = _('a lousy extra life to be lost at the next possible occasion (besides, you are pretty good at loosing your lifes).')
+        else:
+            gain = _('{0} extra lifes. Don\'t get it wrong, your performance was awful, as always, but we admit the level is difficult and we don\'t want you to feel bad about it.').format(life_gain)
+            
+        self.AddLives(life_gain)
         
         def dropit(x):
             self.PopSuspend()
@@ -708,11 +717,12 @@ Hit {0} or {1} to return to the menu .. """).format(
                 Renderer.RemoveDrawable(x)
                 pass
             
-            self.FadeOutAndShowStatusNotice("""Go on, there's more to do.
-"""+ ("" if self.level is None else self.level.GetStatsString())+
+            import notification
+            self.FadeOutAndShowStatusNotice(notification.SimpleWrap(_("Go on, there's more to do. As a reward for your extraordinary achievements, you have been granted ") + gain + "\n" +
+ ("" if self.level is None else self.level.GetStatsString())+
 """
 Hit any key to continue.
-""",
+""",50),
     defaults.messagebox_fade_time,(550,230),0.0,accepted,sf.Color.Black,on_close,flags=MessageBox.NO_FADE_IN)
             
         Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
