@@ -142,6 +142,8 @@ class MainMenu(Drawable):
         self.clock = sf.Clock()
         self.images = [ ]
         
+        # uncomment to enable a logo image at the top of the menu screen
+        """
         from textures import TextureCache
         img = TextureCache.Get(os.path.join(defaults.data_dir,"textures","title_small.png"))
         
@@ -151,6 +153,7 @@ class MainMenu(Drawable):
         sp.SetPosition((defaults.resolution[0]-x)/2,10)
         sp.Resize(x,y)
         self.images.append(sp)
+        """
 
         print("Entering main menu")
         self.SetMenuOption(self.cur_option,first=True)

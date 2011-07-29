@@ -289,7 +289,7 @@ OOOOOO  OOOOO  \n\
         shape.EnableFill(True)
         shape.EnableOutline(True)
 
-        self.DrawSingle(shape)
+        #self.DrawSingle(shape)
         
         if self.undecorated is False:
             
