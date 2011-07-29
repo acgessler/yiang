@@ -215,6 +215,7 @@ class Player(Entity):
         
         self.dirchange_clock = None
         self.move_steady = None
+        self.steady_stand = None
         self.count_shoot_unsuccessful = 0
         self.weapon_shoot_unsuccessful = 0
         
@@ -651,7 +652,10 @@ class Player(Entity):
             # HACK: fake acceleration effect when walking, kept separate from self.acc to avoid interfering with other effects
             if self.vel[0] == 0:
                 self.move_steady = None
+                if not self.steady_stand:
+                    self.steady_stand = sf.Clock()
             else:
+                self.steady_stand = None
                 if not self.move_steady:
                     self.move_steady = sf.Clock()
                     s = 0.02
@@ -660,6 +664,7 @@ class Player(Entity):
                 else:
                     s = math.exp(self.move_steady.GetElapsedTime())-1
                 self.vel[0] *= min(s,0.33)*3
+            
           
             if defaults.debug_updown_move is True or self.move_freely is True:
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):
@@ -737,11 +742,14 @@ class Player(Entity):
                 
         if anim is None:
             if not self.in_jump:
-                if self.dir == Player.LEFT:
-                    if cur_anim != 'idle_left':
-                        anim = 'left_to_midl'
-                elif cur_anim != 'idle_right':
-                    anim = 'right_to_midr'
+                if self.steady_stand and self.steady_stand.GetElapsedTime() > defaults.idle_delay:
+                    if self.dir == Player.LEFT:
+                        if cur_anim != 'idle_left':
+                            anim = 'left_to_midl'
+                    elif cur_anim != 'idle_right':
+                        anim = 'right_to_midr'
+                else:
+                    anim = 'walk'+lr_suffix()+'_preparetoidle'
         
         if anim:
             self.animset.Select(anim)

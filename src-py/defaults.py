@@ -202,6 +202,9 @@ collision_tap_size = 0.1
 # delay in which the player won't move after turning around
 turnaround_delay = 0.18
 
+# delay after which the player is set to make the transition from walk_xxx to idle_xxx 
+idle_delay = 0.5
+
 max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
 
