@@ -200,7 +200,7 @@ slowdown_level = 0
 collision_tap_size = 0.1
 
 # delay in which the player won't move after turning around
-turnaround_delay = 0.15
+turnaround_delay = 0.18
 
 max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60

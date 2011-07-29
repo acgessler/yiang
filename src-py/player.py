@@ -214,6 +214,7 @@ class Player(Entity):
         self.pofsy = pcb[1]*0.5
         
         self.dirchange_clock = None
+        self.move_steady = None
         self.count_shoot_unsuccessful = 0
         self.weapon_shoot_unsuccessful = 0
         
@@ -582,6 +583,7 @@ class Player(Entity):
         
         pvely = self.vel[1]
         anim = None
+        move = False
         
         cur_anim = self.animset.GetCurrent()
         
@@ -596,9 +598,6 @@ class Player(Entity):
                     if self.vel[0] > 0:
                         # player was moving to the right, so first get to idle-right
                         anim = 'right_to_midr'
-                    elif cur_anim == 'idle_right':
-                        # player in idle_right, so get to idle-left
-                        anim = 'midr_to_midl'
                     
                     self.vel[0] = 0 
                     
@@ -606,15 +605,19 @@ class Player(Entity):
                         self.dirchange_clock = sf.Clock()               
                 else:
                     self.dirchange_clock = None
-                    self.vel[0] = -defaults.move_speed[0] * self.speed_scale
+                    self.vel[0] = -defaults.move_speed[0] * self.speed_scale 
                     
-                    if cur_anim == 'idle_left':
+                    if cur_anim == 'idle_right':
+                        # player in idle_right, so get to idle_left
+                        anim = 'midr_to_midl'
+                    elif cur_anim == 'idle_left':
                         anim = 'midl_to_left'
                     elif cur_anim != 'midl_to_left':
                         anim = 'walk_left'
                 
                 self.dir = Player.LEFT
                 self.moved_once = True
+                move = True
                 
             if inp.IsKeyDown(KeyMapping.Get("move-right")):
                 if self.dir == Player.LEFT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
@@ -622,18 +625,18 @@ class Player(Entity):
                     if self.vel[0] < 0:
                         # player was moving to the right, so first get to idle-right
                         anim = 'left_to_midl'
-                    elif cur_anim == 'idle_left':
-                        # player in idle_right, so get to idle-left
-                        anim = 'midl_to_midr'
                         
                     self.vel[0] = 0 
+                    
                     if self.dir == Player.LEFT:
                         self.dirchange_clock = sf.Clock()
                 else:
                     self.dirchange_clock = None
                     self.vel[0] = defaults.move_speed[0] * self.speed_scale
                     
-                    if cur_anim == 'idle_right':
+                    if cur_anim == 'idle_left':
+                        anim = 'midl_to_midr'
+                    elif cur_anim == 'idle_right':
                         anim = 'midr_to_right'
                     elif cur_anim != 'midr_to_right':
                         anim = 'walk_right'
@@ -643,7 +646,21 @@ class Player(Entity):
                     
                 self.dir = Player.RIGHT
                 self.moved_once = True
-    
+                move = True
+          
+            # HACK: fake acceleration effect when walking, kept separate from self.acc to avoid interfering with other effects
+            if self.vel[0] == 0:
+                self.move_steady = None
+            else:
+                if not self.move_steady:
+                    self.move_steady = sf.Clock()
+                    s = 0.02
+                elif self.in_jump:
+                    s = 1.0
+                else:
+                    s = math.exp(self.move_steady.GetElapsedTime())-1
+                self.vel[0] *= min(s,0.33)*3
+          
             if defaults.debug_updown_move is True or self.move_freely is True:
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):
                     self.pos[1] -= time * defaults.move_speed[1]
