@@ -1,4 +1,4 @@
-4; 0.15; goto=walk_left
+4; 4; goto=walk_left
   ____  
 o|O.O |o
  |-___| 

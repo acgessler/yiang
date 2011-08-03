@@ -1,4 +1,4 @@
-4; 0.15; goto=idle_left
+4; 4; goto=idle_left
   ____  
 /O  M| 
 |-___| 
