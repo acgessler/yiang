@@ -26,6 +26,7 @@ import operator
 
 # My own stuff
 from stubs import *
+from complexanim import Anim,AnimSet
 
 class InventoryItem:
     """Base class for inventory items.
@@ -64,133 +65,7 @@ class InventoryItem:
         leaving a level."""
         return False
     
-    
-    
-class Anim:    
-    """Single animation of the player entity, used in conjunction with `AnimSet`"""
-    
-    modi = ('repeat','stop','goto')
-    
-    def __init__(self,fname):
-        self.fname = fname
-        self.frame = 0
-        with open(fname,'rt') as inp:
-            lines = inp.readlines()
-            if len(lines) <= 1:
-                raise Exception('too few lines')
-            
-            
-            self.framecnt,self.framelen,self.mode = [s.strip() for s in lines[0].split(';') if len(s.strip())]
-            self.framecnt = int(self.framecnt)
-            self.framelen = float(self.framecnt) if defaults.debug_player_anims else float(self.framelen) 
-            
-            if self.framecnt == 0:
-                raise Exception('need at least one frame')
-            
-            if not self.mode.split('=')[0] in Anim.modi:
-                raise Exception('animation mode not supported: ' + self.mode)
-            
-            frames = '\n'.join(s.rstrip() for s in lines[1:]).split('\n\n')
-            if len(frames) < self.framecnt:
-                raise Exception('too few frames, expected ' + str(self.framecnt))
-            
-            frames = frames[:self.framecnt]
-            if len(set(n.count('\n') for n in frames)) != 1:
-                raise Exception('all frames must have the same y size')
-            
-            self.tiles = [Tile(f,halo_img=None,permute=False) for f in frames]
-            
-    def __str__(self):
-        return "[Anim " + self.fname + '}'
-    
-    def GetTile(self):
-        return self.tiles[self.frame]
-    
-    def Select(self):
-        pass
-    
-    def Deselect(self):
-        self.frame = 0
-        try:
-            delattr(self,'started')
-        except AttributeError:
-            pass
-    
-    def Update(self,time,dtime):
-        if not hasattr(self,'started'):
-            self.started = time
-        
-        diff = time-self.started
-        if (self.mode == 'stop' or self.mode[:4] == 'goto') and diff >= self.framelen:
-            self.frame = self.framecnt-1
-            if self.mode[:4] == 'goto':
-                assert self.mode[4] == '='
-                return self.mode[5:]
-            
-            return
-        
-        self.frame = int(((diff % self.framelen)/self.framelen)*self.framecnt)
-        print(self.frame)
                 
-    
-class AnimSet:
-    """Class to keep track of all the animations for the player. Players have
-    significantly more complex animations as the rest of the entities,
-    so I'm introducing a dedicated solution at this point."""
-    def __init__(self,name):
-        self.name = name
-        self.active = None
-        
-        self.anims = {}
-        print('start loading AnimSet: ' + name)
-        
-        # scan the directory for all animations
-        base = os.path.join(defaults.data_dir,"external_anims",name)
-        for thisfile in os.listdir(base):      
-            fname,ext = os.path.splitext(thisfile)
-            if ext.lower() == '.txt':
-                full = os.path.join(base,thisfile)
-                try:
-                    self.anims[fname] = self._LoadAnimFile(full)
-                    print('got animation ' + fname)
-                except Exception as e:
-                    print('failed to load animation {0}, got exception: {1}'.format(fname,e))
-                    
-        print('finish loading AnimSet: {0}, got {1} animsets with totally {2} frames'.format(name,len(self.anims),sum(s.framecnt for s in self.anims.values())))
-        print(self.anims)
-              
-    def _LoadAnimFile(self,f):
-        return Anim(f)
-            
-    def __str__(self):
-        return "[AnimSet " + self.name + '}'
-    
-    def Select(self,name):
-        if name == self.active:
-            return
-        
-        if not self.active is None:
-            self.anims[self.active].Deselect()
-        
-        self.active = name
-        self.anims[self.active].Select()
-        
-    def GetCurrent(self):
-        return self.active
-    
-    def GetCurrentTile(self):
-        assert self.active in self.anims
-        return self.anims[self.active].GetTile()
-    
-    def UpdateCurrentTile(self,time,dtime):
-        assert self.active in self.anims
-        newone = self.anims[self.active].Update(time,dtime)
-        if isinstance(newone,str):
-            self.Select(newone)
-    
-    def ConfigureTilesGlobally(self,callback):
-        [[callback(t) for t in a.tiles] for a in self.anims.values()]
-            
 
 class Player(Entity):
     """Special entity which responds to user input and moves the
@@ -216,6 +91,7 @@ class Player(Entity):
         self.dirchange_clock = None
         self.move_steady = None
         self.steady_stand = None
+        self.turnto = None
         self.count_shoot_unsuccessful = 0
         self.weapon_shoot_unsuccessful = 0
         
@@ -600,20 +476,15 @@ class Player(Entity):
                         # player was moving to the right, so first get to idle-right
                         anim = 'right_to_midr'
                     
-                    self.vel[0] = 0 
+                    self.vel[0] = 0
+                    self.turnto = 'l'
                     
                     if self.dir == Player.RIGHT:
                         self.dirchange_clock = sf.Clock()               
                 else:
                     self.dirchange_clock = None
-                    self.vel[0] = -defaults.move_speed[0] * self.speed_scale 
-                    
-                    if cur_anim == 'idle_right':
-                        # player in idle_right, so get to idle_left
-                        anim = 'midr_to_midl'
-                    elif cur_anim == 'idle_left':
-                        anim = 'midl_to_left'
-                    elif cur_anim != 'midl_to_left':
+                    self.vel[0] = -defaults.move_speed[0] * self.speed_scale
+                    if not self.turnto:
                         anim = 'walk_left'
                 
                 self.dir = Player.LEFT
@@ -627,20 +498,17 @@ class Player(Entity):
                         # player was moving to the right, so first get to idle-right
                         anim = 'left_to_midl'
                         
-                    self.vel[0] = 0 
+                    self.vel[0] = 0
+                    self.turnto = 'r'
                     
                     if self.dir == Player.LEFT:
                         self.dirchange_clock = sf.Clock()
                 else:
                     self.dirchange_clock = None
                     self.vel[0] = defaults.move_speed[0] * self.speed_scale
-                    
-                    if cur_anim == 'idle_left':
-                        anim = 'midl_to_midr'
-                    elif cur_anim == 'idle_right':
-                        anim = 'midr_to_right'
-                    elif cur_anim != 'midr_to_right':
+                    if not self.turnto:
                         anim = 'walk_right'
+                
                 
                 #if not self.in_jump: # do not trigger walking animation while jumping
                 #    anim = 'walk'+lr_suffix()
@@ -648,7 +516,7 @@ class Player(Entity):
                 self.dir = Player.RIGHT
                 self.moved_once = True
                 move = True
-          
+
             # HACK: fake acceleration effect when walking, kept separate from self.acc to avoid interfering with other effects
             if self.vel[0] == 0:
                 self.move_steady = None
@@ -664,7 +532,30 @@ class Player(Entity):
                 else:
                     s = math.exp(self.move_steady.GetElapsedTime())-1
                 self.vel[0] *= min(s,0.33)*3
-            
+
+            if self.turnto == 'l' and anim != 'right_to_midr':
+                if cur_anim == 'idle_right':
+                    # player in idle_right, so get to idle_left
+                    anim = 'midr_to_midl'
+                elif cur_anim == 'idle_left':
+                    anim = 'midl_to_left'
+                elif not cur_anim in ('midl_to_left','midr_to_midl','right_to_midr'):
+                    if self.vel[0] < 0:
+                        anim = 'walk_left'
+                    self.turnto = None
+                    
+            elif self.turnto == 'r' and anim != 'left_to_midl':
+                if cur_anim == 'idle_left':
+                    anim = 'midl_to_midr'
+                elif cur_anim == 'idle_right':
+                    anim = 'midr_to_right'
+                elif not cur_anim in ('midr_to_right','midl_to_midr','left_to_midl'):
+                    if self.vel[0] > 0:
+                        anim = 'walk_right'
+                    self.turnto = None
+
+            if anim:
+                print(anim)    
           
             if defaults.debug_updown_move is True or self.move_freely is True:
                 if inp.IsKeyDown(KeyMapping.Get("move-up")):

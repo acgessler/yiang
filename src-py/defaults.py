@@ -206,7 +206,7 @@ turnaround_delay = 0.18
 idle_delay = 0.5
 
 # slow all player animations down to 1 frame/s. 
-debug_player_anims = True
+debug_player_anims = False
 
 max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
