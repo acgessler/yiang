@@ -80,6 +80,18 @@ class Drawable:
         r = self.GetBoundingBox()
         return r and (r[0],r[1],r[0]+r[2],r[1]+r[3])
 
+    def GetBoundingBoxShrinked(self):
+        """Get a shrinked version of the own bounding box, for
+        drawables which support this concept. The idea is that
+        in some situations a certain degree of 'tolerance'
+        during collision detection may be desirable, and using
+        shrinked bounding boxes is an easy solution."""
+        return None
+    
+    def GetBoundingBoxAbsShrinked(self):
+        r = self.GetBoundingBoxShrinked()
+        return r and (r[0],r[1],r[0]+r[2],r[1]+r[3])
+
     def OnRemoveFromRenderer(self):
         """Called by Renderer when the Drawable has actually
         been removed from the list of all active drawables.

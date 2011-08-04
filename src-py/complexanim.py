@@ -147,3 +147,5 @@ class AnimSet:
     def ConfigureTilesGlobally(self,callback):
         [[callback(t) for t in a.tiles] for a in self.anims.values()]
 
+
+# vim: ai ts=4 sts=4 et sw=4

@@ -306,15 +306,25 @@ class Tile(Entity):
     
     def GetBoundingBoxAbs(self):
         return self.cached_bb_abs if self.cached_bb else None
+
+    def GetBoundingBoxShrinked(self):
+        return self.cached_bb_shrinked
+    
+    def GetBoundingBoxAbsShrinked(self):
+        return self.cached_bb_abs_shrinked if self.cached_bb_shrinked else None
     
     def _UpdateBB(self):
+        self.cached_bb = b = (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
+        self.cached_bb_abs = (b[0],b[1],b[0]+b[2],b[1]+b[3])
+        
         if hasattr(self,"shrink_percentage"):
             ssp = 1.0-self.shrink_percentage
             hs = (self.dim[0]*ssp,self.dim[1]*ssp)
-            self.cached_bb = b = (self.pos[0]+hs[0]/2,self.pos[1]+hs[1]/2,self.dim[0]-hs[0],self.dim[1]-hs[1])       
+            self.cached_bb_shrinked = b = (self.pos[0]+hs[0]/2,self.pos[1]+hs[1]/2,self.dim[0]-hs[0],self.dim[1]-hs[1])
+            self.cached_bb_abs_shrinked = (b[0],b[1],b[0]+b[2],b[1]+b[3])
         else:
-            self.cached_bb = b = (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
-        self.cached_bb_abs = (b[0],b[1],b[0]+b[2],b[1]+b[3])
+            self.cached_bb_shrinked = self.cached_bb
+            self.cached_bb_abs_shrinked = self.cached_bb_abs
     
     def GetBoundingBox_EditorCatalogue(self): # Special logic for use within the editor
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])

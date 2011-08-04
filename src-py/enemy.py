@@ -201,7 +201,7 @@ class SmallTraverser(Enemy):
         if not self.game.IsGameRunning():
             return 
             
-        ab = self.GetBoundingBoxAbs()
+        ab = self.GetBoundingBoxAbsShrinked()
             
         # left, top, right, bottom
         intersect = [[1e5,0.0],[1e5,0.0],[-1e5,0.0],[-1e5,0.0]]

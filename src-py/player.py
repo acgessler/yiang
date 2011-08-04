@@ -83,10 +83,11 @@ class Player(Entity):
         pcb = (defaults.player_caution_border[0] / defaults.tiles_size_px[0], 
             defaults.player_caution_border[1] / defaults.tiles_size_px[1])
         
-        self.pwidth = width / defaults.tiles_size[0]  - pcb[0]
-        self.pheight = height / defaults.tiles_size[1] - pcb[1]*0.5
         self.pofsx = ofsx / defaults.tiles_size[0] + pcb[0]*0.5
         self.pofsy = pcb[1]*0.5
+
+        self.pwidth = width / defaults.tiles_size[0] + pcb[0]*0.5
+        self.pheight = height / defaults.tiles_size[1] - pcb[1]*0.5
         
         self.dirchange_clock = None
         self.move_steady = None
@@ -433,7 +434,6 @@ class Player(Entity):
                 (-1.0,0.0),self.color,[self],None,True)
             
     def Interact(self,other):
-        
         from weapon import Shot
         if isinstance(other, Shot):
             if self.MeCanDie():
@@ -443,10 +443,10 @@ class Player(Entity):
         return Entity.Interact(self,other)
                          
     def Update(self, time_elapsed, time):
-        if self.game.IsGameRunning() is False or self.dead is True:
+        # XXX refactor this function, probably use an external controller distinct from the view logic.
+        if not self.game.IsGameRunning() or self.dead:
             return
             
-        
         # if self.game.mode == Game.BACKGROUND:
         #    return
         
@@ -774,7 +774,7 @@ class Player(Entity):
                 if collider is self: # or collider in all:
                     continue
                 
-                cd = collider.GetBoundingBoxAbs()
+                cd = collider.GetBoundingBoxAbsShrinked()
                 if cd is None:
                     continue
             
