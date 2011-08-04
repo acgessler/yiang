@@ -308,10 +308,10 @@ class Tile(Entity):
         return self.cached_bb_abs if self.cached_bb else None
 
     def GetBoundingBoxShrinked(self):
-        return self.cached_bb_shrinked
+        return self.cached_bb_shrinked or self.GetBoundingBox()
     
     def GetBoundingBoxAbsShrinked(self):
-        return self.cached_bb_abs_shrinked if self.cached_bb_shrinked else None
+        return self.cached_bb_abs_shrinked or self.GetBoundingBoxAbs()
     
     def _UpdateBB(self):
         self.cached_bb = b = (self.pos[0],self.pos[1],self.dim[0],self.dim[1])

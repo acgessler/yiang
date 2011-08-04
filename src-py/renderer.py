@@ -86,7 +86,7 @@ class Drawable:
         in some situations a certain degree of 'tolerance'
         during collision detection may be desirable, and using
         shrinked bounding boxes is an easy solution."""
-        return None
+        return self.GetBoundingBox()
     
     def GetBoundingBoxAbsShrinked(self):
         r = self.GetBoundingBoxShrinked()
