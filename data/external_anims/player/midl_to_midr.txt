@@ -1,4 +1,4 @@
-1; 1; goto=idle_right
+1; 0.15; goto=idle_right
   ____  
 o| O.O|o
  |-___| 

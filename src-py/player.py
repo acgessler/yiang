@@ -82,7 +82,7 @@ class Anim:
             
             self.framecnt,self.framelen,self.mode = [s.strip() for s in lines[0].split(';') if len(s.strip())]
             self.framecnt = int(self.framecnt)
-            self.framelen = float(self.framelen)
+            self.framelen = float(self.framecnt) if defaults.debug_player_anims else float(self.framelen) 
             
             if self.framecnt == 0:
                 raise Exception('need at least one frame')
