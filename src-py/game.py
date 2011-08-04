@@ -647,24 +647,24 @@ MoneyAmount:       {scaled_score} $
                 on_close_mb_extra()
             
             if key == accepted[2]:
-                self.BackToWorldMap() if self.GetGameMode() == Game.CAMPAIGN else self.GameOver()
+                self.BackToWorldMapFailure() if self.GetGameMode() == Game.CAMPAIGN else self.GameOver()
             player.Respawn(True if key == accepted[0] else False)
             
         self._FadeOutAndShowStatusNotice(sf.String(_("""You died a martyr and are now awaiting resurrection!
   .. the godless slaughterer was {0}
 
-Press {1} to restart at the last respawning point
-Press {2} to restart the level
+Press {1} to RESPAWN
+Press {2} to RESTART the level
 Press {3} to {4}""").format(
                     killer,
                     KeyMapping.GetString("accept"),
                     KeyMapping.GetString("level-new"),
                     KeyMapping.GetString("escape"),
-                    _("return to the map") if self.GetGameMode() == Game.CAMPAIGN else _("leave the game")
+                    _("return to WORLDMAP") if self.GetGameMode() == Game.CAMPAIGN else _("leave the game")
                 ),
                 Size=defaults.letter_height_game_over,
                 Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
-        )),defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color.Red,on_close)
+        )),defaults.game_over_fade_time,(560,130),0.0,accepted,sf.Color(150,0,0),on_close)
         
     def GameOverQuitToMenu(self):
         """Set immediate Game Over and switch to the menu. Don't
@@ -729,10 +729,21 @@ Hit {0} or {1} to return to the menu .. """).format(
             if i.IsPersistent():
                 self.cookies["inventory"].append(i)
 
+    def BackToWorldMapFailure(self):
+        """Return to WORLDMAP after failing a level (i.e. pick option 3 in the post-mortem dialog)"""
 
+        def dropit(x):
+            self.PopSuspend()
+            self.DropLevel()
+            Renderer.RemoveDrawable(x)
+
+        from posteffect import FadeOutOverlay, FadeInOverlay
+        Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
+        self.PushSuspend()
+        raise NewFrame()
     
     def BackToWorldMap(self,life_gain=0):
-        """Display level statistics and move the player back to the world map"""
+        """Display level statistics and move the player back to the world map"""           
     
         from posteffect import FadeOutOverlay, FadeInOverlay
         from notification import MessageBox
