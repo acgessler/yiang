@@ -343,7 +343,7 @@ class NaughtyPongPong(Enemy):
         # Check for possible colliders on the bottom to determine when we
         # are touching the ground
         
-        ab = self.GetBoundingBoxAbs()  
+        ab = self.GetBoundingBoxAbsShrinked()  
         for collider in self.game.GetLevel().EnumPossibleColliders(ab):
             if collider is self:
                 continue
@@ -473,7 +473,7 @@ class SmallBob(Enemy):
         if not self.game.IsGameRunning():
             return 
             
-        ab = self.GetBoundingBoxAbs()
+        ab = self.GetBoundingBoxAbsShrinked()
         ab2 = list(ab)
         ab2[1] -= 1
         ab2[3] += 1
