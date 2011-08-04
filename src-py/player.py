@@ -469,10 +469,45 @@ class Player(Entity):
 
         inp = Renderer.app.GetInput()
         if not self.block_input:
+
+            if defaults.debug_updown_move is True or self.move_freely is True:
+                if inp.IsKeyDown(KeyMapping.Get("move-up")):
+                    self.pos[1] -= time * defaults.move_speed[1]
+                    self.moved_once = True
+                    anim = 'jump'+lr_suffix()
+                if inp.IsKeyDown(KeyMapping.Get("move-down")):
+                    self.pos[1] += time * defaults.move_speed[1]
+                    self.moved_once = True
+                    anim = 'jump'+lr_suffix()
+            else:
+                if inp.IsKeyDown(KeyMapping.Get("move-up")):
+                    if self.in_jump is False and self.block_jump is False:
+                        self.vel[1] -= defaults.jump_vel * self.jump_scale
+                        self.in_jump = self.level.gravity != 0 
+                        self.block_jump = True
+    
+                        anim = 'jump'+lr_suffix()
+                    self.moved_once = True
+                    
+                else:
+                    self.block_jump = False
+                    
+                if inp.IsKeyDown(KeyMapping.Get("move-down")):
+                    if self.in_djump is False and self.block_djump is False:
+                        self.vel[1] += defaults.jump_vel * self.jump_scale
+                        self.in_djump = self.level.gravity != 0 
+                        self.block_djump = True
+    
+                        anim = 'jump'+lr_suffix()
+                        self.moved_once = True
+                else:
+                    self.block_djump = False
+
+                    
             if inp.IsKeyDown(KeyMapping.Get("move-left")):
                 if self.dir == Player.RIGHT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
                     # player changes direction from right to left
-                    if self.vel[0] > 0:
+                    if self.vel[0] > 0 or self.in_jump:
                         # player was moving to the right, so first get to idle-right
                         anim = 'right_to_midr'
                     
@@ -484,7 +519,7 @@ class Player(Entity):
                 else:
                     self.dirchange_clock = None
                     self.vel[0] = -defaults.move_speed[0] * self.speed_scale
-                    if not self.turnto:
+                    if not self.turnto and not self.in_jump:
                         anim = 'walk_left'
                 
                 self.dir = Player.LEFT
@@ -494,7 +529,7 @@ class Player(Entity):
             if inp.IsKeyDown(KeyMapping.Get("move-right")):
                 if self.dir == Player.LEFT or (self.dirchange_clock and self.dirchange_clock.GetElapsedTime() < defaults.turnaround_delay):
                     # player changes direction from right to left
-                    if self.vel[0] < 0:
+                    if self.vel[0] < 0 or self.in_jump:
                         # player was moving to the right, so first get to idle-right
                         anim = 'left_to_midl'
                         
@@ -506,7 +541,7 @@ class Player(Entity):
                 else:
                     self.dirchange_clock = None
                     self.vel[0] = defaults.move_speed[0] * self.speed_scale
-                    if not self.turnto:
+                    if not self.turnto and not self.in_jump:
                         anim = 'walk_right'
                 
                 
@@ -556,40 +591,6 @@ class Player(Entity):
 
             if anim:
                 print(anim)    
-          
-            if defaults.debug_updown_move is True or self.move_freely is True:
-                if inp.IsKeyDown(KeyMapping.Get("move-up")):
-                    self.pos[1] -= time * defaults.move_speed[1]
-                    self.moved_once = True
-                    anim = 'jump'+lr_suffix()
-                if inp.IsKeyDown(KeyMapping.Get("move-down")):
-                    self.pos[1] += time * defaults.move_speed[1]
-                    self.moved_once = True
-                    anim = 'jump'+lr_suffix()
-            else:
-                if inp.IsKeyDown(KeyMapping.Get("move-up")):
-                    if self.in_jump is False and self.block_jump is False:
-                        self.vel[1] -= defaults.jump_vel * self.jump_scale
-                        self.in_jump = self.level.gravity != 0 
-                        self.block_jump = True
-    
-                        anim = 'jump'+lr_suffix()
-                    self.moved_once = True
-                    
-                else:
-                    self.block_jump = False
-                    
-                if inp.IsKeyDown(KeyMapping.Get("move-down")):
-                    if self.in_djump is False and self.block_djump is False:
-                        self.vel[1] += defaults.jump_vel * self.jump_scale
-                        self.in_djump = self.level.gravity != 0 
-                        self.block_djump = True
-    
-                        anim = 'jump'+lr_suffix()
-                        self.moved_once = True
-                else:
-                    self.block_djump = False
-            
         
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
             if defaults.debug_updown_move is True else 0)) * time]
@@ -619,7 +620,6 @@ class Player(Entity):
             self.in_jump, self.block_jump = False, False
             self.vel[1] = 0
             
-
         self._CheckForTopMapBorder()
         self._CheckForBottomMapBorder()
         self._CheckForLeftMapBorder()
@@ -639,7 +639,7 @@ class Player(Entity):
                             anim = 'left_to_midl'
                     elif cur_anim != 'idle_right':
                         anim = 'right_to_midr'
-                else:
+                elif not self.turnto:
                     anim = 'walk'+lr_suffix()+'_preparetoidle'
         
         if anim:

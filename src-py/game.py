@@ -705,8 +705,9 @@ Hit {0} or {1} to return to the menu .. """).format(
             gain = _('a lousy extra life to be lost at the next possible occasion (besides, you are pretty good at loosing your lifes).')
         else:
             gain = _('{0} extra lifes. Don\'t get it wrong, your performance was awful, as always, but we admit the level is difficult and we don\'t want you to feel bad about it.').format(life_gain)
-            
-        self.AddLives(life_gain)
+
+        if life_gain > 0:
+            self.AddLives(life_gain)
         
         def dropit(x):
             self.PopSuspend()
