@@ -40,7 +40,7 @@ class LevelUp(Tile):
     
             other.has_levelup = True
             if self.game.GetGameMode() == Game.CAMPAIGN:
-                self.game.BackToWorldMap(self.level.metadata.get('reward_lives',1))
+                self.game.BackToWorldMap(int(self.level.metadata.get('reward_lives',1)))
             else:
                 # score aways only outside campaign mode
                 self.game.Award(defaults.levelup_score_base*self.game.GetLevelStats()[-1])
