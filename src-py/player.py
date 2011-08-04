@@ -606,6 +606,8 @@ class Player(Entity):
             # Apply extra velocity, such as coming from air flows
             self.vel = [self.extra_vel[0]+self.vel[0],self.extra_vel[1]+self.vel[1]]
             delattr(self,"extra_vel")
+
+            anim = 'spin'+lr_suffix()
         
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
