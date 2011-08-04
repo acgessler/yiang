@@ -208,6 +208,9 @@ idle_delay = 0.5
 # slow all player animations down to 1 frame/s. 
 debug_player_anims = False
 
+# delay for which to keep up the shoot state
+shoot_anim_delay = 0.3
+
 max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
 

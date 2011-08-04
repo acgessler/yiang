@@ -92,6 +92,7 @@ class Player(Entity):
         self.dirchange_clock = None
         self.move_steady = None
         self.steady_stand = None
+        self.shoot_anim_timer = None
         self.turnto = None
         self.count_shoot_unsuccessful = 0
         self.weapon_shoot_unsuccessful = 0
@@ -587,10 +588,7 @@ class Player(Entity):
                 elif not cur_anim in ('midr_to_right','midl_to_midr','left_to_midl'):
                     if self.vel[0] > 0:
                         anim = 'walk_right'
-                    self.turnto = None
-
-            if anim:
-                print(anim)    
+                    self.turnto = None   
         
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
             if defaults.debug_updown_move is True else 0)) * time]
@@ -605,14 +603,9 @@ class Player(Entity):
         self.SetPosition(pos)
         
         if hasattr(self,"extra_vel"):
-            # Apply extra velocity
+            # Apply extra velocity, such as coming from air flows
             self.vel = [self.extra_vel[0]+self.vel[0],self.extra_vel[1]+self.vel[1]]
             delattr(self,"extra_vel")
-        
-        if inp.IsKeyDown(KeyMapping.Get("shoot")):
-            self._Shoot()
-        else:
-            self.block_shoot = False
         
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
@@ -630,7 +623,26 @@ class Player(Entity):
             if self.setup_autoscroll is False:
                 self.level.PopAutoScroll()
                 self.setup_autoscroll = True
-                
+
+        # handle shots
+        if inp.IsKeyDown(KeyMapping.Get("shoot")):
+            self._Shoot()
+            shoot_anim = True
+
+            self.pre_shoot = anim or cur_anim
+            self.shoot_anim_timer = sf.Clock()
+        else:
+            self.block_shoot = False
+            shoot_anim = self.shoot_anim_timer and self.shoot_anim_timer.GetElapsedTime() < defaults.shoot_anim_delay
+
+        if shoot_anim:
+            anim = 'shoot'+lr_suffix()
+        else:
+            self.shoot_anim_timer = None
+            #if cur_anim[:5] == 'shoot':
+            #    anim = self.pre_shoot
+
+        # handle walk-to-idle transition after some idleing time has passed
         if anim is None:
             if not self.in_jump:
                 if self.steady_stand and self.steady_stand.GetElapsedTime() > defaults.idle_delay:
@@ -640,9 +652,10 @@ class Player(Entity):
                     elif cur_anim != 'idle_right':
                         anim = 'right_to_midr'
                 elif not self.turnto:
-                    anim = 'walk'+lr_suffix()+'_preparetoidle'
+                    anim = 'walk'+lr_suffix()+'_preparetoidle'          
         
         if anim:
+            print(anim)
             self.animset.Select(anim)
         self.animset.UpdateCurrentTile(time_elapsed,time)
                 
