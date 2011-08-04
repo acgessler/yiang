@@ -85,8 +85,7 @@ class Game(Drawable):
         self.level_idx = -1
         self.level = None
         self.level_chain = []
-        
-        self.levels_done = set()
+    
         
         # Load the first level for testing purposes
         # self.LoadLevel(1)
@@ -103,7 +102,9 @@ class Game(Drawable):
         self.suspended = []
         
         self.draw_counter = 0
-        self.cookies = {}
+
+        self.levels_done = set()
+        self.cookies = {'levels_done' : self.levels_done}
         
         self.useless_sprites=1
         self.swallow_escape = False
@@ -112,13 +113,42 @@ class Game(Drawable):
         self.clock_overlays = {}
         
         
-    def Load(self,filename):
-        pass
+    def Load(self,savename):
+        file = os.path.join(defaults.cur_user_profile_dir,"save_"+savename)
+        print('Load game from: ' + file)
+        try:
+            with open(file,'rt') as inf:
+                try:
+                    self.cookies = eval(inf.read())
+                except e:
+                    print(e)
+                    return False
+        except IOError:
+            print('Failed, this savegame does not exist')
+            return False
+
+        if self.cookies['save_format_version'] != 1:
+            print('Failed, savegame format does not exist')
+            return False
+
+        return self.LoadLevel(int(self.cookies.get('worldmap_level_idx',30000)));
     
-    def Save(self,filename):
-        pass
+    def Save(self,savename):
+        file = os.path.join(defaults.cur_user_profile_dir,"save_"+savename)
+        print('Save game to: ' + file)
+
+        self.cookies['save_format_version'] = 1
+        with open(file,'wt') as outf:
+            outf.write (repr(self.cookies))
         
-        
+    def QuickLoad(self):
+        return self.Load('quicksave')
+
+    def QuickSave(self):
+        return self.Save('quicksave')
+
+    def CanSave(self):
+        return self.mode == Game.CAMPAIGN and 39999 > self.level_idx >= 30000
         
     def OnRemoveFromRenderer(self):
         Drawable.OnRemoveFromRenderer(self)
@@ -397,6 +427,17 @@ OOOOOO  OOOOO  \n\
                 if event.Key.Code == KeyMapping.Get("escape") and not self.swallow_escape:
                     self._OnEscape()
                     #raise NewFrame()
+
+                # QuickSave, QuickLoad 
+                elif event.Key.Code == KeyMapping.Get("quicksave"):
+                    if self.CanSave():
+                        self.QuickSave()
+                    else:
+                        print('Saving not possible')
+
+                elif event.Key.Code == KeyMapping.Get("quickload"):
+                    if self.QuickLoad():
+                        return
 
                 if not defaults.debug_keys:
                     return

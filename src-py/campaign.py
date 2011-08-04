@@ -63,7 +63,10 @@ class CampaignLevel(Level):
         self.minimap_offline = game.GetCookie("lv_{0}_minimap_offline".format(level),[])
         if defaults.world_draw_hud is True:
             self._LoadHUD()
-            
+
+        pos = game.cookies.get('player_pos',None)
+        if pos:
+            self._SetPlayerPos(pos[0],pos[1],False)
         
             
     def SetStatusMessage(self,msg,color=sf.Color.Yellow):
@@ -108,6 +111,8 @@ class CampaignLevel(Level):
         print("Load level overlay {0}, got {1} tiles".format(filename,cnt))
         
     def Draw(self, time, dtime):
+
+        self.game.cookies['worldmap_level_idx'] = self.level
         self._GenToDeviceCoordinates()
         self._DoAutoScroll(dtime)
         
@@ -256,7 +261,7 @@ class CampaignLevel(Level):
                 # this happens if the player moves outside the map
                 pass
                 
-    def _SetPlayerPos(self,mx,my):
+    def _SetPlayerPos(self,mx,my,must_update_map = True):
         for entity in self.EnumAllEntities():
             if isinstance(entity,Player):
             
@@ -265,10 +270,11 @@ class CampaignLevel(Level):
                 
                 # needed or the cross at the player position
                 # remains sticky at its old place.
-                self._RebuildMinimap()
+                if must_update_map:
+                    self._RebuildMinimap()
                 
                 print("CampaignLevel: Move player to {0}\{1}".format(mx,my))
-                raise NewFrame()
+                return
         else:
             assert False # we have a player there must be one!
             
@@ -357,6 +363,10 @@ class CampaignPlayer(Player):
     
     def __init__(self, text, width, height, ofsx, move_freely=True, draworder=16500):
         Player.__init__(self,text,width,height,ofsx,move_freely,draworder)
+
+    def Update(self,*args,**kwargs):
+        Player.Update(self,*args,**kwargs)
+        self.game.cookies['player_pos'] = self.pos
         
     def _Shoot(self):
         return

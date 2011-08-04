@@ -51,6 +51,8 @@ class KeyMapping:
         "shoot"         : "LControl",
         "yes"           : "Y",
         "no"            : "N",
+        "quicksave"     : "F5",
+        "quickload"     : "F9",
     }
 
     @classmethod
