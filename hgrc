@@ -1,3 +1,5 @@
 [web]
 allow_push = *
 push_ssl = false
+[paths]
+default = https://rhode.greentoken.de/YIANG
