@@ -2,7 +2,8 @@
 # extra items to be placed on the generated world map
 # this is an input file to genworldmaps.py
 
-43 127 _pl
+44 127 _pl
+
 #Level
 20 71 0a1
 #Level
