@@ -112,8 +112,21 @@
 #Deco objects
 #=======================
 #-----water-----
-59 50 bwa
+
+42 46 bwa
+45 64 bwa
+41 67 bwa
+
+40 51 bwb
+59 51 bwb
+60 69 bwb
+90 68 bwb
+
 37 53 bwc
+37 55 bwc
+37 57 bwc
+37 59 bwc
+
 #-----stones----
 148 44 ~st
 151 39 ~sv
