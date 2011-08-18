@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.1, 0),name=_('Too hot'),color=(0, 0, 30),postfx=[('ingame1.sfx', ())],vis_ofs=5,bgimg=22,scroll=2,lower_offset=0.8)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.1, 0),name=_('Too hot'),color=(0, 0, 30),postfx=[('ingame1.sfx', ())],vis_ofs=5,bgimg=22,scroll=3,lower_offset=0.8)
 
 
 .  .  .  .  .  yA5
