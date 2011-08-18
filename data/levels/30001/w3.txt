@@ -1,4 +1,4 @@
-from tile import AnimTile; <out> = AnimTile(<raw>,12,3,5.4,halo_img=None,collision=Entity.BLOCK,randomize=True)
+from tile import AnimTile; <out> = AnimTile(<raw>,12,3,5.4,halo_img=None,collision=Entity.ENTER,randomize=True)
 oilioopliipllooiioli
 iiiloilipllilloioplp
 pooiiolloioiiolplioo
