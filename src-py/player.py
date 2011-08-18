@@ -620,7 +620,11 @@ class Player(Entity):
         self._CheckForLeftMapBorder()
         self._UpdatePostFX()
         
-        self.level.Scroll(self.pos)
+        # Very quick fix to make it work if there are multiple players around in the level
+        players = sorted(((pl,pl.pos[0]) for pl in self.level.players),key=operator.itemgetter(1))
+        if players[-1][0] is self:
+            self.level.Scroll(self.pos)
+        
         if self.moved_once is True:
             if self.setup_autoscroll is False:
                 self.level.PopAutoScroll()
@@ -657,7 +661,7 @@ class Player(Entity):
                     anim = 'walk'+lr_suffix()+'_preparetoidle'          
         
         if anim:
-            print(anim)
+            #print(anim)
             self.animset.Select(anim)
         self.animset.UpdateCurrentTile(time_elapsed,time)
                 
@@ -674,6 +678,9 @@ class Player(Entity):
     def _CheckForLeftMapBorder(self):
         """Check if we passed the left border of the game, which is
         generally a bad idea because it's the last thing you do """
+        if len(self.level.players) > 1:
+            return
+            
         origin = self.level.GetOrigin()
         if self.pos[0] < origin[0]:
             if self.pos[0] + self.pwidth > origin[0]:
