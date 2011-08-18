@@ -1,4 +1,128 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Bonus II'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=100,bgimg=18,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, -0.0),name=_('Break out'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=100,bgimg=-1,scroll=3,lower_offset=0.0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  .  _B4_A2_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  .  _B4_AD_A2_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  _EC.  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  _EC.  .  .  .  _B4_AD_AD_A2_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  .  _B4_AD_AD_AD_A2_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB
+.  .  .  .  _I0PE0_AD_AD_AD_AD_AD_AD_AD_AD_AD_I0.  .  .  .  .  .  _I0PE0_AD_AD_AD_AD_AD_AD_AD_AD_AD_I0.  .  .  .  .  .  .  _B4_AD_AD_AD_AD_A2_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB_AB
+_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AD_AD_AD_AD_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rRD.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rI0
+_B4_AD_AD_AD_ADBC4.  .  .  _I0BC4_AD_AD_AD_AD_AD_ADBC4.  _AD_AD_AD_ADBC4_I0_AD_AD_AD_ADBC4.  .  .  .  .  .  .  .  .  .  .  _RD.  _AC_AD_AD_AD_AD_AD_AD_AD.  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD.  .  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_ADPS5PS5_AB.  .  .  _MJ.  .  .  .  .  .  .  .  .  .  _AC_AC_AC.  .  .  .  .  .  _AC_AC_AC
+_B4_AD_AD_AD_ADBC4.  -PL.  _I0BC4_AD_AD_AD_AD_AD_ADBC4PE0_AD_AD_AD_ADBC4_I0_AD_AD_AD_ADBC4.  .  .  .  .  .  .  .  .  .  .  _RD.  .  _AC_AD_AD_AD_AD_AD_AD.  .  _I0PE0_AD_AD_AD_AD_AD_AD_AD_AD_AD_I0.  .  .  .  _I0PE0.  _AD_AD_AD_AD_AD_AD_AD_AD_I0_AB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _D3
+_B4_AD_AD_AD_ADBC4.  .  .  _I0BC4_AD_AD_AD_AD_AD_ADBC4PE0_AD_AD_AD_ADBC4_I0_AD_AD_AD_ADBC4.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AB.  .  .  _A1_AC_AC_AC_AC_B4.  .  .  .  .  .  .  .  .  rD8.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B5_AC_AC_AC_AC_AC_AC_C7_AC_B4
+_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_C8_AD_AD_AD_AD_AD_AD_AD_AC_AC_A2_AD.  .  _I0BC4_AD_AD_AD_AD_AD_ADBC4.  _AD_AD_AD_ADBC4_I0.  .  .  .  .  .  BC4_BOBC4.  _AD_AD_AD_AD_AD_AD.  .  .  .  _RD.  _A1_AD_AD_AD_AD_AD_B4.  .  .  .  .  .  .  .  .  .  .  _EC.  .  .  .  .  .  .  .  .  .  .  .  .  .  _B5_S0.  .  .  .  .  .  .  _B4.  .  .  .  .  .  .  .  .  _B6_B6.  .  .  _B6rE2.  .  .  .  .  .  .  .  .  _D3
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD_B4PS3.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD_AD_A2_AD.  _I0BC4_AD_AD_AD_AD_AD_ADBC4PE0_AD_AD_AD_ADBC4_I0.  .  .  .  .  .  BC4_BOBC4.  _AD_AD_AD_AD_AD_AD.  .  .  .  .  _A1_AD_AD_AD_AD_AD_AD_B4.  .  .  _E8.  .  .  .  .  .  .  .  .  .  .  .  .  .  _E8.  .  .  .  .  .  .  _B5_S0.  _S0.  .  .  .  rTR_B4.  .  .  .  .  .  .  .  _B6_B6_B6.  .  yFI_B6_B6
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD_B4PS3PS3.  .  .  .  .  .  .  .  .  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD_AD_AD_A2_AD_I0BC4_AD_AD_AD_AD_AD_ADBC4PE0_AD_AD_AD_ADBC4_I0.  .  .  .  .  .  BC4.  BC4.  _AD_AD_AD_AD_AD_AD.  .  .  .  _A1_AD_AD_AD_AD_AD_AD_AD_B4.  .  .  .  .  .  .  _CB.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _B5_S0.  _S0.  .  .  .  rDA_B4.  .  .  .  .  .  .  _B6_B6_B6_B6.  .  .  _B6_B6_B6.  .  .  .  .  .  .  .  _D3
+.  .  .  .  .  .  _AD_AD_AD_AD_AD_AD_AD_AD_AD_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AD_AD_AD_AD_AD_AD_AD_AD_AD_AD_AD_AD_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AC_AD_AD_AD_AD_AD_AD_AD_AD_B4_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_A5_B5_AC_AC_AC_AC_AC_AC_AC_AC_B4_AC_AC_AC_AC_AC_AC_AC_B6_B6_B6_B6_B6_B6_B6_B6_B6_B6_B6_A5_A5_A5_A5_A5_A5_A5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
