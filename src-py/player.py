@@ -659,19 +659,18 @@ class Player(Entity):
             #    anim = self.pre_shoot
 
         # handle walk-to-idle transition after some idleing time has passed
-        if anim is None:
-            if not self.in_jump:
-                if self.steady_stand and self.steady_stand.GetElapsedTime() > defaults.idle_delay:
-                    if self.dir == Player.LEFT:
-                        if cur_anim != 'idle_left':
-                            anim = 'left_to_midl'
-                    elif cur_anim != 'idle_right':
-                        anim = 'right_to_midr'
-                elif not self.turnto:
-                    anim = 'walk'+lr_suffix()+'_preparetoidle'          
+        if anim is None and not self.in_jump and not self.turnto:
+            if self.steady_stand and self.steady_stand.GetElapsedTime() > defaults.idle_delay:
+                if self.dir == Player.LEFT:
+                    if cur_anim != 'idle_left':
+                        anim = 'left_to_midl'
+                elif cur_anim != 'idle_right':
+                    anim = 'right_to_midr'
+            else:
+                anim = 'walk'+lr_suffix()+'_preparetoidle'          
         
         if anim:
-            #print(anim)
+            print(anim)
             self.animset.Select(anim)
         self.animset.UpdateCurrentTile(time_elapsed,time)
                 
@@ -821,7 +820,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_RIGHT and newvel[0] < 0:
                             intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
@@ -838,7 +837,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_LEFT and newvel[0] > 0:
                         
@@ -856,7 +855,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_TOP and (newvel[1] > 0 or self.level.gravity == 0):
                    
@@ -876,7 +875,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_BOTTOM and (newvel[1] < 0 or self.level.gravity == 0):
             

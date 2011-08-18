@@ -141,7 +141,7 @@ class AnimSet:
         assert self.active in self.anims
         newone = self.anims[self.active].Update(time,dtime)
         if isinstance(newone,str):
-            #print('auto: ' + newone)
+            print('auto: ' + newone)
             self.Select(newone)
     
     def ConfigureTilesGlobally(self,callback):
