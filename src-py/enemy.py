@@ -423,6 +423,12 @@ class RotatingInferno(Enemy):
     
     def GetBoundingBoxAbs(self):
         return (self.real_pos[0],self.real_pos[1],self.dim[0]+self.real_pos[0],self.dim[1]+self.real_pos[1])
+        
+    def GetBoundingBoxShrinked(self):
+        return self.GetBoundingBox()
+        
+    def GetBoundingBoxAbsShrinked(self):
+        return self.GetBoundingBoxAbs()
     
     def Draw_EditorCatalogue(self): # Special logic for use within the editor
         lv = self.game.GetLevel()
