@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('skyline'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,bgimg=-1,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('skyline'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,bgimg=25,scroll=3,lower_offset=0.0)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A6_A6_CC_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_A6_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN_IN
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1gS1gS1_A6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _IN
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A6.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  gS1gS1gS1_A6.  .  .  .  .  .  .  .  .  .  .  yKE.  .  .  .  .  .  .  .  .  .  _IN
