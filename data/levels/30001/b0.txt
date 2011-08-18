@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,15,19,need_levels=[1],status_msg=_('Walk the other way round, here are too many cactuses!'))
+from campaign import Blocker; <out> = Blocker(<raw>,15,19,need_levels=[67],status_msg=_('Walk the other way round, here are too many cactuses!'))
 ,  {}
 {} {}
  \{}'   ,   {}
