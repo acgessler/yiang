@@ -97,6 +97,8 @@ class Player(Entity):
         self.count_shoot_unsuccessful = 0
         self.weapon_shoot_unsuccessful = 0
         
+        self.was_spinning = False
+        
         # XXX get rid of pwith and pheight
         self.dim = self.pwidth,self.pheight
         self.draworder = draworder
@@ -578,6 +580,8 @@ class Player(Entity):
                 elif not cur_anim in ('midl_to_left','midr_to_midl','right_to_midr'):
                     if self.vel[0] < 0:
                         anim = 'walk_left'
+                    if self.was_spinning:
+                        anim = 'spin_left'
                     self.turnto = None
                     
             elif self.turnto == 'r' and anim != 'left_to_midl':
@@ -588,6 +592,8 @@ class Player(Entity):
                 elif not cur_anim in ('midr_to_right','midl_to_midr','left_to_midl'):
                     if self.vel[0] > 0:
                         anim = 'walk_right'
+                    if self.was_spinning:
+                        anim = 'spin_right'
                     self.turnto = None   
         
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
@@ -599,8 +605,11 @@ class Player(Entity):
         newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
 
         # Check for collisions
-        pos, self.vel = self._HandleCollisions(newpos, newvel, time)
+        pos, self.vel, touch_lower = self._HandleCollisions(newpos, newvel, time)
         self.SetPosition(pos)
+        
+        if touch_lower:
+            self.was_spinning = False
         
         if hasattr(self,"extra_vel"):
             # Apply extra velocity, such as coming from air flows
@@ -608,6 +617,7 @@ class Player(Entity):
             delattr(self,"extra_vel")
 
             anim = 'spin'+lr_suffix()
+            self.was_spinning = True
         
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
@@ -941,7 +951,7 @@ class Player(Entity):
             newvel[0] *= (1.0 - time*5)
 
         #print("Active colliders: {0}".format(cnt))
-        return newpos, newvel
+        return newpos, newvel, floor_touch
     
     def _ExperiencePain(self,vel,pain,pos):
         name = "splatter2.txt"
