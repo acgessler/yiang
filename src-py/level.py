@@ -519,6 +519,10 @@ class Level:
         """Used internally to apply deferred changes to the entity
         list. Changes are deferred till the end of the frame to
         avoid changing list sizes while iterating through them."""
+        
+        from game import Game
+        from player import Player
+        
         for entity in self.entities_rem:
             if hasattr(entity,"windows"):
                 
@@ -543,19 +547,27 @@ class Level:
                     self.window_unassigned.remove(entity)
                 except KeyError:
                     pass
-            
-        from game import Game
-        from player import Player
+                    
+            if isinstance(entity,Player):
+                for n,k in enumerate(self.players):
+                    if k is entity:
+                        del self.players[n]
+                       
         for entity in self.entities_add:
             pos = entity.pos
+            pl = isinstance(entity,Player)
             
             lx,ly = self.level_size
             #print(pos,lx,ly,self.origin)
-            if (pos[0] >= lx or pos[1] >= ly) and self.game.mode == Game.EDITOR and not isinstance(entity,Player):
+            if (pos[0] >= lx or pos[1] >= ly) and self.game.mode == Game.EDITOR and not pl:
                 self.SetLevelSize((max(pos[0]+1,lx),max(pos[1]+1,ly)))
             
             self.entities.add(entity)
             self._AddEntityToWindows(entity)
+            
+            if pl and not entity in self.players:
+                self.players.append(entity)
+                
             
         mov = self.entities_mov
         self.entities_mov = set()
