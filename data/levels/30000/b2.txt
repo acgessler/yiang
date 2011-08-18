@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,8,12,need_levels=[14,17,41])
+from campaign import Blocker; <out> = Blocker(<raw>,8,12,need_levels=[14,17,5])
  ___
 [___]
 [___]

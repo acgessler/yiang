@@ -1,4 +1,4 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=1)
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=31)
 H~´`´´``´`~H
 H ~´`´´``´`H
 H  ~´`´´``´H~
