@@ -10,8 +10,8 @@
 .  .  .  .  .  .  .  .  .  yA8yACyACyACyACySMyACyACyACyACyACyACyACyAC.  yACyA8
 .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyAC.  .  yACyACyACyACyACyACyACyA8
 .  .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyACyACyACyAC.  yACyACyA8yAC
-.  .  .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyACyACyACyACyACyA8
-.  .  .  .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyACyACyACyA8
+.  .  .  .  .  .  .  .  .  .  .  .  yA8yACyAC.  yACyACyACyACyACyACyA8
+.  .  .  .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyAC.  yACyA8
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA8yA8yA8.  yA8yA8yA8
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yFI
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  yS3yS3yS3.  yS3yS3yS3
