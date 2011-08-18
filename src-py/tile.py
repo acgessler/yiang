@@ -633,6 +633,47 @@ class TileLoader:
             tile.editor_tcode = tcode
             
         return tile
+        
+    @staticmethod
+    def FetchColors():
+        if hasattr(TileLoader, "cached_color_dict"):
+            return
+        
+        # this remains as the default color table if we can't read config/color.txt
+        color_dict_default = collections.defaultdict(lambda: sf.Color.White, {
+            "r" : sf.Color.Red,
+            "g" : sf.Color.Green,
+            "b" : sf.Color.Blue,
+            "y" : sf.Color.Yellow,
+            "_" : sf.Color.White,
+        })
+        
+        def complain_on_fail():
+            # this is just the last fallback to avoid KeyError's
+            print("Encountered unknown color key")
+            return sf.Color.White
+        
+        TileLoader.cached_color_dict = collections.defaultdict(complain_on_fail, color_dict_default)
+        try:
+            with open(os.path.join(defaults.config_dir, "colors.txt"), "rt") as scores:
+                for n, line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
+                    code, col = [l.strip() for l in line.split("=")]
+
+                    assert len(col) in (6,8)
+                    TileLoader.cached_color_dict[code] = sf.Color(
+                        int(col[0:2], 16), 
+                        int(col[2:4], 16), 
+                        int(col[4:6], 16), 
+                        int(col[6:8], 16) if len(col)==8 else 255 
+                    )
+
+            print("Caching colors.txt file, got {0} dict entries".format(len(TileLoader.cached_color_dict)))
+
+        except IOError:
+            print("Failure reading colors.txt file")
+        except AssertionError:
+            print("color.txt is not well-formed: ")
+            traceback.print_exc()
     
     @staticmethod
     def Load(file,game):
@@ -645,49 +686,14 @@ class TileLoader:
         <game> the current Game instance.
         """
         
-        # this remains as the default color table if we can't read config/color.txt
-        color_dict_default = collections.defaultdict(lambda: sf.Color.White, {
-            "r" : sf.Color.Red,
-            "g" : sf.Color.Green,
-            "b" : sf.Color.Blue,
-            "y" : sf.Color.Yellow,
-            "_" : sf.Color.White,
-        })
         
         file_norm = file.replace("/","\\")
 
         if os.name == 'posix':
-                file = file.replace("\\","/")
+            file = file.replace("\\","/")
 
         # the actual mapping table has been outsourced to config/colors.txt
-        if not hasattr(TileLoader, "cached_color_dict"):
-
-            def complain_on_fail():
-                # this is just the last fallback to avoid KeyError's
-                print("Encountered unknown color key")
-                return sf.Color.White
-            
-            TileLoader.cached_color_dict = collections.defaultdict(complain_on_fail, color_dict_default)
-            try:
-                with open(os.path.join(defaults.config_dir, "colors.txt"), "rt") as scores:
-                    for n, line in enumerate([ll for ll in scores.readlines() if len(ll.strip()) and ll[0] != "#"]):
-                        code, col = [l.strip() for l in line.split("=")]
-
-                        assert len(col) in (6,8)
-                        TileLoader.cached_color_dict[code] = sf.Color(
-                            int(col[0:2], 16), 
-                            int(col[2:4], 16), 
-                            int(col[4:6], 16), 
-                            int(col[6:8], 16) if len(col)==8 else 255 
-                        )
-
-                print("Caching colors.txt file, got {0} dict entries".format(len(TileLoader.cached_color_dict)))
-
-            except IOError:
-                print("Failure reading colors.txt file")
-            except AssertionError:
-                print("color.txt is not well-formed: ")
-                traceback.print_exc()
+        TileLoader.FetchColors()
 
         lines = TileLoader.cache.get(file_norm,None)
         if lines is None:
