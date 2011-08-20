@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,24,6,need_levels=[1],status_msg=_('You can not pass this turnpike! Find another exit of the village!'))
+from campaign import Blocker; <out> = Blocker(<raw>,24,6,need_levels=[66,47],status_msg=_('You can not pass this turnpike! Find another exit of the village!'))
   _____
  _L____L_______________
 |_/_/_/_/_/_/_/_/_/_/_/

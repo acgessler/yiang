@@ -1,0 +1,28 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('pyramiden'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=5,bgimg=-1,scroll=2,lower_offset=0.0)
+
+
+
+
+
+
+
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5OFI.  yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5yA5yA5yA5yA5.  .  yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  yDOpDOyDO.  .  .  yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  yA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5PA5pTBPA5PA5PA5.  .  .  PA5PA5PA5.  .  .  .  .  PA5PA5PA5PA5PA5.  .  .  PA5PA5PA5PA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  yAC.  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  .  .  pH5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5.  .  .  rE2PA5PA5PA5PA5PA5rE2PA5PA5.  PA5PA5PA5.  PA5rE2PA5PA5PA5PA5PA5PA5.  .  .  PA5PA5PA5.  .  .  .  .  PA5PA5PA5PA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  yAC.  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5.  .  .  .  .  .  .  .  .  .  .  PA5PA5pS1pS1pS1.  .  .  pS1pS1pS1pS1pS1pS1.  .  .  .  .  PA5PA5PA5PA5PA5PA5PA5yTAPA5PA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rE2.  .  .  .  pS5PA5
+.  .  .  yA5.  .  .  .  .  .  .  .  .  .  yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5.  .  .  yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5.  .  .  .  .  .  .  .  .  .  .  .  .  pS1PA5PA5PA5PA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  pKE.  PA5
+.  .  .  yA5gB1.  _PL.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAC.  .  .  yA5.  .  .  gB1.  .  .  .  .  .  .  .  .  .  gB1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5PA5PA5PA5.  .  .  .  .  .  .  .  .  pS1PA5PA5.  .  PA5PA5PA5rE1.  .  .  .  .  .  .  .  .  rI0.  .  .  .  .  .  .  PA5
+.  .  .  yA5.  .  .  .  .  .  .  .  yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAC.  .  .  .  yTB.  .  .  rE1.  .  .  .  .  .  .  .  rE1.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5PA5.  .  .  .  .  .  .  rE1PA5PA5.  .  .  .  .  PA5PA5PA5PA5aAFaAFaAFaAFaAFaAFaAFPA5PA5PA5pS1pS1pS1pS1PA5PA5
+.  .  .  yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5.  yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  PA5PA5PA5PA5PA5PA5PA5PA5PA5PA5PA5.  .  .  .  .  PA5PA5PA5PA5PA5PA5PA5PA5PA5PA5PA5PA5.  PA5PA5PA5PA5PA5PA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5pTAyA5
+
+
+
+

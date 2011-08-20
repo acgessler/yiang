@@ -97,6 +97,8 @@ class Player(Entity):
         self.count_shoot_unsuccessful = 0
         self.weapon_shoot_unsuccessful = 0
         
+        self.was_spinning = False
+        
         # XXX get rid of pwith and pheight
         self.dim = self.pwidth,self.pheight
         self.draworder = draworder
@@ -578,6 +580,8 @@ class Player(Entity):
                 elif not cur_anim in ('midl_to_left','midr_to_midl','right_to_midr'):
                     if self.vel[0] < 0:
                         anim = 'walk_left'
+                    if self.was_spinning:
+                        anim = 'spin_left'
                     self.turnto = None
                     
             elif self.turnto == 'r' and anim != 'left_to_midl':
@@ -588,6 +592,8 @@ class Player(Entity):
                 elif not cur_anim in ('midr_to_right','midl_to_midr','left_to_midl'):
                     if self.vel[0] > 0:
                         anim = 'walk_right'
+                    if self.was_spinning:
+                        anim = 'spin_right'
                     self.turnto = None   
         
         newvel = [self.vel[0] + self.acc[0] * time, self.vel[1] + (self.acc[1] + (defaults.gravity \
@@ -599,8 +605,11 @@ class Player(Entity):
         newpos = [self.pos[0] + vec[0], self.pos[1] + vec[1]]
 
         # Check for collisions
-        pos, self.vel = self._HandleCollisions(newpos, newvel, time)
+        pos, self.vel, touch_lower = self._HandleCollisions(newpos, newvel, time)
         self.SetPosition(pos)
+        
+        if touch_lower:
+            self.was_spinning = False
         
         if hasattr(self,"extra_vel"):
             # Apply extra velocity, such as coming from air flows
@@ -608,6 +617,7 @@ class Player(Entity):
             delattr(self,"extra_vel")
 
             anim = 'spin'+lr_suffix()
+            self.was_spinning = True
         
         # (HACK) -- for debugging, prevent the player from falling below the map
         if defaults.debug_prevent_fall_down is True and self.pos[1] > defaults.tiles[1]:
@@ -620,7 +630,11 @@ class Player(Entity):
         self._CheckForLeftMapBorder()
         self._UpdatePostFX()
         
-        self.level.Scroll(self.pos)
+        # Very quick fix to make it work if there are multiple players around in the level
+        players = sorted(((pl,pl.pos[0]) for pl in self.level.players),key=operator.itemgetter(1))
+        if players[-1][0] is self:
+            self.level.Scroll(self.pos)
+        
         if self.moved_once is True:
             if self.setup_autoscroll is False:
                 self.level.PopAutoScroll()
@@ -645,16 +659,15 @@ class Player(Entity):
             #    anim = self.pre_shoot
 
         # handle walk-to-idle transition after some idleing time has passed
-        if anim is None:
-            if not self.in_jump:
-                if self.steady_stand and self.steady_stand.GetElapsedTime() > defaults.idle_delay:
-                    if self.dir == Player.LEFT:
-                        if cur_anim != 'idle_left':
-                            anim = 'left_to_midl'
-                    elif cur_anim != 'idle_right':
-                        anim = 'right_to_midr'
-                elif not self.turnto:
-                    anim = 'walk'+lr_suffix()+'_preparetoidle'          
+        if anim is None and not self.in_jump and not self.turnto:
+            if self.steady_stand and self.steady_stand.GetElapsedTime() > defaults.idle_delay:
+                if self.dir == Player.LEFT:
+                    if cur_anim != 'idle_left':
+                        anim = 'left_to_midl'
+                elif cur_anim != 'idle_right':
+                    anim = 'right_to_midr'
+            else:
+                anim = 'walk'+lr_suffix()+'_preparetoidle'          
         
         if anim:
             print(anim)
@@ -674,6 +687,9 @@ class Player(Entity):
     def _CheckForLeftMapBorder(self):
         """Check if we passed the left border of the game, which is
         generally a bad idea because it's the last thing you do """
+        if len(self.level.players) > 1:
+            return
+            
         origin = self.level.GetOrigin()
         if self.pos[0] < origin[0]:
             if self.pos[0] + self.pwidth > origin[0]:
@@ -804,7 +820,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_RIGHT and newvel[0] < 0:
                             intersect[0][0] = min(intersect[0][0],cd[2] - self.pofsx)
@@ -821,7 +837,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_LEFT and newvel[0] > 0:
                         
@@ -839,7 +855,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_TOP and (newvel[1] > 0 or self.level.gravity == 0):
                    
@@ -859,7 +875,7 @@ class Player(Entity):
                             print("hit deadly entity, need to commit suicide")
                             if self.MeCanDie():
                                 self._Kill(collider.GetVerboseName())
-                                return newpos, newvel
+                                return newpos, newvel, False
                 
                         elif res & Entity.BLOCK_BOTTOM and (newvel[1] < 0 or self.level.gravity == 0):
             
@@ -934,7 +950,7 @@ class Player(Entity):
             newvel[0] *= (1.0 - time*5)
 
         #print("Active colliders: {0}".format(cnt))
-        return newpos, newvel
+        return newpos, newvel, floor_touch
     
     def _ExperiencePain(self,vel,pain,pos):
         name = "splatter2.txt"

@@ -2275,6 +2275,7 @@ class EditorGame(Game):
         # Fix: sf.Color is unsafe to use in dict's because its
         # internal operators aren't implemented properly
         from tile import TileLoader
+        TileLoader.FetchColors()
         
         def gen_rcolors():
             return dict(( (v.r,v.g,v.b,v.a) ,k) for k,v in TileLoader.cached_color_dict.items())

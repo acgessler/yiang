@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,5,27,need_levels=[1])
+from campaign import Blocker; <out> = Blocker(<raw>,5,27,need_levels=[30002],status_msg=_('Found a machine part in the ice? NOT? What are you waiting for, Barbie?'))
 _____
 |\ /|
 | X |

@@ -1,0 +1,18 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0, 0),name=_('FallDown'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,bgimg=2,scroll=2,lower_offset=0.0)
+
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  yA8yA8yA8yA8yA8yA8yA8
+.  .  .  .  .  .  .  .  .  .  .  .  .  yA8ySM.  .  pPLySM.  .  yA8
+.  .  .  .  .  .  .  .  .  .  .  .  yA8.  .  .  .  .  .  .  .  .  yA8
+.  .  .  .  .  .  .  .  .  .  .  yA8yACyAC.  yACyACyACyACyAC.  yACyACyA8
+.  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyAC.  yACyACyACyACyACyACyACyA8
+.  .  .  .  .  .  .  .  .  yA8yACyACyAC.  yACyACyACyACyACyACyACyACyAC.  yACyA8
+.  .  .  .  .  .  .  .  yA8yACyACyACyACyACyACyACyACyACyAC.  yACyACyAC.  yACyACyA8
+.  .  .  .  .  .  .  .  .  yA8yACyACyACyACySMyACyACyACyACyACyACyACyAC.  yACyA8
+.  .  .  .  .  .  .  .  .  .  yA8yACyACyACyAC.  .  yACyACyACyACyACyACyACyA8
+.  .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyACyACyACyAC.  yACyACyA8yAC
+.  .  .  .  .  .  .  .  .  .  .  .  yA8yACyAC.  yACyACyACyACyACyACyA8
+.  .  .  .  .  .  .  .  .  .  .  .  .  yA8yACyACyACyACyAC.  yACyA8
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  yA8yA8yA8.  yA8yA8yA8
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yFI
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  yS3yS3yS3.  yS3yS3yS3
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  yA8yA8yA8yA8yA8yA8yA8yA8yA8yA8yA8yA8yA8

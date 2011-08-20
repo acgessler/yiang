@@ -112,7 +112,7 @@ class AnimSet:
                     print('failed to load animation {0}, got exception: {1}'.format(fname,e))
                     
         print('finish loading AnimSet: {0}, got {1} animsets with totally {2} frames'.format(name,len(self.anims),sum(s.framecnt for s in self.anims.values())))
-        print(self.anims)
+        #print(self.anims)
               
     def _LoadAnimFile(self,f):
         return Anim(f)
