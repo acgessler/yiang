@@ -413,6 +413,7 @@ OOOOOO  OOOOO  \n\
                 pass
         
         Renderer.RemoveDrawable(self)
+        
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -869,6 +870,7 @@ Hit {2} to return to the menu""")).format(
         
         if not no_alert:
             def on_close(a):
+                self.game_over = True
                 self._OnEscape()
             
             accepted = (KeyMapping.Get("accept"),)

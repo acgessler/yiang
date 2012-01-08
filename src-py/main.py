@@ -131,7 +131,7 @@ class MainMenu(Drawable):
         self.effect = PostFXCache.Get("intro.sfx")
 
         self.cur_option = 4
-        self.menu_text = [(None,None)]*len(MainMenu.options)
+        self.menu_text = [None]*len(MainMenu.options)
         self.game = None
         self.swallow_escape = False
         self.ttl = 0
@@ -339,7 +339,7 @@ Hit {1} to reconsider your decision""").format(
         self.base_x,self.base_y = bb[2],bb[1]
 
         #self.DrawBackground()
-        for entry in itertools.chain.from_iterable(self.menu_text):
+        for entry in itertools.chain(self.menu_text):
             if entry:
                 Renderer.app.Draw(entry)
             
@@ -419,6 +419,7 @@ Hit {1} to reconsider your decision""").format(
         for i in range(len(MainMenu.options)):
             opt = MainMenu.options[i]
             if not opt[5]:
+                self.menu_text[i] = None
                 continue
             
             hscaled = int(opt[3]*defaults.letter_height_menu*defaults.scale[1])
