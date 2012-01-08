@@ -115,7 +115,7 @@ def sf_string(text,font_name,size,x,y,color):
     return tex
 
 
-SI_CHOOSE_LEVEL,SI_NONE,SI_HIGHSCORE,SI_CREDITS,SI_ACHIEVEMENTS=range(5)
+SI_CHOOSE_LEVEL,SI_NONE,SI_HIGHSCORE,SI_CREDITS,SI_ACHIEVEMENTS,SI_LOAD,SI_SAVE = range(7)
 
 class MainMenu(Drawable):
     """This class is responsible for displaying the main menu
@@ -233,10 +233,10 @@ class MainMenu(Drawable):
         )), defaults.game_over_fade_time, (550, 50), 0.0, accepted, sf.Color.Black, on_close))
         
     def _OptionsLoadGame(self):
-        pass
+        self.subindex = SI_LOAD
     
     def _OptionsSaveGame(self):
-        pass
+        self.subindex = SI_SAVE
             
 
     options = [ # don't need [2] anymore
@@ -255,10 +255,7 @@ class MainMenu(Drawable):
         [_("Quit!"), _OptionsQuit ,None,1.0,False,True]
     ]
     
-    def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME,on_loaded=lambda:None):
-        if old is None:
-            old = self
-            
+    def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME,on_loaded=lambda:None):    
         if not self.game is None:
             
             accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
@@ -268,7 +265,7 @@ class MainMenu(Drawable):
                     self._TryStartGameFromLevel(level,old,mode,on_loaded)
                 
             Renderer.AddDrawable( MessageBox(sf.String(_("""You are currently in a game. 
-If you start a new game, all your progress will be lost.
+If you start another game, all your progress will be lost.
 
 Hit {0} to continue
 Hit {1} to cancel""").format(
@@ -281,14 +278,20 @@ Hit {1} to cancel""").format(
             
         else:
         
-            self._SetGame(Game(mode=mode))
-            Renderer.AddDrawable(self.game,old)
-            self.game.LoadLevel(level,False)
+            self._SetGame(Game(mode=mode), old=old)
+            
+            if level != -1:
+                self.game.LoadLevel(level,False)
             
             on_loaded()
             
-    def _SetGame(self, game):
+    def _SetGame(self, game, old = None):
+        if old is None:
+            old = self
+            
         self.game = game
+        if game:
+            Renderer.AddDrawable(self.game,old)
         self.EnableMenu(0, not not game)
         self.EnableMenu(2, not not game)
 
@@ -363,6 +366,8 @@ Hit {1} to reconsider your decision""").format(
             self.ShowAchievements()
         elif self.subindex == SI_CREDITS:
             self.ShowCredits()
+        elif self.subindex == SI_LOAD or self.subindex == SI_SAVE:
+            self.ShowLoadSave(self.subindex == SI_LOAD)
         elif self.subindex == SI_HIGHSCORE:
             self.ShowHighscore()
             
@@ -379,10 +384,16 @@ Hit {1} to reconsider your decision""").format(
                         MainMenu.options[self.cur_option][1] (self)
                 
                     elif event.Key.Code == KeyMapping.Get("menu-down"):
-                        self.SetMenuOption(self.cur_option+1)
+                        i = self.cur_option+1
+                        while not self.IsMenuActive(i):
+                            i += 1
+                        self.SetMenuOption(i)
                      
                     elif event.Key.Code == KeyMapping.Get("menu-up"):
-                        self.SetMenuOption(self.cur_option-1)
+                        i = self.cur_option-1
+                        while not self.IsMenuActive(i):
+                            i -= 1
+                        self.SetMenuOption(i)
 
                 if event.Type == sf.Event.Resized:
                     continue
@@ -411,6 +422,9 @@ Hit {1} to reconsider your decision""").format(
         shape.SetOutlineWidth(4)
         
         Renderer.app.Draw(shape) 
+        
+    def IsMenuActive(self, i):
+        return MainMenu.options[i % len(MainMenu.options)][5]
 
     def SetMenuOption(self,i,first=False):
         """Choose the currently selected main menu option, entries
@@ -543,7 +557,6 @@ Hit {1} to reconsider your decision""").format(
                     self.level = (self.level-( (xnum+num - xnum*rows) if (self.level//xnum == 0) else xnum  ) )%(num) 
 
                 elif event.Key.Code == KeyMapping.Get("accept"):
-                    
                     GetBack()
                     self._TryStartGameFromLevel(self.level+1) 
                    
@@ -569,6 +582,101 @@ Hit {1} to reconsider your decision""").format(
             base_offset[0]+20,
             ry - 130*defaults.scale[1] - height*1.2,
             sf.Color.White )
+                
+        sf_draw_string_with_shadow(
+            _("Press {0} to return").format(KeyMapping.GetString("escape")),
+            defaults.font_menu,
+            height,
+            base_offset[0]+20,
+            ry - 130*defaults.scale[1],
+            sf.Color.White )
+        
+        
+    def ShowLoadSave(self, is_load):
+        assert is_load or self.game
+        slots = defaults.loadsave_slots
+        
+        def DisplayName(i):
+            return (_("Slot") + " " + str(i).zfill(2)) if i else _("Quicksave")
+        
+        def SlotName(i):
+            return str(i) if i else "quicksave"
+        
+        exists_cache = {}
+        def SlotExists(i):
+            if i in exists_cache:
+                return exists_cache[i]
+            file = os.path.join(defaults.cur_user_profile_dir,"save_"+SlotName(i))
+            b = exists_cache[i] = os.path.exists(file)
+            return b
+        
+        if not hasattr(self,"loadsave_index"):
+            self.loadsave_index = 0
+            if is_load:
+                while not SlotExists(self.loadsave_index) and self.loadsave_index < slots:
+                    self.loadsave_index += 1
+     
+        base_height = 42
+        base_offset = (self.base_x+70,self.base_y+10)
+        rx,ry = defaults.resolution
+        
+        bb = (base_offset[0],base_offset[1],rx-40,ry-60)
+
+        height = int(base_height*defaults.scale[1])
+        height_spacing = int(height*1.2)
+        
+        def GetBack():
+            self.subindex = SI_NONE
+            delattr(self,"ls_clock")
+            
+        if not hasattr(self,"ls_clock"):
+            self.ls_clock = sf.Clock()
+                  
+        self._DrawRectangle(bb,scale=min(1.0, self.ls_clock.GetElapsedTime()*3.0))
+        for event in Renderer.SwallowEvents():
+            if event.Type == sf.Event.KeyPressed:
+            
+                if event.Key.Code == KeyMapping.Get("escape"):
+                    GetBack()
+                    return
+
+                elif event.Key.Code == KeyMapping.Get("menu-down"):
+                    self.loadsave_index = (self.loadsave_index+1)%(slots)
+
+                elif event.Key.Code == KeyMapping.Get("menu-up"):
+                    self.loadsave_index = (self.loadsave_index-1)%(slots)
+
+                elif event.Key.Code == KeyMapping.Get("accept"):
+                    GetBack()
+                    if is_load:
+                        def on_loaded():
+                            self.game.Load(SlotName(self.loadsave_index))
+                        self._TryStartGameFromLevel(level= -1,mode= Game.CAMPAIGN,on_loaded=on_loaded)
+                    else:
+                        self.game.Save(SlotName(self.loadsave_index))
+                    return
+                   
+        for i in range(slots):
+            sf_draw_string_with_shadow(
+                DisplayName(i) + ("" if SlotExists(i) else _(" (Empty)")),
+                defaults.font_menu,
+                height,
+                base_offset[0]+ 20,
+                base_offset[1]+i*height_spacing + 20,
+                sf.Color.Red if self.loadsave_index == i else (sf.Color(100,100,100) 
+                    if (is_load and not SlotExists(i)) else sf.Color.White ))
+                
+        height = int(0.5*height)
+        
+        if not is_load or SlotExists(self.loadsave_index):
+            sf_draw_string_with_shadow(
+                _("Press {0} to {1}").format(KeyMapping.GetString("accept"),
+                    _("load this savegame") if is_load else _("save to this slot") ),
+                defaults.font_menu,
+                height,
+                base_offset[0]+20,
+                ry - 130*defaults.scale[1] - height*1.2,
+                sf.Color.White )
                 
         sf_draw_string_with_shadow(
             _("Press {0} to return").format(KeyMapping.GetString("escape")),

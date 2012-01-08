@@ -133,7 +133,7 @@ class Game(Drawable):
 
         return self.LoadLevel(int(self.cookies.get('worldmap_level_idx',30000)));
     
-    def Save(self,savename):
+    def Save(self,savename, display_name = None):
         file = os.path.join(defaults.cur_user_profile_dir,"save_"+savename)
         print('Save game to: ' + file)
 
@@ -146,7 +146,7 @@ class Game(Drawable):
             
         accepted = (KeyMapping.Get("accept"),)
         self._FadeOutAndShowStatusNotice(sf.String((_("""Created savegame {1}. 
-Hit {0} to continue.""")).format(KeyMapping.GetString("accept"), savename),
+Hit {0} to continue.""")).format(KeyMapping.GetString("accept"),  display_name or savename),
             Size=defaults.letter_height_game_over,
             Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
             )),defaults.game_over_fade_time,(550,70),0.0,accepted,sf.Color.Red,on_close) 
@@ -155,7 +155,7 @@ Hit {0} to continue.""")).format(KeyMapping.GetString("accept"), savename),
         return self.Load('quicksave')
 
     def QuickSave(self):
-        return self.Save('quicksave')
+        return self.Save('quicksave',_('Quicksave'))
 
     def CanSave(self):
         # saving is only possible while the player is on a worldmap
