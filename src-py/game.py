@@ -140,6 +140,16 @@ class Game(Drawable):
         self.cookies['save_format_version'] = 1
         with open(file,'wt') as outf:
             outf.write (repr(self.cookies))
+            
+        def on_close(a):
+            pass
+            
+        accepted = (KeyMapping.Get("accept"),)
+        self._FadeOutAndShowStatusNotice(sf.String((_("""Created savegame {1}. 
+Hit {0} to continue.""")).format(KeyMapping.GetString("accept"), savename),
+            Size=defaults.letter_height_game_over,
+            Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+            )),defaults.game_over_fade_time,(550,70),0.0,accepted,sf.Color.Red,on_close) 
         
     def QuickLoad(self):
         return self.Load('quicksave')
@@ -148,6 +158,7 @@ class Game(Drawable):
         return self.Save('quicksave')
 
     def CanSave(self):
+        # saving is only possible while the player is on a worldmap
         return self.mode == Game.CAMPAIGN and 39999 > self.level_idx >= 30000
         
     def OnRemoveFromRenderer(self):
