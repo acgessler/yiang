@@ -36,17 +36,20 @@ class CampaignLevel(Level):
         minimap_bg="questionmark.bmp", 
         overlays=["extra_items.txt"], 
         color=(15,30,15),
-        skip_validation=True
+        skip_validation=True,
+        postfx = [("ingame2.sfx",())],
+        **kwargs
     ):
         Level.__init__(self,level,game, lines, 
             color=color,
-            postfx=[("ingame2.sfx",())],
+            postfx=postfx,
             name=name,
             gravity=0.0,
             autoscroll_speed=0.0,
             scroll=Level.SCROLL_ALL,
             distortion_params=(0,0,0),
-            skip_validation=skip_validation)
+            skip_validation=skip_validation,
+            **kwargs)
         
         self.status_message = ""
         self.SetStatusMessage("")
