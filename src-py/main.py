@@ -241,9 +241,9 @@ class MainMenu(Drawable):
 
     options = [ # don't need [2] anymore
         [_("Resume Game"), _OptionsResumeGame, None,0.4,False, False],
-        [_("New Campaign"), _OptionsNewCampaignGame, None,1.0,False, True],
         [_("Load"), _OptionsLoadGame, None,0.7,False, True],
         [_("Save"), _OptionsSaveGame, None,0.5,False, False],
+        [_("New Campaign"), _OptionsNewCampaignGame, None,1.0,False, True],
         [_("Quick Game"), _OptionsNewGame, None,0.85,False, True],
         [_("Start Tutorial"), _OptionsTutorial, None,0.5,False, True],
         [_("Choose Level"), _OptionsNewGameChoose, None,0.35,False, True],
@@ -290,7 +290,7 @@ Hit {1} to cancel""").format(
     def _SetGame(self, game):
         self.game = game
         self.EnableMenu(0, not not game)
-        self.EnableMenu(3, not not game)
+        self.EnableMenu(2, not not game)
 
     def GetDrawOrder(self):
         """Drawable's are drawn with ascending draw order"""
@@ -323,8 +323,12 @@ Hit {1} to reconsider your decision""").format(
     
     def Draw(self):
         # game over? drop our reference to it.
-        if self.game and self.game.IsGameOver():
-            self._SetGame(None)
+        if self.game:
+            if self.game.IsGameOver():
+                self._SetGame(None)
+            else:
+                # maybe auto-select 'resume' upon re-entering main menu?
+                pass
         
         Renderer.SetClearColor(sf.Color.Black)
 
