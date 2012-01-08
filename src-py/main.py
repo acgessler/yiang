@@ -585,7 +585,7 @@ Hit {1} to reconsider your decision""").format(
             sf.Color.White )
                 
         sf_draw_string_with_shadow(
-            _("Press {0} to return").format(KeyMapping.GetString("escape")),
+            _("Press {0} to get back").format(KeyMapping.GetString("escape")),
             defaults.font_menu,
             height,
             base_offset[0]+20,
@@ -673,7 +673,7 @@ Hit {1} to reconsider your decision""").format(
                 "(" + ( time.ctime(os.path.getmtime(SlotFileName(i))) if SlotExists(i) else _("Empty") ) + ")",
                 defaults.font_menu,
                 height//2,
-                base_offset[0]+ 450,
+                base_offset[0]+ 400,
                 base_offset[1]+i*height_spacing + 30,
                 sf.Color.Red if self.loadsave_index == i else (sf.Color(100,100,100) 
                     if (is_load and not SlotExists(i)) else sf.Color.White ))
@@ -692,7 +692,7 @@ Hit {1} to reconsider your decision""").format(
                 sf.Color.White )
                 
         sf_draw_string_with_shadow(
-            _("Press {0} to return").format(KeyMapping.GetString("escape")),
+            _("Press {0} to get back").format(KeyMapping.GetString("escape")),
             defaults.font_menu,
             height,
             base_offset[0]+20,
