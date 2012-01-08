@@ -293,8 +293,7 @@ Hit {1} to cancel""").format(
         self.game = game
         if game:
             Renderer.AddDrawable(self.game,old)
-        self.EnableMenu(0, not not game)
-        self.EnableMenu(2, not not game)
+        self.EnableMenu(0, game)
 
     def GetDrawOrder(self):
         """Drawable's are drawn with ascending draw order"""
@@ -324,15 +323,22 @@ Hit {1} to reconsider your decision""").format(
             Size=defaults.letter_height_game_over,
             Font=FontCache.get(defaults.letter_height_game_over, face=defaults.font_game_over
         )), defaults.game_over_fade_time, (550, 120), 0.0, accepted, sf.Color.Black, on_close))
+        
+    def OnAddToRenderer(self):
+        Drawable.OnAddToRenderer(self)
+        
+        # always switch to 'resume game' upon RE-entering the main menu
+        if hasattr(self,'was_entered_once'):
+            self.SetMenuOption(0)
+            
+        self.was_entered_once = True
     
     def Draw(self):
         # game over? drop our reference to it.
         if self.game:
+            self.EnableMenu(2, self.game.CanSave())
             if self.game.IsGameOver():
                 self._SetGame(None)
-            else:
-                # maybe auto-select 'resume' upon re-entering main menu?
-                pass
         
         Renderer.SetClearColor(sf.Color.Black)
 
@@ -560,6 +566,7 @@ Hit {1} to reconsider your decision""").format(
                 elif event.Key.Code == KeyMapping.Get("accept"):
                     GetBack()
                     self._TryStartGameFromLevel(self.level+1) 
+                    return
                    
         for y in range(rows):
             for x in range(min(num - y*xnum,xnum)):
@@ -577,7 +584,9 @@ Hit {1} to reconsider your decision""").format(
         height = int(0.5*height)
         from level import LevelLoader
         sf_draw_string_with_shadow(
-            _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),self.level+1,LevelLoader.GuessLevelName(self.level+1)),
+            _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),
+                self.level+1,
+                LevelLoader.GuessLevelName(self.level+1)),
             defaults.font_menu,
             height,
             base_offset[0]+20,
