@@ -27,6 +27,7 @@ import sys
 import os
 import itertools
 import math
+import time
 
 
 # My own stuff
@@ -596,18 +597,20 @@ Hit {1} to reconsider your decision""").format(
         assert is_load or self.game
         slots = defaults.loadsave_slots
         
-        def DisplayName(i):
-            return (_("Slot") + " " + str(i).zfill(2)) if i else _("Quicksave")
-        
         def SlotName(i):
             return str(i) if i else "quicksave"
+        
+        def SlotFileName(i):
+            return os.path.join(defaults.cur_user_profile_dir,"save_"+SlotName(i))
+        
+        def DisplayName(i):
+            return (_("Slot") + " " + str(i).zfill(2)) if i else _("Quicksave")
         
         exists_cache = {}
         def SlotExists(i):
             if i in exists_cache:
                 return exists_cache[i]
-            file = os.path.join(defaults.cur_user_profile_dir,"save_"+SlotName(i))
-            b = exists_cache[i] = os.path.exists(file)
+            b = exists_cache[i] = os.path.exists(SlotFileName(i))
             return b
         
         if not hasattr(self,"loadsave_index"):
@@ -617,7 +620,7 @@ Hit {1} to reconsider your decision""").format(
                     self.loadsave_index += 1
      
         base_height = 42
-        base_offset = (self.base_x+70,self.base_y+10)
+        base_offset = (self.base_x+50,self.base_y+15)
         rx,ry = defaults.resolution
         
         bb = (base_offset[0],base_offset[1],rx-40,ry-60)
@@ -658,13 +661,23 @@ Hit {1} to reconsider your decision""").format(
                    
         for i in range(slots):
             sf_draw_string_with_shadow(
-                DisplayName(i) + ("" if SlotExists(i) else _(" (Empty)")),
+                DisplayName(i),
                 defaults.font_menu,
                 height,
-                base_offset[0]+ 20,
+                base_offset[0]+ 40,
                 base_offset[1]+i*height_spacing + 20,
                 sf.Color.Red if self.loadsave_index == i else (sf.Color(100,100,100) 
                     if (is_load and not SlotExists(i)) else sf.Color.White ))
+            
+            sf_draw_string_with_shadow(
+                "(" + ( time.ctime(os.path.getmtime(SlotFileName(i))) if SlotExists(i) else _("Empty") ) + ")",
+                defaults.font_menu,
+                height//2,
+                base_offset[0]+ 450,
+                base_offset[1]+i*height_spacing + 30,
+                sf.Color.Red if self.loadsave_index == i else (sf.Color(100,100,100) 
+                    if (is_load and not SlotExists(i)) else sf.Color.White ))
+            
                 
         height = int(0.5*height)
         
