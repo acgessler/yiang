@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,17,20,need_levels=[30001,30002,30003],status_msg=_('Maybe i can fly that helicopter in a houndred years!'))
+from campaign import Blocker; <out> = Blocker(<raw>,17,20,need_levels=[30001,30002],status_msg=_('Maybe i can fly that helicopter in a houndred years!'))
  +++++++++++++++++++++++++        X   X
       ,------T------,              X X
      /   )  [][][]   °`"""""""""""""X

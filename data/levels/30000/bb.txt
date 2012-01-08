@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,17,20,need_levels=[1],status_msg=_('Beach, the direction to the Sea (or under it)'))
+from campaign import Blocker; <out> = Blocker(<raw>,17,20,need_levels=[64],status_msg=_('Beach, the direction to the Sea (or under it)'))
   _/\_____/\_
  _/|O\   /O|\_
 _/|  _\_/_  |\_

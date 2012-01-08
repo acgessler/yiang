@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,54,48,need_levels=[1],status_msg=_('The ice camp'))
+from campaign import Blocker; <out> = Blocker(<raw>,54,48,need_levels=[30000],status_msg=_('The ice camp'))
     ==================================================
   /##################################################/
  /##################################################/
