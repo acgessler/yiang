@@ -363,6 +363,11 @@ class CampaignPlayer(Player):
     
     def __init__(self, text, width, height, ofsx, move_freely=True, draworder=16500):
         Player.__init__(self,text,width,height,ofsx,move_freely,draworder)
+        
+    def SetGame(self,game):
+        Player.SetGame(self,game)
+        if 'player_pos' in self.game.cookies:
+            self.SetPosition(self.game.cookies['player_pos'])
 
     def Update(self,*args,**kwargs):
         Player.Update(self,*args,**kwargs)
