@@ -1,0 +1,14 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=64)
+   GGGG      OOOO
+  GG  GG    OO  OO
+ GG        OO    OO
+ GG  GG    OO    OO
+  GG  GG    OO  OO
+   GGGG      OOOO
+
+WW            WW   OOOO   NNN    NN
+ WW   WWWW   WW   OO  OO  NNNN   NN
+ WW   WWWW   WW  OO    OO NN NN  NN
+  WW WW  WW WW   OO    OO NN  NN NN
+  WW WW  WW WW    OO  OO  NN   NNNN
+   WWW    WWW      OOOO   NN    NNN

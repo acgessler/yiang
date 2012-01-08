@@ -1,0 +1,14 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,6,1,1.0,2,halo_img=None,next_level=65)
+I I PRISONI I I I I
+I I I I_I I I I I I
+I I I I%I I I I I I
+I I I I I I I I I I
+I I I I I I I I I I
+I I I I I I I I I I
+
+I I PRISONI I I I I
+I I I I_I I / \ I I
+I I I I%I I(   )I I
+I I I I I I \ / I I
+I I I I I I I I I I
+I I I I I I I I I I

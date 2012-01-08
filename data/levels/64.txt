@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('game over'),color=[0, 0, 0],postfx=[('ingame1.sfx', ())],vis_ofs=0,bgimg=-1,scroll=2,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.2, 0),name=_('game over'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=0,bgimg=-1,scroll=10,lower_offset=0.0)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9_A9_A9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  pS0pS0_A9
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  pS0pS0_A9
@@ -20,3 +20,10 @@
 .  .  .  .  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  yTA.  _A9_A9.  rE1.  .  .  .  .  .  .  .  .  .  .  .  .  rE1_A9_A9_A9_A9_A9_A9.  .  _A9_A9_A9_A9_A9
 .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  _A9_A9_A9.  _A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9_A9.  .  .  .  _A9rE2.  _A9
 .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _A9_A9_A9_A9
+
+
+
+
+
+
+

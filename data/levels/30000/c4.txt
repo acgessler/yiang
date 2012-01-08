@@ -1,0 +1,10 @@
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,4,1,1.0,2,halo_img=None,next_level=76)
+  ____
+__L_ |  _
+|  | |  |\__
+|  | |  |  |
+
+* ____  * ()
+__L_ | *_  .
+|  | |  |\__
+|  | |  |  |

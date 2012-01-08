@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('SimpleOne'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=5,bgimg=-1,scroll=14,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(-0.0, 0),name=_('SimpleOne'),color=(0, 0, 0),postfx=[('ingame1.sfx', ())],vis_ofs=5,bgimg=-1,scroll=15,lower_offset=0.0)
 _B6.  _B6
 _B6.  _B6
 _B6.  _B6
