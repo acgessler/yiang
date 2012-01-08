@@ -185,6 +185,9 @@ Hit {0} to continue.""")).format(KeyMapping.GetString("accept"),  display_name o
     def MarkLevelDone(self,level):
         self.levels_done.add(level)
         
+        from main import mark_level_done_globally
+        mark_level_done_globally(level)
+        
     def GetGameMode(self):
         return self.mode
 

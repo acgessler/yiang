@@ -76,6 +76,35 @@ def get_level_count():
     return level_count
 
 
+global_levels_available = None
+def mark_level_available_globally(level):
+    """Add a level index to the global (profile-wide) list of all levels
+    that have been entered at least once in campaign mode"""
+    global global_levels_available
+    global_levels_available.add(level)
+    
+    # save immediately
+    f = os.path.join(defaults.cur_user_profile_dir,"levels_done")
+    with open(f,'wt') as outf:
+        outf.write(repr(global_levels_available or s))
+        
+def get_globally_available_levels():
+    """Get the set of all level indices that have been entered at
+    least once in campaign mode."""
+    global global_levels_available
+    if global_levels_available is None:
+        f = os.path.join(defaults.cur_user_profile_dir,"levels_done")
+        try:
+            with open(f,'rt') as inf:
+                global_levels_available = eval(inf.read())
+        except IOError:
+            global_levels_available = set(defaults.initially_enabled_levels)
+            with open(f,'wt') as outf:
+                outf.write(repr(global_levels_available))
+            
+    return global_levels_available
+        
+
 def sf_string_with_shadow(text,font_name,size,x,y,color,bgcolor=sf.Color(0,0,0),shadow_diff=0):
     """Spawn a string with a shadow behind, which is actually the same
     string in a different color, moved and scaled slightly. Return a
@@ -535,6 +564,10 @@ Hit {1} to reconsider your decision""").format(
         self.level = getattr(self,"level", 0)
         bb = (base_offset[0],base_offset[1],rx-40,ry-60)  
         
+        gl = get_globally_available_levels()
+        if not hasattr(self, "active_levels"):
+            self.active_levels = gl
+        
         def GetBack():
             self.subindex = SI_NONE
             delattr(self,"cl_clock")
@@ -564,9 +597,17 @@ Hit {1} to reconsider your decision""").format(
                     self.level = (self.level-( (xnum+num - xnum*rows) if (self.level//xnum == 0) else xnum  ) )%(num) 
 
                 elif event.Key.Code == KeyMapping.Get("accept"):
-                    GetBack()
-                    self._TryStartGameFromLevel(self.level+1) 
-                    return
+                    if self.level+1 in self.active_levels:
+                        GetBack()
+                        self._TryStartGameFromLevel(self.level+1) 
+                        return
+                    
+                if not defaults.debug_keys:
+                    continue
+                
+                if event.Key.Code == KeyMapping.Get("debug-godmode"):
+                    self.active_levels = set(range(get_level_count()+1)) if self.active_levels is gl else gl
+                    break
                    
         for y in range(rows):
             for x in range(min(num - y*xnum,xnum)):
@@ -579,14 +620,16 @@ Hit {1} to reconsider your decision""").format(
                     height,
                     base_offset[0]+(x*width_spacing) + 20,
                     base_offset[1]+y*height_spacing + 20,
-                    sf.Color.Red if self.level == i else sf.Color.White )
+                    (sf.Color(150,0,0) if self.level == i else sf.Color(100,100,100)) if not i+1 in self.active_levels else ( 
+                        sf.Color.Red if self.level == i else sf.Color.White ))
                 
         height = int(0.5*height)
         from level import LevelLoader
         sf_draw_string_with_shadow(
             _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),
                 self.level+1,
-                LevelLoader.GuessLevelName(self.level+1)),
+                LevelLoader.GuessLevelName(self.level+1)) if self.level+1 in self.active_levels else 
+            _("You haven't discovered this level yet. To do so, you need to enter it once in campaign mode."),
             defaults.font_menu,
             height,
             base_offset[0]+20,
