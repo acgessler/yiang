@@ -1,0 +1,3 @@
+group wc *.txt
+	push archive_files ~
+end
