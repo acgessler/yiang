@@ -239,20 +239,20 @@ class MainMenu(Drawable):
         pass
             
 
-    options = [ # don't need [1] anymore
-        (_("Resume Game"), _OptionsResumeGame, "You will die soon",0.4,False),
-        (_("Campaign"), _OptionsNewCampaignGame, "You will die",1.0,False),
-        (_("Load"), _OptionsLoadGame, "You will die soon",0.7,False),
-        (_("Save"), _OptionsSaveGame, "You will die soon",0.5,False),
-        (_("Quick Game"), _OptionsNewGame, "You will die",0.85,False),
-        (_("Start Tutorial"), _OptionsTutorial, "You will die",0.5,False),
-        (_("Choose Level"), _OptionsNewGameChoose, "Bad idea",0.35,False),
-        (_("Achievements"), _OptionsShowAchievements, "Updates!",0.7,False),
+    options = [ # don't need [2] anymore
+        [_("Resume Game"), _OptionsResumeGame, None,0.4,False, False],
+        [_("New Campaign"), _OptionsNewCampaignGame, None,1.0,False, True],
+        [_("Load"), _OptionsLoadGame, None,0.7,False, True],
+        [_("Save"), _OptionsSaveGame, None,0.5,False, False],
+        [_("Quick Game"), _OptionsNewGame, None,0.85,False, True],
+        [_("Start Tutorial"), _OptionsTutorial, None,0.5,False, True],
+        [_("Choose Level"), _OptionsNewGameChoose, None,0.35,False, True],
+        [_("Achievements"), _OptionsShowAchievements, None,0.7,False,True],
      #   ("Preferences", _OptionsNotImplemented, "Options",1.0),
-        (_("Credits"), _OptionsCredits, "CREDITS",0.4,False),
-        (_("Online Highscore"), _OptionsViewHighscore, "Updates!",0.35,False),
-        (_("Check for Updates"), _OptionsNotImplemented, "Updates!",0.35,False),
-        (_("Quit!"), _OptionsQuit ,"",1.0,False)
+        [_("Credits"), _OptionsCredits, None,0.4,False,True],
+        [_("Online Highscore"), _OptionsViewHighscore, None,0.35,False,True],
+        [_("Check for Updates"), _OptionsNotImplemented, None,0.35,False,True],
+        [_("Quit!"), _OptionsQuit ,None,1.0,False,True]
     ]
     
     def _TryStartGameFromLevel(self,level,old=None,mode=Game.QUICKGAME,on_loaded=lambda:None):
@@ -281,11 +281,16 @@ Hit {1} to cancel""").format(
             
         else:
         
-            self.game = Game(mode=mode)
+            self._SetGame(Game(mode=mode))
             Renderer.AddDrawable(self.game,old)
             self.game.LoadLevel(level,False)
             
             on_loaded()
+            
+    def _SetGame(self, game):
+        self.game = game
+        self.EnableMenu(0, not not game)
+        self.EnableMenu(3, not not game)
 
     def GetDrawOrder(self):
         """Drawable's are drawn with ascending draw order"""
@@ -317,8 +322,9 @@ Hit {1} to reconsider your decision""").format(
         )), defaults.game_over_fade_time, (550, 120), 0.0, accepted, sf.Color.Black, on_close))
     
     def Draw(self):
-        if not self.game is None and self.game.IsGameOver():
-            self.game = None
+        # game over? drop our reference to it.
+        if self.game and self.game.IsGameOver():
+            self._SetGame(None)
         
         Renderer.SetClearColor(sf.Color.Black)
 
@@ -333,8 +339,9 @@ Hit {1} to reconsider your decision""").format(
         self.base_x,self.base_y = bb[2],bb[1]
 
         #self.DrawBackground()
-        for entry in itertools.chain(self.menu_text):
-            Renderer.app.Draw(entry)
+        for entry in itertools.chain.from_iterable(self.menu_text):
+            if entry:
+                Renderer.app.Draw(entry)
             
         a,b = sf_string_with_shadow(
                 _("Profile: {1} / best result so far: $ {0:.4}").format(HighscoreManager.GetHighscoreRecord()/100,defaults.cur_user_profile),
@@ -410,20 +417,35 @@ Hit {1} to reconsider your decision""").format(
         y = 180 * defaults.scale[1]
         
         for i in range(len(MainMenu.options)):
-            hscaled = int(MainMenu.options[i][3]*defaults.letter_height_menu*defaults.scale[1])
+            opt = MainMenu.options[i]
+            if not opt[5]:
+                continue
+            
+            hscaled = int(opt[3]*defaults.letter_height_menu*defaults.scale[1])
             self.menu_text[i] = sf_string_with_shadow(
-                MainMenu.options[i][0],
-                defaults.font_menu,
-                hscaled,
-                40,
-                y,
-                (sf.Color(100,100,100) if self.cur_option == OPTION_RESUME and self.game is None else sf.Color.Red) 
-                    if self.cur_option==i else sf.Color.White )
+                 opt[0],
+                 defaults.font_menu,
+                 hscaled,
+                 40,
+                 y,
+                 sf.Color.Red if self.cur_option==i else sf.Color.White )           
+            
 
             y += hscaled*1.5
             
-        if MainMenu.options[self.cur_option][-1]:
-            MainMenu.options[self.cur_option][1] (self)
+        if MainMenu.options[self.cur_option][4]:
+            MainMenu.options[self.cur_option][4] (self)
+            
+    def UpdateMenu(self):
+        return self.SetMenuOption(self.cur_option)
+    
+    def ToggleMenu(self, which):
+        MainMenu.options[which][5] = not MainMenu.options[which][5]
+        self.UpdateMenu() 
+        
+    def EnableMenu(self, which, what):
+        MainMenu.options[which][5] = what
+        self.UpdateMenu() 
 
     def RecacheDangerSigns(self):
         """Regenerate the dangerous, red flashing matrix-like ghost texts"""
