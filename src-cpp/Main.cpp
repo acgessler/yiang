@@ -80,7 +80,8 @@ int PyMain(int argc, wchar_t* argv[])
 		"except Exception as e:\n"
 		"\tprint(e)\n"
 		"\ttraceback.print_exc()\n"
-		"\tprint(traceback.extract_stack())"
+		"\tprint(traceback.extract_stack())\n"
+		"\traise"
 	;
 #ifdef _MSC_VER
 	PyImport_AppendInittab("sf", & PyInit_sf);
@@ -105,7 +106,16 @@ int PyMain(int argc, wchar_t* argv[])
 
 	const int ret = PyRun_SimpleString(start_stub);
 
-	if (PyErr_Occurred()) {
+	if (PyErr_Occurred() || ret == -1) {
+
+#ifdef _MSC_VER
+		MessageBoxA(NULL,"Our apologies - YIANG just crashed and we know this should not have happened.\n\n"
+			"If you want to help us fix this issue, " 
+			"please send a copy of the log file (in the folder where game.exe resides) "
+			"along with a description of the steps that led to the crash to bugs@yiang-thegame.com",
+			"Crash Report", MB_OK);
+#endif
+
 		PyErr_Print();
 		PyErr_Clear();
 	}
