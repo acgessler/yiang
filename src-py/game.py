@@ -185,9 +185,6 @@ Hit {0} to continue.""")).format(KeyMapping.GetString("accept"),  display_name o
     def MarkLevelDone(self,level):
         self.levels_done.add(level)
         
-        from main import mark_level_available_globally
-        mark_level_available_globally(level)
-        
     def GetGameMode(self):
         return self.mode
 
@@ -847,6 +844,10 @@ Hit {2} to return to the menu""")).format(
         """Load a particular level and drop the old one"""
         self.DropLevel()
         self.level_idx = idx
+        
+        # mark this level as available
+        from main import mark_level_available_globally
+        mark_level_available_globally(idx)
         
         # Carefully reset everything while loading isn't finished
         self.level = None

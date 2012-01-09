@@ -81,6 +81,8 @@ def mark_level_available_globally(level):
     """Add a level index to the global (profile-wide) list of all levels
     that have been entered at least once in campaign mode"""
     global global_levels_available
+    if global_levels_available is None:
+        get_globally_available_levels()
     global_levels_available.add(level)
     
     # save immediately
