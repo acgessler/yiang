@@ -409,7 +409,7 @@ Hit {1} to reconsider your decision""").format(
                 Renderer.app.Draw(entry)
             
         a,b = sf_string_with_shadow(
-                _("Best result so far: $ {0:.4}").format(HighscoreManager.GetHighscoreRecord()/100),
+                _("Quick Game Highscore: $ {0:.4}").format(HighscoreManager.GetHighscoreRecord()/100),
                 defaults.font_menu,
                 int(20*defaults.scale[1]),
                 int(defaults.resolution[0]-300*defaults.scale[1]),
