@@ -159,6 +159,9 @@ Hit {0} to continue.""")).format(KeyMapping.GetString("accept"),  display_name o
 
     def CanSave(self):
         # saving is only possible while the player is on a worldmap
+        return self.IsOnWorldMap()
+    
+    def IsOnWorldMap(self):
         return self.mode == Game.CAMPAIGN and 39999 > self.level_idx >= 30000
         
     def OnRemoveFromRenderer(self):
@@ -754,7 +757,7 @@ Hit {0} or {1} to return to the menu .. """).format(
         from posteffect import FadeOutOverlay, FadeInOverlay
         Renderer.AddDrawable( FadeOutOverlay(defaults.enter_worldmap_fade_time, fade_end=defaults.fade_stop, on_close=dropit) )
         self.PushSuspend()
-        raise NewFrame()
+        #raise NewFrame()
     
     def BackToWorldMap(self,life_gain=0):
         """Display level statistics and move the player back to the world map"""           

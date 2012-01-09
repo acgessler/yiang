@@ -258,6 +258,14 @@ class MainMenu(Drawable):
 
         Renderer.AddDrawable(self.game,self)
         
+        
+    def _OptionsBackToWorldMap(self):
+        if self.game is None:
+            return
+        
+        self.game.BackToWorldMapFailure()
+        self._OptionsResumeGame()
+        
     def _OptionsNotImplemented(self):
         
         def on_close(result):
@@ -279,6 +287,7 @@ class MainMenu(Drawable):
 
     options = [ # don't need [2] anymore
         [_("Resume Game"), _OptionsResumeGame, None,0.4,False, False],
+        [_("Back to World Map"), _OptionsBackToWorldMap, None,0.4,False, False],
         [_("Load"), _OptionsLoadGame, None,0.7,False, True],
         [_("Save"), _OptionsSaveGame, None,0.5,False, False],
         [_("New Campaign"), _OptionsNewCampaignGame, None,1.0,False, True],
@@ -330,6 +339,10 @@ Hit {1} to cancel""").format(
         self.game = game
         if game:
             Renderer.AddDrawable(self.game,old)
+        else:
+            self.EnableMenu(1, False)
+            self.EnableMenu(3, False)
+            
         self.EnableMenu(0, game)
 
     def GetDrawOrder(self):
@@ -373,7 +386,8 @@ Hit {1} to reconsider your decision""").format(
     def Draw(self):
         # game over? drop our reference to it.
         if self.game:
-            self.EnableMenu(2, self.game.CanSave())
+            self.EnableMenu(3, self.game.CanSave())
+            self.EnableMenu(1, not self.game.IsOnWorldMap())
             if self.game.IsGameOver():
                 self._SetGame(None)
         
