@@ -133,7 +133,7 @@ audio_volume_scale = 0.8
 def_user_profile = "Wurzelgnom"
 no_intro = True
 no_logo = True
-disable_audio = True
+disable_audio = False
 initially_enabled_levels = [1,2,69,8]
 
 postfx_flash_length = 1

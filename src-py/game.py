@@ -761,11 +761,6 @@ Hit {0} or {1} to return to the menu .. """).format(
         
         raise NewFrame()
 
-    def MergeInventoryBack(self):
-        self.cookies.setdefault("inventory",[])
-        for i in self.level.inventory_shared:
-            if i.IsPersistent():
-                self.cookies["inventory"].append(i)
 
     def BackToWorldMapFailure(self):
         """Return to WORLDMAP after failing a level (i.e. pick option 3 in the post-mortem dialog)"""
@@ -786,7 +781,6 @@ Hit {0} or {1} to return to the menu .. """).format(
         from posteffect import FadeOutOverlay, FadeInOverlay
         from notification import MessageBox
         
-        self.MergeInventoryBack()
         accepted = KeyMapping.Get("accept"),
         
         # this, perhaps, is best described as the ASCII equivalent of a demotivational pic
@@ -823,8 +817,6 @@ Hit any key to continue.
     def NextLevel(self):
         """Load another (randomly chosen) level"""
         DebugTools.Trace()
-        
-        self.MergeInventoryBack()
         
         import main # XXX (hack)
         print("Level {0} done, advancing to the next level".format(self.level_idx))
