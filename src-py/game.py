@@ -829,7 +829,7 @@ Hit any key to continue.
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
         def on_close(key):
             from main import get_globally_available_levels
-            lidx = random.choice(list(get_globally_available_levels()))
+            lidx = random.choice(list(get_globally_available_levels() - set([self.level_idx]) ))
                 
             if self.LoadLevel(lidx) is False:
                 print("Failure loading level {0}, returning to main menu".format(lidx))
