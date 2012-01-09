@@ -1,0 +1,2 @@
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="story_4",text_color=sf.Color(0,150,0),audio_fx="_story_2.ogg")
+"Rocket,that can bring me away on the other side" Helicopter in the way, repair it to fly it out of the way <TEXT AUSTAUSCHEN>

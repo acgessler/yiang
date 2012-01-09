@@ -1,0 +1,2 @@
+from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="story_3",text_color=sf.Color(0,150,0),audio_fx="_story_2.ogg")
+Last night you were in a bar <TEXT AUSTAUSCHEN>
