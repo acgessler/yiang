@@ -1,17 +1,13 @@
 <Metadata>
-	<Level idx="1">
-		<Property name="reward_lives">
-			2
-		</Property>
-	</Level>
+	
 	<Level idx="10000">
 		<Property name="reward_lives">
-		        0	
+		        1	
 		</Property>
 	</Level>
-	<Level idx="10001">
+	<Level idx="1">
 		<Property name="reward_lives">
-			0
+			1
 		</Property>
 	</Level>
 	<Level idx="2">
@@ -20,6 +16,12 @@
 			0
 		</Property>
 	</Level>
+	<Level idx="10001">
+		<Property name="reward_lives">
+			0
+		</Property>
+	</Level>
+	
 	<Level idx="4">
 		<Property name="reward_lives">
 			2
