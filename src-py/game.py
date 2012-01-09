@@ -185,8 +185,8 @@ Hit {0} to continue.""")).format(KeyMapping.GetString("accept"),  display_name o
     def MarkLevelDone(self,level):
         self.levels_done.add(level)
         
-        from main import mark_level_done_globally
-        mark_level_done_globally(level)
+        from main import mark_level_available_globally
+        mark_level_available_globally(level)
         
     def GetGameMode(self):
         return self.mode
@@ -311,7 +311,7 @@ OOOOOO  OOOOO  \n\
         """draw the status bar with the player's score, lives and total game duration"""
         if self.level is None:
             return
-    
+        
         statush = self.GetUpperStatusBarHeight()*defaults.tiles_size_px[1]
         if not hasattr(self,"status_bar_font"):
             self.status_bar_font = FontCache.get(defaults.letter_height_status,\
@@ -333,7 +333,9 @@ OOOOOO  OOOOO  \n\
         shape.EnableFill(True)
         shape.EnableOutline(True)
 
+        # don't draw an upper status bar
         #self.DrawSingle(shape)
+        
         
         if self.undecorated is False:
             
@@ -798,7 +800,7 @@ Hit any key to continue.
         raise NewFrame()
     
     def NextLevel(self):
-        """Load the next level, cycle if the last level was reached"""
+        """Load another (randomly chosen) level"""
         DebugTools.Trace()
         
         self.MergeInventoryBack()
@@ -808,15 +810,9 @@ Hit any key to continue.
         
         accepted = (KeyMapping.Get("escape"),KeyMapping.Get("accept"))
         def on_close(key):
-            if self.level_idx == main.get_level_count():
-                lidx = 1
-                self.rounds += 1
+            from main import get_globally_available_levels
+            lidx = random.choice(list(get_globally_available_levels()))
                 
-                print("Scale time by {0}%".format((defaults.speed_scale_per_round-1.0)*100))
-                self.speed_scale *= defaults.speed_scale_per_round
-            else:
-                lidx = self.level_idx+1
-                       
             if self.LoadLevel(lidx) is False:
                 print("Failure loading level {0}, returning to main menu".format(lidx))
                 Renderer.RemoveDrawable(self)

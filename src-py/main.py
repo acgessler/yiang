@@ -219,7 +219,7 @@ class MainMenu(Drawable):
             if defaults.no_bg_sound is False:
                 SoundEffectCache.Get("logo.ogg").Play()
                 
-        self._TryStartGameFromLevel(1,on_loaded=settune)
+        self._TryStartGameFromLevel(random.choice(list(get_globally_available_levels())),on_loaded=settune)
         
     def _OptionsNewCampaignGame(self):
         def settune():
