@@ -1,4 +1,4 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_2",text_color=sf.Color.Black,only_once=True)
-Congratulations. How many tries did you need?
+Congratulations. This was your first challenge and you completed it.
 
-To provide some theoretical background: as almost everything on this planet, teleporters have a color and a teleporter entrance will always teleport you to the closest receiver of the same color. Note that, according to quantum mechanics, there is a slight possibility of you failing to re-appear at the intended location but I seriously wouldn't worry about this. 
+To give some theoretical background: as almost everything on this planet, Megamatic ASCII Teleports do have a color and an entrance will always teleport you to the closest receiver of the same color. Note that, according to quantum mechanics and the laws of the unstable physics engine that we use here, there is a slight possibility of you failing to re-appear at the intended location but the official recommendation is not to worry about this. 

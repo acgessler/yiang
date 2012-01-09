@@ -1,2 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_8",text_color=sf.Color.Black,only_once=True)
-To clarify: if you have a particular color, you can shoot only enemies of the same color (unless they are immortal, shit happens). 
+To clarify: you can shoot only enemies of your current color (which doesn't imply that you can shoot all enemies, you can't, some of them don't care about colors). 

@@ -1,2 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_5",text_color=sf.Color.Black,only_once=True)
-This is a door and to open a door one needs ... a key, genius. Go find one and REMEMBER NOT TO TOUCH THE FAT GUY.
+This is a door and to open a door one needs ... a key (or an axe if you watched "the Shining"). Go find either of them and REMEMBER NOT TO TOUCH THE FAT GUY.

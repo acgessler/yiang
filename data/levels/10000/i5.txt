@@ -1,2 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_6",text_color=sf.Color.Black,only_once=True)
-Just keep walking but try not to follow any useful advice because you surely don't want to miss the experience of being burnt alive (which is exactly what will happen if you should fail to enable the bridge).
+You surely don't want to miss the experience of being burnt alive (which is exactly what would happen if you failed to enable the bridge).

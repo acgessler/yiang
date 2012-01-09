@@ -1,3 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_1",text_color=sf.Color.Black,only_once=True)
-The yellow brick right in front of you is a teleporter. Touch it to get teleported to .... uhm, you'll find that out for yourself.
-
+The yellow brick right in front of you is a Megamatic ASCII Teleport. Why not give it a try? Just walk into it, just as Frodo walked into Mordor.

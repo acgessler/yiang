@@ -1,4 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_10",text_color=sf.Color.Black,only_once=True)
-Now keep your eyes open and find out how to get through this last obstacle. Hint: just watch it for a while and be enlightened.
-
-Afterwards, advance to the exit gate and go fetch your achievement.
+Great! Now find a way through this vert last obstacle. Hint: just watch it for a while ... and be enlightened.

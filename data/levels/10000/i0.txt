@@ -1,9 +1,9 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_0",text_color=sf.Color.Black,only_once=True)
 Wanderer! 
 
-You are probably used to boring video game opening tutorials. Be aware, however, that this tutorial is a bit special because it gives you the unique chance of earning an achievement solely for completing it. 
+You are probably used to boring video game opening tutorials. This tutorial, however, is absolutely amazing because if you complete it, you will earn your first achievement (all things considered, the idea of giving players so called achievements for things that aren't achievements at all is not exactly new, but we thought you might have become so accustomed to it that you wouldn't like the game if we didn't do that).
 
-Use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump (if this keyboard setup doesn't suit your preferred key pattern, edit ./config/key_bindings.txt). 
+Use the LEFT and RIGHT arrow keys to move and the UP arrow key to jump (if this keyboard setup doesn't suit your preferred key pattern, go and edit ./config/key_bindings.txt). 
 
-Hit {enter} or {accept} to accept the challenge (no, you don't have a choice).
+Hit {enter} to accept the challenge (looks like a choice, but isn't).
 

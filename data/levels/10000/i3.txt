@@ -1,2 +1,2 @@
 from notification import SimpleNotification; <out> = SimpleNotification(_(<raw>),desc="tutorial_3",text_color=sf.Color.Black,only_once=True)
-Have a look at this beautiful guy down there. Just avoid getting into closer contact.
+Have a look at this beautiful, handsome ASCII guy down there. Just avoid getting into closer contact.
