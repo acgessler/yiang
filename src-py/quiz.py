@@ -36,27 +36,27 @@ quizes = [
     # quiz #0 - very beginning of the game
     [
        {
-            'question':'Which of the enemies shown below could you slay - assuming you had weapon and ammo? (neither of which can be found in this room, so this question is kind of theoretical)',
-            'a': 'The red one',
-            'b': 'The green one',
-            'c': 'All of them',
-            'd': 'None of them',
+            'question':_('Which of the enemies shown below could you kill assuming you had weapon and ammo? (neither of which can be found in this room, so this question is kind of theoretical)'),
+            'a': _('The red one'),
+            'b': _('The green one'),
+            'c': _('All of them'),
+            'd': _('None of them'),
             'correct': 'a'
        },
        {
-            'question':'Which of the danger barrels below would kill you, assuming you managed to get to them? (you won\'t, so don\'t bother trying)',
-            'a': 'The blue and the green one',
-            'b': 'All except the red barrel',
-            'c': 'None of them',
-            'd': 'The red and the yellow one',
+            'question':_('Which of the ASCII danger barrels below are dangerous for you?'),
+            'a': _('The blue and the green one'),
+            'b': _('All except the red barrel'),
+            'c': _('None of them'),
+            'd': _('The red and the yellow one'),
             'correct': 'b'
        },
        {
-            'question':'What can you *not* do with your collected money? If you didn\'t know yet, money is the kind of item that seems to affect the number on the left of the dollar sign in the upper status bar',
-            'a': 'Loose it by killing too many monsters',
-            'b': 'Buy more lives to survive this hell of a torture longer',
-            'c': 'Improve my online highscore and show off how great I am',
-            'd': 'Change my player\'s body color at will',
+            'question':_('If you didn\'t know yet, money is the kind of item that seems to affect the number on the left of the dollar sign in the upper status bar. What can you NOT do with it?'),
+            'a': _('Loose it by slaying too many ASCII zombies'),
+            'b': _('Buy more lives to survive this hell of a torture chamber longer'),
+            'c': _('Improve your online highscore and show off how great you are'),
+            'd': _('Change your player\'s body color at will'),
             'correct': 'd'
        }
     ],
