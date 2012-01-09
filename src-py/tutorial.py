@@ -19,7 +19,7 @@
 # ///////////////////////////////////////////////////////////////////////////////////
 
 from achievements import Achievements
-from game import Entity
+from entity import Entity
 from player import Player
 
 class EarnTutorialAchievement(Entity):
