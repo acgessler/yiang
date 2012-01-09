@@ -26,7 +26,7 @@ class ForceField(AnimTile):
     
     def __init__(self,*args,vel=[0.0,-10.0],halo_img=None, **kwargs):
         AnimTile.__init__(self,*args,halo_img=halo_img,**kwargs)
-        self.players = {}
+        self.players = []
         self.vel = vel
         
     def Update(self,t,dt):
@@ -42,7 +42,6 @@ class ForceField(AnimTile):
 
     def Interact(self, other):
         if isinstance(other,Player):
-            
             self.__dict__.setdefault("players",[]).append(other)
         
         return Entity.ENTER
