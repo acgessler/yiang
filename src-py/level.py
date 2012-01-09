@@ -274,7 +274,8 @@ class Level:
                         
                 def characters(self,content):
                     if hasattr(self, "active_prop" ) and hasattr(self, "active" ):
-                        self.active[ self.active_prop ] = content.strip()
+                        if content.strip():
+                            self.active[ self.active_prop ] = content.strip()
             
             try:
                 # use parseString() because parse() causes trouble in packed releases, xml.sax
@@ -292,6 +293,7 @@ class Level:
      
         try:
             self.metadata = Level.all_metadata[self.level]
+            
         except KeyError:
             self.metadata = {}
         
