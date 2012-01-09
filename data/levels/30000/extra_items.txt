@@ -201,8 +201,8 @@
 56 37 gfl
 
 # story_3 drunkenmessage
-54 45 _n3
-54 45 ~qm
+53 31 _n3
+53 31 ~qm
 
 # story_3 helicopter in the way
 56 59 _n4
