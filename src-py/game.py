@@ -430,6 +430,14 @@ OOOOOO  OOOOO  \n\
         
         Renderer.RemoveDrawable(self)
         
+        
+    def _Notify(self, message):
+        accepted = (KeyMapping.Get("accept"),)
+        self._FadeOutAndShowStatusNotice(sf.String((message +  "\n\n" + _("Hit {0} to continue.")).format(KeyMapping.GetString("accept")),
+            Size=defaults.letter_height_game_over,
+            Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+            )),defaults.game_over_fade_time,(550,70),0.0,accepted,sf.Color.Red) 
+        
 
     def _HandleIncomingEvent(self,event):
         """Standard window behaviour and debug keys"""
@@ -447,12 +455,22 @@ OOOOOO  OOOOO  \n\
 
                 # QuickSave, QuickLoad 
                 elif event.Key.Code == KeyMapping.Get("quicksave"):
+                    if self.mode != Game.CAMPAIGN:
+                        self._Notify(_("Quicksave is available in campaign mode only."))
+                        return
+                    
                     if self.CanSave():
                         self.QuickSave()
                     else:
                         print('Saving not possible')
+                        self._Notify(_("Saving is only possible on the world map."))
+                            
 
                 elif event.Key.Code == KeyMapping.Get("quickload"):
+                    if self.mode != Game.CAMPAIGN:
+                        self._Notify(_("Quickload is available in campaign mode only."))
+                        return
+                    
                     if self.QuickLoad():
                         return
 
