@@ -80,6 +80,9 @@ global_levels_available = None
 def mark_level_available_globally(level):
     """Add a level index to the global (profile-wide) list of all levels
     that have been entered at least once in campaign mode"""
+    if level >= 10000:
+        return
+    
     global global_levels_available
     if global_levels_available is None:
         get_globally_available_levels()
@@ -103,6 +106,9 @@ def get_globally_available_levels():
             global_levels_available = set(defaults.initially_enabled_levels)
             with open(f,'wt') as outf:
                 outf.write(repr(global_levels_available))
+                
+        # just in case some earlier alpha builds left their faulty traces
+        global_levels_available = set([f for f in global_levels_available if f < 10000])
             
     return global_levels_available
         
