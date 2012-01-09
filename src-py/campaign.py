@@ -184,10 +184,13 @@ class CampaignLevel(Level):
         self.minimap_bg_img = TextureCache.Get(os.path.join(defaults.data_dir, "levels", str(self.level), self.minimap_bg ))
         if not self.minimap_img:
             print("Failure loading HUD minimap from {0}".format(self.minimap))
-            return
+            return 
         
         # the visible minimap is initially black and is uncovered as the player moves
         w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
+        self.minimap_scale = self.minimap_bg_img.GetWidth()/w
+        assert self.minimap_scale == self.minimap_bg_img.GetHeight()/h
+        
         b = bytearray(b'\x00\x00\x00\x00')
         #b.append(defaults.minimap_alpha)
         self.minimap_vis.LoadFromPixels(w,h, bytes(b) * (w*h))
@@ -220,7 +223,8 @@ class CampaignLevel(Level):
     def UncoverMinimap(self,pos,radius=None):
         """Uncover all minimap pixels given a position on the map
         and a radius, in tile units as well."""
-        radius = radius or (defaults.tiles[0]+defaults.tiles[1])*0.8
+        radius = (radius or (defaults.tiles[0]+defaults.tiles[1])*0.8) * self.minimap_scale
+        pos = (int(pos[0] * self.minimap_scale),int(pos[1] * self.minimap_scale))
         
         # tiles map one by one to pixels on the minimap
         w,h = self.minimap_img.GetWidth(),self.minimap_img.GetHeight()
@@ -298,8 +302,8 @@ class CampaignLevel(Level):
                         mx -= self.sx
                         my -= self.sy
                         
-                        mx = int( mx * self.minimap_img.GetWidth()/self.sw)
-                        my = int( my * self.minimap_img.GetHeight()/self.sh)
+                        mx = int( mx * self.minimap_img.GetWidth()/(self.sw * self.minimap_scale))
+                        my = int( my * self.minimap_img.GetHeight()/(self.sh * self.minimap_scale))
                         
                         self._SetPlayerPos(mx,my)
             else:
