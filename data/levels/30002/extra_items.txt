@@ -2,19 +2,18 @@
 # extra items to be placed on the generated world map
 # this is an input file to genworldmaps.py
 
-186 15 0pl
+77 11 0pl
 #Door to green map
-191 15 0a0
-#Level
-182 138 0a1
-#Level
-113 49 0a2
-#Level
-58 37 0a3
-#Level
-#33 76
-#Level
-#49 150
+78 8 0a0
+#Level 28
+62 62 0a1
+#Level 23
+27 17 0a2
+#Level 70
+12 12 0a3
+
+
+
 
 
 

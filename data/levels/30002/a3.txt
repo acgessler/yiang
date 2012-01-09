@@ -1,4 +1,4 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,8,1,4.0,2,halo_img=None,next_level=1)
+from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,8,1,4.0,2,halo_img=None,next_level=70)
     .-. 
    /  °)=-
   sD  D  

@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0, 0),name=_('Blub Blub'),color=(200, 200, 255),postfx=[('underwater.sfx', ())],vis_ofs=3,bgimg=0,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0, 0),name=_('Blub Blub'),color=(200, 200, 255),postfx=[('underwater.sfx', ())],vis_ofs=3,bgimg=-1,scroll=3,lower_offset=0.0)
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yINyINyINyINxAOxA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  xAOxA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  xC4xC4xC4xFIxA5xA8xA5xA5xA5xA5xA5xA8xA5xA5xA5xA5xA5xA50C5xA5xA5xA5xA5xA5xA5xA5
