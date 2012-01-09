@@ -13,3 +13,4 @@ fakeshadow.sfx
 focusplayer_circle.sfx
 focusplayer_bw.sfx
 focusplayer_bw2.sfx
+brighten.sfx

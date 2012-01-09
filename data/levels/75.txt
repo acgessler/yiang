@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0, 0),name=_('Water Fantasy'),color=(0, 0, 0),postfx=[('underwater.sfx', ()), ('ingame1.sfx', ()), ('fakeshadow.sfx', ())],vis_ofs=10,bgimg=18,scroll=3,lower_offset=0.0)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0, 0),name=_('Water Fantasy'),color=(0, 0, 0),postfx=[('underwater.sfx', ()), ('ingame1.sfx', ()), ('brighten.sfx', ())],vis_ofs=10,bgimg=18,scroll=3,lower_offset=0.0)
 
 
 

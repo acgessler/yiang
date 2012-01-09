@@ -1,0 +1,10 @@
+texture framebuffer = {FRAMEBUFFER}
+
+effect
+{
+	vec4 pixel = framebuffer(_in);
+	
+	_out.rgb = pixel.rgb * 1.5;
+	_out.a = 1.0;
+}
+
