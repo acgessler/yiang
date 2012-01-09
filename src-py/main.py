@@ -387,7 +387,7 @@ Hit {1} to reconsider your decision""").format(
         # game over? drop our reference to it.
         if self.game:
             self.EnableMenu(3, self.game.CanSave())
-            self.EnableMenu(1, not self.game.IsOnWorldMap())
+            self.EnableMenu(1, self.game.GetGameMode() == Game.CAMPAIGN and not self.game.IsOnWorldMap())
             if self.game.IsGameOver():
                 self._SetGame(None)
         
