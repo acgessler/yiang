@@ -120,7 +120,7 @@ class Game(Drawable):
             with open(file,'rt') as inf:
                 try:
                     self.cookies = eval(inf.read())
-                except e:
+                except Exception as e:
                     print(e)
                     return False
         except IOError:
@@ -131,12 +131,15 @@ class Game(Drawable):
             print('Failed, savegame format does not exist')
             return False
 
+        self.levels_done = set( self.cookies.get("levels_done",[]) )
+        self.lives = self.cookies.get("lives",5)
         return self.LoadLevel(int(self.cookies.get('worldmap_level_idx',30000)));
     
     def Save(self,savename, display_name = None):
         file = os.path.join(defaults.cur_user_profile_dir,"save_"+savename)
         print('Save game to: ' + file)
 
+        self.cookies['lives'] = self.lives
         self.cookies['save_format_version'] = 1
         with open(file,'wt') as outf:
             outf.write (repr(self.cookies))
