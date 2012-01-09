@@ -336,6 +336,12 @@ Hit {1} to cancel""").format(
         if old is None:
             old = self
             
+        if self.game:
+            if self.game is game:
+                return
+            
+            self.game._OnEscape()
+            
         self.game = game
         if game:
             Renderer.AddDrawable(self.game,old)
