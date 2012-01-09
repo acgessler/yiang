@@ -2,3 +2,7 @@
 group wc *.png
 	push archive_files ~
 end
+
+group wc *.jpg
+	push archive_files ~
+end
