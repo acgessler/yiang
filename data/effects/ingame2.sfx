@@ -34,7 +34,7 @@ effect
 	vec4 dither = noise(randomUV-vec2(0.5,0.5)+tin);
 #endif
 	
-	vec4 color = mix(pixel, (pixel+another+notthis+evenmor)*0.25, scale+0.2);
+	vec4 color = mix(pixel, (pixel+another+notthis+evenmor)*0.25, scale+0.1);
 
 	_out.rgb = color.rgb * clamp(1.f-scale+0.3,0.0,1.0);
 
