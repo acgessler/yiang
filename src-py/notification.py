@@ -226,16 +226,15 @@ class SimpleNotification(EntityWithEditorImage):
         
         if format is True:
             try:
-                self.text = self.text.format(enter=KeyMapping.GetString("escape"), \
-                  accept=KeyMapping.GetString("accept"))
-            except:
-                print("format() failed, consider passing False for the 'format' parameter")
+                self.text = self.text.format(**{ k : v  for k,v in KeyMapping.mapping.items() if self.text.find("{"+k+"}") != -1})
+            except Exception as e:
+                print("format() failed, consider passing False for the 'format' parameter: " + e)
         
         # fix wrapping
         self.text_formatted = SimpleWrap(self.text,line_length)
         
         self.block_timer = sf.Clock()
-        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.60) ), 
+        self.box_dim = (int(line_length *(defaults.letter_height_messagebox * 0.625) ), 
             int(self.text_formatted.count("\n") * defaults.letter_height_messagebox*1.0)
         )
         

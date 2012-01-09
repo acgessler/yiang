@@ -47,6 +47,7 @@ class KeyMapping:
         "debug-gameover": "Q",
         "escape"        : "Escape",
         "accept"        : "Return",
+        "enter"         : "Return",
         "interact"      : "Return",
         "shoot"         : "LControl",
         "yes"           : "Y",
