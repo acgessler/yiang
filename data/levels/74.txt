@@ -1,0 +1,27 @@
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0, 0),name=_('Blub Blub'),color=(200, 200, 255),postfx=[('underwater.sfx', ())],vis_ofs=3,bgimg=0,scroll=3,lower_offset=0.0)
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yINyINyINyINxAOxA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  xAOxA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  xC4xC4xC4xFIxA5xA8xA5xA5xA5xA5xA5xA8xA5xA5xA5xA5xA5xA50C5xA5xA5xA5xA5xA5xA5xA5
+.  .  .  .  .  .  .  .  .  .  .  .  .  yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  xC4xC4.  xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xC4xC4xC4xC4xA5xA5xA5xA5xA5xA5xA5
+.  .  .  .  .  .  .  .  .  _A1_AB_A0_A0_A0_A0_A2.  _B4cACcAF.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  xAOxA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xA5xC4xC4xC4xC4xA5xA5xA5xA5xA5xA5xA5pB1cAF
+.  .  .  _PL.  .  .  .  _A4_A0_A0_A0_A5_A5_A5_A5_A4_B4cACcAF.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  .  xAOxANxANxANxANxANxANxANxANxANxANxANxC4xC4xANxANxANxANxANxANxANxANxAN.  cAF
+.  .  .  .  .  .  .  .  .  _AO_A5_A5_A5_A5_A5_AN.  _B4cACcAF.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yRD.  .  .  .  xACxAC.  cD3
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cAC.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yRD.  .  .  .  .  .  .  cD3
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cH1
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yRD.  .  .  .  .  .  .  cD3
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yRD.  .  .  .  .  .  .  cD3
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN
+yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yIN.  cCE.  .  .  .  .  .  .  .  .  .  .  .  .  yRD.  .  .  .  .  .  .  cD3
+yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yINyINyINyINyIN
+yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yINyINyINyINyINyINyINyINyINyINyINyINyIN.  .  .  .  .  .  .  cD3
+yAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  _D8.  .  .  .  .  _D8.  .  .  .  .  _D8
+yAEyAE.  .  .  .  .  .  .  .  .  .  iE3.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  cD3
+yAEyAEyAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAE
+yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  .  .  .  .  yAEyAEyE0.  .  .  .  .  .  yAEyAEyAEyAEyAEyAE.  .  .  .  .  .  .  .  .  iE2.  .  .  .  .  .  iE2.  .  .  .  .  .  .  .  .  .  .  .  .  cD3
+yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAE.  .  iE1.  .  .  .  .  iE0.  .  .  iE1.  .  .  yAEyE5yAE.  .  cCE.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  iE0yI0
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyAEyS2yAEyAEyAEyAEyAEyAEyAEyAE
+.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yAE.  .  .  .  .  .  .  yD1
+
+
