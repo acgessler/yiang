@@ -204,21 +204,26 @@ for tile,cx,cy in cluster_count:
     with open(os.path.join(tile_output_folder,newname+'.txt'),'wt') as op:
         op.write(shebang+'\n')
         lines = [c.rstrip() for c in contents.split('\n')]
-        for n,l in reversed(list(enumerate(lines))):
+        for l in reversed(list(lines)):
             if not l.strip():
-                lines = lines[:n]
+                lines.pop()
             else:
                 break
             
         if not lines:
             continue
+        
+        cont = all(c in ('_ ') for c in lines[0])
+        
+        m = 3-( len(lines)-(1 if cont else 0) % 3)
+        lines += [''] * (0 if m == 3 else m)
             
         justlen = max(len(l) for l in lines)
         lines_new = '\n'.join( (c.ljust(justlen))*cx for c in lines)
         fulltile = (lines_new+('\n' if lines_new[-1] != '\n' else ''))
         
         # for tiles which start with ____, drop one line to make them look like a continuous row
-        if all(c in ('_ ') for c in lines[0]):
+        if cont:
             fulltile += '\n'.join(fulltile.split('\n')[1:])*(cy-1)
         else:
             fulltile = fulltile*cy
