@@ -862,8 +862,11 @@ Hit {2} to return to the menu""")).format(
         self.level_idx = idx
         
         # mark this level as available
-        from main import mark_level_available_globally
-        mark_level_available_globally(idx)
+        # only if this is campaign mode -- otherwise cheating in quick game mode would result
+        # in levels being permanently enabled.
+        if self.mode == Game.CAMPAIGN:
+            from main import mark_level_available_globally
+            mark_level_available_globally(idx)
         
         # Carefully reset everything while loading isn't finished
         self.level = None
