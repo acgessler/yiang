@@ -200,6 +200,17 @@ class Level:
             
             
         self._GenToDeviceCoordinates()
+        
+        
+        # mark this level as available
+        # only if this is campaign mode -- otherwise cheating in quick game mode would result
+        # in levels being permanently enabled.
+        if game.GetGameMode() == game.CAMPAIGN and level < 10000:
+            from main import mark_level_available_globally, get_globally_available_levels
+            if not level in get_globally_available_levels():
+                mark_level_available_globally(level)
+                self.was_unlocked = True
+                
             
     def AddTileFromCode(self,code,x,y):
         assert len(code)==3
@@ -858,6 +869,10 @@ class Level:
         may raise Game.NewFrame to advance to the next frame
         and skip any other jobs for this frame"""
         
+        if hasattr(self,'was_unlocked'):
+            delattr(self,'was_unlocked')
+            self._NotifyUnlocked()
+        
         self._DoAutoScroll(dtime)
         self._GenToDeviceCoordinates()
             
@@ -1054,6 +1069,33 @@ class Level:
                 delattr(entity,"highlight_bb")
             except AttributeError:
                 pass
+            
+    def _NotifyUnlocked(self):
+        f = os.path.join(defaults.cur_user_profile_dir,"suppress_new_level_message")
+        if os.path.exists(f):
+            return
+        
+        from fonts import FontCache
+        from keys import KeyMapping
+        
+        accepted = (KeyMapping.Get("accept"),KeyMapping.Get("never-show-again"))
+        def on_close(key):
+            if key == accepted[1]:
+                with open(f,'wt'):
+                    pass
+                
+            
+        self.game._FadeOutAndShowStatusNotice(sf.String((_("""You've unlocked this level for Quick Game mode!
+        
+Hit {0} to continue 
+Hit {1} to suppress this message in future""")).format(
+                    KeyMapping.GetString("accept"),
+                    KeyMapping.GetString("never-show-again")
+                ),
+                Size=defaults.letter_height_game_over,
+                Font=FontCache.get(defaults.letter_height_game_over,face=defaults.font_game_over
+        )),defaults.game_over_fade_time,(550,125),0.0,accepted,sf.Color.Black,on_close) 
+    
     
 # LevelLoader maintains a global cache, so we need to protect 
 # it to avoid concurrency problems.

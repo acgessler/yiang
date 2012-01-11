@@ -86,7 +86,12 @@ def mark_level_available_globally(level):
     global global_levels_available
     if global_levels_available is None:
         get_globally_available_levels()
+        
+    if level in global_levels_available:
+        return
+        
     global_levels_available.add(level)
+    print('Unlock global level for Quick Game mode: ' + str(level))
     
     # save immediately
     f = os.path.join(defaults.cur_user_profile_dir,"levels_done")
