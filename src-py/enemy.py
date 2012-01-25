@@ -399,6 +399,7 @@ class NaughtyPongPong(Enemy):
                     self.vel = max(0,self.vel)
                     collider.AddToActiveBBs()     
                 break
+            
                 
     def Interact(self, other):
         if isinstance(other,Player) and self.killable:
@@ -441,6 +442,19 @@ class RotatingInferno(Enemy):
         
         self.ofs_vec = [self.ofs_vec[0]*a-self.ofs_vec[1]*b,self.ofs_vec[0]*b+self.ofs_vec[1]*a]
         self.SetPosition(self.pos)
+        
+        if not hasattr(self,'spawn_clock'):
+            self.spawn_clock = sf.Clock()
+        
+        elif self.spawn_clock.GetElapsedTime() > 0.2:
+            delattr(self,'spawn_clock')
+            for dir in itertools.product((-2,-1,+1,2.5),(-2.5,-1,+1,+2)):
+                if random.random() > 0.5:
+                    continue
+                l = DirectedEnemyAnimStub(dir, 6.0, ttl=0.3)
+                l.SetPosition((self.real_pos[0]+self.dim[0]*0.4,self.real_pos[1]+self.dim[1]*0.5))
+                l.SetColor(self.color)
+                self.game.AddEntity(l)
         
     def GetBoundingBox_EditorCatalogue(self): # Special logic for use within the editor
         return (self.pos[0],self.pos[1],self.dim[0],self.dim[1])
