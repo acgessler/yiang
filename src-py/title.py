@@ -57,7 +57,7 @@ class TitlePlayer(Player):
             Player.Update(self,time_elapsed,timet)
             
         # spawn MUCH blood
-        if time > 5.92 and self.splatter_cnt>0:
+        if time > 5.95 and self.splatter_cnt>0:
             # spread the spawning across multiple frames to reduce lagging
             time *= 15
             if int(time)-int(time-timet*15)>0:

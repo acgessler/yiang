@@ -276,8 +276,8 @@ class Player(Entity):
         cnt = len([i for i in self.inventory if i.SameKind(item)])
         
         self.inventory.append(item)
-        self.game.AddEntity(InventoryChangeAnimStub("++ "+item.GetItemName() + 
-            (_(" [#{0} of this item]").format(cnt+1) if cnt else ""),self.pos))
+        self.game.AddEntity(InventoryChangeAnimStub("++ Added "+item.GetItemName() + 
+            (_(" [#{0} of this item]").format(cnt+1) if cnt else "") + _(" to inventory"),self.pos))
         
         print("Add item to inventory: {0}".format(item))
         
@@ -287,7 +287,7 @@ class Player(Entity):
         assert ammo > 0
         self.ammo[0] += ammo
         self.game.AddEntity(InventoryChangeAnimStub(_("++ {0}x ammo").format(ammo),
-            self.pos,color=sf.Color.Yellow))
+            self.pos,color=sf.Color.Yellow,border=False))
         
         print("Add ammo: {0}".format(ammo))
         
@@ -1185,8 +1185,17 @@ class KillAnimStub(Tile):
 class InventoryChangeAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player adds or removes an item from the inventory."""
+    
+    # XXX code just duplicated from ScoreAnimStub ...
 
-    def __init__(self,text,pos,speed=1.0,color=sf.Color.Green,rsize=None):
+    def __init__(self,text,pos,speed=1.0,color=sf.Color.Green,rsize=None,border=True):
+        
+        self.border = border
+        if border:
+            text = text.split('\n')
+            maxlen = max(len(n) for n in text) + 4
+            text = '\n'.join(['-' * maxlen] + ['[ ' + n.ljust(maxlen-4) + ' ]' for n in text] + ['-' * maxlen])
+        
         Tile.__init__(self,text,draworder=11002,rsize=rsize,permute=False)
         
         self.SetPosition( pos )
@@ -1204,10 +1213,10 @@ class InventoryChangeAnimStub(Tile):
 
         if self.pos[1] > defaults.tiles[1]:
             self.game.RemoveEntity(self) 
-            
-    def _GetHaloImage(self):
-        return None
+        
 
+    def _GetHaloImage(self):
+        return Tile._GetHaloImage(self) if self.border else None
         
 class DropProtection(EntityWithEditorImage):
     """Special, invisible entity to reset the player's
