@@ -79,10 +79,14 @@ class Machine(AnimTile,FloatingNotification):
     def Draw(self):
         AnimTile.Draw(self)
         
-        cl = self.level.IsPlayerClose(self.center,2.5)
+        cl = self.level.IsPlayerClose(self.center,max(self.dim[0],self.dim[1]))
         if cl and not self.used_once:
             self.dropshadow = True
-            self.DrawNotification(text=_("Press {0} to buy something").format(KeyMapping.GetString('interact')),scale=1-cl[1]/3)
+            if self.game.mode == self.game.BACKGROUND:
+                t = _("Dispenser: not available")
+            else:
+                t = _("Dispenser: press {0} to use").format(KeyMapping.GetString('interact'))
+            self.DrawNotification(text=t,scale=1-cl[1]/3)
         else:
             self.dropshadow = False
             
