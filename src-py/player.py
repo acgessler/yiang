@@ -28,6 +28,7 @@ import operator
 from stubs import *
 from complexanim import Anim,AnimSet
 
+
 class InventoryItem:
     """Base class for inventory items.
     Such items are collected by the player and are subsequently
@@ -744,7 +745,16 @@ class Player(Entity):
         if self.game.GetLives() > 0:
             self._SpreadSplatter()
                 
-        if self.game.GetGameMode() != Game.BACKGROUND:
+        if self.game.GetGameMode() == Game.BACKGROUND:
+            
+            if not hasattr(self,'showed_bgdead_report'):
+                self.showed_bgdead_report = True
+            
+                from score import ScoreTileAnimStub
+                self.game.AddEntity(ScoreTileAnimStub(_(
+    """This is just the menu so you can't die here, \nbut still: this was not healthy. 
+Spreading all your blood across the entire\nscreen rarely is."""),self.pos,0.7))
+        else:
             from posteffect import FlashOverlay
             Renderer.AddDrawable(FlashOverlay(sf.Color(80,0,0),0.1,5.5,2))
             
