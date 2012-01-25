@@ -22,6 +22,7 @@
 import random
 import math
 import os
+import itertools
 
 # PySFML
 import sf
@@ -69,6 +70,22 @@ class EnemyAnimStub(Tile):
         
         # fade out, but modulate a high-frequency pulse onto the alpha channel curve
         self.color = sf.Color(self.color.r,self.color.g,self.color.b,(0xff-int(tdelta*0xff/self.ttl)))
+        
+        
+class DirectedEnemyAnimStub(EnemyAnimStub):
+    """Directional light sparks from enemies"""
+
+    def __init__(self,dir=[1.0,1.0],speed=10.0,sparkhalo=1,statecount=3,ttl=0.20):
+        self.dir = dir
+        self.speed = speed
+        EnemyAnimStub.__init__(self, sparkhalo, statecount, ttl)
+    
+
+    def Update(self, time_elapsed, time_delta):
+        EnemyAnimStub.Update(self,time_elapsed,time_delta)
+        self.SetPosition((self.pos[0]+ self.dir[0] * self.speed * time_delta,
+                         self.pos[1]+ self.dir[1] * self.speed * time_delta))
+        
         
 
 class Enemy(AnimTile):
@@ -222,6 +239,7 @@ class SmallTraverser(Enemy):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                         self.vel = abs(self.vel)
+                        self._Return()
                         break
                     elif res == Entity.KILL:
                         self._Die()
@@ -231,6 +249,7 @@ class SmallTraverser(Enemy):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                         self.vel = -abs(self.vel)
+                        self._Return()
                         break
                     elif res == Entity.KILL:
                         self._Die()
@@ -248,6 +267,7 @@ class SmallTraverser(Enemy):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                         self.vel = -abs(self.vel)
+                        self._Return()
                         break
                     elif res == Entity.KILL:
                         self._Die()
@@ -257,6 +277,7 @@ class SmallTraverser(Enemy):
                     res = collider.Interact(self)
                     if res == Entity.BLOCK:
                        self.vel = abs(self.vel)
+                       self._Return()
                        break   
                     elif res == Entity.KILL:
                        self._Die()     
@@ -266,18 +287,27 @@ class SmallTraverser(Enemy):
             pos = [self.pos[0] + self.vel * time, self.pos[1]]
             if pos[0] < 0 or pos[0] > lx:
                 pos[0] = max(0, min(pos[0],lx))
+                self.vel = -self.vel
                 self._Return()
         else:
             pos = [self.pos[0], self.pos[1] + self.vel * time]
             if pos[1] < 0 or pos[1] > ly:
                 pos[1] = max(0, min(pos[1],ly))
+                self.vel = -self.vel
                 self._Return()
                 
         self.SetPosition(pos)
         self.SetState(1 if self.vel > 0 else 0)
         
     def _Return(self):
-        self.vel = -self.vel
+        for dir in itertools.product((-2,-1,+1,2.5),(-2.5,-1,+1,+2)):
+            if dir[self.direction]/abs(dir[self.direction]) == self.vel/abs(self.vel):
+                continue
+            l = DirectedEnemyAnimStub(dir, 6.0, ttl=0.3)
+            l.SetPosition((self.pos[0]+self.dim[0]*0.4,self.pos[1]+self.dim[1]*0.5))
+            l.SetColor(self.color)
+            self.game.AddEntity(l)
+        
         # XXX the sound effect seems to shoort for SFMl to handle it.
         #from audio import SoundEffectCache
         #SoundEffectCache.Get("click8a.wav").Play()
