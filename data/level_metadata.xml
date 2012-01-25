@@ -21,7 +21,27 @@
 			0
 		</Property>
 	</Level>
-	
+	<Level idx="68">
+		<Property name="reward_lives">
+			1
+		</Property>
+	</Level>
+	<Level idx="25">
+		<Property name="reward_lives">
+			2
+		</Property>
+	</Level>
+	<Level idx="36">
+		<Property name="reward_lives">
+			2
+		</Property>
+	</Level>
+	<Level idx="20">
+		<!-- viel Geld-->
+		<Property name="reward_lives">
+			0
+		</Property>
+	</Level>
 	<Level idx="4">
 		<Property name="reward_lives">
 			2
