@@ -1115,7 +1115,7 @@ class KillAnimStub(Tile):
     def __init__(self, text, index=None):
         Tile.__init__(self, random.choice(text.split("\n\n")) if random.random() > 0.95 else "",
             draworder=11000,
-            rsize=random.randint(6,16),
+            rsize=random.randint(9,16),
             dropshadow=True,
             permute=False)
 
@@ -1160,14 +1160,14 @@ class KillAnimStub(Tile):
         self.SetDirection((random.uniform(-1.0, 1.0),random.uniform(-1.0, 1.0)))
         
         
-        self.SetTTL(random.random()*6.0)
+        self.SetTTL(random.random()*10.0)
 
     def Update(self, time_elapsed, time_delta):
         self.SetPosition((self.pos[0] + self.dirvec[0] * time_delta * self.speed, 
             self.pos[1] + self.dirvec[1] * time_delta * self.speed))
         
-        self.dirvec[0] = self.dirvec[0] * pow(0.6,time_delta)
-        self.dirvec[1] = self.dirvec[1] * pow(0.6,time_delta)
+        self.dirvec[0] = self.dirvec[0] * pow(0.65,time_delta)
+        self.dirvec[1] = self.dirvec[1] * pow(0.65,time_delta)
 
         if not hasattr(self, "time_start"):
             self.time_start = time_elapsed
