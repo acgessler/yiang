@@ -1045,7 +1045,10 @@ Spreading all your blood across the entire\nscreen rarely is."""),self.pos,0.7))
             else:
                 npos,ncol = self.respawn_positions[0]
             
-        self.SetPositionAndMoveView(npos)
+        if self.game.mode == self.game.BACKGROUND:
+            self.SetPosition(npos)
+        else:
+            self.SetPositionAndMoveView(npos)
         self.SetColor(ncol)
         
         print("Respawn at {0}".format(npos))

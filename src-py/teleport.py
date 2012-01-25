@@ -111,7 +111,10 @@ class Receiver(AnimTile):
         return Entity.ENTER
     
     def OnDoTeleport(self,source,player):
-        player.SetPositionAndMoveView(self.pos,defaults.teleport_origin_distance)
+        if self.game.mode == self.game.BACKGROUND:
+            player.SetPosition(self.pos)
+        else:
+            player.SetPositionAndMoveView(self.pos,defaults.teleport_origin_distance)
         
     def OnDoTeleportSmallTraverser(self,source,st):
         st.SetPosition(self.pos)
