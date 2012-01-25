@@ -38,7 +38,7 @@ class ScoreTile(AnimTile):
                 points = self.game.Award(self.points)
                 
                 self.game.RemoveEntity(self) 
-                self.game.AddEntity(ScoreTileAnimStub(_("{0:4.4} ct").format(points),self.pos,1.0))
+                self.game.AddEntity(ScoreTileAnimStub(_("{0:4.4} ct").format(points),self.pos,2.0,False))
                 self.score_taken = True
                 
                 #if self.game.GetGameMode() != Game.BACKGROUND:
@@ -70,7 +70,14 @@ class ScoreTileAnimStub(Tile):
     """Implements the text string that is spawned whenever
     the player triggers a score item."""
 
-    def __init__(self,text,pos,speed):
+    def __init__(self,text,pos,speed,border=True):
+        
+        self.border = border
+        if border:
+            text = text.split('\n')
+            maxlen = max(len(n) for n in text) + 4
+            text = '\n'.join(['-' * maxlen] + ['| ' + n.ljust(maxlen-4) + ' |' for n in text] + ['-' * maxlen])
+        
         Tile.__init__(self,text,draworder=11001,permute=False)
         
         self.SetPosition( pos )
@@ -89,7 +96,9 @@ class ScoreTileAnimStub(Tile):
             self.game.RemoveEntity(self) 
             
     def _GetHaloImage(self):
-        return None
+        return Tile._GetHaloImage(self) if self.border else None
+            
+    
 
 
     
