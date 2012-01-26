@@ -1,4 +1,4 @@
-from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,8,1,1.0,2,halo_img=None,next_level=14)
+from sf import Color; from campaign import LevelEntrance; <out> = LevelEntrance(<raw>,8,1,1.0,2,halo_img=None,next_level=14,dropshadow=True,dropshadow_color=sf.Color(255,200,0,150))
      i´
   XXXXXXX
  XX()x()XX

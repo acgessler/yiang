@@ -1,4 +1,4 @@
-from campaign import Blocker; <out> = Blocker(<raw>,17,20,need_levels=[30001,30002],status_msg=_('Maybe i can fly that helicopter in a houndred years!'))
+from sf import Color; from campaign import Blocker; <out> = Blocker(<raw>,17,20,need_levels=[30001,30002],status_msg=_('Maybe i can fly that helicopter in a houndred years!'),dropshadow_color=sf.Color(255,255,0,100))
  +++++++++++++++++++++++++        X   X
       ,------T------,              X X
      /   )  [][][]   °`"""""""""""""X

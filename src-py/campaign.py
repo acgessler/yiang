@@ -427,8 +427,8 @@ class LevelEntrance(AnimTile):
     """Only found on the campaign world map, marks the entrance
     to a particular level"""
     
-    def __init__(self,text,height,frames,speed,states,next_level=5,draworder=15000,halo_img=None,dropshadow=True):
-        AnimTile.__init__(self,text,height,frames,speed,states,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow)
+    def __init__(self,text,height,frames,speed,states,next_level=5,draworder=15000,halo_img=None,dropshadow=True,dropshadow_color=sf.Color(30,30,30,150)):
+        AnimTile.__init__(self,text,height,frames,speed,states,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow,dropshadow_color=dropshadow_color)
         self.next_level = next_level
         self.done = False
         
@@ -499,8 +499,8 @@ class Blocker(Tile):
     """Blockers prevent the player from entering certain
     areas of the game world."""
     
-    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None,dropshadow=True,opposite=False):
-        Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow)
+    def __init__(self,text,width,height,draworder=15000,halo_img=None,need_levels=[],status_msg=None,dropshadow=True,opposite=False,dropshadow_color=sf.Color(30,30,30,150)):
+        Tile.__init__(self,text,width=width,height=height,draworder=draworder,halo_img=halo_img,dropshadow=dropshadow,dropshadow_color=dropshadow_color)
         self.need_levels = need_levels
         self.status_msg = status_msg or _("You cannot pass! I am a blocker of the ASCII world, wielder of the Fame of A-Dur.")
         self.opposite=self.nblocking=opposite

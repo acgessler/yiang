@@ -5,12 +5,13 @@
 
 
 |------ ASAP --------
-
+|-Kollisionserkennung mit Blockern auf der Weltkarte (Spieler wird immer an eine Ecke des Blockers geschleudert, sobald er ihn berührt) (add 27.01)
 
 
 
 
 |------ Nice to have --------
+|-Sichtbarkeit der Tiles auf der Weltkarte verbessern (zB durch Schatten) (add 27.01)
 
 
 
