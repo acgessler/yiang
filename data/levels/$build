@@ -1,13 +1,15 @@
 
+# Include all the optimized levels first
 build optimized {
 	group re ^[0-9]+\.txt$
 		push archive_files ~
 	end
 }
 
-
+# Include sample level
 push files (expand 60000.txt)
 
+# Include the cooked per-level tiles for all levels
 group re ^[0-9]+$
 	group type dir 
 		build ~ {
@@ -20,8 +22,6 @@ group re ^[0-9]+$
 		}
 	end
 end
-
-
 
 group unpushed 
 	group re ^[0-9]+\.txt$ 
