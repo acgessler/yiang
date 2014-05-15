@@ -1,0 +1,7 @@
+*.obj
+*.ncb
+*.pdb
+*.idb
+*.user
+*/cooked/*
+bin-*
