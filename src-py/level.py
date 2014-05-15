@@ -1,3 +1,4 @@
+
 #!echo not intended for execution
 # -*- coding: UTF_8 -*-
 
@@ -63,7 +64,7 @@ class Level:
         lower_offset=0,
         bgimg=-1
         ):
-        """Construct a level given its textual description 
+        """Construct a level given its textual description.
         
         Parameters:
             game -- Game instance to host the level
@@ -135,7 +136,6 @@ class Level:
         
         self.lvbase = os.path.join(defaults.data_dir, "levels", str(level))
         self.tlbase = os.path.join(defaults.data_dir, "tiles")
-    
         
         xmax = 0
         yempty = 0
@@ -1272,15 +1272,12 @@ class LevelLoader:
         l = lines[0]
         for k, v in replace.items():
             l = l.replace(k, v)
-
-        #print(l)
         tempdict = dict(locals())
-
         try:
             exec(l, globals(), tempdict)
         except:
             print("exec() fails loading level {0}, executing line: {1} ".format(file, l))
-            traceback.print_exc()
+            print(traceback.format_exc())
             return None
             
         lv = tempdict.get("level", None)

@@ -759,7 +759,8 @@ class TileLoader:
             exec(lines,globals(),tempdict)
         except:
             print("exec() fails loading tile {0}, executing line: {1} ".format(file,lines))
-            traceback.print_exc()
+            # print_exc goes to stderr which does not go to log
+            print(traceback.format_exc())
             
         tile = tempdict.get("entity",Tile())
         tile.SetGame(game)
