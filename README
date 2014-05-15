@@ -1,1 +1,5 @@
-Currently the only description is in german and can be found in zfx_presentation.txt.
+BUILD (Windows)
+===============
+
+1. Make sure running .py files runs Python 3.n. If not,
+   copy a Python 3 python.exe to toolchain/

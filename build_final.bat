@@ -1,3 +1,3 @@
 cd toolchain
-buildbot.py
+python buildbot.py
 cd ..
