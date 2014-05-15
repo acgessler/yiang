@@ -3,5 +3,4 @@
 *.pdb
 *.idb
 *.user
-*/cooked/*
-bin-*
+
