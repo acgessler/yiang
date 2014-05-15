@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>39f9d675-aa7b-4444-8a43-59d65f9675d2</ProjectGuid>
+    <ProjectHome>..\..\src-py\</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <InterpreterId>9a7a9026-48c1-4688-9d5d-e5699d47d074</InterpreterId>
+    <InterpreterVersion>3.3</InterpreterVersion>
+    <Name>yiang_pydev</Name>
+    <RootNamespace>yiang_pydev</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="achievements.py" />
+    <Compile Include="archiver.py" />
+    <Compile Include="audio.py" />
+    <Compile Include="background.py" />
+    <Compile Include="buy.py" />
+    <Compile Include="campaign.py" />
+    <Compile Include="colorchanger.py" />
+    <Compile Include="complexanim.py" />
+    <Compile Include="cpptools.py" />
+    <Compile Include="danger.py" />
+    <Compile Include="defaults.py" />
+    <Compile Include="editor.py" />
+    <Compile Include="editoractions.py" />
+    <Compile Include="editormarkup.py" />
+    <Compile Include="enemy.py" />
+    <Compile Include="entity.py" />
+    <Compile Include="floatingnotify.py" />
+    <Compile Include="fonts.py" />
+    <Compile Include="forcefield.py" />
+    <Compile Include="fshack.py" />
+    <Compile Include="game.py" />
+    <Compile Include="genemptylevel.py" />
+    <Compile Include="highscore.py" />
+    <Compile Include="keys.py" />
+    <Compile Include="level.py" />
+    <Compile Include="levelup.py" />
+    <Compile Include="loadscreen.py" />
+    <Compile Include="locked.py" />
+    <Compile Include="log.py" />
+    <Compile Include="machineparts.py" />
+    <Compile Include="main.py" />
+    <Compile Include="materials.py" />
+    <Compile Include="mathutil.py" />
+    <Compile Include="minigui.py" />
+    <Compile Include="notification.py" />
+    <Compile Include="perks.py" />
+    <Compile Include="player.py" />
+    <Compile Include="posteffect.py" />
+    <Compile Include="preboot.py" />
+    <Compile Include="quiz.py" />
+    <Compile Include="renderer.py" />
+    <Compile Include="score.py" />
+    <Compile Include="sf.py" />
+    <Compile Include="stubs.py" />
+    <Compile Include="studiosplash.py" />
+    <Compile Include="teleport.py" />
+    <Compile Include="textures.py" />
+    <Compile Include="tile.py" />
+    <Compile Include="title.py" />
+    <Compile Include="tutorial.py" />
+    <Compile Include="userprofile.py" />
+    <Compile Include="validator.py" />
+    <Compile Include="weapon.py" />
+    <Compile Include="updaters\ASPECT.py" />
+    <Compile Include="updaters\DITHER_STRENGTH.py" />
+    <Compile Include="updaters\FRAMEBUFFER.py" />
+    <Compile Include="updaters\PLAYER_POS.py" />
+    <Compile Include="updaters\RANDOM.py" />
+    <Compile Include="updaters\STATUS_BAR_DIM.py" />
+    <Compile Include="updaters\__init__.py" />
+    <Content Include="order.txt" />
+    <Content Include="order_entities.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="updaters" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+</Project>
