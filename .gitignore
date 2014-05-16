@@ -3,4 +3,5 @@
 *.pdb
 *.idb
 *.user
+*.pyc
 
