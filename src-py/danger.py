@@ -198,9 +198,17 @@ class FakeDangerousBarrel(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
-        if isinstance(other,Player):
+        if isinstance(other,Player) and not hasattr(self, "done"):
             print("Huh, you've found an special door which doesn't kill you!")
             self.game.RemoveEntity(self)
+
+            from score import ScoreTileAnimStub
+            import random
+            # Randomly pick a small score that is awarded to the player
+            score = max(0.01, random.random()**3)
+            self.game.Award(score)
+            self.game.AddEntity(ScoreTileAnimStub(_("{0:4.4} ct").format(score),self.pos,2.0,False))
+            self.done = True
 
         if isinstance(other,Enemy):
             return Entity.BLOCK if other.color != self.color else Entity.ENTER
