@@ -715,9 +715,7 @@ class TileLoader:
                     
                 except:
                     print("Failure reading cooked tiles: {0}".format(cache))
-                    traceback.print_exc()
-
-               
+                    traceback.print_exc()            
             
         if lines is None:
             try:
@@ -747,12 +745,8 @@ class TileLoader:
             for k,v in replace.items():
                 lines = lines.replace(k,v)
                 
-            #if lines.find( "_(" ) != -1:
-            #    print(lines)
-                
             TileLoader.cache[file_norm] = lines = compile(lines,"<shebang-string>","exec")
 
-        #print(l)
         tempdict = dict(locals())
 
         try:

@@ -324,7 +324,7 @@ class FadeOutOverlay(PostFXOverlay):
             
 class BlurInOverlay(PostFXOverlay):
     """A special overlay to slowly decrease the amount of blur until the normal status is reached"""
-    def __init__(self,blur_time=1.0,blur_start=defaults.blur_start,on_close=None,draworder=910):
+    def __init__(self,blur_time=1.0,blur_start=defaults.blur_stop,on_close=None,draworder=910):
         """
         Construct a BlurOverlay.
         

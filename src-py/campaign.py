@@ -70,7 +70,7 @@ class CampaignLevel(Level):
         pos = game.cookies.get('player_pos',None)
         if pos:
             self._SetPlayerPos(pos[0],pos[1],False)
-        
+       
             
     def SetStatusMessage(self,msg,color=sf.Color.Yellow):
         self.status_color = color
@@ -114,7 +114,6 @@ class CampaignLevel(Level):
         print("Load level overlay {0}, got {1} tiles".format(filename,cnt))
         
     def Draw(self, time, dtime):
-
         self.game.cookies['worldmap_level_idx'] = self.level
         self._GenToDeviceCoordinates()
         self._DoAutoScroll(dtime)

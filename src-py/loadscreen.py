@@ -203,6 +203,8 @@ This makes me SO happy {0}
                             # fade to the level view
                             from posteffect import FadeInOverlay
                             Renderer.AddDrawable( FadeInOverlay(3.0, fade_start=0.0) )
+                            from posteffect import BlurInOverlay
+                            Renderer.AddDrawable(BlurInOverlay(3.5))
                             break
                         
             finally:
