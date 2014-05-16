@@ -22,7 +22,7 @@
 import os
 
 from stubs import *
-from player import Player,InventoryItem
+from player import Player, InventoryItem
 
 class ShootAnimStub(Tile):
     """Implements the text strings that are spawned whenever
@@ -142,6 +142,7 @@ class Weapon(InventoryItem, Tile):
         return Entity.ENTER
     
     def Shoot(self,pos, dir,color=None,protected=[],speed=None,do_flash=False):
+        from tileloader import TileLoader
         t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",self.shot_tile),self.game)
                 
         color = color or sf.Color(200,200,255)

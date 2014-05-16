@@ -28,9 +28,9 @@ import mathutil
 from game import Game
 from entity import Entity,EntityWithEditorImage
 from renderer import NewFrame, Drawable, Renderer
-from tile import Tile,AnimTile,TileLoader
+from tile import Tile, AnimTile
 from keys import KeyMapping
-from level import Level,LevelLoader
+from level import Level
 from fonts import FontCache
 from textures import TextureCache
 

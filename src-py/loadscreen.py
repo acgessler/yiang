@@ -88,7 +88,7 @@ class LoadScreen:
         
         global SPECIAL_LEVEL_LOADING_END
         if SPECIAL_LEVEL_LOADING_END < SPECIAL_LEVEL_LOADING_START:
-            from level import LevelLoader
+            from levelloader import LevelLoader
             
             m = SPECIAL_LEVEL_LOADING_START-1
             for n,readonly in sorted(LevelLoader.EnumLevelIndices()):

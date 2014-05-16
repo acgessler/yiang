@@ -204,7 +204,7 @@ class MainMenu(Drawable):
         # copy'n'paste from loadsceen.py
         global SPECIAL_LEVEL_MENUBG_END
         if SPECIAL_LEVEL_MENUBG_END < SPECIAL_LEVEL_MENUBG_START:
-            from level import LevelLoader
+            from levelloader import LevelLoader
             
             m = SPECIAL_LEVEL_MENUBG_START-1
             for n,readonly in sorted(LevelLoader.EnumLevelIndices()):
@@ -657,7 +657,7 @@ Hit {1} to reconsider your decision""").format(
                         sf.Color.Red if self.level == i else sf.Color.White ))
                 
         height = int(0.5*height)
-        from level import LevelLoader
+        from levelloader import LevelLoader
         sf_draw_string_with_shadow(
             _("Press {0} to enter Level {1} - '{2}'").format(KeyMapping.GetString("accept"),
                 self.level+1,

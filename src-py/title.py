@@ -22,7 +22,7 @@ import time,random,os
 from stubs import *
 
 from player import Player
-from tile import TileLoader
+from tileloader import TileLoader
 
 SPECIAL_LEVEL_TITLE = 80000
 
@@ -143,13 +143,4 @@ class Title(Drawable):
             from posteffect import FadeOutOverlay
             Renderer.AddDrawable(FadeOutOverlay(fade_time=2.0,fade_end=0.1,on_close=next))
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+# vim: ai ts=4 sts=4 et sw=4

@@ -41,14 +41,15 @@ from keys import KeyMapping
 from game import Game
 from entity import Entity
 from log import Log
-from renderer import Renderer,Drawable,NewFrame
+from renderer import Renderer, Drawable, NewFrame
 from highscore import HighscoreManager
 from audio import BerlinerPhilharmoniker
 from achievements import Achievements
 from score import ScoreTile
 from player import Player
 from keys import KeyMapping
-from tile import Tile,AnimTile,TileLoader
+from tile import Tile, AnimTile
+from tileloader import TileLoader
 from level import Level
 from minigui import Component, Button, ToggleButton, Label, GUIManager, EditControl, ImageControl
 
@@ -1003,7 +1004,7 @@ class EditorGame(Game):
                 yb = -h*0.5
                 yb = yb+(self.ty-oy)*defaults.tiles_size_px[1] 
                 
-                from tile import TileLoader
+                from tileloader import TileLoader
                 colors = TileLoader.cached_color_dict
                 
                 self2.elements = []
@@ -2120,7 +2121,7 @@ class EditorGame(Game):
         # that we have an editor to hide the storage 
         # details.
         
-        from tile import TileLoader
+        from tileloader import TileLoader
         colors = TileLoader.cached_color_dict
         
         forbidden_forest = [" ", "\t", ".", "\n", "\r"]
@@ -2269,12 +2270,12 @@ class EditorGame(Game):
         # Clear LevelLoader's cache for this level, this ensures
         # that the file contents are refetched from disk the next
         # time they're requested.
-        from level import LevelLoader
+        from levelloader import LevelLoader
         LevelLoader.ClearCache([self.level_idx])
         
         # Fix: sf.Color is unsafe to use in dict's because its
         # internal operators aren't implemented properly
-        from tile import TileLoader
+        from tileloader import TileLoader
         TileLoader.FetchColors()
         
         def gen_rcolors():
@@ -3224,6 +3225,7 @@ class EditorMenu(Drawable):
             x,y = xs ,ys
             w,h = 200,14
             w2,h2 = 16,14
+            from levelloader import LevelLoader
             for i,readonly in sorted( LevelLoader.EnumLevelIndices(), key=operator.itemgetter(0) ):
                 nam = LevelLoader.GuessLevelName(i)
                 
@@ -3323,7 +3325,7 @@ class EditorMenu(Drawable):
             AddLevelButtons()
             
             
-        from level import LevelLoader
+        from levelloader import LevelLoader
         def EditLevel(i,ronly):
             game = EditorGame(readonly=ronly)
             if game.LoadLevel(i,no_loadscreen=True):

@@ -39,7 +39,7 @@ import validator
 from fonts import FontCache
 from keys import KeyMapping
 from renderer import Drawable,Renderer,DebugTools,NewFrame
-from level import Level,LevelLoader
+from level import Level
 from posteffect import PostFXCache, PostFXOverlay, FadeOutOverlay, FadeInOverlay
 
 
@@ -865,12 +865,12 @@ Hit {2} to return to the menu""")).format(
         # Carefully reset everything while loading isn't finished
         self.level = None
         
+        from levelloader import LevelLoader
         if defaults.profile_level_loading is True:
             import cProfile
             
             fname = filename=os.path.join(defaults.profile_dir,
-                "load_level_{0}.cprof".format(idx))
-            
+                "load_level_{0}.cprof".format(idx))                      
             try:
                 cProfile.runctx("self.level = LevelLoader.LoadLevel(idx,self,no_loadscreen)", 
                     globals(), locals(), fname
@@ -935,6 +935,8 @@ Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")
             self.level = None # makes sure that the previous level won't interfere with the loadscreen
             
         self.level_idx = idx
+
+        from levelloader import LevelLoader
         self.level = LevelLoader.LoadLevel(idx,self)
         if self.level:
             self.level.OnEnable()

@@ -129,8 +129,9 @@ class Perk(AnimTile):
                     return perk
 
         player.perks.add(self)
-        
+               
         if not self.overlay_file is None:
+            from tileloader import TileLoader
             self.overlay = TileLoader.Load(self.overlay_file,self.game)
             self.overlay.Enable()
         

@@ -143,7 +143,7 @@ class Enemy(AnimTile):
             defaults.min_death_sprites
         )
         for i in range(min(remaining, int(defaults.death_sprites * scale))):
-            from tile import TileLoader
+            from tileloader import TileLoader
                 
             t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
             t.RandomizeSplatter()

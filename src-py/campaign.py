@@ -25,7 +25,6 @@ import random
 from stubs import *
 from player import Player
 
-
 class CampaignLevel(Level):
     """Slightly adjust the default level behaviour to allow for the
     world's map to be rendered fluently."""
@@ -450,6 +449,7 @@ class LevelEntrance(AnimTile):
             self.SetState(1)
             
     def _GuessLevelName(self):    
+        from levelloader import LevelLoader
         return LevelLoader.GuessLevelName(self.next_level)
         
     def _RunLevel(self):

@@ -720,7 +720,7 @@ class Player(Entity):
             defaults.min_death_sprites_player
         ),defaults.death_sprites_player)
         
-        from tile import TileLoader
+        from tileloader import TileLoader
         for i in range(remaining):
             # add human body parts plus pieces of generic splatter
             if i == remaining-2:
@@ -964,7 +964,7 @@ Spreading all your blood across the entire\nscreen rarely is."""),self.pos,0.7))
         from posteffect import BlurInOverlay
         Renderer.AddDrawable(BlurInOverlay(min(4, 0.25*pain),0.4**pain))
         
-        from tile import TileLoader
+        from tileloader import TileLoader
         for i in range(remaining):
             t = TileLoader.Load(os.path.join(defaults.data_dir,"tiles_misc",name),self.game)
             
