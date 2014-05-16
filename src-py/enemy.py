@@ -32,10 +32,7 @@ from stubs import *
 from weapon import Shot
 from score import ScoreTileAnimStub
 from player import KillAnimStub,Player
-
-
-def ColorLerp(a,b,t):
-    return sf.Color(int(a.r+(b.r-a.r)*t),int(a.g+(b.g-a.g)*t),int(a.b+(b.b-a.b)*t),int(a.a+(b.a-a.a)*t))
+from sfutil import ColorLerp
 
 
 class EnemyAnimStub(Tile):

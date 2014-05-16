@@ -5,6 +5,7 @@ Sun					-1000
 ZeroG				-100
 Tile				10
 AnimTile			20
+LevelUp				30
 Entity				500
 Player				1000
 Enemy				2000

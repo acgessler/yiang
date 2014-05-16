@@ -18,14 +18,30 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ///////////////////////////////////////////////////////////////////////////////////
 
+import math
 from stubs import *
 from player import Player
+from sfutil import ColorLerp
 
-class LevelUp(Tile):
+class LevelUp(AnimTile):
     """The player enters the next level upon touching this tile"""
 
-    def __init__(self,text,width,height):
-        Tile.__init__(self,text,width,height)
+    def __init__(self,text,height,frames,speed):
+        AnimTile.__init__(self, text, height, frames, speed, dropshadow=True, draworder=30)
+        self.first_time = True
+
+        # but oscilate the drop shadow between gray and white
+        self.dropshadow_color = self.dropshadow_blend_color = sf.Color(255, 0, 0, 128);
+
+    def Update(self,time,dtime):     
+        AnimTile.Update(self, time, dtime)
+        # Force the color to be a medium gray
+        # cannot do this in the constructor as it would get overridden
+        if self.first_time:
+            self.SetColor(sf.Color.White)
+            self.first_time = False
+
+        self.dropshadow_color = ColorLerp(self.dropshadow_blend_color,self.color,(math.sin(time)+1.0)/2)
         
     def Interact(self,other):
         if isinstance(other,Player) and not hasattr(other,"has_levelup"):
@@ -33,7 +49,7 @@ class LevelUp(Tile):
             
             print("Level completed: {0}!".format(self.level.GetName() or ""))
             
-            # in campaign mode, make sure the level is correctly marked done
+            # In campaign mode, make sure the level is correctly marked done
             # so the player won't be able to enter it again, even if he
             # wants to because there's so much score in it.
             self.game.MarkLevelDone(self.level.GetLevelIndex())
@@ -54,8 +70,5 @@ class LevelUp(Tile):
             #raise NewFrame()
             
         return Entity.ENTER
-
-
-    
 
 # vim: ai ts=4 sts=4 et sw=4

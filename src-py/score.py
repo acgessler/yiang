@@ -34,7 +34,6 @@ class ScoreTile(AnimTile):
         if isinstance(other,Player):
             
             if not hasattr(self,"score_taken"):
-            
                 points = self.game.Award(self.points)
                 
                 self.game.RemoveEntity(self) 
@@ -97,10 +96,6 @@ class ScoreTileAnimStub(Tile):
             
     def _GetHaloImage(self):
         return Tile._GetHaloImage(self) if self.border else None
-            
-    
-
-
-    
+              
 
 # vim: ai ts=4 sts=4 et sw=4
