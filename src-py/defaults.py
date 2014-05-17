@@ -213,6 +213,8 @@ debug_player_anims = False
 # delay for which to keep up the shoot state
 shoot_anim_delay = 0.3
 
+enable_achievements_system_prototype = False
+
 max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
 

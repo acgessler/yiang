@@ -97,6 +97,8 @@ class Achievements:
     @staticmethod
     def EarnAchievement(name):
         """Award a specific achievement to the player """
+        if not defaults.enable_achievements_system_prototype:
+            return
         assert name in Achievements.all
         
         if not name in Achievements.have:
@@ -110,6 +112,8 @@ class Achievements:
         """Call this regularly when the user can be safely interrupted (i.e.
         he's not in a game). It checks if the user earned new achievements
         in the meantime and displays notifications via Acknowledge()"""
+        if not defaults.enable_achievements_system_prototype:
+            return
         for ach in Achievements.have:
             if not ach in Achievements.acked:
                 Achievements.Acknowledge(ach)
@@ -117,6 +121,8 @@ class Achievements:
     @staticmethod
     def Acknowledge(ach):
         """Inform the user about his reception of an achievement."""
+        if not defaults.enable_achievements_system_prototype:
+            return
         print("Acknowledge achievement: "+ach)
         
         from notification import MessageBox
