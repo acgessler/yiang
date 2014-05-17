@@ -37,7 +37,9 @@ class DangerousBarrel(AnimTile):
         self._ShrinkBB(bbadjust)
 
     def Interact(self,other):
-        return Entity.KILL if other.color != self.color else Entity.BLOCK
+        if isinstance(other, Player):
+            return Entity.KILL
+        return Entity.BLOCK
 
     def GetVerboseName(self):
         return _("a deathly barrel (it's hilarious!)")
@@ -112,7 +114,7 @@ class Heat(AnimTile):
 
     def Interact(self,other):
         if not isinstance(other,Player):
-            return Entity.KILL if other.color != self.color else Entity.BLOCK
+            return Entity.BLOCK
         
         if self.heat_activated and self.myplayer.heat_counter > 0:
             return Entity.ENTER
