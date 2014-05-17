@@ -1146,7 +1146,7 @@ class KillAnimStub(Tile):
         self.speed = speed*3
         
     def SetTTL(self,ttl):
-        self.ttl = ttl
+        self.ttl = ttl/2
 
     def GetBoundingBox(self):
         return None
