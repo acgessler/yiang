@@ -98,7 +98,10 @@ class Tile(Entity):
         double=False,
         permute=True,
         dropshadow=False,
-        dropshadow_color=sf.Color(30,30,30,150)):
+        dropshadow_color=sf.Color(30,30,30,150),
+        colored_halo=True):
+
+        self.colored_halo = colored_halo
         
         # Note: the 'constants' from defaults may change during startup, but 
         # this file may get parsed BEFORE this happens, so we can't
@@ -289,8 +292,8 @@ class Tile(Entity):
 
     def SetColor(self,color):
         Entity.SetColor(self,color)
-        for elem in self.cached:
-            elem[1].SetColor(self.color)
+        #for elem in self.cached:
+        #    elem[1].SetColor(self.color)
             
     def SetDim(self,dim):
         self.dim = dim
@@ -352,17 +355,17 @@ class Tile(Entity):
                 
             Tile.global_str_cache[(self.rsize,self.text)] = res
         
-        self.cached = [(True,res)]
+        self.cached = [(True,res,True)]
         
         img = self._GetHaloImage()
         if not img is None:
             if isinstance(img,sf.Image):
-                self.cached.append((False,sf.Sprite(img)))
+                self.cached.append((False,sf.Sprite(img),self.colored_halo))
                 self.cached[-1][1].Resize(self.dim[0] * defaults.tiles_size_px[0],
                     self.dim[1] * defaults.tiles_size_px[1]
                 )
             elif isinstance(img,sf.Sprite):
-                self.cached.append((False,img))
+                self.cached.append((False,img,self.colored_halo))
             else:
                 assert False
             
@@ -395,7 +398,7 @@ class Tile(Entity):
         pos_x,pos_y = self.pos
         
         if self.dropshadow: # the drop shadow only affects the first sub-part of the tile
-            offset_it,elem = self.cached[0]
+            offset_it,elem,colored = self.cached[0]
             
             d_x = 1.0/defaults.tiles_size_px[0]
             d_y = 1.0/defaults.tiles_size_px[1]
@@ -413,8 +416,9 @@ class Tile(Entity):
                 lvd(elem,(pos_x - d_x,pos_y + d_y))
         
         ofs_x,ofs_y = self.ofs
-        for offsetit, elem in reversed(self.cached):     
-            elem.SetColor(self.color)
+        for offsetit, elem, colored in reversed(self.cached):     
+            if colored:
+                elem.SetColor(self.color)
             if offsetit is True:
                 lvd(elem,(pos_x-ofs_x,pos_y-ofs_y))
             else:
@@ -427,8 +431,9 @@ class Tile(Entity):
         """Same as Draw(), except it adds an offset to the tile
         position. The offset is specified in tile coordinates"""
         lv = self.game.GetLevel()
-        for offsetit, elem in self.cached: 
-            elem.SetColor(self.color)
+        for offsetit, elem, colored in self.cached: 
+            if colored:
+                elem.SetColor(self.color)
             lv.DrawSingle(elem,(self.pos[0]+offset[0],self.pos[1]+offset[1]))
             
             

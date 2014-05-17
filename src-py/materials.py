@@ -94,7 +94,7 @@ class BackgroundLight(Tile):
             return
         
         lv = self.game.GetLevel()
-        offset,elem = self.cached[1]
+        offset,elem,colored = self.cached[1]
         
         elem.SetBlendMode(sf.Blend.Multiply if self.multiply else sf.Blend.Alpha)
        

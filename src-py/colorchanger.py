@@ -26,7 +26,7 @@ class ColorChanger(AnimTile):
     upon colliding with them."""
     
     def __init__(self,*args,**kwargs):
-        AnimTile.__init__(self,*args,**kwargs)
+        AnimTile.__init__(self,*args, colored_halo=False, **kwargs)
         
     def Interact(self, other):
         if isinstance(other,Player):

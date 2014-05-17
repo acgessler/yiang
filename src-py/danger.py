@@ -173,9 +173,7 @@ class Heat(AnimTile):
                     self.myplayer.SetColor(self.myplayer.oldcolor)
                     delattr(self.myplayer,"oldcolor")
                     
-                    self.level.RemovePostFX(Heat.POSTFX_NAME)
-                    
-                    
+                    self.level.RemovePostFX(Heat.POSTFX_NAME)                   
     
     def GetVerboseName(self):
         return _("a terribly hot stone")
