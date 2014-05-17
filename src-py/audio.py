@@ -73,6 +73,8 @@ class SoundEffectCache:
                 if not sound.OpenFromFile(filename):
                     print("Failure creating music {0} [{1}] -> can't decode file".format(name,filename))
                     return None
+
+                print("Creating music {0}".format(name))
                 
                 sound.SetVolume(defaults.audio_volume_scale*100)
                 class MusicWrapper:
@@ -82,6 +84,13 @@ class SoundEffectCache:
         
                     def __getattr__(self,name):
                         return getattr(self.music,name)
+
+                    def Play(self):
+                        if defaults.disable_audio:
+                            return
+                        
+                        self.music.Play()
+                        return self
                     
                     def SetVolume(self,volume):
                         self.music.SetVolume(defaults.audio_volume_scale*100*volume)
@@ -197,6 +206,8 @@ class BerlinerPhilharmoniker:
                 cls.current_music = None
                 cls.current_index = 0
                 
+            # NOTE: this Stop() is known to cause spurious deadlocks. Could be
+            # related to http://en.sfml-dev.org/forums/index.php?topic=4060.0
             if old and cls.current_music_name != cls.playlist[name][cls.current_index]:
                 old.Stop()
             
@@ -249,14 +260,6 @@ class BerlinerPhilharmoniker:
                 )
                 cls.current_music.Play()
             
-    
-        
-        
-        
-        
-        
-        
-        
-        
+           
 
 # vim: ai ts=4 sts=4 et sw=4

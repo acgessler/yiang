@@ -1138,8 +1138,7 @@ class KillAnimStub(Tile):
         
     def SetDirection(self,dirvec):
         if dirvec[0]==0 and dirvec[1]==0:
-            return
-             
+            return   
         self.dirvec = list( mathutil.Normalize(dirvec) )
         
     def SetSpeed(self,speed):
@@ -1158,7 +1157,6 @@ class KillAnimStub(Tile):
         """Setup random direction, speed and ttl"""
         self.SetSpeed(random.uniform(-1.0, 1.0))
         self.SetDirection((random.uniform(-1.0, 1.0),random.uniform(-1.0, 1.0)))
-        
         
         self.SetTTL(random.random()*10.0)
 

@@ -860,7 +860,7 @@ Hit {2} to return to the menu""")).format(
         """Load a particular level and drop the old one"""
         self.DropLevel()
         self.level_idx = idx
-            
+        print("LoadLevel: {0}".format(idx))
         
         # Carefully reset everything while loading isn't finished
         self.level = None
@@ -887,9 +887,9 @@ Hit {2} to return to the menu""")).format(
             self.level = LevelLoader.LoadLevel(idx,self,no_loadscreen)
             
         if self.level:
+            print("Set new level via LoadLevel")
             if self.QueryFlag(Drawable.FLAG_ACTIVE):
-                self.level.OnEnable()
-                
+                self.level.OnEnable()                       
             return True
         
         if not no_alert:
@@ -911,6 +911,7 @@ Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")
         if idx == self.level_idx:
             return
           
+        print("PushLevel: {0}".format(idx))
         if [e for e in self.level_chain if e[0] == idx]:
             # if this level is already in the chain,
             # drop all levels until we're back there.
@@ -939,7 +940,8 @@ Hit {0} to return to the menu. Sorry.""")).format(KeyMapping.GetString("accept")
         from levelloader import LevelLoader
         self.level = LevelLoader.LoadLevel(idx,self)
         if self.level:
-            self.level.OnEnable()
+            print("Set new level via PushLevel")
+            self.level.OnEnable()           
             return True
             
         return False 

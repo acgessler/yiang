@@ -174,10 +174,11 @@ class LevelLoader:
         <out> = Level(<level>,<game>,<raw>)
         """
         
-        print("Loading level from disc: " + str(level))
+        print("Loading level from disk: " + str(level))
         
         if not no_loadscreen and not defaults.no_threading:
             from loadscreen import LoadScreen
+            # pass on no_loadscreen=True to prevent infinite recursion
             lv = LoadScreen.Load(LevelLoader.LoadLevel,level,game,no_loadscreen=True)
             if lv:
                 lv.used_loadscreen = True
@@ -227,6 +228,7 @@ class LevelLoader:
             lv.editor_raw = lines[1].rstrip()
             lv.editor_shebang = lines[0]
             
+        print("Loaded level {0}".format(file))
         return lv
 
 # vim: ai ts=4 sts=4 et sw=4

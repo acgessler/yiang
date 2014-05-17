@@ -306,7 +306,9 @@ class Level:
         
     
     def _SetupAudioSection(self):
-        if self.audio_section == "current" or self.game.mode == self.game.BACKGROUND:
+        # HACK: not setting up AudioSection as it leads to spurious
+        # deadlocks in sf.Music.Close() (see audio.py)
+        if True or self.audio_section == "current" or self.game.mode == self.game.BACKGROUND:
             return
         
         from audio import BerlinerPhilharmoniker

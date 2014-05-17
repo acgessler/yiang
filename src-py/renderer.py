@@ -514,13 +514,6 @@ class Renderer:
         print("-"*60)
         print("Leaving main menu, shutdown")
         
-        
 
-        
-    
-
-    
-
-    
 
 # vim: ai ts=4 sts=4 et sw=4

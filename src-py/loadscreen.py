@@ -129,9 +129,13 @@ class LoadScreen:
         
     @staticmethod
     def EndProgressBar():
-        
-        # exclude the movement keys - it's too likely that the user is using them already to move the player in the loadscreen level
-        ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed and not e.Key.Code in [KeyMapping.Get("move-left"),KeyMapping.Get("move-right")]]
+        # exclude the movement keys - it's too likely that the user is using them
+        # already to move the player in the loadscreen level
+        ret = not not [e for e in Renderer.GetEvents() if e.Type == sf.Event.KeyPressed and not e.Key.Code in
+                       [
+                        KeyMapping.Get("move-left"),
+                        KeyMapping.Get("move-right")]
+                      ]
         e = LoadScreen.progress_tile
         if not e:
             return ret
@@ -161,8 +165,7 @@ This makes me SO happy {0}
         try:
         
             ret = [None]
-            def DoLoading():    
-                
+            def DoLoading():               
                 ret[0] = loadProc(*args,**kwargs)
                 if not ret[0]:
                     return
@@ -198,21 +201,19 @@ This makes me SO happy {0}
                         c = time.time()
                         LoadScreen.UpdateProgressBar((c-a)/defaults.loading_time)
                     else:    
-                        if not ret[0] or LoadScreen.EndProgressBar():
-                            
+                        if not ret[0] or LoadScreen.EndProgressBar():                           
                             # fade to the level view
                             from posteffect import FadeInOverlay
                             Renderer.AddDrawable( FadeInOverlay(3.0, fade_start=0.0) )
                             from posteffect import BlurInOverlay
                             Renderer.AddDrawable(BlurInOverlay(3.5))
+                            print("Finished loading, fading to level")
                             break
                         
             finally:
                 if LoadScreen.loadlevel:
                     Renderer.RemoveDrawable(LoadScreen.loadlevel)
             
-        except:
-            raise
         finally:
             LoadScreen.running = False
         return ret[0]
