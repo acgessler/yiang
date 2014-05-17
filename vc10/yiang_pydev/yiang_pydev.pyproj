@@ -50,6 +50,7 @@
     <Compile Include="highscore.py" />
     <Compile Include="keys.py" />
     <Compile Include="level.py" />
+    <Compile Include="levelloader.py" />
     <Compile Include="levelup.py" />
     <Compile Include="loadscreen.py" />
     <Compile Include="locked.py" />
@@ -68,11 +69,13 @@
     <Compile Include="renderer.py" />
     <Compile Include="score.py" />
     <Compile Include="sf.py" />
+    <Compile Include="sfutil.py" />
     <Compile Include="stubs.py" />
     <Compile Include="studiosplash.py" />
     <Compile Include="teleport.py" />
     <Compile Include="textures.py" />
     <Compile Include="tile.py" />
+    <Compile Include="tileloader.py" />
     <Compile Include="title.py" />
     <Compile Include="tutorial.py" />
     <Compile Include="userprofile.py" />
