@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game.vcproj", "{CBCE0DF1-FDF8-415C-BF88-76A086DDD057}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game_conapp", "game_conapp.vcproj", "{CBCE0DF1-FDF8-415C-BF88-76A086DDD058}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57DF66A9-8488-4A61-82DD-D897949E6A21} = {57DF66A9-8488-4A61-82DD-D897949E6A21}
+		{BF2854E3-0D8E-402B-9D5E-A4C294F99160} = {BF2854E3-0D8E-402B-9D5E-A4C294F99160}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "editor", "editor.vcproj", "{C497D1AE-D39A-4970-8694-41EB74069398}"
 EndProject

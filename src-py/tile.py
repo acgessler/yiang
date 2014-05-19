@@ -345,12 +345,10 @@ class Tile(Entity):
             font = FontCache.get(rsize)
             
             if double:
-                text = "\n".join(m+"\n"+m for m in ["".join(m+m for m in n) for n in self.text.split("\n")] )
+                text = "\n".join(m+"\n"+m for m in ["".join(m+m for m in n)for n in self.text.split("\n")] )
                 res = sf.CustomString(text,Font=font,Size=rsize*0.5)
             else:
                 text = self.text
-                
-                                        
                 res = sf.CustomString(text,Font=font,Size=rsize)
                 
             Tile.global_str_cache[(self.rsize,self.text)] = res

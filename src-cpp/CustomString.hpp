@@ -159,6 +159,12 @@ public :
     ////////////////////////////////////////////////////////////
     FloatRect GetRect() const;
 
+
+
+	void SetImmediateModeRendering(bool yesno) {
+		use_immediate_mode_rendering = yesno;
+	}
+
 protected :
 
     ////////////////////////////////////////////////////////////
@@ -184,6 +190,9 @@ private :
     unsigned long     myStyle;          ///< Text style (see Style enum)
     FloatRect         myBaseRect;       ///< Bounding rectangle of the text in object coordinates
     bool              myNeedRectUpdate; ///< Does the bounding rect need an update ?
+
+	// Fallback to immediate mode rendering as SFML does it.
+	bool use_immediate_mode_rendering;
 };
 
 } // namespace sf

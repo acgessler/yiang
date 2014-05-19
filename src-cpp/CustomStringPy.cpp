@@ -123,6 +123,14 @@ PySfCustomString_SetSize(PySfCustomString* self, PyObject *args)
 }
 
 static PyObject *
+PySfCustomString_SetImmediateModeRendering(PySfCustomString* self, PyObject *args)
+{
+	self->obj->SetImmediateModeRendering(PyBool_AsBool(args));
+	Py_RETURN_NONE;
+}
+
+
+static PyObject *
 PySfCustomString_GetSize(PySfCustomString* self)
 {
 	return PyFloat_FromDouble(self->obj->GetSize());
@@ -241,6 +249,7 @@ Return the visual position (a tuple of two floats) of the Index-th character of 
 	{"SetStyle", (PyCFunction)PySfCustomString_SetStyle, METH_O, "SetStyle(TextSize)\nSet the style of the text. The default style is Regular.\n	TextSize : New text style, (combination of Style values)"},
 	{"GetStyle", (PyCFunction)PySfCustomString_GetStyle, METH_NOARGS, "GetStyle()\nGet the style of the text."},
 	{"GetRect", (PyCFunction)PySfCustomString_GetRect, METH_NOARGS, "GetRect()\nGet the string rectangle on screen."},
+	{"SetImmediateModeRendering", (PyCFunction)PySfCustomString_SetImmediateModeRendering, METH_O, "Enable/disable immediate mode fallback"},
 	{NULL}  /* Sentinel */
 };
 

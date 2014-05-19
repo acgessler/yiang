@@ -1,3 +1,6 @@
+// Modified version of sf.String using our VBO-based rendering logic.
+// Dropped any overhead that YIANG does not need.
+
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
@@ -28,8 +31,18 @@
 #include "CustomString.hpp"
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/GraphicsContext.hpp>
+
 #include <locale>
 #include <assert.h>
+#include <limits>
+
+#include "VBOManager.hpp"
+
+namespace {
+
+VBOManager g_vboManager;
+	
+}
 
 namespace sf_yiang
 {
@@ -40,7 +53,8 @@ CustomString::CustomString() :
 myFont          (&Font::GetDefaultFont()),
 mySize          (30.f),
 myStyle         (Regular),
-myNeedRectUpdate(true)
+myNeedRectUpdate(true),
+use_immediate_mode_rendering()
 {
 
 }
@@ -214,12 +228,15 @@ FloatRect CustomString::GetRect() const
 ////////////////////////////////////////////////////////////
 void CustomString::Render(RenderTarget&) const
 {
-    // First get the internal UTF-32 string of the text
-    const Unicode::UTF32String& Text = myText;
+	EnsureGlewInit();
 
-    // No text, no rendering :)
-    if (Text.empty())
+	// This is modified from the original String::Render() code from
+	// SFML. It uses the VBO cache to retrieve cached VBOs and to
+	// (re-)populate them as needed.
+    const Unicode::UTF32String& Text = myText;
+	if (Text.empty()) {
         return;
+	}
 
     // Set the scaling factor to get the actual size
     float CharSize =  static_cast<float>(myFont->GetCharacterSize());
@@ -233,38 +250,163 @@ void CustomString::Render(RenderTarget&) const
     float X = 0.f;
     float Y = CharSize;
 
+	std::string copy_text;
+	copy_text.resize(Text.size());
+	for (size_t i = 0, e = Text.size(); i < e; ++i) {
+		copy_text[i] = static_cast<char>(Text[i]);
+	}
 
-    // Draw one quad for each character
-    glBegin(GL_QUADS);
-    for (std::size_t i = 0; i < Text.size(); ++i)
-    {
-        // Get the current character and its corresponding glyph
-        Uint32           CurChar  = Text[i];
-        const Glyph&     CurGlyph = myFont->GetGlyph(CurChar);
-        int              Advance  = CurGlyph.Advance;
-        const IntRect&   Rect     = CurGlyph.Rectangle;
-        const FloatRect& Coord    = CurGlyph.TexCoords;
+	// Extract a 32bit RGBA color
+	union {
+		Uint32 color;
+		char color_channels[4];
+	};
+	const sf::Color& float_color = GetColor();
+	color_channels[0] = float_color.r;
+	color_channels[1] = float_color.g;
+	color_channels[2] = float_color.b;
+	color_channels[3] = float_color.a;
 
+	// Derive an unique key by adding the color at the end
+	// of the string. This is a terrible hack, so avoiding
+	// unintended null-termination by ORing with 1 does
+	// not make it worse ...
+	std::string key = copy_text;
+	key.push_back(float_color.r | 1);
+	key.push_back(float_color.g | 1);
+	key.push_back(float_color.b | 1);
+	key.push_back(float_color.a | 1);
 
-        // Handle special characters
-        switch (CurChar)
-        {
-            case L' ' :  X += Advance;         continue;
-            case L'\n' : Y += CharSize; X = 0; continue;
-            case L'\t' : X += Advance  * 4;    continue;
-            case L'\v' : Y += CharSize * 4;    continue;
-        }
+	VBOTile* const tile = g_vboManager.Get(key, g_vboManager.GetVBOSizeForString(copy_text));
+	if (use_immediate_mode_rendering || tile == NULL || tile->vbo == 0) {
+		// Draw one quad for each character
+		glBegin(GL_QUADS);
+		for (std::size_t i = 0, e = Text.size(); i < e; ++i)
+		{
+			// Get the current character and its corresponding glyph
+			Uint32           CurChar  = Text[i];
+			const Glyph&     CurGlyph = myFont->GetGlyph(CurChar);
+			int              Advance  = CurGlyph.Advance;
+			const IntRect&   Rect     = CurGlyph.Rectangle;
+			const FloatRect& Coord    = CurGlyph.TexCoords;
 
-        // Draw a textured quad for the current character
-        glTexCoord2f(Coord.Left,  Coord.Top);    glVertex2f(X + Rect.Left,    Y + Rect.Top);
-        glTexCoord2f(Coord.Left,  Coord.Bottom); glVertex2f(X + Rect.Left,    Y + Rect.Bottom);
-       glTexCoord2f(Coord.Right, Coord.Bottom); glVertex2f(X + Rect.Right,   Y + Rect.Bottom);
-        glTexCoord2f(Coord.Right, Coord.Top);    glVertex2f(X + Rect.Right,   Y + Rect.Top);
+			// Handle special characters
+			switch (CurChar)
+			{
+				case L' ' :  X += Advance;         continue;
+				case L'\n' : Y += CharSize; X = 0; continue;
+				// Note: The original SFML code handles those as well:
+				//case L'\t' : X += Advance  * 4;    continue;
+				//case L'\v' : Y += CharSize * 4;    continue;
+			}
 
-        // Advance to the next character
-        X += Advance;
-    }
-    glEnd();
+			// Draw a textured quad for the current character
+			glTexCoord2f(Coord.Left,  Coord.Top);    glVertex2f(X + Rect.Left,    Y + Rect.Top);
+			glTexCoord2f(Coord.Left,  Coord.Bottom); glVertex2f(X + Rect.Left,    Y + Rect.Bottom);
+			glTexCoord2f(Coord.Right, Coord.Bottom); glVertex2f(X + Rect.Right,   Y + Rect.Bottom);
+			glTexCoord2f(Coord.Right, Coord.Top);    glVertex2f(X + Rect.Right,   Y + Rect.Top);
+
+			// Advance to the next character
+			X += Advance;
+		}
+		glEnd();
+		return;
+	}
+	
+	assert(tile->vbo != NULL);
+	::glBindBuffer(GL_ARRAY_BUFFER, tile->vbo);
+	
+	if (tile->dirty) {
+		float* const data = static_cast<float*>(::glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+		if (data == NULL) {
+			// Retry next time, leave |dirty==true|
+			return;
+		}
+
+		tile->quad_count = 0;
+		float* cursor = data;
+
+		// Copy-paste logic from above to have it be efficient.
+		// Copy data to the VBO instead of emitting immediate mode calls.
+		for (std::size_t i = 0, e = Text.size(); i < e; ++i)
+		{
+			Uint32           CurChar  = Text[i];
+			const Glyph&     CurGlyph = myFont->GetGlyph(CurChar);
+			int              Advance  = CurGlyph.Advance;
+			const IntRect&   Rect     = CurGlyph.Rectangle;
+			const FloatRect& Coord    = CurGlyph.TexCoords;
+
+			// Handle special characters
+			switch (CurChar)
+			{
+			case L' ' :  X += Advance;         continue;
+			case L'\n' : Y += CharSize; X = 0; continue;
+			// Note: The original SFML code handles those as well:
+			//case L'\t' : X += Advance  * 4;    continue;
+			//case L'\v' : Y += CharSize * 4;    continue;
+			}
+
+			// Draw a textured quad for the current character
+
+			// glTexCoord2f(Coord.Left,  Coord.Top);    glVertex2f(X + Rect.Left,    Y + Rect.Top);
+			*cursor++ = Coord.Left;
+			*cursor++ = Coord.Top;
+			*cursor++ = X + Rect.Left;
+			*cursor++ = Y + Rect.Top;
+			*cursor++ = *reinterpret_cast<float*>(&color);
+
+			// glTexCoord2f(Coord.Left,  Coord.Bottom); glVertex2f(X + Rect.Left,    Y + Rect.Bottom);
+			*cursor++ = Coord.Left;
+			*cursor++ = Coord.Bottom;
+			*cursor++ = X + Rect.Left;
+			*cursor++ = Y + Rect.Bottom;
+			*cursor++ = *reinterpret_cast<float*>(&color);
+
+			// glTexCoord2f(Coord.Right, Coord.Bottom); glVertex2f(X + Rect.Right,   Y + Rect.Bottom);
+			*cursor++ = Coord.Right;
+			*cursor++ = Coord.Bottom;
+			*cursor++ = X + Rect.Right;
+			*cursor++ = Y + Rect.Bottom;
+			*cursor++ = *reinterpret_cast<float*>(&color);
+
+			// glTexCoord2f(Coord.Right, Coord.Top);    glVertex2f(X + Rect.Right,   Y + Rect.Top);
+			*cursor++ = Coord.Right;
+			*cursor++ = Coord.Top;
+			*cursor++ = X + Rect.Right;
+			*cursor++ = Y + Rect.Top;
+			*cursor++ = *reinterpret_cast<float*>(&color);
+
+			// Advance to the next character
+			X += Advance;
+			++tile->quad_count;
+		}
+
+		assert (std::distance(data, cursor) <= tile->size);
+		::glUnmapBuffer(GL_ARRAY_BUFFER);
+		//::glBufferData(GL_ARRAY_BUFFER, tile->size, data, GL_DYNAMIC_DRAW);
+		//::glBufferSubData(GL_ARRAY_BUFFER, 0, tile->size, data);
+		//delete[] data;
+
+		// Drop the dirty flag from the tile
+		tile->dirty = false;
+	}
+
+	const int VERTEX_SIZE = 5 * 4;
+	::glTexCoordPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(0));
+	::glVertexPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(8));
+	::glColorPointer(4, GL_UNSIGNED_BYTE, VERTEX_SIZE, reinterpret_cast<void*>(16));
+
+	::glEnableClientState(GL_COLOR_ARRAY);
+	::glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	::glEnableClientState(GL_VERTEX_ARRAY);
+
+	glDrawArrays(GL_QUADS, 0, tile->quad_count * 4);
+
+	// Restore GL state for SFML to resume
+	::glBindBuffer(GL_ARRAY_BUFFER, 0);
+	::glDisableClientState(GL_COLOR_ARRAY);
+	::glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	::glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 
