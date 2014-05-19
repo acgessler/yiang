@@ -218,6 +218,9 @@ enable_achievements_system_prototype = False
 max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
 
+# legacy GL immediate mode rendering for comparison
+use_immediate_mode_font_rendering = True
+
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.

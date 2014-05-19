@@ -269,16 +269,17 @@ void CustomString::Render(RenderTarget&) const
 
 	// Derive an unique key by adding the color at the end
 	// of the string. This is a terrible hack, so avoiding
-	// unintended null-termination by ORing with 1 does
-	// not make it worse ...
+	// unintended null-termination by ORing a 1 does
+	// not make it worse.
 	std::string key = copy_text;
 	key.push_back(float_color.r | 1);
 	key.push_back(float_color.g | 1);
 	key.push_back(float_color.b | 1);
 	key.push_back(float_color.a | 1);
 
-	VBOTile* const tile = g_vboManager.Get(key, g_vboManager.GetVBOSizeForString(copy_text));
-	if (use_immediate_mode_rendering || tile == NULL || tile->vbo == 0) {
+	VBOTile* const tile = use_immediate_mode_rendering ? NULL :
+		g_vboManager.Get(key, g_vboManager.GetVBOSizeForString(copy_text));
+	if (tile == NULL || tile->vbo == 0) {
 		// Draw one quad for each character
 		glBegin(GL_QUADS);
 		for (std::size_t i = 0, e = Text.size(); i < e; ++i)

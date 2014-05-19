@@ -352,7 +352,7 @@ class Tile(Entity):
                 res = sf.CustomString(text,Font=font,Size=rsize)
                 
             Tile.global_str_cache[(self.rsize,self.text)] = res
-        
+            res.SetImmediateModeRendering(defaults.use_immediate_mode_font_rendering)
         self.cached = [(True,res,True)]
         
         img = self._GetHaloImage()
@@ -421,9 +421,7 @@ class Tile(Entity):
                 lvd(elem,(pos_x-ofs_x,pos_y-ofs_y))
             else:
                 lvd(elem,self.pos)
-                
-        
-        
+                     
 
     def DrawRelative(self,offset):
         """Same as Draw(), except it adds an offset to the tile
