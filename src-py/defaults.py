@@ -199,7 +199,7 @@ slowdown_level = 0
 # Size of a single collision tap, in tiles. If the player moves
 # by n times this distance in a single frame, collision detection
 # is performed multiple times.
-collision_tap_size = 0.1
+collision_tap_size = 0.02
 
 # delay in which the player won't move after turning around
 turnaround_delay = 0.18
