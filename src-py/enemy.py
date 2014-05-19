@@ -473,7 +473,7 @@ class RotatingInferno(Enemy):
     
     def Draw_EditorCatalogue(self): # Special logic for use within the editor
         lv = self.game.GetLevel()
-        for offsetit, elem in self.cached: 
+        for offsetit, elem, colored in self.cached: 
             lv.DrawSingle(elem,self.pos)
             
     def Draw(self): 
