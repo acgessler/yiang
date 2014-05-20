@@ -85,11 +85,11 @@ loading_time = 6.0
 loading_fool_player = True
 death_sprites = 160
 min_death_sprites = 5
-death_sprites_player = 360
-min_death_sprites_player = 10
-pain_sprites_player = 10
+death_sprites_player = 240
+min_death_sprites_player = 6
+pain_sprites_player = 5
 min_pain_sprites_player = 2
-max_useless_sprites = 2000
+max_useless_sprites = 500
 max_framerate_for_sprites = 25
 
 framerate_limit = 60
