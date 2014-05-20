@@ -287,6 +287,9 @@ class Tile(Entity):
             
         return (x,y),(0,0)
 
+    def GetCenter(self):
+        return (self.pos[0]+self.dim[0]/2,self.pos[1]+self.dim[1]/2)
+
     def Interact(self,other):
         return self.collision
 

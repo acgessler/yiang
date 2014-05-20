@@ -48,11 +48,12 @@ class DangerousBarrel(AnimTile):
 class Mine(AnimTile):
     """This entity is an animated mine which kills
     the player after the animation of the explosion ended"""
-    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=3,hideontouch=False,**kwargs):
+    def __init__(self,text,height,frames,speed,randomize,bbadjust=0.55,radius=4,hideontouch=False,**kwargs):
         AnimTile.__init__(self,text,height,frames,speed,2,halo_img=None,**kwargs)
         self.mine_activated = False
         self.radius = radius
         self.hideontouch = hideontouch
+        self.__other = None
         if randomize is True:
             self.GotoRandom()
 
@@ -67,12 +68,29 @@ class Mine(AnimTile):
             
             from posteffect import FlashOverlay
             Renderer.AddDrawable(FlashOverlay(sf.Color(255,120,0),0.09,4,3))
+
+            from posteffect import BlurInOverlay
+            Renderer.AddDrawable(BlurInOverlay())
                 
             self.DeathTimer = sf.Clock()
             self.DeathTimerEnd = (self.GetNumFrames()-1)*self.speed
             self.__other = other
             self.mine_activated = True
             return Entity.ENTER
+
+    def Draw(self):
+        # Draw a semi-transparent circle to visualize the mine radius
+        # This is slow, but mines are rare.
+        cpos = self.level.ToCameraDeviceCoordinates(self.GetCenter())
+
+        border_color = sf.Color(90,90,90,80)
+        if self.__other and self.DistanceInnerRadius(self.__other):
+            border_color = sf.Color(120,120,120,150)
+
+        self.game.DrawSingle(sf.Shape.Circle(cpos[0],cpos[1],
+            self.radius*defaults.tiles_size_px[0], sf.Color(50,50,50,60), 1, border_color
+        ))
+        AnimTile.Draw(self)
         
     def Update(self,time_elapsed,time_delta):
         AnimTile.Update(self,time_elapsed,time_delta)
@@ -81,8 +99,7 @@ class Mine(AnimTile):
                 self.Set(self.GetNumFrames())
                 
                 if not defaults.debug_godmode and not self.game.mode == Game.BACKGROUND:
-                    if self.DistanceInnerRadius(self.__other):
-                        self.game.Kill(self.GetVerboseName(),self.__other)
+                    self.KillNeighbors()                   
                 self.SetState(0)
                 self.level.RemoveEntity(self)
     
@@ -90,7 +107,22 @@ class Mine(AnimTile):
         return _("an explosive mine (BOOooOOM!)")
     
     def DistanceInnerRadius(self,other):
-        return self.Distance(other) < (self.radius**2) 
+        return self.Distance(other) < (self.radius**2)
+
+    def KillNeighbors(self):
+        # Get all enemies, and the player, from within the mines
+        # radius of influence and kill them.
+        cpos = self.GetCenter()
+        radius = self.radius
+        bb = [cpos[0] - radius, cpos[1] - radius, cpos[0] + radius, cpos[1] + radius]
+        for e in self.game.GetLevel().EnumPossibleColliders(bb):
+            if not isinstance(e, Player) and not isinstance(e, Enemy):
+                continue
+            if self.DistanceInnerRadius(e):
+                if isinstance(e, Player):
+                    self.game.Kill(self.GetVerboseName(),e)
+                elif isinstance(e, Enemy):
+                    e.Kill()
 
     
 

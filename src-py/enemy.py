@@ -103,6 +103,9 @@ class Enemy(AnimTile):
     
     def GetDrawOrder(self):
         return 2000
+
+    def Kill(self):
+        self._Die()
     
     def _Die(self):
         """Invoked when the enemy is slayed"""
@@ -424,6 +427,10 @@ class RotatingInferno(Enemy):
     
     def GetVerboseName(self):
         return _("Rotating Inferno")
+
+    def _Die(self):
+        # We CANNOT die.
+        return
     
     def SetPosition(self,pos):
         self.real_pos = (pos[0]+self.ofs_vec[0],pos[1]+self.ofs_vec[1])
@@ -580,7 +587,8 @@ class SmallBob(Enemy):
         #    self.vel = -self.vel
                     
         pos = [self.pos[0] + self.vel * time * self.move_speed * (self.slow_start+1.0 if self.triggered else 1), self.pos[1]]
-        self.slow_start = min(self.trigger_speed_scale-1, self.slow_start + self.trigger_speed_scale* (1.0/self.accel_time) * time * (-1 if self.cool_down else 1))
+        self.slow_start = min(self.trigger_speed_scale-1, self.slow_start + self.trigger_speed_scale* (1.0/self.accel_time) * time *
+                              (-1 if self.cool_down else 1))
         if self.slow_start < 0:
             self.cool_down = False
             self.slow_start = 0
@@ -644,7 +652,6 @@ class SmallRobot(SmallTraverser):
             
 
 class Turret(Enemy):
-    
     def __init__(self, *args, speed=0.5, cooldown_time=4, shot_delta=0.08, shots=7, shot_ofs=((0.3,0.55),(0.6,0.55)), angle_limit=55, distance_limit=5, shot_speed=20, no_flash=True, **kwargs):
         Enemy.__init__(self, *args, speed=speed, states=2, halo_img=None, sparkhalo=0, no_flash=no_flash, **kwargs)
         self.weapon = Weapon(speed=shot_speed)
