@@ -2,8 +2,9 @@
 #define INCLUDED_VBO_MANAGER_H
 
 #include <string>
+#include <iostream>
 
-#include "../contrib/SFML-1.6/src/SFML/Graphics/GLEW/glew.h"
+#include "GLXW/glxw.h"
 #include "LRUCache.hpp"
 
 // VBOManager caches vertices for text sprites ("tiles") in VBOs.
@@ -19,11 +20,11 @@
 //   or it may need to be re-filled. This can happen if the key has
 //   never been cached before, or it has been evicted from the cache.
 struct VBOTile {
-	VBOTile() : vbo(), offset(), size(), dirty(true), quad_count() {}
+	VBOTile() : vbo(), offset(), size(), dirty(true), quad_count(), vao() {}
 	~VBOTile() {
 		if (vbo != 0) {
 			std::cerr << "(likely not logged) Destroying VBO with size " << size << std::endl;
-			::glDeleteBuffersARB(1, &vbo);
+			glDeleteBuffers(1, &vbo);
 		}
 	}
 
@@ -47,11 +48,13 @@ struct VBOTile {
 	// Whether the VBO slice contains stale data
 	bool dirty;
 	unsigned int quad_count;
+
+	GLuint vao;
 };
 
-void EnsureGlewInit();
+void EnsureGlxwInit();
 
-// Call EnsureGlewInit() before any use
+// Call EnsureGlxwInit() before any use
 class VBOManager {
 public:
 

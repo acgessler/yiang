@@ -1,3 +1,9 @@
+// Modified version of sf.String using our VBO-based rendering logic.
+// Dropped any overhead that YIANG does not need. Lots of obsolete
+// SFML comments are still there, just ignore them.
+
+// NOT THREADSAFE
+
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
@@ -34,6 +40,7 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <string>
+
 
 
 namespace sf_yiang

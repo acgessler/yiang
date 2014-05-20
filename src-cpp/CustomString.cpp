@@ -1,5 +1,6 @@
 // Modified version of sf.String using our VBO-based rendering logic.
-// Dropped any overhead that YIANG does not need.
+// Dropped any overhead that YIANG does not need. Lots of obsolete
+// SFML comments are still there, just ignore them.
 
 ////////////////////////////////////////////////////////////
 //
@@ -28,18 +29,55 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+
+
+// Use GLXW because it loads the core profile correctly (including
+// the VAO functions, which GLEW refuses to properly load even
+// with glewExperimental=true).
+//
+// Since we (and SFML) also still need deprecated functions (i.e. immediate
+// mode, ffp), some hacks are necessary to properly make Gl available.
+
 #include "CustomString.hpp"
 #include <SFML/Graphics/Image.hpp>
-#include <SFML/Graphics/GraphicsContext.hpp>
 
-#include <locale>
-#include <assert.h>
-#include <limits>
+// *Not* include this - it brings in GLEW
+//#include <SFML/Graphics/GraphicsContext.hpp>
 
+
+// This includes GLXW (GL Core)
 #include "VBOManager.hpp"
+
+// Manually re-declare legacy APIs. Including GL.h does not work,
+// it would clash with GL Core macros
+extern "C" {
+
+WINGDIAPI void APIENTRY glTexCoordPointer (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
+WINGDIAPI void APIENTRY glVertexPointer (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
+WINGDIAPI void APIENTRY glColorPointer (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
+WINGDIAPI void APIENTRY glDisableClientState (GLenum array);
+WINGDIAPI void APIENTRY glEnableClientState (GLenum array);
+WINGDIAPI void APIENTRY glScalef (GLfloat x, GLfloat y, GLfloat z);
+WINGDIAPI void APIENTRY glBegin (GLenum mode);
+WINGDIAPI void APIENTRY glTexCoord2f (GLfloat s, GLfloat t);
+WINGDIAPI void APIENTRY glVertex2f (GLfloat x, GLfloat y);
+WINGDIAPI void APIENTRY glEnd (void);
+
+}
+
+#define GL_VERTEX_ARRAY                   0x8074
+#define GL_TEXTURE_COORD_ARRAY            0x8078
+#define GL_COLOR_ARRAY                    0x8076
+
+#include <assert.h>
+#include <locale>
+#include <limits>
+#include <iostream>
 
 namespace {
 
+	// Global VBO cache instance used to cache the vertices for
+	// drawing text tiles.
 VBOManager g_vboManager;
 	
 }
@@ -222,13 +260,29 @@ FloatRect CustomString::GetRect() const
     return Rect;
 }
 
+void BindZeroVAO() {
+	static GLuint vao = 0;
+	if (vao == 0) {
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
+		// Restore GL state for SFML to resume
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		return;
+	}
+	glBindVertexArray(vao);
+}
+
 
 ////////////////////////////////////////////////////////////
 /// /see sfDrawable::Render
 ////////////////////////////////////////////////////////////
 void CustomString::Render(RenderTarget&) const
 {
-	EnsureGlewInit();
+	EnsureGlxwInit();
 
 	// This is modified from the original String::Render() code from
 	// SFML. It uses the VBO cache to retrieve cached VBOs and to
@@ -241,7 +295,7 @@ void CustomString::Render(RenderTarget&) const
     // Set the scaling factor to get the actual size
     float CharSize =  static_cast<float>(myFont->GetCharacterSize());
     float Factor   = mySize / CharSize;
-    GLCheck(glScalef(Factor, Factor, 1.f));
+	glScalef(Factor, Factor, 1.f);
 
     // Bind the font texture
     myFont->GetImage().Bind();
@@ -315,12 +369,20 @@ void CustomString::Render(RenderTarget&) const
 	}
 	
 	assert(tile->vbo != NULL);
-	::glBindBuffer(GL_ARRAY_BUFFER, tile->vbo);
 	
 	if (tile->dirty) {
-		float* const data = static_cast<float*>(::glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+		// Record a new VAO
+		if( tile->vao != 0) {
+			glDeleteVertexArrays(1, &tile->vao);
+		}
+		glGenVertexArrays(1, &tile->vao);
+		glBindVertexArray(tile->vao);
+
+		glBindBuffer(GL_ARRAY_BUFFER, tile->vbo);
+		float* const data = static_cast<float*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 		if (data == NULL) {
 			// Retry next time, leave |dirty==true|
+			std::cerr << "(likely not logged) glMapBuffer() failed" << std::endl;
 			return;
 		}
 
@@ -383,31 +445,31 @@ void CustomString::Render(RenderTarget&) const
 		}
 
 		assert (std::distance(data, cursor) <= tile->size);
-		::glUnmapBuffer(GL_ARRAY_BUFFER);
-		//::glBufferData(GL_ARRAY_BUFFER, tile->size, data, GL_DYNAMIC_DRAW);
-		//::glBufferSubData(GL_ARRAY_BUFFER, 0, tile->size, data);
-		//delete[] data;
+		glUnmapBuffer(GL_ARRAY_BUFFER);
 
 		// Drop the dirty flag from the tile
 		tile->dirty = false;
+
+		// Use legacy APIs because T&L is still done using fixed-function
+		// pipeline. Using vertexAttrib* would not supply the semantics
+		// of each stream.
+		glEnableClientState(GL_COLOR_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		const int VERTEX_SIZE = 5 * 4;
+		glTexCoordPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(0));
+		glVertexPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(8));
+		glColorPointer(4, GL_UNSIGNED_BYTE, VERTEX_SIZE, reinterpret_cast<void*>(16));
 	}
-
-	const int VERTEX_SIZE = 5 * 4;
-	::glTexCoordPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(0));
-	::glVertexPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(8));
-	::glColorPointer(4, GL_UNSIGNED_BYTE, VERTEX_SIZE, reinterpret_cast<void*>(16));
-
-	::glEnableClientState(GL_COLOR_ARRAY);
-	::glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	::glEnableClientState(GL_VERTEX_ARRAY);
-
+	else {
+		glBindVertexArray(tile->vao);
+	}
+	
 	glDrawArrays(GL_QUADS, 0, tile->quad_count * 4);
 
 	// Restore GL state for SFML to resume
-	::glBindBuffer(GL_ARRAY_BUFFER, 0);
-	::glDisableClientState(GL_COLOR_ARRAY);
-	::glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	::glDisableClientState(GL_VERTEX_ARRAY);
+	BindZeroVAO();
 }
 
 

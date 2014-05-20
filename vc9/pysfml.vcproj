@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;"
+				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;;..\contrib\glxw\include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;PYSFML_EXPORTS;GLEW_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;"
+				AdditionalIncludeDirectories="..\contrib\python\include;&quot;..\contrib\SFML-1.6\include&quot;;&quot;..\contrib\SFML-1.6\src&quot;;..\contrib\glxw\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PYSFML_EXPORTS;GLEW_STATIC"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -629,26 +629,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\contrib\SFML-1.6\src\SFML\Graphics\GLEW\glew.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="GLEW_STATIC"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="GLEW_STATIC"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\src-cpp\GPUStreaming.cpp"
 					>
 				</File>
@@ -666,6 +646,34 @@
 				</File>
 				<File
 					RelativePath="..\src-cpp\VBOManager.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="glxw"
+				>
+				<File
+					RelativePath="..\contrib\glxw\src\glxw.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="..\contrib\glxw\include"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="..\contrib\glxw\include"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\contrib\glxw\include\GLXW\glxw.h"
 					>
 				</File>
 			</Filter>

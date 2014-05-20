@@ -20,16 +20,18 @@ struct VBOManager::ReuseOrCreateVBOPolicy {
 		out = new VBOTile();
 		out->size = size;
 
-		::glGetError();
-		::glGenBuffers(1, &out->vbo);
-		::glBindBuffer(GL_ARRAY_BUFFER, out->vbo);
+		// Clear errors upfront
+		glGetError();
+
+		glGenBuffers(1, &out->vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, out->vbo);
 
 		// Initialize the VBO with the correct size to enable
 		// subsequent glBufferSubData() and glMapBuffer calls.
-		::glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
-		::glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
-		const GLenum err = ::glGetError();
+		const GLenum err = glGetError();
 		if (err != GL_NO_ERROR) {
 			// Set output VBO to 0, this ensures that users
 			// will not attempt to use it.
@@ -97,12 +99,12 @@ size_t VBOManager::GetVBOSizeForString(const std::string& str) const
 }
 
 // -----------------------------------------------------------------------------
-void EnsureGlewInit()
+void EnsureGlxwInit()
 {
 	// No need for thread-safety
 	static bool done = false;
 	if (!done) {
-		glewInit();
+		glxwInit();
 		done = true;
 	}
 }
