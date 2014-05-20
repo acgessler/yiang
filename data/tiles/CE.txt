@@ -110,7 +110,7 @@ from forcefield import ForceField; <out> = ForceField(<raw>,9,12,2.0,vel=[0,-75]
 
  
 
-   /  \   d
+   /  \   
 
 
 
