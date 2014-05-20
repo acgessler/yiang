@@ -20,6 +20,7 @@
 
 # Python stuff
 import os
+import math
 
 from stubs import *
 from player import Player, InventoryItem
@@ -83,8 +84,10 @@ class Shot(Tile):
         return None
         
     def Update(self,time_elapsed,time):
-        
         oldpos = getattr(self,'oldpos',self.pos)
+
+        for e in self._EnumCached():
+            e.Rotate(time_elapsed * 500)
         
         self.SetPosition((self.pos[0] + self.dir[0]*time*self.speed, self.pos[1] + self.dir[1]*time*self.speed))
         lvdim = self.level.GetLevelSize()
