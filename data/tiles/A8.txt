@@ -1,4 +1,4 @@
-<out> = Tile(<raw>,Tile.AUTO,Tile.AUTO)
+<out> = Tile(<raw>,Tile.AUTO,Tile.AUTO,halo_img="halo_rounded.png")
  ___ 
 /   \
 \___/

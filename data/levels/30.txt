@@ -1,4 +1,4 @@
-<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Sun Invasion'),color=(0, 10, 30),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ()), ('fakeshadow.sfx', ())],vis_ofs=4,bgimg=15,scroll=2,lower_offset=1.2)
+<out> = Level(<level>,<game>,<raw>,autoscroll_speed=(0.25, 0),name=_('Sun Invasion'),color=(0, 10, 30),postfx=[('ingame1.sfx', ()), ('dimmed_colors.sfx', ())],vis_ofs=4,bgimg=15,scroll=2,lower_offset=1.2)
 
 
 
@@ -22,11 +22,6 @@ yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB
 yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0.  .  .  .  .  yB0yB0yB0yB0yB0yB0yB0.  .  .  .  .  yB0yB0yB0yB0yB0yB0yB0.  .  .  .  .  yB0yB0yB0yB0yB0yB0yB0.  .  .  .  yB0yB0yB0yB0yB0yB0yB0.  .  .  .  .  .  yB0yB0yB0yB0yB0yB0yB0.  .  .  .  .  .  .  .  .  yA9yA9yA9yA9yA9yA9yA9yA9yA9yA9.  .  yDAyDA.  .  .  .  .  yDAyDA.  .  .  yA9yA9yA9yA9yA9yA9yA9.  yCE.  .  .  .  .  yCE.  .  yA9yA9yA9yA9yA9yA9yA9.  yCE.  .  yA9yA9yA9yA9yA9yA9yA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAyA5yA5rDArDArDArDArDArDArC4yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5
 yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yB0yDAyDAyDAyDAyDAyB0yB0yB0yB0yB0yB0yB0yDAyDAyDAyDAyDAyB0yB0yB0yB0yB0yB0yB0yDAyDAyDAyDAyDAyB0yB0yB0yB0yB0yB0yB0yDAyDAyDAyDAyB0yB0yB0yB0yB0yB0yB0yDAyDAyDAyDAyDAyDAyB0yB0yB0yB0yB0yB0yB0yDAyDAyDAyDAyDAyDAyDAyDAyDAyA9yA9yA9yA9yA9yA9yA9yA9yA9yA9yDAyDAyDAyDAyDAyDAyDAyDAyDAyDAyDAyDAyDAyDAyA9yA9yA9yA9yA9yA9yA9.  .  .  .  .  .  .  .  .  .  yA9yA9yA9yA9yA9yA9yA9.  .  .  .  yA9yA9yA9yA9yA9yA9yA9.  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAyA5yA5yA5yA5rDArDArDArDArDArC4rDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDArDAyA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5yA5
 .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  yA5
-
-
-
-
-
 
 
 
