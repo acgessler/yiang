@@ -640,7 +640,7 @@ class Level:
     def EnumVisibleEntities(self):
         """Enum all entities which are currently 'visible'.
         Visible entities are always active."""
-        return [e for e in self.entities_active if e.in_visible_set is True]
+        return (e for e in self.entities_active if e.in_visible_set is True)
     
     def EnumPossibleColliders(self,bb):
         """Given a bounding box (x,y,x2,y2), enumerate all entities
@@ -789,19 +789,37 @@ class Level:
     def _DrawEntities(self):
         Renderer.SetClearColor(self.color)
         havepfx = False
-        for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
-            if entity.GetDrawOrder() > 10000 and havepfx is False and not defaults.no_ppfx:
+
+        if defaults.ignore_entities_draw_order:
+            visible = list(self.EnumVisibleEntities())
+            for entity in visible:
+                if entity.GetDrawOrder() < 10:
+                    entity.Draw()
+            for entity in visible:
+                do = entity.GetDrawOrder()
+                if do >= 10 and do <= 10000:
+                    entity.Draw()
+            if not defaults.no_ppfx:
                 for name,fx,env in self.postfx_rt:
                     if not fx is None:
                         fx.Draw()
-                havepfx = True
+            for entity in visible:
+                if entity.GetDrawOrder() > 10000:
+                    entity.Draw()
+        else:
+            for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
+                if entity.GetDrawOrder() > 10000 and havepfx is False and not defaults.no_ppfx:
+                    for name,fx,env in self.postfx_rt:
+                        if not fx is None:
+                            fx.Draw()
+                    havepfx = True
                 
-            entity.Draw()
+                entity.Draw()
         
-        if havepfx is False and not defaults.no_ppfx:
-            for name,fx,env in self.postfx_rt:
-                if not fx is None:
-                    fx.Draw()
+            if havepfx is False and not defaults.no_ppfx:
+                for name,fx,env in self.postfx_rt:
+                    if not fx is None:
+                        fx.Draw()
                 
     def _UpdateEntities(self,time,dtime):
         self.entities_active = set()

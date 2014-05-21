@@ -170,7 +170,7 @@ profile_level_loading = False
 # every 600st frame for a level (~10s).
 # writes cProfile results to the profile directory
 # and dumps the 20 hottest locations to the console
-profile_rendering = False
+profile_rendering = True
 
 # Draw the HUD (minimap) in world maps. Disable if
 # this causes problems with your screen setup (i.e.
@@ -219,7 +219,11 @@ max_velocity_x,max_velocity_y = 20,25
 update_tickrate = 60
 
 # legacy GL immediate mode rendering for comparison
-use_immediate_mode_font_rendering = True
+use_immediate_mode_font_rendering = False
+
+# Whether default entity draw order is ignored and a broad approximation is used
+# This gives a slight speedup (~4%) at the expense of minor visual bugs 
+ignore_entities_draw_order = True
 
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
