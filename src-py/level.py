@@ -876,11 +876,14 @@ class Level:
         self._DoAutoScroll(dtime)
         self._GenToDeviceCoordinates()
             
+        self._DrawEntities()
+        self.game.DrawStatusBar()
+
         self._UpdateEntities(time,dtime)
         self._UpdateDistortion(time,dtime)
-        self._DrawEntities()
+        
         self._UpdateEntityList()
-        self.game.DrawStatusBar()
+        
         
     def DrawSingle(self, drawable, pos=None):
         """Draw a sf.Drawable at a specific position, which is
