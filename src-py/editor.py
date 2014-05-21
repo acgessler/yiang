@@ -943,7 +943,11 @@ class EditorGame(Game):
                     # Allow entities to provide special drawing routines
                     # for use in the catalogue if this is needed.
                     getattr(elem,"Update_EditorCatalogue",elem.Update)(self.time,self.time_delta)
-                    getattr(elem,"Draw_EditorCatalogue",elem.Draw)()
+
+                    if hasattr(elem, "Draw_EditorCatalogue"):
+                        elem.Draw_EditorCatalogue()
+                    else:
+                        elem.Draw(None)
                     
                     # Don't take the regular bounding box -- take the basic shape of the
                     # entity instead of the tight collision hull, if possible.
