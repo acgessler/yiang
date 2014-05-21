@@ -28,7 +28,7 @@ struct VBOManager::ReuseOrCreateVBOPolicy {
 
 		// Initialize the VBO with the correct size to enable
 		// subsequent glBufferSubData() and glMapBuffer calls.
-		glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_STREAM_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		const GLenum err = glGetError();

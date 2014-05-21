@@ -135,7 +135,7 @@ class Drawable:
         resolution, in pixels."""
         pass
 
-    def Draw(self):
+    def Draw(self, *args):
         """To be implemented to perform any drawing operations
         for the drawable entity (a drawable should represent 
         something that can be drawn, shouldn't it?)"""

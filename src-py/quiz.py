@@ -126,8 +126,8 @@ class QuizChoice(BackgroundImage):
             self.light.SetColor(sf.Color(0,0,0,0))
             self.light.pulse = False
     
-    def Draw(self):
-        return BackgroundImage.Draw(self)
+    def Draw(self, *args):
+        return BackgroundImage.Draw(self, *args)
         
         
 class QuizLevel(Level):

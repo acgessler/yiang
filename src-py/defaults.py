@@ -225,6 +225,13 @@ use_immediate_mode_font_rendering = False
 # This gives a slight speedup (~4%) at the expense of minor visual bugs 
 ignore_entities_draw_order = True
 
+# Batches up any sf.Drawable.Draw commands that involve drawing a string
+# tile with the default font and then uses an optimized rendering path
+# to save as many state changes as possible.
+#
+# Pre-release optimization hack.
+use_optimized_text_draw_queue = True
+
 # -----------------------------------------------------------------------------
 # these are not intended to be modified, although no one keeps
 # you from changing them. you have been warned.

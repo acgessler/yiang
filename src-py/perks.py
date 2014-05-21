@@ -71,7 +71,7 @@ class PerkOverlay(Tile):
         
         self._Recache()
             
-    def Draw(self):
+    def Draw(self,*args):
         self.clock_handle[0] = self.formatters['percentage']
         
         offset = 0

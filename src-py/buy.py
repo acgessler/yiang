@@ -76,8 +76,8 @@ class Machine(AnimTile,FloatingNotification):
     def _RunMachine(self):
         self.used_once = True
     
-    def Draw(self):
-        AnimTile.Draw(self)
+    def Draw(self,*args):
+        AnimTile.Draw(self,*args)
         
         cl = self.level.IsPlayerClose(self.center,max(self.dim[0],self.dim[1]))
         if cl and not self.used_once:

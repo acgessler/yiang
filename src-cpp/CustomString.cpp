@@ -92,7 +92,9 @@ myFont          (&Font::GetDefaultFont()),
 mySize          (30.f),
 myStyle         (Regular),
 myNeedRectUpdate(true),
-use_immediate_mode_rendering()
+use_immediate_mode_rendering(),
+use_optimized_rendering_prior(),
+use_optimized_rendering_posterior()
 {
 
 }
@@ -116,8 +118,17 @@ myNeedRectUpdate(true)
 ////////////////////////////////////////////////////////////
 void CustomString::SetText(const Unicode::Text& Text)
 {
-    myNeedRectUpdate = true;
+    //myNeedRectUpdate = true;
     myText = Text;
+
+	// Precompute the ASCII version of the string
+	// as well as the prefix of the cache key for the VBO cache
+	const Unicode::UTF32String& utf32 = myText;
+	ascii_text.resize(utf32.size());
+	cache_key_buffer.resize(utf32.size() + 4);
+	for (size_t i = 0, e = utf32.size(); i < e; ++i) {
+		cache_key_buffer[i] = ascii_text[i] = static_cast<char>(utf32[i]);
+	}
 }
 
 
@@ -287,8 +298,7 @@ void CustomString::Render(RenderTarget&) const
 	// This is modified from the original String::Render() code from
 	// SFML. It uses the VBO cache to retrieve cached VBOs and to
 	// (re-)populate them as needed.
-    const Unicode::UTF32String& Text = myText;
-	if (Text.empty()) {
+	if (ascii_text.empty()) {
         return;
 	}
 
@@ -297,18 +307,14 @@ void CustomString::Render(RenderTarget&) const
     float Factor   = mySize / CharSize;
 	glScalef(Factor, Factor, 1.f);
 
-    // Bind the font texture
-    myFont->GetImage().Bind();
+	if (!use_optimized_rendering_prior) {
+		// Bind the font texture
+		myFont->GetImage().Bind();
+	}
 
     // Initialize the rendering coordinates
     float X = 0.f;
     float Y = CharSize;
-
-	std::string copy_text;
-	copy_text.resize(Text.size());
-	for (size_t i = 0, e = Text.size(); i < e; ++i) {
-		copy_text[i] = static_cast<char>(Text[i]);
-	}
 
 	// Extract a 32bit RGBA color
 	union {
@@ -325,21 +331,22 @@ void CustomString::Render(RenderTarget&) const
 	// of the string. This is a terrible hack, so avoiding
 	// unintended null-termination by ORing a 1 does
 	// not make it worse.
-	std::string key = copy_text;
-	key.push_back(float_color.r | 1);
-	key.push_back(float_color.g | 1);
-	key.push_back(float_color.b | 1);
-	key.push_back(float_color.a | 1);
+	std::string& key = cache_key_buffer;
+	size_t j = ascii_text.length();
+	key[j++] = float_color.r | 1;
+	key[j++] = float_color.g | 1;
+	key[j++] = float_color.b | 1;
+	key[j  ] = float_color.a | 1;
 
 	VBOTile* const tile = use_immediate_mode_rendering ? NULL :
-		g_vboManager.Get(key, g_vboManager.GetVBOSizeForString(copy_text));
+		g_vboManager.Get(key, g_vboManager.GetVBOSizeForString(ascii_text));
 	if (tile == NULL || tile->vbo == 0) {
 		// Draw one quad for each character
 		glBegin(GL_QUADS);
-		for (std::size_t i = 0, e = Text.size(); i < e; ++i)
+		for (std::size_t i = 0, e = ascii_text.size(); i < e; ++i)
 		{
 			// Get the current character and its corresponding glyph
-			Uint32           CurChar  = Text[i];
+			Uint32           CurChar  = ascii_text[i];
 			const Glyph&     CurGlyph = myFont->GetGlyph(CurChar);
 			int              Advance  = CurGlyph.Advance;
 			const IntRect&   Rect     = CurGlyph.Rectangle;
@@ -391,9 +398,9 @@ void CustomString::Render(RenderTarget&) const
 
 		// Copy-paste logic from above to have it be efficient.
 		// Copy data to the VBO instead of emitting immediate mode calls.
-		for (std::size_t i = 0, e = Text.size(); i < e; ++i)
+		for (std::size_t i = 0, e = ascii_text.size(); i < e; ++i)
 		{
-			Uint32           CurChar  = Text[i];
+			Uint32           CurChar  = ascii_text[i];
 			const Glyph&     CurGlyph = myFont->GetGlyph(CurChar);
 			int              Advance  = CurGlyph.Advance;
 			const IntRect&   Rect     = CurGlyph.Rectangle;
@@ -462,14 +469,16 @@ void CustomString::Render(RenderTarget&) const
 		glVertexPointer(2, GL_FLOAT, VERTEX_SIZE, reinterpret_cast<void*>(8));
 		glColorPointer(4, GL_UNSIGNED_BYTE, VERTEX_SIZE, reinterpret_cast<void*>(16));
 	}
-	else {
+	else {	
 		glBindVertexArray(tile->vao);
 	}
 	
 	glDrawArrays(GL_QUADS, 0, tile->quad_count * 4);
 
-	// Restore GL state for SFML to resume
-	BindZeroVAO();
+	if (!use_optimized_rendering_posterior) {
+		// Restore GL state for SFML to resume
+		BindZeroVAO();
+	}
 }
 
 

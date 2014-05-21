@@ -310,7 +310,7 @@ class EntityWithEditorImage(Entity):
                 self.respawn_sprite = sf.Sprite(self.respawn_img)
                 self.respawn_sprite.Resize(tx*bb[2],ty*bb[3])
                 
-    def Draw(self):
+    def Draw(self,*args):
         if self.game.GetGameMode() == Game.EDITOR  and self.editor_stub_img:
             self.game.GetLevel().DrawSingle( self.respawn_sprite, self.pos )
             

@@ -172,6 +172,14 @@ public :
 		use_immediate_mode_rendering = yesno;
 	}
 
+	void SetOptimizedRenderingPrior(bool yesno) {
+		use_optimized_rendering_prior = yesno;
+	}
+
+	void SetOptimizedRenderingPosterior(bool yesno) {
+		use_optimized_rendering_posterior = yesno;
+	}
+
 protected :
 
     ////////////////////////////////////////////////////////////
@@ -200,6 +208,14 @@ private :
 
 	// Fallback to immediate mode rendering as SFML does it.
 	bool use_immediate_mode_rendering;
+	bool use_optimized_rendering_prior;
+	bool use_optimized_rendering_posterior;
+
+	std::string ascii_text;
+
+	// ascii_text + encoded color to serve as cache key for the VBO cache
+	// SetText() simply reserves space for four extra characters.
+	mutable std::string cache_key_buffer;
 };
 
 } // namespace sf

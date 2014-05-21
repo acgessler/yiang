@@ -123,6 +123,8 @@ class Tile(Entity):
         self.double = double
         self.dropshadow = dropshadow
         self.dropshadow_color = dropshadow_color
+
+        self.optimized_text_elem = None
             
         self.draworder = draworder
         self.halo_img = halo_img
@@ -356,6 +358,7 @@ class Tile(Entity):
                 
             Tile.global_str_cache[(self.rsize,self.text)] = res
             res.SetImmediateModeRendering(defaults.use_immediate_mode_font_rendering)
+            self.optimized_text_elem = res if self.rsize == defaults.letter_size[1] else None
         self.cached = [(True,res,True)]
         
         img = self._GetHaloImage()
@@ -390,7 +393,7 @@ class Tile(Entity):
 
         return t
 
-    def Draw(self):
+    def Draw(self, optimized_text_draw_queue):
         """Draw the tile given a Game instance, which defines the
         render target and the coordinate system origin for the tile"""
         lv = self.game.GetLevel()
@@ -420,6 +423,16 @@ class Tile(Entity):
         for offsetit, elem, colored in reversed(self.cached):     
             if colored:
                 elem.SetColor(self.color)
+
+            # If this element is a font element, push it to the draw queue.
+            # This is a pre-release hack to get things faster.
+            if elem is self.optimized_text_elem and not optimized_text_draw_queue is None:
+                if offsetit is False:
+                    optimized_text_draw_queue.append((elem, self.pos))
+                else:
+                    optimized_text_draw_queue.append((elem, (pos_x-ofs_x,pos_y-ofs_y)))
+                continue
+
             if offsetit is True:
                 lvd(elem,(pos_x-ofs_x,pos_y-ofs_y))
             else:

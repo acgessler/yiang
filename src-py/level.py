@@ -785,36 +785,59 @@ class Level:
     
     def GetAutoScroll(self):
         return self.autoscroll_speed[-1]
+
+    def _DrawTextDrawQueue(self, optimized_text_draw_queue):
+        # Inform entities whether they can avoid setup/cleanup
+        for n, (drawable, position) in enumerate(optimized_text_draw_queue):
+            drawable.SetOptimizedRenderingPrior(n != 0)
+            drawable.SetOptimizedRenderingPosterior(n != len(optimized_text_draw_queue)-1)
+            self.DrawSingle(drawable, position)
+            drawable.SetOptimizedRenderingPrior(False)
+            drawable.SetOptimizedRenderingPosterior(False)
     
     def _DrawEntities(self):
         Renderer.SetClearColor(self.color)
         havepfx = False
 
+        optimized_text_draw_queue = [] if defaults.use_optimized_text_draw_queue else None
+
         if defaults.ignore_entities_draw_order:
             visible = list(self.EnumVisibleEntities())
+
+            # draworder < 10 is background items (i.e. background lights)
+            # that *must* come before normal entities or the visual
+            # damage will be inacceptable.
             for entity in visible:
                 if entity.GetDrawOrder() < 10:
-                    entity.Draw()
+                    entity.Draw(optimized_text_draw_queue)
             for entity in visible:
                 do = entity.GetDrawOrder()
                 if do >= 10 and do <= 10000:
-                    entity.Draw()
+                    entity.Draw(optimized_text_draw_queue)
+
+            if not optimized_text_draw_queue is None:
+                self._DrawTextDrawQueue(optimized_text_draw_queue)
+            optimized_text_draw_queue = []
             if not defaults.no_ppfx:
                 for name,fx,env in self.postfx_rt:
                     if not fx is None:
                         fx.Draw()
             for entity in visible:
                 if entity.GetDrawOrder() > 10000:
-                    entity.Draw()
+                    entity.Draw(None)
         else:
             for entity in sorted(self.EnumVisibleEntities(),key=lambda x:x.GetDrawOrder()):
                 if entity.GetDrawOrder() > 10000 and havepfx is False and not defaults.no_ppfx:
+                    if not optimized_text_draw_queue is None:
+                        self._DrawTextDrawQueue(optimized_text_draw_queue)
+                        optimized_text_draw_queue = None
+
                     for name,fx,env in self.postfx_rt:
                         if not fx is None:
                             fx.Draw()
                     havepfx = True
                 
-                entity.Draw()
+                entity.Draw(optimized_text_draw_queue)
         
             if havepfx is False and not defaults.no_ppfx:
                 for name,fx,env in self.postfx_rt:
@@ -931,10 +954,10 @@ class Level:
                 return (floord((coords[0]- origin[0] )*tx),
                         floord((coords[1]- origin[1] )*ty))
         else:                          
-            def ToCameraDeviceCoordinates(coords,tx=tiles_size_px[0],ty=tiles_size_px[1]):
+            def ToCameraDeviceCoordinates(coords,tx=tiles_size_px[0],ty=tiles_size_px[1],lorig_x=origin[0],lorig_y=origin[1]):
                 #optimize - merge ToCameraCoordinates and game.ToDeviceCoordinates()
-                return ((coords[0]- origin[0] )*tx,
-                        (coords[1]- origin[1] )*ty)
+                return ((coords[0]- lorig_x )*tx,
+                        (coords[1]- lorig_y )*ty)
             
         self.ToCameraDeviceCoordinates = ToCameraDeviceCoordinates
     

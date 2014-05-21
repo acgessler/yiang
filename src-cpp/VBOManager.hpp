@@ -88,7 +88,7 @@ private:
 
 	enum {
 		// Number of cache levels
-		CACHE_LEVEL_COUNT = 3
+		CACHE_LEVEL_COUNT = 8
 	};
 
 	enum {
@@ -113,12 +113,12 @@ private:
 	enum {
 		// After the first cache level, each level has 4x the size
 		// of the previous level.
-		CACHE_SIZE_LEVEL_SHIFT = 2
+		CACHE_SIZE_LEVEL_SHIFT = 1
 	};
 
 	enum {
 		// Number of tiles to cache per level
-		CACHE_PER_LEVEL_CAPACITY = 250
+		CACHE_PER_LEVEL_CAPACITY = 200
 	};
 
 	struct ReuseOrCreateVBOPolicy;

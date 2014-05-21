@@ -343,7 +343,7 @@ class Player(Entity):
         for perk in list(self.perks):
             perk.DisablePerk(self)
     
-    def Draw(self):
+    def Draw(self,*args):
         if self.draw is False:
             return
         if hasattr(self,"flash_halo"): # XXX
@@ -664,7 +664,6 @@ class Player(Entity):
                 anim = 'walk'+lr_suffix()+'_preparetoidle'          
         
         if anim:
-            print(anim)
             self.animset.Select(anim)
         self.animset.UpdateCurrentTile(time_elapsed,time)
                 
@@ -1176,8 +1175,8 @@ class KillAnimStub(Tile):
             self.game.RemoveEntity(self)
             self.game.useless_sprites -= 1
         
-    def Draw(self):
-        Tile.Draw(self)
+    def Draw(self,*args):
+        Tile.Draw(self,*args)
 
 
 class InventoryChangeAnimStub(Tile):

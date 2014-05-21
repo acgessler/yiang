@@ -129,6 +129,19 @@ PySfCustomString_SetImmediateModeRendering(PySfCustomString* self, PyObject *arg
 	Py_RETURN_NONE;
 }
 
+static PyObject *
+PySfCustomString_SetOptimizedRenderingPrior(PySfCustomString* self, PyObject *args)
+{
+	self->obj->SetOptimizedRenderingPrior(PyBool_AsBool(args));
+	Py_RETURN_NONE;
+}
+
+static PyObject *
+PySfCustomString_SetOptimizedRenderingPosterior(PySfCustomString* self, PyObject *args)
+{
+	self->obj->SetOptimizedRenderingPosterior(PyBool_AsBool(args));
+	Py_RETURN_NONE;
+}
 
 static PyObject *
 PySfCustomString_GetSize(PySfCustomString* self)
@@ -250,6 +263,8 @@ Return the visual position (a tuple of two floats) of the Index-th character of 
 	{"GetStyle", (PyCFunction)PySfCustomString_GetStyle, METH_NOARGS, "GetStyle()\nGet the style of the text."},
 	{"GetRect", (PyCFunction)PySfCustomString_GetRect, METH_NOARGS, "GetRect()\nGet the string rectangle on screen."},
 	{"SetImmediateModeRendering", (PyCFunction)PySfCustomString_SetImmediateModeRendering, METH_O, "Enable/disable immediate mode fallback"},
+	{"SetOptimizedRenderingPrior", (PyCFunction)PySfCustomString_SetOptimizedRenderingPrior, METH_O, "Enable/disable optimized batch rendering"},
+	{"SetOptimizedRenderingPosterior", (PyCFunction)PySfCustomString_SetOptimizedRenderingPosterior, METH_O, "Enable/disable optimized batch rendering"},
 	{NULL}  /* Sentinel */
 };
 

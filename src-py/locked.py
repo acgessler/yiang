@@ -88,8 +88,8 @@ class Door(AnimTile,FloatingNotification):
     def _CanFlash(self):
         return not self.unlocked
         
-    def Draw(self):
-        AnimTile.Draw(self)
+    def Draw(self, *args):
+        AnimTile.Draw(self, *args)
         
         if self.notify and self.player_close and not self.IsWorking():
             self.DrawNotification(text=_("Get a {0} key to speak to this door").format(defaults.GetColorName(self.color)),
@@ -137,8 +137,8 @@ class Bridge(Door):
     def Interact(self, other):
         return Entity.BLOCK
     
-    def Draw(self):
-        AnimTile.Draw(self)
+    def Draw(self, *args):
+        AnimTile.Draw(self, *args)
         
     def _CanFlash(self):
         return True # bridges can flash in any state
@@ -181,8 +181,8 @@ class BridgeControl(AnimTile,FloatingNotification):
         return Entity.ENTER
 
     
-    def Draw(self):
-        AnimTile.Draw(self)
+    def Draw(self, *args):
+        AnimTile.Draw(self, *args)
         cl = self.level.IsPlayerClose(self.pos,2.0)
         
         doit = self.notify and cl and not self.moved_once

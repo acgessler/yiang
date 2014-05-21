@@ -42,10 +42,10 @@ class TitlePlayer(Player):
     def _Shoot(self):
         return
     
-    def Draw(self):
+    def Draw(self,*args):
         time = self.clock.GetElapsedTime()
         if 5<time<6.2:
-            Player.Draw(self)
+            Player.Draw(self,*args)
     
     def Update(self, time_elapsed, timet):
         # don't update unless 3 seconds passed

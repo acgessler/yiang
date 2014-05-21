@@ -78,7 +78,7 @@ class Mine(AnimTile):
             self.mine_activated = True
             return Entity.ENTER
 
-    def Draw(self):
+    def Draw(self,*args):
         # Draw a semi-transparent circle to visualize the mine radius
         # This is slow, but mines are rare.
         cpos = self.level.ToCameraDeviceCoordinates(self.GetCenter())
@@ -90,7 +90,7 @@ class Mine(AnimTile):
         self.game.DrawSingle(sf.Shape.Circle(cpos[0],cpos[1],
             self.radius*defaults.tiles_size_px[0], sf.Color(50,50,50,60), 1, border_color
         ))
-        AnimTile.Draw(self)
+        AnimTile.Draw(self,*args)
         
     def Update(self,time_elapsed,time_delta):
         AnimTile.Update(self,time_elapsed,time_delta)

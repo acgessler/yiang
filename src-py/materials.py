@@ -47,8 +47,8 @@ class InvisibleTile(EntityWithEditorImage,Tile):
         Tile.Update(self,t,dt)
         EntityWithEditorImage.Update(self,t,dt)
         
-    def Draw(self):
-        Tile.Draw(self)
+    def Draw(self,*args):
+        Tile.Draw(self,*args)
         EntityWithEditorImage.Draw(self)
         
         
@@ -89,7 +89,7 @@ class BackgroundLight(Tile):
     def Update(self,time_elapsed,time_delta):
         self.alpha = int((math.sin(time_elapsed-self.seed)+1)*0.5*0xff if self.pulse else 0xff)
     
-    def Draw(self):
+    def Draw(self,*args):
         if len(self.cached) < 2:
             return
         

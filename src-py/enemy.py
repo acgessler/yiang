@@ -483,7 +483,7 @@ class RotatingInferno(Enemy):
         for offsetit, elem, colored in self.cached: 
             lv.DrawSingle(elem,self.pos)
             
-    def Draw(self): 
+    def Draw(self,*args): 
         lv = self.game.GetLevel()
         for offsetit, elem, colored in self.cached: 
             lv.DrawSingle(elem,self.real_pos)
