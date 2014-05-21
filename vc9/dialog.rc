@@ -32,7 +32,7 @@ IDB_SPLASH              BITMAP                  "bitmap1.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -73,12 +73,12 @@ BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,88,297,1
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -94,7 +94,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 IDD_DIALOG1 DIALOGEX 0, 0, 297, 310
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
-CAPTION "Annoying Startup Customer Experience Evaluation"
+CAPTION "YIANG"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,231,286,57,14
@@ -102,21 +102,22 @@ BEGIN
     CONTROL         "Do not ask again",IDC_NOTASKAGAIN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,288,69,10
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,277,297,1
     GROUPBOX        "Video",IDC_STATIC,6,95,285,114
-    CONTROL         "Fullscreen mode - native resolution",IDC_FS,"Button",BS_AUTORADIOBUTTON | WS_GROUP,17,110,134,10
-    CONTROL         "Windowed mode - large",IDC_WND1200,"Button",BS_AUTORADIOBUTTON,17,127,228,10
-    CONTROL         "Windowed mode - medium",IDC_WND1280,"Button",BS_AUTORADIOBUTTON,17,139,134,10
+    CONTROL         "Fullscreen mode - native resolution",IDC_FS,"Button",BS_AUTORADIOBUTTON | WS_GROUP,16,130,134,10
+    CONTROL         "Windowed mode - large",IDC_WND1200,"Button",BS_AUTORADIOBUTTON,16,155,228,10
+    CONTROL         "Windowed mode - medium (RECOMMENDED - Looks best and is reasonably fast)",IDC_WND1280,
+                    "Button",BS_AUTORADIOBUTTON,16,108,269,10
     CONTROL         "Disable postprocessing - a clean ASCII look designed for purists",IDC_NOPPFX,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,175,248,8
-    CONTROL         "Low quality - no expensive effects, works well with your cheap hardware",IDC_LOWEND,
+    CONTROL         "Low quality - no expensive effects, works well with low-end hardware",IDC_LOWEND,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,187,245,8
     GROUPBOX        "Audio",IDC_STATIC,5,215,286,54
     CONTROL         "No background music  - you will sleep well afterwards",IDC_NOMUSIC,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,234,256,8
+                    "Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,17,234,256,8
     CONTROL         "No sound effects - you will sleep even better",IDC_NOSOUND,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,246,267,8
+                    "Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,17,246,267,8
     CONTROL         108,IDB_SPLASHB,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,297,88,WS_EX_TRANSPARENT
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,88,297,1
-    CONTROL         "Windowed mode - small",IDC_WND1024,"Button",BS_AUTORADIOBUTTON,17,151,198,10
+    CONTROL         "Windowed mode - small",IDC_WND1024,"Button",BS_AUTORADIOBUTTON,16,143,198,10
 END
 
 
@@ -170,7 +171,7 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_ICON1               ICON                    ".\\..\\data\\icon\\YIANG.ico"
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
